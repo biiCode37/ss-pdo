@@ -71,6 +71,11 @@ export function useOfflineSync() {
         // If success, remove from remaining
         remainingQueue = remainingQueue.filter(q => q.id !== item.id);
         saveQueue(remainingQueue);
+        
+        // Jeda 2 detik sebelum memproses antrean berikutnya untuk menghindari rate limit API
+        if (remainingQueue.length > 0) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
       } catch (err: any) {
         // If it's auth error, stop processing immediately
         if (err.message && err.message.includes('Auth') || err.status === 401 || err.message?.includes('Credentials')) {
