@@ -37,6 +37,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
     setError(null);
   };
 
+  const handleCopyKm = () => {
+    if (formData.kmAkhir1) {
+      setFormData(prev => ({ ...prev, kmAwal2: prev.kmAkhir1 }));
+      setSaveStatus('idle');
+      setError(null);
+    }
+  };
+
   const handleSave = async () => {
     // Validation
     const checkKm = (awal?: string, akhir?: string) => {
@@ -56,6 +64,10 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
     }
     if (!checkKm(formData.kmAwal2, formData.kmAkhir2)) {
       setError('KM Akhir Shift 2 tidak boleh lebih kecil dari KM Awal Shift 2');
+      return;
+    }
+    if (!checkKm(formData.kmAkhir1, formData.kmAwal2)) {
+      setError('KM Awal Shift 2 tidak boleh lebih kecil dari KM Akhir Shift 1');
       return;
     }
 
@@ -253,7 +265,17 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
 
           <div className="form-grid">
             <div className="input-group">
-              <label>KM Awal Shift 2</label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <label>KM Awal Shift 2</label>
+                <button 
+                  type="button"
+                  onClick={handleCopyKm} 
+                  disabled={isFieldDisabled('kmAwal2') || !formData.kmAkhir1}
+                  style={{ background: 'none', border: '1px solid var(--accent-color)', color: 'var(--accent-color)', borderRadius: '4px', fontSize: '11px', padding: '2px 6px', cursor: 'pointer' }}
+                >
+                  Salin KM Akhir 1
+                </button>
+              </div>
               <input 
                 type="number" 
                 inputMode="numeric" 
