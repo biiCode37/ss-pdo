@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { extractSheetId, getBusData } from '../services/googleSheets';
 import { BusList } from './BusList';
-import { Loader2, LogOut, Settings, Plus, X, CloudOff } from 'lucide-react';
+import { Loader2, LogOut, Settings, Plus, X, CloudOff, Sun, Moon, RefreshCw } from 'lucide-react';
 import { useOfflineSync } from '../hooks/useOfflineSync';
 
 interface Props {
@@ -30,8 +30,24 @@ export function Dashboard({ onLogout, onOpenSettings }: Props) {
   const [headerMap, setHeaderMap] = useState<HeaderMap | null>(null);
   const [currentSheetId, setCurrentSheetId] = useState<string>('');
   const [currentTabName, setCurrentTabName] = useState<string>('');
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    return (document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'dark';
+  });
+
+  const [touchStartY, setTouchStartY] = useState(0);
+  const [pullDistance, setPullDistance] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { queue, addToQueue } = useOfflineSync();
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('PDO_THEME', newTheme);
+  };
 
   useEffect(() => {
     // Load saved routes on mount
@@ -53,6 +69,15 @@ export function Dashboard({ onLogout, onOpenSettings }: Props) {
     } else {
       setIsAddingRoute(true);
     }
+    
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   const saveNewRoute = () => {
@@ -118,11 +143,67 @@ export function Dashboard({ onLogout, onOpenSettings }: Props) {
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (window.scrollY === 0) {
+      setTouchStartY(e.touches[0].clientY);
+    } else {
+      setTouchStartY(0);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartY === 0) return;
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - touchStartY;
+    if (diff > 0) {
+      setPullDistance(Math.min(diff, 100)); // cap at 100px
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (pullDistance > 60) {
+      setIsRefreshing(true);
+      handleLoadData().finally(() => {
+        setIsRefreshing(false);
+        setPullDistance(0);
+      });
+    } else {
+      setPullDistance(0);
+    }
+    setTouchStartY(0);
+  };
+
   // Generate options for days 1-31
   const days = Array.from({ length: 31 }, (_, i) => String(i + 1));
 
   return (
-    <div className="app-container">
+    <div 
+      className="app-container"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div style={{
+        height: pullDistance > 0 ? `${pullDistance}px` : '0',
+        overflow: 'hidden',
+        transition: touchStartY === 0 ? 'height 0.3s ease' : 'none',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <div style={{
+          transform: `rotate(${pullDistance * 3}deg)`,
+          color: 'var(--accent-color)'
+        }}>
+          <RefreshCw size={24} className={isRefreshing ? 'spinner' : ''} />
+        </div>
+      </div>
+      
+      {!isOnline && (
+        <div className="offline-banner">
+          ⚠️ Koneksi Terputus - Mode Offline Aktif
+        </div>
+      )}
       <div className="app-header" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 style={{ margin: 0, textAlign: 'left', fontSize: '20px' }}>PDO Mobile</h1>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -132,6 +213,9 @@ export function Dashboard({ onLogout, onOpenSettings }: Props) {
               {queue.length} Tertunda
             </div>
           )}
+          <button className="btn btn-outline" style={{ padding: '8px' }} onClick={toggleTheme} title="Toggle Theme">
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
           <button className="btn btn-outline" style={{ padding: '8px' }} onClick={onOpenSettings} title="Settings">
             <Settings size={20} />
           </button>
