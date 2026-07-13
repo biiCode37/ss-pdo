@@ -1,10 +1,9 @@
 import { gapi } from 'gapi-script';
 
-// This will be stored in localStorage by the user
 export const getGoogleCreds = () => {
   return {
-    clientId: localStorage.getItem('GAPI_CLIENT_ID') || '',
-    apiKey: localStorage.getItem('GAPI_API_KEY') || ''
+    clientId: import.meta.env.VITE_GAPI_CLIENT_ID || '',
+    apiKey: import.meta.env.VITE_GAPI_API_KEY || ''
   };
 };
 

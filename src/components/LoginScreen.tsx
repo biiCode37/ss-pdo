@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { signIn } from '../services/googleSheets';
-import { LogIn, Loader2, Settings } from 'lucide-react';
+import { LogIn, Loader2 } from 'lucide-react';
 
 interface Props {
   onLoginSuccess: () => void;
-  onOpenSettings: () => void;
 }
 
-export function LoginScreen({ onLoginSuccess, onOpenSettings }: Props) {
+export function LoginScreen({ onLoginSuccess }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,11 +49,6 @@ export function LoginScreen({ onLoginSuccess, onOpenSettings }: Props) {
         <button className="btn" onClick={handleLogin} disabled={isLoading} style={{ marginBottom: '16px' }}>
           {isLoading ? <Loader2 className="spinner" size={20} /> : <LogIn size={20} />}
           Sign In with Google
-        </button>
-
-        <button className="btn btn-outline" onClick={onOpenSettings} disabled={isLoading}>
-          <Settings size={20} />
-          Pengaturan API (Wajib di awal)
         </button>
       </div>
     </div>

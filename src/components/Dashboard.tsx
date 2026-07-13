@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { extractSheetId, getBusData } from '../services/googleSheets';
 import { BusList } from './BusList';
-import { Loader2, LogOut, Settings, Plus, X, CloudOff, Sun, Moon, RefreshCw } from 'lucide-react';
+import { Loader2, LogOut, Plus, X, CloudOff, Sun, Moon, RefreshCw } from 'lucide-react';
 import { useOfflineSync } from '../hooks/useOfflineSync';
 
 interface Props {
   onLogout: () => void;
-  onOpenSettings: () => void;
 }
 
 interface SavedRoute {
@@ -15,7 +14,7 @@ interface SavedRoute {
   url: string;
 }
 
-export function Dashboard({ onLogout, onOpenSettings }: Props) {
+export function Dashboard({ onLogout }: Props) {
   const [sheetUrl, setSheetUrl] = useState('');
   const [selectedTab, setSelectedTab] = useState(new Date().getDate().toString());
   const [isLoading, setIsLoading] = useState(false);
@@ -215,9 +214,6 @@ export function Dashboard({ onLogout, onOpenSettings }: Props) {
           )}
           <button className="btn btn-outline" style={{ padding: '8px' }} onClick={toggleTheme} title="Toggle Theme">
             {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-          </button>
-          <button className="btn btn-outline" style={{ padding: '8px' }} onClick={onOpenSettings} title="Settings">
-            <Settings size={20} />
           </button>
           <button className="btn btn-outline" style={{ padding: '8px', color: 'var(--danger-color)' }} onClick={onLogout} title="Logout">
             <LogOut size={20} />
