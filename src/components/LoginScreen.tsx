@@ -4,9 +4,10 @@ import { LogIn, Loader2 } from 'lucide-react';
 
 interface Props {
   onLoginSuccess: () => void;
+  isApiReady: boolean;
 }
 
-export function LoginScreen({ onLoginSuccess }: Props) {
+export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +20,7 @@ export function LoginScreen({ onLoginSuccess }: Props) {
     } catch (err: any) {
       console.error(err);
       if (err.error !== 'popup_closed_by_user') {
-        setError('Gagal login. Pastikan Anda mengizinkan popup Google dan Settings API sudah diatur.');
+        setError('Gagal login. Pastikan kredensial di file .env sudah diatur atau hubungi admin.');
       }
     } finally {
       setIsLoading(false);
@@ -46,7 +47,7 @@ export function LoginScreen({ onLoginSuccess }: Props) {
         
         {error && <div className="error-text" style={{ marginBottom: '16px' }}>{error}</div>}
 
-        <button className="btn" onClick={handleLogin} disabled={isLoading} style={{ marginBottom: '16px' }}>
+        <button className="btn" onClick={handleLogin} disabled={isLoading || !isApiReady} style={{ marginBottom: '16px', opacity: isApiReady ? 1 : 0.5 }}>
           {isLoading ? <Loader2 className="spinner" size={20} /> : <LogIn size={20} />}
           Sign In with Google
         </button>

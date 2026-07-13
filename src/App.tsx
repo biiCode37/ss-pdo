@@ -6,6 +6,7 @@ import { initGoogleApi, checkSignedIn, signOut, hasGoogleCreds } from './service
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
+  const [isApiReady, setIsApiReady] = useState(false);
 
   const initializeApi = async () => {
     if (!hasGoogleCreds()) {
@@ -16,6 +17,7 @@ export default function App() {
     try {
       setInitError(null);
       await initGoogleApi();
+      setIsApiReady(true);
       setIsSignedIn(checkSignedIn());
     } catch (err: any) {
       console.error('Failed to init Google API:', err);
@@ -24,9 +26,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (hasGoogleCreds()) {
-      initializeApi();
-    }
+    initializeApi();
   }, []);
 
   const handleLogout = async () => {
@@ -37,7 +37,7 @@ export default function App() {
   return (
     <>
       {!isSignedIn ? (
-        <LoginScreen onLoginSuccess={() => setIsSignedIn(true)} />
+        <LoginScreen onLoginSuccess={() => setIsSignedIn(true)} isApiReady={isApiReady} />
       ) : (
         <Dashboard onLogout={handleLogout} />
       )}
