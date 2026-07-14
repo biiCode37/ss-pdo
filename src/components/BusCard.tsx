@@ -54,6 +54,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   const [isLoading, setIsLoading] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'queued'>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState(false);
 
   const debouncedFormData = useDebounce(formData, 1000);
 
@@ -73,6 +74,8 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
       setFormData(prev => ({ ...prev, kmAwal2: prev.kmAkhir1 }));
       setSaveStatus('idle');
       setError(null);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
     }
   };
 
@@ -304,10 +307,19 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
                   type="button"
                   onClick={handleCopyKm} 
                   disabled={isFieldDisabled('kmAwal2') || !formData.kmAkhir1}
-                  title="Salin KM Akhir 1"
-                  style={{ background: 'none', border: 'none', color: 'var(--accent-color)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                  aria-label="Salin KM Akhir 1"
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    color: isCopied ? 'var(--success-color)' : 'var(--accent-color)', 
+                    cursor: 'pointer', 
+                    padding: '4px', 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    transition: 'all 0.2s ease'
+                  }}
                 >
-                  <Copy size={16} />
+                  {isCopied ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>
               <input 
