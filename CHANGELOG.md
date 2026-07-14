@@ -5,6 +5,11 @@ Semua perubahan penting dalam proyek ini akan didokumentasikan di dalam file ini
 Format pencatatan berdasarkan [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 dan proyek ini mematuhi [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-07-14
+
+### Added
+- **Data Collision Prevention (Optimistic Concurrency Control):** Menerapkan validasi *pre-flight check* pada `BusCard`. Sebelum menyimpan data ke Google Sheets, aplikasi akan membandingkan data terbaru di server dengan *snapshot* lokal. Jika terdapat perbedaan (data telah diubah oleh orang lain), aplikasi akan memunculkan peringatan (Modal Resolusi Konflik) yang memungkinkan petugas untuk tetap memaksa penimpaan (Force Save) atau menggunakan data dari server.
+
 ## [1.3.0] - 2026-07-14
 
 ### Added

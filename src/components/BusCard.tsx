@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import type { BusData, HeaderMap } from '../services/googleSheets';
-import { updateBusData } from '../services/googleSheets';
+import { updateBusData, getBusRowData } from '../services/googleSheets';
 import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy } from 'lucide-react';
 
 interface Props {
@@ -55,6 +55,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'queued'>('idle');
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
+  const [conflictData, setConflictData] = useState<Partial<BusData> | null>(null);
 
   const debouncedFormData = useDebounce(formData, 1000);
 
@@ -79,7 +80,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (forceOverwrite = false) => {
     // Validation
     const checkKm = (awal?: string, akhir?: string) => {
       if (awal && akhir) {
@@ -108,9 +109,35 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
     setIsLoading(true);
     setError(null);
     try {
+      if (!forceOverwrite) {
+        // Pre-flight check
+        const remoteData = await getBusRowData(sheetId, tabName, bus.rowIndex, headerMap);
+        
+        // Cek apakah ada field yang berubah dari snapshot asli (bus props)
+        const fieldsToCheck: (keyof BusData)[] = [
+          'toaShift1', 'manualShift1', 'manualShift2', 'totalToa',
+          'kmAwal1', 'kmAkhir1', 'kmAwal2', 'kmAkhir2', 'keterangan'
+        ];
+        
+        let hasCollision = false;
+        for (const field of fieldsToCheck) {
+          if ((remoteData[field] || '') !== (bus[field] || '')) {
+            hasCollision = true;
+            break;
+          }
+        }
+
+        if (hasCollision) {
+          setConflictData(remoteData);
+          setIsLoading(false);
+          return; // Hentikan penyimpanan
+        }
+      }
+
       await updateBusData(sheetId, tabName, bus.rowIndex, formData, headerMap);
       setSaveStatus('success');
       localStorage.removeItem(draftKey);
+      setConflictData(null);
       setTimeout(() => setIsExpanded(false), 1000); // Auto close on success after 1s
     } catch (err: any) {
       if (err.message && err.message.includes('API Credentials missing')) {
@@ -364,9 +391,47 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
 
           {error && <div className="error-text" style={{ marginBottom: 12 }}>{error}</div>}
 
+          {conflictData && (
+            <div style={{ 
+              background: 'rgba(239, 68, 68, 0.1)', 
+              border: '1px solid var(--danger-color)', 
+              borderRadius: '8px', 
+              padding: '12px', 
+              marginTop: '12px',
+              marginBottom: '12px'
+            }}>
+              <h4 style={{ color: 'var(--danger-color)', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                ⚠️ Tabrakan Data Terdeteksi
+              </h4>
+              <p style={{ fontSize: '13px', margin: '0 0 12px 0', lineHeight: 1.4, color: 'var(--text-secondary)' }}>
+                Petugas lain baru saja mengubah data bus ini. Jika Anda menyimpan sekarang, data mereka akan tertimpa.
+              </p>
+              <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+                <button 
+                  className="btn" 
+                  style={{ background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+                  onClick={() => {
+                    setFormData(prev => ({ ...prev, ...conflictData }));
+                    setConflictData(null);
+                    setError('Draft lokal Anda telah diperbarui dengan data dari server.');
+                  }}
+                >
+                  Gunakan Data Server
+                </button>
+                <button 
+                  className="btn" 
+                  style={{ background: 'var(--danger-color)' }}
+                  onClick={() => handleSave(true)}
+                >
+                  Tetap Timpa (Force Save)
+                </button>
+              </div>
+            </div>
+          )}
+
           <button 
             className="btn" 
-            onClick={handleSave}
+            onClick={() => handleSave(false)}
             disabled={isLoading}
             style={{ 
               backgroundColor: saveStatus === 'success' ? 'var(--success-color)' : '',

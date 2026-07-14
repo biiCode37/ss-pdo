@@ -9,6 +9,7 @@ Keunggulan utama aplikasi ini adalah dukungannya terhadap mode **Offline**. Peng
 - **Integrasi Google Sheets**: Membaca dan menulis data shift bus secara *real-time* ke spreadsheet.
 - **PWA & Offline-First**: Aplikasi dapat diakses tanpa koneksi internet (menggunakan Service Worker dari Vite PWA) dan menyimpan operasi penyimpanan (save) dalam *queue* lokal.
 - **Auto-save Drafts**: Menyimpan input yang sedang diketik secara lokal sementara, mencegah kehilangan data akibat aplikasi tertutup.
+- **Pencegahan Tabrakan Data**: Validasi keamanan (Optimistic Concurrency Control) sebelum menyimpan, sehingga data tidak akan tertimpa tanpa sengaja jika ada petugas lain yang mengedit baris yang sama.
 - **Visibilitas Sinkronisasi**: Menampilkan indikator (badge) antrean data yang belum tersinkronisasi.
 - **Skeleton Loading**: Tampilan UI *shimmer* yang lebih mulus ketika data bus sedang dimuat.
 - **Mobile-Friendly UX**: Antarmuka interaksi dioptimalkan untuk perangkat seluler.

@@ -228,6 +228,41 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
   }
 };
 
+export const getBusRowData = async (
+  sheetId: string, 
+  tabName: string, 
+  rowIndex: number, 
+  headerMap: HeaderMap
+): Promise<Partial<BusData>> => {
+  try {
+    const response = await (gapi.client as any).sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId,
+      range: `${tabName}!A${rowIndex}:ZZ${rowIndex}`, 
+    });
+
+    const rows = response.result.values;
+    if (!rows || rows.length === 0) {
+      return {}; // Row is empty
+    }
+
+    const row = rows[0];
+    
+    return {
+      toaShift1: headerMap.toaShift1 !== -1 ? row[headerMap.toaShift1] || '' : '',
+      manualShift1: headerMap.manualShift1 !== -1 ? row[headerMap.manualShift1] || '' : '',
+      manualShift2: headerMap.manualShift2 !== -1 ? row[headerMap.manualShift2] || '' : '',
+      totalToa: headerMap.totalToa !== -1 ? row[headerMap.totalToa] || '' : '',
+      kmAwal1: headerMap.kmAwal1 !== -1 ? row[headerMap.kmAwal1] || '' : '',
+      kmAkhir1: headerMap.kmAkhir1 !== -1 ? row[headerMap.kmAkhir1] || '' : '',
+      kmAwal2: headerMap.kmAwal2 !== -1 ? row[headerMap.kmAwal2] || '' : '',
+      kmAkhir2: headerMap.kmAkhir2 !== -1 ? row[headerMap.kmAkhir2] || '' : '',
+      keterangan: headerMap.keterangan !== -1 ? row[headerMap.keterangan] || '' : '',
+    };
+  } catch (error: any) {
+    throw new Error(error?.result?.error?.message || 'Gagal melakukan pengecekan data.');
+  }
+};
+
 const numberToColumnName = (num: number): string => {
   let col = '';
   let n = num + 1; // 1-based
