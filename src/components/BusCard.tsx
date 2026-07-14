@@ -321,7 +321,15 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
               />
             </div>
             <div className="input-group">
-              <label>KM Akhir Shift 2</label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <label>KM Akhir Shift 2</label>
+                <button 
+                  type="button"
+                  style={{ visibility: 'hidden', border: '1px solid transparent', borderRadius: '4px', fontSize: '11px', padding: '2px 6px' }}
+                >
+                  X
+                </button>
+              </div>
               <input 
                 type="number" 
                 inputMode="numeric" 
