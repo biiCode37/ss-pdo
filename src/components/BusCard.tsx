@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData } from '../services/googleSheets';
-import { ChevronDown, ChevronUp, Save, Loader2, Check } from 'lucide-react';
+import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy } from 'lucide-react';
 
 interface Props {
   bus: BusData;
@@ -304,9 +304,10 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
                   type="button"
                   onClick={handleCopyKm} 
                   disabled={isFieldDisabled('kmAwal2') || !formData.kmAkhir1}
-                  style={{ background: 'none', border: '1px solid var(--accent-color)', color: 'var(--accent-color)', borderRadius: '4px', fontSize: '11px', padding: '2px 6px', cursor: 'pointer' }}
+                  title="Salin KM Akhir 1"
+                  style={{ background: 'none', border: 'none', color: 'var(--accent-color)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
                 >
-                  Salin KM Akhir 1
+                  <Copy size={16} />
                 </button>
               </div>
               <input 
