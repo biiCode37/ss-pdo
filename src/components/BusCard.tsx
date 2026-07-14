@@ -297,9 +297,9 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
           </div>
 
           <div className="form-grid">
-            <div className="input-group">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label>KM Awal Shift 2</label>
+            <div className="input-group" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <label style={{ marginBottom: 0 }}>KM Awal Shift 2</label>
                 <button 
                   type="button"
                   onClick={handleCopyKm} 
@@ -320,16 +320,8 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
                 disabled={isFieldDisabled('kmAwal2')}
               />
             </div>
-            <div className="input-group">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label>KM Akhir Shift 2</label>
-                <button 
-                  type="button"
-                  style={{ visibility: 'hidden', border: '1px solid transparent', borderRadius: '4px', fontSize: '11px', padding: '2px 6px' }}
-                >
-                  X
-                </button>
-              </div>
+            <div className="input-group" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+              <label>KM Akhir Shift 2</label>
               <input 
                 type="number" 
                 inputMode="numeric" 
