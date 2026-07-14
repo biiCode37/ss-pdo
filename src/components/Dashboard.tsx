@@ -295,14 +295,18 @@ export function Dashboard({ onLogout }: Props) {
       </div>
 
       {isLoading && !busData && (
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <Loader2 className="spinner" size={32} style={{ color: 'var(--accent-color)' }} />
-          <p style={{ marginTop: '16px', color: 'var(--text-secondary)' }}>Membaca file spreadsheet...</p>
+        <div className="bus-list" style={{ marginTop: '16px' }}>
+          <phantom-ui loading={true}>
+            <div className="dashboard-card glass" style={{ height: '120px', marginBottom: '16px' }}></div>
+            <div className="dashboard-card glass" style={{ height: '120px', marginBottom: '16px' }}></div>
+            <div className="dashboard-card glass" style={{ height: '120px', marginBottom: '16px' }}></div>
+          </phantom-ui>
         </div>
       )}
 
-      {busData && headerMap && !isLoading && (
+      {busData && headerMap && (
         <BusList 
+          isLoading={isLoading}
           data={busData} 
           sheetId={currentSheetId} 
           tabName={currentTabName} 

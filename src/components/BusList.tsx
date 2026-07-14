@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { BusCard } from './BusCard';
 import { Search, Filter, CheckCircle2 } from 'lucide-react';
+import '@aejkatappaja/phantom-ui';
 
 import type { SyncItem } from '../hooks/useOfflineSync';
 
@@ -12,9 +13,10 @@ interface Props {
   headerMap: HeaderMap;
   syncQueue: SyncItem[];
   addToQueue: (item: Omit<SyncItem, 'id' | 'status'>) => void;
+  isLoading?: boolean;
 }
 
-export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQueue }: Props) {
+export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQueue, isLoading = false }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [activeCategory, setActiveCategory] = useState('ALL');
@@ -119,26 +121,28 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
         </button>
       </div>
 
-      <div className="bus-list">
-        {filteredData.length > 0 ? (
-          filteredData.map((bus) => (
-            <BusCard 
-              key={bus.rowIndex} 
-              bus={bus} 
-              sheetId={sheetId} 
-              tabName={tabName} 
-              headerMap={headerMap} 
-              isQueued={syncQueue.some(q => q.rowIndex === bus.rowIndex && q.sheetId === sheetId && q.tabName === tabName)}
-              addToQueue={addToQueue}
-              activeCategory={activeCategory}
-            />
-          ))
-        ) : (
-          <div className="empty-state">
-            <p>Tidak ada bus yang ditemukan dengan nomor "{searchQuery}"</p>
-          </div>
-        )}
-      </div>
+      <phantom-ui loading={isLoading}>
+        <div className="bus-list">
+          {filteredData.length > 0 ? (
+            filteredData.map((bus) => (
+              <BusCard 
+                key={bus.rowIndex} 
+                bus={bus} 
+                sheetId={sheetId} 
+                tabName={tabName} 
+                headerMap={headerMap} 
+                isQueued={syncQueue.some(q => q.rowIndex === bus.rowIndex && q.sheetId === sheetId && q.tabName === tabName)}
+                addToQueue={addToQueue}
+                activeCategory={activeCategory}
+              />
+            ))
+          ) : (
+            <div className="empty-state">
+              <p>Tidak ada bus yang ditemukan dengan nomor "{searchQuery}"</p>
+            </div>
+          )}
+        </div>
+      </phantom-ui>
     </div>
   );
 }
