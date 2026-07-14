@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDebounce } from '../hooks/useDebounce';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData } from '../services/googleSheets';
 import { ChevronDown, ChevronUp, Save, Loader2, Check } from 'lucide-react';
@@ -15,21 +16,51 @@ interface Props {
 
 export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue, activeCategory }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [formData, setFormData] = useState<Partial<BusData>>({
-    toaShift1: bus.toaShift1,
-    manualShift1: bus.manualShift1,
-    manualShift2: bus.manualShift2,
-    totalToa: bus.totalToa,
-    kmAwal1: bus.kmAwal1,
-    kmAkhir1: bus.kmAkhir1,
-    kmAwal2: bus.kmAwal2,
-    kmAkhir2: bus.kmAkhir2,
-    keterangan: bus.keterangan,
+  const draftKey = `draft_bus_${sheetId}_${tabName}_${bus.rowIndex}`;
+
+  const [formData, setFormData] = useState<Partial<BusData>>(() => {
+    const savedDraft = localStorage.getItem(draftKey);
+    if (savedDraft) {
+      try {
+        const parsed = JSON.parse(savedDraft);
+        return {
+          toaShift1: parsed.toaShift1 ?? bus.toaShift1,
+          manualShift1: parsed.manualShift1 ?? bus.manualShift1,
+          manualShift2: parsed.manualShift2 ?? bus.manualShift2,
+          totalToa: parsed.totalToa ?? bus.totalToa,
+          kmAwal1: parsed.kmAwal1 ?? bus.kmAwal1,
+          kmAkhir1: parsed.kmAkhir1 ?? bus.kmAkhir1,
+          kmAwal2: parsed.kmAwal2 ?? bus.kmAwal2,
+          kmAkhir2: parsed.kmAkhir2 ?? bus.kmAkhir2,
+          keterangan: parsed.keterangan ?? bus.keterangan,
+        };
+      } catch (e) {
+        // ignore JSON parse error
+      }
+    }
+    return {
+      toaShift1: bus.toaShift1,
+      manualShift1: bus.manualShift1,
+      manualShift2: bus.manualShift2,
+      totalToa: bus.totalToa,
+      kmAwal1: bus.kmAwal1,
+      kmAkhir1: bus.kmAkhir1,
+      kmAwal2: bus.kmAwal2,
+      kmAkhir2: bus.kmAkhir2,
+      keterangan: bus.keterangan,
+    };
   });
   
   const [isLoading, setIsLoading] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'queued'>('idle');
   const [error, setError] = useState<string | null>(null);
+
+  const debouncedFormData = useDebounce(formData, 1000);
+
+  useEffect(() => {
+    // Save draft when user types, but debounce it
+    localStorage.setItem(draftKey, JSON.stringify(debouncedFormData));
+  }, [debouncedFormData, draftKey]);
 
   const handleChange = (field: keyof BusData) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
@@ -76,6 +107,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
     try {
       await updateBusData(sheetId, tabName, bus.rowIndex, formData, headerMap);
       setSaveStatus('success');
+      localStorage.removeItem(draftKey);
       setTimeout(() => setIsExpanded(false), 1000); // Auto close on success after 1s
     } catch (err: any) {
       if (err.message && err.message.includes('API Credentials missing')) {
@@ -86,6 +118,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
         // Assume network error or temporary Google API glitch
         addToQueue({ sheetId, tabName, rowIndex: bus.rowIndex, updates: formData, headerMap });
         setSaveStatus('queued');
+        localStorage.removeItem(draftKey);
         setIsExpanded(false);
       }
     } finally {
