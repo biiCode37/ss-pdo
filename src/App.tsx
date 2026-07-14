@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LoginScreen } from './components/LoginScreen';
 import { Dashboard } from './components/Dashboard';
+import { SyncQueueBadge } from './components/SyncQueueBadge';
 import { initGoogleApi, checkSignedIn, signOut, hasGoogleCreds } from './services/googleSheets';
 
 export default function App() {
@@ -47,6 +48,8 @@ export default function App() {
           {initError}
         </div>
       )}
+
+      {isSignedIn && <SyncQueueBadge />}
     </>
   );
 }
