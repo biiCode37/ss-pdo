@@ -177,24 +177,74 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       throw new Error('Tidak ada data di sheet ini.');
     }
 
-    const headers = rows[0];
-    
-    const headerMap: HeaderMap = {
-      unit: findColumnIndex(headers, HEADER_KEYWORDS.unit),
-      toaShift1: findColumnIndex(headers, HEADER_KEYWORDS.toaShift1),
-      manualShift1: findColumnIndex(headers, HEADER_KEYWORDS.manualShift1),
-      manualShift2: findColumnIndex(headers, HEADER_KEYWORDS.manualShift2),
-      totalToa: findColumnIndex(headers, HEADER_KEYWORDS.totalToa),
-      kmAwal1: findColumnIndex(headers, HEADER_KEYWORDS.kmAwal1),
-      kmAkhir1: findColumnIndex(headers, HEADER_KEYWORDS.kmAkhir1),
-      kmAwal2: findColumnIndex(headers, HEADER_KEYWORDS.kmAwal2),
-      kmAkhir2: findColumnIndex(headers, HEADER_KEYWORDS.kmAkhir2),
-      keterangan: findColumnIndex(headers, HEADER_KEYWORDS.keterangan),
-    };
+    // --- NEW LOGIC: Dynamic Header Row Detection ---
+    let headerRowIndex = -1;
+    // Scan up to first 5 rows to find "Unit" / "No Body" keyword
+    for (let i = 0; i < Math.min(5, rows.length); i++) {
+      if (findColumnIndex(rows[i], HEADER_KEYWORDS.unit) !== -1) {
+        headerRowIndex = i;
+        break;
+      }
+    }
 
-    if (headerMap.unit === -1) {
+    if (headerRowIndex === -1) {
       throw new Error('Tidak bisa menemukan kolom "No Body / Unit". Pastikan header berisikan kata "No Body" atau "Unit".');
     }
+
+    // Determine if the next row is a sub-header (merged cell format)
+    let isSubHeader = false;
+    if (headerRowIndex + 1 < rows.length) {
+      const nextRow = rows[headerRowIndex + 1];
+      const unitColIdx = findColumnIndex(rows[headerRowIndex], HEADER_KEYWORDS.unit);
+      const unitNextVal = nextRow[unitColIdx] ? String(nextRow[unitColIdx]).trim() : '';
+      // If unit column is empty on the next row, it's highly likely a subheader
+      if (unitNextVal === '') {
+        isSubHeader = true;
+      }
+    }
+
+    const compositeHeaders: string[] = [];
+    const maxCols = Math.max(
+      rows[headerRowIndex].length,
+      isSubHeader ? (rows[headerRowIndex + 1]?.length || 0) : 0
+    );
+
+    // Build composite headers handling horizontal merges on the main header row
+    let lastMainHeader = '';
+    for (let j = 0; j < maxCols; j++) {
+      let mainHeaderVal = rows[headerRowIndex][j] ? String(rows[headerRowIndex][j]).trim() : '';
+      if (mainHeaderVal !== '') {
+        lastMainHeader = mainHeaderVal;
+      } else {
+        // Inherit from left if empty (horizontal merge)
+        mainHeaderVal = lastMainHeader;
+      }
+      
+      let headerText = mainHeaderVal;
+      
+      // If sub-header exists, append it
+      if (isSubHeader && rows[headerRowIndex + 1] && rows[headerRowIndex + 1][j]) {
+        const subHeaderVal = String(rows[headerRowIndex + 1][j]).trim();
+        if (subHeaderVal !== '') {
+          headerText += ' ' + subHeaderVal;
+        }
+      }
+      
+      compositeHeaders[j] = headerText;
+    }
+    
+    const headerMap: HeaderMap = {
+      unit: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit),
+      toaShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift1),
+      manualShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift1),
+      manualShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift2),
+      totalToa: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.totalToa),
+      kmAwal1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAwal1),
+      kmAkhir1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAkhir1),
+      kmAwal2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAwal2),
+      kmAkhir2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAkhir2),
+      keterangan: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.keterangan),
+    };
 
     const getValue = (row: any[], idx: number) => {
       if (idx === -1) return '';
@@ -203,8 +253,9 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
     };
 
     const data: BusData[] = [];
-    // Data usually starts at row 2, index 1
-    for (let i = 1; i < rows.length; i++) {
+    // Data starts after the header(s)
+    const dataStartIndex = isSubHeader ? headerRowIndex + 2 : headerRowIndex + 1;
+    for (let i = dataStartIndex; i < rows.length; i++) {
       const row = rows[i];
       const unitVal = row[headerMap.unit];
       
