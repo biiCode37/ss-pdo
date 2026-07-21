@@ -144,14 +144,14 @@ const normalizeString = (str: string) => {
 // Map keywords to standard fields
 const HEADER_KEYWORDS: Record<string, string[]> = {
   unit: ['nobody', 'unit', 'bus', 'body'],
-  toaShift1: ['toashift1', 'toashifti'],
-  manualShift1: ['manualshift1', 'manualshifti', 'manual1'],
-  manualShift2: ['manualshift2', 'manualshiftii', 'manual2'],
+  toaShift1: ['toashift1', 'toashifti', 'toas1', 'toasi'],
+  manualShift1: ['manualshift1', 'manualshifti', 'manual1', 'manuals1', 'manualsi'],
+  manualShift2: ['manualshift2', 'manualshiftii', 'manual2', 'manuals2', 'manualsii'],
   totalToa: ['totaltoa', 'total'],
-  kmAwal1: ['kilometerawalshift1', 'kmawalshift1', 'kmawal1', 'kmawalshifti'],
-  kmAkhir1: ['kilometerakhirshift1', 'kmakhirshift1', 'kmakhir1', 'kmakhirshifti'],
-  kmAwal2: ['kilometerawalshift2', 'kmawalshift2', 'kmawal2', 'kmawalshiftii'],
-  kmAkhir2: ['kilometerakhirshift2', 'kmakhirshift2', 'kmakhir2', 'kmakhirshiftii'],
+  kmAwal1: ['kilometerawalshift1', 'kmawalshift1', 'kmawal1', 'kmawalshifti', 'kmawals1', 'kmawalsi'],
+  kmAkhir1: ['kilometerakhirshift1', 'kmakhirshift1', 'kmakhir1', 'kmakhirshifti', 'kmakhirs1', 'kmakhirsi'],
+  kmAwal2: ['kilometerawalshift2', 'kmawalshift2', 'kmawal2', 'kmawalshiftii', 'kmawals2', 'kmawalsii'],
+  kmAkhir2: ['kilometerakhirshift2', 'kmakhirshift2', 'kmakhir2', 'kmakhirshiftii', 'kmakhirs2', 'kmakhirsii'],
   keterangan: ['keterangan', 'ket', 'notes', 'catatan'],
 };
 
@@ -196,6 +196,12 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       throw new Error('Tidak bisa menemukan kolom "No Body / Unit". Pastikan header berisikan kata "No Body" atau "Unit".');
     }
 
+    const getValue = (row: any[], idx: number) => {
+      if (idx === -1) return '';
+      const val = row[idx];
+      return val !== undefined && val !== null ? String(val) : '';
+    };
+
     const data: BusData[] = [];
     // Data usually starts at row 2, index 1
     for (let i = 1; i < rows.length; i++) {
@@ -208,15 +214,15 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       data.push({
         rowIndex: i + 1, // Sheets API uses 1-based index (A1)
         unit: String(unitVal),
-        toaShift1: headerMap.toaShift1 !== -1 ? row[headerMap.toaShift1] || '' : '',
-        manualShift1: headerMap.manualShift1 !== -1 ? row[headerMap.manualShift1] || '' : '',
-        manualShift2: headerMap.manualShift2 !== -1 ? row[headerMap.manualShift2] || '' : '',
-        totalToa: headerMap.totalToa !== -1 ? row[headerMap.totalToa] || '' : '',
-        kmAwal1: headerMap.kmAwal1 !== -1 ? row[headerMap.kmAwal1] || '' : '',
-        kmAkhir1: headerMap.kmAkhir1 !== -1 ? row[headerMap.kmAkhir1] || '' : '',
-        kmAwal2: headerMap.kmAwal2 !== -1 ? row[headerMap.kmAwal2] || '' : '',
-        kmAkhir2: headerMap.kmAkhir2 !== -1 ? row[headerMap.kmAkhir2] || '' : '',
-        keterangan: headerMap.keterangan !== -1 ? row[headerMap.keterangan] || '' : '',
+        toaShift1: getValue(row, headerMap.toaShift1),
+        manualShift1: getValue(row, headerMap.manualShift1),
+        manualShift2: getValue(row, headerMap.manualShift2),
+        totalToa: getValue(row, headerMap.totalToa),
+        kmAwal1: getValue(row, headerMap.kmAwal1),
+        kmAkhir1: getValue(row, headerMap.kmAkhir1),
+        kmAwal2: getValue(row, headerMap.kmAwal2),
+        kmAkhir2: getValue(row, headerMap.kmAkhir2),
+        keterangan: getValue(row, headerMap.keterangan),
         originalRow: row
       });
     }
@@ -247,16 +253,22 @@ export const getBusRowData = async (
 
     const row = rows[0];
     
+    const getValue = (idx: number) => {
+      if (idx === -1) return '';
+      const val = row[idx];
+      return val !== undefined && val !== null ? String(val) : '';
+    };
+
     return {
-      toaShift1: headerMap.toaShift1 !== -1 ? row[headerMap.toaShift1] || '' : '',
-      manualShift1: headerMap.manualShift1 !== -1 ? row[headerMap.manualShift1] || '' : '',
-      manualShift2: headerMap.manualShift2 !== -1 ? row[headerMap.manualShift2] || '' : '',
-      totalToa: headerMap.totalToa !== -1 ? row[headerMap.totalToa] || '' : '',
-      kmAwal1: headerMap.kmAwal1 !== -1 ? row[headerMap.kmAwal1] || '' : '',
-      kmAkhir1: headerMap.kmAkhir1 !== -1 ? row[headerMap.kmAkhir1] || '' : '',
-      kmAwal2: headerMap.kmAwal2 !== -1 ? row[headerMap.kmAwal2] || '' : '',
-      kmAkhir2: headerMap.kmAkhir2 !== -1 ? row[headerMap.kmAkhir2] || '' : '',
-      keterangan: headerMap.keterangan !== -1 ? row[headerMap.keterangan] || '' : '',
+      toaShift1: getValue(headerMap.toaShift1),
+      manualShift1: getValue(headerMap.manualShift1),
+      manualShift2: getValue(headerMap.manualShift2),
+      totalToa: getValue(headerMap.totalToa),
+      kmAwal1: getValue(headerMap.kmAwal1),
+      kmAkhir1: getValue(headerMap.kmAkhir1),
+      kmAwal2: getValue(headerMap.kmAwal2),
+      kmAkhir2: getValue(headerMap.kmAkhir2),
+      keterangan: getValue(headerMap.keterangan),
     };
   } catch (error: any) {
     throw new Error(error?.result?.error?.message || 'Gagal melakukan pengecekan data.');

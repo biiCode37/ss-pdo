@@ -113,7 +113,7 @@ export function Dashboard({ onLogout }: Props) {
     }
   };
 
-  const handleLoadData = async () => {
+  const handleLoadData = async (isRefresh = false) => {
     if (!sheetUrl) {
       setError('Silakan pilih atau paste link Google Sheet terlebih dahulu');
       return;
@@ -127,7 +127,9 @@ export function Dashboard({ onLogout }: Props) {
 
     setIsLoading(true);
     setError(null);
-    setBusData(null);
+    if (!isRefresh) {
+      setBusData(null);
+    }
 
     try {
       const { data, headerMap } = await getBusData(sheetId, selectedTab);
@@ -140,6 +142,15 @@ export function Dashboard({ onLogout }: Props) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleUpdateBus = (rowIndex: number, updates: Partial<BusData>) => {
+    setBusData(prevData => {
+      if (!prevData) return prevData;
+      return prevData.map(bus => 
+        bus.rowIndex === rowIndex ? { ...bus, ...updates } : bus
+      );
+    });
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -162,7 +173,7 @@ export function Dashboard({ onLogout }: Props) {
   const handleTouchEnd = () => {
     if (pullDistance > 60) {
       setIsRefreshing(true);
-      handleLoadData().finally(() => {
+      handleLoadData(true).finally(() => {
         setIsRefreshing(false);
         setPullDistance(0);
       });
@@ -287,7 +298,7 @@ export function Dashboard({ onLogout }: Props) {
           </select>
         </div>
 
-        <button className="btn" onClick={handleLoadData} disabled={isLoading || isAddingRoute}>
+        <button className="btn" onClick={() => handleLoadData(false)} disabled={isLoading || isAddingRoute}>
           {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Bus'}
         </button>
 
@@ -313,6 +324,7 @@ export function Dashboard({ onLogout }: Props) {
           headerMap={headerMap} 
           syncQueue={queue}
           addToQueue={addToQueue}
+          onUpdateBus={handleUpdateBus}
         />
       )}
     </div>

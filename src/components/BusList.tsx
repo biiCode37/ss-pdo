@@ -14,9 +14,10 @@ interface Props {
   syncQueue: SyncItem[];
   addToQueue: (item: Omit<SyncItem, 'id' | 'status'>) => void;
   isLoading?: boolean;
+  onUpdateBus?: (rowIndex: number, updates: Partial<BusData>) => void;
 }
 
-export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQueue, isLoading = false }: Props) {
+export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQueue, isLoading = false, onUpdateBus }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [activeCategory, setActiveCategory] = useState('ALL');
@@ -33,17 +34,18 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
 
   // Logic selesai bergantung pada kategori yang aktif
   const isBusFilled = (bus: BusData) => {
+    const hasValue = (val: any) => val !== undefined && val !== null && String(val).trim() !== '';
     if (activeCategory === 'ALL') {
       return !!(
-        bus.toaShift1 && 
-        bus.totalToa && 
-        bus.kmAwal1 && 
-        bus.kmAkhir1 && 
-        bus.kmAwal2 && 
-        bus.kmAkhir2
+        hasValue(bus.toaShift1) && 
+        hasValue(bus.totalToa) && 
+        hasValue(bus.kmAwal1) && 
+        hasValue(bus.kmAkhir1) && 
+        hasValue(bus.kmAwal2) && 
+        hasValue(bus.kmAkhir2)
       );
     } else {
-      return !!bus[activeCategory as keyof BusData];
+      return hasValue(bus[activeCategory as keyof BusData]);
     }
   };
 
@@ -134,6 +136,7 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
                 isQueued={syncQueue.some(q => q.rowIndex === bus.rowIndex && q.sheetId === sheetId && q.tabName === tabName)}
                 addToQueue={addToQueue}
                 activeCategory={activeCategory}
+                onUpdateBus={onUpdateBus ? (updates) => onUpdateBus(bus.rowIndex, updates) : undefined}
               />
             ))
           ) : (

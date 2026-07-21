@@ -12,9 +12,10 @@ interface Props {
   isQueued: boolean;
   addToQueue: (item: any) => void;
   activeCategory: string;
+  onUpdateBus?: (updates: Partial<BusData>) => void;
 }
 
-export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue, activeCategory }: Props) {
+export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue, activeCategory, onUpdateBus }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const draftKey = `draft_bus_${sheetId}_${tabName}_${bus.rowIndex}`;
 
@@ -138,6 +139,9 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
       setSaveStatus('success');
       localStorage.removeItem(draftKey);
       setConflictData(null);
+      if (onUpdateBus) {
+        onUpdateBus(formData);
+      }
       setTimeout(() => setIsExpanded(false), 1000); // Auto close on success after 1s
     } catch (err: any) {
       if (err.message && err.message.includes('API Credentials missing')) {
@@ -159,17 +163,18 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
 
 
   const getMissingCount = () => {
+    const hasValue = (val: any) => val !== undefined && val !== null && String(val).trim() !== '';
     if (activeCategory === 'ALL') {
       let count = 0;
-      if (!formData.toaShift1) count++;
-      if (!formData.totalToa) count++;
-      if (!formData.kmAwal1) count++;
-      if (!formData.kmAkhir1) count++;
-      if (!formData.kmAwal2) count++;
-      if (!formData.kmAkhir2) count++;
+      if (!hasValue(formData.toaShift1)) count++;
+      if (!hasValue(formData.totalToa)) count++;
+      if (!hasValue(formData.kmAwal1)) count++;
+      if (!hasValue(formData.kmAkhir1)) count++;
+      if (!hasValue(formData.kmAwal2)) count++;
+      if (!hasValue(formData.kmAkhir2)) count++;
       return count;
     } else {
-      return formData[activeCategory as keyof BusData] ? 0 : 1;
+      return hasValue(formData[activeCategory as keyof BusData]) ? 0 : 1;
     }
   };
   
