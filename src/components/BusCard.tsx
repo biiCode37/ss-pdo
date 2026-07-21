@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData, getBusRowData } from '../services/googleSheets';
@@ -60,10 +60,41 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
 
   const debouncedFormData = useDebounce(formData, 1000);
 
+  const inputRefs = {
+    toaShift1: useRef<HTMLInputElement>(null),
+    totalToa: useRef<HTMLInputElement>(null),
+    manualShift1: useRef<HTMLInputElement>(null),
+    manualShift2: useRef<HTMLInputElement>(null),
+    kmAwal1: useRef<HTMLInputElement>(null),
+    kmAkhir1: useRef<HTMLInputElement>(null),
+    kmAwal2: useRef<HTMLInputElement>(null),
+    kmAkhir2: useRef<HTMLInputElement>(null),
+    keterangan: useRef<HTMLInputElement>(null),
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur();
+      handleSave(false);
+    }
+  };
+
   useEffect(() => {
     // Save draft when user types, but debounce it
     localStorage.setItem(draftKey, JSON.stringify(debouncedFormData));
   }, [debouncedFormData, draftKey]);
+
+  useEffect(() => {
+    if (isExpanded && activeCategory !== 'ALL') {
+      const timer = setTimeout(() => {
+        const ref = inputRefs[activeCategory as keyof typeof inputRefs];
+        if (ref && ref.current && !ref.current.disabled) {
+          ref.current.focus();
+        }
+      }, 300); // Tunggu animasi expand selesai
+      return () => clearTimeout(timer);
+    }
+  }, [isExpanded, activeCategory]);
 
   const handleChange = (field: keyof BusData) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
@@ -142,7 +173,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
       if (onUpdateBus) {
         onUpdateBus(formData);
       }
-      setTimeout(() => setIsExpanded(false), 1000); // Auto close on success after 1s
+      setIsExpanded(false); // Auto close immediately on success
     } catch (err: any) {
       if (err.message && err.message.includes('API Credentials missing')) {
         setError('Sesi login telah habis. Silakan refresh dan login ulang.');
@@ -248,12 +279,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group">
               <label>TOA SHIFT 1</label>
               <input 
+                ref={inputRefs.toaShift1}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.toaShift1 || ''} 
                 onChange={handleChange('toaShift1')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('toaShift1')}
               />
@@ -261,12 +294,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group">
               <label>TOTAL TOA</label>
               <input 
+                ref={inputRefs.totalToa}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.totalToa || ''} 
                 onChange={handleChange('totalToa')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('totalToa')}
               />
@@ -277,12 +312,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group">
               <label>MANUAL SHIFT 1</label>
               <input 
+                ref={inputRefs.manualShift1}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.manualShift1 || ''} 
                 onChange={handleChange('manualShift1')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('manualShift1')}
               />
@@ -290,12 +327,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group">
               <label>MANUAL SHIFT 2</label>
               <input 
+                ref={inputRefs.manualShift2}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.manualShift2 || ''} 
                 onChange={handleChange('manualShift2')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('manualShift2')}
               />
@@ -306,12 +345,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group">
               <label>KM Awal Shift 1</label>
               <input 
+                ref={inputRefs.kmAwal1}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.kmAwal1 || ''} 
                 onChange={handleChange('kmAwal1')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('kmAwal1')}
               />
@@ -319,12 +360,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group">
               <label>KM Akhir Shift 1</label>
               <input 
+                ref={inputRefs.kmAkhir1}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.kmAkhir1 || ''} 
                 onChange={handleChange('kmAkhir1')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('kmAkhir1')}
               />
@@ -355,12 +398,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
                 </button>
               </div>
               <input 
+                ref={inputRefs.kmAwal2}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.kmAwal2 || ''} 
                 onChange={handleChange('kmAwal2')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('kmAwal2')}
               />
@@ -368,12 +413,14 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
               <label>KM Akhir Shift 2</label>
               <input 
+                ref={inputRefs.kmAkhir2}
                 type="number" 
                 inputMode="numeric" 
                 pattern="[0-9]*" 
                 className="input-field" 
                 value={formData.kmAkhir2 || ''} 
                 onChange={handleChange('kmAkhir2')}
+                onKeyDown={handleKeyDown}
                 placeholder="0"
                 disabled={isFieldDisabled('kmAkhir2')}
               />
@@ -384,10 +431,12 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
             <div className="input-group">
               <label>KETERANGAN</label>
               <input 
+                ref={inputRefs.keterangan}
                 type="text" 
                 className="input-field" 
                 value={formData.keterangan || ''} 
                 onChange={handleChange('keterangan')}
+                onKeyDown={handleKeyDown}
                 placeholder="Tambahkan keterangan..."
                 disabled={isFieldDisabled('keterangan')}
               />
