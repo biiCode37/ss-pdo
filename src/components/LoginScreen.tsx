@@ -18,8 +18,14 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
       await signIn();
       onLoginSuccess();
     } catch (err: any) {
-      console.error(err);
-      if (err.error !== 'popup_closed_by_user') {
+      // BUG-04: err bisa berupa objek detail dari CustomEvent (google-login-error)
+      const errorType = err?.type || err?.error || '';
+      if (errorType === 'popup_closed_by_user' || err?.message?.includes('Login dibatalkan')) {
+        // User menutup popup — bukan error fatal, cukup reset state
+        setError(null);
+      } else if (err?.message?.includes('timeout')) {
+        setError('Login timeout. Silakan coba lagi.');
+      } else {
         setError('Gagal login. Pastikan kredensial di file .env sudah diatur atau hubungi admin.');
       }
     } finally {

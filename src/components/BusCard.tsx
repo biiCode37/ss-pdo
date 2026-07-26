@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData, getBusRowData } from '../services/googleSheets';
+import { isNetworkError } from '../hooks/useOfflineSync';
 import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy } from 'lucide-react';
 
 interface Props {
@@ -19,36 +20,46 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   const [isExpanded, setIsExpanded] = useState(false);
   const draftKey = `draft_bus_${sheetId}_${tabName}_${bus.rowIndex}`;
 
+  const isDirtyRef = useRef(false);
+
   const [formData, setFormData] = useState<Partial<BusData>>(() => {
     const savedDraft = localStorage.getItem(draftKey);
     if (savedDraft) {
       try {
         const parsed = JSON.parse(savedDraft);
+        const getVal = (key: keyof BusData): string => {
+          const dVal = parsed[key];
+          if (dVal !== undefined && dVal !== null && String(dVal).trim() !== '') {
+            return String(dVal);
+          }
+          const bVal = bus[key];
+          return typeof bVal === 'string' ? bVal : '';
+        };
         return {
-          toaShift1: parsed.toaShift1 ?? bus.toaShift1,
-          manualShift1: parsed.manualShift1 ?? bus.manualShift1,
-          manualShift2: parsed.manualShift2 ?? bus.manualShift2,
-          totalToa: parsed.totalToa ?? bus.totalToa,
-          kmAwal1: parsed.kmAwal1 ?? bus.kmAwal1,
-          kmAkhir1: parsed.kmAkhir1 ?? bus.kmAkhir1,
-          kmAwal2: parsed.kmAwal2 ?? bus.kmAwal2,
-          kmAkhir2: parsed.kmAkhir2 ?? bus.kmAkhir2,
-          keterangan: parsed.keterangan ?? bus.keterangan,
+          toaShift1: getVal('toaShift1'),
+          manualShift1: getVal('manualShift1'),
+          manualShift2: getVal('manualShift2'),
+          totalToa: getVal('totalToa'),
+          kmAwal1: getVal('kmAwal1'),
+          kmAkhir1: getVal('kmAkhir1'),
+          kmAwal2: getVal('kmAwal2'),
+          kmAkhir2: getVal('kmAkhir2'),
+          keterangan: getVal('keterangan'),
         };
       } catch (e) {
         // ignore JSON parse error
       }
     }
     return {
-      toaShift1: bus.toaShift1,
-      manualShift1: bus.manualShift1,
-      manualShift2: bus.manualShift2,
-      totalToa: bus.totalToa,
-      kmAwal1: bus.kmAwal1,
-      kmAkhir1: bus.kmAkhir1,
-      kmAwal2: bus.kmAwal2,
-      kmAkhir2: bus.kmAkhir2,
-      keterangan: bus.keterangan,
+      toaShift1: bus.toaShift1 || '',
+      manualShift1: bus.manualShift1 || '',
+      manualShift2: bus.manualShift2 || '',
+      totalToa: bus.totalToa || '',
+      kmAwal1: bus.kmAwal1 || '',
+      kmAkhir1: bus.kmAkhir1 || '',
+      kmAwal2: bus.kmAwal2 || '',
+      kmAkhir2: bus.kmAkhir2 || '',
+      keterangan: bus.keterangan || '',
     };
   });
   
@@ -59,6 +70,23 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   const [conflictData, setConflictData] = useState<Partial<BusData> | null>(null);
 
   const debouncedFormData = useDebounce(formData, 1000);
+
+  // Sync formData when bus prop changes from reload/refresh (if not dirty)
+  useEffect(() => {
+    if (!isDirtyRef.current) {
+      setFormData({
+        toaShift1: bus.toaShift1 || '',
+        manualShift1: bus.manualShift1 || '',
+        manualShift2: bus.manualShift2 || '',
+        totalToa: bus.totalToa || '',
+        kmAwal1: bus.kmAwal1 || '',
+        kmAkhir1: bus.kmAkhir1 || '',
+        kmAwal2: bus.kmAwal2 || '',
+        kmAkhir2: bus.kmAkhir2 || '',
+        keterangan: bus.keterangan || '',
+      });
+    }
+  }, [bus]);
 
   const inputRefs = {
     toaShift1: useRef<HTMLInputElement>(null),
@@ -80,9 +108,31 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   };
 
   useEffect(() => {
-    // Save draft when user types, but debounce it
-    localStorage.setItem(draftKey, JSON.stringify(debouncedFormData));
+    // Only save draft when user has actively edited the fields
+    if (isDirtyRef.current) {
+      localStorage.setItem(draftKey, JSON.stringify(debouncedFormData));
+    }
   }, [debouncedFormData, draftKey]);
+
+  // BUG-09: Simpan draft segera saat user meninggalkan halaman
+  useEffect(() => {
+    const saveImmediately = () => {
+      if (isDirtyRef.current) {
+        localStorage.setItem(draftKey, JSON.stringify(formData));
+      }
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        saveImmediately();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', saveImmediately);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', saveImmediately);
+    };
+  }, [formData, draftKey]);
 
   useEffect(() => {
     if (isExpanded && activeCategory !== 'ALL') {
@@ -97,6 +147,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   }, [isExpanded, activeCategory]);
 
   const handleChange = (field: keyof BusData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    isDirtyRef.current = true;
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
     setSaveStatus('idle');
     setError(null);
@@ -104,6 +155,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
 
   const handleCopyKm = () => {
     if (formData.kmAkhir1) {
+      isDirtyRef.current = true;
       setFormData(prev => ({ ...prev, kmAwal2: prev.kmAkhir1 }));
       setSaveStatus('idle');
       setError(null);
@@ -167,6 +219,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
       }
 
       await updateBusData(sheetId, tabName, bus.rowIndex, formData, headerMap);
+      isDirtyRef.current = false;
       setSaveStatus('success');
       localStorage.removeItem(draftKey);
       setConflictData(null);
@@ -179,12 +232,29 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
         setError('Sesi login telah habis. Silakan refresh dan login ulang.');
       } else if (err.status === 401 || err.message?.includes('Auth') || err.message?.includes('Credentials')) {
         setError('Akses ditolak. Sesi mungkin kadaluarsa. Silakan login ulang.');
-      } else {
-        // Assume network error or temporary Google API glitch
-        addToQueue({ sheetId, tabName, rowIndex: bus.rowIndex, updates: formData, headerMap });
+      } else if (isNetworkError(err)) {
+        // BUG-03: Hanya masukkan ke antrean jika benar-benar error jaringan
+        // BUG-02: Sertakan originalSnapshot untuk collision detection di jalur antrean
+        const originalSnapshot: Partial<BusData> = {
+          toaShift1: bus.toaShift1,
+          manualShift1: bus.manualShift1,
+          manualShift2: bus.manualShift2,
+          totalToa: bus.totalToa,
+          kmAwal1: bus.kmAwal1,
+          kmAkhir1: bus.kmAkhir1,
+          kmAwal2: bus.kmAwal2,
+          kmAkhir2: bus.kmAkhir2,
+          keterangan: bus.keterangan,
+        };
+        addToQueue({ sheetId, tabName, rowIndex: bus.rowIndex, updates: formData, headerMap, originalSnapshot });
+        isDirtyRef.current = false;
         setSaveStatus('queued');
         localStorage.removeItem(draftKey);
         setIsExpanded(false);
+      } else {
+        // BUG-03: Error permanen dari Google API (400/403/404) — tampilkan langsung ke user
+        const apiMsg = err?.result?.error?.message || err?.message || 'Gagal menyimpan data.';
+        setError(`Gagal menyimpan: ${apiMsg}`);
       }
     } finally {
       setIsLoading(false);
@@ -193,28 +263,51 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
 
 
 
-  const getMissingCount = () => {
-    const hasValue = (val: any) => val !== undefined && val !== null && String(val).trim() !== '';
-    if (activeCategory === 'ALL') {
-      let count = 0;
-      if (!hasValue(formData.toaShift1)) count++;
-      if (!hasValue(formData.totalToa)) count++;
-      if (!hasValue(formData.kmAwal1)) count++;
-      if (!hasValue(formData.kmAkhir1)) count++;
-      if (!hasValue(formData.kmAwal2)) count++;
-      if (!hasValue(formData.kmAkhir2)) count++;
-      return count;
-    } else {
-      return hasValue(formData[activeCategory as keyof BusData]) ? 0 : 1;
-    }
-  };
-  
-  const missingCount = getMissingCount();
-
   const isFieldDisabled = (fieldName: string) => {
     if (isLoading) return true;
     if (activeCategory === 'ALL') return false;
+    // BUG-07: Field pelengkap (catatan/manual) selalu aktif, bukan kolom kerja utama
+    const alwaysEnabledFields = ['manualShift1', 'manualShift2', 'keterangan'];
+    if (alwaysEnabledFields.includes(fieldName)) return false;
     return activeCategory !== fieldName;
+  };
+
+  const renderServerSummary = () => {
+    const CATEGORY_LABELS: Record<string, string> = {
+      toaShift1: 'TOA S1',
+      totalToa: 'Total TOA',
+      manualShift1: 'Manual S1',
+      manualShift2: 'Manual S2',
+      kmAwal1: 'KM Awal S1',
+      kmAkhir1: 'KM Akhir S1',
+      kmAwal2: 'KM Awal S2',
+      kmAkhir2: 'KM Akhir S2',
+      keterangan: 'Keterangan',
+    };
+
+    if (activeCategory !== 'ALL') {
+      const val = bus[activeCategory as keyof BusData];
+      const label = CATEGORY_LABELS[activeCategory] || activeCategory;
+      if (val !== undefined && val !== null && String(val).trim() !== '') {
+        return <span style={{ color: 'var(--text-secondary)' }}>{label}: {val}</span>;
+      }
+      return <span style={{ color: '#f87171', fontWeight: 500 }}>Belum Terisi</span>;
+    }
+
+    const parts: string[] = [];
+    if (bus.kmAwal1 || bus.kmAkhir1) {
+      parts.push(`KM S1: ${bus.kmAwal1 || '-'}-${bus.kmAkhir1 || '-'}`);
+    }
+    if (bus.kmAwal2 || bus.kmAkhir2) {
+      parts.push(`KM S2: ${bus.kmAwal2 || '-'}-${bus.kmAkhir2 || '-'}`);
+    }
+    if (bus.toaShift1) {
+      parts.push(`TOA S1: ${bus.toaShift1}`);
+    }
+    if (parts.length === 0) {
+      return <span style={{ color: '#f87171', fontWeight: 500 }}>Belum Terisi</span>;
+    }
+    return <span style={{ color: 'var(--text-secondary)' }}>{parts.join(' | ')}</span>;
   };
 
   return (
@@ -223,27 +316,15 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
         className="bus-card-header"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className="bus-card-title" style={{ alignItems: 'flex-start' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div className="bus-card-title" style={{ alignItems: 'flex-start', flexDirection: 'column', gap: '2px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>{bus.unit}</span>
-            {missingCount > 0 ? (
-              <span style={{ fontSize: '13px', color: 'var(--danger-color)', fontWeight: 'bold', background: 'rgba(239, 68, 68, 0.1)', padding: '2px 6px', borderRadius: '12px' }}>
-                -{missingCount}
-              </span>
-            ) : (
-              <span style={{ fontSize: '11px', color: 'var(--success-color)', fontWeight: 'bold', background: 'rgba(16, 185, 129, 0.1)', padding: '2px 6px', borderRadius: '12px' }}>
-                Selesai
-              </span>
-            )}
-          </div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            {(saveStatus === 'success' || (saveStatus === 'idle' && !isQueued && !error)) && null}
-            {saveStatus === 'success' && (
-              <span className="bus-card-status status-updated">Tersimpan</span>
-            )}
             {(saveStatus === 'queued' || isQueued) && (
               <span className="bus-card-status status-queued">Menunggu Sinyal</span>
             )}
+          </div>
+          <div style={{ fontSize: '12px', fontWeight: 'normal', opacity: 0.9 }}>
+            {renderServerSummary()}
           </div>
         </div>
         <div style={{ alignSelf: 'flex-start', marginTop: '2px' }}>
@@ -458,16 +539,65 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
                 ⚠️ Tabrakan Data Terdeteksi
               </h4>
               <p style={{ fontSize: '13px', margin: '0 0 12px 0', lineHeight: 1.4, color: 'var(--text-secondary)' }}>
-                Petugas lain baru saja mengubah data bus ini. Jika Anda menyimpan sekarang, data mereka akan tertimpa.
+                Petugas lain baru saja mengubah data bus ini di Google Sheets. Berikut adalah rincian data terbaru dari server:
               </p>
+
+              <div style={{ 
+                background: 'rgba(0, 0, 0, 0.25)', 
+                borderRadius: '6px', 
+                padding: '10px 12px', 
+                marginBottom: '12px',
+                fontSize: '12px'
+              }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)', fontSize: '11px' }}>
+                      <th style={{ padding: '4px 0' }}>KOLOM</th>
+                      <th style={{ padding: '4px 0', color: 'var(--accent-color)' }}>DATA SERVER</th>
+                      <th style={{ padding: '4px 0', color: 'var(--danger-color)' }}>INPUT ANDA</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { key: 'toaShift1', label: 'TOA Shift 1' },
+                      { key: 'totalToa', label: 'Total TOA' },
+                      { key: 'manualShift1', label: 'Manual Shift 1' },
+                      { key: 'manualShift2', label: 'Manual Shift 2' },
+                      { key: 'kmAwal1', label: 'KM Awal S1' },
+                      { key: 'kmAkhir1', label: 'KM Akhir S1' },
+                      { key: 'kmAwal2', label: 'KM Awal S2' },
+                      { key: 'kmAkhir2', label: 'KM Akhir S2' },
+                      { key: 'keterangan', label: 'Keterangan' },
+                    ].map(f => {
+                      const serverVal = conflictData[f.key as keyof BusData] || '';
+                      const localVal = formData[f.key as keyof BusData] || '';
+                      const isDiff = (serverVal !== (bus[f.key as keyof BusData] || '')) || (serverVal !== localVal);
+                      if (!isDiff && !serverVal) return null;
+                      return (
+                        <tr key={f.key} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                          <td style={{ padding: '6px 0', fontWeight: 600 }}>{f.label}</td>
+                          <td style={{ padding: '6px 0', color: 'var(--accent-color)', fontWeight: 'bold' }}>
+                            {serverVal || <span style={{ opacity: 0.5, fontStyle: 'italic' }}>(Kosong)</span>}
+                          </td>
+                          <td style={{ padding: '6px 0', color: isDiff ? 'var(--danger-color)' : 'var(--text-primary)' }}>
+                            {localVal || <span style={{ opacity: 0.5, fontStyle: 'italic' }}>(Kosong)</span>}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
               <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
                 <button 
                   className="btn" 
                   style={{ background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
                   onClick={() => {
+                    isDirtyRef.current = false;
                     setFormData(prev => ({ ...prev, ...conflictData }));
                     setConflictData(null);
-                    setError('Draft lokal Anda telah diperbarui dengan data dari server.');
+                    setError('Form Anda telah diperbarui dengan data terbaru dari server.');
                   }}
                 >
                   Gunakan Data Server

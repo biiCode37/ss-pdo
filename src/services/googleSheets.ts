@@ -43,7 +43,13 @@ export const initGoogleApi = async (): Promise<void> => {
                 }));
                 // Notify UI that login succeeded
                 window.dispatchEvent(new Event('google-login-success'));
+                // BUG-11: Mulai timer refresh token otomatis
+                startTokenRefreshTimer(tokenResponse.expires_in * 1000);
               }
+            },
+            // BUG-04: Tangkap semua kegagalan popup (ditutup user, akses ditolak, dll.)
+            error_callback: (err: any) => {
+              window.dispatchEvent(new CustomEvent('google-login-error', { detail: err }));
             },
           });
           resolve();
@@ -65,11 +71,39 @@ export const signIn = async (): Promise<void> => {
       return;
     }
     
-    const handleSuccess = () => {
+    let settled = false;
+
+    const cleanup = () => {
       window.removeEventListener('google-login-success', handleSuccess);
+      window.removeEventListener('google-login-error', handleError as EventListener);
+      clearTimeout(timeoutId);
+    };
+
+    const handleSuccess = () => {
+      if (settled) return;
+      settled = true;
+      cleanup();
       resolve();
     };
+
+    // BUG-04: Tangkap error dari popup (ditutup/dibatalkan user)
+    const handleError = (e: CustomEvent) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(e.detail || new Error('Login dibatalkan'));
+    };
+
+    // BUG-04: Timeout pengaman 60 detik jika Google tidak memberi respons apa pun
+    const timeoutId = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('Login timeout — tidak ada respons dari Google. Silakan coba lagi.'));
+    }, 60000);
+
     window.addEventListener('google-login-success', handleSuccess);
+    window.addEventListener('google-login-error', handleError as EventListener);
     
     // Trigger popup
     tokenClient.requestAccessToken({ prompt: 'consent' });
@@ -100,11 +134,43 @@ export const checkSignedIn = () => {
       return false;
     }
     gapi.client.setToken({ access_token: tokenObj.token });
+    // BUG-11: Mulai timer refresh dengan sisa waktu
+    const remainingMs = tokenObj.expiresAt - Date.now();
+    startTokenRefreshTimer(remainingMs);
     return true;
   } catch (e) {
     return false;
   }
 };
+
+// BUG-11: Timer refresh token proaktif
+let refreshTimerId: ReturnType<typeof setTimeout> | null = null;
+
+function startTokenRefreshTimer(expiresInMs: number) {
+  stopTokenRefreshTimer();
+  // Refresh 5 menit sebelum kedaluwarsa (atau segera jika < 5 menit tersisa)
+  const FIVE_MINUTES = 5 * 60 * 1000;
+  const refreshDelay = Math.max(expiresInMs - FIVE_MINUTES, 0);
+  
+  refreshTimerId = setTimeout(async () => {
+    try {
+      if (tokenClient) {
+        // Silent refresh — tanpa prompt consent
+        tokenClient.requestAccessToken({ prompt: '' });
+      }
+    } catch {
+      // Gagal silent refresh — user akan diminta login ulang saat simpan berikutnya
+      window.dispatchEvent(new CustomEvent('google-token-expiring'));
+    }
+  }, refreshDelay);
+}
+
+function stopTokenRefreshTimer() {
+  if (refreshTimerId !== null) {
+    clearTimeout(refreshTimerId);
+    refreshTimerId = null;
+  }
+}
 
 export const extractSheetId = (urlOrId: string) => {
   if (!urlOrId) return '';
@@ -165,7 +231,7 @@ const findColumnIndex = (headers: string[], keywords: string[]): number => {
   return -1;
 };
 
-export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap }> => {
+export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[] }> => {
   try {
     const response = await (gapi.client as any).sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
@@ -182,8 +248,15 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
     // Scan up to first 5 rows to find "Unit" / "No Body" keyword
     for (let i = 0; i < Math.min(5, rows.length); i++) {
       if (findColumnIndex(rows[i], HEADER_KEYWORDS.unit) !== -1) {
-        headerRowIndex = i;
-        break;
+        // BUG-10: Validasi tambahan — baris header seharusnya berisi mayoritas teks, bukan angka murni
+        const nonEmptyCells = rows[i].filter((cell: any) => cell !== undefined && cell !== null && String(cell).trim() !== '');
+        const textCells = nonEmptyCells.filter((cell: any) => isNaN(Number(cell)));
+        // Baris dianggap header jika ≥ 50% sel non-kosong berupa teks (bukan angka)
+        if (nonEmptyCells.length === 0 || textCells.length / nonEmptyCells.length >= 0.5) {
+          headerRowIndex = i;
+          break;
+        }
+        // Jika mayoritas angka, ini kemungkinan baris data — lanjut cari baris berikutnya
       }
     }
 
@@ -246,11 +319,33 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       keterangan: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.keterangan),
     };
 
+    // BUG-05: Validasi SEMUA field, bukan hanya 'unit'
+    const FIELD_LABELS: Record<string, string> = {
+      toaShift1: 'TOA Shift 1',
+      manualShift1: 'Manual Shift 1',
+      manualShift2: 'Manual Shift 2',
+      totalToa: 'Total TOA',
+      kmAwal1: 'KM Awal Shift 1',
+      kmAkhir1: 'KM Akhir Shift 1',
+      kmAwal2: 'KM Awal Shift 2',
+      kmAkhir2: 'KM Akhir Shift 2',
+      keterangan: 'Keterangan',
+    };
+    const missingColumns: string[] = [];
+    for (const [key, label] of Object.entries(FIELD_LABELS)) {
+      if (headerMap[key] === -1) {
+        missingColumns.push(label);
+      }
+    }
+
     const getValue = (row: any[], idx: number) => {
       if (idx === -1) return '';
       const val = row[idx];
       return val !== undefined && val !== null ? String(val) : '';
     };
+
+    const km1Idx = findColumnIndex(compositeHeaders, ['km1']);
+    const km2Idx = findColumnIndex(compositeHeaders, ['km2']);
 
     const data: BusData[] = [];
     // Data starts after the header(s)
@@ -262,6 +357,30 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       // Skip empty rows
       if (!unitVal || String(unitVal).trim() === '') continue;
 
+      let kmAwal1Val = getValue(row, headerMap.kmAwal1);
+      let kmAkhir1Val = getValue(row, headerMap.kmAkhir1);
+      let kmAwal2Val = getValue(row, headerMap.kmAwal2);
+      let kmAkhir2Val = getValue(row, headerMap.kmAkhir2);
+
+      // Fallback: If individual KM fields are empty, parse from KM 1 (Col O) or KM 2 (Col P) if available (e.g., 14.011 -> 14 & 011)
+      if ((!kmAwal1Val || !kmAkhir1Val) && km1Idx !== -1) {
+        const rawKm1 = getValue(row, km1Idx);
+        if (rawKm1 && rawKm1.includes('.')) {
+          const parts = rawKm1.split('.');
+          if (!kmAwal1Val) kmAwal1Val = parts[0];
+          if (!kmAkhir1Val) kmAkhir1Val = parts[1];
+        }
+      }
+
+      if ((!kmAwal2Val || !kmAkhir2Val) && km2Idx !== -1) {
+        const rawKm2 = getValue(row, km2Idx);
+        if (rawKm2 && rawKm2.includes('.')) {
+          const parts = rawKm2.split('.');
+          if (!kmAwal2Val) kmAwal2Val = parts[0];
+          if (!kmAkhir2Val) kmAkhir2Val = parts[1];
+        }
+      }
+
       data.push({
         rowIndex: i + 1, // Sheets API uses 1-based index (A1)
         unit: String(unitVal),
@@ -269,16 +388,16 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
         manualShift1: getValue(row, headerMap.manualShift1),
         manualShift2: getValue(row, headerMap.manualShift2),
         totalToa: getValue(row, headerMap.totalToa),
-        kmAwal1: getValue(row, headerMap.kmAwal1),
-        kmAkhir1: getValue(row, headerMap.kmAkhir1),
-        kmAwal2: getValue(row, headerMap.kmAwal2),
-        kmAkhir2: getValue(row, headerMap.kmAkhir2),
+        kmAwal1: kmAwal1Val,
+        kmAkhir1: kmAkhir1Val,
+        kmAwal2: kmAwal2Val,
+        kmAkhir2: kmAkhir2Val,
         keterangan: getValue(row, headerMap.keterangan),
         originalRow: row
       });
     }
 
-    return { data, headerMap };
+    return { data, headerMap, missingColumns };
   } catch (error: any) {
     console.error('Error fetching data', error);
     throw new Error(error?.result?.error?.message || 'Gagal mengambil data dari Google Sheets. Pastikan link benar dan Anda memiliki akses.');

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { extractSheetId, getBusData } from '../services/googleSheets';
 import { BusList } from './BusList';
-import { Loader2, LogOut, Plus, X, CloudOff, Sun, Moon, RefreshCw } from 'lucide-react';
+import { Loader2, LogOut, Plus, X, CloudOff, Sun, Moon, RefreshCw, AlertTriangle, RotateCw, Trash2 } from 'lucide-react';
 import { useOfflineSync } from '../hooks/useOfflineSync';
 
 interface Props {
@@ -30,6 +30,7 @@ export function Dashboard({ onLogout }: Props) {
   const [currentSheetId, setCurrentSheetId] = useState<string>('');
   const [currentTabName, setCurrentTabName] = useState<string>('');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [missingColumns, setMissingColumns] = useState<string[]>([]);
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'dark';
@@ -38,8 +39,15 @@ export function Dashboard({ onLogout }: Props) {
   const [touchStartY, setTouchStartY] = useState(0);
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isQueueModalOpen, setIsQueueModalOpen] = useState(false);
 
-  const { queue, addToQueue } = useOfflineSync();
+  const { queue, addToQueue, processQueue, retryItem, removeItem, resolveConflict, forceConflictItem } = useOfflineSync({
+    onSyncSuccess: (rowIndex, _sheetId, _tabName, updates) => {
+      // BUG-06: Update busData saat sinkronisasi antrean berhasil
+      // Ini mencegah false positive "Tabrakan Data" pada edit berikutnya
+      handleUpdateBus(rowIndex, updates);
+    },
+  });
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -90,6 +98,11 @@ export function Dashboard({ onLogout }: Props) {
       setError('Link tidak valid. Pastikan link berisi /d/SPREADSHEET_ID');
       return;
     }
+    // BUG-13: Cek rute duplikat berdasarkan Sheet ID
+    if (savedRoutes.some(r => extractSheetId(r.url) === sheetId)) {
+      setError('Rute dengan Sheet ID yang sama sudah tersimpan.');
+      return;
+    }
 
     const newRoute = { title: newRouteTitle.trim(), url: sheetUrl.trim() };
     const updatedRoutes = [...savedRoutes, newRoute];
@@ -132,11 +145,12 @@ export function Dashboard({ onLogout }: Props) {
     }
 
     try {
-      const { data, headerMap } = await getBusData(sheetId, selectedTab);
+      const { data, headerMap, missingColumns: missing } = await getBusData(sheetId, selectedTab);
       setBusData(data);
       setHeaderMap(headerMap);
       setCurrentSheetId(sheetId);
       setCurrentTabName(selectedTab);
+      setMissingColumns(missing);
     } catch (err: any) {
       setError(err.message || 'Gagal memuat data. Periksa kembali link dan tab Anda.');
     } finally {
@@ -172,6 +186,13 @@ export function Dashboard({ onLogout }: Props) {
 
   const handleTouchEnd = () => {
     if (pullDistance > 60) {
+      // BUG-14: Cek status online sebelum refresh
+      if (!isOnline) {
+        setError('Tidak bisa refresh saat offline');
+        setPullDistance(0);
+        setTouchStartY(0);
+        return;
+      }
       setIsRefreshing(true);
       handleLoadData(true).finally(() => {
         setIsRefreshing(false);
@@ -218,8 +239,11 @@ export function Dashboard({ onLogout }: Props) {
         <h1 style={{ margin: 0, textAlign: 'left', fontSize: '20px' }}>PDO Mobile</h1>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           {queue.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--warning-color)', fontSize: '14px', fontWeight: 'bold', background: 'rgba(234, 179, 8, 0.1)', padding: '4px 8px', borderRadius: '12px' }}>
-              <CloudOff size={16} />
+            <div 
+              onClick={() => setIsQueueModalOpen(true)}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', color: queue.some(q => q.status === 'failed' || q.status === 'conflict') ? 'var(--danger-color)' : 'var(--warning-color)', fontSize: '14px', fontWeight: 'bold', background: queue.some(q => q.status === 'failed' || q.status === 'conflict') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(234, 179, 8, 0.1)', padding: '4px 8px', borderRadius: '12px', cursor: 'pointer' }}
+            >
+              {queue.some(q => q.status === 'failed' || q.status === 'conflict') ? <AlertTriangle size={16} /> : <CloudOff size={16} />}
               {queue.length} Tertunda
             </div>
           )}
@@ -303,6 +327,21 @@ export function Dashboard({ onLogout }: Props) {
         </button>
 
         {error && <div className="error-text" style={{ marginTop: 16 }}>{error}</div>}
+
+        {missingColumns.length > 0 && (
+          <div style={{
+            marginTop: 12,
+            padding: '10px 14px',
+            background: 'rgba(234, 179, 8, 0.12)',
+            border: '1px solid rgba(234, 179, 8, 0.4)',
+            borderRadius: '8px',
+            fontSize: '13px',
+            lineHeight: 1.5,
+            color: 'var(--warning-color)',
+          }}>
+            ⚠️ Kolom berikut <strong>tidak terdeteksi</strong> di header sheet dan <strong>TIDAK akan tersimpan</strong>: {missingColumns.join(', ')}. Hubungi admin untuk memperbaiki header.
+          </div>
+        )}
       </div>
 
       {isLoading && !busData && (
@@ -326,6 +365,68 @@ export function Dashboard({ onLogout }: Props) {
           addToQueue={addToQueue}
           onUpdateBus={handleUpdateBus}
         />
+      )}
+
+      {isQueueModalOpen && (
+        <div 
+          onClick={() => setIsQueueModalOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '16px', backdropFilter: 'blur(4px)' }}
+        >
+          <div 
+            onClick={e => e.stopPropagation()}
+            style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', borderRadius: '12px', padding: '20px', width: '100%', maxWidth: '420px', maxHeight: '80vh', overflowY: 'auto', boxShadow: 'var(--shadow)', border: '1px solid var(--border-color)' }}
+          >
+            <h2 style={{ fontSize: '1.1rem', marginTop: 0, marginBottom: '16px' }}>Antrean Sinkronisasi</h2>
+            {queue.length === 0 ? (
+              <p style={{ color: 'var(--text-secondary)' }}>Tidak ada antrean.</p>
+            ) : (
+              queue.map(item => (
+                <div key={item.id} style={{ padding: '12px 0', borderBottom: '1px solid var(--border-color)' }}>
+                  <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}>
+                    <strong>Tab {item.tabName}</strong> — Baris {item.rowIndex}
+                  </p>
+                  <p style={{ margin: '0 0 8px 0', fontSize: '13px', color: item.status === 'pending' ? 'var(--warning-color)' : item.status === 'conflict' ? 'var(--accent-color)' : 'var(--danger-color)' }}>
+                    {item.status === 'pending' && `⏳ Menunggu (percobaan ke-${(item.retryCount || 0) + 1})`}
+                    {item.status === 'failed' && `❌ Gagal setelah ${item.retryCount} percobaan`}
+                    {item.status === 'conflict' && '⚠️ Tabrakan data — data server telah berubah'}
+                  </p>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {item.status === 'failed' && (
+                      <>
+                        <button className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => { retryItem(item.id); }}>
+                          <RotateCw size={14} /> Coba Lagi
+                        </button>
+                        <button className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '12px', color: 'var(--danger-color)', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => removeItem(item.id)}>
+                          <Trash2 size={14} /> Hapus
+                        </button>
+                      </>
+                    )}
+                    {item.status === 'conflict' && (
+                      <>
+                        <button className="btn btn-outline" style={{ padding: '4px 10px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => resolveConflict(item.id)}>
+                          Gunakan Data Server
+                        </button>
+                        <button className="btn" style={{ padding: '4px 10px', fontSize: '12px', background: 'var(--danger-color)', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => forceConflictItem(item.id)}>
+                          Force Save
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+            <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+              {queue.some(q => q.status === 'pending') && (
+                <button className="btn" style={{ flex: 1 }} onClick={() => { processQueue(); setIsQueueModalOpen(false); }}>
+                  Sinkronkan Sekarang
+                </button>
+              )}
+              <button className="btn btn-outline" style={{ flex: 1 }} onClick={() => setIsQueueModalOpen(false)}>
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

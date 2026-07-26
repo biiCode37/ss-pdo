@@ -80,7 +80,11 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
     <div>
       <div className="progress-section glass" style={{ padding: '16px', marginBottom: '16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <div style={{ fontWeight: '600', fontSize: '14px' }}>Progres Harian</div>
+          <div style={{ fontWeight: '600', fontSize: '14px' }}>
+            {activeCategory === 'ALL' 
+              ? 'Progres Harian' 
+              : `Progres Kolom: ${categories.find(c => c.id === activeCategory)?.label || activeCategory}`}
+          </div>
           <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
             <span style={{ color: filledCount === totalCount ? 'var(--success-color)' : 'var(--text-primary)', fontWeight: 'bold' }}>{filledCount}</span> / {totalCount} Bus
           </div>

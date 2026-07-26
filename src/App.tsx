@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { LoginScreen } from './components/LoginScreen';
 import { Dashboard } from './components/Dashboard';
-import { SyncQueueBadge } from './components/SyncQueueBadge';
 import { initGoogleApi, checkSignedIn, signOut, hasGoogleCreds } from './services/googleSheets';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
   const [isApiReady, setIsApiReady] = useState(false);
+  // BUG-15: Guard untuk mencegah double-init di StrictMode
+  const initCalledRef = useRef(false);
 
   const initializeApi = async () => {
     if (!hasGoogleCreds()) {
@@ -21,12 +22,13 @@ export default function App() {
       setIsApiReady(true);
       setIsSignedIn(checkSignedIn());
     } catch (err: any) {
-      console.error('Failed to init Google API:', err);
       setInitError('Gagal menginisialisasi Google API. Cek kembali API Key dan Client ID Anda.');
     }
   };
 
   useEffect(() => {
+    if (initCalledRef.current) return;
+    initCalledRef.current = true;
     initializeApi();
   }, []);
 
@@ -48,8 +50,6 @@ export default function App() {
           {initError}
         </div>
       )}
-
-      {isSignedIn && <SyncQueueBadge />}
     </>
   );
 }
