@@ -52,7 +52,7 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
             <FileText size={14} style={{ color: 'var(--accent-color)' }} />
             <span>Keterangan Bus ({summary.busesWithNotes.length}):</span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '160px', overflowY: 'auto' }}>
+          <div className="no-scrollbar" style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '160px', overflowY: 'auto' }}>
             {summary.busesWithNotes.map((note, idx) => (
               <div
                 key={idx}

@@ -688,12 +688,13 @@ select.input-field {
   border-color: var(--accent-color);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .morph-selector-card,
-  .morph-pill-content,
-  .morph-form-content {
-    transition: none !important;
-  }
+/* Hide scrollbar while keeping scroll functionality */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 
