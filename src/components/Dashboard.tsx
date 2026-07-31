@@ -293,8 +293,15 @@ export function Dashboard({ onLogout }: Props) {
                 const el = document.getElementById(`bus-card-${unit}`);
                 if (el) {
                   el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  el.classList.remove('bus-card-highlight');
+                  // Trigger reflow to restart CSS animation if clicked repeatedly
+                  void el.offsetWidth;
+                  el.classList.add('bus-card-highlight');
+                  setTimeout(() => {
+                    el.classList.remove('bus-card-highlight');
+                  }, 2500);
                 }
-              }, 100);
+              }, 150);
             }}
           />
         )
