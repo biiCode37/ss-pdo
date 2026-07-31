@@ -4,7 +4,8 @@ import { extractSheetId, getBusData } from '../services/googleSheets';
 import { BusList } from './BusList';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { BottomNav } from './BottomNav';
-import { Loader2, LogOut, Plus, X, CloudOff, Sun, Moon, RefreshCw, AlertTriangle, RotateCw, Trash2 } from 'lucide-react';
+import { RouteSelectorCard } from './RouteSelectorCard';
+import { LogOut, CloudOff, Sun, Moon, RefreshCw, AlertTriangle, RotateCw, Trash2 } from 'lucide-react';
 import { useOfflineSync } from '../hooks/useOfflineSync';
 
 interface Props {
@@ -25,8 +26,6 @@ export function Dashboard({ onLogout }: Props) {
   
   // Route Management State
   const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>([]);
-  const [isAddingRoute, setIsAddingRoute] = useState(false);
-  const [newRouteTitle, setNewRouteTitle] = useState('');
   
   const [busData, setBusData] = useState<BusData[] | null>(null);
   const [headerMap, setHeaderMap] = useState<HeaderMap | null>(null);
@@ -70,15 +69,10 @@ export function Dashboard({ onLogout }: Props) {
         // Automatically select the first route if available
         if (parsed.length > 0) {
           setSheetUrl(parsed[0].url);
-        } else {
-          setIsAddingRoute(true);
         }
       } catch (e) {
         console.error('Failed to parse saved routes');
-        setIsAddingRoute(true);
       }
-    } else {
-      setIsAddingRoute(true);
     }
     
     const handleOnline = () => setIsOnline(true);
@@ -90,45 +84,6 @@ export function Dashboard({ onLogout }: Props) {
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
-
-  const saveNewRoute = () => {
-    if (!newRouteTitle.trim() || !sheetUrl.trim()) {
-      setError('Judul Rute dan Link harus diisi');
-      return;
-    }
-    
-    const sheetId = extractSheetId(sheetUrl);
-    if (!sheetId) {
-      setError('Link tidak valid. Pastikan link berisi /d/SPREADSHEET_ID');
-      return;
-    }
-    // BUG-13: Cek rute duplikat berdasarkan Sheet ID
-    if (savedRoutes.some(r => extractSheetId(r.url) === sheetId)) {
-      setError('Rute dengan Sheet ID yang sama sudah tersimpan.');
-      return;
-    }
-
-    const newRoute = { title: newRouteTitle.trim(), url: sheetUrl.trim() };
-    const updatedRoutes = [...savedRoutes, newRoute];
-    
-    setSavedRoutes(updatedRoutes);
-    localStorage.setItem('PDO_SAVED_ROUTES', JSON.stringify(updatedRoutes));
-    
-    setIsAddingRoute(false);
-    setNewRouteTitle('');
-    setError(null);
-  };
-
-  const handleRouteSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    if (value === 'ADD_NEW') {
-      setIsAddingRoute(true);
-      setSheetUrl('');
-    } else {
-      setIsAddingRoute(false);
-      setSheetUrl(value);
-    }
-  };
 
   const handleLoadData = async (isRefresh = false) => {
     if (!sheetUrl) {
@@ -261,93 +216,50 @@ export function Dashboard({ onLogout }: Props) {
         </div>
       </div>
 
-      <div className="dashboard-card glass">
-        
-        {!isAddingRoute && savedRoutes.length > 0 ? (
-          <div className="input-group">
-            <label>Pilih Rute</label>
-            <select 
-              className="input-field" 
-              value={sheetUrl}
-              onChange={handleRouteSelect}
-            >
-              {savedRoutes.map((route, i) => (
-                <option key={i} value={route.url}>{route.title}</option>
-              ))}
-              <option value="ADD_NEW">+ Tambah Rute Baru</option>
-            </select>
-          </div>
-        ) : (
-          <div className="form-grid full" style={{ position: 'relative' }}>
-            {savedRoutes.length > 0 && (
-              <button 
-                onClick={() => { setIsAddingRoute(false); setSheetUrl(savedRoutes[0]?.url || ''); setError(null); }}
-                style={{ position: 'absolute', right: 0, top: 0, background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
-              >
-                <X size={20} />
-              </button>
-            )}
-            <div className="input-group">
-              <label>Nama Rute (Contoh: JAK.115)</label>
-              <input 
-                type="text" 
-                className="input-field" 
-                placeholder="Masukkan nama rute" 
-                value={newRouteTitle}
-                onChange={(e) => setNewRouteTitle(e.target.value)}
-              />
-            </div>
-            <div className="input-group">
-              <label>Link Google Sheet</label>
-              <input 
-                type="text" 
-                className="input-field" 
-                placeholder="Paste link dari bos di sini..." 
-                value={sheetUrl}
-                onChange={(e) => setSheetUrl(e.target.value)}
-              />
-            </div>
-            <button className="btn btn-outline" onClick={saveNewRoute} style={{ marginBottom: '8px' }}>
-              <Plus size={16} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />
-              Simpan Rute
-            </button>
-          </div>
-        )}
+      <RouteSelectorCard
+        sheetUrl={sheetUrl}
+        setSheetUrl={setSheetUrl}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+        savedRoutes={savedRoutes}
+        days={days}
+        isLoading={isLoading}
+        isDataLoaded={!!busData}
+        onLoadData={() => handleLoadData(false)}
+        onSaveNewRoute={(title, url) => {
+          const updated = [...savedRoutes, { title, url }];
+          setSavedRoutes(updated);
+          localStorage.setItem('PDO_SAVED_ROUTES', JSON.stringify(updated));
+        }}
+        onDeleteRoute={(index) => {
+          const updated = savedRoutes.filter((_, i) => i !== index);
+          setSavedRoutes(updated);
+          localStorage.setItem('PDO_SAVED_ROUTES', JSON.stringify(updated));
+          if (updated.length > 0) {
+            setSheetUrl(updated[0].url);
+          } else {
+            setSheetUrl('');
+          }
+        }}
+      />
 
-        <div className="input-group" style={{ marginTop: '12px' }}>
-          <label>Pilih Tanggal (Tab)</label>
-          <select 
-            className="input-field" 
-            value={selectedTab}
-            onChange={(e) => setSelectedTab(e.target.value)}
-          >
-            {days.map(day => (
-              <option key={day} value={day}>Tanggal {day}</option>
-            ))}
-          </select>
-        </div>
-
-        <button className="btn" onClick={() => handleLoadData(false)} disabled={isLoading || isAddingRoute}>
-          {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Bus'}
-        </button>
-
-        {error && <div className="error-text" style={{ marginTop: 16 }}>{error}</div>}
+      {error && <div className="error-text" style={{ marginBottom: 16 }}>{error}</div>}
 
         {missingColumns.length > 0 && (
-          <div style={{
-            marginTop: 12,
-            padding: '10px 14px',
-            background: 'rgba(234, 179, 8, 0.12)',
-            border: '1px solid rgba(234, 179, 8, 0.4)',
-            borderRadius: '8px',
-            fontSize: '13px',
-            lineHeight: 1.5,
-            color: 'var(--warning-color)',
-          }}>
-            ⚠️ Kolom berikut <strong>tidak terdeteksi</strong> di header sheet dan <strong>TIDAK akan tersimpan</strong>: {missingColumns.join(', ')}. Hubungi admin untuk memperbaiki header.
-          </div>
-        )}
-      </div>
+        <div style={{
+          marginTop: 12,
+          marginBottom: 16,
+          padding: '10px 14px',
+          background: 'rgba(234, 179, 8, 0.12)',
+          border: '1px solid rgba(234, 179, 8, 0.4)',
+          borderRadius: '8px',
+          fontSize: '13px',
+          lineHeight: 1.5,
+          color: 'var(--warning-color)',
+        }}>
+          ⚠️ Kolom berikut <strong>tidak terdeteksi</strong> di header sheet dan <strong>TIDAK akan tersimpan</strong>: {missingColumns.join(', ')}. Hubungi admin untuk memperbaiki header.
+        </div>
+      )}
 
       {isLoading && !busData && (
         <div className="bus-list" style={{ marginTop: '16px' }}>
