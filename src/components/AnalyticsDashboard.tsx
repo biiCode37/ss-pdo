@@ -13,7 +13,7 @@ export function AnalyticsDashboard({ busData, onSelectUnit }: Props) {
   const summary = calculateAnalytics(busData);
 
   return (
-    <div className="space-y-4 pb-20 max-w-md mx-auto sm:max-w-xl">
+    <div className="analytics-container">
       <KPICard summary={summary} />
       <ShiftComparisonCard summary={summary} />
       <CompletionStatusCard summary={summary} onSelectUnit={onSelectUnit} />
