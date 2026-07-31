@@ -61,7 +61,7 @@ export function RouteSelectorCard({
       onClick={isMorphed ? () => setIsMorphed(false) : undefined}
       title={isMorphed ? 'Klik untuk membuka Form Pemilihan' : undefined}
     >
-      {/* Morphed Compact Pill View Layer */}
+      {/* Morphed Compact Pill View Layer (Entire Pill is Clickable Trigger) */}
       <div className={`morph-pill-content ${isMorphed ? 'visible' : 'hidden'}`}>
         <div className="morph-pill-info">
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -81,43 +81,34 @@ export function RouteSelectorCard({
 
       {/* Expanded Form View Layer */}
       <div className={`morph-form-content ${isMorphed ? 'hidden' : 'visible'}`}>
-        {/* Header Bar with Quick Collapse Button if Data Already Loaded */}
-        {isDataLoaded && (
-          <div style={{
+        {/* Header Bar Area — Clickable Header Trigger to Collapse */}
+        <div
+          onClick={(e) => {
+            if (isDataLoaded) {
+              e.stopPropagation();
+              setIsMorphed(true);
+            }
+          }}
+          style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingBottom: '8px',
             marginBottom: '4px',
-            borderBottom: '1px solid var(--card-border)'
-          }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <MapPin size={15} style={{ color: 'var(--accent-color)' }} />
-              Pilih Rute & Tanggal
-            </span>
-            <button
-              type="button"
-              onClick={() => setIsMorphed(true)}
-              style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid var(--card-border)',
-                color: 'var(--text-secondary)',
-                fontSize: '11px',
-                fontWeight: 600,
-                padding: '3px 10px',
-                borderRadius: '999px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
-              title="Tutup / Menciutkan Form"
-            >
-              <ChevronUp size={14} />
-              <span>Tutup</span>
-            </button>
-          </div>
-        )}
+            borderBottom: '1px solid var(--card-border)',
+            cursor: isDataLoaded ? 'pointer' : 'default',
+            userSelect: 'none'
+          }}
+          title={isDataLoaded ? 'Klik header ini untuk menciutkan form' : undefined}
+        >
+          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <MapPin size={15} style={{ color: 'var(--accent-color)' }} />
+            Pilih Rute & Tanggal
+          </span>
+          {isDataLoaded && (
+            <ChevronUp size={16} style={{ color: 'var(--text-secondary)', opacity: 0.8 }} />
+          )}
+        </div>
 
         <div className="input-group" style={{ marginBottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
