@@ -37,6 +37,7 @@ export const initGoogleApi = async (): Promise<void> => {
             callback: (tokenResponse: any) => {
               if (tokenResponse && tokenResponse.access_token) {
                 gapi.client.setToken({ access_token: tokenResponse.access_token });
+                localStorage.setItem('PDO_IS_SIGNED_IN', 'true');
                 localStorage.setItem('GAPI_ACCESS_TOKEN', JSON.stringify({
                   token: tokenResponse.access_token,
                   expiresAt: Date.now() + tokenResponse.expires_in * 1000
@@ -121,26 +122,36 @@ export const signOut = async () => {
     } catch (e) {}
   }
   localStorage.removeItem('GAPI_ACCESS_TOKEN');
+  localStorage.removeItem('PDO_IS_SIGNED_IN');
   gapi.client.setToken(null);
 };
 
-export const checkSignedIn = () => {
+export const checkSignedIn = (): boolean => {
+  const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
   const tokenStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
-  if (!tokenStr) return false;
-  try {
-    const tokenObj = JSON.parse(tokenStr);
-    if (Date.now() > tokenObj.expiresAt) {
-      localStorage.removeItem('GAPI_ACCESS_TOKEN');
-      return false;
-    }
-    gapi.client.setToken({ access_token: tokenObj.token });
-    // BUG-11: Mulai timer refresh dengan sisa waktu
-    const remainingMs = tokenObj.expiresAt - Date.now();
-    startTokenRefreshTimer(remainingMs);
-    return true;
-  } catch (e) {
+
+  if (!isPersistentSignedIn && !tokenStr) {
     return false;
   }
+
+  if (tokenStr) {
+    try {
+      const tokenObj = JSON.parse(tokenStr);
+      gapi.client.setToken({ access_token: tokenObj.token });
+      
+      const remainingMs = tokenObj.expiresAt - Date.now();
+      if (remainingMs > 0) {
+        startTokenRefreshTimer(remainingMs);
+      } else if (tokenClient) {
+        // Silent refresh di background tanpa me-logout user
+        tokenClient.requestAccessToken({ prompt: '' });
+      }
+    } catch (e) {
+      // Ignore parse error, tetap pertahankan login persisten
+    }
+  }
+
+  return true;
 };
 
 // BUG-11: Timer refresh token proaktif
