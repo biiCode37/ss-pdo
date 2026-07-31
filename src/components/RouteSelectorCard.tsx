@@ -57,142 +57,140 @@ export function RouteSelectorCard({
 
   return (
     <div className={`morph-selector-card ${isMorphed ? 'morphed' : ''}`}>
-      {isMorphed ? (
-        /* Morphed Compact Pill View */
-        <div className="morph-pill-content">
-          <div className="morph-pill-info">
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <MapPin size={16} style={{ color: 'var(--accent-color)' }} />
-              <b>{activeRouteTitle}</b>
-            </span>
-            <span className="morph-pill-badge">
-              <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
-              Tgl {selectedTab}
-            </span>
+      {/* Morphed Compact Pill View Layer */}
+      <div className={`morph-pill-content ${isMorphed ? 'visible' : 'hidden'}`}>
+        <div className="morph-pill-info">
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <MapPin size={16} style={{ color: 'var(--accent-color)' }} />
+            <b>{activeRouteTitle}</b>
+          </span>
+          <span className="morph-pill-badge">
+            <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
+            Tgl {selectedTab}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          className="morph-pill-edit-btn"
+          onClick={() => setIsMorphed(false)}
+        >
+          <Edit3 size={13} />
+          <span>Ubah</span>
+        </button>
+      </div>
+
+      {/* Expanded Form View Layer */}
+      <div className={`morph-form-content ${isMorphed ? 'hidden' : 'visible'}`}>
+        <div className="input-group" style={{ marginBottom: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+            <label style={{ margin: 0 }}>Pilih Rute</label>
+            {!isAddingRoute && (
+              <button
+                type="button"
+                onClick={() => setIsAddingRoute(true)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--accent-color)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}
+              >
+                <Plus size={14} /> Tambah Rute
+              </button>
+            )}
           </div>
 
-          <button
-            type="button"
-            className="morph-pill-edit-btn"
-            onClick={() => setIsMorphed(false)}
-          >
-            <Edit3 size={13} />
-            <span>Ubah</span>
-          </button>
-        </div>
-      ) : (
-        /* Expanded Form View */
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div className="input-group" style={{ marginBottom: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <label style={{ margin: 0 }}>Pilih Rute</label>
-              {!isAddingRoute && (
+          {savedRoutes.length > 0 && (
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+              <select
+                className="input-field"
+                value={sheetUrl}
+                onChange={(e) => setSheetUrl(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                <option value="" disabled>-- Pilih Rute Tersimpan --</option>
+                {savedRoutes.map((route, idx) => (
+                  <option key={idx} value={route.url}>
+                    {route.title}
+                  </option>
+                ))}
+              </select>
+              {activeRouteObj && (
                 <button
                   type="button"
-                  onClick={() => setIsAddingRoute(true)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--accent-color)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
+                  className="btn btn-outline"
+                  style={{ width: 'auto', padding: '0 12px', color: 'var(--danger-color)' }}
+                  onClick={() => {
+                    const idx = savedRoutes.findIndex(r => r.url === sheetUrl);
+                    if (idx !== -1) onDeleteRoute(idx);
                   }}
+                  title="Hapus Rute Ini"
                 >
-                  <Plus size={14} /> Tambah Rute
+                  <Trash2 size={16} />
                 </button>
               )}
             </div>
+          )}
 
-            {savedRoutes.length > 0 && (
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                <select
-                  className="input-field"
-                  value={sheetUrl}
-                  onChange={(e) => setSheetUrl(e.target.value)}
-                  style={{ flex: 1 }}
-                >
-                  <option value="" disabled>-- Pilih Rute Tersimpan --</option>
-                  {savedRoutes.map((route, idx) => (
-                    <option key={idx} value={route.url}>
-                      {route.title}
-                    </option>
-                  ))}
-                </select>
-                {activeRouteObj && (
-                  <button
-                    type="button"
-                    className="btn btn-outline"
-                    style={{ width: 'auto', padding: '0 12px', color: 'var(--danger-color)' }}
-                    onClick={() => {
-                      const idx = savedRoutes.findIndex(r => r.url === sheetUrl);
-                      if (idx !== -1) onDeleteRoute(idx);
-                    }}
-                    title="Hapus Rute Ini"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                )}
-              </div>
-            )}
-
-            {isAddingRoute && (
-              <div style={{ background: 'var(--input-bg)', padding: '12px', borderRadius: '12px', border: '1px solid var(--card-border)', marginTop: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 700 }}>Tambah Rute Baru</span>
-                  <button type="button" onClick={() => setIsAddingRoute(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
-                    <X size={16} />
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  className="input-field"
-                  placeholder="Nama Rute (misal: JAK.76)..."
-                  value={newRouteTitle}
-                  onChange={(e) => setNewRouteTitle(e.target.value)}
-                  style={{ marginBottom: '8px' }}
-                />
-                <input
-                  type="text"
-                  className="input-field"
-                  placeholder="Link Google Sheets..."
-                  value={sheetUrl}
-                  onChange={(e) => setSheetUrl(e.target.value)}
-                  style={{ marginBottom: '8px' }}
-                />
-                <button type="button" className="btn" onClick={handleSaveRoute}>
-                  Simpan Rute
+          {isAddingRoute && (
+            <div style={{ background: 'var(--input-bg)', padding: '12px', borderRadius: '12px', border: '1px solid var(--card-border)', marginTop: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 700 }}>Tambah Rute Baru</span>
+                <button type="button" onClick={() => setIsAddingRoute(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                  <X size={16} />
                 </button>
               </div>
-            )}
-          </div>
-
-          <div className="input-group" style={{ marginBottom: 0 }}>
-            <label>Pilih Tanggal (Tab)</label>
-            <select
-              className="input-field"
-              value={selectedTab}
-              onChange={(e) => setSelectedTab(e.target.value)}
-            >
-              {days.map(day => (
-                <option key={day} value={day}>Tanggal {day}</option>
-              ))}
-            </select>
-          </div>
-
-          <button
-            type="button"
-            className="btn"
-            onClick={onLoadData}
-            disabled={isLoading || isAddingRoute}
-          >
-            {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Bus'}
-          </button>
+              <input
+                type="text"
+                className="input-field"
+                placeholder="Nama Rute (misal: JAK.76)..."
+                value={newRouteTitle}
+                onChange={(e) => setNewRouteTitle(e.target.value)}
+                style={{ marginBottom: '8px' }}
+              />
+              <input
+                type="text"
+                className="input-field"
+                placeholder="Link Google Sheets..."
+                value={sheetUrl}
+                onChange={(e) => setSheetUrl(e.target.value)}
+                style={{ marginBottom: '8px' }}
+              />
+              <button type="button" className="btn" onClick={handleSaveRoute}>
+                Simpan Rute
+              </button>
+            </div>
+          )}
         </div>
-      )}
+
+        <div className="input-group" style={{ marginBottom: 0 }}>
+          <label>Pilih Tanggal (Tab)</label>
+          <select
+            className="input-field"
+            value={selectedTab}
+            onChange={(e) => setSelectedTab(e.target.value)}
+          >
+            {days.map(day => (
+              <option key={day} value={day}>Tanggal {day}</option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          type="button"
+          className="btn"
+          onClick={onLoadData}
+          disabled={isLoading || isAddingRoute}
+        >
+          {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Bus'}
+        </button>
+      </div>
     </div>
   );
 }
