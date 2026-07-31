@@ -1,4 +1,4 @@
-import { Gauge, Users, TrendingUp, Bus } from 'lucide-react';
+import { Gauge, Users, UserCheck, Bus } from 'lucide-react';
 import type { AnalyticsSummary } from '../utils/analytics';
 
 interface Props {
@@ -60,8 +60,8 @@ export function KPICard({ summary }: Props) {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)' }}>
-            <TrendingUp size={16} style={{ color: 'var(--success-color)' }} />
-            <span>Kepadatan:</span>
+            <UserCheck size={16} style={{ color: 'var(--success-color)' }} />
+            <span>Pnp/Km:</span>
           </span>
           <b style={{ color: 'var(--text-primary)', wordBreak: 'break-all', textAlign: 'right' }}>
             {formatRaw(summary.passengersPerKm)} Pnp/KM
