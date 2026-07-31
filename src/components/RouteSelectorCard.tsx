@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Calendar, Edit3, Plus, X, Loader2, Trash2, ChevronUp } from 'lucide-react';
+import { MapPin, Calendar, Plus, X, Loader2, Trash2, ChevronUp } from 'lucide-react';
 
 export interface SavedRoute {
   title: string;
@@ -44,9 +44,14 @@ export function RouteSelectorCard({
     }
   }, [isDataLoaded]);
 
-  // Find active route title
+  // Find active route title and ensure month/year is shown
   const activeRouteObj = savedRoutes.find(r => r.url === sheetUrl);
-  const activeRouteTitle = activeRouteObj ? activeRouteObj.title : 'Rute Aktif';
+  const rawTitle = activeRouteObj ? activeRouteObj.title : 'Rute Aktif';
+  
+  const currentMonthName = new Date().toLocaleString('id-ID', { month: 'long' }).toUpperCase();
+  const currentYear = new Date().getFullYear();
+  const hasYear = /\d{4}/.test(rawTitle);
+  const displayRouteTitle = hasYear ? rawTitle : `${rawTitle} (${currentMonthName} ${currentYear})`;
 
   const handleSaveRoute = () => {
     if (!newRouteTitle.trim() || !sheetUrl.trim()) return;
@@ -61,22 +66,25 @@ export function RouteSelectorCard({
       onClick={isMorphed ? () => setIsMorphed(false) : undefined}
       title={isMorphed ? 'Klik untuk membuka Form Pemilihan' : undefined}
     >
-      {/* Morphed Compact Pill View Layer (Entire Pill is Clickable Trigger) */}
+      {/* Morphed Compact Pill View Layer */}
       <div className={`morph-pill-content ${isMorphed ? 'visible' : 'hidden'}`}>
-        <div className="morph-pill-info">
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <MapPin size={16} style={{ color: 'var(--accent-color)' }} />
-            <b>{activeRouteTitle}</b>
-          </span>
-          <span className="morph-pill-badge">
-            <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
-            Tgl {selectedTab}
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0, flex: 1 }}>
+          <MapPin size={16} style={{ color: 'var(--accent-color)', flexShrink: 0 }} />
+          <b style={{
+            fontSize: '13px',
+            color: 'var(--text-primary)',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>
+            {displayRouteTitle}
+          </b>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-secondary)', opacity: 0.8 }}>
-          <Edit3 size={14} />
-        </div>
+        <span className="morph-pill-badge" style={{ flexShrink: 0, marginLeft: '8px' }}>
+          <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
+          Tgl {selectedTab}
+        </span>
       </div>
 
       {/* Expanded Form View Layer */}
