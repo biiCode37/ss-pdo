@@ -82,8 +82,8 @@ export function RouteSelectorCard({
         </div>
 
         <span className="morph-pill-badge" style={{ flexShrink: 0, marginLeft: '8px' }}>
-          <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
-          Tgl {selectedTab}
+          <Calendar size={13} style={{ flexShrink: 0 }} />
+          <span>Tgl {selectedTab}</span>
         </span>
       </div>
 

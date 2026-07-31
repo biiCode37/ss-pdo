@@ -645,13 +645,26 @@ select.input-field {
 }
 
 .morph-pill-badge {
-  background: rgba(59, 130, 246, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(56, 189, 248, 0.16);
   color: var(--accent-color);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.1);
+  transition: all 0.2s ease;
+}
+
+[data-theme='light'] .morph-pill-badge {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
 }
 
 .morph-pill-edit-btn {
