@@ -699,7 +699,7 @@ select.input-field {
 
 /* Targeted Bus Card Highlight Pulse Effect (UI/UX Pro Max) */
 .bus-card-highlight {
-  animation: busCardPulseHighlight 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  animation: busCardPulseHighlight 6s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   will-change: transform, box-shadow, border-color;
   z-index: 10;
   position: relative;
@@ -711,15 +711,25 @@ select.input-field {
     border-color: var(--accent-color);
     box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7), 0 8px 32px rgba(56, 189, 248, 0.3);
   }
-  20% {
+  10% {
     transform: scale(1.03);
     border-color: #38bdf8;
-    box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.45), 0 12px 40px rgba(56, 189, 248, 0.45);
+    box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.5), 0 12px 40px rgba(56, 189, 248, 0.45);
   }
-  40% {
+  20% {
     transform: scale(1.01);
     border-color: #38bdf8;
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3), 0 10px 36px rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.35), 0 10px 36px rgba(56, 189, 248, 0.35);
+  }
+  30% {
+    transform: scale(1.03);
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.5), 0 12px 40px rgba(56, 189, 248, 0.45);
+  }
+  75% {
+    transform: scale(1);
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3), 0 8px 24px rgba(56, 189, 248, 0.2);
   }
   100% {
     transform: scale(1);

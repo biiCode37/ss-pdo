@@ -299,7 +299,7 @@ export function Dashboard({ onLogout }: Props) {
                   el.classList.add('bus-card-highlight');
                   setTimeout(() => {
                     el.classList.remove('bus-card-highlight');
-                  }, 2500);
+                  }, 6000);
                 }
               }, 150);
             }}
