@@ -40,14 +40,32 @@ export function KPICard({ summary }: Props) {
         </div>
       </div>
 
-      <div className="analytics-sub-bar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Bus size={16} />
-          <span>KM/Bus: <b>{formatRaw(summary.kmPerBus)} KM</b></span>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        marginTop: '14px',
+        paddingTop: '12px',
+        borderTop: '1px solid var(--card-border)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)' }}>
+            <Bus size={16} style={{ color: 'var(--accent-color)' }} />
+            <span>KM/Bus:</span>
+          </span>
+          <b style={{ color: 'var(--text-primary)', wordBreak: 'break-all', textAlign: 'right' }}>
+            {formatRaw(summary.kmPerBus)} KM
+          </b>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <TrendingUp size={16} />
-          <span>Kepadatan: <b>{formatRaw(summary.passengersPerKm)} Pnp/KM</b></span>
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)' }}>
+            <TrendingUp size={16} style={{ color: 'var(--success-color)' }} />
+            <span>Kepadatan:</span>
+          </span>
+          <b style={{ color: 'var(--text-primary)', wordBreak: 'break-all', textAlign: 'right' }}>
+            {formatRaw(summary.passengersPerKm)} Pnp/KM
+          </b>
         </div>
       </div>
     </div>
