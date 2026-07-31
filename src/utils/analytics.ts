@@ -85,7 +85,7 @@ export function calculateAnalytics(
   const completionPercentage = totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
 
   // Priority SSOT: Use sheetSummary values if present, fallback to local Excel formula emulation (AVERAGEIF(KM > 0))
-  const finalTotalKm = sheetSummary?.totalKm ?? parseFloat(totalKm.toFixed(2));
+  const finalTotalKm = sheetSummary?.totalKm ?? totalKm;
   const finalTotalPassengers = sheetSummary?.totalPassengers ?? totalPassengers;
 
   // AVERAGEIF(KM > 0): Only divide total KM by active operating buses (KM > 0)
@@ -96,10 +96,10 @@ export function calculateAnalytics(
   const finalPnpPerKm = sheetSummary?.passengersPerKm ?? calcPnpPerKm;
 
   return {
-    totalKm: parseFloat(finalTotalKm.toFixed(1)),
+    totalKm: finalTotalKm,
     totalPassengers: Math.round(finalTotalPassengers),
-    passengersPerKm: parseFloat(finalPnpPerKm.toFixed(2)),
-    kmPerBus: parseFloat(finalKmPerBus.toFixed(1)),
+    passengersPerKm: finalPnpPerKm,
+    kmPerBus: finalKmPerBus,
     totalToaShift1: sheetSummary?.totalToaShift1 ?? totalToaShift1,
     totalManualShift1: sheetSummary?.totalManualShift1 ?? totalManualShift1,
     totalShift1: sheetSummary?.totalShift1 ?? totalShift1,

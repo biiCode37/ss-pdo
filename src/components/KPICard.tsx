@@ -6,10 +6,10 @@ interface Props {
 }
 
 export function KPICard({ summary }: Props) {
-  // Format numbers using Indonesian locale
+  // Format numbers using Indonesian locale without rounding away decimals
   const formatInt = (val: number) => val.toLocaleString('id-ID');
-  const formatDec = (val: number, decimals: number) =>
-    val.toLocaleString('id-ID', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  const formatRaw = (val: number) =>
+    val.toLocaleString('id-ID', { maximumFractionDigits: 10 });
 
   return (
     <div className="analytics-card glass">
@@ -25,7 +25,7 @@ export function KPICard({ summary }: Props) {
             <span>TOTAL KM</span>
           </div>
           <div className="analytics-stat-value" style={{ color: 'var(--success-color)' }}>
-            {formatDec(summary.totalKm, 1)} <span style={{ fontSize: '12px', fontWeight: 400 }}>KM</span>
+            {formatRaw(summary.totalKm)} <span style={{ fontSize: '12px', fontWeight: 400 }}>KM</span>
           </div>
         </div>
 
@@ -43,11 +43,11 @@ export function KPICard({ summary }: Props) {
       <div className="analytics-sub-bar">
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Bus size={16} />
-          <span>KM/Bus: <b>{formatDec(summary.kmPerBus, 1)} KM</b></span>
+          <span>KM/Bus: <b>{formatRaw(summary.kmPerBus)} KM</b></span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <TrendingUp size={16} />
-          <span>Kepadatan: <b>{formatDec(summary.passengersPerKm, 2)} Pnp/KM</b></span>
+          <span>Kepadatan: <b>{formatRaw(summary.passengersPerKm)} Pnp/KM</b></span>
         </div>
       </div>
     </div>

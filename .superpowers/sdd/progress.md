@@ -1,7 +1,6 @@
 # Subagent-Driven Development Progress Ledger
 
-Plan: `docs/superpowers/plans/2026-07-31-morphed-route-selector.md`
+Plan: `docs/superpowers/plans/2026-07-31-raw-ssot-summary.md`
 
-- [x] Task 1: Add Morphing CSS Animations (`src/index.css`) (complete)
-- [x] Task 2: Morphing Route Selector Component (`src/components/RouteSelectorCard.tsx`) (complete)
-- [x] Task 3: Integration into `src/components/Dashboard.tsx` (complete)
+- [x] Task 1: Preserve Raw Floating-Point Precision (`src/services/googleSheets.ts` & `src/utils/analytics.ts`) (complete)
+- [x] Task 2: Display Pure Raw Decimal Values in UI (`src/components/KPICard.tsx`) (complete)

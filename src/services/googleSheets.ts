@@ -446,7 +446,7 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
             for (let offset = 1; offset <= 3; offset++) {
               const nextVal = row[colIdx + offset];
               if (nextVal !== undefined && nextVal !== null && nextVal !== '' && !isNaN(Number(nextVal))) {
-                sheetSummary[key] = parseFloat(Number(nextVal).toFixed(4));
+                sheetSummary[key] = Number(nextVal);
                 break;
               }
             }

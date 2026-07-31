@@ -41,19 +41,19 @@ export function runAnalyticsTest() {
   console.assert(localSummary.kmPerBus === 200, 'kmPerBus should be 200 (200 KM / 1 active bus)');
   console.assert(localSummary.passengersPerKm === 1.05, 'passengersPerKm should be 1.05 (210 / 200)');
 
-  // Test SSOT priority from sheetSummary
+  // Test SSOT exact unrounded values from sheetSummary
   const ssotSummary = calculateAnalytics(mockBusData, {
     totalKm: 5589.06,
     totalPassengers: 4670,
-    kmPerBus: 192.7262,
-    passengersPerKm: 0.8355
+    kmPerBus: 192.72620689655172,
+    passengersPerKm: 0.8355601120404863
   });
 
-  console.assert(ssotSummary.totalKm === 5589.1, 'SSOT totalKm formatted to 1 decimal');
-  console.assert(ssotSummary.kmPerBus === 192.7, 'SSOT kmPerBus formatted to 1 decimal');
-  console.assert(ssotSummary.passengersPerKm === 0.84, 'SSOT passengersPerKm formatted to 2 decimals');
+  console.assert(ssotSummary.totalKm === 5589.06, 'SSOT totalKm preserved exact raw value');
+  console.assert(ssotSummary.kmPerBus === 192.72620689655172, 'SSOT kmPerBus preserved exact raw value');
+  console.assert(ssotSummary.passengersPerKm === 0.8355601120404863, 'SSOT passengersPerKm preserved exact raw value');
 
-  console.log('✅ SSOT Executive Analytics unit test passed');
+  console.log('✅ SSOT Exact Raw Analytics unit test passed');
 }
 
 runAnalyticsTest();
