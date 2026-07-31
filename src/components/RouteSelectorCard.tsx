@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Calendar, Edit3, Plus, X, Loader2, Trash2 } from 'lucide-react';
+import { MapPin, Calendar, Edit3, Plus, X, Loader2, Trash2, ChevronUp } from 'lucide-react';
 
 export interface SavedRoute {
   title: string;
@@ -59,9 +59,9 @@ export function RouteSelectorCard({
     <div
       className={`morph-selector-card ${isMorphed ? 'morphed' : ''}`}
       onClick={isMorphed ? () => setIsMorphed(false) : undefined}
-      title={isMorphed ? 'Klik untuk mengubah Rute atau Tanggal' : undefined}
+      title={isMorphed ? 'Klik untuk membuka Form Pemilihan' : undefined}
     >
-      {/* Morphed Compact Pill View Layer (Entire Pill is Clickable Trigger) */}
+      {/* Morphed Compact Pill View Layer */}
       <div className={`morph-pill-content ${isMorphed ? 'visible' : 'hidden'}`}>
         <div className="morph-pill-info">
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -81,6 +81,44 @@ export function RouteSelectorCard({
 
       {/* Expanded Form View Layer */}
       <div className={`morph-form-content ${isMorphed ? 'hidden' : 'visible'}`}>
+        {/* Header Bar with Quick Collapse Button if Data Already Loaded */}
+        {isDataLoaded && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingBottom: '8px',
+            marginBottom: '4px',
+            borderBottom: '1px solid var(--card-border)'
+          }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <MapPin size={15} style={{ color: 'var(--accent-color)' }} />
+              Pilih Rute & Tanggal
+            </span>
+            <button
+              type="button"
+              onClick={() => setIsMorphed(true)}
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid var(--card-border)',
+                color: 'var(--text-secondary)',
+                fontSize: '11px',
+                fontWeight: 600,
+                padding: '3px 10px',
+                borderRadius: '999px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+              title="Tutup / Menciutkan Form"
+            >
+              <ChevronUp size={14} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        )}
+
         <div className="input-group" style={{ marginBottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
             <label style={{ margin: 0 }}>Pilih Rute</label>
