@@ -311,7 +311,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   };
 
   return (
-    <div className="bus-card glass">
+    <div id={`bus-card-${bus.unit}`} className="bus-card glass">
       <div 
         className="bus-card-header"
         onClick={() => setIsExpanded(!isExpanded)}

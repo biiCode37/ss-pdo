@@ -372,8 +372,14 @@ export function Dashboard({ onLogout }: Props) {
         ) : (
           <AnalyticsDashboard
             busData={busData}
-            onSelectUnit={() => {
+            onSelectUnit={(unit) => {
               setMainTab('input');
+              setTimeout(() => {
+                const el = document.getElementById(`bus-card-${unit}`);
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }, 100);
             }}
           />
         )
