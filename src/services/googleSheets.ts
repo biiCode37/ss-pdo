@@ -244,6 +244,26 @@ const findColumnIndex = (headers: string[], keywords: string[]): number => {
   return -1;
 };
 
+export function parseIndonesianNumber(val: any): number {
+  if (val === undefined || val === null || val === '') return NaN;
+  if (typeof val === 'number') return isNaN(val) ? NaN : val;
+  
+  let str = String(val).trim();
+  if (str === '' || str.startsWith('#')) return NaN;
+
+  // Handle Indonesian currency/number formats like "5.589,06" or "4.670" or "192,73"
+  if (str.includes('.') && str.includes(',')) {
+    str = str.replace(/\./g, '').replace(',', '.');
+  } else if (str.includes(',')) {
+    str = str.replace(',', '.');
+  } else if (/^\d{1,3}(\.\d{3})+$/.test(str)) {
+    str = str.replace(/\./g, '');
+  }
+
+  const num = Number(str);
+  return isNaN(num) ? NaN : num;
+}
+
 export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[], sheetSummary: Record<string, number> }> => {
   try {
     const response = await (gapi.client as any).sheets.spreadsheets.values.get({
@@ -426,27 +446,41 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
         // Scan summary rows below table
         row.forEach((cellVal: any, colIdx: number) => {
           if (!cellVal) return;
-          const str = String(cellVal).trim().toLowerCase();
+          const cleanStr = String(cellVal).replace(/\s+/g, ' ').trim().toLowerCase();
 
           let key = '';
-          if (str.includes('total pelanggan/km') || str.includes('pelanggan/km')) key = 'passengersPerKm';
-          else if (str.includes('total pelanggan')) key = 'totalPassengers';
-          else if (str.includes('total km')) key = 'totalKm';
-          else if (str.includes('km/bus') || str.includes('km / bus')) key = 'kmPerBus';
-          else if (str.includes('total toa shift 1') || str.includes('total toa s1')) key = 'totalToaShift1';
-          else if (str.includes('total manual shift 1') || str.includes('total manual s1')) key = 'totalManualShift1';
-          else if (str.includes('total shift 1') || str.includes('total s1')) key = 'totalShift1';
-          else if (str.includes('total toa shift 2') || str.includes('total toa s2')) key = 'totalToaShift2';
-          else if (str.includes('total manual shift 2') || str.includes('total manual s2')) key = 'totalManualShift2';
-          else if (str.includes('total shift 2') || str.includes('total s2')) key = 'totalShift2';
-          else if (str.includes('total toa')) key = 'grandTotalToa';
-          else if (str.includes('total manual')) key = 'grandTotalManual';
+          if (cleanStr.includes('pelanggan/km') || cleanStr.includes('pelanggan / km') || cleanStr.includes('pelanggan/ km')) {
+            key = 'passengersPerKm';
+          } else if (cleanStr.includes('km/bus') || cleanStr.includes('km / bus') || cleanStr.includes('km /bus') || cleanStr.includes('km/ bus')) {
+            key = 'kmPerBus';
+          } else if (cleanStr.includes('total pelanggan')) {
+            key = 'totalPassengers';
+          } else if (cleanStr.includes('total km')) {
+            key = 'totalKm';
+          } else if (cleanStr.includes('toa shift 1') || cleanStr.includes('toa s1')) {
+            key = 'totalToaShift1';
+          } else if (cleanStr.includes('manual shift 1') || cleanStr.includes('manual s1')) {
+            key = 'totalManualShift1';
+          } else if (cleanStr.includes('shift 1') || cleanStr.includes('total s1')) {
+            key = 'totalShift1';
+          } else if (cleanStr.includes('toa shift 2') || cleanStr.includes('toa s2')) {
+            key = 'totalToaShift2';
+          } else if (cleanStr.includes('manual shift 2') || cleanStr.includes('manual s2')) {
+            key = 'totalManualShift2';
+          } else if (cleanStr.includes('shift 2') || cleanStr.includes('total s2')) {
+            key = 'totalShift2';
+          } else if (cleanStr === 'total toa' || cleanStr.startsWith('total toa')) {
+            key = 'grandTotalToa';
+          } else if (cleanStr === 'total manual' || cleanStr.startsWith('total manual')) {
+            key = 'grandTotalManual';
+          }
 
           if (key && sheetSummary[key] === undefined) {
             for (let offset = 1; offset <= 3; offset++) {
               const nextVal = row[colIdx + offset];
-              if (nextVal !== undefined && nextVal !== null && nextVal !== '' && !isNaN(Number(nextVal))) {
-                sheetSummary[key] = Number(nextVal);
+              const parsedNum = parseIndonesianNumber(nextVal);
+              if (!isNaN(parsedNum)) {
+                sheetSummary[key] = parsedNum;
                 break;
               }
             }

@@ -84,30 +84,37 @@ export function calculateAnalytics(
   const unfilledBuses = totalBuses - filledBuses;
   const completionPercentage = totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
 
-  // Priority SSOT: Use sheetSummary values if present, fallback to local Excel formula emulation (AVERAGEIF(KM > 0))
-  const finalTotalKm = sheetSummary?.totalKm ?? totalKm;
-  const finalTotalPassengers = sheetSummary?.totalPassengers ?? totalPassengers;
+function getValidNumber(ssotVal: number | undefined, calculatedFallback: number): number {
+  if (ssotVal !== undefined && !isNaN(ssotVal)) {
+    return ssotVal;
+  }
+  return calculatedFallback;
+}
+
+  // Priority SSOT: Use sheetSummary values if valid, fallback to local Excel formula emulation (AVERAGEIF(KM > 0))
+  const finalTotalKm = getValidNumber(sheetSummary?.totalKm, totalKm);
+  const finalTotalPassengers = getValidNumber(sheetSummary?.totalPassengers, totalPassengers);
 
   // AVERAGEIF(KM > 0): Only divide total KM by active operating buses (KM > 0)
   const calcKmPerBus = activeBusCount > 0 ? totalKm / activeBusCount : 0;
-  const finalKmPerBus = sheetSummary?.kmPerBus ?? calcKmPerBus;
+  const finalKmPerBus = getValidNumber(sheetSummary?.kmPerBus, calcKmPerBus);
 
   const calcPnpPerKm = finalTotalKm > 0 ? finalTotalPassengers / finalTotalKm : 0;
-  const finalPnpPerKm = sheetSummary?.passengersPerKm ?? calcPnpPerKm;
+  const finalPnpPerKm = getValidNumber(sheetSummary?.passengersPerKm, calcPnpPerKm);
 
   return {
     totalKm: finalTotalKm,
     totalPassengers: Math.round(finalTotalPassengers),
     passengersPerKm: finalPnpPerKm,
     kmPerBus: finalKmPerBus,
-    totalToaShift1: sheetSummary?.totalToaShift1 ?? totalToaShift1,
-    totalManualShift1: sheetSummary?.totalManualShift1 ?? totalManualShift1,
-    totalShift1: sheetSummary?.totalShift1 ?? totalShift1,
-    totalToaShift2: sheetSummary?.totalToaShift2 ?? totalToaShift2,
-    totalManualShift2: sheetSummary?.totalManualShift2 ?? totalManualShift2,
-    totalShift2: sheetSummary?.totalShift2 ?? totalShift2,
-    grandTotalToa: sheetSummary?.grandTotalToa ?? grandTotalToa,
-    grandTotalManual: sheetSummary?.grandTotalManual ?? grandTotalManual,
+    totalToaShift1: getValidNumber(sheetSummary?.totalToaShift1, totalToaShift1),
+    totalManualShift1: getValidNumber(sheetSummary?.totalManualShift1, totalManualShift1),
+    totalShift1: getValidNumber(sheetSummary?.totalShift1, totalShift1),
+    totalToaShift2: getValidNumber(sheetSummary?.totalToaShift2, totalToaShift2),
+    totalManualShift2: getValidNumber(sheetSummary?.totalManualShift2, totalManualShift2),
+    totalShift2: getValidNumber(sheetSummary?.totalShift2, totalShift2),
+    grandTotalToa: getValidNumber(sheetSummary?.grandTotalToa, grandTotalToa),
+    grandTotalManual: getValidNumber(sheetSummary?.grandTotalManual, grandTotalManual),
     totalBuses,
     filledBuses,
     unfilledBuses,
