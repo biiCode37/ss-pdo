@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, FileText } from 'lucide-react';
 import type { AnalyticsSummary } from '../utils/analytics';
 
 interface Props {
@@ -42,25 +42,40 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
         </span>
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--warning-color)', fontWeight: 600 }}>
           <AlertCircle size={16} />
-          {summary.unfilledBuses} Belum Lengkap
+          {summary.unfilledBuses} Belum Terisi
         </span>
       </div>
 
-      {summary.unfilledUnits.length > 0 && (
-        <div className="analytics-stat-box" style={{ textAlign: 'left', marginTop: '4px' }}>
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 500 }}>
-            Unit Belum Lengkap (Klik untuk lompat):
+      {summary.busesWithNotes.length > 0 && (
+        <div style={{ marginTop: '14px', paddingTop: '12px', borderTop: '1px solid var(--card-border)' }}>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <FileText size={14} style={{ color: 'var(--accent-color)' }} />
+            <span>Keterangan Bus ({summary.busesWithNotes.length}):</span>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', maxHeight: '100px', overflowY: 'auto' }}>
-            {summary.unfilledUnits.map((unit) => (
-              <button
-                key={unit}
-                type="button"
-                onClick={() => onSelectUnit?.(unit)}
-                className="unfilled-tag"
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '160px', overflowY: 'auto' }}>
+            {summary.busesWithNotes.map((note, idx) => (
+              <div
+                key={idx}
+                onClick={() => onSelectUnit?.(note.unit)}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '6px 10px',
+                  background: 'var(--input-bg)',
+                  border: '1px solid var(--card-border)',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                title="Klik untuk lompat ke unit bus ini"
               >
-                {unit}
-              </button>
+                <b style={{ color: 'var(--accent-color)' }}>{note.unit}</b>
+                <span style={{ color: 'var(--warning-color)', fontWeight: 600, marginLeft: '8px', textAlign: 'right' }}>
+                  {note.keterangan}
+                </span>
+              </div>
             ))}
           </div>
         </div>

@@ -1,5 +1,10 @@
 import type { BusData } from '../services/googleSheets';
 
+export interface BusNote {
+  unit: string;
+  keterangan: string;
+}
+
 export interface AnalyticsSummary {
   totalKm: number;
   totalPassengers: number;
@@ -26,6 +31,16 @@ export interface AnalyticsSummary {
   unfilledBuses: number;
   unfilledUnits: string[];
   completionPercentage: number;
+
+  // Bus Keterangan / Notes
+  busesWithNotes: BusNote[];
+}
+
+function getValidNumber(ssotVal: number | undefined, calculatedFallback: number): number {
+  if (ssotVal !== undefined && !isNaN(ssotVal)) {
+    return ssotVal;
+  }
+  return calculatedFallback;
 }
 
 export function calculateAnalytics(
@@ -40,6 +55,7 @@ export function calculateAnalytics(
   let filledBuses = 0;
   let activeBusCount = 0;
   const unfilledUnits: string[] = [];
+  const busesWithNotes: BusNote[] = [];
 
   busData.forEach((bus) => {
     const kmAwal1 = parseFloat(bus.kmAwal1) || 0;
@@ -72,6 +88,13 @@ export function calculateAnalytics(
     } else {
       unfilledUnits.push(bus.unit);
     }
+
+    if (bus.keterangan && bus.keterangan.trim() !== '') {
+      busesWithNotes.push({
+        unit: bus.unit,
+        keterangan: bus.keterangan.trim()
+      });
+    }
   });
 
   const totalShift1 = totalToaShift1 + totalManualShift1;
@@ -83,13 +106,6 @@ export function calculateAnalytics(
   const totalBuses = busData.length;
   const unfilledBuses = totalBuses - filledBuses;
   const completionPercentage = totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
-
-function getValidNumber(ssotVal: number | undefined, calculatedFallback: number): number {
-  if (ssotVal !== undefined && !isNaN(ssotVal)) {
-    return ssotVal;
-  }
-  return calculatedFallback;
-}
 
   // Priority SSOT: Use sheetSummary values if valid, fallback to local Excel formula emulation (AVERAGEIF(KM > 0))
   const finalTotalKm = getValidNumber(sheetSummary?.totalKm, totalKm);
@@ -119,6 +135,7 @@ function getValidNumber(ssotVal: number | undefined, calculatedFallback: number)
     filledBuses,
     unfilledBuses,
     unfilledUnits,
-    completionPercentage
+    completionPercentage,
+    busesWithNotes
   };
 }
