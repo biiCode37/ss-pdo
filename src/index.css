@@ -567,12 +567,24 @@ select.input-field {
   background: rgba(30, 41, 59, 0.85);
   border-color: rgba(56, 189, 248, 0.35);
   box-shadow: 0 4px 24px rgba(56, 189, 248, 0.2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.morph-selector-card.morphed:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 28px rgba(56, 189, 248, 0.35);
 }
 
 [data-theme='light'] .morph-selector-card.morphed {
   background: rgba(255, 255, 255, 0.92);
   border-color: rgba(37, 99, 235, 0.35);
   box-shadow: 0 4px 24px rgba(37, 99, 235, 0.15);
+}
+
+[data-theme='light'] .morph-selector-card.morphed:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 28px rgba(37, 99, 235, 0.25);
 }
 
 /* Pill Content Overlay */

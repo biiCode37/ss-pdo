@@ -56,8 +56,12 @@ export function RouteSelectorCard({
   };
 
   return (
-    <div className={`morph-selector-card ${isMorphed ? 'morphed' : ''}`}>
-      {/* Morphed Compact Pill View Layer */}
+    <div
+      className={`morph-selector-card ${isMorphed ? 'morphed' : ''}`}
+      onClick={isMorphed ? () => setIsMorphed(false) : undefined}
+      title={isMorphed ? 'Klik untuk mengubah Rute atau Tanggal' : undefined}
+    >
+      {/* Morphed Compact Pill View Layer (Entire Pill is Clickable Trigger) */}
       <div className={`morph-pill-content ${isMorphed ? 'visible' : 'hidden'}`}>
         <div className="morph-pill-info">
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -70,14 +74,9 @@ export function RouteSelectorCard({
           </span>
         </div>
 
-        <button
-          type="button"
-          className="morph-pill-edit-btn"
-          onClick={() => setIsMorphed(false)}
-        >
-          <Edit3 size={13} />
-          <span>Ubah</span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-secondary)', opacity: 0.8 }}>
+          <Edit3 size={14} />
+        </div>
       </div>
 
       {/* Expanded Form View Layer */}
