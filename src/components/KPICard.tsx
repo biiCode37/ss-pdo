@@ -64,7 +64,7 @@ export function KPICard({ summary }: Props) {
             <span>Pnp/Km:</span>
           </span>
           <b style={{ color: 'var(--text-primary)', wordBreak: 'break-all', textAlign: 'right' }}>
-            {formatRaw(summary.passengersPerKm)} Pnp/KM
+            {formatRaw(summary.passengersPerKm)}
           </b>
         </div>
       </div>
