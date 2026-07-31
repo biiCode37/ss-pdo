@@ -6,11 +6,12 @@ import { CompletionStatusCard } from './CompletionStatusCard';
 
 interface Props {
   busData: BusData[];
+  sheetSummary?: Record<string, number>;
   onSelectUnit?: (unit: string) => void;
 }
 
-export function AnalyticsDashboard({ busData, onSelectUnit }: Props) {
-  const summary = calculateAnalytics(busData);
+export function AnalyticsDashboard({ busData, sheetSummary, onSelectUnit }: Props) {
+  const summary = calculateAnalytics(busData, sheetSummary);
 
   return (
     <div className="analytics-container">

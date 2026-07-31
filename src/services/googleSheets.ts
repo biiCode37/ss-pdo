@@ -233,7 +233,7 @@ const findColumnIndex = (headers: string[], keywords: string[]): number => {
   return -1;
 };
 
-export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[] }> => {
+export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[], sheetSummary: Record<string, number> }> => {
   try {
     const response = await (gapi.client as any).sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
@@ -351,67 +351,100 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
     const km2Idx = findColumnIndex(compositeHeaders, ['km2']);
 
     const data: BusData[] = [];
+    const sheetSummary: Record<string, number> = {};
+
     // Data starts after the header(s)
     const dataStartIndex = isSubHeader ? headerRowIndex + 2 : headerRowIndex + 1;
     for (let i = dataStartIndex; i < rows.length; i++) {
       const row = rows[i];
+      if (!row || row.length === 0) continue;
       const unitVal = row[headerMap.unit];
       
-      // Skip empty rows
-      if (!unitVal || String(unitVal).trim() === '') continue;
+      // If unit is present, parse bus data
+      if (unitVal && String(unitVal).trim() !== '') {
+        let kmAwal1Val = getValue(row, headerMap.kmAwal1);
+        let kmAkhir1Val = getValue(row, headerMap.kmAkhir1);
+        let kmAwal2Val = getValue(row, headerMap.kmAwal2);
+        let kmAkhir2Val = getValue(row, headerMap.kmAkhir2);
 
-      let kmAwal1Val = getValue(row, headerMap.kmAwal1);
-      let kmAkhir1Val = getValue(row, headerMap.kmAkhir1);
-      let kmAwal2Val = getValue(row, headerMap.kmAwal2);
-      let kmAkhir2Val = getValue(row, headerMap.kmAkhir2);
-
-      // Fallback: If individual KM fields are empty, parse from KM 1 (Col O) or KM 2 (Col P) if available (e.g., 14.011 -> 14 & 011)
-      if ((!kmAwal1Val || !kmAkhir1Val) && km1Idx !== -1) {
-        const rawKm1 = getValue(row, km1Idx);
-        if (rawKm1 && rawKm1.includes('.')) {
-          const parts = rawKm1.split('.');
-          if (!kmAwal1Val) kmAwal1Val = parts[0];
-          if (!kmAkhir1Val) kmAkhir1Val = parts[1];
+        // Fallback: If individual KM fields are empty, parse from KM 1 (Col O) or KM 2 (Col P) if available (e.g., 14.011 -> 14 & 011)
+        if ((!kmAwal1Val || !kmAkhir1Val) && km1Idx !== -1) {
+          const rawKm1 = getValue(row, km1Idx);
+          if (rawKm1 && rawKm1.includes('.')) {
+            const parts = rawKm1.split('.');
+            if (!kmAwal1Val) kmAwal1Val = parts[0];
+            if (!kmAkhir1Val) kmAkhir1Val = parts[1];
+          }
         }
-      }
 
-      if ((!kmAwal2Val || !kmAkhir2Val) && km2Idx !== -1) {
-        const rawKm2 = getValue(row, km2Idx);
-        if (rawKm2 && rawKm2.includes('.')) {
-          const parts = rawKm2.split('.');
-          if (!kmAwal2Val) kmAwal2Val = parts[0];
-          if (!kmAkhir2Val) kmAkhir2Val = parts[1];
+        if ((!kmAwal2Val || !kmAkhir2Val) && km2Idx !== -1) {
+          const rawKm2 = getValue(row, km2Idx);
+          if (rawKm2 && rawKm2.includes('.')) {
+            const parts = rawKm2.split('.');
+            if (!kmAwal2Val) kmAwal2Val = parts[0];
+            if (!kmAkhir2Val) kmAkhir2Val = parts[1];
+          }
         }
+
+        let toaShift1Val = getValue(row, headerMap.toaShift1);
+        let toaShift2Val = getValue(row, headerMap.toaShift2);
+        let totalToaVal = getValue(row, headerMap.totalToa);
+
+        if (!toaShift2Val && totalToaVal && toaShift1Val) {
+          const tot = parseInt(totalToaVal, 10) || 0;
+          const t1 = parseInt(toaShift1Val, 10) || 0;
+          toaShift2Val = Math.max(0, tot - t1).toString();
+        }
+
+        data.push({
+          rowIndex: i + 1, // Sheets API uses 1-based index (A1)
+          unit: String(unitVal),
+          toaShift1: toaShift1Val,
+          toaShift2: toaShift2Val || '0',
+          manualShift1: getValue(row, headerMap.manualShift1),
+          manualShift2: getValue(row, headerMap.manualShift2),
+          totalToa: totalToaVal,
+          kmAwal1: kmAwal1Val,
+          kmAkhir1: kmAkhir1Val,
+          kmAwal2: kmAwal2Val,
+          kmAkhir2: kmAkhir2Val,
+          keterangan: getValue(row, headerMap.keterangan),
+          originalRow: row
+        });
+      } else {
+        // Scan summary rows below table
+        row.forEach((cellVal: any, colIdx: number) => {
+          if (!cellVal) return;
+          const str = String(cellVal).trim().toLowerCase();
+
+          let key = '';
+          if (str.includes('total pelanggan/km') || str.includes('pelanggan/km')) key = 'passengersPerKm';
+          else if (str.includes('total pelanggan')) key = 'totalPassengers';
+          else if (str.includes('total km')) key = 'totalKm';
+          else if (str.includes('km/bus') || str.includes('km / bus')) key = 'kmPerBus';
+          else if (str.includes('total toa shift 1') || str.includes('total toa s1')) key = 'totalToaShift1';
+          else if (str.includes('total manual shift 1') || str.includes('total manual s1')) key = 'totalManualShift1';
+          else if (str.includes('total shift 1') || str.includes('total s1')) key = 'totalShift1';
+          else if (str.includes('total toa shift 2') || str.includes('total toa s2')) key = 'totalToaShift2';
+          else if (str.includes('total manual shift 2') || str.includes('total manual s2')) key = 'totalManualShift2';
+          else if (str.includes('total shift 2') || str.includes('total s2')) key = 'totalShift2';
+          else if (str.includes('total toa')) key = 'grandTotalToa';
+          else if (str.includes('total manual')) key = 'grandTotalManual';
+
+          if (key && sheetSummary[key] === undefined) {
+            for (let offset = 1; offset <= 3; offset++) {
+              const nextVal = row[colIdx + offset];
+              if (nextVal !== undefined && nextVal !== null && nextVal !== '' && !isNaN(Number(nextVal))) {
+                sheetSummary[key] = parseFloat(Number(nextVal).toFixed(4));
+                break;
+              }
+            }
+          }
+        });
       }
-
-      let toaShift1Val = getValue(row, headerMap.toaShift1);
-      let toaShift2Val = getValue(row, headerMap.toaShift2);
-      let totalToaVal = getValue(row, headerMap.totalToa);
-
-      if (!toaShift2Val && totalToaVal && toaShift1Val) {
-        const tot = parseInt(totalToaVal, 10) || 0;
-        const t1 = parseInt(toaShift1Val, 10) || 0;
-        toaShift2Val = Math.max(0, tot - t1).toString();
-      }
-
-      data.push({
-        rowIndex: i + 1, // Sheets API uses 1-based index (A1)
-        unit: String(unitVal),
-        toaShift1: toaShift1Val,
-        toaShift2: toaShift2Val || '0',
-        manualShift1: getValue(row, headerMap.manualShift1),
-        manualShift2: getValue(row, headerMap.manualShift2),
-        totalToa: totalToaVal,
-        kmAwal1: kmAwal1Val,
-        kmAkhir1: kmAkhir1Val,
-        kmAwal2: kmAwal2Val,
-        kmAkhir2: kmAkhir2Val,
-        keterangan: getValue(row, headerMap.keterangan),
-        originalRow: row
-      });
     }
 
-    return { data, headerMap, missingColumns };
+    return { data, headerMap, missingColumns, sheetSummary };
   } catch (error: any) {
     console.error('Error fetching data', error);
     throw new Error(error?.result?.error?.message || 'Gagal mengambil data dari Google Sheets. Pastikan link benar dan Anda memiliki akses.');

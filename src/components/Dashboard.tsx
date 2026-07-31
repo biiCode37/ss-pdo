@@ -34,6 +34,7 @@ export function Dashboard({ onLogout }: Props) {
   const [currentTabName, setCurrentTabName] = useState<string>('');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [missingColumns, setMissingColumns] = useState<string[]>([]);
+  const [sheetSummary, setSheetSummary] = useState<Record<string, number>>({});
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'dark';
@@ -148,12 +149,13 @@ export function Dashboard({ onLogout }: Props) {
     }
 
     try {
-      const { data, headerMap, missingColumns: missing } = await getBusData(sheetId, selectedTab);
+      const { data, headerMap, missingColumns: missing, sheetSummary: summary } = await getBusData(sheetId, selectedTab);
       setBusData(data);
       setHeaderMap(headerMap);
       setCurrentSheetId(sheetId);
       setCurrentTabName(selectedTab);
       setMissingColumns(missing);
+      setSheetSummary(summary || {});
     } catch (err: any) {
       setError(err.message || 'Gagal memuat data. Periksa kembali link dan tab Anda.');
     } finally {
@@ -372,6 +374,7 @@ export function Dashboard({ onLogout }: Props) {
         ) : (
           <AnalyticsDashboard
             busData={busData}
+            sheetSummary={sheetSummary}
             onSelectUnit={(unit) => {
               setMainTab('input');
               setTimeout(() => {

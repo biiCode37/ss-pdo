@@ -28,13 +28,17 @@ export interface AnalyticsSummary {
   completionPercentage: number;
 }
 
-export function calculateAnalytics(busData: BusData[]): AnalyticsSummary {
+export function calculateAnalytics(
+  busData: BusData[],
+  sheetSummary?: Record<string, number>
+): AnalyticsSummary {
   let totalKm = 0;
   let totalToaShift1 = 0;
   let totalManualShift1 = 0;
   let totalToaShift2 = 0;
   let totalManualShift2 = 0;
   let filledBuses = 0;
+  let activeBusCount = 0;
   const unfilledUnits: string[] = [];
 
   busData.forEach((bus) => {
@@ -47,6 +51,10 @@ export function calculateAnalytics(busData: BusData[]): AnalyticsSummary {
     const kmShift2 = kmAkhir2 > kmAwal2 ? kmAkhir2 - kmAwal2 : 0;
     const busTotalKm = kmShift1 + kmShift2;
     totalKm += busTotalKm;
+
+    if (busTotalKm > 0) {
+      activeBusCount += 1;
+    }
 
     const toa1 = parseInt(bus.toaShift1, 10) || 0;
     const man1 = parseInt(bus.manualShift1, 10) || 0;
@@ -75,22 +83,31 @@ export function calculateAnalytics(busData: BusData[]): AnalyticsSummary {
   const totalBuses = busData.length;
   const unfilledBuses = totalBuses - filledBuses;
   const completionPercentage = totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
-  const kmPerBus = filledBuses > 0 ? parseFloat((totalKm / filledBuses).toFixed(2)) : 0;
-  const passengersPerKm = totalKm > 0 ? parseFloat((totalPassengers / totalKm).toFixed(3)) : 0;
+
+  // Priority SSOT: Use sheetSummary values if present, fallback to local Excel formula emulation (AVERAGEIF(KM > 0))
+  const finalTotalKm = sheetSummary?.totalKm ?? parseFloat(totalKm.toFixed(2));
+  const finalTotalPassengers = sheetSummary?.totalPassengers ?? totalPassengers;
+
+  // AVERAGEIF(KM > 0): Only divide total KM by active operating buses (KM > 0)
+  const calcKmPerBus = activeBusCount > 0 ? totalKm / activeBusCount : 0;
+  const finalKmPerBus = sheetSummary?.kmPerBus ?? calcKmPerBus;
+
+  const calcPnpPerKm = finalTotalKm > 0 ? finalTotalPassengers / finalTotalKm : 0;
+  const finalPnpPerKm = sheetSummary?.passengersPerKm ?? calcPnpPerKm;
 
   return {
-    totalKm: parseFloat(totalKm.toFixed(2)),
-    totalPassengers,
-    passengersPerKm,
-    kmPerBus,
-    totalToaShift1,
-    totalManualShift1,
-    totalShift1,
-    totalToaShift2,
-    totalManualShift2,
-    totalShift2,
-    grandTotalToa,
-    grandTotalManual,
+    totalKm: parseFloat(finalTotalKm.toFixed(1)),
+    totalPassengers: Math.round(finalTotalPassengers),
+    passengersPerKm: parseFloat(finalPnpPerKm.toFixed(2)),
+    kmPerBus: parseFloat(finalKmPerBus.toFixed(1)),
+    totalToaShift1: sheetSummary?.totalToaShift1 ?? totalToaShift1,
+    totalManualShift1: sheetSummary?.totalManualShift1 ?? totalManualShift1,
+    totalShift1: sheetSummary?.totalShift1 ?? totalShift1,
+    totalToaShift2: sheetSummary?.totalToaShift2 ?? totalToaShift2,
+    totalManualShift2: sheetSummary?.totalManualShift2 ?? totalManualShift2,
+    totalShift2: sheetSummary?.totalShift2 ?? totalShift2,
+    grandTotalToa: sheetSummary?.grandTotalToa ?? grandTotalToa,
+    grandTotalManual: sheetSummary?.grandTotalManual ?? grandTotalManual,
     totalBuses,
     filledBuses,
     unfilledBuses,
