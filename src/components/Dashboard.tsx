@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { extractSheetId, getBusData } from '../services/googleSheets';
 import { BusList } from './BusList';
+import { AnalyticsDashboard } from './AnalyticsDashboard';
+import { BottomNav } from './BottomNav';
 import { Loader2, LogOut, Plus, X, CloudOff, Sun, Moon, RefreshCw, AlertTriangle, RotateCw, Trash2 } from 'lucide-react';
 import { useOfflineSync } from '../hooks/useOfflineSync';
 
@@ -19,6 +21,7 @@ export function Dashboard({ onLogout }: Props) {
   const [selectedTab, setSelectedTab] = useState(new Date().getDate().toString());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mainTab, setMainTab] = useState<'input' | 'analytics'>('input');
   
   // Route Management State
   const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>([]);
@@ -355,17 +358,32 @@ export function Dashboard({ onLogout }: Props) {
       )}
 
       {busData && headerMap && (
-        <BusList 
-          isLoading={isLoading}
-          data={busData} 
-          sheetId={currentSheetId} 
-          tabName={currentTabName} 
-          headerMap={headerMap} 
-          syncQueue={queue}
-          addToQueue={addToQueue}
-          onUpdateBus={handleUpdateBus}
-        />
+        mainTab === 'input' ? (
+          <BusList 
+            isLoading={isLoading}
+            data={busData} 
+            sheetId={currentSheetId} 
+            tabName={currentTabName} 
+            headerMap={headerMap} 
+            syncQueue={queue}
+            addToQueue={addToQueue}
+            onUpdateBus={handleUpdateBus}
+          />
+        ) : (
+          <AnalyticsDashboard
+            busData={busData}
+            onSelectUnit={() => {
+              setMainTab('input');
+            }}
+          />
+        )
       )}
+
+      <BottomNav
+        activeTab={mainTab}
+        onSelectTab={setMainTab}
+        pendingQueueCount={queue.filter(q => q.status === 'pending' || q.status === 'failed').length}
+      />
 
       {isQueueModalOpen && (
         <div 

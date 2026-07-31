@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup Dashboard SS_PDO</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #0b0f17;
+      color: #f8fafc;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .mobile-frame {
+      width: 100%;
+      max-width: 400px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .header {
+      text-align: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #1f2937;
+      margin-bottom: 16px;
+    }
+    .badge {
+      background: rgba(56, 189, 248, 0.1);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 10px 0 4px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat-box {
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+    .sub-stats {
+      margin-top: 10px;
+      background: #0f172a;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      color: #94a3b8;
+    }
+    .bottom-bar {
+      margin-top: 20px;
+      background: #0f172a;
+      border-radius: 16px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #64748b;
+    }
+    .nav-item.active {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-frame">
+    <div class="header">
+      <span class="badge">Pratinjau Mobile</span>
+      <div class="title">Dashboard Analitik SS_PDO</div>
+    </div>
+
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="card-title" style="color: #38bdf8;">1. Produktivitas Armada</div>
+      <div class="grid-2">
+        <div class="stat-box">
+          <div style="font-size:10px; color:#94a3b8;">TOTAL KM</div>
+          <div class="stat-val" style="color: #4ade80;">5,589 KM</div>
+        </div>
+        <div class="stat-box">
+          <div style="font-size:10px; color:#94a3b8;">TOTAL PELANGGAN</div>
+          <div class="stat-val" style="color: #38bdf8;">4,670</div>
+        </div>
+      </div>
+      <div class="sub-stats">
+        <span>KM/Bus: <b style="color:#f8fafc;">192.7 KM</b></span>
+        <span>Pelanggan/KM: <b style="color:#f8fafc;">0.84</b></span>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="card-title" style="color: #fbbf24;">2. Rekap Shift 1 & Shift 2</div>
+      <div class="grid-2" style="font-size: 11px;">
+        <div style="background: #0f172a; padding: 10px; border-radius: 8px;">
+          <div style="color: #fbbf24; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 4px; margin-bottom: 6px;">SHIFT 1</div>
+          <div>TOA: <b>2,001</b></div>
+          <div>Manual: <b>0</b></div>
+          <div style="margin-top: 4px; font-weight: 800; color: #4ade80;">Total: 2,001</div>
+        </div>
+        <div style="background: #0f172a; padding: 10px; border-radius: 8px;">
+          <div style="color: #a78bfa; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 4px; margin-bottom: 6px;">SHIFT 2</div>
+          <div>TOA: <b>2,669</b></div>
+          <div>Manual: <b>0</b></div>
+          <div style="margin-top: 4px; font-weight: 800; color: #4ade80;">Total: 2,669</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-title" style="color: #ec4899;">3. Kelengkapan Bus</div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px;">
+        <span>Status Terisi: <b>28/30 Bus</b></span>
+        <span style="color: #4ade80; font-weight: 800;">93% Selesai</span>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-bar">
+      <div class="nav-item">📋 Input Data</div>
+      <div class="nav-item active">📊 Dashboard</div>
+    </div>
+  </div>
+</body>
+</html>

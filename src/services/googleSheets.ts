@@ -190,6 +190,7 @@ export interface BusData {
   rowIndex: number; // 1-based index in the sheet
   unit: string;
   toaShift1: string;
+  toaShift2: string;
   manualShift1: string;
   manualShift2: string;
   totalToa: string;
@@ -211,6 +212,7 @@ const normalizeString = (str: string) => {
 const HEADER_KEYWORDS: Record<string, string[]> = {
   unit: ['nobody', 'unit', 'bus', 'body'],
   toaShift1: ['toashift1', 'toashifti', 'toas1', 'toasi'],
+  toaShift2: ['toashift2', 'toashiftii', 'toas2', 'toasii'],
   manualShift1: ['manualshift1', 'manualshifti', 'manual1', 'manuals1', 'manualsi'],
   manualShift2: ['manualshift2', 'manualshiftii', 'manual2', 'manuals2', 'manualsii'],
   totalToa: ['totaltoa', 'total'],
@@ -309,6 +311,7 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
     const headerMap: HeaderMap = {
       unit: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit),
       toaShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift1),
+      toaShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift2),
       manualShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift1),
       manualShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift2),
       totalToa: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.totalToa),
@@ -381,13 +384,24 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
         }
       }
 
+      let toaShift1Val = getValue(row, headerMap.toaShift1);
+      let toaShift2Val = getValue(row, headerMap.toaShift2);
+      let totalToaVal = getValue(row, headerMap.totalToa);
+
+      if (!toaShift2Val && totalToaVal && toaShift1Val) {
+        const tot = parseInt(totalToaVal, 10) || 0;
+        const t1 = parseInt(toaShift1Val, 10) || 0;
+        toaShift2Val = Math.max(0, tot - t1).toString();
+      }
+
       data.push({
         rowIndex: i + 1, // Sheets API uses 1-based index (A1)
         unit: String(unitVal),
-        toaShift1: getValue(row, headerMap.toaShift1),
+        toaShift1: toaShift1Val,
+        toaShift2: toaShift2Val || '0',
         manualShift1: getValue(row, headerMap.manualShift1),
         manualShift2: getValue(row, headerMap.manualShift2),
-        totalToa: getValue(row, headerMap.totalToa),
+        totalToa: totalToaVal,
         kmAwal1: kmAwal1Val,
         kmAkhir1: kmAkhir1Val,
         kmAwal2: kmAwal2Val,
