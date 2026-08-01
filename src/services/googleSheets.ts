@@ -126,32 +126,63 @@ export const signOut = async () => {
   gapi.client.setToken(null);
 };
 
-export const checkSignedIn = (): boolean => {
+export const ensureValidToken = async (): Promise<void> => {
   const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
+  if (!isPersistentSignedIn) return;
+
   const tokenStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
-
-  if (!isPersistentSignedIn && !tokenStr) {
-    return false;
-  }
-
   if (tokenStr) {
     try {
       const tokenObj = JSON.parse(tokenStr);
-      gapi.client.setToken({ access_token: tokenObj.token });
-      
-      const remainingMs = tokenObj.expiresAt - Date.now();
-      if (remainingMs > 0) {
-        startTokenRefreshTimer(remainingMs);
-      } else if (tokenClient) {
-        // Silent refresh di background tanpa me-logout user
-        tokenClient.requestAccessToken({ prompt: '' });
+      // Jika token masih berlaku lebih dari 2 menit, pasang ke gapi client
+      if (tokenObj.token && tokenObj.expiresAt && tokenObj.expiresAt - Date.now() > 2 * 60 * 1000) {
+        gapi.client.setToken({ access_token: tokenObj.token });
+        return;
       }
-    } catch (e) {
-      // Ignore parse error, tetap pertahankan login persisten
-    }
+    } catch (e) {}
   }
 
-  return true;
+  // Jika token habis/kosong namun status PDO_IS_SIGNED_IN 'true', lakukan silent refresh otomatis
+  if (tokenClient) {
+    return new Promise((resolve) => {
+      let settled = false;
+      const handleSuccess = () => {
+        if (settled) return;
+        settled = true;
+        window.removeEventListener('google-login-success', handleSuccess);
+        resolve();
+      };
+
+      window.addEventListener('google-login-success', handleSuccess);
+      try {
+        tokenClient.requestAccessToken({ prompt: '' });
+      } catch (e) {
+        if (!settled) {
+          settled = true;
+          window.removeEventListener('google-login-success', handleSuccess);
+          resolve();
+        }
+      }
+
+      // Timeout pengaman 3 detik untuk silent refresh
+      setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          window.removeEventListener('google-login-success', handleSuccess);
+          resolve();
+        }
+      }, 3000);
+    });
+  }
+};
+
+export const checkSignedIn = (): boolean => {
+  const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
+  if (isPersistentSignedIn) {
+    ensureValidToken();
+    return true;
+  }
+  return false;
 };
 
 // BUG-11: Timer refresh token proaktif
@@ -170,7 +201,6 @@ function startTokenRefreshTimer(expiresInMs: number) {
         tokenClient.requestAccessToken({ prompt: '' });
       }
     } catch {
-      // Gagal silent refresh — user akan diminta login ulang saat simpan berikutnya
       window.dispatchEvent(new CustomEvent('google-token-expiring'));
     }
   }, refreshDelay);
@@ -265,6 +295,7 @@ export function parseIndonesianNumber(val: any): number {
 }
 
 export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[], sheetSummary: Record<string, number> }> => {
+  await ensureValidToken();
   try {
     const response = await (gapi.client as any).sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
@@ -502,6 +533,7 @@ export const getBusRowData = async (
   rowIndex: number, 
   headerMap: HeaderMap
 ): Promise<Partial<BusData>> => {
+  await ensureValidToken();
   try {
     const response = await (gapi.client as any).sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
@@ -555,6 +587,7 @@ export const updateBusData = async (
   updates: Partial<BusData>, 
   headerMap: HeaderMap
 ): Promise<void> => {
+  await ensureValidToken();
   
   // We construct individual updates for each cell to avoid overwriting formulas
   const data: any[] = [];
@@ -600,6 +633,7 @@ export const getMonthlyToaTrend = async (
   sheetId: string, 
   maxDay: number
 ): Promise<{ day: string; totalToa: number }[]> => {
+  await ensureValidToken();
   const trendData: { day: string; totalToa: number }[] = [];
   
   if (!sheetId || maxDay < 1) return trendData;
