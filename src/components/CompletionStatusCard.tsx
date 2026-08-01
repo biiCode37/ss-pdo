@@ -17,24 +17,33 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
           justifyContent: "space-between",
           alignItems: "center",
           marginBottom: hasNotes ? "12px" : 0,
+          gap: "8px",
+          flexWrap: "wrap",
         }}
       >
         <div
           className="analytics-card-title"
-          style={{ color: "var(--accent-color)" }}
+          style={{ color: "var(--accent-color)", flex: "1 1 auto", minWidth: "160px" }}
         >
           <FileText size={18} />
           <span>Unit Dengan Keterangan Tertentu</span>
         </div>
         <span
           style={{
-            fontSize: "11px",
-            fontWeight: 700,
+            fontSize: "13px",
+            fontWeight: 800,
             color: "var(--accent-color)",
-            background: "rgba(59, 130, 246, 0.12)",
-            padding: "2px 8px",
-            borderRadius: "999px",
-            border: "1px solid rgba(59, 130, 246, 0.3)",
+            background: "rgba(59, 130, 246, 0.15)",
+            padding: "4px 12px",
+            borderRadius: "9999px",
+            border: "1px solid rgba(59, 130, 246, 0.35)",
+            boxShadow: "0 2px 8px rgba(59, 130, 246, 0.2)",
+            whiteSpace: "nowrap",
+            letterSpacing: "0.2px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
           }}
         >
           {summary.busesWithNotes.length} Unit
@@ -47,8 +56,8 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "6px",
-            maxHeight: "200px",
+            gap: "8px",
+            maxHeight: "220px",
             overflowY: "auto",
           }}
         >
@@ -60,23 +69,43 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                padding: "8px 12px",
+                padding: "9px 12px",
                 background: "var(--input-bg)",
                 border: "1px solid var(--card-border)",
-                borderRadius: "8px",
-                fontSize: "12px",
+                borderRadius: "10px",
+                fontSize: "12.5px",
                 cursor: "pointer",
-                transition: "all 0.2s ease",
+                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                gap: "10px",
               }}
               title="Klik untuk lompat ke unit ini"
             >
-              <b style={{ color: "var(--accent-color)" }}>{note.unit}</b>
+              <span
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 800,
+                  color: "#ffffff",
+                  background: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
+                  padding: "3px 10px",
+                  borderRadius: "6px",
+                  letterSpacing: "0.3px",
+                  boxShadow: "0 2px 6px rgba(59, 130, 246, 0.3)",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                }}
+              >
+                {note.unit}
+              </span>
               <span
                 style={{
                   color: "var(--warning-color)",
                   fontWeight: 600,
-                  marginLeft: "8px",
                   textAlign: "right",
+                  wordBreak: "break-word",
+                  overflowWrap: "anywhere",
+                  flex: 1,
+                  fontSize: "12px",
+                  lineHeight: 1.4,
                 }}
               >
                 {note.keterangan}

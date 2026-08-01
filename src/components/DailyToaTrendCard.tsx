@@ -47,9 +47,9 @@ export function DailyToaTrendCard({
       setActiveTooltipDay(null);
     };
 
-    window.addEventListener('click', handleDismiss);
+    window.addEventListener("click", handleDismiss);
     return () => {
-      window.removeEventListener('click', handleDismiss);
+      window.removeEventListener("click", handleDismiss);
     };
   }, [activeTooltipDay]);
 
@@ -157,7 +157,9 @@ export function DailyToaTrendCard({
     ? bars.find((b) => b.day === activeTooltipDay)
     : null;
   const peakBar = peakItem ? bars.find((b) => b.day === peakItem.day) : null;
-  const lowestBar = lowestItem ? bars.find((b) => b.day === lowestItem.day) : null;
+  const lowestBar = lowestItem
+    ? bars.find((b) => b.day === lowestItem.day)
+    : null;
 
   return (
     <div
@@ -233,7 +235,7 @@ export function DailyToaTrendCard({
             }}
           >
             <Award size={11} style={{ color: "#4ade80" }} />
-            Terbanyak
+            Tertinggi
           </span>
           <span
             style={{
@@ -491,7 +493,7 @@ export function DailyToaTrendCard({
           />
 
           {/* Render Column Bars */}
-          {bars.map((bar) => {
+          {bars.map((bar, idx) => {
             const rx = Math.min(3, barWidth / 2);
             const fillUrl = bar.isSelected
               ? "url(#activeBluePillGradient)"
@@ -506,7 +508,9 @@ export function DailyToaTrendCard({
                 key={bar.day}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setActiveTooltipDay((prev) => (prev === bar.day ? null : bar.day));
+                  setActiveTooltipDay((prev) =>
+                    prev === bar.day ? null : bar.day,
+                  );
                 }}
                 style={{ cursor: "pointer", transition: "all 0.2s ease" }}
               >
@@ -519,6 +523,8 @@ export function DailyToaTrendCard({
                   ry={rx}
                   fill={fillUrl}
                   filter={bar.isSelected ? "url(#pillBlueGlow)" : undefined}
+                  className="trend-bar-rect"
+                  style={{ animationDelay: `${idx * 16}ms` }}
                 />
               </g>
             );
@@ -528,29 +534,47 @@ export function DailyToaTrendCard({
           {peakBar && (!activeBar || activeBar.day !== peakBar.day) && (
             <g
               transform={`translate(${peakBar.x + barWidth / 2 - 6}, ${Math.max(peakBar.y - 14, 2)})`}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
               onClick={(e) => {
                 e.stopPropagation();
-                setActiveTooltipDay((prev) => (prev === peakBar.day ? null : peakBar.day));
+                setActiveTooltipDay((prev) =>
+                  prev === peakBar.day ? null : peakBar.day,
+                );
               }}
             >
-              <Award size={12} style={{ color: '#4ade80', filter: 'drop-shadow(0px 1px 2px rgba(34,197,94,0.5))' }} />
+              <Award
+                size={12}
+                style={{
+                  color: "#4ade80",
+                  filter: "drop-shadow(0px 1px 2px rgba(34,197,94,0.5))",
+                }}
+              />
             </g>
           )}
 
           {/* Lowest Bar Indicator Icon (TrendingDown / Rose) */}
-          {lowestBar && lowestBar.day !== peakBar?.day && (!activeBar || activeBar.day !== lowestBar.day) && (
-            <g
-              transform={`translate(${lowestBar.x + barWidth / 2 - 6}, ${Math.max(lowestBar.y - 14, 2)})`}
-              style={{ cursor: 'pointer' }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveTooltipDay((prev) => (prev === lowestBar.day ? null : lowestBar.day));
-              }}
-            >
-              <TrendingDown size={12} style={{ color: '#fb7185', filter: 'drop-shadow(0px 1px 2px rgba(244,63,94,0.5))' }} />
-            </g>
-          )}
+          {lowestBar &&
+            lowestBar.day !== peakBar?.day &&
+            (!activeBar || activeBar.day !== lowestBar.day) && (
+              <g
+                transform={`translate(${lowestBar.x + barWidth / 2 - 6}, ${Math.max(lowestBar.y - 14, 2)})`}
+                style={{ cursor: "pointer" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveTooltipDay((prev) =>
+                    prev === lowestBar.day ? null : lowestBar.day,
+                  );
+                }}
+              >
+                <TrendingDown
+                  size={12}
+                  style={{
+                    color: "#fb7185",
+                    filter: "drop-shadow(0px 1px 2px rgba(244,63,94,0.5))",
+                  }}
+                />
+              </g>
+            )}
 
           {/* Active Day Floating Metric Tooltip Badge */}
           {activeBar && (
@@ -620,7 +644,9 @@ export function DailyToaTrendCard({
                 style={{ cursor: "pointer" }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setActiveTooltipDay((prev) => (prev === bar.day ? null : bar.day));
+                  setActiveTooltipDay((prev) =>
+                    prev === bar.day ? null : bar.day,
+                  );
                 }}
               >
                 {bar.day}
