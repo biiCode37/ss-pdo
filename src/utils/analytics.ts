@@ -139,3 +139,30 @@ export function calculateAnalytics(
     busesWithNotes
   };
 }
+
+export function extractMonthYearLabel(sheetUrl: string, savedRoutes: { title: string; url: string }[]): string {
+  const routeObj = savedRoutes.find((r) => r.url === sheetUrl);
+  if (routeObj && routeObj.title) {
+    const titleUpper = routeObj.title.toUpperCase();
+    
+    const months = [
+      'JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI',
+      'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'
+    ];
+    
+    const foundMonth = months.find((m) => titleUpper.includes(m));
+    const yearMatch = titleUpper.match(/\b(20\d{2})\b/);
+    const foundYear = yearMatch ? yearMatch[1] : '';
+
+    if (foundMonth) {
+      const capitalizedMonth = foundMonth.charAt(0) + foundMonth.slice(1).toLowerCase();
+      return foundYear ? `${capitalizedMonth} ${foundYear}` : capitalizedMonth;
+    }
+  }
+
+  const now = new Date();
+  const currentMonth = now.toLocaleString('id-ID', { month: 'long' });
+  const capitalizedCurrentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
+  const currentYear = now.getFullYear();
+  return `${capitalizedCurrentMonth} ${currentYear}`;
+}

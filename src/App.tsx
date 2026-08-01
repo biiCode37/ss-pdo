@@ -3,6 +3,8 @@ import { LoginScreen } from './components/LoginScreen';
 import { Dashboard } from './components/Dashboard';
 import { initGoogleApi, checkSignedIn, signOut, hasGoogleCreds } from './services/googleSheets';
 
+import { formatUserError } from './utils/errorFormatter';
+
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
@@ -12,7 +14,7 @@ export default function App() {
 
   const initializeApi = async () => {
     if (!hasGoogleCreds()) {
-      setInitError('Kredensial API tidak ditemukan di Environment Variables.');
+      setInitError(formatUserError('API Credentials missing'));
       return;
     }
     
@@ -22,7 +24,7 @@ export default function App() {
       setIsApiReady(true);
       setIsSignedIn(checkSignedIn());
     } catch (err: any) {
-      setInitError('Gagal menginisialisasi Google API. Cek kembali API Key dan Client ID Anda.');
+      setInitError(formatUserError(err, 'Gagal menginisialisasi layanan Google API.'));
     }
   };
 

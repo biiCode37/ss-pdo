@@ -3,6 +3,7 @@ import { useDebounce } from '../hooks/useDebounce';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData, getBusRowData } from '../services/googleSheets';
 import { isNetworkError } from '../hooks/useOfflineSync';
+import { formatUserError } from '../utils/errorFormatter';
 import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy } from 'lucide-react';
 
 interface Props {
@@ -252,9 +253,8 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
         localStorage.removeItem(draftKey);
         setIsExpanded(false);
       } else {
-        // BUG-03: Error permanen dari Google API (400/403/404) — tampilkan langsung ke user
-        const apiMsg = err?.result?.error?.message || err?.message || 'Gagal menyimpan data.';
-        setError(`Gagal menyimpan: ${apiMsg}`);
+        // BUG-03: Error permanen dari Google API (400/403/404) — tampilkan pesan terformat ke user
+        setError(formatUserError(err, 'Gagal menyimpan data. Silakan coba lagi.'));
       }
     } finally {
       setIsLoading(false);

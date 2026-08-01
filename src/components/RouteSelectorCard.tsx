@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MapPin, Calendar, Plus, X, Loader2, Trash2, ChevronUp } from 'lucide-react';
 
 export interface SavedRoute {
@@ -36,13 +36,15 @@ export function RouteSelectorCard({
   const [isMorphed, setIsMorphed] = useState(false);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
   const [newRouteTitle, setNewRouteTitle] = useState('');
+  const prevLoadingRef = useRef(isLoading);
 
-  // Auto morph into compact pill when data successfully loads
+  // Auto morph into compact pill when data successfully loads / finishes loading
   useEffect(() => {
-    if (isDataLoaded) {
+    if ((prevLoadingRef.current && !isLoading && isDataLoaded) || (isDataLoaded && !isMorphed && !isLoading && !prevLoadingRef.current)) {
       setIsMorphed(true);
     }
-  }, [isDataLoaded]);
+    prevLoadingRef.current = isLoading;
+  }, [isLoading, isDataLoaded]);
 
   // Find active route title and ensure month/year is shown
   const activeRouteObj = savedRoutes.find(r => r.url === sheetUrl);
@@ -224,7 +226,7 @@ export function RouteSelectorCard({
           onClick={onLoadData}
           disabled={isLoading || isAddingRoute}
         >
-          {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Bus'}
+          {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Unit'}
         </button>
       </div>
     </div>

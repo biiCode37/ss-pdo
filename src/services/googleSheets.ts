@@ -595,3 +595,152 @@ export const updateBusData = async (
     throw new Error(error?.result?.error?.message || 'Gagal menyimpan data.');
   }
 };
+
+export const getMonthlyToaTrend = async (
+  sheetId: string, 
+  maxDay: number
+): Promise<{ day: string; totalToa: number }[]> => {
+  const trendData: { day: string; totalToa: number }[] = [];
+  
+  if (!sheetId || maxDay < 1) return trendData;
+
+  const ranges: string[] = [];
+  for (let day = 1; day <= maxDay; day++) {
+    ranges.push(`${day}!A1:ZZ100`);
+  }
+
+  try {
+    const response = await (gapi.client as any).sheets.spreadsheets.values.batchGet({
+      spreadsheetId: sheetId,
+      ranges: ranges,
+    });
+
+    const valueRanges = response?.result?.valueRanges || [];
+
+    for (let idx = 0; idx < maxDay; idx++) {
+      const dayStr = (idx + 1).toString();
+      const vr = valueRanges[idx];
+      const rows = vr?.values;
+
+      if (!rows || rows.length === 0) {
+        trendData.push({ day: dayStr, totalToa: 0 });
+        continue;
+      }
+
+      // Detect header row index
+      let headerRowIndex = -1;
+      for (let i = 0; i < Math.min(5, rows.length); i++) {
+        if (findColumnIndex(rows[i], HEADER_KEYWORDS.unit) !== -1) {
+          headerRowIndex = i;
+          break;
+        }
+      }
+
+      if (headerRowIndex === -1) {
+        trendData.push({ day: dayStr, totalToa: 0 });
+        continue;
+      }
+
+      // Check subheader
+      let isSubHeader = false;
+      if (headerRowIndex + 1 < rows.length) {
+        const unitColIdx = findColumnIndex(rows[headerRowIndex], HEADER_KEYWORDS.unit);
+        const unitNextVal = rows[headerRowIndex + 1]?.[unitColIdx] ? String(rows[headerRowIndex + 1][unitColIdx]).trim() : '';
+        if (unitNextVal === '') isSubHeader = true;
+      }
+
+      const compositeHeaders: string[] = [];
+      const maxCols = Math.max(
+        rows[headerRowIndex].length,
+        isSubHeader ? (rows[headerRowIndex + 1]?.length || 0) : 0
+      );
+
+      let lastMainHeader = '';
+      for (let j = 0; j < maxCols; j++) {
+        let mainHeaderVal = rows[headerRowIndex][j] ? String(rows[headerRowIndex][j]).trim() : '';
+        if (mainHeaderVal !== '') {
+          lastMainHeader = mainHeaderVal;
+        } else {
+          mainHeaderVal = lastMainHeader;
+        }
+        let headerText = mainHeaderVal;
+        if (isSubHeader && rows[headerRowIndex + 1]?.[j]) {
+          const subHeaderVal = String(rows[headerRowIndex + 1][j]).trim();
+          if (subHeaderVal !== '') headerText += ' ' + subHeaderVal;
+        }
+        compositeHeaders[j] = headerText;
+      }
+
+      const unitColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
+      const toaShift1ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift1);
+      const toaShift2ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift2);
+      const manualShift1ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift1);
+      const manualShift2ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift2);
+
+      const startRowIdx = headerRowIndex + (isSubHeader ? 2 : 1);
+      const tabSummary: Record<string, number> = {};
+      let totalToaShift1 = 0;
+      let totalManualShift1 = 0;
+      let totalToaShift2 = 0;
+      let totalManualShift2 = 0;
+
+      for (let r = startRowIdx; r < rows.length; r++) {
+        const row = rows[r];
+        if (!row || row.length === 0) continue;
+
+        const unitVal = unitColIdx !== -1 && row[unitColIdx] ? String(row[unitColIdx]).trim() : '';
+
+        if (unitVal !== '') {
+          // Bus data row
+          let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx]) : NaN;
+          let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx]) : NaN;
+          let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx]) : NaN;
+          let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx]) : NaN;
+
+          if (!isNaN(toa1)) totalToaShift1 += toa1;
+          if (!isNaN(man1)) totalManualShift1 += man1;
+          if (!isNaN(toa2)) totalToaShift2 += toa2;
+          if (!isNaN(man2)) totalManualShift2 += man2;
+        } else {
+          // Summary row below table (exact match to getBusData summary scanning)
+          row.forEach((cellVal: any, colIdx: number) => {
+            if (!cellVal) return;
+            const cleanStr = String(cellVal).replace(/\s+/g, ' ').trim().toLowerCase();
+
+            let key = '';
+            if (cleanStr.includes('total pelanggan') || cleanStr === 'total pnp') {
+              key = 'totalPassengers';
+            } else if (cleanStr === 'total toa' || cleanStr.startsWith('total toa')) {
+              key = 'grandTotalToa';
+            }
+
+            if (key && tabSummary[key] === undefined) {
+              for (let offset = 1; offset <= 3; offset++) {
+                const nextVal = row[colIdx + offset];
+                const parsedNum = parseIndonesianNumber(nextVal);
+                if (!isNaN(parsedNum)) {
+                  tabSummary[key] = parsedNum;
+                  break;
+                }
+              }
+            }
+          });
+        }
+      }
+
+      const calculatedTotalPassengers = totalToaShift1 + totalManualShift1 + totalToaShift2 + totalManualShift2;
+      const finalDayTotal = tabSummary['totalPassengers'] !== undefined && !isNaN(tabSummary['totalPassengers'])
+        ? tabSummary['totalPassengers']
+        : calculatedTotalPassengers;
+
+      trendData.push({ day: dayStr, totalToa: Math.round(finalDayTotal) });
+    }
+  } catch (error) {
+    console.error('Error fetching batch monthly TOA trend:', error);
+    for (let day = 1; day <= maxDay; day++) {
+      trendData.push({ day: day.toString(), totalToa: 0 });
+    }
+  }
+
+  return trendData;
+};

@@ -3,18 +3,42 @@ import { calculateAnalytics } from '../utils/analytics';
 import { KPICard } from './KPICard';
 import { ShiftComparisonCard } from './ShiftComparisonCard';
 import { CompletionStatusCard } from './CompletionStatusCard';
+import { DailyToaTrendCard } from './DailyToaTrendCard';
 
 interface Props {
   busData: BusData[];
   sheetSummary?: Record<string, number>;
+  sheetId?: string;
+  selectedTab?: string;
+  refreshKey?: number;
+  monthLabel?: string;
+  onSelectTab?: (tab: string) => void;
   onSelectUnit?: (unit: string) => void;
 }
 
-export function AnalyticsDashboard({ busData, sheetSummary, onSelectUnit }: Props) {
+export function AnalyticsDashboard({ 
+  busData, 
+  sheetSummary, 
+  sheetId = '', 
+  selectedTab = '1', 
+  refreshKey = 0,
+  monthLabel,
+  onSelectTab, 
+  onSelectUnit 
+}: Props) {
   const summary = calculateAnalytics(busData, sheetSummary);
 
   return (
-    <div className="analytics-container">
+    <div className="analytics-container" style={{ paddingBottom: '90px' }}>
+      {sheetId && (
+        <DailyToaTrendCard 
+          sheetId={sheetId} 
+          selectedTab={selectedTab} 
+          refreshKey={refreshKey}
+          monthLabel={monthLabel}
+          onSelectTab={onSelectTab} 
+        />
+      )}
       <KPICard summary={summary} />
       <ShiftComparisonCard summary={summary} />
       <CompletionStatusCard summary={summary} onSelectUnit={onSelectUnit} />

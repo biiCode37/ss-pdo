@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { signIn } from '../services/googleSheets';
 import { LogIn, Loader2 } from 'lucide-react';
+import { formatUserError } from '../utils/errorFormatter';
 
 interface Props {
   onLoginSuccess: () => void;
@@ -18,16 +19,8 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
       await signIn();
       onLoginSuccess();
     } catch (err: any) {
-      // BUG-04: err bisa berupa objek detail dari CustomEvent (google-login-error)
-      const errorType = err?.type || err?.error || '';
-      if (errorType === 'popup_closed_by_user' || err?.message?.includes('Login dibatalkan')) {
-        // User menutup popup — bukan error fatal, cukup reset state
-        setError(null);
-      } else if (err?.message?.includes('timeout')) {
-        setError('Login timeout. Silakan coba lagi.');
-      } else {
-        setError('Gagal login. Pastikan kredensial di file .env sudah diatur atau hubungi admin.');
-      }
+      const userMessage = formatUserError(err);
+      setError(userMessage);
     } finally {
       setIsLoading(false);
     }
@@ -48,7 +41,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
           PDO Mobile
         </h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '32px' }}>
-          Aplikasi penginputan data shift bus harian langsung ke Google Sheets.
+          Aplikasi penginputan data shift unit harian langsung ke Google Sheets.
         </p>
         
         {error && <div className="error-text" style={{ marginBottom: '16px' }}>{error}</div>}

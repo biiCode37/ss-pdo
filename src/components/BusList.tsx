@@ -86,7 +86,7 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
               : `Progres Kolom: ${categories.find(c => c.id === activeCategory)?.label || activeCategory}`}
           </div>
           <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-            <span style={{ color: filledCount === totalCount ? 'var(--success-color)' : 'var(--text-primary)', fontWeight: 'bold' }}>{filledCount}</span> / {totalCount} Bus
+            <span style={{ color: filledCount === totalCount ? 'var(--success-color)' : 'var(--text-primary)', fontWeight: 'bold' }}>{filledCount}</span> / {totalCount} Unit
           </div>
         </div>
         <div className="progress-bar-bg" style={{ height: '8px', background: 'rgba(0,0,0,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
@@ -112,7 +112,7 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
           <input
             type="text"
             className="input-field search-input"
-            placeholder="Cari No Body Bus..."
+            placeholder="Cari No Body Unit..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -123,7 +123,7 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
           onClick={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
         >
           {showOnlyUnfinished ? <CheckCircle2 size={18} /> : <Filter size={18} />}
-          {showOnlyUnfinished ? 'Sisa Bus' : 'Filter'}
+          {showOnlyUnfinished ? 'Sisa Unit' : 'Filter'}
         </button>
       </div>
 
@@ -145,7 +145,7 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
             ))
           ) : (
             <div className="empty-state">
-              <p>Tidak ada bus yang ditemukan dengan nomor "{searchQuery}"</p>
+              <p>Tidak ada unit yang ditemukan dengan nomor "{searchQuery}"</p>
             </div>
           )}
         </div>

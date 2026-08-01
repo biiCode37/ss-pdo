@@ -7,6 +7,8 @@ import { BottomNav } from './BottomNav';
 import { RouteSelectorCard } from './RouteSelectorCard';
 import { LogOut, CloudOff, Sun, Moon, RefreshCw, AlertTriangle, RotateCw, Trash2 } from 'lucide-react';
 import { useOfflineSync } from '../hooks/useOfflineSync';
+import { formatUserError } from '../utils/errorFormatter';
+import { extractMonthYearLabel } from '../utils/analytics';
 
 interface Props {
   onLogout: () => void;
@@ -34,6 +36,7 @@ export function Dashboard({ onLogout }: Props) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [missingColumns, setMissingColumns] = useState<string[]>([]);
   const [sheetSummary, setSheetSummary] = useState<Record<string, number>>({});
+  const [refreshKey, setRefreshKey] = useState<number>(0);
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'dark';
@@ -85,7 +88,8 @@ export function Dashboard({ onLogout }: Props) {
     };
   }, []);
 
-  const handleLoadData = async (isRefresh = false) => {
+  const handleLoadData = async (isRefresh = false, targetTab?: string) => {
+    const tabToLoad = targetTab || selectedTab;
     if (!sheetUrl) {
       setError('Silakan pilih atau paste link Google Sheet terlebih dahulu');
       return;
@@ -99,22 +103,31 @@ export function Dashboard({ onLogout }: Props) {
 
     setIsLoading(true);
     setError(null);
-    if (!isRefresh) {
-      setBusData(null);
+    // Keep previous busData in memory while loading new date data to prevent component unmounting/flicker
+
+    if (isRefresh || sheetId !== currentSheetId) {
+      setRefreshKey((prev) => prev + 1);
     }
 
     try {
-      const { data, headerMap, missingColumns: missing, sheetSummary: summary } = await getBusData(sheetId, selectedTab);
+      const { data, headerMap, missingColumns: missing, sheetSummary: summary } = await getBusData(sheetId, tabToLoad);
       setBusData(data);
       setHeaderMap(headerMap);
       setCurrentSheetId(sheetId);
-      setCurrentTabName(selectedTab);
+      setCurrentTabName(tabToLoad);
       setMissingColumns(missing);
       setSheetSummary(summary || {});
     } catch (err: any) {
-      setError(err.message || 'Gagal memuat data. Periksa kembali link dan tab Anda.');
+      setError(formatUserError(err, 'Gagal memuat data. Periksa kembali link dan tab Anda.'));
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSelectTab = (newTab: string) => {
+    setSelectedTab(newTab);
+    if (currentSheetId || sheetUrl) {
+      handleLoadData(false, newTab);
     }
   };
 
@@ -220,7 +233,7 @@ export function Dashboard({ onLogout }: Props) {
         sheetUrl={sheetUrl}
         setSheetUrl={setSheetUrl}
         selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
+        setSelectedTab={handleSelectTab}
         savedRoutes={savedRoutes}
         days={days}
         isLoading={isLoading}
@@ -272,39 +285,47 @@ export function Dashboard({ onLogout }: Props) {
       )}
 
       {busData && headerMap && (
-        mainTab === 'input' ? (
-          <BusList 
-            isLoading={isLoading}
-            data={busData} 
-            sheetId={currentSheetId} 
-            tabName={currentTabName} 
-            headerMap={headerMap} 
-            syncQueue={queue}
-            addToQueue={addToQueue}
-            onUpdateBus={handleUpdateBus}
-          />
-        ) : (
-          <AnalyticsDashboard
-            busData={busData}
-            sheetSummary={sheetSummary}
-            onSelectUnit={(unit) => {
-              setMainTab('input');
-              setTimeout(() => {
-                const el = document.getElementById(`bus-card-${unit}`);
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  el.classList.remove('bus-card-highlight');
-                  // Trigger reflow to restart CSS animation if clicked repeatedly
-                  void el.offsetWidth;
-                  el.classList.add('bus-card-highlight');
-                  setTimeout(() => {
+        <>
+          <div style={{ display: mainTab === 'input' ? 'block' : 'none' }}>
+            <BusList 
+              isLoading={isLoading}
+              data={busData} 
+              sheetId={currentSheetId} 
+              tabName={currentTabName} 
+              headerMap={headerMap} 
+              syncQueue={queue}
+              addToQueue={addToQueue}
+              onUpdateBus={handleUpdateBus}
+            />
+          </div>
+          <div style={{ display: mainTab === 'analytics' ? 'block' : 'none' }}>
+            <AnalyticsDashboard
+              busData={busData}
+              sheetSummary={sheetSummary}
+              sheetId={currentSheetId}
+              selectedTab={selectedTab}
+              refreshKey={refreshKey}
+              monthLabel={extractMonthYearLabel(sheetUrl, savedRoutes)}
+              onSelectTab={handleSelectTab}
+              onSelectUnit={(unit) => {
+                setMainTab('input');
+                setTimeout(() => {
+                  const el = document.getElementById(`bus-card-${unit}`);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     el.classList.remove('bus-card-highlight');
-                  }, 6000);
-                }
-              }, 150);
-            }}
-          />
-        )
+                    // Trigger reflow to restart CSS animation if clicked repeatedly
+                    void el.offsetWidth;
+                    el.classList.add('bus-card-highlight');
+                    setTimeout(() => {
+                      el.classList.remove('bus-card-highlight');
+                    }, 6000);
+                  }
+                }, 150);
+              }}
+            />
+          </div>
+        </>
       )}
 
       <BottomNav

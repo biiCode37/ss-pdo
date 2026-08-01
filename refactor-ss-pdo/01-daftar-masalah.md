@@ -8,26 +8,26 @@ Setiap temuan diberi ID unik (BUG-01 s.d. BUG-16) yang dipakai konsisten di selu
 
 ---
 
-## Ringkasan
+## Ringkasan Status Perbaikan
 
-| ID | Judul Singkat | Severity | Lokasi Utama |
-|---|---|---|---|
-| BUG-01 | Race condition di antrean sync menghapus edit terbaru | 🔴 Kritis | `hooks/useOfflineSync.ts` |
-| BUG-02 | Antrean offline tidak punya deteksi konflik/collision | 🔴 Kritis | `hooks/useOfflineSync.ts` |
-| BUG-03 | Head-of-line blocking — 1 error blokir semua antrean | 🔴 Kritis | `hooks/useOfflineSync.ts`, `components/BusCard.tsx` |
-| BUG-04 | Tombol login macet permanen jika popup Google ditutup | 🔴 Kritis | `services/googleSheets.ts`, `components/LoginScreen.tsx` |
-| BUG-05 | Kegagalan silent per-kolom saat header sheet tak cocok | 🔴 Kritis | `services/googleSheets.ts` |
-| BUG-06 | False positive "Tabrakan Data" usai sync offline sukses | 🟠 Sedang | `components/BusCard.tsx`, `components/Dashboard.tsx` |
-| BUG-07 | Field Manual Shift 1/2 & Keterangan terkunci di mode filter kategori | 🟠 Sedang | `components/BusCard.tsx`, `components/BusList.tsx` |
-| BUG-08 | Badge antrean duplikat + styling rusak (Tailwind tak terpasang) | 🟠 Sedang | `components/SyncQueueBadge.tsx`, `App.tsx` |
-| BUG-09 | Jendela kehilangan data <1 detik pada auto-save draft | 🟠 Sedang | `hooks/useDebounce.ts`, `components/BusCard.tsx` |
-| BUG-10 | Deteksi baris header rapuh (fuzzy substring match) | 🟡 Minor | `services/googleSheets.ts` |
-| BUG-11 | Tidak ada refresh token otomatis / deteksi kedaluwarsa proaktif | 🟡 Minor | `services/googleSheets.ts` |
-| BUG-12 | Status `'failed'` pada SyncItem didefinisikan tapi tak pernah dipakai | 🟡 Minor | `hooks/useOfflineSync.ts` |
-| BUG-13 | Rute (Google Sheet) duplikat tidak dicegah saat disimpan | 🟡 Minor | `components/Dashboard.tsx` |
-| BUG-14 | Pull-to-refresh tidak memeriksa status online | 🟡 Minor | `components/Dashboard.tsx` |
-| BUG-15 | `StrictMode` memicu init API dua kali saat development | 🟡 Minor | `main.tsx`, `App.tsx` |
-| BUG-16 | Persentase "Progres Harian" ambigu saat filter kategori aktif | 🟡 Minor | `components/BusList.tsx` |
+| ID | Judul Singkat | Severity | Lokasi Utama | Status |
+|---|---|---|---|---|
+| BUG-01 | Race condition di antrean sync menghapus edit terbaru | 🔴 Kritis | `hooks/useOfflineSync.ts` | ✅ Selesai (v1.5.0) |
+| BUG-02 | Antrean offline tidak punya deteksi konflik/collision | 🔴 Kritis | `hooks/useOfflineSync.ts` | ✅ Selesai (v1.5.0) |
+| BUG-03 | Head-of-line blocking — 1 error blokir semua antrean | 🔴 Kritis | `hooks/useOfflineSync.ts`, `components/BusCard.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-04 | Tombol login macet permanen jika popup Google ditutup | 🔴 Kritis | `services/googleSheets.ts`, `components/LoginScreen.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-05 | Kegagalan silent per-kolom saat header sheet tak cocok | 🔴 Kritis | `services/googleSheets.ts` | ✅ Selesai (v1.5.0) |
+| BUG-06 | False positive "Tabrakan Data" usai sync offline sukses | 🟠 Sedang | `components/BusCard.tsx`, `components/Dashboard.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-07 | Field Manual Shift 1/2 & Keterangan terkunci di mode filter kategori | 🟠 Sedang | `components/BusCard.tsx`, `components/BusList.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-08 | Badge antrean duplikat + styling rusak (Tailwind tak terpasang) | 🟠 Sedang | `components/SyncQueueBadge.tsx`, `App.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-09 | Jendela kehilangan data <1 detik pada auto-save draft | 🟠 Sedang | `hooks/useDebounce.ts`, `components/BusCard.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-10 | Deteksi baris header rapuh (fuzzy substring match) | 🟡 Minor | `services/googleSheets.ts` | ✅ Selesai (v1.5.0) |
+| BUG-11 | Tidak ada refresh token otomatis / deteksi kedaluwarsa proaktif | 🟡 Minor | `services/googleSheets.ts` | ✅ Selesai (v1.5.0) |
+| BUG-12 | Status `'failed'` pada SyncItem didefinisikan tapi tak pernah dipakai | 🟡 Minor | `hooks/useOfflineSync.ts` | ✅ Selesai (v1.5.0) |
+| BUG-13 | Rute (Google Sheet) duplikat tidak dicegah saat disimpan | 🟡 Minor | `components/Dashboard.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-14 | Pull-to-refresh tidak memeriksa status online | 🟡 Minor | `components/Dashboard.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-15 | `StrictMode` memicu init API dua kali saat development | 🟡 Minor | `main.tsx`, `App.tsx` | ✅ Selesai (v1.5.0) |
+| BUG-16 | Persentase "Progres Harian" ambigu saat filter kategori aktif | 🟡 Minor | `components/BusList.tsx` | ✅ Selesai (v1.5.0) |
 
 ---
 

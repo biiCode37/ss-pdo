@@ -11,6 +11,7 @@
   --danger-color: #ef4444;
   --success-color: #10b981;
   --warning-color: #facc15;
+  --orange-color: #fb923c;
 }
 
 [data-theme='light'] {
@@ -22,6 +23,7 @@
   --card-border: rgba(0, 0, 0, 0.1);
   --input-bg: rgba(241, 245, 249, 0.8);
   --warning-color: #eab308;
+  --orange-color: #f97316;
 }
 
 * {
