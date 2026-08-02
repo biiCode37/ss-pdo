@@ -5,6 +5,26 @@ Semua perubahan penting dalam proyek ini akan didokumentasikan di dalam file ini
 Format pencatatan berdasarkan [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 dan proyek ini mematuhi [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-08-02
+
+### Added
+- **Apple iOS Style Sliding Indicator Dock Navbar:** Menambahkan kapsul penanda aktif *electric blue gradient* melayang yang meluncur dengan animasi pegas fisika Apple (`cubic-bezier(0.32, 0.72, 0, 1)`) dan *zero-delay touch* (`onPointerDown` + `touch-action: manipulation`).
+- **Smooth Wave Growth Entrance Animation pada Grafik TOA:** Menambahkan animasi gelombang berjenjang (`@keyframes trendBarRise`) dengan kurva `cubic-bezier(0.34, 1.35, 0.64, 1)` dan promosi layer GPU (`will-change: transform, height, opacity`) untuk performa 60FPS / 120FPS tanpa patah-patah.
+- **Icon Highlight Nilai Tertinggi & Terendah pada Balok Grafik:** Menambahkan ikon `Award` (hijau `#4ade80`) untuk hari puncak TOA dan `TrendingDown` (rose `#fb7185`) untuk hari terendah pada Grafik Tren TOA.
+- **Dismiss Badge Melayang Dua Arah (Bidirectional Tap):** Badge info balok grafik dapat ditutup kembali dengan mengetuk ulang balok yang sama, mengetuk badge, atau mengetuk area di luar grafik.
+- **Refresh Token Akses Otomatis Latar Belakang (`ensureValidToken`):** Mengganti pembatasan waktu sesi login dengan *silent background token refresh* (0.2s) agar sesi pengguna tetap aktif permanen tanpa memaksa logout.
+- **Identitas Visual SPUM (Spreadsheet PDO Utara Mobile):** Memperbarui nama dan identitas visual aplikasi menjadi SPUM.
+
+### Changed
+- **Default Landing Page ke Dashboard Analitik:** Mengubah inisialisasi state `mainTab` dari `'input'` menjadi `'analytics'`, sehingga pengguna langsung disajikan ringkasan eksekutif Dashboard Analitik saat membuka aplikasi.
+- **Kesesuaian Presisi Murni Single Source of Truth (SSOT):** Menyelaraskan perhitungan `getMonthlyToaTrend` di `googleSheets.ts` dengan rumus murni Google Sheets (TOA + TOA Manual) agar angka badge balok (e.g. `1.527`) konsisten 100% dengan blok "PELANGGAN (TOA)".
+- **Render Tab Komponen Secara Persisten:** Memperbarui `Dashboard.tsx` agar `AnalyticsDashboard` dan `DailyToaTrendCard` tetap terpasang (*persistently mounted*) di DOM menggunakan CSS `display` + `opacity transition` untuk mengeliminasi *reflow lag*.
+- **Header Bulan/Tahun Dinamis:** Menambahkan helper `extractMonthYearLabel` untuk mengekstrak nama bulan dan tahun dari nama sheet/link secara dinamis (e.g. `📅 Juli 2026`).
+- **Pembaruan Badge Jumlah Unit Keterangan (UI/UX Pro Max):** Memperbesar badge `X Unit` menjadi font `13px` (`fontWeight: 800`), padding `4px 12px`, bentuk kapsul membal dengan *shadow aura*, serta teks keterangan responsif (`wordBreak: break-word`).
+
+### Fixed
+- **[BUG-17] Login Prompt Tidak Diharapkan saat Tap "Load Data":** Menyelaraskan fungsi `checkSignedIn()` dan `ensureValidToken()` di `googleSheets.ts` untuk memverifikasi masa berlaku `GAPI_ACCESS_TOKEN` (`expiresAt`). Jika token kedaluwarsa, state stale dibersihkan dan aplikasi meminta login bersih sejak awal di `<LoginScreen />`, mengeliminasi kemunculan popup login Google secara mendadak ketika pengguna mengetuk "Load Data".
+
 ## [1.5.0] - 2026-07-26
 
 ### Fixed

@@ -136,7 +136,9 @@ export const ensureValidToken = async (): Promise<void> => {
       const tokenObj = JSON.parse(tokenStr);
       // Jika token masih berlaku lebih dari 2 menit, pasang ke gapi client
       if (tokenObj.token && tokenObj.expiresAt && tokenObj.expiresAt - Date.now() > 2 * 60 * 1000) {
-        gapi.client.setToken({ access_token: tokenObj.token });
+        if (gapi.client) {
+          gapi.client.setToken({ access_token: tokenObj.token });
+        }
         return;
       }
     } catch (e) {}
@@ -149,17 +151,31 @@ export const ensureValidToken = async (): Promise<void> => {
       const handleSuccess = () => {
         if (settled) return;
         settled = true;
-        window.removeEventListener('google-login-success', handleSuccess);
+        cleanup();
         resolve();
       };
 
+      const handleError = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        resolve();
+      };
+
+      const cleanup = () => {
+        window.removeEventListener('google-login-success', handleSuccess);
+        window.removeEventListener('google-login-error', handleError);
+      };
+
       window.addEventListener('google-login-success', handleSuccess);
+      window.addEventListener('google-login-error', handleError);
+
       try {
         tokenClient.requestAccessToken({ prompt: '' });
       } catch (e) {
         if (!settled) {
           settled = true;
-          window.removeEventListener('google-login-success', handleSuccess);
+          cleanup();
           resolve();
         }
       }
@@ -168,7 +184,7 @@ export const ensureValidToken = async (): Promise<void> => {
       setTimeout(() => {
         if (!settled) {
           settled = true;
-          window.removeEventListener('google-login-success', handleSuccess);
+          cleanup();
           resolve();
         }
       }, 3000);
@@ -178,9 +194,28 @@ export const ensureValidToken = async (): Promise<void> => {
 
 export const checkSignedIn = (): boolean => {
   const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
-  if (isPersistentSignedIn) {
-    ensureValidToken();
-    return true;
+  if (!isPersistentSignedIn) return false;
+
+  const tokenStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
+  if (tokenStr) {
+    try {
+      const tokenObj = JSON.parse(tokenStr);
+      // Jika token masih valid (lebih dari 2 menit sisa), pasang token dan kembalikan true
+      if (tokenObj.token && tokenObj.expiresAt && tokenObj.expiresAt - Date.now() > 2 * 60 * 1000) {
+        if (gapi.client) {
+          gapi.client.setToken({ access_token: tokenObj.token });
+        }
+        startTokenRefreshTimer(tokenObj.expiresAt - Date.now());
+        return true;
+      }
+    } catch (e) {}
+  }
+
+  // Jika token sudah kedaluwarsa atau tidak ada, bersihkan state stale agar pengguna login sejak awal
+  localStorage.removeItem('GAPI_ACCESS_TOKEN');
+  localStorage.removeItem('PDO_IS_SIGNED_IN');
+  if (gapi.client) {
+    gapi.client.setToken(null);
   }
   return false;
 };

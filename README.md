@@ -75,6 +75,6 @@ pnpm run preview
 
 ## 📄 Dokumentasi Tambahan
 
-- **[CHANGELOG.md](file:///d:/MINE/SS_PDO/CHANGELOG.md):** Riwayat lengkap perubahan versi aplikasi (v1.0.0 s.d. v1.5.0).
+- **[CHANGELOG.md](file:///d:/MINE/SS_PDO/CHANGELOG.md):** Riwayat lengkap perubahan versi aplikasi (v1.0.0 s.d. v1.6.0).
 - **[ADR 0001](file:///d:/MINE/SS_PDO/docs/adr/0001-refactoring-and-ux-enhancements.md):** Keputusan arsitektur refactoring antrean sync offline, autentikasi, dan UX card dinamis.
 - **[Daftar Masalah & Audit](file:///d:/MINE/SS_PDO/refactor-ss-pdo/01-daftar-masalah.md):** Dokumentasi audit 16 bug yang telah diselesaikan.
