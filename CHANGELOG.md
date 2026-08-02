@@ -23,7 +23,7 @@ dan proyek ini mematuhi [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Pembaruan Badge Jumlah Unit Keterangan (UI/UX Pro Max):** Memperbesar badge `X Unit` menjadi font `13px` (`fontWeight: 800`), padding `4px 12px`, bentuk kapsul membal dengan *shadow aura*, serta teks keterangan responsif (`wordBreak: break-word`).
 
 ### Fixed
-- **[BUG-17] Login Prompt Tidak Diharapkan saat Tap "Load Data":** Menyelaraskan fungsi `checkSignedIn()` dan `ensureValidToken()` di `googleSheets.ts` untuk memverifikasi masa berlaku `GAPI_ACCESS_TOKEN` (`expiresAt`). Jika token kedaluwarsa, state stale dibersihkan dan aplikasi meminta login bersih sejak awal di `<LoginScreen />`, mengeliminasi kemunculan popup login Google secara mendadak ketika pengguna mengetuk "Load Data".
+- **[BUG-17] Sesi Login Permanen & Auto Retry API Auth (`withAuthRetry`):** Menjamin ketaatan 100% pada Aturan Emas #3 (Sesi Login Permanen). Menambahkan fungsi pembungkus `withAuthRetry` pada seluruh panggilan API Google Sheets (`getBusData`, `getBusRowData`, `updateBusData`, `getMonthlyToaTrend`). Jika token kedaluwarsa setelah aplikasi didiamkan lama, `withAuthRetry` menangkap error 401/403, memperbarui token secara transparan, dan otomatis mengulang permintaan API tanpa me-logout pengguna atau mengganggu interaksi.
 
 ## [1.5.0] - 2026-07-26
 

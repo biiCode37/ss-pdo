@@ -144,53 +144,100 @@ export const ensureValidToken = async (): Promise<void> => {
     } catch (e) {}
   }
 
-  // Jika token habis/kosong namun status PDO_IS_SIGNED_IN 'true', lakukan silent refresh otomatis
-  if (tokenClient) {
-    return new Promise((resolve) => {
-      let settled = false;
-      const handleSuccess = () => {
-        if (settled) return;
-        settled = true;
-        cleanup();
-        resolve();
-      };
-
-      const handleError = () => {
-        if (settled) return;
-        settled = true;
-        cleanup();
-        resolve();
-      };
-
-      const cleanup = () => {
-        window.removeEventListener('google-login-success', handleSuccess);
-        window.removeEventListener('google-login-error', handleError);
-      };
-
-      window.addEventListener('google-login-success', handleSuccess);
-      window.addEventListener('google-login-error', handleError);
-
-      try {
-        tokenClient.requestAccessToken({ prompt: '' });
-      } catch (e) {
-        if (!settled) {
-          settled = true;
-          cleanup();
-          resolve();
-        }
-      }
-
-      // Timeout pengaman 3 detik untuk silent refresh
-      setTimeout(() => {
-        if (!settled) {
-          settled = true;
-          cleanup();
-          resolve();
-        }
-      }, 3000);
-    });
-  }
+  // Lakukan silent token refresh tanpa prompt consent
+  await refreshTokenInteractiveOrSilent(true);
 };
+
+export function isAuthError(err: any): boolean {
+  if (!err) return false;
+  const status = err.status || err.result?.error?.code || err.code;
+  if (status === 401 || status === 403) return true;
+  const statusStr = err.result?.error?.status || '';
+  if (statusStr === 'UNAUTHENTICATED' || statusStr === 'PERMISSION_DENIED') return true;
+  const message = String(err.message || err.result?.error?.message || '').toLowerCase();
+  return (
+    message.includes('401') ||
+    message.includes('403') ||
+    message.includes('unauthenticated') ||
+    message.includes('invalid credentials') ||
+    message.includes('token expired') ||
+    message.includes('access token')
+  );
+}
+
+let tokenRefreshPromise: Promise<void> | null = null;
+
+export const refreshTokenInteractiveOrSilent = async (silentOnly = false): Promise<void> => {
+  if (!tokenClient) return;
+  if (tokenRefreshPromise) return tokenRefreshPromise;
+
+  tokenRefreshPromise = new Promise<void>((resolve) => {
+    let settled = false;
+
+    const cleanup = () => {
+      window.removeEventListener('google-login-success', handleSuccess);
+      window.removeEventListener('google-login-error', handleError);
+      tokenRefreshPromise = null;
+    };
+
+    const handleSuccess = () => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve();
+    };
+
+    const handleError = () => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      if (!silentOnly && tokenClient) {
+        // Jika silent refresh gagal dan butuh interaksi, jalankan consent prompt
+        try {
+          tokenClient.requestAccessToken({ prompt: 'consent' });
+        } catch (e) {}
+      }
+      resolve();
+    };
+
+    window.addEventListener('google-login-success', handleSuccess);
+    window.addEventListener('google-login-error', handleError);
+
+    try {
+      tokenClient.requestAccessToken({ prompt: '' });
+    } catch (e) {
+      if (!settled) {
+        settled = true;
+        cleanup();
+        resolve();
+      }
+    }
+
+    setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        cleanup();
+        resolve();
+      }
+    }, 3500);
+  });
+
+  return tokenRefreshPromise;
+};
+
+export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
+  await ensureValidToken();
+  try {
+    return await apiFn();
+  } catch (err: any) {
+    if (isAuthError(err)) {
+      console.warn('Google API Access Token kedaluwarsa/unauthorized. Melakukan silent refresh & retry otomatis...');
+      await refreshTokenInteractiveOrSilent(false);
+      return await apiFn();
+    }
+    throw err;
+  }
+}
 
 export const checkSignedIn = (): boolean => {
   const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
@@ -200,24 +247,24 @@ export const checkSignedIn = (): boolean => {
   if (tokenStr) {
     try {
       const tokenObj = JSON.parse(tokenStr);
-      // Jika token masih valid (lebih dari 2 menit sisa), pasang token dan kembalikan true
-      if (tokenObj.token && tokenObj.expiresAt && tokenObj.expiresAt - Date.now() > 2 * 60 * 1000) {
-        if (gapi.client) {
-          gapi.client.setToken({ access_token: tokenObj.token });
-        }
-        startTokenRefreshTimer(tokenObj.expiresAt - Date.now());
-        return true;
+      if (tokenObj.token && gapi.client) {
+        gapi.client.setToken({ access_token: tokenObj.token });
       }
-    } catch (e) {}
+      if (tokenObj.expiresAt && tokenObj.expiresAt > Date.now()) {
+        startTokenRefreshTimer(tokenObj.expiresAt - Date.now());
+      } else {
+        ensureValidToken();
+      }
+    } catch (e) {
+      ensureValidToken();
+    }
+  } else {
+    ensureValidToken();
   }
 
-  // Jika token sudah kedaluwarsa atau tidak ada, bersihkan state stale agar pengguna login sejak awal
-  localStorage.removeItem('GAPI_ACCESS_TOKEN');
-  localStorage.removeItem('PDO_IS_SIGNED_IN');
-  if (gapi.client) {
-    gapi.client.setToken(null);
-  }
-  return false;
+  // ATURAN EMAS #3: Sesi login dibuat PERMANEN tanpa batas waktu.
+  // Selama PDO_IS_SIGNED_IN === 'true', tetap pertahankan pengguna di halaman utama!
+  return true;
 };
 
 // BUG-11: Timer refresh token proaktif
@@ -330,9 +377,9 @@ export function parseIndonesianNumber(val: any): number {
 }
 
 export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[], sheetSummary: Record<string, number> }> => {
-  await ensureValidToken();
-  try {
-    const response = await (gapi.client as any).sheets.spreadsheets.values.get({
+  return withAuthRetry(async () => {
+    try {
+      const response = await (gapi.client as any).sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
       range: `${tabName}!A1:ZZ`, 
     });
@@ -560,6 +607,7 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
     console.error('Error fetching data', error);
     throw new Error(error?.result?.error?.message || 'Gagal mengambil data dari Google Sheets. Pastikan link benar dan Anda memiliki akses.');
   }
+  });
 };
 
 export const getBusRowData = async (
@@ -568,9 +616,9 @@ export const getBusRowData = async (
   rowIndex: number, 
   headerMap: HeaderMap
 ): Promise<Partial<BusData>> => {
-  await ensureValidToken();
-  try {
-    const response = await (gapi.client as any).sheets.spreadsheets.values.get({
+  return withAuthRetry(async () => {
+    try {
+      const response = await (gapi.client as any).sheets.spreadsheets.values.get({
       spreadsheetId: sheetId,
       range: `${tabName}!A${rowIndex}:ZZ${rowIndex}`, 
     });
@@ -602,6 +650,7 @@ export const getBusRowData = async (
   } catch (error: any) {
     throw new Error(error?.result?.error?.message || 'Gagal melakukan pengecekan data.');
   }
+  });
 };
 
 const numberToColumnName = (num: number): string => {
@@ -622,56 +671,56 @@ export const updateBusData = async (
   updates: Partial<BusData>, 
   headerMap: HeaderMap
 ): Promise<void> => {
-  await ensureValidToken();
-  
-  // We construct individual updates for each cell to avoid overwriting formulas
-  const data: any[] = [];
-  
-  const addUpdate = (key: keyof HeaderMap, value: any) => {
-    const colIndex = headerMap[key];
-    if (colIndex !== -1 && value !== undefined) {
-      const colName = numberToColumnName(colIndex);
-      data.push({
-        range: `${tabName}!${colName}${rowIndex}`,
-        values: [[value]]
-      });
-    }
-  };
-
-  addUpdate('toaShift1', updates.toaShift1);
-  addUpdate('manualShift1', updates.manualShift1);
-  addUpdate('manualShift2', updates.manualShift2);
-  addUpdate('totalToa', updates.totalToa);
-  addUpdate('kmAwal1', updates.kmAwal1);
-  addUpdate('kmAkhir1', updates.kmAkhir1);
-  addUpdate('kmAwal2', updates.kmAwal2);
-  addUpdate('kmAkhir2', updates.kmAkhir2);
-  addUpdate('keterangan', updates.keterangan);
-
-  if (data.length === 0) return; // Nothing to update
-
-  try {
-    await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
-      spreadsheetId: sheetId,
-      resource: {
-        valueInputOption: 'USER_ENTERED', // So numbers/formulas are parsed properly
-        data: data
+  return withAuthRetry(async () => {
+    // We construct individual updates for each cell to avoid overwriting formulas
+    const data: any[] = [];
+    
+    const addUpdate = (key: keyof HeaderMap, value: any) => {
+      const colIndex = headerMap[key];
+      if (colIndex !== -1 && value !== undefined) {
+        const colName = numberToColumnName(colIndex);
+        data.push({
+          range: `${tabName}!${colName}${rowIndex}`,
+          values: [[value]]
+        });
       }
-    });
-  } catch (error: any) {
-    console.error('Error updating data', error);
-    throw new Error(error?.result?.error?.message || 'Gagal menyimpan data.');
-  }
+    };
+
+    addUpdate('toaShift1', updates.toaShift1);
+    addUpdate('manualShift1', updates.manualShift1);
+    addUpdate('manualShift2', updates.manualShift2);
+    addUpdate('totalToa', updates.totalToa);
+    addUpdate('kmAwal1', updates.kmAwal1);
+    addUpdate('kmAkhir1', updates.kmAkhir1);
+    addUpdate('kmAwal2', updates.kmAwal2);
+    addUpdate('kmAkhir2', updates.kmAkhir2);
+    addUpdate('keterangan', updates.keterangan);
+
+    if (data.length === 0) return; // Nothing to update
+
+    try {
+      await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId: sheetId,
+        resource: {
+          valueInputOption: 'USER_ENTERED', // So numbers/formulas are parsed properly
+          data: data
+        }
+      });
+    } catch (error: any) {
+      console.error('Error updating data', error);
+      throw new Error(error?.result?.error?.message || 'Gagal menyimpan data.');
+    }
+  });
 };
 
 export const getMonthlyToaTrend = async (
   sheetId: string, 
   maxDay: number
 ): Promise<{ day: string; totalToa: number }[]> => {
-  await ensureValidToken();
-  const trendData: { day: string; totalToa: number }[] = [];
-  
-  if (!sheetId || maxDay < 1) return trendData;
+  return withAuthRetry(async () => {
+    const trendData: { day: string; totalToa: number }[] = [];
+    
+    if (!sheetId || maxDay < 1) return trendData;
 
   const ranges: string[] = [];
   for (let day = 1; day <= maxDay; day++) {
@@ -812,4 +861,5 @@ export const getMonthlyToaTrend = async (
   }
 
   return trendData;
+  });
 };
