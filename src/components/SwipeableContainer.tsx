@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 
+// ponytail: minimal touch gesture container for mobile horizontal swiping
 export interface SwipeableContainerProps {
   children: React.ReactNode;
   onSwipeLeft?: () => void;
@@ -10,69 +11,63 @@ export interface SwipeableContainerProps {
   style?: React.CSSProperties;
 }
 
-export function SwipeableContainer({
+export const SwipeableContainer: React.FC<SwipeableContainerProps> = ({
   children,
   onSwipeLeft,
   onSwipeRight,
   minSwipeDistance = 50,
   disabled = false,
-  className = '',
-  style = {},
-}: SwipeableContainerProps) {
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
+  className,
+  style,
+}) => {
+  const startXRef = useRef<number | null>(null);
+  const startYRef = useRef<number | null>(null);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (disabled || e.touches.length === 0) return;
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (disabled) return;
 
-    // Pengecualian elemen input, textarea, select, .no-swipe, .route-date-tabs
     const target = e.target as HTMLElement | null;
-    if (
-      target &&
-      (target.tagName === 'INPUT' ||
-        target.tagName === 'TEXTAREA' ||
-        target.tagName === 'SELECT' ||
-        target.closest('.no-swipe') ||
-        target.closest('.route-date-tabs'))
-    ) {
+    if (target?.closest?.('input, textarea, select, .no-swipe, .route-date-tabs')) {
+      startXRef.current = null;
+      startYRef.current = null;
       return;
     }
 
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
+    if (e.touches.length > 0) {
+      startXRef.current = e.touches[0].clientX;
+      startYRef.current = e.touches[0].clientY;
+    }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (disabled || touchStartX.current === null || touchStartY.current === null || e.changedTouches.length === 0) {
-      return;
-    }
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (disabled || startXRef.current === null || startYRef.current === null) return;
 
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
+    if (e.changedTouches.length > 0) {
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
 
-    const deltaX = touchEndX - touchStartX.current;
-    const deltaY = touchEndY - touchStartY.current;
+      const deltaX = endX - startXRef.current;
+      const deltaY = endY - startYRef.current;
 
-    const absX = Math.abs(deltaX);
-    const absY = Math.abs(deltaY);
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
 
-    // Reset touch coordinates
-    touchStartX.current = null;
-    touchStartY.current = null;
-
-    // Dominan horizontal (|deltaX| > |deltaY| * 1.2) dan melebihi minSwipeDistance
-    if (absX >= minSwipeDistance && absX > absY * 1.2) {
-      if (deltaX < 0) {
-        onSwipeLeft?.();
-      } else {
-        onSwipeRight?.();
+      if (absX >= minSwipeDistance && absX > absY * 1.2) {
+        if (deltaX < 0) {
+          onSwipeLeft?.();
+        } else if (deltaX > 0) {
+          onSwipeRight?.();
+        }
       }
     }
+
+    startXRef.current = null;
+    startYRef.current = null;
   };
 
   return (
     <div
-      className={`swipeable-container ${className}`}
+      className={className}
       style={{ touchAction: 'pan-y', ...style }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -80,4 +75,4 @@ export function SwipeableContainer({
       {children}
     </div>
   );
-}
+};

@@ -89,7 +89,7 @@
   "87": "Global Constraints",
   "88": "codex-tools.md",
   "89": "Pi Tool Mapping",
-  "90": "Anti-patterns to avoid",
+  "90": "Evaluation and iteration",
   "91": "Checklist for effective Skills",
   "92": "Core principles",
   "93": "File Organization",
@@ -103,5 +103,8 @@
   "101": "plan-document-reviewer-prompt.md",
   "102": "rules/graphify.md",
   "103": "workflows/graphify.md",
-  "104": "progress.md"
+  "104": "progress.md",
+  "105": "routeService.ts",
+  "106": "Supabase Integration & Metadata Catalog Design Specification",
+  "107": "Global Constraints"
 }

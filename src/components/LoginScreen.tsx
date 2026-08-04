@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { signIn, signOut } from "../services/googleSheets";
-import { verifyUserProfile } from "../services/routeService";
+import { verifyUserProfile, upsertUserProfile } from "../services/routeService";
 import { LogIn, Loader2 } from "lucide-react";
 import { formatUserError } from "../utils/errorFormatter";
 
@@ -18,21 +18,39 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
     setError(null);
     try {
       await signIn();
+
+      // PDO_USER_EMAIL sekarang pasti tersedia karena signIn() menunggu userinfo selesai
       const userEmail = localStorage.getItem('PDO_USER_EMAIL') || '';
+      const userName = localStorage.getItem('PDO_USER_NAME') || '';
+      const userAvatar = localStorage.getItem('PDO_USER_AVATAR') || '';
 
       if (userEmail) {
+        // Verifikasi apakah user terdaftar dan aktif di Supabase
         const verify = await verifyUserProfile(userEmail);
         if (!verify.isAllowed) {
           await signOut();
           setError(verify.message || 'Akses ditolak: Akun Anda belum terdaftar.');
           return;
         }
+
+        // Sinkronkan profil user ke Supabase (fire-and-forget, tidak blocking)
+        // ponytail: upsert async agar tidak memperlambat login
+        upsertUserProfile({
+          email: userEmail,
+          full_name: userName || userEmail,
+          avatar_url: userAvatar || undefined,
+        }).catch(() => {
+          // Gagal upsert bukan fatal — user tetap bisa masuk
+        });
       }
 
       onLoginSuccess();
     } catch (err: any) {
       const userMessage = formatUserError(err);
-      setError(userMessage);
+      // formatUserError returns null untuk popup_closed_by_user → reset loading saja
+      if (userMessage) {
+        setError(userMessage);
+      }
     } finally {
       setIsLoading(false);
     }

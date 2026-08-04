@@ -43,10 +43,8 @@ export const initGoogleApi = async (): Promise<void> => {
                   expiresAt: Date.now() + tokenResponse.expires_in * 1000
                 }));
 
-                // Dispatch success immediately so login resolves instantly
-                window.dispatchEvent(new Event('google-login-success'));
-
-                // Fetch Google profile userinfo asynchronously in background
+                // Fetch Google profile userinfo SEBELUM dispatch success
+                // agar PDO_USER_EMAIL tersedia saat LoginScreen melanjutkan
                 fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
                   headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
                 })
@@ -55,9 +53,17 @@ export const initGoogleApi = async (): Promise<void> => {
                     if (info && info.email) {
                       localStorage.setItem('PDO_USER_EMAIL', info.email);
                       localStorage.setItem('PDO_USER_NAME', info.name || info.email);
+                      localStorage.setItem('PDO_USER_AVATAR', info.picture || '');
                     }
+                    // Dispatch SETELAH userinfo tersimpan ke localStorage
+                    window.dispatchEvent(new CustomEvent('google-login-success', {
+                      detail: { email: info?.email, name: info?.name, avatar: info?.picture }
+                    }));
                   })
-                  .catch(() => {});
+                  .catch(() => {
+                    // Fallback: tetap dispatch success meskipun userinfo gagal
+                    window.dispatchEvent(new Event('google-login-success'));
+                  });
 
                 // BUG-11: Mulai timer refresh token otomatis
                 startTokenRefreshTimer(tokenResponse.expires_in * 1000);
@@ -140,6 +146,9 @@ export const signOut = async () => {
   }
   localStorage.removeItem('GAPI_ACCESS_TOKEN');
   localStorage.removeItem('PDO_IS_SIGNED_IN');
+  localStorage.removeItem('PDO_USER_EMAIL');
+  localStorage.removeItem('PDO_USER_NAME');
+  localStorage.removeItem('PDO_USER_AVATAR');
   gapi.client.setToken(null);
 };
 
@@ -167,18 +176,37 @@ export const ensureValidToken = async (): Promise<void> => {
 
 export function isAuthError(err: any): boolean {
   if (!err) return false;
+
   const status = err.status || err.result?.error?.code || err.code;
-  if (status === 401 || status === 403) return true;
-  const statusStr = err.result?.error?.status || '';
-  if (statusStr === 'UNAUTHENTICATED' || statusStr === 'PERMISSION_DENIED') return true;
-  const message = String(err.message || err.result?.error?.message || '').toLowerCase();
+  const statusStr = String(err.statusText || err.result?.error?.status || '').toUpperCase();
+  const message = String(err.message || err.result?.error?.message || err.error?.message || '').toLowerCase();
+
+  // 401 is ALWAYS an authentication token error
+  if (status === 401 || statusStr === 'UNAUTHENTICATED') return true;
+
+  // File permission error ("The caller does not have permission") is NOT an auth token error!
+  // It means the user is logged in, but their Google account doesn't have access to this specific Google Sheet file.
+  if (message.includes('caller does not have permission') || message.includes('does not have permission')) {
+    return false;
+  }
+
+  // 403 is an auth error ONLY IF it is due to insufficient scopes or invalid credentials
+  if (status === 403 || statusStr === 'PERMISSION_DENIED' || statusStr === 'FORBIDDEN') {
+    return (
+      message.includes('insufficient') ||
+      message.includes('scope') ||
+      message.includes('invalid credentials') ||
+      message.includes('token expired') ||
+      message.includes('access token') ||
+      message.includes('oauth')
+    );
+  }
+
   return (
     message.includes('401') ||
-    message.includes('403') ||
     message.includes('unauthenticated') ||
     message.includes('invalid credentials') ||
-    message.includes('token expired') ||
-    message.includes('access token')
+    message.includes('token expired')
   );
 }
 
@@ -297,12 +325,16 @@ export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
     return await apiFn();
   } catch (err: any) {
     if (isAuthError(err)) {
-      console.warn('Google API Access Token kedaluwarsa/unauthorized (401/403). Membersihkan token lama...');
-      localStorage.removeItem('GAPI_ACCESS_TOKEN');
-      localStorage.removeItem('PDO_IS_SIGNED_IN');
-      if (gapi.client) gapi.client.setToken(null);
-      window.dispatchEvent(new CustomEvent('google-auth-expired'));
-      throw err;
+      console.warn('Google API Access Token kedaluwarsa/unauthorized (401/403). Mencoba perbarui token otomatis...');
+      try {
+        await reauthenticateSession();
+        // Sesi berhasil diperbarui! Coba lagi pemanggilan API secara otomatis
+        return await apiFn();
+      } catch (refreshErr) {
+        console.error('Pembaruan token gagal atau dibatalkan:', refreshErr);
+        window.dispatchEvent(new CustomEvent('google-auth-expired'));
+        throw err;
+      }
     }
     throw err;
   }
@@ -660,6 +692,9 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
     return { data, headerMap, missingColumns, sheetSummary };
   } catch (error: any) {
     console.error('Error fetching data', error);
+    if (isAuthError(error)) {
+      throw error;
+    }
     throw new Error(error?.result?.error?.message || 'Gagal mengambil data dari Google Sheets. Pastikan link benar dan Anda memiliki akses.');
   }
   });
@@ -763,6 +798,9 @@ export const updateBusData = async (
       });
     } catch (error: any) {
       console.error('Error updating data', error);
+      if (isAuthError(error)) {
+        throw error;
+      }
       throw new Error(error?.result?.error?.message || 'Gagal menyimpan data.');
     }
   });

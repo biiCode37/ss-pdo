@@ -30,10 +30,24 @@ export function DailyToaTrendCard({
   const [isLoading, setIsLoading] = useState(false);
   const [activeTooltipDay, setActiveTooltipDay] = useState<string | null>(null);
 
-  const today = new Date();
-  const currentDayNum = today.getDate();
-  const selectedDayNum = parseInt(selectedTab) || 1;
-  const maxDay = Math.max(selectedDayNum, currentDayNum);
+  // Track max day for the chart so internal bar/badge clicks don't shrink the chart
+  const [chartMaxDay, setChartMaxDay] = useState<number>(() => {
+    return Math.max(1, Math.min(31, parseInt(selectedTab, 10) || 1));
+  });
+
+  // When sheetId or refreshKey changes (e.g. user clicks "LOAD DATA" in header), reset chartMaxDay to selectedTab
+  useEffect(() => {
+    const selectedNum = parseInt(selectedTab, 10) || 1;
+    setChartMaxDay(Math.max(1, Math.min(31, selectedNum)));
+  }, [sheetId, refreshKey]);
+
+  // When selectedTab increases beyond current chartMaxDay, expand chartMaxDay
+  useEffect(() => {
+    const selectedNum = parseInt(selectedTab, 10) || 1;
+    if (selectedNum > chartMaxDay) {
+      setChartMaxDay(Math.min(31, selectedNum));
+    }
+  }, [selectedTab]);
 
   useEffect(() => {
     // Reset tooltip when active tab changes
@@ -54,12 +68,12 @@ export function DailyToaTrendCard({
   }, [activeTooltipDay]);
 
   useEffect(() => {
-    if (!sheetId) return;
+    if (!sheetId || chartMaxDay < 1) return;
 
     let isMounted = true;
     setIsLoading(true);
 
-    getMonthlyToaTrend(sheetId, maxDay).then((data) => {
+    getMonthlyToaTrend(sheetId, chartMaxDay).then((data) => {
       if (isMounted) {
         setTrendData(data);
         setIsLoading(false);
@@ -69,7 +83,7 @@ export function DailyToaTrendCard({
     return () => {
       isMounted = false;
     };
-  }, [sheetId, refreshKey]);
+  }, [sheetId, chartMaxDay]);
 
   if (isLoading) {
     return (

@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
-import React, { act } from 'react';
-import { createRoot, Root } from 'react-dom/client';
+import { act } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SwipeableContainer } from '../SwipeableContainer';
 
@@ -9,7 +9,7 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 describe('SwipeableContainer', () => {
   let container: HTMLDivElement;
-  let root: Root | null = null;
+  let root: Root;
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -18,13 +18,10 @@ describe('SwipeableContainer', () => {
   });
 
   afterEach(() => {
-    if (root) {
-      act(() => {
-        root?.unmount();
-      });
-      root = null;
-    }
-    container?.remove();
+    act(() => {
+      root.unmount();
+    });
+    container.remove();
   });
 
   const createTouchEvent = (type: string, clientX: number, clientY: number, target: Element) => {
@@ -33,7 +30,7 @@ describe('SwipeableContainer', () => {
       clientY,
       identifier: 0,
       target,
-    } as Touch;
+    } as unknown as Touch;
 
     return new TouchEvent(type, {
       bubbles: true,

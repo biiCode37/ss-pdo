@@ -33,10 +33,20 @@ export function formatUserError(
     return null;
   }
 
-  // 2. OAuth Session Expired / Invalid Token (HTTP 401 / Invalid Credentials)
+  // 2. Specific Google Sheet File Access / Permission Denied (Not an Auth Token error)
+  if (
+    lowerMsg.includes("caller does not have permission") ||
+    lowerMsg.includes("does not have permission")
+  ) {
+    return "Gagal mengakses Google Sheets (Hak Akses Ditolak). Akun Google Anda tidak memiliki akses ke dokumen ini. Pastikan dokumen telah dibagikan (share) ke akun Anda.";
+  }
+
+  // 3. OAuth Session Expired / Invalid Token (HTTP 401 / Invalid Credentials / Insufficient Scope)
   if (
     lowerMsg.includes("invalid authentication credentials") ||
     lowerMsg.includes("oauth 2 access token") ||
+    lowerMsg.includes("insufficient") ||
+    lowerMsg.includes("scope") ||
     lowerMsg.includes("401") ||
     lowerMsg.includes("unauthorized")
   ) {

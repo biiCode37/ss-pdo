@@ -70,8 +70,8 @@
     "semantic_hash": "029f4905006c1fffd96bc863e2d98d3e"
   },
   "package.json": {
-    "mtime": 1785811229.3859854,
-    "ast_hash": "1310750b2b08bad5167200d48288b9e7",
+    "mtime": 1785815102.4673953,
+    "ast_hash": "835b1c42314ab5a7524b304e0e53cbc6",
     "semantic_hash": ""
   },
   "src/App.tsx": {
@@ -120,13 +120,13 @@
     "semantic_hash": "51fcb3237d2d15558e70568dd5112c16"
   },
   "src/components/LoginScreen.tsx": {
-    "mtime": 1785610796.6470468,
-    "ast_hash": "cc13809e24a2144784ca65db28b3d72f",
-    "semantic_hash": "cc13809e24a2144784ca65db28b3d72f"
+    "mtime": 1785816223.350557,
+    "ast_hash": "940fed78dbf5c27f1d5523cc0c186bee",
+    "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
-    "mtime": 1785811160.8987002,
-    "ast_hash": "5720072fe3033597a860f08bc440b381",
+    "mtime": 1785815102.4754074,
+    "ast_hash": "7af7bd60e66f208dbb2c7fadc340d094",
     "semantic_hash": ""
   },
   "src/components/ShiftComparisonCard.tsx": {
@@ -150,8 +150,8 @@
     "semantic_hash": "787e5a07efeb2bf6209d5937195f2f68"
   },
   "src/services/googleSheets.ts": {
-    "mtime": 1785812875.3311913,
-    "ast_hash": "443c1affa1d64b772fc2598b72b6f67a",
+    "mtime": 1785816230.996268,
+    "ast_hash": "ceb8d7fc2cd10e73d856e8352c4e5563",
     "semantic_hash": ""
   },
   "src/types/phantom-ui.d.ts": {
@@ -642,6 +642,36 @@
   "src/assets/vite.svg": {
     "mtime": 1783615490.7369921,
     "ast_hash": "9960a24288958394ac50e57ff638b036",
+    "semantic_hash": ""
+  },
+  "src/services/routeService.ts": {
+    "mtime": 1785816244.1450121,
+    "ast_hash": "8fba215e67ab016a3d049536829758d1",
+    "semantic_hash": ""
+  },
+  "src/services/supabase.ts": {
+    "mtime": 1785815428.4690156,
+    "ast_hash": "c67e143d30e6856f7bfa290ee73f2e4e",
+    "semantic_hash": ""
+  },
+  "src/types/supabase.ts": {
+    "mtime": 1785815102.4769902,
+    "ast_hash": "65b52162983ba125396de9b0a4c46598",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-08-04-supabase-integration.md": {
+    "mtime": 1785814971.572547,
+    "ast_hash": "9b641dc6238146d888538ea941df1b4f",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-08-04-supabase-integration-design.md": {
+    "mtime": 1785814837.5217013,
+    "ast_hash": "0ef406139b077adc64a12eb30b4ee69b",
+    "semantic_hash": ""
+  },
+  "src/services/routeService.test.ts": {
+    "mtime": 1785816250.2926488,
+    "ast_hash": "5f159208da65eff38dff1b697a40af25",
     "semantic_hash": ""
   }
 }

@@ -28,6 +28,7 @@ vi.mock('./supabase', () => ({
   supabase: {
     from: vi.fn(),
   },
+  isSupabaseConfigured: true,
 }));
 
 describe('routeService', () => {

@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-08-04)
 
 ## Corpus Check
-- 119 files · ~129,772 words
+- 125 files · ~132,645 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1240 nodes · 1390 edges · 105 communities (91 shown, 14 thin omitted)
+- 1279 nodes · 1448 edges · 108 communities (94 shown, 14 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `baa60d9f`
+- Built from commit: `dfe0ccc7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -118,6 +118,9 @@
 - rules/graphify.md
 - workflows/graphify.md
 - progress.md
+- routeService.ts
+- Supabase Integration & Metadata Catalog Design Specification
+- Global Constraints
 
 ## God Nodes (most connected - your core abstractions)
 1. `Writing Skills` - 23 edges
@@ -146,7 +149,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (105 total, 14 thin omitted)
+## Communities (108 total, 14 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -158,7 +161,7 @@ Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctua
 
 ### Community 2 - "googleSheets.ts"
 Cohesion: 0.06
-Nodes (71): react, App(), AnalyticsDashboard(), Props, BottomNav(), BottomNavProps, BusCard(), Props (+63 more)
+Nodes (69): react, App(), AnalyticsDashboard(), Props, BottomNav(), BottomNavProps, BusCard(), Props (+61 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -174,7 +177,7 @@ Nodes (23): DOM, src, vite/client, compilerOptions, allowArbitraryExtensions, al
 
 ### Community 6 - "devDependencies"
 Cohesion: 0.04
-Nodes (46): @aejkatappaja/phantom-ui, gapi-script, lucide-react, oxlint, dependencies, @aejkatappaja/phantom-ui, gapi-script, lucide-react (+38 more)
+Nodes (48): @aejkatappaja/phantom-ui, gapi-script, lucide-react, oxlint, dependencies, @aejkatappaja/phantom-ui, gapi-script, lucide-react (+40 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.10
@@ -504,8 +507,20 @@ Nodes (3): Global Constraints, Task 1: Update BusCard.tsx (Auto-Focus & Enter-to
 Cohesion: 0.50
 Nodes (3): Global Constraints, Persistent Auth Session Implementation Plan, Task 1: Update Auth Session Persistence (`src/services/googleSheets.ts`)
 
+### Community 105 - "routeService.ts"
+Cohesion: 0.18
+Nodes (15): Props, RouteSelectorCard(), SavedRoute, backupSyncQueue(), fetchRoutesWithSheets(), logActivity(), localStorageMock, upsertUserProfile() (+7 more)
+
+### Community 106 - "Supabase Integration & Metadata Catalog Design Specification"
+Cohesion: 0.17
+Nodes (11): 1. Types & Client Initialization, 2. Service Layer (`src/services/routeService.ts`), 3. UI Component Layer, Application Architecture & Services Layer, Automated Verification, Database Schema (PostgreSQL / Supabase DDL), Goal, Manual Verification (+3 more)
+
+### Community 107 - "Global Constraints"
+Cohesion: 0.25
+Nodes (7): Global Constraints, Supabase Integration Implementation Plan, Task 1: Install `@supabase/supabase-js` & Define TypeScript Types, Task 2: Implement Supabase Client & Route Service Layer, Task 3: Integrate User Profile Sync in Login Flow, Task 4: Connect RouteSelectorCard & Dashboard to Metadata Service, Task 5: Final Verification & Clean Build
+
 ## Knowledge Gaps
-- **749 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+744 more)
+- **766 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+761 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -513,16 +528,16 @@ Nodes (3): Global Constraints, Persistent Auth Session Implementation Plan, Task
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Writing Skills` connect `Writing Skills` to `Skill Discovery Optimization (SDO)`, `Testing Skills With Subagents`, `Bulletproofing Skills Against Rationalization`, `Anti-Patterns`, `Testing All Skill Types`, `RED-GREEN-REFACTOR for Skills`, `File Organization`, `Skill Types`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **Why does `react` connect `googleSheets.ts` to `plugins`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **Why does `react` connect `googleSheets.ts` to `routeService.ts`, `plugins`?**
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
+- **Why does `plugins` connect `plugins` to `googleSheets.ts`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _749 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _766 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05576441102756892 - nodes in this community are weakly interconnected._
 - **Should `googleSheets.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.057811753463927376 - nodes in this community are weakly interconnected._
-- **Should `Test-Driven Development (TDD)` be split into smaller, more focused modules?**
-  _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06128702757916241 - nodes in this community are weakly interconnected._

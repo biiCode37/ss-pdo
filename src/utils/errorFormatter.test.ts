@@ -31,6 +31,13 @@ describe('formatUserError', () => {
     expect(headerResult).toContain('Format kolom pada tabel Google Sheets tidak sesuai');
   });
 
+  it('sanitizes 403 and insufficient scopes auth errors', () => {
+    const scopeErr = new Error('Request had insufficient authentication scopes.');
+    const scopeResult = formatUserError(scopeErr);
+    expect(scopeResult).not.toBeNull();
+    expect(scopeResult).toContain('Sesi anda telah berakhir');
+  });
+
   it('uses custom fallback message for unknown errors', () => {
     const unknownErr = new Error('Random unexpected error');
     const fallbackResult = formatUserError(unknownErr, 'Pesan fallback khusus');

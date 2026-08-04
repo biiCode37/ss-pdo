@@ -153,23 +153,30 @@ export function calculateAnalytics(
   };
 }
 
-export function extractMonthYearLabel(sheetUrl: string, savedRoutes: { title: string; url: string }[]): string {
-  const routeObj = savedRoutes.find((r) => r.url === sheetUrl);
-  if (routeObj && routeObj.title) {
-    const titleUpper = routeObj.title.toUpperCase();
-    
-    const months = [
-      'JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI',
-      'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'
-    ];
-    
-    const foundMonth = months.find((m) => titleUpper.includes(m));
-    const yearMatch = titleUpper.match(/\b(20\d{2})\b/);
-    const foundYear = yearMatch ? yearMatch[1] : '';
+import type { Route } from '../types/supabase';
 
-    if (foundMonth) {
-      const capitalizedMonth = foundMonth.charAt(0) + foundMonth.slice(1).toLowerCase();
-      return foundYear ? `${capitalizedMonth} ${foundYear}` : capitalizedMonth;
+const MONTH_NAMES_ID = [
+  '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+];
+
+export function extractMonthYearLabel(sheetUrl: string, routes?: Route[]): string {
+  let routeList = routes;
+  if (!routeList) {
+    try {
+      const cached = localStorage.getItem('PDO_CACHE_ROUTES');
+      if (cached) routeList = JSON.parse(cached);
+    } catch (_e) {}
+  }
+
+  if (routeList && Array.isArray(routeList)) {
+    for (const r of routeList) {
+      for (const s of r.route_sheets || []) {
+        if (s.sheet_url === sheetUrl || (sheetUrl && (s.sheet_url.includes(sheetUrl) || sheetUrl.includes(s.spreadsheet_id)))) {
+          const monthName = MONTH_NAMES_ID[s.month] || '';
+          return monthName ? `${monthName} ${s.year}` : `${s.year}`;
+        }
+      }
     }
   }
 

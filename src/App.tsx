@@ -36,9 +36,9 @@ export default function App() {
 
   // Listen to session expiration / insufficient scope events
   useEffect(() => {
-    const handleAuthExpired = async () => {
-      await signOut();
-      setIsSignedIn(false);
+    const handleAuthExpired = () => {
+      // Menjaga status login tetap aktif (Aturan Emas #3: No Timeout/Logout Paksa).
+      // Pembaruan token ditangani oleh Dashboard secara inline/popup tanpa melempar pengguna ke LoginScreen.
     };
     window.addEventListener('google-auth-expired', handleAuthExpired);
     return () => window.removeEventListener('google-auth-expired', handleAuthExpired);
