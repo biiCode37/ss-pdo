@@ -34,6 +34,16 @@ export default function App() {
     initializeApi();
   }, []);
 
+  // Listen to session expiration / insufficient scope events
+  useEffect(() => {
+    const handleAuthExpired = async () => {
+      await signOut();
+      setIsSignedIn(false);
+    };
+    window.addEventListener('google-auth-expired', handleAuthExpired);
+    return () => window.removeEventListener('google-auth-expired', handleAuthExpired);
+  }, []);
+
   const handleLogout = async () => {
     await signOut();
     setIsSignedIn(false);
