@@ -33,7 +33,7 @@ export const initGoogleApi = async (): Promise<void> => {
         script.onload = () => {
           tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
             client_id: creds.clientId,
-            scope: 'https://www.googleapis.com/auth/spreadsheets',
+            scope: 'https://www.googleapis.com/auth/spreadsheets email profile',
             callback: (tokenResponse: any) => {
               if (tokenResponse && tokenResponse.access_token) {
                 gapi.client.setToken({ access_token: tokenResponse.access_token });
@@ -43,7 +43,10 @@ export const initGoogleApi = async (): Promise<void> => {
                   expiresAt: Date.now() + tokenResponse.expires_in * 1000
                 }));
 
-                // Fetch Google profile userinfo to store user email & name
+                // Dispatch success immediately so login resolves instantly
+                window.dispatchEvent(new Event('google-login-success'));
+
+                // Fetch Google profile userinfo asynchronously in background
                 fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
                   headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
                 })
@@ -54,11 +57,7 @@ export const initGoogleApi = async (): Promise<void> => {
                       localStorage.setItem('PDO_USER_NAME', info.name || info.email);
                     }
                   })
-                  .catch(() => {})
-                  .finally(() => {
-                    // Notify UI that login succeeded after saving userinfo
-                    window.dispatchEvent(new Event('google-login-success'));
-                  });
+                  .catch(() => {});
 
                 // BUG-11: Mulai timer refresh token otomatis
                 startTokenRefreshTimer(tokenResponse.expires_in * 1000);
