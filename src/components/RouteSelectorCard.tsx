@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { MapPin, Calendar, Plus, X, Loader2, Trash2, ChevronUp } from 'lucide-react';
+import { fetchRoutesWithSheets } from '../services/routeService';
+import type { Route } from '../types/supabase';
 
 export interface SavedRoute {
   title: string;
@@ -43,6 +45,21 @@ export function RouteSelectorCard({
   // BUG-27: Separate state for new route URL so typing in add form doesn't mutate active sheetUrl
   const [newRouteUrl, setNewRouteUrl] = useState('');
   const prevLoadingRef = useRef(isLoading);
+  const [supabaseRoutes, setSupabaseRoutes] = useState<Route[]>([]);
+
+  // Load routes from Supabase / Local cache on mount
+  useEffect(() => {
+    fetchRoutesWithSheets().then((routes) => {
+      setSupabaseRoutes(routes);
+      if (routes.length > 0 && !sheetUrl) {
+        // Auto select first route's sheet if available
+        const firstSheet = routes[0].route_sheets?.[0];
+        if (firstSheet) {
+          setSheetUrl(firstSheet.sheet_url);
+        }
+      }
+    });
+  }, []);
 
   // Auto morph into compact pill when data successfully loads / finishes loading
   useEffect(() => {
@@ -159,7 +176,7 @@ export function RouteSelectorCard({
             )}
           </div>
 
-          {savedRoutes.length > 0 && (
+          {(savedRoutes.length > 0 || supabaseRoutes.length > 0) && (
             <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
               <select
                 className="input-field"
@@ -168,8 +185,15 @@ export function RouteSelectorCard({
                 style={{ flex: 1 }}
               >
                 <option value="" disabled>-- Pilih Rute Tersimpan --</option>
+                {supabaseRoutes.map((r) =>
+                  r.route_sheets?.map((s) => (
+                    <option key={`sp-${s.id}`} value={s.sheet_url}>
+                      {r.route_name} ({s.month}/{s.year})
+                    </option>
+                  ))
+                )}
                 {savedRoutes.map((route, idx) => (
-                  <option key={idx} value={route.url}>
+                  <option key={`local-${idx}`} value={route.url}>
                     {route.title}
                   </option>
                 ))}
