@@ -297,9 +297,17 @@ export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
     return await apiFn();
   } catch (err: any) {
     if (isAuthError(err)) {
-      console.warn('Google API Access Token kedaluwarsa/unauthorized. Mengirim event perbaruan sesi...');
-      window.dispatchEvent(new CustomEvent('google-auth-expired'));
-      throw err;
+      console.warn('Google API Access Token kedaluwarsa/unauthorized (401/403). Membersihkan token lama dan mencoba perbaruan token...');
+      localStorage.removeItem('GAPI_ACCESS_TOKEN');
+      if (gapi.client) gapi.client.setToken(null);
+
+      try {
+        await refreshTokenInteractiveOrSilent(false);
+        return await apiFn();
+      } catch (retryErr) {
+        window.dispatchEvent(new CustomEvent('google-auth-expired'));
+        throw retryErr;
+      }
     }
     throw err;
   }
