@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { fetchRoutesWithSheets, upsertUserProfile, logActivity, backupSyncQueue } from './routeService';
+import { fetchRoutesWithSheets, upsertUserProfile, verifyUserProfile, logActivity, backupSyncQueue } from './routeService';
 import { supabase } from './supabase';
 
 // Mock localStorage in Node environment
@@ -105,6 +105,61 @@ describe('routeService', () => {
       ],
       { onConflict: 'email' }
     );
+  });
+
+  it('verifyUserProfile allows whitelisted active user and updates last_login_at', async () => {
+    const mockProfile = {
+      id: 1,
+      email: 'petugas@pusm.id',
+      full_name: 'Petugas Resmi',
+      role: 'petugas',
+      is_active: true,
+    };
+
+    (supabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockImplementation((_col: string, _val: string) => ({
+        single: vi.fn().mockResolvedValue({ data: mockProfile, error: null }),
+        eq: vi.fn().mockResolvedValue({ data: null, error: null }),
+      })),
+    });
+
+    const result = await verifyUserProfile('petugas@pusm.id');
+    expect(result.isAllowed).toBe(true);
+    expect(result.profile?.email).toBe('petugas@pusm.id');
+  });
+
+  it('verifyUserProfile rejects unlisted user with clear error message', async () => {
+    (supabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST116' } }),
+    });
+
+    const result = await verifyUserProfile('unknown@gmail.com');
+    expect(result.isAllowed).toBe(false);
+    expect(result.message).toContain('belum terdaftar');
+  });
+
+  it('verifyUserProfile rejects inactive user with clear error message', async () => {
+    const mockInactiveProfile = {
+      id: 2,
+      email: 'inactive@pusm.id',
+      full_name: 'Petugas Nonaktif',
+      role: 'petugas',
+      is_active: false,
+    };
+
+    (supabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: mockInactiveProfile, error: null }),
+    });
+
+    const result = await verifyUserProfile('inactive@pusm.id');
+    expect(result.isAllowed).toBe(false);
+    expect(result.message).toContain('dinonaktifkan');
   });
 
   it('logActivity invokes supabase insert with activity payload', async () => {

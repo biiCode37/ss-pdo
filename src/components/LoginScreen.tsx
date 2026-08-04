@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { signIn } from "../services/googleSheets";
-import { upsertUserProfile } from "../services/routeService";
+import { signIn, signOut } from "../services/googleSheets";
+import { verifyUserProfile } from "../services/routeService";
 import { LogIn, Loader2 } from "lucide-react";
 import { formatUserError } from "../utils/errorFormatter";
 
@@ -18,10 +18,16 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
     setError(null);
     try {
       await signIn();
-      // Sync user profile to Supabase (fire and forget / non-blocking)
-      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'user@pusm.id';
-      const userName = localStorage.getItem('PDO_USER_NAME') || 'Petugas PUSM';
-      upsertUserProfile({ email: userEmail, full_name: userName }).catch(() => {});
+      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || '';
+
+      if (userEmail) {
+        const verify = await verifyUserProfile(userEmail);
+        if (!verify.isAllowed) {
+          await signOut();
+          setError(verify.message || 'Akses ditolak: Akun Anda belum terdaftar.');
+          return;
+        }
+      }
 
       onLoginSuccess();
     } catch (err: any) {

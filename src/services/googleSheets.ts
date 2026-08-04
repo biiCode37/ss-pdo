@@ -42,8 +42,24 @@ export const initGoogleApi = async (): Promise<void> => {
                   token: tokenResponse.access_token,
                   expiresAt: Date.now() + tokenResponse.expires_in * 1000
                 }));
-                // Notify UI that login succeeded
-                window.dispatchEvent(new Event('google-login-success'));
+
+                // Fetch Google profile userinfo to store user email & name
+                fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                })
+                  .then(res => res.json())
+                  .then(info => {
+                    if (info && info.email) {
+                      localStorage.setItem('PDO_USER_EMAIL', info.email);
+                      localStorage.setItem('PDO_USER_NAME', info.name || info.email);
+                    }
+                  })
+                  .catch(() => {})
+                  .finally(() => {
+                    // Notify UI that login succeeded after saving userinfo
+                    window.dispatchEvent(new Event('google-login-success'));
+                  });
+
                 // BUG-11: Mulai timer refresh token otomatis
                 startTokenRefreshTimer(tokenResponse.expires_in * 1000);
               } else if (tokenResponse && tokenResponse.error) {

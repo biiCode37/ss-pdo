@@ -24,6 +24,47 @@ export async function fetchRoutesWithSheets(): Promise<Route[]> {
   return cached ? JSON.parse(cached) : [];
 }
 
+export async function verifyUserProfile(email: string): Promise<{ isAllowed: boolean; profile?: UserProfile; message?: string }> {
+  try {
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    if (error || !data) {
+      return {
+        isAllowed: false,
+        message: `Akun Google Anda (${email}) belum terdaftar dalam sistem PUSM. Silakan hubungi Admin untuk pendaftaran akses.`,
+      };
+    }
+
+    if (!data.is_active) {
+      return {
+        isAllowed: false,
+        message: `Akun Google Anda (${email}) sedang dinonaktifkan oleh Admin. Silakan hubungi pengawas PUSM.`,
+      };
+    }
+
+    // Update last_login_at timestamp asynchronously
+    try {
+      await supabase
+        .from('user_profiles')
+        .update({ last_login_at: new Date().toISOString() })
+        .eq('email', email);
+    } catch (e) {}
+
+    return {
+      isAllowed: true,
+      profile: data as UserProfile,
+    };
+  } catch (err) {
+    console.warn('[RouteService] Failed to verify user profile (offline?):', err);
+    // Offline fallback: allow login if internet/supabase fails, relying on Google Sheets Auth
+    return { isAllowed: true };
+  }
+}
+
 export async function upsertUserProfile(profile: Partial<UserProfile> & { email: string; full_name: string }): Promise<void> {
   try {
     const { error } = await supabase.from('user_profiles').upsert(
