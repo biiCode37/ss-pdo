@@ -9,6 +9,7 @@ import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { BottomNav } from "./BottomNav";
 import { RouteSelectorCard } from "./RouteSelectorCard";
+import { SwipeableContainer } from "./SwipeableContainer";
 import {
   LogOut,
   CloudOff,
@@ -28,11 +29,6 @@ interface Props {
   onLogout: () => void;
 }
 
-interface SavedRoute {
-  title: string;
-  url: string;
-}
-
 export function Dashboard({ onLogout }: Props) {
   const [sheetUrl, setSheetUrl] = useState("");
   const [selectedTab, setSelectedTab] = useState(
@@ -43,8 +39,6 @@ export function Dashboard({ onLogout }: Props) {
   const [mainTab, setMainTab] = useState<"input" | "analytics">("analytics");
 
   // Route Management State
-  const [savedRoutes, setSavedRoutes] = useState<SavedRoute[]>([]);
-
   const [busData, setBusData] = useState<BusData[] | null>(null);
   const [headerMap, setHeaderMap] = useState<HeaderMap | null>(null);
   const [currentSheetId, setCurrentSheetId] = useState<string>("");
@@ -126,6 +120,24 @@ export function Dashboard({ onLogout }: Props) {
     localStorage.setItem("PDO_THEME", newTheme);
   };
 
+  const mainTabs: Array<"input" | "analytics"> = ["input", "analytics"];
+
+  const handleSwipeNextTab = () => {
+    setMainTab((prev) => {
+      const currentIndex = mainTabs.indexOf(prev);
+      const nextIndex = (currentIndex + 1) % mainTabs.length;
+      return mainTabs[nextIndex];
+    });
+  };
+
+  const handleSwipePrevTab = () => {
+    setMainTab((prev) => {
+      const currentIndex = mainTabs.indexOf(prev);
+      const prevIndex = (currentIndex - 1 + mainTabs.length) % mainTabs.length;
+      return mainTabs[prevIndex];
+    });
+  };
+
   useEffect(() => {
     // Listen for auth expiration / login success events
     const handleAuthExpired = () => {
@@ -138,20 +150,7 @@ export function Dashboard({ onLogout }: Props) {
     window.addEventListener("google-auth-expired", handleAuthExpired);
     window.addEventListener("google-login-success", handleLoginSuccess);
 
-    // Load saved routes on mount
-    const saved = localStorage.getItem("PDO_SAVED_ROUTES");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setSavedRoutes(parsed);
-        // Automatically select the first route if available
-        if (parsed.length > 0) {
-          setSheetUrl(parsed[0].url);
-        }
-      } catch (e) {
-        console.error("Failed to parse saved routes");
-      }
-    }
+
 
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -390,28 +389,12 @@ export function Dashboard({ onLogout }: Props) {
         setSheetUrl={setSheetUrl}
         selectedTab={selectedTab}
         setSelectedTab={handleSelectTab}
-        savedRoutes={savedRoutes}
         days={days}
         isLoading={isLoading}
         isDataLoaded={!!busData}
         currentSheetId={currentSheetId}
         currentTabName={currentTabName}
         onLoadData={() => handleLoadData(false)}
-        onSaveNewRoute={(title, url) => {
-          const updated = [...savedRoutes, { title, url }];
-          setSavedRoutes(updated);
-          localStorage.setItem("PDO_SAVED_ROUTES", JSON.stringify(updated));
-        }}
-        onDeleteRoute={(index) => {
-          const updated = savedRoutes.filter((_, i) => i !== index);
-          setSavedRoutes(updated);
-          localStorage.setItem("PDO_SAVED_ROUTES", JSON.stringify(updated));
-          if (updated.length > 0) {
-            setSheetUrl(updated[0].url);
-          } else {
-            setSheetUrl("");
-          }
-        }}
       />
 
       {isAuthExpired && (
@@ -526,7 +509,10 @@ export function Dashboard({ onLogout }: Props) {
       )}
 
       {busData && headerMap && (
-        <div>
+        <SwipeableContainer
+          onSwipeLeft={handleSwipeNextTab}
+          onSwipeRight={handleSwipePrevTab}
+        >
           <div
             style={{
               display: mainTab === "input" ? "block" : "none",
@@ -594,7 +580,7 @@ export function Dashboard({ onLogout }: Props) {
               sheetId={currentSheetId}
               selectedTab={selectedTab}
               refreshKey={refreshKey}
-              monthLabel={extractMonthYearLabel(sheetUrl, savedRoutes)}
+              monthLabel={extractMonthYearLabel(sheetUrl)}
               onSelectTab={handleSelectTab}
               onSelectUnit={(unit) => {
                 setMainTab("input");
@@ -615,7 +601,7 @@ export function Dashboard({ onLogout }: Props) {
               }}
             />
           </div>
-        </div>
+        </SwipeableContainer>
       )}
 
       <BottomNav
