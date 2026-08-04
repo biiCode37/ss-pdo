@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
-import { extractSheetId, getBusData } from "../services/googleSheets";
+import {
+  extractSheetId,
+  getBusData,
+  reauthenticateSession,
+} from "../services/googleSheets";
 import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { BottomNav } from "./BottomNav";
@@ -14,10 +18,11 @@ import {
   AlertTriangle,
   RotateCw,
   Trash2,
+  Loader2,
 } from "lucide-react";
 import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
-import { extractMonthYearLabel } from "../utils/analytics";
+import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
 
 interface Props {
   onLogout: () => void;
@@ -62,6 +67,13 @@ export function Dashboard({ onLogout }: Props) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isQueueModalOpen, setIsQueueModalOpen] = useState(false);
 
+  const [isAuthExpired, setIsAuthExpired] = useState(false);
+  const [isReauthenticating, setIsReauthenticating] = useState(false);
+
+  // BUG-19: AbortController and Request ID tracking for race condition protection
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const requestIdRef = useRef<number>(0);
+
   const {
     queue,
     addToQueue,
@@ -76,7 +88,36 @@ export function Dashboard({ onLogout }: Props) {
       // Ini mencegah false positive "Tabrakan Data" pada edit berikutnya
       handleUpdateBus(rowIndex, updates);
     },
+    onAuthError: () => {
+      // BUG-23: Handle auth error when offline sync queue encounters 401 session expiry
+      setIsAuthExpired(true);
+      setError(
+        formatUserError(
+          { status: 401 },
+          "Sesi anda telah berakhir. Ketuk tombol 'Perbarui Sesi' untuk melanjutkan.",
+        ),
+      );
+    },
   });
+
+  const handleReauthenticate = async () => {
+    setIsReauthenticating(true);
+    try {
+      await reauthenticateSession();
+      setIsAuthExpired(false);
+      setError(null);
+      if (currentSheetId && currentTabName) {
+        handleLoadData(true, currentTabName);
+      }
+      processQueue();
+    } catch (err: any) {
+      setError(
+        formatUserError(err, "Gagal memperbarui sesi. Silakan coba lagi."),
+      );
+    } finally {
+      setIsReauthenticating(false);
+    }
+  };
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -86,6 +127,17 @@ export function Dashboard({ onLogout }: Props) {
   };
 
   useEffect(() => {
+    // Listen for auth expiration / login success events
+    const handleAuthExpired = () => {
+      setIsAuthExpired(true);
+    };
+    const handleLoginSuccess = () => {
+      setIsAuthExpired(false);
+      setError(null);
+    };
+    window.addEventListener("google-auth-expired", handleAuthExpired);
+    window.addEventListener("google-login-success", handleLoginSuccess);
+
     // Load saved routes on mount
     const saved = localStorage.getItem("PDO_SAVED_ROUTES");
     if (saved) {
@@ -106,6 +158,8 @@ export function Dashboard({ onLogout }: Props) {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
     return () => {
+      window.removeEventListener("google-auth-expired", handleAuthExpired);
+      window.removeEventListener("google-login-success", handleLoginSuccess);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
@@ -126,6 +180,16 @@ export function Dashboard({ onLogout }: Props) {
       return;
     }
 
+    // BUG-19: Abort previous request & increment request ID to ignore stale responses
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    requestIdRef.current += 1;
+    const currentRequestId = requestIdRef.current;
+
     setIsLoading(true);
     setError(null);
     // Keep previous busData in memory while loading new date data to prevent component unmounting/flicker
@@ -141,6 +205,9 @@ export function Dashboard({ onLogout }: Props) {
         missingColumns: missing,
         sheetSummary: summary,
       } = await getBusData(sheetId, tabToLoad);
+
+      if (currentRequestId !== requestIdRef.current) return;
+
       setBusData(data);
       setHeaderMap(headerMap);
       setCurrentSheetId(sheetId);
@@ -148,6 +215,9 @@ export function Dashboard({ onLogout }: Props) {
       setMissingColumns(missing);
       setSheetSummary(summary || {});
     } catch (err: any) {
+      if (currentRequestId !== requestIdRef.current) return;
+      if (err.name === "AbortError") return;
+
       setError(
         formatUserError(
           err,
@@ -155,7 +225,9 @@ export function Dashboard({ onLogout }: Props) {
         ),
       );
     } finally {
-      setIsLoading(false);
+      if (currentRequestId === requestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -322,6 +394,8 @@ export function Dashboard({ onLogout }: Props) {
         days={days}
         isLoading={isLoading}
         isDataLoaded={!!busData}
+        currentSheetId={currentSheetId}
+        currentTabName={currentTabName}
         onLoadData={() => handleLoadData(false)}
         onSaveNewRoute={(title, url) => {
           const updated = [...savedRoutes, { title, url }];
@@ -340,7 +414,73 @@ export function Dashboard({ onLogout }: Props) {
         }}
       />
 
-      {error && (
+      {isAuthExpired && (
+        <div
+          className="card glass"
+          style={{
+            marginBottom: "16px",
+            backgroundColor: "var(--warning-bg, rgba(245, 158, 11, 0.15))",
+            borderColor: "var(--warning-border, #f59e0b)",
+            padding: "16px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            alignItems: "center",
+            textAlign: "center",
+            boxShadow: "0 4px 20px rgba(245, 158, 11, 0.2)",
+            borderRadius: "16px",
+          }}
+        >
+          <div
+            style={{
+              fontWeight: 700,
+              fontSize: "14px",
+              color: "var(--warning-text, #d97706)",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <RotateCw size={18} />
+            <span>Sesi Google Spreadsheets Perlu Diperbarui</span>
+          </div>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "13px",
+              color: "var(--text-secondary)",
+            }}
+          >
+            Demi keamanan, klik tombol di bawah untuk login kembali.
+          </p>
+          <button
+            type="button"
+            className="btn"
+            onClick={handleReauthenticate}
+            disabled={isReauthenticating}
+            style={{
+              width: "100%",
+              maxWidth: "280px",
+              backgroundColor: "var(--accent-color)",
+              color: "#fff",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+            }}
+          >
+            {isReauthenticating ? (
+              <Loader2 className="spinner" size={18} />
+            ) : (
+              <RotateCw size={18} />
+            )}
+            Perbarui Sesi
+          </button>
+        </div>
+      )}
+
+      {error && !isAuthExpired && (
         <div className="error-text" style={{ marginBottom: 16 }}>
           {error}
         </div>
@@ -386,7 +526,7 @@ export function Dashboard({ onLogout }: Props) {
       )}
 
       {busData && headerMap && (
-        <div style={{ position: "relative", minHeight: "400px" }}>
+        <div>
           <div
             style={{
               display: mainTab === "input" ? "block" : "none",
@@ -394,17 +534,53 @@ export function Dashboard({ onLogout }: Props) {
               transition: "opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
             }}
           >
+            {missingColumns.length > 0 && (
+              <div
+                className="card"
+                style={{
+                  marginBottom: "16px",
+                  backgroundColor: "var(--warning-bg, rgba(245, 158, 11, 0.1))",
+                  borderColor: "var(--warning-border, #f59e0b)",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    color: "var(--warning-text, #d97706)",
+                    fontWeight: 600,
+                  }}
+                >
+                  <AlertTriangle size={18} />
+                  <span>Beberapa kolom tidak ditemukan di Sheet:</span>
+                </div>
+                <ul
+                  style={{
+                    margin: "8px 0 0 24px",
+                    fontSize: "14px",
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  {missingColumns.map((col, i) => (
+                    <li key={i}>{col}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <BusList
-              isLoading={isLoading}
               data={busData}
               sheetId={currentSheetId}
               tabName={currentTabName}
               headerMap={headerMap}
               syncQueue={queue}
               addToQueue={addToQueue}
+              isLoading={isLoading}
               onUpdateBus={handleUpdateBus}
             />
           </div>
+
           <div
             style={{
               display: mainTab === "analytics" ? "block" : "none",
@@ -423,7 +599,8 @@ export function Dashboard({ onLogout }: Props) {
               onSelectUnit={(unit) => {
                 setMainTab("input");
                 setTimeout(() => {
-                  const el = document.getElementById(`bus-card-${unit}`);
+                  const cardId = `bus-card-${slugifyUnitId(unit)}`;
+                  const el = document.getElementById(cardId);
                   if (el) {
                     el.scrollIntoView({ behavior: "smooth", block: "center" });
                     el.classList.remove("bus-card-highlight");

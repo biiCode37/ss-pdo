@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { calculateAnalytics } from './analytics';
 import type { BusData } from '../services/googleSheets';
 
@@ -34,26 +35,50 @@ const mockBusData: BusData[] = [
   }
 ];
 
-export function runAnalyticsTest() {
-  // Test local calculation with AVERAGEIF(KM > 0)
-  const localSummary = calculateAnalytics(mockBusData);
-  console.assert(localSummary.totalKm === 200, 'totalKm should be 200');
-  console.assert(localSummary.kmPerBus === 200, 'kmPerBus should be 200 (200 KM / 1 active bus)');
-  console.assert(localSummary.passengersPerKm === 1.05, 'passengersPerKm should be 1.05 (210 / 200)');
-
-  // Test SSOT exact unrounded values from sheetSummary
-  const ssotSummary = calculateAnalytics(mockBusData, {
-    totalKm: 5589.06,
-    totalPassengers: 4670,
-    kmPerBus: 192.72620689655172,
-    passengersPerKm: 0.8355601120404863
+describe('calculateAnalytics', () => {
+  it('correctly calculates local summary with AVERAGEIF(KM > 0)', () => {
+    const localSummary = calculateAnalytics(mockBusData);
+    expect(localSummary.totalKm).toBe(200);
+    expect(localSummary.kmPerBus).toBe(200);
+    expect(localSummary.passengersPerKm).toBe(1.05);
   });
 
-  console.assert(ssotSummary.totalKm === 5589.06, 'SSOT totalKm preserved exact raw value');
-  console.assert(ssotSummary.kmPerBus === 192.72620689655172, 'SSOT kmPerBus preserved exact raw value');
-  console.assert(ssotSummary.passengersPerKm === 0.8355601120404863, 'SSOT passengersPerKm preserved exact raw value');
+  it('preserves exact raw unrounded SSOT values from sheetSummary', () => {
+    const ssotSummary = calculateAnalytics(mockBusData, {
+      totalKm: 5589.06,
+      totalPassengers: 4670,
+      kmPerBus: 192.72620689655172,
+      passengersPerKm: 0.8355601120404863
+    });
 
-  console.log('✅ SSOT Exact Raw Analytics unit test passed');
-}
+    expect(ssotSummary.totalKm).toBe(5589.06);
+    expect(ssotSummary.kmPerBus).toBe(192.72620689655172);
+    expect(ssotSummary.passengersPerKm).toBe(0.8355601120404863);
+  });
 
-runAnalyticsTest();
+  it('correctly parses Indonesian formatted numbers (BUG-20 fix)', () => {
+    const indonesianData: BusData[] = [
+      {
+        rowIndex: 2,
+        unit: 'JAK.76',
+        toaShift1: '1.234', // 1234
+        toaShift2: '45,5',  // 45.5 -> parsed as 45.5
+        manualShift1: '0',
+        manualShift2: '0',
+        totalToa: '1.279,5',
+        kmAwal1: '1.000',
+        kmAkhir1: '1.250,5', // 250.5 km
+        kmAwal2: '',
+        kmAkhir2: '',
+        keterangan: '',
+        originalRow: []
+      }
+    ];
+
+    const summary = calculateAnalytics(indonesianData);
+    expect(summary.totalKm).toBe(250.5);
+    expect(summary.totalToaShift1).toBe(1234);
+    expect(summary.totalToaShift2).toBe(45.5);
+    expect(summary.totalPassengers).toBe(1280); // Math.round(1234 + 45.5) = 1280
+  });
+});

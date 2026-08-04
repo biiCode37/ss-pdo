@@ -59,3 +59,11 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
   5. Jika keputusan/pendapat saya keliru/kurang tepat atau bahkan berdampak buruk kedepannya dalam berbagai aspek, anda wajib keritis dan memberikan masukan alternatif solusi terbaik untuk kelangsungan project ini.
   6. Selalu perhatikan apa yang boleh dilihat oleh user (tampil pada frontend) dan apa yang tidak boleh (termasuk database), peringatan sistem, dan hal-hal lainnya yang hanya dimengerti oleh developer.
   7. Selalu sajikan pesan error/kesalahan (frontend) pada sisi user yang mudah untuk user fahami (bahasa non teknis).
+
+---
+
+## ⚡ 7. Penggunaan Skill Wajib (Ponytail & Graphify)
+
+- **Mode Ponytail (Wajib Aktif):** Selalu terapkan prinsip YAGNI (*You Aren't Gonna Need It*) dan *Lazy Senior Dev*. Gunakan solusi native/standard library, buat kode seminimal & seefisien mungkin tanpa over-engineering/abstraksi tak perlu, serta cantumkan komentar `// ponytail: [alasan]` jika ada penyederhanaan teknis.
+- **Graphify (Wajib Aktif):** Selalu manfaatkan Knowledge Graph pada `graphify-out/` untuk kueri arsitektur/navigasi file, dan jalankan `graphify update .` secara otomatis setelah setiap perubahan kode untuk menjaga graf pengetahuan tetap *up-to-date*.
+

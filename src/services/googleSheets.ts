@@ -46,6 +46,8 @@ export const initGoogleApi = async (): Promise<void> => {
                 window.dispatchEvent(new Event('google-login-success'));
                 // BUG-11: Mulai timer refresh token otomatis
                 startTokenRefreshTimer(tokenResponse.expires_in * 1000);
+              } else if (tokenResponse && tokenResponse.error) {
+                window.dispatchEvent(new CustomEvent('google-login-error', { detail: tokenResponse }));
               }
             },
             // BUG-04: Tangkap semua kegagalan popup (ditutup user, akses ditolak, dll.)
@@ -225,15 +227,64 @@ export const refreshTokenInteractiveOrSilent = async (silentOnly = false): Promi
   return tokenRefreshPromise;
 };
 
+export const reauthenticateSession = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (!tokenClient) {
+      reject(new Error('Token client belum siap'));
+      return;
+    }
+    
+    let settled = false;
+
+    const cleanup = () => {
+      window.removeEventListener('google-login-success', handleSuccess);
+      window.removeEventListener('google-login-error', handleError as EventListener);
+      clearTimeout(timeoutId);
+    };
+
+    const handleSuccess = () => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve();
+    };
+
+    const handleError = (e: CustomEvent) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(e.detail || new Error('Perbaruan sesi dibatalkan'));
+    };
+
+    const timeoutId = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('Perbaruan sesi timeout — tidak ada respons dari Google. Silakan coba lagi.'));
+    }, 60000);
+
+    window.addEventListener('google-login-success', handleSuccess);
+    window.addEventListener('google-login-error', handleError as EventListener);
+    
+    // Trigger popup directly from user gesture (click event)
+    // Omit prompt: 'consent' so GIS uses existing consent for instant 1-tap token renewal
+    try {
+      tokenClient.requestAccessToken();
+    } catch (e) {
+      tokenClient.requestAccessToken({ prompt: 'select_account' });
+    }
+  });
+};
+
 export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
   await ensureValidToken();
   try {
     return await apiFn();
   } catch (err: any) {
     if (isAuthError(err)) {
-      console.warn('Google API Access Token kedaluwarsa/unauthorized. Melakukan silent refresh & retry otomatis...');
-      await refreshTokenInteractiveOrSilent(false);
-      return await apiFn();
+      console.warn('Google API Access Token kedaluwarsa/unauthorized. Mengirim event perbaruan sesi...');
+      window.dispatchEvent(new CustomEvent('google-auth-expired'));
+      throw err;
     }
     throw err;
   }
@@ -356,24 +407,66 @@ const findColumnIndex = (headers: string[], keywords: string[]): number => {
   return -1;
 };
 
-export function parseIndonesianNumber(val: any): number {
-  if (val === undefined || val === null || val === '') return NaN;
-  if (typeof val === 'number') return isNaN(val) ? NaN : val;
-  
-  let str = String(val).trim();
-  if (str === '' || str.startsWith('#')) return NaN;
+import { parseIndonesianNumber } from '../utils/numberUtils';
+export { parseIndonesianNumber };
 
-  // Handle Indonesian currency/number formats like "5.589,06" or "4.670" or "192,73"
-  if (str.includes('.') && str.includes(',')) {
-    str = str.replace(/\./g, '').replace(',', '.');
-  } else if (str.includes(',')) {
-    str = str.replace(',', '.');
-  } else if (/^\d{1,3}(\.\d{3})+$/.test(str)) {
-    str = str.replace(/\./g, '');
+export function detectHeaderRowAndBuildComposite(rows: any[][]): { headerRowIndex: number; isSubHeader: boolean; compositeHeaders: string[] } {
+  let headerRowIndex = -1;
+  for (let i = 0; i < Math.min(5, rows.length); i++) {
+    const row = rows[i];
+    if (!row) continue;
+    if (findColumnIndex(row, HEADER_KEYWORDS.unit) !== -1) {
+      // BUG-10: Validasi tambahan — baris header seharusnya berisi mayoritas teks (≥50%), bukan angka murni
+      const nonEmptyCells = row.filter((cell: any) => cell !== undefined && cell !== null && String(cell).trim() !== '');
+      const textCells = nonEmptyCells.filter((cell: any) => isNaN(Number(String(cell).trim())));
+      if (nonEmptyCells.length === 0 || textCells.length / nonEmptyCells.length >= 0.5) {
+        headerRowIndex = i;
+        break;
+      }
+    }
   }
 
-  const num = Number(str);
-  return isNaN(num) ? NaN : num;
+  if (headerRowIndex === -1) {
+    return { headerRowIndex: -1, isSubHeader: false, compositeHeaders: [] };
+  }
+
+  let isSubHeader = false;
+  if (headerRowIndex + 1 < rows.length) {
+    const nextRow = rows[headerRowIndex + 1];
+    const unitColIdx = findColumnIndex(rows[headerRowIndex], HEADER_KEYWORDS.unit);
+    const unitNextVal = nextRow && nextRow[unitColIdx] ? String(nextRow[unitColIdx]).trim() : '';
+    if (unitNextVal === '') {
+      isSubHeader = true;
+    }
+  }
+
+  const compositeHeaders: string[] = [];
+  const maxCols = Math.max(
+    rows[headerRowIndex].length,
+    isSubHeader ? (rows[headerRowIndex + 1]?.length || 0) : 0
+  );
+
+  let lastMainHeader = '';
+  for (let j = 0; j < maxCols; j++) {
+    let mainHeaderVal = rows[headerRowIndex][j] ? String(rows[headerRowIndex][j]).trim() : '';
+    if (mainHeaderVal !== '') {
+      lastMainHeader = mainHeaderVal;
+    } else {
+      mainHeaderVal = lastMainHeader;
+    }
+    
+    let headerText = mainHeaderVal;
+    if (isSubHeader && rows[headerRowIndex + 1] && rows[headerRowIndex + 1][j]) {
+      const subHeaderVal = String(rows[headerRowIndex + 1][j]).trim();
+      if (subHeaderVal !== '') {
+        headerText += ' ' + subHeaderVal;
+      }
+    }
+    
+    compositeHeaders[j] = headerText;
+  }
+
+  return { headerRowIndex, isSubHeader, compositeHeaders };
 }
 
 export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[], sheetSummary: Record<string, number> }> => {
@@ -389,67 +482,11 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       throw new Error('Tidak ada data di sheet ini.');
     }
 
-    // --- NEW LOGIC: Dynamic Header Row Detection ---
-    let headerRowIndex = -1;
-    // Scan up to first 5 rows to find "Unit" / "No Body" keyword
-    for (let i = 0; i < Math.min(5, rows.length); i++) {
-      if (findColumnIndex(rows[i], HEADER_KEYWORDS.unit) !== -1) {
-        // BUG-10: Validasi tambahan — baris header seharusnya berisi mayoritas teks, bukan angka murni
-        const nonEmptyCells = rows[i].filter((cell: any) => cell !== undefined && cell !== null && String(cell).trim() !== '');
-        const textCells = nonEmptyCells.filter((cell: any) => isNaN(Number(cell)));
-        // Baris dianggap header jika ≥ 50% sel non-kosong berupa teks (bukan angka)
-        if (nonEmptyCells.length === 0 || textCells.length / nonEmptyCells.length >= 0.5) {
-          headerRowIndex = i;
-          break;
-        }
-        // Jika mayoritas angka, ini kemungkinan baris data — lanjut cari baris berikutnya
-      }
-    }
+    // BUG-26: Use unified header detection with BUG-10 text validation
+    const { headerRowIndex, isSubHeader, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
 
     if (headerRowIndex === -1) {
       throw new Error('Tidak bisa menemukan kolom "No Body / Unit". Pastikan header berisikan kata "No Body" atau "Unit".');
-    }
-
-    // Determine if the next row is a sub-header (merged cell format)
-    let isSubHeader = false;
-    if (headerRowIndex + 1 < rows.length) {
-      const nextRow = rows[headerRowIndex + 1];
-      const unitColIdx = findColumnIndex(rows[headerRowIndex], HEADER_KEYWORDS.unit);
-      const unitNextVal = nextRow[unitColIdx] ? String(nextRow[unitColIdx]).trim() : '';
-      // If unit column is empty on the next row, it's highly likely a subheader
-      if (unitNextVal === '') {
-        isSubHeader = true;
-      }
-    }
-
-    const compositeHeaders: string[] = [];
-    const maxCols = Math.max(
-      rows[headerRowIndex].length,
-      isSubHeader ? (rows[headerRowIndex + 1]?.length || 0) : 0
-    );
-
-    // Build composite headers handling horizontal merges on the main header row
-    let lastMainHeader = '';
-    for (let j = 0; j < maxCols; j++) {
-      let mainHeaderVal = rows[headerRowIndex][j] ? String(rows[headerRowIndex][j]).trim() : '';
-      if (mainHeaderVal !== '') {
-        lastMainHeader = mainHeaderVal;
-      } else {
-        // Inherit from left if empty (horizontal merge)
-        mainHeaderVal = lastMainHeader;
-      }
-      
-      let headerText = mainHeaderVal;
-      
-      // If sub-header exists, append it
-      if (isSubHeader && rows[headerRowIndex + 1] && rows[headerRowIndex + 1][j]) {
-        const subHeaderVal = String(rows[headerRowIndex + 1][j]).trim();
-        if (subHeaderVal !== '') {
-          headerText += ' ' + subHeaderVal;
-        }
-      }
-      
-      compositeHeaders[j] = headerText;
     }
     
     const headerMap: HeaderMap = {
@@ -745,48 +782,12 @@ export const getMonthlyToaTrend = async (
         continue;
       }
 
-      // Detect header row index
-      let headerRowIndex = -1;
-      for (let i = 0; i < Math.min(5, rows.length); i++) {
-        if (findColumnIndex(rows[i], HEADER_KEYWORDS.unit) !== -1) {
-          headerRowIndex = i;
-          break;
-        }
-      }
+      // BUG-26: Use unified header detection with text cell percentage check
+      const { headerRowIndex, isSubHeader, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
 
       if (headerRowIndex === -1) {
         trendData.push({ day: dayStr, totalToa: 0 });
         continue;
-      }
-
-      // Check subheader
-      let isSubHeader = false;
-      if (headerRowIndex + 1 < rows.length) {
-        const unitColIdx = findColumnIndex(rows[headerRowIndex], HEADER_KEYWORDS.unit);
-        const unitNextVal = rows[headerRowIndex + 1]?.[unitColIdx] ? String(rows[headerRowIndex + 1][unitColIdx]).trim() : '';
-        if (unitNextVal === '') isSubHeader = true;
-      }
-
-      const compositeHeaders: string[] = [];
-      const maxCols = Math.max(
-        rows[headerRowIndex].length,
-        isSubHeader ? (rows[headerRowIndex + 1]?.length || 0) : 0
-      );
-
-      let lastMainHeader = '';
-      for (let j = 0; j < maxCols; j++) {
-        let mainHeaderVal = rows[headerRowIndex][j] ? String(rows[headerRowIndex][j]).trim() : '';
-        if (mainHeaderVal !== '') {
-          lastMainHeader = mainHeaderVal;
-        } else {
-          mainHeaderVal = lastMainHeader;
-        }
-        let headerText = mainHeaderVal;
-        if (isSubHeader && rows[headerRowIndex + 1]?.[j]) {
-          const subHeaderVal = String(rows[headerRowIndex + 1][j]).trim();
-          if (subHeaderVal !== '') headerText += ' ' + subHeaderVal;
-        }
-        compositeHeaders[j] = headerText;
       }
 
       const unitColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
@@ -851,7 +852,8 @@ export const getMonthlyToaTrend = async (
         ? tabSummary['totalPassengers']
         : calculatedTotalPassengers;
 
-      trendData.push({ day: dayStr, totalToa: Math.round(finalDayTotal) });
+      // BUG-21: Preserve pure raw decimal SSOT value without rounding in service layer
+      trendData.push({ day: dayStr, totalToa: finalDayTotal });
     }
   } catch (error) {
     console.error('Error fetching batch monthly TOA trend:', error);

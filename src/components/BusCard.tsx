@@ -4,6 +4,7 @@ import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData, getBusRowData } from '../services/googleSheets';
 import { isNetworkError } from '../hooks/useOfflineSync';
 import { formatUserError } from '../utils/errorFormatter';
+import { slugifyUnitId } from '../utils/analytics';
 import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy } from 'lucide-react';
 
 interface Props {
@@ -229,11 +230,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
       }
       setIsExpanded(false); // Auto close immediately on success
     } catch (err: any) {
-      if (err.message && err.message.includes('API Credentials missing')) {
-        setError('Sesi login telah habis. Silakan refresh dan login ulang.');
-      } else if (err.status === 401 || err.message?.includes('Auth') || err.message?.includes('Credentials')) {
-        setError('Akses ditolak. Sesi mungkin kadaluarsa. Silakan login ulang.');
-      } else if (isNetworkError(err)) {
+      if (isNetworkError(err)) {
         // BUG-03: Hanya masukkan ke antrean jika benar-benar error jaringan
         // BUG-02: Sertakan originalSnapshot untuk collision detection di jalur antrean
         const originalSnapshot: Partial<BusData> = {
@@ -253,8 +250,9 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
         localStorage.removeItem(draftKey);
         setIsExpanded(false);
       } else {
-        // BUG-03: Error permanen dari Google API (400/403/404) — tampilkan pesan terformat ke user
-        setError(formatUserError(err, 'Gagal menyimpan data. Silakan coba lagi.'));
+        // BUG-30: Centrally format all errors (including session/auth/credentials) via formatUserError
+        setSaveStatus('idle');
+        setError(formatUserError(err, 'Gagal menyimpan data bus. Silakan coba lagi.'));
       }
     } finally {
       setIsLoading(false);
@@ -269,7 +267,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
     // BUG-07: Field pelengkap (catatan/manual) selalu aktif, bukan kolom kerja utama
     const alwaysEnabledFields = ['manualShift1', 'manualShift2', 'keterangan'];
     if (alwaysEnabledFields.includes(fieldName)) return false;
-    return activeCategory !== fieldName;
+    return fieldName !== activeCategory;
   };
 
   const renderServerSummary = () => {
@@ -311,7 +309,7 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
   };
 
   return (
-    <div id={`bus-card-${bus.unit}`} className="bus-card glass">
+    <div id={`bus-card-${slugifyUnitId(bus.unit)}`} className="bus-card glass">
       <div 
         className="bus-card-header"
         onClick={() => setIsExpanded(!isExpanded)}

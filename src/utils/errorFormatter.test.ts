@@ -1,34 +1,39 @@
+import { describe, it, expect } from 'vitest';
 import { formatUserError } from './errorFormatter';
 
-export function runErrorFormatterTest() {
-  // Test 1: returns null for null or user closed popup
-  console.assert(formatUserError(null) === null, 'null input should return null');
-  console.assert(formatUserError({ type: 'popup_closed_by_user' }) === null, 'popup_closed_by_user should return null');
-  console.assert(formatUserError(new Error('Login dibatalkan')) === null, 'Login dibatalkan should return null');
+describe('formatUserError', () => {
+  it('returns null for null input or user cancelled popups', () => {
+    expect(formatUserError(null)).toBeNull();
+    expect(formatUserError({ type: 'popup_closed_by_user' })).toBeNull();
+    expect(formatUserError(new Error('Login dibatalkan'))).toBeNull();
+  });
 
-  // Test 2: sanitizes technical credentials and .env error messages
-  const envErr = new Error('API Credentials missing in .env file');
-  const envResult = formatUserError(envErr);
-  console.assert(envResult !== null && !envResult.includes('.env'), 'Result should not leak .env');
-  console.assert(envResult !== null && envResult.includes('Layanan belum siap dikonfigurasi'), 'Result should return friendly message');
+  it('sanitizes technical credentials and .env error messages', () => {
+    const envErr = new Error('API Credentials missing in .env file');
+    const envResult = formatUserError(envErr);
+    expect(envResult).not.toBeNull();
+    expect(envResult).not.toContain('.env');
+    expect(envResult).toContain('Layanan belum siap dikonfigurasi');
+  });
 
-  // Test 3: sanitizes network errors
-  const netErr = new TypeError('Failed to fetch');
-  const netResult = formatUserError(netErr);
-  console.assert(netResult !== null && netResult.includes('Koneksi internet Anda terputus'), 'Result should handle network error');
+  it('sanitizes network errors', () => {
+    const netErr = new TypeError('Failed to fetch');
+    const netResult = formatUserError(netErr);
+    expect(netResult).not.toBeNull();
+    expect(netResult).toContain('Koneksi internet Anda terputus');
+  });
 
-  // Test 4: sanitizes sheet header errors
-  const headerErr = new Error('Tidak bisa menemukan kolom "No Body / Unit".');
-  const headerResult = formatUserError(headerErr);
-  console.assert(headerResult !== null && !headerResult.includes('No Body'), 'Result should not leak technical header names');
-  console.assert(headerResult !== null && headerResult.includes('Format kolom pada tabel Google Sheets tidak sesuai'), 'Result should sanitize header error');
+  it('sanitizes Google Sheets column header mismatch errors', () => {
+    const headerErr = new Error('Tidak bisa menemukan kolom "No Body / Unit".');
+    const headerResult = formatUserError(headerErr);
+    expect(headerResult).not.toBeNull();
+    expect(headerResult).not.toContain('No Body');
+    expect(headerResult).toContain('Format kolom pada tabel Google Sheets tidak sesuai');
+  });
 
-  // Test 5: fallback message
-  const unknownErr = new Error('Random unexpected error');
-  const fallbackResult = formatUserError(unknownErr, 'Pesan fallback khusus');
-  console.assert(fallbackResult === 'Pesan fallback khusus', 'Result should use custom fallback message');
-
-  console.log('✅ ErrorFormatter unit test passed');
-}
-
-runErrorFormatterTest();
+  it('uses custom fallback message for unknown errors', () => {
+    const unknownErr = new Error('Random unexpected error');
+    const fallbackResult = formatUserError(unknownErr, 'Pesan fallback khusus');
+    expect(fallbackResult).toBe('Pesan fallback khusus');
+  });
+});

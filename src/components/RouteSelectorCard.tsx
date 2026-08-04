@@ -15,6 +15,8 @@ interface Props {
   days: string[];
   isLoading: boolean;
   isDataLoaded: boolean;
+  currentSheetId?: string;
+  currentTabName?: string;
   onLoadData: () => void;
   onSaveNewRoute: (title: string, url: string) => void;
   onDeleteRoute: (index: number) => void;
@@ -29,6 +31,8 @@ export function RouteSelectorCard({
   days,
   isLoading,
   isDataLoaded,
+  currentSheetId,
+  currentTabName,
   onLoadData,
   onSaveNewRoute,
   onDeleteRoute
@@ -36,6 +40,8 @@ export function RouteSelectorCard({
   const [isMorphed, setIsMorphed] = useState(false);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
   const [newRouteTitle, setNewRouteTitle] = useState('');
+  // BUG-27: Separate state for new route URL so typing in add form doesn't mutate active sheetUrl
+  const [newRouteUrl, setNewRouteUrl] = useState('');
   const prevLoadingRef = useRef(isLoading);
 
   // Auto morph into compact pill when data successfully loads / finishes loading
@@ -46,19 +52,28 @@ export function RouteSelectorCard({
     prevLoadingRef.current = isLoading;
   }, [isLoading, isDataLoaded]);
 
-  // Find active route title and ensure month/year is shown
-  const activeRouteObj = savedRoutes.find(r => r.url === sheetUrl);
+  // BUG-28: Find active route title from confirmed loaded currentSheetId (fallback to sheetUrl)
+  const activeRouteObj = savedRoutes.find(r => currentSheetId ? r.url.includes(currentSheetId) : r.url === sheetUrl);
   const rawTitle = activeRouteObj ? activeRouteObj.title : 'Rute Aktif';
   
   const currentMonthName = new Date().toLocaleString('id-ID', { month: 'long' }).toUpperCase();
   const currentYear = new Date().getFullYear();
   const hasYear = /\d{4}/.test(rawTitle);
   const displayRouteTitle = hasYear ? rawTitle : `${rawTitle} (${currentMonthName} ${currentYear})`;
+  const displayTabName = currentTabName || selectedTab;
 
   const handleSaveRoute = () => {
-    if (!newRouteTitle.trim() || !sheetUrl.trim()) return;
-    onSaveNewRoute(newRouteTitle.trim(), sheetUrl.trim());
+    if (!newRouteTitle.trim() || !newRouteUrl.trim()) return;
+    onSaveNewRoute(newRouteTitle.trim(), newRouteUrl.trim());
+    setSheetUrl(newRouteUrl.trim());
     setNewRouteTitle('');
+    setNewRouteUrl('');
+    setIsAddingRoute(false);
+  };
+
+  const handleCancelAddRoute = () => {
+    setNewRouteTitle('');
+    setNewRouteUrl('');
     setIsAddingRoute(false);
   };
 
@@ -85,7 +100,7 @@ export function RouteSelectorCard({
 
         <span className="morph-pill-badge" style={{ flexShrink: 0, marginLeft: '8px' }}>
           <Calendar size={13} style={{ flexShrink: 0 }} />
-          <span>Tgl {selectedTab}</span>
+          <span>Tgl {displayTabName}</span>
         </span>
       </div>
 
@@ -180,7 +195,7 @@ export function RouteSelectorCard({
             <div style={{ background: 'var(--input-bg)', padding: '12px', borderRadius: '12px', border: '1px solid var(--card-border)', marginTop: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '12px', fontWeight: 700 }}>Tambah Rute Baru</span>
-                <button type="button" onClick={() => setIsAddingRoute(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                <button type="button" onClick={handleCancelAddRoute} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
                   <X size={16} />
                 </button>
               </div>
@@ -196,8 +211,8 @@ export function RouteSelectorCard({
                 type="text"
                 className="input-field"
                 placeholder="Link Google Sheets..."
-                value={sheetUrl}
-                onChange={(e) => setSheetUrl(e.target.value)}
+                value={newRouteUrl}
+                onChange={(e) => setNewRouteUrl(e.target.value)}
                 style={{ marginBottom: '8px' }}
               />
               <button type="button" className="btn" onClick={handleSaveRoute}>

@@ -181,12 +181,14 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
         const newRetryCount = (item.retryCount || 0) + 1;
 
         if (newRetryCount >= MAX_RETRIES) {
-          // Batas retry tercapai: tandai 'failed'  (BUG-12 aktif)
+          // Batas retry tercapai: tandai 'failed' (BUG-12 aktif)
           const updated = freshQueue.map(q =>
             q.id === item.id ? { ...q, status: 'failed' as const, retryCount: newRetryCount } : q
           );
           writeQueueToStorage(updated);
           setQueue(updated);
+          // BUG-25: Item baru saja ditandai 'failed' — langsung lanjut tanpa menunggu delay retry lama
+          continue;
         } else {
           // Increment retry counter
           const updated = freshQueue.map(q =>
@@ -194,12 +196,11 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
           );
           writeQueueToStorage(updated);
           setQueue(updated);
-        }
 
-        // BUG-03: continue ke item berikutnya, bukan break
-        const delay = RETRY_DELAYS[Math.min(newRetryCount - 1, RETRY_DELAYS.length - 1)];
-        await new Promise(resolve => setTimeout(resolve, delay));
-        continue;
+          const delay = RETRY_DELAYS[Math.min(newRetryCount - 1, RETRY_DELAYS.length - 1)];
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
       }
     }
 
@@ -225,11 +226,20 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
     setQueue(updated);
   }, []);
 
-  /** Gunakan data server untuk item yang conflict */
-  const resolveConflict = useCallback((itemId: string) => {
-    // Hapus item dari antrean — user memilih data server
+  /** BUG-22 FIX: Gunakan data server untuk item yang conflict dan update UI lokal */
+  const resolveConflict = useCallback(async (itemId: string) => {
+    const currentQueue = readQueueFromStorage();
+    const item = currentQueue.find(q => q.id === itemId);
+    if (item && options?.onSyncSuccess) {
+      try {
+        const remoteData = await getBusRowData(item.sheetId, item.tabName, item.rowIndex, item.headerMap);
+        options.onSyncSuccess(item.rowIndex, item.sheetId, item.tabName, remoteData);
+      } catch (err) {
+        console.error("Failed to fetch server data on resolve conflict:", err);
+      }
+    }
     removeItem(itemId);
-  }, [removeItem]);
+  }, [removeItem, options]);
 
   /** Force save item yang conflict */
   const forceConflictItem = useCallback((itemId: string) => {
@@ -247,6 +257,21 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
   useEffect(() => {
     window.addEventListener('online', processQueue);
     return () => window.removeEventListener('online', processQueue);
+  }, [processQueue]);
+
+  // BUG-24: Periodic retry scheduler for pending queue items
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (navigator.onLine) {
+        const currentQueue = readQueueFromStorage();
+        const hasPending = currentQueue.some(item => item.status === 'pending');
+        if (hasPending) {
+          processQueue();
+        }
+      }
+    }, 45000);
+
+    return () => clearInterval(interval);
   }, [processQueue]);
 
   // Initial attempt on load

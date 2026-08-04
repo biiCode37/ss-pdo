@@ -1,4 +1,5 @@
 import type { BusData } from '../services/googleSheets';
+import { parseIndonesianNumber } from './numberUtils';
 
 export interface BusNote {
   unit: string;
@@ -36,12 +37,22 @@ export interface AnalyticsSummary {
   busesWithNotes: BusNote[];
 }
 
+export function slugifyUnitId(unit: string): string {
+  if (!unit) return 'unit';
+  return unit.toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+}
+
 function getValidNumber(ssotVal: number | undefined, calculatedFallback: number): number {
   if (ssotVal !== undefined && !isNaN(ssotVal)) {
     return ssotVal;
   }
   return calculatedFallback;
 }
+
+const safeParseNumber = (val: any): number => {
+  const num = parseIndonesianNumber(val);
+  return isNaN(num) ? 0 : num;
+};
 
 export function calculateAnalytics(
   busData: BusData[],
@@ -58,10 +69,11 @@ export function calculateAnalytics(
   const busesWithNotes: BusNote[] = [];
 
   busData.forEach((bus) => {
-    const kmAwal1 = parseFloat(bus.kmAwal1) || 0;
-    const kmAkhir1 = parseFloat(bus.kmAkhir1) || 0;
-    const kmAwal2 = parseFloat(bus.kmAwal2) || 0;
-    const kmAkhir2 = parseFloat(bus.kmAkhir2) || 0;
+    // BUG-20: Use parseIndonesianNumber instead of parseFloat/parseInt to correctly parse "1.234" as 1234
+    const kmAwal1 = safeParseNumber(bus.kmAwal1);
+    const kmAkhir1 = safeParseNumber(bus.kmAkhir1);
+    const kmAwal2 = safeParseNumber(bus.kmAwal2);
+    const kmAkhir2 = safeParseNumber(bus.kmAkhir2);
 
     const kmShift1 = kmAkhir1 > kmAwal1 ? kmAkhir1 - kmAwal1 : 0;
     const kmShift2 = kmAkhir2 > kmAwal2 ? kmAkhir2 - kmAwal2 : 0;
@@ -72,10 +84,10 @@ export function calculateAnalytics(
       activeBusCount += 1;
     }
 
-    const toa1 = parseInt(bus.toaShift1, 10) || 0;
-    const man1 = parseInt(bus.manualShift1, 10) || 0;
-    const toa2 = parseInt(bus.toaShift2, 10) || 0;
-    const man2 = parseInt(bus.manualShift2, 10) || 0;
+    const toa1 = safeParseNumber(bus.toaShift1);
+    const man1 = safeParseNumber(bus.manualShift1);
+    const toa2 = safeParseNumber(bus.toaShift2);
+    const man2 = safeParseNumber(bus.manualShift2);
 
     totalToaShift1 += toa1;
     totalManualShift1 += man1;
@@ -120,6 +132,7 @@ export function calculateAnalytics(
 
   return {
     totalKm: finalTotalKm,
+    // BUG-36: totalPassengers is always an integer passenger count per product decision
     totalPassengers: Math.round(finalTotalPassengers),
     passengersPerKm: finalPnpPerKm,
     kmPerBus: finalKmPerBus,
