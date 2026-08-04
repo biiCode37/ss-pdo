@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { signIn } from "../services/googleSheets";
+import { upsertUserProfile } from "../services/routeService";
 import { LogIn, Loader2 } from "lucide-react";
 import { formatUserError } from "../utils/errorFormatter";
 
@@ -17,6 +18,11 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
     setError(null);
     try {
       await signIn();
+      // Sync user profile to Supabase (fire and forget / non-blocking)
+      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'user@pusm.id';
+      const userName = localStorage.getItem('PDO_USER_NAME') || 'Petugas PUSM';
+      upsertUserProfile({ email: userEmail, full_name: userName }).catch(() => {});
+
       onLoginSuccess();
     } catch (err: any) {
       const userMessage = formatUserError(err);
