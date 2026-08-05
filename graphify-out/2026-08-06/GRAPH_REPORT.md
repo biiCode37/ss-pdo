@@ -1,7 +1,7 @@
 # Graph Report - SS_PDO  (2026-08-06)
 
 ## Corpus Check
-- 140 files · ~145,154 words
+- 140 files · ~145,172 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fe3afe43`
+- Built from commit: `929873dc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -129,7 +129,7 @@
 - Global Constraints
 - scripts
 - package.json
-- @types/gapi.auth2
+- @types/gapi.client.sheets
 - @types/react-dom
 - vite
 - vite-plugin-pwa
@@ -541,7 +541,7 @@ Nodes (7): Global Constraints, Supabase Integration Implementation Plan, Task 1:
 
 ### Community 108 - "devDependencies"
 Cohesion: 0.13
-Nodes (15): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.client.sheets, @types/node, @types/react (+7 more)
+Nodes (15): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.auth2, @types/node, @types/react (+7 more)
 
 ### Community 109 - "Daftar Masalah v3 — Proyek SS_PDO / SPUM (Sistem Pencatatan Shift Bus)"
 Cohesion: 0.13

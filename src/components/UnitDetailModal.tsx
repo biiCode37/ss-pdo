@@ -17,6 +17,8 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
   const [touchStartY, setTouchStartY] = useState(0);
   const [dragY, setDragY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const metrics = useMemo(() => {
@@ -24,8 +26,11 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
   }, [busData, unit]);
 
   useEffect(() => {
+    // Trigger entrance morphing animation after mount
+    requestAnimationFrame(() => setIsMounted(true));
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') handleDismiss();
     };
     window.addEventListener('keydown', handleKeyDown);
     
@@ -37,7 +42,13 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = originalOverflow;
     };
-  }, [onClose]);
+  }, []);
+
+  const handleDismiss = () => {
+    if (isClosing) return;
+    setIsClosing(true);
+    setTimeout(onClose, 220);
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.stopPropagation();
@@ -60,13 +71,25 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
   const handleTouchEnd = (e: React.TouchEvent) => {
     e.stopPropagation();
     if (dragY > 90) {
-      onClose();
+      handleDismiss();
     } else {
       setDragY(0);
     }
     setTouchStartY(0);
     setIsDragging(false);
   };
+
+  const opacityValue = isClosing
+    ? 0
+    : isMounted
+    ? Math.max(0.15, 0.65 - dragY / 400)
+    : 0;
+
+  const modalTransform = isClosing
+    ? 'translateY(100%) scale(0.95)'
+    : !isMounted
+    ? 'translateY(100%) scale(0.95)'
+    : `translateY(${dragY}px) scale(${Math.max(0.92, 1 - dragY / 1500)})`;
 
   return createPortal(
     <div
@@ -80,12 +103,14 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-end',
-        backgroundColor: `rgba(0, 0, 0, ${Math.max(0.15, 0.65 - dragY / 400)})`,
+        backgroundColor: `rgba(0, 0, 0, ${opacityValue})`,
         backdropFilter: 'blur(6px)',
         WebkitBackdropFilter: 'blur(6px)',
-        animation: 'fadeIn 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
+        opacity: isClosing ? 0 : isMounted ? 1 : 0,
+        transition: 'opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
+        willChange: 'opacity, background-color',
       }}
-      onClick={onClose}
+      onClick={handleDismiss}
       onTouchStart={(e) => e.stopPropagation()}
       onTouchMove={(e) => e.stopPropagation()}
     >
@@ -110,8 +135,12 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           overflowY: 'auto',
           boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.6)',
           border: '1px solid var(--border-color, rgba(255,255,255,0.15))',
-          transform: `translateY(${dragY}px)`,
-          transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+          transform: modalTransform,
+          transformOrigin: 'bottom center',
+          transition: isDragging
+            ? 'none'
+            : 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+          willChange: 'transform',
           touchAction: 'pan-y',
         }}
       >
@@ -131,7 +160,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleDismiss}
             className="btn btn-outline"
             style={{ padding: '6px', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
