@@ -19,7 +19,6 @@ import {
   AlertTriangle,
   RotateCw,
   Trash2,
-  Loader2,
 } from "lucide-react";
 import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
@@ -30,10 +29,27 @@ interface Props {
 }
 
 export function Dashboard({ onLogout }: Props) {
-  const [sheetUrl, setSheetUrl] = useState("");
-  const [selectedTab, setSelectedTab] = useState(
-    new Date().getDate().toString(),
-  );
+  const [sheetUrl, setSheetUrl] = useState(() => {
+    try {
+      const saved = localStorage.getItem("PDO_LAST_VISITED");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.sheetUrl || "";
+      }
+    } catch (_e) {}
+    return "";
+  });
+
+  const [selectedTab, setSelectedTab] = useState(() => {
+    try {
+      const saved = localStorage.getItem("PDO_LAST_VISITED");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.selectedTab) return String(parsed.selectedTab);
+      }
+    } catch (_e) {}
+    return new Date().getDate().toString();
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mainTab, setMainTab] = useState<"input" | "analytics">("analytics");
@@ -318,6 +334,51 @@ export function Dashboard({ onLogout }: Props) {
           ⚠️ Koneksi Terputus - Mode Offline Aktif
         </div>
       )}
+
+      {isAuthExpired && (
+        <div
+          style={{
+            background: 'var(--danger-color, #ef4444)',
+            color: '#ffffff',
+            padding: '12px 16px',
+            borderRadius: '12px',
+            marginBottom: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+            boxShadow: '0 4px 12px rgba(239, 68, 68, 0.25)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', fontWeight: 600 }}>
+            <AlertTriangle size={20} />
+            <span>Sesi Google Sheets kedaluwarsa. Ketuk tombol untuk perbarui sesi.</span>
+          </div>
+          <button
+            type="button"
+            className="btn"
+            style={{
+              background: '#ffffff',
+              color: 'var(--danger-color, #ef4444)',
+              fontWeight: 'bold',
+              whiteSpace: 'nowrap',
+              border: 'none',
+              padding: '8px 14px',
+              fontSize: '13px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            onClick={handleReauthenticate}
+            disabled={isReauthenticating}
+          >
+            {isReauthenticating ? <RefreshCw size={14} className="spinner" /> : <RefreshCw size={14} />}
+            {isReauthenticating ? 'Memproses...' : 'Login Ulang'}
+          </button>
+        </div>
+      )}
       <div
         className="app-header"
         style={{
@@ -397,72 +458,6 @@ export function Dashboard({ onLogout }: Props) {
         onLoadData={() => handleLoadData(false)}
       />
 
-      {isAuthExpired && (
-        <div
-          className="card glass"
-          style={{
-            marginBottom: "16px",
-            backgroundColor: "var(--warning-bg, rgba(245, 158, 11, 0.15))",
-            borderColor: "var(--warning-border, #f59e0b)",
-            padding: "16px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
-            alignItems: "center",
-            textAlign: "center",
-            boxShadow: "0 4px 20px rgba(245, 158, 11, 0.2)",
-            borderRadius: "16px",
-          }}
-        >
-          <div
-            style={{
-              fontWeight: 700,
-              fontSize: "14px",
-              color: "var(--warning-text, #d97706)",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            <RotateCw size={18} />
-            <span>Sesi Google Spreadsheets Perlu Diperbarui</span>
-          </div>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "13px",
-              color: "var(--text-secondary)",
-            }}
-          >
-            Demi keamanan, klik tombol di bawah untuk login kembali.
-          </p>
-          <button
-            type="button"
-            className="btn"
-            onClick={handleReauthenticate}
-            disabled={isReauthenticating}
-            style={{
-              width: "100%",
-              maxWidth: "280px",
-              backgroundColor: "var(--accent-color)",
-              color: "#fff",
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-            }}
-          >
-            {isReauthenticating ? (
-              <Loader2 className="spinner" size={18} />
-            ) : (
-              <RotateCw size={18} />
-            )}
-            Perbarui Sesi
-          </button>
-        </div>
-      )}
-
       {error && !isAuthExpired && (
         <div className="error-text" style={{ marginBottom: 16 }}>
           {error}
@@ -492,18 +487,28 @@ export function Dashboard({ onLogout }: Props) {
       {isLoading && !busData && (
         <div className="bus-list" style={{ marginTop: "16px" }}>
           <phantom-ui loading={true}>
-            <div
-              className="dashboard-card glass"
-              style={{ height: "120px", marginBottom: "16px" }}
-            ></div>
-            <div
-              className="dashboard-card glass"
-              style={{ height: "120px", marginBottom: "16px" }}
-            ></div>
-            <div
-              className="dashboard-card glass"
-              style={{ height: "120px", marginBottom: "16px" }}
-            ></div>
+            {[1, 2, 3, 4].map((n) => (
+              <div
+                key={n}
+                className="bus-card glass"
+                style={{
+                  height: "84px",
+                  marginBottom: "12px",
+                  borderRadius: "16px",
+                  padding: "14px 16px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  opacity: 0.75,
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ width: "90px", height: "18px", borderRadius: "6px", background: "var(--card-border)" }}></div>
+                  <div style={{ width: "70px", height: "16px", borderRadius: "12px", background: "var(--card-border)" }}></div>
+                </div>
+                <div style={{ width: "160px", height: "12px", borderRadius: "4px", background: "var(--card-border)", opacity: 0.6 }}></div>
+              </div>
+            ))}
           </phantom-ui>
         </div>
       )}
@@ -515,9 +520,12 @@ export function Dashboard({ onLogout }: Props) {
         >
           <div
             style={{
-              display: mainTab === "input" ? "block" : "none",
+              visibility: mainTab === "input" ? "visible" : "hidden",
+              height: mainTab === "input" ? "auto" : 0,
+              overflow: mainTab === "input" ? "visible" : "hidden",
               opacity: mainTab === "input" ? 1 : 0,
-              transition: "opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
+              transform: mainTab === "input" ? "translateY(0)" : "translateY(6px)",
+              transition: "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
           >
             {missingColumns.length > 0 && (
@@ -569,9 +577,12 @@ export function Dashboard({ onLogout }: Props) {
 
           <div
             style={{
-              display: mainTab === "analytics" ? "block" : "none",
+              visibility: mainTab === "analytics" ? "visible" : "hidden",
+              height: mainTab === "analytics" ? "auto" : 0,
+              overflow: mainTab === "analytics" ? "visible" : "hidden",
               opacity: mainTab === "analytics" ? 1 : 0,
-              transition: "opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
+              transform: mainTab === "analytics" ? "translateY(0)" : "translateY(6px)",
+              transition: "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
           >
             <AnalyticsDashboard

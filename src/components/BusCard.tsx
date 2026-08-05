@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData, getBusRowData } from '../services/googleSheets';
@@ -18,7 +18,7 @@ interface Props {
   onUpdateBus?: (updates: Partial<BusData>) => void;
 }
 
-export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue, activeCategory, onUpdateBus }: Props) {
+function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQueue, activeCategory, onUpdateBus }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const draftKey = `draft_bus_${sheetId}_${tabName}_${bus.rowIndex}`;
 
@@ -628,3 +628,5 @@ export function BusCard({ bus, sheetId, tabName, headerMap, isQueued, addToQueue
     </div>
   );
 }
+
+export const BusCard = memo(BusCardComponent);

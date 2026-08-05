@@ -264,7 +264,7 @@ export const refreshTokenInteractiveOrSilent = async (silentOnly = false): Promi
         cleanup();
         resolve();
       }
-    }, 3500);
+    }, 8000); // ponytail: 8 detik untuk mengakomodasi sinyal lemah di lapangan (BUG-38)
   });
 
   return tokenRefreshPromise;
@@ -325,16 +325,8 @@ export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
     return await apiFn();
   } catch (err: any) {
     if (isAuthError(err)) {
-      console.warn('Google API Access Token kedaluwarsa/unauthorized (401/403). Mencoba perbarui token otomatis...');
-      try {
-        await reauthenticateSession();
-        // Sesi berhasil diperbarui! Coba lagi pemanggilan API secara otomatis
-        return await apiFn();
-      } catch (refreshErr) {
-        console.error('Pembaruan token gagal atau dibatalkan:', refreshErr);
-        window.dispatchEvent(new CustomEvent('google-auth-expired'));
-        throw err;
-      }
+      console.warn('[GoogleSheets] Access Token kedaluwarsa/unauthorized (401/403). Memicu modal re-auth...');
+      window.dispatchEvent(new CustomEvent('google-auth-expired'));
     }
     throw err;
   }

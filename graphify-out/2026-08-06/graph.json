@@ -2562,26 +2562,15 @@
       "norm_label": "props"
     },
     {
-      "label": "BusCardComponent()",
+      "label": "BusCard()",
       "file_type": "code",
       "source_file": "src/components/BusCard.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "src_components_buscard_buscardcomponent",
-      "community": 2,
-      "community_name": "googleSheets.ts",
-      "norm_label": "buscardcomponent()"
-    },
-    {
-      "label": "BusCard",
-      "file_type": "code",
-      "source_file": "src/components/BusCard.tsx",
-      "source_location": "L632",
-      "_origin": "ast",
       "id": "src_components_buscard_buscard",
       "community": 2,
       "community_name": "googleSheets.ts",
-      "norm_label": "buscard"
+      "norm_label": "buscard()"
     },
     {
       "label": "BusList.tsx",
@@ -18836,24 +18825,12 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L632",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
       "target": "src_components_buscard_buscard",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "confidence": "INFERRED",
-      "source_file": "src/components/BusCard.tsx",
-      "source_location": "L632",
-      "weight": 1.0,
-      "_origin": "ast",
-      "context": "argument",
-      "source": "src_components_buscard",
-      "target": "src_components_buscard_buscardcomponent",
-      "confidence_score": 0.5
     },
     {
       "relation": "contains",
@@ -19062,73 +19039,73 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/components/BusCard.tsx",
       "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_components_buscard_buscardcomponent",
-      "target": "src_hooks_usedebounce_usedebounce",
-      "confidence_score": 1.0
+      "source": "src_components_buscard_buscard",
+      "target": "src_hooks_usedebounce_usedebounce"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/components/BusCard.tsx",
       "source_location": "L233",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_components_buscard_buscardcomponent",
-      "target": "src_hooks_useofflinesync_isnetworkerror",
-      "confidence_score": 1.0
+      "source": "src_components_buscard_buscard",
+      "target": "src_hooks_useofflinesync_isnetworkerror"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/components/BusCard.tsx",
       "source_location": "L200",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_components_buscard_buscardcomponent",
-      "target": "src_services_googlesheets_getbusrowdata",
-      "confidence_score": 1.0
+      "source": "src_components_buscard_buscard",
+      "target": "src_services_googlesheets_getbusrowdata"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/components/BusCard.tsx",
       "source_location": "L223",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_components_buscard_buscardcomponent",
-      "target": "src_services_googlesheets_updatebusdata",
-      "confidence_score": 1.0
+      "source": "src_components_buscard_buscard",
+      "target": "src_services_googlesheets_updatebusdata"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/components/BusCard.tsx",
       "source_location": "L312",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_components_buscard_buscardcomponent",
-      "target": "src_utils_analytics_slugifyunitid",
-      "confidence_score": 1.0
+      "source": "src_components_buscard_buscard",
+      "target": "src_utils_analytics_slugifyunitid"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/components/BusCard.tsx",
       "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_components_buscard_buscardcomponent",
-      "target": "src_utils_errorformatter_formatusererror",
-      "confidence_score": 1.0
+      "source": "src_components_buscard_buscard",
+      "target": "src_utils_errorformatter_formatusererror"
     },
     {
       "relation": "imports",
@@ -19680,7 +19657,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L594",
+      "source_location": "L578",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -19692,7 +19669,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L599",
+      "source_location": "L583",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",

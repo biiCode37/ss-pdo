@@ -94,7 +94,7 @@ export function BusList({ data, sheetId, tabName, headerMap, syncQueue, addToQue
         </div>
       </div>
 
-      <div className="category-scroll-container" style={{ display: 'flex', overflowX: 'auto', gap: '8px', paddingBottom: '12px', marginBottom: '16px', scrollbarWidth: 'none' }}>
+      <div className="category-scroll-container no-swipe" style={{ display: 'flex', overflowX: 'auto', gap: '8px', paddingBottom: '12px', marginBottom: '16px', scrollbarWidth: 'none' }}>
         {categories.map(cat => (
           <button
             key={cat.id}

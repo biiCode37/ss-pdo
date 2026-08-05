@@ -1,12 +1,12 @@
 # Graph Report - SS_PDO  (2026-08-06)
 
 ## Corpus Check
-- 133 files · ~141,008 words
+- 133 files · ~140,852 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1346 nodes · 1533 edges · 121 communities (102 shown, 19 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.5)
+- 1345 nodes · 1532 edges · 121 communities (102 shown, 19 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
@@ -174,7 +174,7 @@ Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctua
 
 ### Community 2 - "googleSheets.ts"
 Cohesion: 0.06
-Nodes (72): react, App(), AnalyticsDashboard(), Props, BottomNav(), BottomNavProps, BusCard, BusCardComponent() (+64 more)
+Nodes (71): react, App(), AnalyticsDashboard(), Props, BottomNav(), BottomNavProps, BusCard(), Props (+63 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -585,4 +585,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05576441102756892 - nodes in this community are weakly interconnected._
 - **Should `googleSheets.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.057195149851292613 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05820476858345021 - nodes in this community are weakly interconnected._

@@ -32,9 +32,13 @@ export async function fetchRoutesWithSheets(): Promise<Route[]> {
 }
 
 export async function verifyUserProfile(email: string): Promise<{ isAllowed: boolean; profile?: UserProfile; message?: string }> {
-  // Jika Supabase belum dikonfigurasi, izinkan login (hanya andalkan Google Auth)
+  // Jika Supabase belum dikonfigurasi, tolak login demi keamanan (fail-closed)
   if (!isSupabaseConfigured) {
-    return { isAllowed: true };
+    console.error('[RouteService] Supabase is not configured. Failing closed for security.');
+    return {
+      isAllowed: false,
+      message: 'Sistem verifikasi otorisasi akun belum dikonfigurasi. Silakan hubungi Admin PUSM.',
+    };
   }
 
   try {
@@ -74,9 +78,11 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       profile: data as UserProfile,
     };
   } catch (err) {
-    console.warn('[RouteService] Failed to verify user profile (offline?):', err);
-    // Offline fallback: izinkan login, andalkan Google Sheets Auth
-    return { isAllowed: true };
+    console.error('[RouteService] Error verifying user profile (fail-closed):', err);
+    return {
+      isAllowed: false,
+      message: 'Tidak dapat memverifikasi akun Anda saat ini karena gangguan sistem/koneksi. Silakan coba beberapa saat lagi atau hubungi Admin PUSM.',
+    };
   }
 }
 
