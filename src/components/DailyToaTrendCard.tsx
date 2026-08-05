@@ -15,6 +15,7 @@ interface Props {
   refreshKey?: number;
   monthLabel?: string;
   onSelectTab?: (tab: string) => void;
+  unitFilter?: string;
 }
 
 export function DailyToaTrendCard({
@@ -23,6 +24,7 @@ export function DailyToaTrendCard({
   refreshKey = 0,
   monthLabel,
   onSelectTab,
+  unitFilter,
 }: Props) {
   const [trendData, setTrendData] = useState<
     { day: string; totalToa: number }[]
@@ -73,7 +75,7 @@ export function DailyToaTrendCard({
     let isMounted = true;
     setIsLoading(true);
 
-    getMonthlyToaTrend(sheetId, chartMaxDay).then((data) => {
+    getMonthlyToaTrend(sheetId, chartMaxDay, unitFilter).then((data) => {
       if (isMounted) {
         setTrendData(data);
         setIsLoading(false);
@@ -83,7 +85,7 @@ export function DailyToaTrendCard({
     return () => {
       isMounted = false;
     };
-  }, [sheetId, chartMaxDay]);
+  }, [sheetId, chartMaxDay, unitFilter]);
 
   const chartMetrics = useMemo(() => {
     if (trendData.length === 0) return null;
@@ -235,7 +237,7 @@ export function DailyToaTrendCard({
           }}
         >
           <BarChart2 size={18} />
-          <span>Grafik TOA Harian</span>
+          <span>{unitFilter ? `Grafik TOA Harian (${unitFilter})` : 'Grafik TOA Harian 1 Rute'}</span>
         </div>
         <span
           style={{

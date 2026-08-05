@@ -20937,7 +20937,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/UnitDetailModal.tsx",
-      "source_location": "L23",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_unitdetailmodal_unitdetailmodal",
@@ -33163,5 +33163,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "866eeb97dfb590c4e3ed390345ee0238a0704ad1"
+  "built_at_commit": "770a36a78788771540abd4f60e57fdbead3348df"
 }

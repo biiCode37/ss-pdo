@@ -800,7 +800,8 @@ export const updateBusData = async (
 
 export const getMonthlyToaTrend = async (
   sheetId: string, 
-  maxDay: number
+  maxDay: number,
+  unitFilter?: string
 ): Promise<{ day: string; totalToa: number }[]> => {
   return withAuthRetry(async () => {
     const trendData: { day: string; totalToa: number }[] = [];
@@ -819,6 +820,7 @@ export const getMonthlyToaTrend = async (
     });
 
     const valueRanges = response?.result?.valueRanges || [];
+    const normalizedUnitFilter = unitFilter ? unitFilter.trim().toLowerCase() : null;
 
     for (let idx = 0; idx < maxDay; idx++) {
       const dayStr = (idx + 1).toString();
@@ -841,6 +843,7 @@ export const getMonthlyToaTrend = async (
       const unitColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
       const toaShift1ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift1);
       const toaShift2ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift2);
+      const totalToaColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.totalToa);
       const manualShift1ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift1);
       const manualShift2ColIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift2);
 
@@ -850,6 +853,8 @@ export const getMonthlyToaTrend = async (
       let totalManualShift1 = 0;
       let totalToaShift2 = 0;
       let totalManualShift2 = 0;
+      let unitDayTotal = 0;
+      let unitFound = false;
 
       for (let r = startRowIdx; r < rows.length; r++) {
         const row = rows[r];
@@ -858,17 +863,38 @@ export const getMonthlyToaTrend = async (
         const unitVal = unitColIdx !== -1 && row[unitColIdx] ? String(row[unitColIdx]).trim() : '';
 
         if (unitVal !== '') {
-          // Bus data row
-          let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx]) : NaN;
-          let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx]) : NaN;
-          let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx]) : NaN;
-          let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx]) : NaN;
+          if (normalizedUnitFilter) {
+            if (unitVal.toLowerCase() === normalizedUnitFilter) {
+              unitFound = true;
+              let tot = totalToaColIdx !== -1 ? parseIndonesianNumber(row[totalToaColIdx]) : NaN;
+              let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx]) : NaN;
+              let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx]) : NaN;
+              let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx]) : NaN;
+              let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx]) : NaN;
 
-          if (!isNaN(toa1)) totalToaShift1 += toa1;
-          if (!isNaN(man1)) totalManualShift1 += man1;
-          if (!isNaN(toa2)) totalToaShift2 += toa2;
-          if (!isNaN(man2)) totalManualShift2 += man2;
-        } else {
+              if (!isNaN(tot)) {
+                unitDayTotal += tot;
+              } else {
+                const s1 = isNaN(toa1) ? 0 : toa1;
+                const s2 = isNaN(toa2) ? 0 : toa2;
+                const m1 = isNaN(man1) ? 0 : man1;
+                const m2 = isNaN(man2) ? 0 : man2;
+                unitDayTotal += (s1 + s2 + m1 + m2);
+              }
+            }
+          } else {
+            // Bus data row for overall route
+            let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx]) : NaN;
+            let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx]) : NaN;
+            let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx]) : NaN;
+            let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx]) : NaN;
+
+            if (!isNaN(toa1)) totalToaShift1 += toa1;
+            if (!isNaN(man1)) totalManualShift1 += man1;
+            if (!isNaN(toa2)) totalToaShift2 += toa2;
+            if (!isNaN(man2)) totalManualShift2 += man2;
+          }
+        } else if (!normalizedUnitFilter) {
           // Summary row below table (exact match to getBusData summary scanning)
           row.forEach((cellVal: any, colIdx: number) => {
             if (!cellVal) return;
@@ -895,13 +921,17 @@ export const getMonthlyToaTrend = async (
         }
       }
 
-      const calculatedTotalPassengers = totalToaShift1 + totalManualShift1 + totalToaShift2 + totalManualShift2;
-      const finalDayTotal = tabSummary['totalPassengers'] !== undefined && !isNaN(tabSummary['totalPassengers'])
-        ? tabSummary['totalPassengers']
-        : calculatedTotalPassengers;
+      if (normalizedUnitFilter) {
+        trendData.push({ day: dayStr, totalToa: unitFound ? unitDayTotal : 0 });
+      } else {
+        const calculatedTotalPassengers = totalToaShift1 + totalManualShift1 + totalToaShift2 + totalManualShift2;
+        const finalDayTotal = tabSummary['totalPassengers'] !== undefined && !isNaN(tabSummary['totalPassengers'])
+          ? tabSummary['totalPassengers']
+          : calculatedTotalPassengers;
 
-      // BUG-21: Preserve pure raw decimal SSOT value without rounding in service layer
-      trendData.push({ day: dayStr, totalToa: finalDayTotal });
+        // BUG-21: Preserve pure raw decimal SSOT value without rounding in service layer
+        trendData.push({ day: dayStr, totalToa: finalDayTotal });
+      }
     }
   } catch (error) {
     console.error('Error fetching batch monthly TOA trend:', error);

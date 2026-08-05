@@ -196,11 +196,12 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           </div>
         </div>
 
-        {/* Chart Tren Harian */}
+        {/* Chart Tren Harian Per Unit */}
         <div style={{ marginBottom: '20px' }}>
           <DailyToaTrendCard
             sheetId={sheetId}
             selectedTab={selectedTab}
+            unitFilter={unit}
           />
         </div>
 
