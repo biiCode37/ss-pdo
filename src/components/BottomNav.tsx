@@ -1,16 +1,22 @@
-import { ClipboardList, BarChart3 } from 'lucide-react';
+import { ClipboardList, BarChart3, Bus } from 'lucide-react';
 
 interface BottomNavProps {
-  activeTab: 'input' | 'analytics';
-  onSelectTab: (tab: 'input' | 'analytics') => void;
+  activeTab: 'input' | 'analytics' | 'units';
+  onSelectTab: (tab: 'input' | 'analytics' | 'units') => void;
   pendingQueueCount?: number;
 }
 
 export function BottomNav({ activeTab, onSelectTab, pendingQueueCount = 0 }: BottomNavProps) {
-  const handleTabClick = (tab: 'input' | 'analytics') => {
+  const handleTabClick = (tab: 'input' | 'analytics' | 'units') => {
     if (activeTab !== tab) {
       onSelectTab(tab);
     }
+  };
+
+  const getIndicatorPosClass = () => {
+    if (activeTab === 'input') return 'pos-input';
+    if (activeTab === 'analytics') return 'pos-analytics';
+    return 'pos-units';
   };
 
   return (
@@ -18,7 +24,7 @@ export function BottomNav({ activeTab, onSelectTab, pendingQueueCount = 0 }: Bot
       <nav className="bottom-nav" aria-label="Navigasi Utama">
         {/* Apple iOS Style Sliding Active Indicator Pill */}
         <div 
-          className={`bottom-nav-indicator ${activeTab === 'input' ? 'pos-input' : 'pos-analytics'}`} 
+          className={`bottom-nav-indicator ${getIndicatorPosClass()}`} 
           aria-hidden="true"
         />
 
@@ -49,6 +55,18 @@ export function BottomNav({ activeTab, onSelectTab, pendingQueueCount = 0 }: Bot
             <BarChart3 size={18} />
           </div>
           <span>Dashboard</span>
+        </button>
+
+        <button
+          type="button"
+          onPointerDown={() => handleTabClick('units')}
+          onClick={() => handleTabClick('units')}
+          className={`bottom-nav-item ${activeTab === 'units' ? 'active' : ''}`}
+        >
+          <div className="bottom-nav-icon-wrapper">
+            <Bus size={18} />
+          </div>
+          <span>Per Unit</span>
         </button>
       </nav>
     </div>
