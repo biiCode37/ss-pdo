@@ -28,10 +28,19 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    
+    // Lock body scrolling when modal is active
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [onClose]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
     if (contentRef.current && contentRef.current.scrollTop <= 0) {
       setTouchStartY(e.touches[0].clientY);
       setIsDragging(true);
@@ -39,6 +48,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    e.stopPropagation();
     if (!isDragging || touchStartY === 0) return;
     const currentY = e.touches[0].clientY;
     const diff = currentY - touchStartY;
@@ -47,7 +57,8 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
     if (dragY > 90) {
       onClose();
     } else {
@@ -75,6 +86,8 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         animation: 'fadeIn 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
       }}
       onClick={onClose}
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
     >
       <div
         ref={contentRef}
