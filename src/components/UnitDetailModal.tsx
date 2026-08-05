@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Bus, TrendingUp, Navigation, MessageSquare } from 'lucide-react';
 import type { BusData } from '../services/googleSheets';
 import { calculateUnitMetrics } from '../utils/unitAnalytics';
@@ -25,17 +26,21 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div
       style={{
         position: 'fixed',
-        inset: 0,
-        zIndex: 1000,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 99999,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-end',
-        backgroundColor: 'rgba(0, 0, 0, 0.55)',
-        backdropFilter: 'blur(4px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+        backdropFilter: 'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
         animation: 'fadeIn 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
       }}
       onClick={onClose}
@@ -48,14 +53,15 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           maxHeight: '90vh',
           height: '90vh',
           backgroundColor: 'var(--surface-color, #1e293b)',
+          color: 'var(--text-primary, #f8fafc)',
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
           overflowY: 'auto',
-          boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.4)',
-          border: '1px solid var(--border-color, rgba(255,255,255,0.1))',
+          boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.6)',
+          border: '1px solid var(--border-color, rgba(255,255,255,0.15))',
           animation: 'slideUp 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
         }}
       >
@@ -135,6 +141,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

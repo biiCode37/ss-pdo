@@ -1820,8 +1820,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "ref_react",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "react"
     },
     {
@@ -2458,8 +2458,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "app.tsx"
     },
     {
@@ -2469,8 +2469,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_app_app",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "app()"
     },
     {
@@ -2481,7 +2481,7 @@
       "_origin": "ast",
       "id": "src_components_analyticsdashboard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "analyticsdashboard.tsx"
     },
     {
@@ -2492,7 +2492,7 @@
       "_origin": "ast",
       "id": "src_components_analyticsdashboard_props",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "props"
     },
     {
@@ -2503,7 +2503,7 @@
       "_origin": "ast",
       "id": "src_components_analyticsdashboard_analyticsdashboard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "analyticsdashboard()"
     },
     {
@@ -2513,8 +2513,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_bottomnav",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "bottomnav.tsx"
     },
     {
@@ -2524,8 +2524,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_bottomnav_bottomnavprops",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "bottomnavprops"
     },
     {
@@ -2535,8 +2535,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_bottomnav_bottomnav",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "bottomnav()"
     },
     {
@@ -2546,8 +2546,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buscard",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "buscard.tsx"
     },
     {
@@ -2557,8 +2557,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_components_buscard_props",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "props"
     },
     {
@@ -2568,8 +2568,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_components_buscard_buscardcomponent",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "buscardcomponent()"
     },
     {
@@ -2579,8 +2579,8 @@
       "source_location": "L632",
       "_origin": "ast",
       "id": "src_components_buscard_buscard",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "buscard"
     },
     {
@@ -2590,8 +2590,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buslist",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "buslist.tsx"
     },
     {
@@ -2601,8 +2601,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_buslist_props",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "props"
     },
     {
@@ -2612,8 +2612,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_buslist_buslist",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "buslist()"
     },
     {
@@ -2624,7 +2624,7 @@
       "_origin": "ast",
       "id": "src_components_completionstatuscard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "completionstatuscard.tsx"
     },
     {
@@ -2635,7 +2635,7 @@
       "_origin": "ast",
       "id": "src_components_completionstatuscard_props",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "props"
     },
     {
@@ -2646,7 +2646,7 @@
       "_origin": "ast",
       "id": "src_components_completionstatuscard_completionstatuscard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "completionstatuscard()"
     },
     {
@@ -2656,7 +2656,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dailytoatrendcard",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "dailytoatrendcard.tsx"
     },
@@ -2667,7 +2667,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_dailytoatrendcard_props",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "props"
     },
@@ -2678,7 +2678,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_dailytoatrendcard_dailytoatrendcard",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "dailytoatrendcard()"
     },
@@ -2689,30 +2689,30 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dashboard",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboard.tsx"
     },
     {
       "label": "Props",
       "file_type": "code",
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L27",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "src_components_dashboard_props",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
     {
       "label": "Dashboard()",
       "file_type": "code",
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L31",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "src_components_dashboard_dashboard",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboard()"
     },
     {
@@ -2723,7 +2723,7 @@
       "_origin": "ast",
       "id": "src_components_kpicard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "kpicard.tsx"
     },
     {
@@ -2734,7 +2734,7 @@
       "_origin": "ast",
       "id": "src_components_kpicard_props",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "props"
     },
     {
@@ -2745,7 +2745,7 @@
       "_origin": "ast",
       "id": "src_components_kpicard_kpicard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "kpicard()"
     },
     {
@@ -2755,8 +2755,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_loginscreen",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "loginscreen.tsx"
     },
     {
@@ -2766,8 +2766,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_loginscreen_props",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "props"
     },
     {
@@ -2777,8 +2777,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_loginscreen_loginscreen",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "loginscreen()"
     },
     {
@@ -2855,7 +2855,7 @@
       "_origin": "ast",
       "id": "src_components_shiftcomparisoncard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "shiftcomparisoncard.tsx"
     },
     {
@@ -2866,7 +2866,7 @@
       "_origin": "ast",
       "id": "src_components_shiftcomparisoncard_props",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "props"
     },
     {
@@ -2877,7 +2877,7 @@
       "_origin": "ast",
       "id": "src_components_shiftcomparisoncard_shiftcomparisoncard",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "shiftcomparisoncard()"
     },
     {
@@ -2887,8 +2887,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainer.tsx"
     },
     {
@@ -2898,8 +2898,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainerprops",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainerprops"
     },
     {
@@ -2909,9 +2909,119 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainer",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainer()"
+    },
+    {
+      "label": "UnitCard.tsx",
+      "file_type": "code",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_unitcard",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitcard.tsx"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_unitcard_props",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "props"
+    },
+    {
+      "label": "UnitCardComponent()",
+      "file_type": "code",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_components_unitcard_unitcardcomponent",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitcardcomponent()"
+    },
+    {
+      "label": "UnitCard",
+      "file_type": "code",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L64",
+      "_origin": "ast",
+      "id": "src_components_unitcard_unitcard",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitcard"
+    },
+    {
+      "label": "UnitDetailModal.tsx",
+      "file_type": "code",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_unitdetailmodal",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitdetailmodal.tsx"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_unitdetailmodal_props",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "props"
+    },
+    {
+      "label": "UnitDetailModal()",
+      "file_type": "code",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "src_components_unitdetailmodal_unitdetailmodal",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitdetailmodal()"
+    },
+    {
+      "label": "UnitSummaryDashboard.tsx",
+      "file_type": "code",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_unitsummarydashboard",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitsummarydashboard.tsx"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_components_unitsummarydashboard_props",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "props"
+    },
+    {
+      "label": "UnitSummaryDashboard()",
+      "file_type": "code",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "src_components_unitsummarydashboard_unitsummarydashboard",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitsummarydashboard()"
     },
     {
       "label": "SwipeableContainer.test.tsx",
@@ -2920,8 +3030,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_tests_swipeablecontainer_test",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainer.test.tsx"
     },
     {
@@ -2931,8 +3041,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_usedebounce",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "usedebounce.ts"
     },
     {
@@ -2942,8 +3052,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_hooks_usedebounce_usedebounce",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "usedebounce()"
     },
     {
@@ -2953,8 +3063,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "useofflinesync.ts"
     },
     {
@@ -2964,8 +3074,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_retry_delays",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "retry_delays"
     },
     {
@@ -2975,8 +3085,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_syncitem",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "syncitem"
     },
     {
@@ -2986,8 +3096,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_readqueuefromstorage",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "readqueuefromstorage()"
     },
     {
@@ -2997,8 +3107,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_writequeuetostorage",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "writequeuetostorage()"
     },
     {
@@ -3008,8 +3118,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_isautherror",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "isautherror()"
     },
     {
@@ -3019,8 +3129,8 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_isnetworkerror",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "isnetworkerror()"
     },
     {
@@ -3030,8 +3140,8 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_detectcollision",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "detectcollision()"
     },
     {
@@ -3041,8 +3151,8 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesyncoptions",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "useofflinesyncoptions"
     },
     {
@@ -3052,8 +3162,8 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesync",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "useofflinesync()"
     },
     {
@@ -3063,8 +3173,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_main",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "main.tsx"
     },
     {
@@ -3074,7 +3184,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "googlesheets.ts"
     },
@@ -3085,8 +3195,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_services_googlesheets_getgooglecreds",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "getgooglecreds()"
     },
     {
@@ -3096,8 +3206,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_services_googlesheets_hasgooglecreds",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "hasgooglecreds()"
     },
     {
@@ -3107,8 +3217,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_services_googlesheets_initgoogleapi",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "initgoogleapi()"
     },
     {
@@ -3118,8 +3228,8 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "src_services_googlesheets_signin",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "signin()"
     },
     {
@@ -3129,8 +3239,8 @@
       "source_location": "L137",
       "_origin": "ast",
       "id": "src_services_googlesheets_signout",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "signout()"
     },
     {
@@ -3140,7 +3250,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "src_services_googlesheets_ensurevalidtoken",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "ensurevalidtoken()"
     },
@@ -3151,7 +3261,7 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "src_services_googlesheets_isautherror",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "isautherror()"
     },
@@ -3162,7 +3272,7 @@
       "source_location": "L215",
       "_origin": "ast",
       "id": "src_services_googlesheets_refreshtokeninteractiveorsilent",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "refreshtokeninteractiveorsilent()"
     },
@@ -3173,8 +3283,8 @@
       "source_location": "L273",
       "_origin": "ast",
       "id": "src_services_googlesheets_reauthenticatesession",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "reauthenticatesession()"
     },
     {
@@ -3184,7 +3294,7 @@
       "source_location": "L322",
       "_origin": "ast",
       "id": "src_services_googlesheets_withauthretry",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "withauthretry()"
     },
@@ -3195,7 +3305,7 @@
       "source_location": "L335",
       "_origin": "ast",
       "id": "src_services_googlesheets_checksignedin",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "checksignedin()"
     },
@@ -3206,7 +3316,7 @@
       "source_location": "L366",
       "_origin": "ast",
       "id": "src_services_googlesheets_starttokenrefreshtimer",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "starttokenrefreshtimer()"
     },
@@ -3217,7 +3327,7 @@
       "source_location": "L384",
       "_origin": "ast",
       "id": "src_services_googlesheets_stoptokenrefreshtimer",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "stoptokenrefreshtimer()"
     },
@@ -3239,8 +3349,8 @@
       "source_location": "L401",
       "_origin": "ast",
       "id": "src_services_googlesheets_headermap",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "headermap"
     },
     {
@@ -3250,8 +3360,8 @@
       "source_location": "L405",
       "_origin": "ast",
       "id": "src_services_googlesheets_busdata",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "busdata"
     },
     {
@@ -3261,7 +3371,7 @@
       "source_location": "L422",
       "_origin": "ast",
       "id": "src_services_googlesheets_normalizestring",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "normalizestring()"
     },
@@ -3272,7 +3382,7 @@
       "source_location": "L428",
       "_origin": "ast",
       "id": "src_services_googlesheets_header_keywords",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "header_keywords"
     },
@@ -3283,7 +3393,7 @@
       "source_location": "L442",
       "_origin": "ast",
       "id": "src_services_googlesheets_findcolumnindex",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "findcolumnindex()"
     },
@@ -3294,7 +3404,7 @@
       "source_location": "L455",
       "_origin": "ast",
       "id": "src_services_googlesheets_detectheaderrowandbuildcomposite",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "detectheaderrowandbuildcomposite()"
     },
@@ -3305,7 +3415,7 @@
       "source_location": "L514",
       "_origin": "ast",
       "id": "src_services_googlesheets_getbusdata",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "getbusdata()"
     },
@@ -3316,8 +3426,8 @@
       "source_location": "L695",
       "_origin": "ast",
       "id": "src_services_googlesheets_getbusrowdata",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "BusData",
       "norm_label": "getbusrowdata()"
     },
     {
@@ -3327,7 +3437,7 @@
       "source_location": "L738",
       "_origin": "ast",
       "id": "src_services_googlesheets_numbertocolumnname",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "numbertocolumnname()"
     },
@@ -3338,7 +3448,7 @@
       "source_location": "L749",
       "_origin": "ast",
       "id": "src_services_googlesheets_updatebusdata",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "updatebusdata()"
     },
@@ -3349,7 +3459,7 @@
       "source_location": "L801",
       "_origin": "ast",
       "id": "src_services_googlesheets_getmonthlytoatrend",
-      "community": 2,
+      "community": 122,
       "community_name": "googleSheets.ts",
       "norm_label": "getmonthlytoatrend()"
     },
@@ -3404,8 +3514,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_services_routeservice_verifyuserprofile",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "verifyuserprofile()"
     },
     {
@@ -3415,8 +3525,8 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "src_services_routeservice_upsertuserprofile",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "upsertuserprofile()"
     },
     {
@@ -3614,7 +3724,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_test",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "analytics.test.ts"
     },
     {
@@ -3625,7 +3735,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_test_mockbusdata",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "mockbusdata"
     },
     {
@@ -3636,7 +3746,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "analytics.ts"
     },
     {
@@ -3647,7 +3757,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_busnote",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "busnote"
     },
     {
@@ -3658,7 +3768,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_analyticssummary",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "analyticssummary"
     },
     {
@@ -3668,8 +3778,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_utils_analytics_slugifyunitid",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "slugifyunitid()"
     },
     {
@@ -3680,7 +3790,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_getvalidnumber",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "getvalidnumber()"
     },
     {
@@ -3691,7 +3801,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_safeparsenumber",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "safeparsenumber()"
     },
     {
@@ -3702,7 +3812,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_calculateanalytics",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "calculateanalytics()"
     },
     {
@@ -3713,7 +3823,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_month_names_id",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "month_names_id"
     },
     {
@@ -3723,8 +3833,8 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "src_utils_analytics_extractmonthyearlabel",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "extractmonthyearlabel()"
     },
     {
@@ -3734,8 +3844,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorformatter_test",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "errorformatter.test.ts"
     },
     {
@@ -3745,8 +3855,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorformatter",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "errorformatter.ts"
     },
     {
@@ -3756,8 +3866,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_utils_errorformatter_formatusererror",
-      "community": 2,
-      "community_name": "googleSheets.ts",
+      "community": 124,
+      "community_name": "App.tsx",
       "norm_label": "formatusererror()"
     },
     {
@@ -3768,7 +3878,7 @@
       "_origin": "ast",
       "id": "src_utils_numberutils",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "numberutils.ts"
     },
     {
@@ -3779,8 +3889,85 @@
       "_origin": "ast",
       "id": "src_utils_numberutils_parseindonesiannumber",
       "community": 2,
-      "community_name": "googleSheets.ts",
+      "community_name": "analytics.ts",
       "norm_label": "parseindonesiannumber()"
+    },
+    {
+      "label": "unitAnalytics.test.ts",
+      "file_type": "code",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_utils_unitanalytics_test",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitanalytics.test.ts"
+    },
+    {
+      "label": "mockBusData",
+      "file_type": "code",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_utils_unitanalytics_test_mockbusdata",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "mockbusdata"
+    },
+    {
+      "label": "unitAnalytics.ts",
+      "file_type": "code",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_utils_unitanalytics",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitanalytics.ts"
+    },
+    {
+      "label": "UnitSummaryItem",
+      "file_type": "code",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "src_utils_unitanalytics_unitsummaryitem",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitsummaryitem"
+    },
+    {
+      "label": "UnitSummaryMetrics",
+      "file_type": "code",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_utils_unitanalytics_unitsummarymetrics",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "unitsummarymetrics"
+    },
+    {
+      "label": "extractUnitList()",
+      "file_type": "code",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_utils_unitanalytics_extractunitlist",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "extractunitlist()"
+    },
+    {
+      "label": "calculateUnitMetrics()",
+      "file_type": "code",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "src_utils_unitanalytics_calculateunitmetrics",
+      "community": 123,
+      "community_name": "UnitSummaryDashboard.tsx",
+      "norm_label": "calculateunitmetrics()"
     },
     {
       "label": "tsconfig.app.json",
@@ -11868,6 +12055,83 @@
       "norm_label": "task 4: verifikasi & graphify update"
     },
     {
+      "label": "2026-08-06-unit-summary-page-plan.md",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan",
+      "community": 127,
+      "community_name": "Global Constraints",
+      "norm_label": "2026-08-06-unit-summary-page-plan.md"
+    },
+    {
+      "label": "Implementation Plan: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_implementation_plan_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "community": 127,
+      "community_name": "Global Constraints",
+      "norm_label": "implementation plan: halaman ringkasan per unit (read-only unit dashboard)"
+    },
+    {
+      "label": "Global Constraints",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_global_constraints",
+      "community": 127,
+      "community_name": "Global Constraints",
+      "norm_label": "global constraints"
+    },
+    {
+      "label": "Task 1: `unitAnalytics.ts` Abstraksi Logic Rekapitulasi Data Unit",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_1_unitanalytics_ts_abstraksi_logic_rekapitulasi_data_unit",
+      "community": 127,
+      "community_name": "Global Constraints",
+      "norm_label": "task 1: `unitanalytics.ts` abstraksi logic rekapitulasi data unit"
+    },
+    {
+      "label": "Task 2: Komponen `UnitCard.tsx` & `UnitSummaryDashboard.tsx`",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L197",
+      "_origin": "ast",
+      "id": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_2_komponen_unitcard_tsx_unitsummarydashboard_tsx",
+      "community": 127,
+      "community_name": "Global Constraints",
+      "norm_label": "task 2: komponen `unitcard.tsx` & `unitsummarydashboard.tsx`"
+    },
+    {
+      "label": "Task 3: Komponen `UnitDetailModal.tsx` (iOS-Style 90% Bottom Sheet)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L367",
+      "_origin": "ast",
+      "id": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_3_komponen_unitdetailmodal_tsx_ios_style_90_bottom_sheet",
+      "community": 127,
+      "community_name": "Global Constraints",
+      "norm_label": "task 3: komponen `unitdetailmodal.tsx` (ios-style 90% bottom sheet)"
+    },
+    {
+      "label": "Task 4: Integrasi Tab Navigasi `mainTab === \"units\"` di `BottomNav.tsx` & `Dashboard.tsx`",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L531",
+      "_origin": "ast",
+      "id": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_4_integrasi_tab_navigasi_maintab_units_di_bottomnav_tsx_dashboard_tsx",
+      "community": 127,
+      "community_name": "Global Constraints",
+      "norm_label": "task 4: integrasi tab navigasi `maintab === \"units\"` di `bottomnav.tsx` & `dashboard.tsx`"
+    },
+    {
       "label": "2026-07-13-improvement-v1-2-design.md",
       "file_type": "document",
       "source_file": "docs/superpowers/specs/2026-07-13-improvement-v1-2-design.md",
@@ -13087,6 +13351,116 @@
       "community": 111,
       "community_name": "Design Spec: Mobile Touch Swipe & Infinite Navigation",
       "norm_label": "5. standar ui/ux & animasi"
+    },
+    {
+      "label": "2026-08-06-unit-summary-page-design.md",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "2026-08-06-unit-summary-page-design.md"
+    },
+    {
+      "label": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_design_specification_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "design specification: halaman ringkasan per unit (read-only unit dashboard)"
+    },
+    {
+      "label": "Goal & Purpose",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_goal_purpose",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "goal & purpose"
+    },
+    {
+      "label": "System Architecture & User Flow",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_system_architecture_user_flow",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "system architecture & user flow"
+    },
+    {
+      "label": "1. Navigasi Utamanya (`BottomNav.tsx`)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_1_navigasi_utamanya_bottomnav_tsx",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "1. navigasi utamanya (`bottomnav.tsx`)"
+    },
+    {
+      "label": "2. Tampilan Halaman Utama \"Per Unit\" (`UnitSummaryDashboard.tsx`)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_2_tampilan_halaman_utama_per_unit_unitsummarydashboard_tsx",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "2. tampilan halaman utama \"per unit\" (`unitsummarydashboard.tsx`)"
+    },
+    {
+      "label": "3. Tampilan Modal Detail Armada (`UnitDetailModal.tsx`)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_3_tampilan_modal_detail_armada_unitdetailmodal_tsx",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "3. tampilan modal detail armada (`unitdetailmodal.tsx`)"
+    },
+    {
+      "label": "Data Layer & Calculation Logic (`unitAnalytics.ts`)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_data_layer_calculation_logic_unitanalytics_ts",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "data layer & calculation logic (`unitanalytics.ts`)"
+    },
+    {
+      "label": "UI/UX Standards & Aesthetics (iOS Style)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L66",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_ui_ux_standards_aesthetics_ios_style",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "ui/ux standards & aesthetics (ios style)"
+    },
+    {
+      "label": "Verification Plan",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_verification_plan",
+      "community": 126,
+      "community_name": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+      "norm_label": "verification plan"
     },
     {
       "label": "01-daftar-masalah.md",
@@ -17710,6 +18084,42 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitcard",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/hooks/useDebounce.ts",
       "source_location": "L1",
       "weight": 1.0,
@@ -19389,6 +19799,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_components_dailytoatrendcard",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -19401,10 +19823,22 @@
       "target": "src_services_googlesheets_getmonthlytoatrend"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_components_dailytoatrendcard_dailytoatrendcard",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L31",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard",
@@ -19415,7 +19849,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L27",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard",
@@ -19468,6 +19902,30 @@
       "_origin": "ast",
       "source": "src_components_dashboard",
       "target": "src_components_swipeablecontainer_swipeablecontainer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Dashboard.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_dashboard",
+      "target": "src_components_unitsummarydashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Dashboard.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_dashboard",
+      "target": "src_components_unitsummarydashboard_unitsummarydashboard",
       "confidence_score": 1.0
     },
     {
@@ -19632,7 +20090,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L95",
+      "source_location": "L97",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -19644,7 +20102,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L190",
+      "source_location": "L192",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -19656,7 +20114,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L222",
+      "source_location": "L224",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -19668,7 +20126,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L116",
+      "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -19680,7 +20138,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L594",
+      "source_location": "L596",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -19692,7 +20150,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L599",
+      "source_location": "L601",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -19704,7 +20162,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/Dashboard.tsx",
-      "source_location": "L105",
+      "source_location": "L107",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dashboard_dashboard",
@@ -20284,6 +20742,312 @@
       "source": "src_components_tests_swipeablecontainer_test",
       "target": "src_components_swipeablecontainer_swipeablecontainer",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitcard",
+      "target": "src_components_unitcard_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitcard",
+      "target": "src_components_unitcard_unitcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "argument",
+      "source": "src_components_unitcard",
+      "target": "src_components_unitcard_unitcardcomponent",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitcard",
+      "target": "src_utils_unitanalytics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitcard",
+      "target": "src_utils_unitanalytics_unitsummaryitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_components_unitcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitCard.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitcard_props",
+      "target": "src_utils_unitanalytics_unitsummaryitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_components_unitcard_unitcard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_components_unitdetailmodal_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_components_unitdetailmodal_unitdetailmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_services_googlesheets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_services_googlesheets_busdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_utils_unitanalytics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal",
+      "target": "src_utils_unitanalytics_calculateunitmetrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_components_unitdetailmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal_props",
+      "target": "src_services_googlesheets_busdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/UnitDetailModal.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitdetailmodal_unitdetailmodal",
+      "target": "src_utils_unitanalytics_calculateunitmetrics"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_components_unitdetailmodal_unitdetailmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_components_unitsummarydashboard_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_components_unitsummarydashboard_unitsummarydashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_services_googlesheets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_services_googlesheets_busdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_utils_unitanalytics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard",
+      "target": "src_utils_unitanalytics_extractunitlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard_props",
+      "target": "src_services_googlesheets_busdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/UnitSummaryDashboard.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_unitsummarydashboard_unitsummarydashboard",
+      "target": "src_utils_unitanalytics_extractunitlist"
     },
     {
       "relation": "contains",
@@ -20899,6 +21663,30 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics",
+      "target": "src_services_googlesheets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics_test",
+      "target": "src_services_googlesheets",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -21111,6 +21899,30 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_analytics_test",
+      "target": "src_services_googlesheets_busdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics",
+      "target": "src_services_googlesheets_busdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics_test",
       "target": "src_services_googlesheets_busdata",
       "confidence_score": 1.0
     },
@@ -21887,6 +22699,97 @@
       "_origin": "ast",
       "source": "src_utils_numberutils",
       "target": "src_utils_numberutils_parseindonesiannumber",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics_test",
+      "target": "src_utils_unitanalytics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics_test",
+      "target": "src_utils_unitanalytics_calculateunitmetrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics_test",
+      "target": "src_utils_unitanalytics_extractunitlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics_test",
+      "target": "src_utils_unitanalytics_test_mockbusdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics",
+      "target": "src_utils_unitanalytics_calculateunitmetrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics",
+      "target": "src_utils_unitanalytics_extractunitlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics",
+      "target": "src_utils_unitanalytics_unitsummaryitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/unitAnalytics.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_utils_unitanalytics",
+      "target": "src_utils_unitanalytics_unitsummarymetrics",
       "confidence_score": 1.0
     },
     {
@@ -29335,6 +30238,72 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan",
+      "target": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_implementation_plan_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_implementation_plan_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "target": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_global_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_global_constraints",
+      "target": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_1_unitanalytics_ts_abstraksi_logic_rekapitulasi_data_unit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L197",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_global_constraints",
+      "target": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_2_komponen_unitcard_tsx_unitsummarydashboard_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L367",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_global_constraints",
+      "target": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_3_komponen_unitdetailmodal_tsx_ios_style_90_bottom_sheet",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md",
+      "source_location": "L531",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_global_constraints",
+      "target": "docs_superpowers_plans_2026_08_06_unit_summary_page_plan_task_4_integrasi_tab_navigasi_maintab_units_di_bottomnav_tsx_dashboard_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "docs/superpowers/specs/2026-07-13-improvement-v1-2-design.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -30408,6 +31377,105 @@
       "_origin": "ast",
       "source": "docs_superpowers_specs_2026_08_04_swipe_navigation_design_3_logika_deteksi_gestur_infinite_navigation",
       "target": "docs_superpowers_specs_2026_08_04_swipe_navigation_design_b_rumus_infinite_swipe_modular_wrap_around",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_design_specification_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_design_specification_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_data_layer_calculation_logic_unitanalytics_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_design_specification_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_goal_purpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_design_specification_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_system_architecture_user_flow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_design_specification_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_ui_ux_standards_aesthetics_ios_style",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_design_specification_halaman_ringkasan_per_unit_read_only_unit_dashboard",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_verification_plan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_system_architecture_user_flow",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_1_navigasi_utamanya_bottomnav_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_system_architecture_user_flow",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_2_tampilan_halaman_utama_per_unit_unitsummarydashboard_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_system_architecture_user_flow",
+      "target": "docs_superpowers_specs_2026_08_06_unit_summary_page_design_3_tampilan_modal_detail_armada_unitdetailmodal_tsx",
       "confidence_score": 1.0
     },
     {
@@ -32095,5 +33163,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d35c7aeae632302dad3b34d5bcf2dce7d03f13f0"
+  "built_at_commit": "fe3afe43f9f109f58bd28b5def5841297597a82a"
 }
