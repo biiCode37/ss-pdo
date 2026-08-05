@@ -25,6 +25,8 @@ import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
 
+import { UnitSummaryDashboard } from "./UnitSummaryDashboard";
+
 interface Props {
   onLogout: () => void;
 }
@@ -36,7 +38,7 @@ export function Dashboard({ onLogout }: Props) {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mainTab, setMainTab] = useState<"input" | "analytics">("analytics");
+  const [mainTab, setMainTab] = useState<"input" | "analytics" | "units">("analytics");
 
   // Route Management State
   const [busData, setBusData] = useState<BusData[] | null>(null);
@@ -120,7 +122,7 @@ export function Dashboard({ onLogout }: Props) {
     localStorage.setItem("PDO_THEME", newTheme);
   };
 
-  const mainTabs: Array<"input" | "analytics"> = ["input", "analytics"];
+  const mainTabs: Array<"input" | "analytics" | "units"> = ["input", "analytics", "units"];
 
   const handleSwipeNextTab = () => {
     setMainTab((prev) => {
@@ -599,6 +601,23 @@ export function Dashboard({ onLogout }: Props) {
                   }
                 }, 150);
               }}
+            />
+          </div>
+
+          <div
+            style={{
+              visibility: mainTab === "units" ? "visible" : "hidden",
+              height: mainTab === "units" ? "auto" : 0,
+              overflow: mainTab === "units" ? "visible" : "hidden",
+              opacity: mainTab === "units" ? 1 : 0,
+              transform: mainTab === "units" ? "translateY(0)" : "translateY(6px)",
+              transition: "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
+            }}
+          >
+            <UnitSummaryDashboard
+              busData={busData}
+              sheetId={currentSheetId}
+              selectedTab={selectedTab}
             />
           </div>
         </SwipeableContainer>

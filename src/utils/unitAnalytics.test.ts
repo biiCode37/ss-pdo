@@ -7,6 +7,7 @@ const mockBusData: BusData[] = [
     rowIndex: 2,
     unit: 'SAF-001',
     toaShift1: '50',
+    toaShift2: '70',
     manualShift1: '0',
     manualShift2: '0',
     totalToa: '120',
@@ -15,11 +16,13 @@ const mockBusData: BusData[] = [
     kmAwal2: '150',
     kmAkhir2: '200',
     keterangan: 'Servis AC',
+    originalRow: [],
   },
   {
     rowIndex: 3,
     unit: 'SAF-002',
     toaShift1: '40',
+    toaShift2: '40',
     manualShift1: '0',
     manualShift2: '0',
     totalToa: '80',
@@ -28,6 +31,7 @@ const mockBusData: BusData[] = [
     kmAwal2: '',
     kmAkhir2: '',
     keterangan: '',
+    originalRow: [],
   },
 ];
 
