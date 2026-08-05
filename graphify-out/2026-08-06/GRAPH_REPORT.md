@@ -1,23 +1,23 @@
 # Graph Report - SS_PDO  (2026-08-06)
 
 ## Corpus Check
-- 133 files · ~141,008 words
+- 140 files · ~145,154 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1346 nodes · 1533 edges · 121 communities (102 shown, 19 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.5)
+- 1380 nodes · 1593 edges · 128 communities (109 shown, 19 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d35c7aea`
+- Built from commit: `fe3afe43`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - server.cjs
 - design_system.py
-- googleSheets.ts
+- analytics.ts
 - Test-Driven Development (TDD)
 - plugins
 - compilerOptions
@@ -134,35 +134,42 @@
 - vite
 - vite-plugin-pwa
 - vitest
+- BusData
+- googleSheets.ts
+- UnitSummaryDashboard.tsx
+- App.tsx
+- Dashboard.tsx
+- Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)
+- Global Constraints
 
 ## God Nodes (most connected - your core abstractions)
 1. `Writing Skills` - 23 edges
-2. `compilerOptions` - 18 edges
-3. `Testing Skills With Subagents` - 16 edges
-4. `compilerOptions` - 15 edges
-5. `Code Review Reception` - 15 edges
-6. `Subagent-Driven Development` - 15 edges
-7. `Test-Driven Development (TDD)` - 15 edges
-8. `handleRequest()` - 14 edges
-9. `react` - 13 edges
-10. `BusData` - 13 edges
+2. `BusData` - 19 edges
+3. `compilerOptions` - 18 edges
+4. `react` - 16 edges
+5. `Testing Skills With Subagents` - 16 edges
+6. `compilerOptions` - 15 edges
+7. `Code Review Reception` - 15 edges
+8. `Subagent-Driven Development` - 15 edges
+9. `Test-Driven Development (TDD)` - 15 edges
+10. `handleRequest()` - 14 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Props` --references--> `BusData`  [EXTRACTED]
   src/components/AnalyticsDashboard.tsx → src/services/googleSheets.ts
-- `Props` --references--> `AnalyticsSummary`  [EXTRACTED]
-  src/components/CompletionStatusCard.tsx → src/utils/analytics.ts
-- `Dashboard()` --calls--> `extractSheetId()`  [EXTRACTED]
-  src/components/Dashboard.tsx → src/services/googleSheets.ts
-- `Props` --references--> `AnalyticsSummary`  [EXTRACTED]
-  src/components/KPICard.tsx → src/utils/analytics.ts
-- `Props` --references--> `AnalyticsSummary`  [EXTRACTED]
-  src/components/ShiftComparisonCard.tsx → src/utils/analytics.ts
+- `Props` --references--> `BusData`  [EXTRACTED]
+  src/components/UnitDetailModal.tsx → src/services/googleSheets.ts
+- `Props` --references--> `BusData`  [EXTRACTED]
+  src/components/UnitSummaryDashboard.tsx → src/services/googleSheets.ts
+- `App()` --calls--> `checkSignedIn()`  [EXTRACTED]
+  src/App.tsx → src/services/googleSheets.ts
+- `BusCardComponent()` --calls--> `updateBusData()`  [EXTRACTED]
+  src/components/BusCard.tsx → src/services/googleSheets.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (121 total, 19 thin omitted)
+## Communities (128 total, 19 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -172,9 +179,9 @@ Nodes (55): bootstrapPage(), brandMarkup(), broadcast(), browserLauncherForPlatf
 Cohesion: 0.06
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
-### Community 2 - "googleSheets.ts"
-Cohesion: 0.06
-Nodes (72): react, App(), AnalyticsDashboard(), Props, BottomNav(), BottomNavProps, BusCard, BusCardComponent() (+64 more)
+### Community 2 - "analytics.ts"
+Cohesion: 0.16
+Nodes (16): AnalyticsDashboard(), Props, CompletionStatusCard(), Props, KPICard(), Props, Props, ShiftComparisonCard() (+8 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -564,25 +571,53 @@ Nodes (6): scripts, build, dev, lint, preview, test
 Cohesion: 0.40
 Nodes (4): name, private, type, version
 
+### Community 121 - "BusData"
+Cohesion: 0.22
+Nodes (17): BusCard, BusCardComponent(), Props, Props, useDebounce(), detectCollision(), isAuthError(), isNetworkError() (+9 more)
+
+### Community 122 - "googleSheets.ts"
+Cohesion: 0.22
+Nodes (17): DailyToaTrendCard(), Props, checkSignedIn(), detectHeaderRowAndBuildComposite(), ensureValidToken(), findColumnIndex(), getBusData(), getMonthlyToaTrend() (+9 more)
+
+### Community 123 - "UnitSummaryDashboard.tsx"
+Cohesion: 0.21
+Nodes (11): Props, UnitCard, Props, UnitDetailModal(), Props, UnitSummaryDashboard(), calculateUnitMetrics(), extractUnitList() (+3 more)
+
+### Community 124 - "App.tsx"
+Cohesion: 0.28
+Nodes (11): App(), LoginScreen(), Props, getGoogleCreds(), hasGoogleCreds(), initGoogleApi(), signIn(), signOut() (+3 more)
+
+### Community 125 - "Dashboard.tsx"
+Cohesion: 0.21
+Nodes (11): react, BottomNav(), BottomNavProps, BusList(), Dashboard(), Props, SwipeableContainer(), SwipeableContainerProps (+3 more)
+
+### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
+Cohesion: 0.20
+Nodes (9): 1. Navigasi Utamanya (`BottomNav.tsx`), 2. Tampilan Halaman Utama "Per Unit" (`UnitSummaryDashboard.tsx`), 3. Tampilan Modal Detail Armada (`UnitDetailModal.tsx`), Data Layer & Calculation Logic (`unitAnalytics.ts`), Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard), Goal & Purpose, System Architecture & User Flow, UI/UX Standards & Aesthetics (iOS Style) (+1 more)
+
+### Community 127 - "Global Constraints"
+Cohesion: 0.29
+Nodes (6): Global Constraints, Implementation Plan: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard), Task 1: `unitAnalytics.ts` Abstraksi Logic Rekapitulasi Data Unit, Task 2: Komponen `UnitCard.tsx` & `UnitSummaryDashboard.tsx`, Task 3: Komponen `UnitDetailModal.tsx` (iOS-Style 90% Bottom Sheet), Task 4: Integrasi Tab Navigasi `mainTab === "units"` di `BottomNav.tsx` & `Dashboard.tsx`
+
 ## Knowledge Gaps
-- **800 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+795 more)
+- **813 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+808 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `BusData`, `googleSheets.ts`, `UnitSummaryDashboard.tsx`, `App.tsx`?**
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `Writing Skills` connect `Writing Skills` to `Skill Discovery Optimization (SDO)`, `Testing Skills With Subagents`, `Bulletproofing Skills Against Rationalization`, `Anti-Patterns`, `Testing All Skill Types`, `RED-GREEN-REFACTOR for Skills`, `File Organization`, `Skill Types`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `react` connect `googleSheets.ts` to `routeService.ts`, `plugins`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `plugins` connect `plugins` to `googleSheets.ts`?**
+- **Why does `plugins` connect `plugins` to `Dashboard.tsx`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _800 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _813 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05576441102756892 - nodes in this community are weakly interconnected._
-- **Should `googleSheets.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.057195149851292613 - nodes in this community are weakly interconnected._
+- **Should `Test-Driven Development (TDD)` be split into smaller, more focused modules?**
+  _Cohesion score 0.05 - nodes in this community are weakly interconnected._

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Bus, TrendingUp, Navigation, MessageSquare } from 'lucide-react';
 import type { BusData } from '../services/googleSheets';
@@ -14,6 +14,11 @@ interface Props {
 }
 
 export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }: Props) {
+  const [touchStartY, setTouchStartY] = useState(0);
+  const [dragY, setDragY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const metrics = useMemo(() => {
     return calculateUnitMetrics(busData || [], unit);
   }, [busData, unit]);
@@ -25,6 +30,32 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (contentRef.current && contentRef.current.scrollTop <= 0) {
+      setTouchStartY(e.touches[0].clientY);
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || touchStartY === 0) return;
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - touchStartY;
+    if (diff > 0) {
+      setDragY(diff);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (dragY > 90) {
+      onClose();
+    } else {
+      setDragY(0);
+    }
+    setTouchStartY(0);
+    setIsDragging(false);
+  };
 
   return createPortal(
     <div
@@ -38,7 +69,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-end',
-        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+        backgroundColor: `rgba(0, 0, 0, ${Math.max(0.15, 0.65 - dragY / 400)})`,
         backdropFilter: 'blur(6px)',
         WebkitBackdropFilter: 'blur(6px)',
         animation: 'fadeIn 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
@@ -46,7 +77,11 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
       onClick={onClose}
     >
       <div
+        ref={contentRef}
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           width: '100%',
           maxWidth: '640px',
@@ -62,11 +97,15 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           overflowY: 'auto',
           boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.6)',
           border: '1px solid var(--border-color, rgba(255,255,255,0.15))',
-          animation: 'slideUp 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+          transform: `translateY(${dragY}px)`,
+          transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+          touchAction: 'pan-y',
         }}
       >
-        {/* Swipe Handle & Header */}
-        <div style={{ width: '40px', height: '4px', backgroundColor: 'var(--text-secondary)', opacity: 0.4, borderRadius: '2px', margin: '0 auto 16px auto' }}></div>
+        {/* Swipe Handle Bar */}
+        <div style={{ width: '100%', padding: '4px 0 12px 0', display: 'flex', justifyContent: 'center', cursor: 'grab' }}>
+          <div style={{ width: '44px', height: '5px', backgroundColor: 'var(--text-secondary, #94a3b8)', opacity: 0.5, borderRadius: '3px' }}></div>
+        </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

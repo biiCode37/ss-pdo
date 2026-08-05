@@ -1,7 +1,7 @@
 {
   "0": "server.cjs",
   "1": "design_system.py",
-  "2": "googleSheets.ts",
+  "2": "analytics.ts",
   "3": "Test-Driven Development (TDD)",
   "4": "plugins",
   "5": "compilerOptions",
@@ -119,5 +119,12 @@
   "117": "@types/react-dom",
   "118": "vite",
   "119": "vite-plugin-pwa",
-  "120": "vitest"
+  "120": "vitest",
+  "121": "BusData",
+  "122": "googleSheets.ts",
+  "123": "UnitSummaryDashboard.tsx",
+  "124": "App.tsx",
+  "125": "Dashboard.tsx",
+  "126": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
+  "127": "Global Constraints"
 }

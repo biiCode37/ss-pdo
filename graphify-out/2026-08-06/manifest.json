@@ -85,9 +85,9 @@
     "semantic_hash": "2c837b6d02dda758cbc04d5c80920ad5"
   },
   "src/components/BottomNav.tsx": {
-    "mtime": 1785610062.6312165,
-    "ast_hash": "263c5d7c4bf6f8bbb9503185ce5feb6a",
-    "semantic_hash": "263c5d7c4bf6f8bbb9503185ce5feb6a"
+    "mtime": 1785954253.4481828,
+    "ast_hash": "b95c55679eae8b7662a069af93a0fad9",
+    "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
     "mtime": 1785951291.1894712,
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1785951325.9746294,
-    "ast_hash": "1566e1789fda192c0d7f07461ff194d5",
+    "mtime": 1785954253.4583294,
+    "ast_hash": "ff33492717ad2ed905c770e7c2cfe348",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -712,6 +712,41 @@
   "supabase/migrations/20260806000000_init_schema.sql": {
     "mtime": 1785950000.3894224,
     "ast_hash": "2b0489e54a3c95de7464dfb2c0287f55",
+    "semantic_hash": ""
+  },
+  "src/components/UnitCard.tsx": {
+    "mtime": 1785954253.4589853,
+    "ast_hash": "197ee13ed7890ebc1c80b2e70f16ed42",
+    "semantic_hash": ""
+  },
+  "src/components/UnitDetailModal.tsx": {
+    "mtime": 1785954253.4609928,
+    "ast_hash": "49a87c799cb7afc093f1d44768b9098c",
+    "semantic_hash": ""
+  },
+  "src/components/UnitSummaryDashboard.tsx": {
+    "mtime": 1785954253.4609928,
+    "ast_hash": "d8edb3ca8481fdb03ffab46ea4946c97",
+    "semantic_hash": ""
+  },
+  "src/utils/unitAnalytics.test.ts": {
+    "mtime": 1785954253.4629993,
+    "ast_hash": "6a28bd3e1db99cb12ce6b83bef8dc205",
+    "semantic_hash": ""
+  },
+  "src/utils/unitAnalytics.ts": {
+    "mtime": 1785954253.463627,
+    "ast_hash": "b1709b73dcd94501f07e58d0ce6a327d",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md": {
+    "mtime": 1785954253.4422705,
+    "ast_hash": "f67cc046599cb64e4c161390321a811b",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md": {
+    "mtime": 1785954253.4422705,
+    "ast_hash": "17b45895caf03729901dc33d20d8494a",
     "semantic_hash": ""
   }
 }
