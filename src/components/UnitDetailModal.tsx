@@ -171,25 +171,25 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         {/* 3 Grid Executive Summary (Shift 1, Shift 2, Akumulasi Total) */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px', marginBottom: '20px' }}>
           {/* Grid 1: Shift 1 */}
-          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(30, 41, 59, 0.4) 100%)', border: '1px solid rgba(249, 115, 22, 0.25)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#fb923c', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0.5) 100%)', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#38bdf8', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span>Shift 1</span>
-              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(249, 115, 22, 0.18)', color: '#fb923c' }}>Operasional</span>
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)' }}>Operasional</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {/* 1. KM Paling Atas (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#fb923c' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#38bdf8' }}>
                   <Navigation size={18} />
                 </div>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: '#fb923c', lineHeight: 1.1 }}>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8', lineHeight: 1.1 }}>
                   {metrics.kmShift1.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
                 </div>
               </div>
 
               {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#fb923c' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#38bdf8' }}>
                   <Users size={18} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
@@ -199,7 +199,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
 
               {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
               {metrics.manualShift1 > 0 && (
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.25)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid rgba(255,255,255,0.05)' }}>
                   TOA: <strong>{metrics.toaShift1.toLocaleString('id-ID')}</strong> | Manual: <strong>{metrics.manualShift1.toLocaleString('id-ID')}</strong>
                 </div>
               )}
