@@ -176,16 +176,25 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
               <span>Shift 1</span>
               <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.15)' }}>Operasional</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {/* 1. KM Paling Atas (Menonjol) */}
-              <div style={{ fontSize: '22px', fontWeight: 800, color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '6px', lineHeight: 1.1 }}>
-                <Navigation size={18} /> {metrics.kmShift1.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {/* 1. KM Paling Atas (Menonjol & Simetris) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#38bdf8' }}>
+                  <Navigation size={18} />
+                </div>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8', lineHeight: 1.1 }}>
+                  {metrics.kmShift1.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+                </div>
               </div>
 
-              {/* 2. Jumlah Pnp di bawah KM (Menonjol) dengan Ikon */}
-              <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Users size={16} style={{ color: 'var(--accent-color)' }} />
-                <span>{metrics.totalShift1Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span></span>
+              {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--accent-color)' }}>
+                  <Users size={18} />
+                </div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                  {metrics.totalShift1Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                </div>
               </div>
 
               {/* 3. Detail TOA & Manual Paling Bawah */}
@@ -201,16 +210,25 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
               <span>Shift 2</span>
               <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(168, 85, 247, 0.15)' }}>Operasional</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {/* 1. KM Paling Atas (Menonjol) */}
-              <div style={{ fontSize: '22px', fontWeight: 800, color: '#c084fc', display: 'flex', alignItems: 'center', gap: '6px', lineHeight: 1.1 }}>
-                <Navigation size={18} /> {metrics.kmShift2.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {/* 1. KM Paling Atas (Menonjol & Simetris) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#c084fc' }}>
+                  <Navigation size={18} />
+                </div>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#c084fc', lineHeight: 1.1 }}>
+                  {metrics.kmShift2.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+                </div>
               </div>
 
-              {/* 2. Jumlah Pnp di bawah KM (Menonjol) dengan Ikon */}
-              <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Users size={16} style={{ color: '#c084fc' }} />
-                <span>{metrics.totalShift2Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span></span>
+              {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#c084fc' }}>
+                  <Users size={18} />
+                </div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                  {metrics.totalShift2Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                </div>
               </div>
 
               {/* 3. Detail TOA & Manual Paling Bawah */}
@@ -226,16 +244,25 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
               <span>Akumulasi Total</span>
               <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80' }}>Shift 1 + 2</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {/* 1. KM Paling Atas (Menonjol) */}
-              <div style={{ fontSize: '24px', fontWeight: 800, color: '#4ade80', display: 'flex', alignItems: 'center', gap: '6px', lineHeight: 1.1 }}>
-                <Navigation size={20} /> {metrics.totalKm.toLocaleString('id-ID')} <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {/* 1. KM Paling Atas (Menonjol & Simetris) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#4ade80' }}>
+                  <Navigation size={20} />
+                </div>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: '#4ade80', lineHeight: 1.1 }}>
+                  {metrics.totalKm.toLocaleString('id-ID')} <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
+                </div>
               </div>
 
-              {/* 2. Jumlah Pnp di bawah KM (Menonjol) dengan Ikon */}
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#4ade80', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Users size={18} style={{ color: '#4ade80' }} />
-                <span>{metrics.totalPassengers.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span></span>
+              {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#4ade80' }}>
+                  <Users size={20} />
+                </div>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#4ade80', lineHeight: 1.1 }}>
+                  {metrics.totalPassengers.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
+                </div>
               </div>
 
               {/* 3. Detail TOA & Manual Paling Bawah */}
