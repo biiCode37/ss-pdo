@@ -197,10 +197,12 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                 </div>
               </div>
 
-              {/* 3. Detail TOA & Manual Paling Bawah */}
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
-                TOA: <strong>{metrics.toaShift1.toLocaleString('id-ID')}</strong> | Manual: <strong>{metrics.manualShift1.toLocaleString('id-ID')}</strong>
-              </div>
+              {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
+              {metrics.manualShift1 > 0 && (
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
+                  TOA: <strong>{metrics.toaShift1.toLocaleString('id-ID')}</strong> | Manual: <strong>{metrics.manualShift1.toLocaleString('id-ID')}</strong>
+                </div>
+              )}
             </div>
           </div>
 
@@ -231,10 +233,12 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                 </div>
               </div>
 
-              {/* 3. Detail TOA & Manual Paling Bawah */}
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
-                TOA: <strong>{metrics.toaShift2.toLocaleString('id-ID')}</strong> | Manual: <strong>{metrics.manualShift2.toLocaleString('id-ID')}</strong>
-              </div>
+              {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
+              {metrics.manualShift2 > 0 && (
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
+                  TOA: <strong>{metrics.toaShift2.toLocaleString('id-ID')}</strong> | Manual: <strong>{metrics.manualShift2.toLocaleString('id-ID')}</strong>
+                </div>
+              )}
             </div>
           </div>
 
@@ -265,10 +269,12 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                 </div>
               </div>
 
-              {/* 3. Detail TOA & Manual Paling Bawah */}
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
-                Total TOA: <strong>{metrics.totalToa.toLocaleString('id-ID')}</strong> | Manual: <strong>{(metrics.manualShift1 + metrics.manualShift2).toLocaleString('id-ID')}</strong>
-              </div>
+              {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
+              {(metrics.manualShift1 + metrics.manualShift2) > 0 && (
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
+                  Total TOA: <strong>{metrics.totalToa.toLocaleString('id-ID')}</strong> | Manual: <strong>{(metrics.manualShift1 + metrics.manualShift2).toLocaleString('id-ID')}</strong>
+                </div>
+              )}
             </div>
           </div>
         </div>
