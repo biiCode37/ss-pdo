@@ -63,22 +63,17 @@ function UnitCardComponent({ item, onClick }: Props) {
         </div>
       </div>
 
-      {/* Line 3: Compact Value Catatan Keterangan (Jika Ada) */}
+      {/* Line 3: Value Catatan Keterangan (Tanpa Pembungkus) */}
       {item.notes && item.notes.length > 0 && (
         <div
           style={{
-            padding: '6px 10px',
-            background: 'rgba(249, 115, 22, 0.08)',
-            borderRadius: '6px',
-            borderLeft: '2.5px solid rgba(249, 115, 22, 0.6)',
             fontSize: '11px',
             color: '#fdba74',
             fontWeight: 600,
             letterSpacing: '0.01em',
             display: 'flex',
-            gap: '8px',
+            gap: '6px',
             alignItems: 'center',
-            marginTop: '1px',
           }}
         >
           <AlertTriangle size={13} style={{ color: '#f97316', flexShrink: 0 }} />

@@ -356,21 +356,17 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
         <div 
           onClick={() => setIsExpanded(true)}
           style={{ 
-            margin: '0 20px 16px 20px', 
-            padding: '8px 12px', 
-            background: 'rgba(249, 115, 22, 0.08)', 
-            borderRadius: '10px', 
-            borderLeft: '3px solid rgba(249, 115, 22, 0.6)',
+            margin: '0 20px 12px 20px', 
             fontSize: '12px',
             color: '#fdba74',
             fontWeight: 600,
-            letterSpacing: '0.02em',
+            letterSpacing: '0.01em',
             display: 'flex',
-            gap: '8px',
-            alignItems: 'flex-start',
+            gap: '6px',
+            alignItems: 'center',
             cursor: 'pointer'
           }}>
-          <AlertTriangle size={15} style={{ color: '#f97316', flexShrink: 0, marginTop: '1px' }} />
+          <AlertTriangle size={14} style={{ color: '#f97316', flexShrink: 0 }} />
           <span style={{ lineHeight: '1.4', wordBreak: 'break-word', textTransform: 'uppercase' }}>{formData.keterangan}</span>
         </div>
       )}
