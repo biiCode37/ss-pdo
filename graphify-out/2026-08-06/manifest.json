@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
-    "mtime": 1785949941.9619498,
-    "ast_hash": "474d4d635feb67f0d57dfaecb45ea086",
+    "mtime": 1785978836.6372986,
+    "ast_hash": "be429c709c65b7f97948a4fac60b33da",
     "semantic_hash": ""
   },
   "src/components/CompletionStatusCard.tsx": {
@@ -105,13 +105,13 @@
     "semantic_hash": "8d44c6c8f2146471fcb51c221d68dc73"
   },
   "src/components/DailyToaTrendCard.tsx": {
-    "mtime": 1785959046.1770623,
-    "ast_hash": "f7ef967a52f6a227059de78597e0cd69",
+    "mtime": 1785978910.2687473,
+    "ast_hash": "59087f1897f1ac1ce4d361cc2b366eea",
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1785954253.4583294,
-    "ast_hash": "ff33492717ad2ed905c770e7c2cfe348",
+    "mtime": 1785978787.5898566,
+    "ast_hash": "8da37912ae926785b4524b5b7bc407bf",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitSummaryDashboard.tsx": {
-    "mtime": 1785954253.4609928,
-    "ast_hash": "d8edb3ca8481fdb03ffab46ea4946c97",
+    "mtime": 1785978884.6200328,
+    "ast_hash": "f0afd45696a36fce2bec515a11cc69e7",
     "semantic_hash": ""
   },
   "src/utils/unitAnalytics.test.ts": {
@@ -747,6 +747,11 @@
   "docs/superpowers/specs/2026-08-06-unit-summary-page-design.md": {
     "mtime": 1785954253.4422705,
     "ast_hash": "17b45895caf03729901dc33d20d8494a",
+    "semantic_hash": ""
+  },
+  "src/components/Skeletons.tsx": {
+    "mtime": 1785978766.5573606,
+    "ast_hash": "74b8a993f47963020787653c5f91f256",
     "semantic_hash": ""
   }
 }

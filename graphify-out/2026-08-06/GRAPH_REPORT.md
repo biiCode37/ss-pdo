@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-08-06)
 
 ## Corpus Check
-- 140 files · ~145,596 words
+- 141 files · ~145,933 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1380 nodes · 1593 edges · 128 communities (109 shown, 19 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
+- 1386 nodes · 1607 edges · 129 communities (110 shown, 19 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ada64154`
+- Built from commit: `bf2ca542`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -129,7 +129,7 @@
 - Global Constraints
 - scripts
 - package.json
-- @types/gapi.auth2
+- Skeletons.tsx
 - @types/react-dom
 - vite
 - vite-plugin-pwa
@@ -141,12 +141,13 @@
 - Dashboard.tsx
 - Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)
 - Global Constraints
+- @types/gapi.client.sheets
 
 ## God Nodes (most connected - your core abstractions)
 1. `Writing Skills` - 23 edges
 2. `BusData` - 19 edges
 3. `compilerOptions` - 18 edges
-4. `react` - 16 edges
+4. `react` - 17 edges
 5. `Testing Skills With Subagents` - 16 edges
 6. `compilerOptions` - 15 edges
 7. `Code Review Reception` - 15 edges
@@ -163,13 +164,13 @@
   src/components/UnitSummaryDashboard.tsx → src/services/googleSheets.ts
 - `App()` --calls--> `checkSignedIn()`  [EXTRACTED]
   src/App.tsx → src/services/googleSheets.ts
-- `BusCardComponent()` --calls--> `updateBusData()`  [EXTRACTED]
-  src/components/BusCard.tsx → src/services/googleSheets.ts
+- `BusCardComponent()` --calls--> `formatUserError()`  [EXTRACTED]
+  src/components/BusCard.tsx → src/utils/errorFormatter.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (128 total, 19 thin omitted)
+## Communities (129 total, 19 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -541,7 +542,7 @@ Nodes (7): Global Constraints, Supabase Integration Implementation Plan, Task 1:
 
 ### Community 108 - "devDependencies"
 Cohesion: 0.13
-Nodes (15): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.client.sheets, @types/node, @types/react (+7 more)
+Nodes (15): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.auth2, @types/node, @types/react (+7 more)
 
 ### Community 109 - "Daftar Masalah v3 — Proyek SS_PDO / SPUM (Sistem Pencatatan Shift Bus)"
 Cohesion: 0.13
@@ -571,13 +572,17 @@ Nodes (6): scripts, build, dev, lint, preview, test
 Cohesion: 0.40
 Nodes (4): name, private, type, version
 
+### Community 116 - "Skeletons.tsx"
+Cohesion: 0.25
+Nodes (6): DailyToaTrendCard(), Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton()
+
 ### Community 121 - "BusData"
-Cohesion: 0.22
-Nodes (17): BusCard, BusCardComponent(), Props, Props, useDebounce(), detectCollision(), isAuthError(), isNetworkError() (+9 more)
+Cohesion: 0.20
+Nodes (20): BusCard, BusCardComponent(), Props, Props, useDebounce(), detectCollision(), isAuthError(), isNetworkError() (+12 more)
 
 ### Community 122 - "googleSheets.ts"
-Cohesion: 0.22
-Nodes (17): DailyToaTrendCard(), Props, checkSignedIn(), detectHeaderRowAndBuildComposite(), ensureValidToken(), findColumnIndex(), getBusData(), getMonthlyToaTrend() (+9 more)
+Cohesion: 0.31
+Nodes (13): checkSignedIn(), detectHeaderRowAndBuildComposite(), ensureValidToken(), findColumnIndex(), getBusData(), getMonthlyToaTrend(), HEADER_KEYWORDS, isAuthError() (+5 more)
 
 ### Community 123 - "UnitSummaryDashboard.tsx"
 Cohesion: 0.21
@@ -588,8 +593,8 @@ Cohesion: 0.28
 Nodes (11): App(), LoginScreen(), Props, getGoogleCreds(), hasGoogleCreds(), initGoogleApi(), signIn(), signOut() (+3 more)
 
 ### Community 125 - "Dashboard.tsx"
-Cohesion: 0.21
-Nodes (11): react, BottomNav(), BottomNavProps, BusList(), Dashboard(), Props, SwipeableContainer(), SwipeableContainerProps (+3 more)
+Cohesion: 0.22
+Nodes (10): react, BottomNav(), BottomNavProps, BusList(), Dashboard(), Props, SwipeableContainer(), SwipeableContainerProps (+2 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
 Cohesion: 0.20
@@ -600,24 +605,24 @@ Cohesion: 0.29
 Nodes (6): Global Constraints, Implementation Plan: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard), Task 1: `unitAnalytics.ts` Abstraksi Logic Rekapitulasi Data Unit, Task 2: Komponen `UnitCard.tsx` & `UnitSummaryDashboard.tsx`, Task 3: Komponen `UnitDetailModal.tsx` (iOS-Style 90% Bottom Sheet), Task 4: Integrasi Tab Navigasi `mainTab === "units"` di `BottomNav.tsx` & `Dashboard.tsx`
 
 ## Knowledge Gaps
-- **813 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+808 more)
+- **814 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+809 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `BusData`, `googleSheets.ts`, `UnitSummaryDashboard.tsx`, `App.tsx`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `Writing Skills` connect `Writing Skills` to `Skill Discovery Optimization (SDO)`, `Testing Skills With Subagents`, `Bulletproofing Skills Against Rationalization`, `Anti-Patterns`, `Testing All Skill Types`, `RED-GREEN-REFACTOR for Skills`, `File Organization`, `Skill Types`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `plugins` connect `plugins` to `Dashboard.tsx`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `Skeletons.tsx`, `BusData`, `UnitSummaryDashboard.tsx`, `App.tsx`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _813 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _814 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05576441102756892 - nodes in this community are weakly interconnected._
 - **Should `Test-Driven Development (TDD)` be split into smaller, more focused modules?**
   _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+- **Should `compilerOptions` be split into smaller, more focused modules?**
+  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
