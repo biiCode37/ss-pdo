@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
-    "mtime": 1785981078.9071279,
-    "ast_hash": "cc8474332404fb0aa46acbfe63bee10d",
+    "mtime": 1785981132.6444066,
+    "ast_hash": "22f61d1b9ae99d4e2a1a516c9105005a",
     "semantic_hash": ""
   },
   "src/components/UnitSummaryDashboard.tsx": {

@@ -98,14 +98,13 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
               </span>
               <span
                 style={{
-                  color: "var(--warning-color)",
-                  fontWeight: 600,
-                  textAlign: "right",
                   wordBreak: "break-word",
                   overflowWrap: "anywhere",
                   flex: 1,
                   fontSize: "12px",
                   lineHeight: 1.4,
+                  color: "#fb923c",
+                  fontWeight: 600,
                 }}
               >
                 {note.keterangan}

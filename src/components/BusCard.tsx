@@ -332,15 +332,16 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
       
       {formData.keterangan && formData.keterangan.trim() !== '' && (
         <div 
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={() => setIsExpanded(true)}
           style={{ 
-            margin: '0 16px 16px 16px', 
-            padding: '10px 12px', 
-            background: 'rgba(255, 255, 255, 0.05)', 
+            marginTop: '10px', 
+            padding: '8px 12px', 
+            background: 'rgba(249, 115, 22, 0.1)', 
             borderRadius: '8px', 
-            borderLeft: '3px solid var(--accent-color)',
+            borderLeft: '3px solid #f97316',
             fontSize: '13px',
-            color: 'var(--text-secondary)',
+            color: '#fb923c',
+            fontWeight: 600,
             display: 'flex',
             gap: '8px',
             alignItems: 'flex-start',

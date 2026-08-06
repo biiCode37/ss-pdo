@@ -294,7 +294,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
             <MessageSquare size={16} /> Catatan & Keterangan Operasional
           </div>
           {metrics.notes.length > 0 ? (
-            <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+            <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#fb923c', fontWeight: 600 }}>
               {metrics.notes.map((n, idx) => (
                 <li key={idx} style={{ marginBottom: '6px' }}>{n}</li>
               ))}
