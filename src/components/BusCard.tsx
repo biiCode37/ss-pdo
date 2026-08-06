@@ -5,7 +5,7 @@ import { updateBusData, getBusRowData } from '../services/googleSheets';
 import { isNetworkError } from '../hooks/useOfflineSync';
 import { formatUserError } from '../utils/errorFormatter';
 import { slugifyUnitId } from '../utils/analytics';
-import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy } from 'lucide-react';
+import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy, AlertTriangle } from 'lucide-react';
 
 interface Props {
   bus: BusData;
@@ -334,10 +334,10 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
         <div 
           onClick={() => setIsExpanded(true)}
           style={{ 
-            marginTop: '10px', 
+            margin: '0 20px 16px 20px', 
             padding: '8px 12px', 
             background: 'rgba(249, 115, 22, 0.08)', 
-            borderRadius: '8px', 
+            borderRadius: '10px', 
             borderLeft: '3px solid rgba(249, 115, 22, 0.6)',
             fontSize: '12px',
             color: '#fdba74',
@@ -348,7 +348,7 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
             alignItems: 'flex-start',
             cursor: 'pointer'
           }}>
-          <span style={{ fontSize: '14px', marginTop: '1px' }}>📝</span>
+          <AlertTriangle size={15} style={{ color: '#f97316', flexShrink: 0, marginTop: '1px' }} />
           <span style={{ lineHeight: '1.4', wordBreak: 'break-word', textTransform: 'uppercase' }}>{formData.keterangan}</span>
         </div>
       )}
