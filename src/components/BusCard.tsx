@@ -342,14 +342,14 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
             fontSize: '12px',
             color: '#fdba74',
             fontWeight: 600,
-            letterSpacing: '0.01em',
+            letterSpacing: '0.02em',
             display: 'flex',
             gap: '8px',
             alignItems: 'flex-start',
             cursor: 'pointer'
           }}>
           <span style={{ fontSize: '14px', marginTop: '1px' }}>📝</span>
-          <span style={{ lineHeight: '1.4', wordBreak: 'break-word', textTransform: 'capitalize' }}>{formData.keterangan}</span>
+          <span style={{ lineHeight: '1.4', wordBreak: 'break-word', textTransform: 'uppercase' }}>{formData.keterangan}</span>
         </div>
       )}
 

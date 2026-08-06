@@ -297,9 +297,9 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           {metrics.notes.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {metrics.notes.map((n, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: '#fdba74', fontWeight: 600, letterSpacing: '0.01em', background: 'rgba(249, 115, 22, 0.08)', padding: '8px 12px', borderRadius: '10px', borderLeft: '3px solid rgba(249, 115, 22, 0.6)' }}>
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: '#fdba74', fontWeight: 600, letterSpacing: '0.02em', background: 'rgba(249, 115, 22, 0.08)', padding: '8px 12px', borderRadius: '10px', borderLeft: '3px solid rgba(249, 115, 22, 0.6)' }}>
                   <AlertTriangle size={15} style={{ color: '#f97316', flexShrink: 0, marginTop: '1px' }} />
-                  <span style={{ lineHeight: 1.4, wordBreak: 'break-word', textTransform: 'capitalize' }}>{n}</span>
+                  <span style={{ lineHeight: 1.4, wordBreak: 'break-word', textTransform: 'uppercase' }}>{n}</span>
                 </div>
               ))}
             </div>

@@ -105,8 +105,8 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
                   lineHeight: 1.4,
                   color: "#fdba74",
                   fontWeight: 600,
-                  letterSpacing: "0.01em",
-                  textTransform: "capitalize",
+                  letterSpacing: "0.02em",
+                  textTransform: "uppercase",
                 }}
               >
                 {note.keterangan}
