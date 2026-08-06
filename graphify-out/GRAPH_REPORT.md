@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-08-06)
 
 ## Corpus Check
-- 141 files · ~146,885 words
+- 141 files · ~147,079 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1386 nodes · 1610 edges · 128 communities (109 shown, 19 thin omitted)
+- 1386 nodes · 1611 edges · 128 communities (109 shown, 19 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d17498e3`
+- Built from commit: `cf54532b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
