@@ -2576,7 +2576,7 @@
       "label": "BusCard",
       "file_type": "code",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L632",
+      "source_location": "L633",
       "_origin": "ast",
       "id": "src_components_buscard_buscard",
       "community": 121,
@@ -19324,7 +19324,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L632",
+      "source_location": "L633",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -19335,7 +19335,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L632",
+      "source_location": "L633",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -33392,5 +33392,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "093fb3b82214e2625a8ce9808430f4849b600c64"
+  "built_at_commit": "e25fe4f6b85e5f3e262bff4e76e0c95ecf084058"
 }

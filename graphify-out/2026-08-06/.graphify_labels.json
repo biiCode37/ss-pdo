@@ -127,5 +127,5 @@
   "125": "Dashboard.tsx",
   "126": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
   "127": "Global Constraints",
-  "128": "@types/gapi.client.sheets"
+  "128": "@types/gapi.auth2"
 }

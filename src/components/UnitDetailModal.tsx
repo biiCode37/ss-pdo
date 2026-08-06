@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Bus, Navigation, MessageSquare, Users } from 'lucide-react';
+import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle } from 'lucide-react';
 import type { BusData } from '../services/googleSheets';
 import { calculateUnitMetrics } from '../utils/unitAnalytics';
 import { DailyToaTrendCard } from './DailyToaTrendCard';
@@ -289,16 +289,20 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         </div>
 
         {/* Riwayat Catatan */}
-        <div className="card glass" style={{ padding: '16px', marginBottom: '16px' }}>
-          <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--warning-color, #f59e0b)' }}>
-            <MessageSquare size={16} /> Catatan & Keterangan Operasional
+        <div className="card glass" style={{ padding: '16px', marginBottom: '16px', borderRadius: '16px' }}>
+          <div style={{ fontSize: '14px', fontWeight: 800, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8' }}>
+            <MessageSquare size={18} style={{ color: '#38bdf8' }} />
+            <span>Catatan & Keterangan Operasional</span>
           </div>
           {metrics.notes.length > 0 ? (
-            <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#fb923c', fontWeight: 600 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {metrics.notes.map((n, idx) => (
-                <li key={idx} style={{ marginBottom: '6px' }}>{n}</li>
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: '#fb923c', fontWeight: 600, background: 'rgba(249, 115, 22, 0.1)', padding: '8px 12px', borderRadius: '10px', borderLeft: '3px solid #f97316' }}>
+                  <AlertTriangle size={15} style={{ color: '#f97316', flexShrink: 0, marginTop: '2px' }} />
+                  <span style={{ lineHeight: 1.4, wordBreak: 'break-word' }}>{n}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
             <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
               Tidak ada catatan khusus yang dilaporkan untuk unit ini.

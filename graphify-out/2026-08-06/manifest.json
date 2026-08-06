@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
-    "mtime": 1785959054.1976283,
-    "ast_hash": "e4cc44ad731fe2efc82e3bc45f91577b",
+    "mtime": 1785981132.6444066,
+    "ast_hash": "22f61d1b9ae99d4e2a1a516c9105005a",
     "semantic_hash": ""
   },
   "src/components/UnitSummaryDashboard.tsx": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/utils/unitAnalytics.ts": {
-    "mtime": 1785954253.463627,
-    "ast_hash": "b1709b73dcd94501f07e58d0ce6a327d",
+    "mtime": 1785980640.0630329,
+    "ast_hash": "6b2b1c185246df9824cfdecfe9997724",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md": {

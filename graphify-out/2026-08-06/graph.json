@@ -2194,8 +2194,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_devdependencies_types_gapi_auth2",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 128,
+      "community_name": "@types/gapi.auth2",
       "norm_label": "@types/gapi.auth2"
     },
     {
@@ -2205,8 +2205,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "types_gapi_auth2",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 128,
+      "community_name": "@types/gapi.auth2",
       "norm_label": "@types/gapi.auth2"
     },
     {
@@ -2216,8 +2216,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "package_devdependencies_types_gapi_client_sheets",
-      "community": 128,
-      "community_name": "@types/gapi.client.sheets",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/gapi.client.sheets"
     },
     {
@@ -2227,8 +2227,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "types_gapi_client_sheets",
-      "community": 128,
-      "community_name": "@types/gapi.client.sheets",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/gapi.client.sheets"
     },
     {
@@ -4017,7 +4017,7 @@
       "label": "extractUnitList()",
       "file_type": "code",
       "source_file": "src/utils/unitAnalytics.ts",
-      "source_location": "L21",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "src_utils_unitanalytics_extractunitlist",
       "community": 123,
@@ -4028,7 +4028,7 @@
       "label": "calculateUnitMetrics()",
       "file_type": "code",
       "source_file": "src/utils/unitAnalytics.ts",
-      "source_location": "L38",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "src_utils_unitanalytics_calculateunitmetrics",
       "community": 123,
@@ -22981,7 +22981,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/unitAnalytics.ts",
-      "source_location": "L38",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_unitanalytics",
@@ -22992,7 +22992,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/unitAnalytics.ts",
-      "source_location": "L21",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_unitanalytics",
@@ -33392,5 +33392,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "bf2ca542db2b2681a450970223149c53772bebbd"
+  "built_at_commit": "093fb3b82214e2625a8ce9808430f4849b600c64"
 }
