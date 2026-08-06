@@ -2194,8 +2194,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "package_devdependencies_types_gapi_auth2",
-      "community": 128,
-      "community_name": "@types/gapi.auth2",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/gapi.auth2"
     },
     {
@@ -2205,8 +2205,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "types_gapi_auth2",
-      "community": 128,
-      "community_name": "@types/gapi.auth2",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/gapi.auth2"
     },
     {
@@ -2216,8 +2216,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "package_devdependencies_types_gapi_client_sheets",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 116,
+      "community_name": "@types/gapi.client.sheets",
       "norm_label": "@types/gapi.client.sheets"
     },
     {
@@ -2227,8 +2227,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "types_gapi_client_sheets",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 116,
+      "community_name": "@types/gapi.client.sheets",
       "norm_label": "@types/gapi.client.sheets"
     },
     {
@@ -3016,7 +3016,7 @@
       "label": "UnitCard",
       "file_type": "code",
       "source_file": "src/components/UnitCard.tsx",
-      "source_location": "L103",
+      "source_location": "L94",
       "_origin": "ast",
       "id": "src_components_unitcard_unitcard",
       "community": 123,
@@ -21023,7 +21023,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/UnitCard.tsx",
-      "source_location": "L103",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_unitcard",
@@ -21034,7 +21034,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/components/UnitCard.tsx",
-      "source_location": "L103",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -33440,5 +33440,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "cf54532b506c8b5c906e3f795bbc126bea213b0b"
+  "built_at_commit": "829700b9d98885135f682c9872f2c538478fecc4"
 }

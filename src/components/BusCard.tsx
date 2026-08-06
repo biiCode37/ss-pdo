@@ -313,13 +313,13 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
 
     const parts: string[] = [];
     if (totalKm > 0) {
-      parts.push(`Total KM: ${totalKm.toLocaleString('id-ID')} KM`);
+      parts.push(`${totalKm.toLocaleString('id-ID')} KM`);
     } else if (bus.kmAwal1 || bus.kmAkhir1) {
       parts.push(`KM S1: ${bus.kmAwal1 || '-'}-${bus.kmAkhir1 || '-'}`);
     }
 
     if (totalPnp > 0) {
-      parts.push(`Total Pnp: ${totalPnp.toLocaleString('id-ID')} Pnp`);
+      parts.push(`${totalPnp.toLocaleString('id-ID')} Pnp`);
     } else if (bus.toaShift1 || bus.totalToa) {
       parts.push(`TOA: ${bus.totalToa || bus.toaShift1 || '0'}`);
     }

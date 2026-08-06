@@ -51,7 +51,7 @@ function UnitCardComponent({ item, onClick }: Props) {
         {/* Total KM */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <Navigation size={13} style={{ color: '#38bdf8', flexShrink: 0 }} />
-          <span>KM: <strong style={{ color: '#38bdf8', fontWeight: 800 }}>{item.totalKm.toLocaleString('id-ID')}</strong> KM</span>
+          <strong style={{ color: '#38bdf8', fontWeight: 800 }}>{item.totalKm.toLocaleString('id-ID')}</strong> <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>KM</span>
         </div>
 
         <span style={{ opacity: 0.3 }}>|</span>
@@ -59,7 +59,7 @@ function UnitCardComponent({ item, onClick }: Props) {
         {/* Total Pnp */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <Users size={13} style={{ color: '#38bdf8', flexShrink: 0 }} />
-          <span>Pnp: <strong style={{ color: 'var(--text-primary)', fontWeight: 800 }}>{item.totalPassengers.toLocaleString('id-ID')}</strong> Pnp</span>
+          <strong style={{ color: 'var(--text-primary)', fontWeight: 800 }}>{item.totalPassengers.toLocaleString('id-ID')}</strong> <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Pnp</span>
         </div>
       </div>
 
