@@ -80,9 +80,9 @@
     "semantic_hash": ""
   },
   "src/components/AnalyticsDashboard.tsx": {
-    "mtime": 1785608629.1165645,
-    "ast_hash": "2c837b6d02dda758cbc04d5c80920ad5",
-    "semantic_hash": "2c837b6d02dda758cbc04d5c80920ad5"
+    "mtime": 1785987269.0919292,
+    "ast_hash": "9545598dae2364ef11d987b86b8473a0",
+    "semantic_hash": ""
   },
   "src/components/BottomNav.tsx": {
     "mtime": 1785954253.4481828,
@@ -90,13 +90,13 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
-    "mtime": 1785982724.241361,
-    "ast_hash": "279bc536e974eee64b8fb69c6f1eaa1d",
+    "mtime": 1785985964.026404,
+    "ast_hash": "7dcfda55387e10f824998a6c21f52394",
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
-    "mtime": 1785978836.6372986,
-    "ast_hash": "be429c709c65b7f97948a4fac60b33da",
+    "mtime": 1785987958.7261574,
+    "ast_hash": "aaeb6584912d3c9ac1eea613e0322417",
     "semantic_hash": ""
   },
   "src/components/CompletionStatusCard.tsx": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1785978787.5898566,
-    "ast_hash": "8da37912ae926785b4524b5b7bc407bf",
+    "mtime": 1785987694.4400766,
+    "ast_hash": "be1f2b76471f070e0edbb0887909b732",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   ".agents/AGENTS.md": {
-    "mtime": 1785812520.2331479,
-    "ast_hash": "2b3d8cc01addfecb850d9dd3acdd9cce",
+    "mtime": 1785982955.4140997,
+    "ast_hash": "db126087ff48b0896451fbd0e3611948",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitCard.tsx": {
-    "mtime": 1785982764.4102647,
-    "ast_hash": "e782a7b06f0e8f10034683dfb5514cb3",
+    "mtime": 1785984147.9741352,
+    "ast_hash": "921857f64649a653582ed476d0308573",
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitSummaryDashboard.tsx": {
-    "mtime": 1785978884.6200328,
-    "ast_hash": "f0afd45696a36fce2bec515a11cc69e7",
+    "mtime": 1785987946.1847785,
+    "ast_hash": "23f32f5df2f632d658326fbb15d4257b",
     "semantic_hash": ""
   },
   "src/utils/unitAnalytics.test.ts": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/utils/unitAnalytics.ts": {
-    "mtime": 1785982582.7338197,
-    "ast_hash": "d6b5ed2c5021be22d09cf1dcecbf7e5e",
+    "mtime": 1785983563.1526358,
+    "ast_hash": "57c44f9c6dae3154ec9b9d534420b90b",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md": {

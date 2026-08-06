@@ -67,3 +67,12 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 - **Mode Ponytail (Wajib Aktif):** Selalu terapkan prinsip YAGNI (*You Aren't Gonna Need It*) dan *Lazy Senior Dev*. Gunakan solusi native/standard library, buat kode seminimal & seefisien mungkin tanpa over-engineering/abstraksi tak perlu, serta cantumkan komentar `// ponytail: [alasan]` jika ada penyederhanaan teknis.
 - **Graphify (Wajib Aktif):** Selalu manfaatkan Knowledge Graph pada `graphify-out/` untuk kueri arsitektur/navigasi file, dan jalankan `graphify update .` secara otomatis setelah setiap perubahan kode untuk menjaga graf pengetahuan tetap *up-to-date*.
 
+---
+
+## 📌 8. Kebijakan Commit Git (Hindari Over-Commit)
+
+- **Aturan Emas:** Dilarang melakukan `git commit` untuk perubahan-perubahan kecil / mikro (seperti tweaking spacing, penyesuaian teks kecil, ganti warna/padding, dll).
+- Kumpulkan beberapa perubahan kecil dalam satu sesi/fitur sebelum melakukan commit agar riwayat commit Git tetap rapi, bersih, dan tidak terlalu banyak.
+- Lakukan `git commit` hanya jika fitur utama telah selesai, ada milestone penting, atau diminta langsung oleh User.
+
+

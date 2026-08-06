@@ -90,12 +90,12 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
-    "mtime": 1785982408.5850923,
-    "ast_hash": "06a86f7894823bec8358ae2ad6237285",
+    "mtime": 1785985964.026404,
+    "ast_hash": "7dcfda55387e10f824998a6c21f52394",
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
-    "mtime": 1785978836.6372986,
+    "mtime": 1785986812.3374043,
     "ast_hash": "be429c709c65b7f97948a4fac60b33da",
     "semantic_hash": ""
   },
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1785978787.5898566,
-    "ast_hash": "8da37912ae926785b4524b5b7bc407bf",
+    "mtime": 1785986253.7128968,
+    "ast_hash": "f4a469397881827ed3d93d6591f3dd59",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   ".agents/AGENTS.md": {
-    "mtime": 1785812520.2331479,
-    "ast_hash": "2b3d8cc01addfecb850d9dd3acdd9cce",
+    "mtime": 1785982955.4140997,
+    "ast_hash": "db126087ff48b0896451fbd0e3611948",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitCard.tsx": {
-    "mtime": 1785982591.2757263,
-    "ast_hash": "5efb3b17797ebeaefe787eec3129ce6b",
+    "mtime": 1785984147.9741352,
+    "ast_hash": "921857f64649a653582ed476d0308573",
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
@@ -725,7 +725,7 @@
     "semantic_hash": ""
   },
   "src/components/UnitSummaryDashboard.tsx": {
-    "mtime": 1785978884.6200328,
+    "mtime": 1785986808.1017327,
     "ast_hash": "f0afd45696a36fce2bec515a11cc69e7",
     "semantic_hash": ""
   },
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "src/utils/unitAnalytics.ts": {
-    "mtime": 1785982582.7338197,
-    "ast_hash": "d6b5ed2c5021be22d09cf1dcecbf7e5e",
+    "mtime": 1785983563.1526358,
+    "ast_hash": "57c44f9c6dae3154ec9b9d534420b90b",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md": {

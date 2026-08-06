@@ -1,11 +1,14 @@
 import type { BusData } from '../services/googleSheets';
 
+export type UnitShiftStatus = 'FULL_COMPLETE' | 'SHIFT_1_ONLY' | 'SHIFT_2_ONLY' | 'INCOMPLETE' | 'EMPTY';
+
 export interface UnitSummaryItem {
   unit: string;
   totalToa: number;
   totalPassengers: number;
   totalKm: number;
   isFilled: boolean;
+  shiftStatus: UnitShiftStatus;
   notes: string[];
   noteCount: number;
 }
@@ -30,6 +33,34 @@ export interface UnitSummaryMetrics {
   notes: string[];
 }
 
+export function getUnitShiftStatus(b: BusData): UnitShiftStatus {
+  const hasValue = (val: any) => val !== undefined && val !== null && String(val).trim() !== '' && String(val).trim() !== '-';
+
+  const hasS1Toa = hasValue(b.toaShift1);
+  const hasS1KmAwal = hasValue(b.kmAwal1);
+  const hasS1KmAkhir = hasValue(b.kmAkhir1);
+  const hasS1Manual = hasValue(b.manualShift1);
+
+  const hasS1 = hasS1Toa || hasS1KmAwal || hasS1KmAkhir || hasS1Manual;
+  const isS1Complete = (hasS1Toa || hasValue(b.totalToa)) && hasS1KmAwal && hasS1KmAkhir;
+
+  const hasS2KmAwal = hasValue(b.kmAwal2);
+  const hasS2KmAkhir = hasValue(b.kmAkhir2);
+  const hasS2Manual = hasValue(b.manualShift2);
+  const totalToaNum = parseInt(String(b.totalToa || '0'), 10) || 0;
+  const s1ToaNum = parseInt(String(b.toaShift1 || '0'), 10) || 0;
+  const hasS2Toa = totalToaNum > s1ToaNum || (totalToaNum > 0 && !hasS1Toa);
+
+  const hasS2 = hasS2Toa || hasS2KmAwal || hasS2KmAkhir || hasS2Manual;
+  const isS2Complete = (hasS2Toa || totalToaNum > 0) && hasS2KmAwal && hasS2KmAkhir;
+
+  if (isS1Complete && isS2Complete) return 'FULL_COMPLETE';
+  if (hasS1 && !hasS2) return 'SHIFT_1_ONLY';
+  if (!hasS1 && hasS2) return 'SHIFT_2_ONLY';
+  if (hasS1 || hasS2) return 'INCOMPLETE';
+  return 'EMPTY';
+}
+
 export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
   if (!data || data.length === 0) return [];
   
@@ -41,6 +72,7 @@ export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
       totalPassengers: metrics.totalPassengers,
       totalKm: metrics.totalKm,
       isFilled: metrics.totalPassengers > 0 || metrics.totalKm > 0 || metrics.notes.length > 0 || metrics.kmAwal1 !== '-',
+      shiftStatus: getUnitShiftStatus(b),
       notes: metrics.notes,
       noteCount: metrics.notes.length,
     };

@@ -93,7 +93,7 @@ export function BusList({
     <div>
       <div
         className="progress-section glass"
-        style={{ padding: "16px", marginBottom: "16px" }}
+        style={{ padding: "16px", marginBottom: "12px" }}
       >
         <div
           style={{

@@ -1,11 +1,21 @@
-import { useState, useEffect, useRef, memo } from 'react';
-import { useDebounce } from '../hooks/useDebounce';
-import type { BusData, HeaderMap } from '../services/googleSheets';
-import { updateBusData, getBusRowData } from '../services/googleSheets';
-import { isNetworkError } from '../hooks/useOfflineSync';
-import { formatUserError } from '../utils/errorFormatter';
-import { slugifyUnitId } from '../utils/analytics';
-import { ChevronDown, ChevronUp, Save, Loader2, Check, Copy, AlertTriangle } from 'lucide-react';
+import { useState, useEffect, useRef, memo } from "react";
+import { useDebounce } from "../hooks/useDebounce";
+import type { BusData, HeaderMap } from "../services/googleSheets";
+import { updateBusData, getBusRowData } from "../services/googleSheets";
+import { isNetworkError } from "../hooks/useOfflineSync";
+import { formatUserError } from "../utils/errorFormatter";
+import { slugifyUnitId } from "../utils/analytics";
+import {
+  Save,
+  Loader2,
+  Check,
+  Copy,
+  AlertTriangle,
+  Navigation,
+  Users,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 
 interface Props {
   bus: BusData;
@@ -18,7 +28,16 @@ interface Props {
   onUpdateBus?: (updates: Partial<BusData>) => void;
 }
 
-function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQueue, activeCategory, onUpdateBus }: Props) {
+function BusCardComponent({
+  bus,
+  sheetId,
+  tabName,
+  headerMap,
+  isQueued,
+  addToQueue,
+  activeCategory,
+  onUpdateBus,
+}: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const draftKey = `draft_bus_${sheetId}_${tabName}_${bus.rowIndex}`;
 
@@ -31,45 +50,53 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
         const parsed = JSON.parse(savedDraft);
         const getVal = (key: keyof BusData): string => {
           const dVal = parsed[key];
-          if (dVal !== undefined && dVal !== null && String(dVal).trim() !== '') {
+          if (
+            dVal !== undefined &&
+            dVal !== null &&
+            String(dVal).trim() !== ""
+          ) {
             return String(dVal);
           }
           const bVal = bus[key];
-          return typeof bVal === 'string' ? bVal : '';
+          return typeof bVal === "string" ? bVal : "";
         };
         return {
-          toaShift1: getVal('toaShift1'),
-          manualShift1: getVal('manualShift1'),
-          manualShift2: getVal('manualShift2'),
-          totalToa: getVal('totalToa'),
-          kmAwal1: getVal('kmAwal1'),
-          kmAkhir1: getVal('kmAkhir1'),
-          kmAwal2: getVal('kmAwal2'),
-          kmAkhir2: getVal('kmAkhir2'),
-          keterangan: getVal('keterangan'),
+          toaShift1: getVal("toaShift1"),
+          manualShift1: getVal("manualShift1"),
+          manualShift2: getVal("manualShift2"),
+          totalToa: getVal("totalToa"),
+          kmAwal1: getVal("kmAwal1"),
+          kmAkhir1: getVal("kmAkhir1"),
+          kmAwal2: getVal("kmAwal2"),
+          kmAkhir2: getVal("kmAkhir2"),
+          keterangan: getVal("keterangan"),
         };
       } catch (e) {
         // ignore JSON parse error
       }
     }
     return {
-      toaShift1: bus.toaShift1 || '',
-      manualShift1: bus.manualShift1 || '',
-      manualShift2: bus.manualShift2 || '',
-      totalToa: bus.totalToa || '',
-      kmAwal1: bus.kmAwal1 || '',
-      kmAkhir1: bus.kmAkhir1 || '',
-      kmAwal2: bus.kmAwal2 || '',
-      kmAkhir2: bus.kmAkhir2 || '',
-      keterangan: bus.keterangan || '',
+      toaShift1: bus.toaShift1 || "",
+      manualShift1: bus.manualShift1 || "",
+      manualShift2: bus.manualShift2 || "",
+      totalToa: bus.totalToa || "",
+      kmAwal1: bus.kmAwal1 || "",
+      kmAkhir1: bus.kmAkhir1 || "",
+      kmAwal2: bus.kmAwal2 || "",
+      kmAkhir2: bus.kmAkhir2 || "",
+      keterangan: bus.keterangan || "",
     };
   });
-  
+
   const [isLoading, setIsLoading] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'queued'>('idle');
+  const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "queued">(
+    "idle",
+  );
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
-  const [conflictData, setConflictData] = useState<Partial<BusData> | null>(null);
+  const [conflictData, setConflictData] = useState<Partial<BusData> | null>(
+    null,
+  );
 
   const debouncedFormData = useDebounce(formData, 1000);
 
@@ -77,15 +104,15 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
   useEffect(() => {
     if (!isDirtyRef.current) {
       setFormData({
-        toaShift1: bus.toaShift1 || '',
-        manualShift1: bus.manualShift1 || '',
-        manualShift2: bus.manualShift2 || '',
-        totalToa: bus.totalToa || '',
-        kmAwal1: bus.kmAwal1 || '',
-        kmAkhir1: bus.kmAkhir1 || '',
-        kmAwal2: bus.kmAwal2 || '',
-        kmAkhir2: bus.kmAkhir2 || '',
-        keterangan: bus.keterangan || '',
+        toaShift1: bus.toaShift1 || "",
+        manualShift1: bus.manualShift1 || "",
+        manualShift2: bus.manualShift2 || "",
+        totalToa: bus.totalToa || "",
+        kmAwal1: bus.kmAwal1 || "",
+        kmAkhir1: bus.kmAkhir1 || "",
+        kmAwal2: bus.kmAwal2 || "",
+        kmAkhir2: bus.kmAkhir2 || "",
+        keterangan: bus.keterangan || "",
       });
     }
   }, [bus]);
@@ -103,7 +130,7 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.currentTarget.blur();
       handleSave(false);
     }
@@ -124,20 +151,20 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
       }
     };
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
+      if (document.visibilityState === "hidden") {
         saveImmediately();
       }
     };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('pagehide', saveImmediately);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", saveImmediately);
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('pagehide', saveImmediately);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", saveImmediately);
     };
   }, [formData, draftKey]);
 
   useEffect(() => {
-    if (isExpanded && activeCategory !== 'ALL') {
+    if (isExpanded && activeCategory !== "ALL") {
       const timer = setTimeout(() => {
         const ref = inputRefs[activeCategory as keyof typeof inputRefs];
         if (ref && ref.current && !ref.current.disabled) {
@@ -148,18 +175,19 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
     }
   }, [isExpanded, activeCategory]);
 
-  const handleChange = (field: keyof BusData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    isDirtyRef.current = true;
-    setFormData(prev => ({ ...prev, [field]: e.target.value }));
-    setSaveStatus('idle');
-    setError(null);
-  };
+  const handleChange =
+    (field: keyof BusData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      isDirtyRef.current = true;
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+      setSaveStatus("idle");
+      setError(null);
+    };
 
   const handleCopyKm = () => {
     if (formData.kmAkhir1) {
       isDirtyRef.current = true;
-      setFormData(prev => ({ ...prev, kmAwal2: prev.kmAkhir1 }));
-      setSaveStatus('idle');
+      setFormData((prev) => ({ ...prev, kmAwal2: prev.kmAkhir1 }));
+      setSaveStatus("idle");
       setError(null);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
@@ -180,15 +208,15 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
     };
 
     if (!checkKm(formData.kmAwal1, formData.kmAkhir1)) {
-      setError('KM Akhir Shift 1 tidak boleh lebih kecil dari KM Awal Shift 1');
+      setError("KM Akhir Shift 1 tidak boleh lebih kecil dari KM Awal Shift 1");
       return;
     }
     if (!checkKm(formData.kmAwal2, formData.kmAkhir2)) {
-      setError('KM Akhir Shift 2 tidak boleh lebih kecil dari KM Awal Shift 2');
+      setError("KM Akhir Shift 2 tidak boleh lebih kecil dari KM Awal Shift 2");
       return;
     }
     if (!checkKm(formData.kmAkhir1, formData.kmAwal2)) {
-      setError('KM Awal Shift 2 tidak boleh lebih kecil dari KM Akhir Shift 1');
+      setError("KM Awal Shift 2 tidak boleh lebih kecil dari KM Akhir Shift 1");
       return;
     }
 
@@ -197,17 +225,29 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
     try {
       if (!forceOverwrite) {
         // Pre-flight check
-        const remoteData = await getBusRowData(sheetId, tabName, bus.rowIndex, headerMap);
-        
+        const remoteData = await getBusRowData(
+          sheetId,
+          tabName,
+          bus.rowIndex,
+          headerMap,
+        );
+
         // Cek apakah ada field yang berubah dari snapshot asli (bus props)
         const fieldsToCheck: (keyof BusData)[] = [
-          'toaShift1', 'manualShift1', 'manualShift2', 'totalToa',
-          'kmAwal1', 'kmAkhir1', 'kmAwal2', 'kmAkhir2', 'keterangan'
+          "toaShift1",
+          "manualShift1",
+          "manualShift2",
+          "totalToa",
+          "kmAwal1",
+          "kmAkhir1",
+          "kmAwal2",
+          "kmAkhir2",
+          "keterangan",
         ];
-        
+
         let hasCollision = false;
         for (const field of fieldsToCheck) {
-          if ((remoteData[field] || '') !== (bus[field] || '')) {
+          if ((remoteData[field] || "") !== (bus[field] || "")) {
             hasCollision = true;
             break;
           }
@@ -222,7 +262,7 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
 
       await updateBusData(sheetId, tabName, bus.rowIndex, formData, headerMap);
       isDirtyRef.current = false;
-      setSaveStatus('success');
+      setSaveStatus("success");
       localStorage.removeItem(draftKey);
       setConflictData(null);
       if (onUpdateBus) {
@@ -244,165 +284,279 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
           kmAkhir2: bus.kmAkhir2,
           keterangan: bus.keterangan,
         };
-        addToQueue({ sheetId, tabName, rowIndex: bus.rowIndex, updates: formData, headerMap, originalSnapshot });
+        addToQueue({
+          sheetId,
+          tabName,
+          rowIndex: bus.rowIndex,
+          updates: formData,
+          headerMap,
+          originalSnapshot,
+        });
         isDirtyRef.current = false;
-        setSaveStatus('queued');
+        setSaveStatus("queued");
         localStorage.removeItem(draftKey);
         setIsExpanded(false);
       } else {
         // BUG-30: Centrally format all errors (including session/auth/credentials) via formatUserError
-        setSaveStatus('idle');
-        setError(formatUserError(err, 'Gagal menyimpan data bus. Silakan coba lagi.'));
+        setSaveStatus("idle");
+        setError(
+          formatUserError(err, "Gagal menyimpan data bus. Silakan coba lagi."),
+        );
       }
     } finally {
       setIsLoading(false);
     }
   };
 
-
-
   const isFieldDisabled = (fieldName: string) => {
     if (isLoading) return true;
-    if (activeCategory === 'ALL') return false;
+    if (activeCategory === "ALL") return false;
     // BUG-07: Field pelengkap (catatan/manual) selalu aktif, bukan kolom kerja utama
-    const alwaysEnabledFields = ['manualShift1', 'manualShift2', 'keterangan'];
+    const alwaysEnabledFields = ["manualShift1", "manualShift2", "keterangan"];
     if (alwaysEnabledFields.includes(fieldName)) return false;
     return fieldName !== activeCategory;
   };
 
   const renderServerSummary = () => {
-    const CATEGORY_LABELS: Record<string, string> = {
-      toaShift1: 'TOA S1',
-      totalToa: 'Total TOA',
-      manualShift1: 'Manual S1',
-      manualShift2: 'Manual S2',
-      kmAwal1: 'KM Awal S1',
-      kmAkhir1: 'KM Akhir S1',
-      kmAwal2: 'KM Awal S2',
-      kmAkhir2: 'KM Akhir S2',
-      keterangan: 'Keterangan',
-    };
-
-    if (activeCategory !== 'ALL') {
-      const val = bus[activeCategory as keyof BusData];
-      const label = CATEGORY_LABELS[activeCategory] || activeCategory;
-      if (val !== undefined && val !== null && String(val).trim() !== '') {
-        return <span style={{ color: 'var(--text-secondary)' }}>{label}: {val}</span>;
-      }
-      return <span style={{ color: '#f87171', fontWeight: 500 }}>Belum Terisi</span>;
-    }
-
     // Hitung Total Pnp & Total KM untuk ringkasan kartu unit
-    const toaShift1Num = parseInt(String(formData.toaShift1 || bus.toaShift1 || '0'), 10) || 0;
-    const totalToaNum = parseInt(String(formData.totalToa || bus.totalToa || '0'), 10) || 0;
-    const manual1Num = parseInt(String(formData.manualShift1 || bus.manualShift1 || '0'), 10) || 0;
-    const manual2Num = parseInt(String(formData.manualShift2 || bus.manualShift2 || '0'), 10) || 0;
+    const toaShift1Num =
+      parseInt(String(formData.toaShift1 || bus.toaShift1 || "0"), 10) || 0;
+    const totalToaNum =
+      parseInt(String(formData.totalToa || bus.totalToa || "0"), 10) || 0;
+    const manual1Num =
+      parseInt(String(formData.manualShift1 || bus.manualShift1 || "0"), 10) ||
+      0;
+    const manual2Num =
+      parseInt(String(formData.manualShift2 || bus.manualShift2 || "0"), 10) ||
+      0;
 
     const totalToa = totalToaNum > 0 ? totalToaNum : toaShift1Num;
     const totalPnp = totalToa + manual1Num + manual2Num;
 
-    const kmA1 = parseFloat(String(formData.kmAwal1 || bus.kmAwal1 || '0')) || 0;
-    const kmAk1 = parseFloat(String(formData.kmAkhir1 || bus.kmAkhir1 || '0')) || 0;
+    const kmA1 =
+      parseFloat(String(formData.kmAwal1 || bus.kmAwal1 || "0")) || 0;
+    const kmAk1 =
+      parseFloat(String(formData.kmAkhir1 || bus.kmAkhir1 || "0")) || 0;
     const kmS1 = kmAk1 > kmA1 ? kmAk1 - kmA1 : 0;
 
-    const kmA2 = parseFloat(String(formData.kmAwal2 || bus.kmAwal2 || '0')) || 0;
-    const kmAk2 = parseFloat(String(formData.kmAkhir2 || bus.kmAkhir2 || '0')) || 0;
+    const kmA2 =
+      parseFloat(String(formData.kmAwal2 || bus.kmAwal2 || "0")) || 0;
+    const kmAk2 =
+      parseFloat(String(formData.kmAkhir2 || bus.kmAkhir2 || "0")) || 0;
     const kmS2 = kmAk2 > kmA2 ? kmAk2 - kmA2 : 0;
 
     const totalKm = kmS1 + kmS2;
 
-    const parts: string[] = [];
-    if (totalKm > 0) {
-      parts.push(`${totalKm.toLocaleString('id-ID')} KM`);
-    } else if (bus.kmAwal1 || bus.kmAkhir1) {
-      parts.push(`KM S1: ${bus.kmAwal1 || '-'}-${bus.kmAkhir1 || '-'}`);
+    const hasKm = totalKm > 0 || !!(formData.kmAwal1 || bus.kmAwal1);
+    const hasPnp =
+      totalPnp > 0 || !!(formData.toaShift1 || bus.toaShift1 || bus.totalToa);
+
+    // Kategori Spesifik (Jika BUKAN 'ALL')
+    if (activeCategory !== "ALL") {
+      const CATEGORY_LABELS: Record<string, string> = {
+        toaShift1: "TOA S1",
+        totalToa: "Total TOA",
+        manualShift1: "Manual S1",
+        manualShift2: "Manual S2",
+        kmAwal1: "KM Awal S1",
+        kmAkhir1: "KM Akhir S1",
+        kmAwal2: "KM Awal S2",
+        kmAkhir2: "KM Akhir S2",
+        keterangan: "Keterangan",
+      };
+      const val =
+        formData[activeCategory as keyof BusData] ??
+        bus[activeCategory as keyof BusData];
+      const label = CATEGORY_LABELS[activeCategory] || activeCategory;
+      const isFilled =
+        val !== undefined && val !== null && String(val).trim() !== "";
+
+      return (
+        <div
+          style={{
+            fontSize: "11px",
+            fontWeight: 700,
+            padding: "3px 8px",
+            borderRadius: "8px",
+            backgroundColor: isFilled
+              ? "rgba(34, 197, 94, 0.15)"
+              : "rgba(239, 68, 68, 0.15)",
+            color: isFilled
+              ? "var(--success-color, #22c55e)"
+              : "var(--danger-color, #ef4444)",
+            border: isFilled
+              ? "1px solid rgba(34, 197, 94, 0.3)"
+              : "1px solid rgba(239, 68, 68, 0.3)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "4px",
+          }}
+        >
+          {isFilled ? (
+            <CheckCircle2 size={12} style={{ flexShrink: 0 }} />
+          ) : (
+            <AlertCircle size={12} style={{ flexShrink: 0 }} />
+          )}
+          <span>
+            {label}: {isFilled ? String(val) : "0"}
+          </span>
+        </div>
+      );
     }
 
-    if (totalPnp > 0) {
-      parts.push(`${totalPnp.toLocaleString('id-ID')} Pnp`);
-    } else if (bus.toaShift1 || bus.totalToa) {
-      parts.push(`TOA: ${bus.totalToa || bus.toaShift1 || '0'}`);
+    if (!hasKm && !hasPnp) {
+      return (
+        <span
+          style={{
+            fontSize: "11px",
+            fontWeight: 600,
+            padding: "3px 8px",
+            borderRadius: "8px",
+            backgroundColor: "rgba(239, 68, 68, 0.15)",
+            color: "var(--danger-color, #ef4444)",
+          }}
+        >
+          Kosong
+        </span>
+      );
     }
 
-    if (parts.length === 0) {
-      return <span style={{ color: '#f87171', fontWeight: 500 }}>Belum Terisi</span>;
-    }
-    return <span style={{ color: 'var(--text-secondary)' }}>{parts.join(' | ')}</span>;
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        {/* Badge 1: KM */}
+        <div
+          style={{
+            fontSize: "11px",
+            fontWeight: 700,
+            padding: "3px 8px",
+            borderRadius: "8px",
+            backgroundColor: "rgba(56, 189, 248, 0.12)",
+            color: "#38bdf8",
+            border: "1px solid rgba(56, 189, 248, 0.25)",
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+          }}
+        >
+          <Navigation size={12} style={{ flexShrink: 0 }} />
+          <span>
+            {totalKm > 0 ? `${totalKm.toLocaleString("id-ID")} KM` : `0 KM`}
+          </span>
+        </div>
+
+        {/* Badge 2: Pnp */}
+        <div
+          style={{
+            fontSize: "11px",
+            fontWeight: 700,
+            padding: "3px 8px",
+            borderRadius: "8px",
+            backgroundColor: "rgba(255, 255, 255, 0.08)",
+            color: "var(--text-primary)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+          }}
+        >
+          <Users size={12} style={{ color: "#38bdf8", flexShrink: 0 }} />
+          <span>
+            {totalPnp > 0 ? `${totalPnp.toLocaleString("id-ID")} Pnp` : `0 Pnp`}
+          </span>
+        </div>
+      </div>
+    );
   };
 
   return (
     <div id={`bus-card-${slugifyUnitId(bus.unit)}`} className="bus-card glass">
-      <div 
+      <div
         className="bus-card-header"
         onClick={() => setIsExpanded(!isExpanded)}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <div className="bus-card-title" style={{ alignItems: 'flex-start', flexDirection: 'column', gap: '2px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>{bus.unit}</span>
-            {(saveStatus === 'queued' || isQueued) && (
-              <span className="bus-card-status status-queued">Menunggu Sinyal</span>
-            )}
-          </div>
-          <div style={{ fontSize: '12px', fontWeight: 'normal', opacity: 0.9 }}>
-            {renderServerSummary()}
-          </div>
+        {/* Title: No Body / Unit */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
+          {(saveStatus === "queued" || isQueued) && (
+            <span className="bus-card-status status-queued">
+              Menunggu Sinyal
+            </span>
+          )}
         </div>
-        <div style={{ alignSelf: 'flex-start', marginTop: '2px' }}>
-          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+
+        {/* Pojok Kanan Atas: Helper Summary Badges (Terpisah KM & Pnp) */}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {renderServerSummary()}
         </div>
       </div>
-      
-      {formData.keterangan && formData.keterangan.trim() !== '' && (
-        <div 
+
+      {formData.keterangan && formData.keterangan.trim() !== "" && (
+        <div
           onClick={() => setIsExpanded(true)}
-          style={{ 
-            margin: '0 20px 12px 20px', 
-            fontSize: '12px',
-            color: '#fdba74',
+          style={{
+            margin: "0 20px 12px 20px",
+            fontSize: "12px",
+            color: "#fdba74",
             fontWeight: 600,
-            letterSpacing: '0.01em',
-            display: 'flex',
-            gap: '6px',
-            alignItems: 'center',
-            cursor: 'pointer'
-          }}>
-          <AlertTriangle size={14} style={{ color: '#f97316', flexShrink: 0 }} />
-          <span style={{ lineHeight: '1.4', wordBreak: 'break-word', textTransform: 'uppercase' }}>{formData.keterangan}</span>
+            letterSpacing: "0.01em",
+            display: "flex",
+            gap: "6px",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+        >
+          <AlertTriangle
+            size={14}
+            style={{ color: "#f97316", flexShrink: 0 }}
+          />
+          <span
+            style={{
+              lineHeight: "1.4",
+              wordBreak: "break-word",
+              textTransform: "uppercase",
+            }}
+          >
+            {formData.keterangan}
+          </span>
         </div>
       )}
 
       {isExpanded && (
         <div className="bus-card-content">
-          
           <div className="form-grid full">
             <div className="input-group">
               <label>TOA SHIFT 1</label>
-              <input 
+              <input
                 ref={inputRefs.toaShift1}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.toaShift1 || ''} 
-                onChange={handleChange('toaShift1')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.toaShift1 || ""}
+                onChange={handleChange("toaShift1")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('toaShift1')}
+                disabled={isFieldDisabled("toaShift1")}
               />
             </div>
             <div className="input-group">
               <label>TOTAL TOA</label>
-              <input 
+              <input
                 ref={inputRefs.totalToa}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.totalToa || ''} 
-                onChange={handleChange('totalToa')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.totalToa || ""}
+                onChange={handleChange("totalToa")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('totalToa')}
+                disabled={isFieldDisabled("totalToa")}
               />
             </div>
           </div>
@@ -410,32 +564,32 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
           <div className="form-grid">
             <div className="input-group">
               <label>MANUAL SHIFT 1</label>
-              <input 
+              <input
                 ref={inputRefs.manualShift1}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.manualShift1 || ''} 
-                onChange={handleChange('manualShift1')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.manualShift1 || ""}
+                onChange={handleChange("manualShift1")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('manualShift1')}
+                disabled={isFieldDisabled("manualShift1")}
               />
             </div>
             <div className="input-group">
               <label>MANUAL SHIFT 2</label>
-              <input 
+              <input
                 ref={inputRefs.manualShift2}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.manualShift2 || ''} 
-                onChange={handleChange('manualShift2')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.manualShift2 || ""}
+                onChange={handleChange("manualShift2")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('manualShift2')}
+                disabled={isFieldDisabled("manualShift2")}
               />
             </div>
           </div>
@@ -443,85 +597,108 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
           <div className="form-grid">
             <div className="input-group">
               <label>KM Awal Shift 1</label>
-              <input 
+              <input
                 ref={inputRefs.kmAwal1}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.kmAwal1 || ''} 
-                onChange={handleChange('kmAwal1')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.kmAwal1 || ""}
+                onChange={handleChange("kmAwal1")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('kmAwal1')}
+                disabled={isFieldDisabled("kmAwal1")}
               />
             </div>
             <div className="input-group">
               <label>KM Akhir Shift 1</label>
-              <input 
+              <input
                 ref={inputRefs.kmAkhir1}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.kmAkhir1 || ''} 
-                onChange={handleChange('kmAkhir1')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.kmAkhir1 || ""}
+                onChange={handleChange("kmAkhir1")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('kmAkhir1')}
+                disabled={isFieldDisabled("kmAkhir1")}
               />
             </div>
           </div>
 
           <div className="form-grid">
-            <div className="input-group" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+            <div
+              className="input-group"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-end",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "6px",
+                }}
+              >
                 <label style={{ marginBottom: 0 }}>KM Awal Shift 2</label>
-                <button 
+                <button
                   type="button"
-                  onClick={handleCopyKm} 
-                  disabled={isFieldDisabled('kmAwal2') || !formData.kmAkhir1}
+                  onClick={handleCopyKm}
+                  disabled={isFieldDisabled("kmAwal2") || !formData.kmAkhir1}
                   aria-label="Salin KM Akhir 1"
-                  style={{ 
-                    background: 'none', 
-                    border: 'none', 
-                    color: isCopied ? 'var(--success-color)' : 'var(--accent-color)', 
-                    cursor: 'pointer', 
-                    padding: '4px', 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    transition: 'all 0.2s ease'
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: isCopied
+                      ? "var(--success-color)"
+                      : "var(--accent-color)",
+                    cursor: "pointer",
+                    padding: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    transition: "all 0.2s ease",
                   }}
                 >
                   {isCopied ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>
-              <input 
+              <input
                 ref={inputRefs.kmAwal2}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.kmAwal2 || ''} 
-                onChange={handleChange('kmAwal2')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.kmAwal2 || ""}
+                onChange={handleChange("kmAwal2")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('kmAwal2')}
+                disabled={isFieldDisabled("kmAwal2")}
               />
             </div>
-            <div className="input-group" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+            <div
+              className="input-group"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-end",
+              }}
+            >
               <label>KM Akhir Shift 2</label>
-              <input 
+              <input
                 ref={inputRefs.kmAkhir2}
-                type="number" 
-                inputMode="numeric" 
-                pattern="[0-9]*" 
-                className="input-field" 
-                value={formData.kmAkhir2 || ''} 
-                onChange={handleChange('kmAkhir2')}
+                type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                className="input-field"
+                value={formData.kmAkhir2 || ""}
+                onChange={handleChange("kmAkhir2")}
                 onKeyDown={handleKeyDown}
                 placeholder="0"
-                disabled={isFieldDisabled('kmAkhir2')}
+                disabled={isFieldDisabled("kmAkhir2")}
               />
             </div>
           </div>
@@ -529,76 +706,161 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
           <div className="form-grid full">
             <div className="input-group">
               <label>KETERANGAN</label>
-              <input 
+              <input
                 ref={inputRefs.keterangan}
-                type="text" 
-                className="input-field" 
-                value={formData.keterangan || ''} 
-                onChange={handleChange('keterangan')}
+                type="text"
+                className="input-field"
+                value={formData.keterangan || ""}
+                onChange={handleChange("keterangan")}
                 onKeyDown={handleKeyDown}
                 placeholder="Tambahkan keterangan..."
-                disabled={isFieldDisabled('keterangan')}
+                disabled={isFieldDisabled("keterangan")}
               />
             </div>
           </div>
 
-          {error && <div className="error-text" style={{ marginBottom: 12 }}>{error}</div>}
+          {error && (
+            <div className="error-text" style={{ marginBottom: 12 }}>
+              {error}
+            </div>
+          )}
 
           {conflictData && (
-            <div style={{ 
-              background: 'rgba(239, 68, 68, 0.1)', 
-              border: '1px solid var(--danger-color)', 
-              borderRadius: '8px', 
-              padding: '12px', 
-              marginTop: '12px',
-              marginBottom: '12px'
-            }}>
-              <h4 style={{ color: 'var(--danger-color)', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div
+              style={{
+                background: "rgba(239, 68, 68, 0.1)",
+                border: "1px solid var(--danger-color)",
+                borderRadius: "8px",
+                padding: "12px",
+                marginTop: "12px",
+                marginBottom: "12px",
+              }}
+            >
+              <h4
+                style={{
+                  color: "var(--danger-color)",
+                  margin: "0 0 8px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
                 ⚠️ Tabrakan Data Terdeteksi
               </h4>
-              <p style={{ fontSize: '13px', margin: '0 0 12px 0', lineHeight: 1.4, color: 'var(--text-secondary)' }}>
-                Petugas lain baru saja mengubah data bus ini di Google Sheets. Berikut adalah rincian data terbaru dari server:
+              <p
+                style={{
+                  fontSize: "13px",
+                  margin: "0 0 12px 0",
+                  lineHeight: 1.4,
+                  color: "var(--text-secondary)",
+                }}
+              >
+                Petugas lain baru saja mengubah data bus ini di Google Sheets.
+                Berikut adalah rincian data terbaru dari server:
               </p>
 
-              <div style={{ 
-                background: 'rgba(0, 0, 0, 0.25)', 
-                borderRadius: '6px', 
-                padding: '10px 12px', 
-                marginBottom: '12px',
-                fontSize: '12px'
-              }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <div
+                style={{
+                  background: "rgba(0, 0, 0, 0.25)",
+                  borderRadius: "6px",
+                  padding: "10px 12px",
+                  marginBottom: "12px",
+                  fontSize: "12px",
+                }}
+              >
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    textAlign: "left",
+                  }}
+                >
                   <thead>
-                    <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)', fontSize: '11px' }}>
-                      <th style={{ padding: '4px 0' }}>KOLOM</th>
-                      <th style={{ padding: '4px 0', color: 'var(--accent-color)' }}>DATA SERVER</th>
-                      <th style={{ padding: '4px 0', color: 'var(--danger-color)' }}>INPUT ANDA</th>
+                    <tr
+                      style={{
+                        borderBottom: "1px solid var(--border-color)",
+                        color: "var(--text-secondary)",
+                        fontSize: "11px",
+                      }}
+                    >
+                      <th style={{ padding: "4px 0" }}>KOLOM</th>
+                      <th
+                        style={{
+                          padding: "4px 0",
+                          color: "var(--accent-color)",
+                        }}
+                      >
+                        DATA SERVER
+                      </th>
+                      <th
+                        style={{
+                          padding: "4px 0",
+                          color: "var(--danger-color)",
+                        }}
+                      >
+                        INPUT ANDA
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {[
-                      { key: 'toaShift1', label: 'TOA Shift 1' },
-                      { key: 'totalToa', label: 'Total TOA' },
-                      { key: 'manualShift1', label: 'Manual Shift 1' },
-                      { key: 'manualShift2', label: 'Manual Shift 2' },
-                      { key: 'kmAwal1', label: 'KM Awal S1' },
-                      { key: 'kmAkhir1', label: 'KM Akhir S1' },
-                      { key: 'kmAwal2', label: 'KM Awal S2' },
-                      { key: 'kmAkhir2', label: 'KM Akhir S2' },
-                      { key: 'keterangan', label: 'Keterangan' },
-                    ].map(f => {
-                      const serverVal = conflictData[f.key as keyof BusData] || '';
-                      const localVal = formData[f.key as keyof BusData] || '';
-                      const isDiff = (serverVal !== (bus[f.key as keyof BusData] || '')) || (serverVal !== localVal);
+                      { key: "toaShift1", label: "TOA Shift 1" },
+                      { key: "totalToa", label: "Total TOA" },
+                      { key: "manualShift1", label: "Manual Shift 1" },
+                      { key: "manualShift2", label: "Manual Shift 2" },
+                      { key: "kmAwal1", label: "KM Awal S1" },
+                      { key: "kmAkhir1", label: "KM Akhir S1" },
+                      { key: "kmAwal2", label: "KM Awal S2" },
+                      { key: "kmAkhir2", label: "KM Akhir S2" },
+                      { key: "keterangan", label: "Keterangan" },
+                    ].map((f) => {
+                      const serverVal =
+                        conflictData[f.key as keyof BusData] || "";
+                      const localVal = formData[f.key as keyof BusData] || "";
+                      const isDiff =
+                        serverVal !== (bus[f.key as keyof BusData] || "") ||
+                        serverVal !== localVal;
                       if (!isDiff && !serverVal) return null;
                       return (
-                        <tr key={f.key} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                          <td style={{ padding: '6px 0', fontWeight: 600 }}>{f.label}</td>
-                          <td style={{ padding: '6px 0', color: 'var(--accent-color)', fontWeight: 'bold' }}>
-                            {serverVal || <span style={{ opacity: 0.5, fontStyle: 'italic' }}>(Kosong)</span>}
+                        <tr
+                          key={f.key}
+                          style={{
+                            borderBottom: "1px solid rgba(255,255,255,0.05)",
+                          }}
+                        >
+                          <td style={{ padding: "6px 0", fontWeight: 600 }}>
+                            {f.label}
                           </td>
-                          <td style={{ padding: '6px 0', color: isDiff ? 'var(--danger-color)' : 'var(--text-primary)' }}>
-                            {localVal || <span style={{ opacity: 0.5, fontStyle: 'italic' }}>(Kosong)</span>}
+                          <td
+                            style={{
+                              padding: "6px 0",
+                              color: "var(--accent-color)",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {serverVal || (
+                              <span
+                                style={{ opacity: 0.5, fontStyle: "italic" }}
+                              >
+                                (Kosong)
+                              </span>
+                            )}
+                          </td>
+                          <td
+                            style={{
+                              padding: "6px 0",
+                              color: isDiff
+                                ? "var(--danger-color)"
+                                : "var(--text-primary)",
+                            }}
+                          >
+                            {localVal || (
+                              <span
+                                style={{ opacity: 0.5, fontStyle: "italic" }}
+                              >
+                                (Kosong)
+                              </span>
+                            )}
                           </td>
                         </tr>
                       );
@@ -607,22 +869,30 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
                 </table>
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
-                <button 
-                  className="btn" 
-                  style={{ background: 'var(--surface-color)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+              <div
+                style={{ display: "flex", gap: "8px", flexDirection: "column" }}
+              >
+                <button
+                  className="btn"
+                  style={{
+                    background: "var(--surface-color)",
+                    border: "1px solid var(--border-color)",
+                    color: "var(--text-primary)",
+                  }}
                   onClick={() => {
                     isDirtyRef.current = false;
-                    setFormData(prev => ({ ...prev, ...conflictData }));
+                    setFormData((prev) => ({ ...prev, ...conflictData }));
                     setConflictData(null);
-                    setError('Form Anda telah diperbarui dengan data terbaru dari server.');
+                    setError(
+                      "Form Anda telah diperbarui dengan data terbaru dari server.",
+                    );
                   }}
                 >
                   Gunakan Data Server
                 </button>
-                <button 
-                  className="btn" 
-                  style={{ background: 'var(--danger-color)' }}
+                <button
+                  className="btn"
+                  style={{ background: "var(--danger-color)" }}
                   onClick={() => handleSave(true)}
                 >
                   Tetap Timpa (Force Save)
@@ -631,17 +901,28 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
             </div>
           )}
 
-          <button 
-            className="btn" 
+          <button
+            className="btn"
             onClick={() => handleSave(false)}
             disabled={isLoading}
-            style={{ 
-              backgroundColor: saveStatus === 'success' ? 'var(--success-color)' : '',
-              marginTop: '8px'
+            style={{
+              backgroundColor:
+                saveStatus === "success" ? "var(--success-color)" : "",
+              marginTop: "8px",
             }}
           >
-            {isLoading ? <Loader2 className="spinner" size={20} /> : saveStatus === 'success' ? <Check size={20} /> : <Save size={20} />}
-            {isLoading ? 'Menyimpan...' : saveStatus === 'success' ? 'Tersimpan!' : 'Simpan Data'}
+            {isLoading ? (
+              <Loader2 className="spinner" size={20} />
+            ) : saveStatus === "success" ? (
+              <Check size={20} />
+            ) : (
+              <Save size={20} />
+            )}
+            {isLoading
+              ? "Menyimpan..."
+              : saveStatus === "success"
+                ? "Tersimpan!"
+                : "Simpan Data"}
           </button>
         </div>
       )}

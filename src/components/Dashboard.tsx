@@ -25,7 +25,11 @@ import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
 
 import { UnitSummaryDashboard } from "./UnitSummaryDashboard";
-import { BusCardSkeleton } from "./Skeletons";
+import {
+  BusCardSkeleton,
+  DailyToaTrendSkeleton,
+  UnitCardSkeleton,
+} from "./Skeletons";
 
 interface Props {
   onLogout: () => void;
@@ -55,7 +59,9 @@ export function Dashboard({ onLogout }: Props) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mainTab, setMainTab] = useState<"input" | "analytics" | "units">("analytics");
+  const [mainTab, setMainTab] = useState<"input" | "analytics" | "units">(
+    "analytics",
+  );
 
   // Route Management State
   const [busData, setBusData] = useState<BusData[] | null>(null);
@@ -139,7 +145,11 @@ export function Dashboard({ onLogout }: Props) {
     localStorage.setItem("PDO_THEME", newTheme);
   };
 
-  const mainTabs: Array<"input" | "analytics" | "units"> = ["input", "analytics", "units"];
+  const mainTabs: Array<"input" | "analytics" | "units"> = [
+    "input",
+    "analytics",
+    "units",
+  ];
 
   const handleSwipeNextTab = () => {
     setMainTab((prev) => {
@@ -168,8 +178,6 @@ export function Dashboard({ onLogout }: Props) {
     };
     window.addEventListener("google-auth-expired", handleAuthExpired);
     window.addEventListener("google-login-success", handleLoginSuccess);
-
-
 
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -341,51 +349,64 @@ export function Dashboard({ onLogout }: Props) {
       {isAuthExpired && (
         <div
           style={{
-            background: 'var(--danger-color, #ef4444)',
-            color: '#ffffff',
-            padding: '12px 16px',
-            borderRadius: '12px',
-            marginBottom: '16px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '12px',
-            boxShadow: '0 4px 12px rgba(239, 68, 68, 0.25)',
+            background: "var(--danger-color, #ef4444)",
+            color: "#ffffff",
+            padding: "12px 16px",
+            borderRadius: "12px",
+            marginBottom: "16px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+            boxShadow: "0 4px 12px rgba(239, 68, 68, 0.25)",
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', fontWeight: 600 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              fontSize: "14px",
+              fontWeight: 600,
+            }}
+          >
             <AlertTriangle size={20} />
-            <span>Sesi Google Sheets kedaluwarsa. Ketuk tombol untuk perbarui sesi.</span>
+            <span>
+              Sesi Google Sheets kedaluwarsa. Ketuk tombol untuk perbarui sesi.
+            </span>
           </div>
           <button
             type="button"
             className="btn"
             style={{
-              background: '#ffffff',
-              color: 'var(--danger-color, #ef4444)',
-              fontWeight: 'bold',
-              whiteSpace: 'nowrap',
-              border: 'none',
-              padding: '8px 14px',
-              fontSize: '13px',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
+              background: "#ffffff",
+              color: "var(--danger-color, #ef4444)",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              border: "none",
+              padding: "8px 14px",
+              fontSize: "13px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
             }}
             onClick={handleReauthenticate}
             disabled={isReauthenticating}
           >
-            {isReauthenticating ? <RefreshCw size={14} className="spinner" /> : <RefreshCw size={14} />}
-            {isReauthenticating ? 'Memproses...' : 'Login Ulang'}
+            {isReauthenticating ? (
+              <RefreshCw size={14} className="spinner" />
+            ) : (
+              <RefreshCw size={14} />
+            )}
+            {isReauthenticating ? "Memproses..." : "Login Ulang"}
           </button>
         </div>
       )}
       <div
         className="app-header"
         style={{
-          marginBottom: "16px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -489,7 +510,9 @@ export function Dashboard({ onLogout }: Props) {
 
       {isLoading && !busData && (
         <div style={{ marginTop: "16px" }}>
-          <BusCardSkeleton count={5} />
+          {mainTab === "analytics" && <DailyToaTrendSkeleton />}
+          {mainTab === "input" && <BusCardSkeleton count={5} />}
+          {mainTab === "units" && <UnitCardSkeleton count={6} />}
         </div>
       )}
 
@@ -504,8 +527,10 @@ export function Dashboard({ onLogout }: Props) {
               height: mainTab === "input" ? "auto" : 0,
               overflow: mainTab === "input" ? "visible" : "hidden",
               opacity: mainTab === "input" ? 1 : 0,
-              transform: mainTab === "input" ? "translateY(0)" : "translateY(6px)",
-              transition: "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
+              transform: mainTab === "input" ? "scale(1)" : "scale(0.985)",
+              transition:
+                "opacity 0.15s cubic-bezier(0.32, 0.72, 0, 1), transform 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
+              willChange: "opacity, transform",
             }}
           >
             {missingColumns.length > 0 && (
@@ -561,8 +586,10 @@ export function Dashboard({ onLogout }: Props) {
               height: mainTab === "analytics" ? "auto" : 0,
               overflow: mainTab === "analytics" ? "visible" : "hidden",
               opacity: mainTab === "analytics" ? 1 : 0,
-              transform: mainTab === "analytics" ? "translateY(0)" : "translateY(6px)",
-              transition: "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
+              transform: mainTab === "analytics" ? "scale(1)" : "scale(0.985)",
+              transition:
+                "opacity 0.15s cubic-bezier(0.32, 0.72, 0, 1), transform 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
+              willChange: "opacity, transform",
             }}
           >
             <AnalyticsDashboard
@@ -599,8 +626,10 @@ export function Dashboard({ onLogout }: Props) {
               height: mainTab === "units" ? "auto" : 0,
               overflow: mainTab === "units" ? "visible" : "hidden",
               opacity: mainTab === "units" ? 1 : 0,
-              transform: mainTab === "units" ? "translateY(0)" : "translateY(6px)",
-              transition: "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
+              transform: mainTab === "units" ? "scale(1)" : "scale(0.985)",
+              transition:
+                "opacity 0.15s cubic-bezier(0.32, 0.72, 0, 1), transform 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
+              willChange: "opacity, transform",
             }}
           >
             <UnitSummaryDashboard

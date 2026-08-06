@@ -115,7 +115,7 @@
   "113": "Global Constraints",
   "114": "scripts",
   "115": "package.json",
-  "116": "@types/gapi.client.sheets",
+  "116": "@types/gapi.auth2",
   "117": "@types/react-dom",
   "118": "vite",
   "119": "vite-plugin-pwa",

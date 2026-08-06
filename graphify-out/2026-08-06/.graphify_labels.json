@@ -115,7 +115,8 @@
   "113": "Global Constraints",
   "114": "scripts",
   "115": "package.json",
-  "117": "@types/react-dom",
+  "116": "@types/gapi.auth2",
+  "117": "@types/gapi.client.sheets",
   "118": "vite",
   "119": "vite-plugin-pwa",
   "120": "vitest",
@@ -125,6 +126,5 @@
   "124": "App.tsx",
   "125": "Dashboard.tsx",
   "126": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
-  "127": "Global Constraints",
-  "128": "@types/gapi.auth2"
+  "127": "Global Constraints"
 }

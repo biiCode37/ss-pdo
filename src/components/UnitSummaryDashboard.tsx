@@ -28,9 +28,9 @@ export function UnitSummaryDashboard({ busData, sheetId, selectedTab }: Props) {
   }, [unitList, searchQuery]);
 
   return (
-    <div style={{ marginTop: "16px" }}>
+    <div style={{ marginTop: "0px" }}>
       {/* Header & Search */}
-      <div className="search-container" style={{ marginBottom: "16px" }}>
+      <div className="search-container" style={{ marginBottom: "12px" }}>
         <div className="search-input-wrapper" style={{ flex: 1 }}>
           <Search className="search-icon" size={20} />
           <input

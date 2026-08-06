@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-08-06)
 
 ## Corpus Check
-- 141 files · ~147,019 words
+- 141 files · ~147,746 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1386 nodes · 1611 edges · 128 communities (109 shown, 19 thin omitted)
+- 1390 nodes · 1620 edges · 128 communities (109 shown, 19 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `829700b9`
+- Built from commit: `17f96d86`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -129,7 +129,7 @@
 - Global Constraints
 - scripts
 - package.json
-- @types/gapi.client.sheets
+- @types/gapi.auth2
 - @types/react-dom
 - vite
 - vite-plugin-pwa
@@ -157,14 +157,14 @@
 ## Surprising Connections (you probably didn't know these)
 - `Props` --references--> `BusData`  [EXTRACTED]
   src/components/AnalyticsDashboard.tsx → src/services/googleSheets.ts
-- `Props` --references--> `BusData`  [EXTRACTED]
-  src/components/UnitDetailModal.tsx → src/services/googleSheets.ts
-- `Props` --references--> `BusData`  [EXTRACTED]
-  src/components/UnitSummaryDashboard.tsx → src/services/googleSheets.ts
-- `App()` --calls--> `checkSignedIn()`  [EXTRACTED]
-  src/App.tsx → src/services/googleSheets.ts
 - `BusCardComponent()` --calls--> `formatUserError()`  [EXTRACTED]
   src/components/BusCard.tsx → src/utils/errorFormatter.ts
+- `Props` --references--> `AnalyticsSummary`  [EXTRACTED]
+  src/components/CompletionStatusCard.tsx → src/utils/analytics.ts
+- `DailyToaTrendCard()` --calls--> `getMonthlyToaTrend()`  [EXTRACTED]
+  src/components/DailyToaTrendCard.tsx → src/services/googleSheets.ts
+- `Dashboard()` --calls--> `useOfflineSync()`  [EXTRACTED]
+  src/components/Dashboard.tsx → src/hooks/useOfflineSync.ts
 
 ## Import Cycles
 - None detected.
@@ -180,8 +180,8 @@ Cohesion: 0.06
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
 ### Community 2 - "analytics.ts"
-Cohesion: 0.16
-Nodes (16): AnalyticsDashboard(), Props, CompletionStatusCard(), Props, KPICard(), Props, Props, ShiftComparisonCard() (+8 more)
+Cohesion: 0.18
+Nodes (15): AnalyticsDashboard(), Props, CompletionStatusCard(), Props, KPICard(), Props, Props, ShiftComparisonCard() (+7 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -380,8 +380,8 @@ Cohesion: 0.22
 Nodes (8): 1. Tujuan, 2. Catatan: BUG-18 Dicabut, 3. Urutan Prioritas, 4. Prinsip Kerja Utama (melanjutkan v1), 5. Batasan Teknis Tambahan, 6. Kapan Harus Berhenti dan Bertanya ke Manusia (tambahan), 7. Pelaporan Progres, Aturan & Ketentuan Kerja untuk AI Coding Agent v2 — Proyek SS_PDO
 
 ### Community 60 - "🛡️ Aturan, Ketetapan, & Batasan Proyek SS_PDO"
-Cohesion: 0.22
-Nodes (8): 📱 1. Layout & Tampilan (Mobile-First Priority), 📊 2. Integritas Data (Single Source of Truth - SSOT), 🔐 3. Autentikasi & Sesi Login, 🛠️ 4. Tooling & Paket Manager (Wajib PNPM), 🎨 5. Standar UI/UX & Animasi Fluid (iOS Style), 💬 6. Komunikasi & Workflow Kerja, ⚡ 7. Penggunaan Skill Wajib (Ponytail & Graphify), 🛡️ Aturan, Ketetapan, & Batasan Proyek SS_PDO
+Cohesion: 0.20
+Nodes (9): 📱 1. Layout & Tampilan (Mobile-First Priority), 📊 2. Integritas Data (Single Source of Truth - SSOT), 🔐 3. Autentikasi & Sesi Login, 🛠️ 4. Tooling & Paket Manager (Wajib PNPM), 🎨 5. Standar UI/UX & Animasi Fluid (iOS Style), 💬 6. Komunikasi & Workflow Kerja, ⚡ 7. Penggunaan Skill Wajib (Ponytail & Graphify), 📌 8. Kebijakan Commit Git (Hindari Over-Commit) (+1 more)
 
 ### Community 61 - "Core Architecture"
 Cohesion: 0.25
@@ -541,7 +541,7 @@ Nodes (7): Global Constraints, Supabase Integration Implementation Plan, Task 1:
 
 ### Community 108 - "devDependencies"
 Cohesion: 0.13
-Nodes (15): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.auth2, @types/node, @types/react (+7 more)
+Nodes (15): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.client.sheets, @types/node, @types/react (+7 more)
 
 ### Community 109 - "Daftar Masalah v3 — Proyek SS_PDO / SPUM (Sistem Pencatatan Shift Bus)"
 Cohesion: 0.13
@@ -572,23 +572,23 @@ Cohesion: 0.40
 Nodes (4): name, private, type, version
 
 ### Community 121 - "BusData"
-Cohesion: 0.20
-Nodes (20): BusCard, BusCardComponent(), Props, Props, useDebounce(), detectCollision(), isAuthError(), isNetworkError() (+12 more)
+Cohesion: 0.17
+Nodes (22): BusCard, BusCardComponent(), Props, Props, Props, Props, useDebounce(), detectCollision() (+14 more)
 
 ### Community 122 - "googleSheets.ts"
-Cohesion: 0.31
-Nodes (13): checkSignedIn(), detectHeaderRowAndBuildComposite(), ensureValidToken(), findColumnIndex(), getBusData(), getMonthlyToaTrend(), HEADER_KEYWORDS, isAuthError() (+5 more)
+Cohesion: 0.35
+Nodes (11): detectHeaderRowAndBuildComposite(), ensureValidToken(), findColumnIndex(), getBusData(), getMonthlyToaTrend(), HEADER_KEYWORDS, isAuthError(), normalizeString() (+3 more)
 
 ### Community 123 - "UnitSummaryDashboard.tsx"
-Cohesion: 0.21
-Nodes (11): Props, UnitCard, Props, UnitDetailModal(), Props, UnitSummaryDashboard(), calculateUnitMetrics(), extractUnitList() (+3 more)
+Cohesion: 0.22
+Nodes (13): Props, renderStatusBadge(), UnitCard, UnitCardComponent(), UnitDetailModal(), UnitSummaryDashboard(), calculateUnitMetrics(), extractUnitList() (+5 more)
 
 ### Community 124 - "App.tsx"
-Cohesion: 0.28
-Nodes (11): App(), LoginScreen(), Props, getGoogleCreds(), hasGoogleCreds(), initGoogleApi(), signIn(), signOut() (+3 more)
+Cohesion: 0.22
+Nodes (14): App(), LoginScreen(), Props, checkSignedIn(), getGoogleCreds(), hasGoogleCreds(), initGoogleApi(), signIn() (+6 more)
 
 ### Community 125 - "Dashboard.tsx"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (16): react, BottomNav(), BottomNavProps, BusList(), DailyToaTrendCard(), Props, Dashboard(), Props (+8 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
@@ -600,7 +600,7 @@ Cohesion: 0.29
 Nodes (6): Global Constraints, Implementation Plan: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard), Task 1: `unitAnalytics.ts` Abstraksi Logic Rekapitulasi Data Unit, Task 2: Komponen `UnitCard.tsx` & `UnitSummaryDashboard.tsx`, Task 3: Komponen `UnitDetailModal.tsx` (iOS-Style 90% Bottom Sheet), Task 4: Integrasi Tab Navigasi `mainTab === "units"` di `BottomNav.tsx` & `Dashboard.tsx`
 
 ## Knowledge Gaps
-- **814 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+809 more)
+- **815 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+810 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -612,7 +612,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `BusData`, `UnitSummaryDashboard.tsx`, `App.tsx`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _814 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _815 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
