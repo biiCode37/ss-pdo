@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Bus, TrendingUp, Navigation, MessageSquare } from 'lucide-react';
+import { X, Bus, Navigation, MessageSquare } from 'lucide-react';
 import type { BusData } from '../services/googleSheets';
 import { calculateUnitMetrics } from '../utils/unitAnalytics';
 import { DailyToaTrendCard } from './DailyToaTrendCard';
@@ -168,31 +168,51 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           </button>
         </div>
 
-        {/* 4 KPI Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
-          <div className="card glass" style={{ padding: '12px' }}>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <TrendingUp size={12} /> TOA Shift 1
+        {/* 3 Grid Executive Summary (Shift 1, Shift 2, Akumulasi Total) */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px', marginBottom: '20px' }}>
+          {/* Grid 1: Shift 1 */}
+          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(30, 41, 59, 0.4) 100%)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-color)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span>Shift 1</span>
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.15)' }}>Operasional</span>
             </div>
-            <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{metrics.toaShift1.toLocaleString('id-ID')} Pnp</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <div style={{ fontSize: '18px', fontWeight: 700 }}>{metrics.totalShift1Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span></div>
+              <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>TOA: {metrics.toaShift1.toLocaleString('id-ID')} | Manual: {metrics.manualShift1.toLocaleString('id-ID')}</div>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#38bdf8', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Navigation size={12} /> {metrics.kmShift1.toLocaleString('id-ID')} KM
+              </div>
+            </div>
           </div>
-          <div className="card glass" style={{ padding: '12px' }}>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <TrendingUp size={12} /> TOA Shift 2
+
+          {/* Grid 2: Shift 2 */}
+          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(30, 41, 59, 0.4) 100%)', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#c084fc', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span>Shift 2</span>
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(168, 85, 247, 0.15)' }}>Operasional</span>
             </div>
-            <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{metrics.toaShift2.toLocaleString('id-ID')} Pnp</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <div style={{ fontSize: '18px', fontWeight: 700 }}>{metrics.totalShift2Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span></div>
+              <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>TOA: {metrics.toaShift2.toLocaleString('id-ID')} | Manual: {metrics.manualShift2.toLocaleString('id-ID')}</div>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#c084fc', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Navigation size={12} /> {metrics.kmShift2.toLocaleString('id-ID')} KM
+              </div>
+            </div>
           </div>
-          <div className="card glass" style={{ padding: '12px' }}>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Navigation size={12} /> KM Shift 1
+
+          {/* Grid 3: Total Akumulasi (Shift 1 + 2) */}
+          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(30, 41, 59, 0.4) 100%)', border: '1px solid rgba(34, 197, 94, 0.25)' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: '#4ade80', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span>Akumulasi Total</span>
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80' }}>Shift 1 + 2</span>
             </div>
-            <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{metrics.kmShift1.toLocaleString('id-ID')} KM</div>
-          </div>
-          <div className="card glass" style={{ padding: '12px' }}>
-            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Navigation size={12} /> KM Shift 2
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: '#4ade80' }}>{metrics.totalPassengers.toLocaleString('id-ID')} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span></div>
+              <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Total TOA: {metrics.totalToa.toLocaleString('id-ID')} Pnp</div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#4ade80', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Navigation size={13} /> {metrics.totalKm.toLocaleString('id-ID')} KM Total
+              </div>
             </div>
-            <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{metrics.kmShift2.toLocaleString('id-ID')} KM</div>
           </div>
         </div>
 

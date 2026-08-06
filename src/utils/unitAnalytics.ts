@@ -10,9 +10,18 @@ export interface UnitSummaryItem {
 export interface UnitSummaryMetrics {
   unit: string;
   toaShift1: number;
+  manualShift1: number;
+  totalShift1Pnp: number;
   toaShift2: number;
+  manualShift2: number;
+  totalShift2Pnp: number;
   totalToa: number;
+  totalPassengers: number;
+  kmAwal1: string;
+  kmAkhir1: string;
   kmShift1: number;
+  kmAwal2: string;
+  kmAkhir2: string;
   kmShift2: number;
   totalKm: number;
   notes: string[];
@@ -39,9 +48,18 @@ export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitS
   const defaultResult: UnitSummaryMetrics = {
     unit: targetUnit,
     toaShift1: 0,
+    manualShift1: 0,
+    totalShift1Pnp: 0,
     toaShift2: 0,
+    manualShift2: 0,
+    totalShift2Pnp: 0,
     totalToa: 0,
+    totalPassengers: 0,
+    kmAwal1: '-',
+    kmAkhir1: '-',
     kmShift1: 0,
+    kmAwal2: '-',
+    kmAkhir2: '-',
     kmShift2: 0,
     totalKm: 0,
     notes: [],
@@ -53,16 +71,24 @@ export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitS
   if (!item) return defaultResult;
 
   const toaShift1 = parseInt(String(item.toaShift1 || '0'), 10) || 0;
-  const totalToa = parseInt(String(item.totalToa || '0'), 10) || 0;
-  const toaShift2 = Math.max(0, totalToa - toaShift1);
+  const manualShift1 = parseInt(String(item.manualShift1 || '0'), 10) || 0;
+  const totalShift1Pnp = toaShift1 + manualShift1;
 
-  const kmAwal1 = parseFloat(String(item.kmAwal1 || '0')) || 0;
-  const kmAkhir1 = parseFloat(String(item.kmAkhir1 || '0')) || 0;
-  const kmShift1 = kmAkhir1 > kmAwal1 ? kmAkhir1 - kmAwal1 : 0;
+  const totalToaRaw = parseInt(String(item.totalToa || '0'), 10) || 0;
+  const toaShift2 = Math.max(0, totalToaRaw - toaShift1);
+  const manualShift2 = parseInt(String(item.manualShift2 || '0'), 10) || 0;
+  const totalShift2Pnp = toaShift2 + manualShift2;
 
-  const kmAwal2 = parseFloat(String(item.kmAwal2 || '0')) || 0;
-  const kmAkhir2 = parseFloat(String(item.kmAkhir2 || '0')) || 0;
-  const kmShift2 = kmAkhir2 > kmAwal2 ? kmAkhir2 - kmAwal2 : 0;
+  const totalToa = totalToaRaw > 0 ? totalToaRaw : (toaShift1 + toaShift2);
+  const totalPassengers = totalToa + manualShift1 + manualShift2;
+
+  const kmAwal1Num = parseFloat(String(item.kmAwal1 || '0')) || 0;
+  const kmAkhir1Num = parseFloat(String(item.kmAkhir1 || '0')) || 0;
+  const kmShift1 = kmAkhir1Num > kmAwal1Num ? kmAkhir1Num - kmAwal1Num : 0;
+
+  const kmAwal2Num = parseFloat(String(item.kmAwal2 || '0')) || 0;
+  const kmAkhir2Num = parseFloat(String(item.kmAkhir2 || '0')) || 0;
+  const kmShift2 = kmAkhir2Num > kmAwal2Num ? kmAkhir2Num - kmAwal2Num : 0;
 
   const notes: string[] = [];
   if (item.keterangan && String(item.keterangan).trim() !== '') {
@@ -72,9 +98,18 @@ export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitS
   return {
     unit: targetUnit,
     toaShift1,
+    manualShift1,
+    totalShift1Pnp,
     toaShift2,
+    manualShift2,
+    totalShift2Pnp,
     totalToa,
+    totalPassengers,
+    kmAwal1: item.kmAwal1 || '-',
+    kmAkhir1: item.kmAkhir1 || '-',
     kmShift1,
+    kmAwal2: item.kmAwal2 || '-',
+    kmAkhir2: item.kmAkhir2 || '-',
     kmShift2,
     totalKm: kmShift1 + kmShift2,
     notes,
