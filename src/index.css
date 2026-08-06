@@ -490,14 +490,35 @@ body.light-mode .bottom-nav {
   gap: 12px;
 }
 
+.gradient-title-text {
+  background: linear-gradient(135deg, #fffbeb 0%, #fde047 30%, #facc15 65%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
 .analytics-card-title {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: none;
   letter-spacing: 0.2px;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.analytics-card-title > span {
+  background: linear-gradient(135deg, #fffbeb 0%, #fde047 30%, #facc15 65%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+.analytics-card-title > svg {
+  color: #facc15 !important;
+  flex-shrink: 0;
 }
 
 .analytics-grid-2 {

@@ -18,10 +18,7 @@ export function ShiftComparisonCard({ summary }: Props) {
           alignItems: "center",
         }}
       >
-        <div
-          className="analytics-card-title"
-          style={{ color: "var(--warning-color)" }}
-        >
+        <div className="analytics-card-title">
           <Sun size={18} />
           <span>Rekapitulasi TOA S1 vs S2</span>
         </div>

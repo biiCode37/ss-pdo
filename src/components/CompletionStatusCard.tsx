@@ -23,7 +23,7 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
       >
         <div
           className="analytics-card-title"
-          style={{ color: "var(--accent-color)", flex: "1 1 auto", minWidth: "160px" }}
+          style={{ flex: "1 1 auto", minWidth: "160px" }}
         >
           <FileText size={18} />
           <span>Unit Dengan Keterangan Tertentu</span>

@@ -155,7 +155,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
               <Bus size={22} />
             </div>
             <div>
-              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>{unit}</h3>
+              <h3 className="gradient-title-text" style={{ margin: 0, fontSize: '18px' }}>{unit}</h3>
               <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Ringkasan Rekapitulasi Armada</span>
             </div>
           </div>
@@ -290,8 +290,8 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
 
         {/* Riwayat Catatan */}
         <div className="card glass" style={{ padding: '16px', marginBottom: '16px', borderRadius: '16px' }}>
-          <div style={{ fontSize: '14px', fontWeight: 800, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: '#fcd34d' }}>
-            <MessageSquare size={18} style={{ color: '#fcd34d' }} />
+          <div className="analytics-card-title" style={{ fontSize: '14px', marginBottom: '12px' }}>
+            <MessageSquare size={18} />
             <span>Catatan & Keterangan Operasional</span>
           </div>
           {metrics.notes.length > 0 ? (

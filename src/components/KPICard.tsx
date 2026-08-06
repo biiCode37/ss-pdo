@@ -13,7 +13,7 @@ export function KPICard({ summary }: Props) {
 
   return (
     <div className="analytics-card glass">
-      <div className="analytics-card-title" style={{ color: 'var(--accent-color)' }}>
+      <div className="analytics-card-title">
         <Gauge size={18} />
         <span>Produktivitas & KM Armada</span>
       </div>

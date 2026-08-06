@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-08-06)
 
 ## Corpus Check
-- 141 files · ~146,746 words
+- 141 files · ~146,774 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1386 nodes · 1607 edges · 129 communities (110 shown, 19 thin omitted)
+- 1386 nodes · 1610 edges · 128 communities (109 shown, 19 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0eec9fd3`
+- Built from commit: `92721f14`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -129,7 +129,6 @@
 - Global Constraints
 - scripts
 - package.json
-- Skeletons.tsx
 - @types/react-dom
 - vite
 - vite-plugin-pwa
@@ -170,7 +169,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (129 total, 19 thin omitted)
+## Communities (128 total, 19 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -572,10 +571,6 @@ Nodes (6): scripts, build, dev, lint, preview, test
 Cohesion: 0.40
 Nodes (4): name, private, type, version
 
-### Community 116 - "Skeletons.tsx"
-Cohesion: 0.25
-Nodes (6): DailyToaTrendCard(), Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton()
-
 ### Community 121 - "BusData"
 Cohesion: 0.20
 Nodes (20): BusCard, BusCardComponent(), Props, Props, useDebounce(), detectCollision(), isAuthError(), isNetworkError() (+12 more)
@@ -593,8 +588,8 @@ Cohesion: 0.28
 Nodes (11): App(), LoginScreen(), Props, getGoogleCreds(), hasGoogleCreds(), initGoogleApi(), signIn(), signOut() (+3 more)
 
 ### Community 125 - "Dashboard.tsx"
-Cohesion: 0.22
-Nodes (10): react, BottomNav(), BottomNavProps, BusList(), Dashboard(), Props, SwipeableContainer(), SwipeableContainerProps (+2 more)
+Cohesion: 0.14
+Nodes (16): react, BottomNav(), BottomNavProps, BusList(), DailyToaTrendCard(), Props, Dashboard(), Props (+8 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
 Cohesion: 0.20
@@ -614,7 +609,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Writing Skills` connect `Writing Skills` to `Skill Discovery Optimization (SDO)`, `Testing Skills With Subagents`, `Bulletproofing Skills Against Rationalization`, `Anti-Patterns`, `Testing All Skill Types`, `RED-GREEN-REFACTOR for Skills`, `File Organization`, `Skill Types`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `Skeletons.tsx`, `BusData`, `UnitSummaryDashboard.tsx`, `App.tsx`?**
+- **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `BusData`, `UnitSummaryDashboard.tsx`, `App.tsx`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
   _814 weakly-connected nodes found - possible documentation gaps or missing edges._
