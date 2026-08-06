@@ -24,7 +24,7 @@ function UnitCardComponent({ item, onClick }: Props) {
     >
       {/* Line 1: Unit Title + Status + Chevron Arrow */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800, fontSize: '15px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, fontSize: '15px' }}>
           <Bus size={17} style={{ color: 'var(--accent-color)', flexShrink: 0 }} />
           <span>{item.unit}</span>
         </div>
@@ -47,9 +47,9 @@ function UnitCardComponent({ item, onClick }: Props) {
       </div>
 
       {/* Line 2: Inline Compact Stats Badges (KM & Pnp) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: 'var(--text-secondary)' }}>
         {/* Total KM */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Navigation size={13} style={{ color: '#38bdf8', flexShrink: 0 }} />
           <strong style={{ color: '#38bdf8', fontWeight: 800 }}>{item.totalKm.toLocaleString('id-ID')}</strong> <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>KM</span>
         </div>
@@ -57,7 +57,7 @@ function UnitCardComponent({ item, onClick }: Props) {
         <span style={{ opacity: 0.3 }}>|</span>
 
         {/* Total Pnp */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Users size={13} style={{ color: '#38bdf8', flexShrink: 0 }} />
           <strong style={{ color: 'var(--text-primary)', fontWeight: 800 }}>{item.totalPassengers.toLocaleString('id-ID')}</strong> <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Pnp</span>
         </div>
@@ -67,7 +67,7 @@ function UnitCardComponent({ item, onClick }: Props) {
       {item.notes && item.notes.length > 0 && (
         <div
           style={{
-            padding: '5px 8px',
+            padding: '6px 10px',
             background: 'rgba(249, 115, 22, 0.08)',
             borderRadius: '6px',
             borderLeft: '2.5px solid rgba(249, 115, 22, 0.6)',
@@ -76,7 +76,7 @@ function UnitCardComponent({ item, onClick }: Props) {
             fontWeight: 600,
             letterSpacing: '0.01em',
             display: 'flex',
-            gap: '6px',
+            gap: '8px',
             alignItems: 'center',
             marginTop: '1px',
           }}

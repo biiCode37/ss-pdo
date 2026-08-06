@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
-    "mtime": 1785982408.5850923,
-    "ast_hash": "06a86f7894823bec8358ae2ad6237285",
+    "mtime": 1785982724.241361,
+    "ast_hash": "279bc536e974eee64b8fb69c6f1eaa1d",
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitCard.tsx": {
-    "mtime": 1785982656.8105943,
-    "ast_hash": "5680a822b51c63fc97d374b79d361029",
+    "mtime": 1785982719.956095,
+    "ast_hash": "ca8f35d82d709e8cb46ca1cba1c2cfc6",
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
