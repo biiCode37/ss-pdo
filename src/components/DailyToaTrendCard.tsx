@@ -214,6 +214,7 @@ export function DailyToaTrendCard({
             color: "#fcd34d",
             fontWeight: 800,
             letterSpacing: "0.01em",
+            textTransform: "none",
             display: "flex",
             alignItems: "center",
             gap: "8px",
