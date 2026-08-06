@@ -2,12 +2,12 @@ import { useState, useEffect, useMemo } from "react";
 import {
   BarChart2,
   Calendar,
-  Loader2,
   Award,
   Zap,
   TrendingDown,
 } from "lucide-react";
 import { getMonthlyToaTrend } from "../services/googleSheets";
+import { DailyToaTrendSkeleton } from "./Skeletons";
 
 interface Props {
   sheetId: string;
@@ -173,27 +173,7 @@ export function DailyToaTrendCard({
   }, [trendData, activeTooltipDay, selectedTab]);
 
   if (isLoading) {
-    return (
-      <div
-        className="analytics-card glass"
-        style={{ textAlign: "center", padding: "24px" }}
-      >
-        <Loader2
-          className="spinner"
-          size={24}
-          style={{ color: "var(--accent-color)", margin: "0 auto" }}
-        />
-        <p
-          style={{
-            fontSize: "12px",
-            color: "var(--text-secondary)",
-            marginTop: "8px",
-          }}
-        >
-          Memuat grafik tren TOA harian...
-        </p>
-      </div>
-    );
+    return <DailyToaTrendSkeleton />;
   }
 
   if (!chartMetrics) return null;

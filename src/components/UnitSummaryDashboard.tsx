@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
-import { Search, Bus } from 'lucide-react';
-import type { BusData } from '../services/googleSheets';
-import { extractUnitList } from '../utils/unitAnalytics';
-import { UnitCard } from './UnitCard';
-import { UnitDetailModal } from './UnitDetailModal';
+import { useState, useMemo } from "react";
+import { Search, Bus } from "lucide-react";
+import type { BusData } from "../services/googleSheets";
+import { extractUnitList } from "../utils/unitAnalytics";
+import { UnitCard } from "./UnitCard";
+import { UnitDetailModal } from "./UnitDetailModal";
+import { UnitCardSkeleton } from "./Skeletons";
 
 interface Props {
   busData: BusData[] | null;
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export function UnitSummaryDashboard({ busData, sheetId, selectedTab }: Props) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
 
   const unitList = useMemo(() => {
@@ -27,15 +28,15 @@ export function UnitSummaryDashboard({ busData, sheetId, selectedTab }: Props) {
   }, [unitList, searchQuery]);
 
   return (
-    <div style={{ marginTop: '16px' }}>
+    <div style={{ marginTop: "16px" }}>
       {/* Header & Search */}
-      <div className="search-container" style={{ marginBottom: '16px' }}>
+      <div className="search-container" style={{ marginBottom: "16px" }}>
         <div className="search-input-wrapper" style={{ flex: 1 }}>
           <Search className="search-icon" size={20} />
           <input
             type="text"
             className="input-field search-input"
-            placeholder="Cari No. Body Armada (misal: SAF-001)..."
+            placeholder="Cari No. Body Unit..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -43,8 +44,16 @@ export function UnitSummaryDashboard({ busData, sheetId, selectedTab }: Props) {
       </div>
 
       {/* Grid Kartu Unit */}
-      {filteredUnits.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '12px' }}>
+      {!busData ? (
+        <UnitCardSkeleton count={6} />
+      ) : filteredUnits.length > 0 ? (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "12px",
+          }}
+        >
           {filteredUnits.map((item) => (
             <UnitCard
               key={item.unit}
@@ -54,8 +63,14 @@ export function UnitSummaryDashboard({ busData, sheetId, selectedTab }: Props) {
           ))}
         </div>
       ) : (
-        <div className="empty-state" style={{ textAlign: 'center', padding: '32px' }}>
-          <Bus size={32} style={{ color: 'var(--text-secondary)', marginBottom: '8px' }} />
+        <div
+          className="empty-state"
+          style={{ textAlign: "center", padding: "32px" }}
+        >
+          <Bus
+            size={32}
+            style={{ color: "var(--text-secondary)", marginBottom: "8px" }}
+          />
           <p>Tidak ada armada yang sesuai dengan kata kunci "{searchQuery}"</p>
         </div>
       )}

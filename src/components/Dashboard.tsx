@@ -25,6 +25,7 @@ import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
 
 import { UnitSummaryDashboard } from "./UnitSummaryDashboard";
+import { BusCardSkeleton } from "./Skeletons";
 
 interface Props {
   onLogout: () => void;
@@ -487,31 +488,8 @@ export function Dashboard({ onLogout }: Props) {
       )}
 
       {isLoading && !busData && (
-        <div className="bus-list" style={{ marginTop: "16px" }}>
-          <phantom-ui loading={true}>
-            {[1, 2, 3, 4].map((n) => (
-              <div
-                key={n}
-                className="bus-card glass"
-                style={{
-                  height: "84px",
-                  marginBottom: "12px",
-                  borderRadius: "16px",
-                  padding: "14px 16px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  opacity: 0.75,
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div style={{ width: "90px", height: "18px", borderRadius: "6px", background: "var(--card-border)" }}></div>
-                  <div style={{ width: "70px", height: "16px", borderRadius: "12px", background: "var(--card-border)" }}></div>
-                </div>
-                <div style={{ width: "160px", height: "12px", borderRadius: "4px", background: "var(--card-border)", opacity: 0.6 }}></div>
-              </div>
-            ))}
-          </phantom-ui>
+        <div style={{ marginTop: "16px" }}>
+          <BusCardSkeleton count={5} />
         </div>
       )}
 
