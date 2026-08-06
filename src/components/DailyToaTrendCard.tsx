@@ -211,7 +211,7 @@ export function DailyToaTrendCard({
         <div
           className="analytics-card-title"
           style={{
-            color: "#38bdf8",
+            color: "#fcd34d",
             fontWeight: 800,
             letterSpacing: "0.01em",
             display: "flex",
@@ -219,7 +219,7 @@ export function DailyToaTrendCard({
             gap: "8px",
           }}
         >
-          <BarChart2 size={18} style={{ color: "#38bdf8" }} />
+          <BarChart2 size={18} style={{ color: "#fcd34d" }} />
           <span>{unitFilter ? `Grafik TOA Harian (${unitFilter})` : 'Grafik TOA Harian 1 Rute'}</span>
         </div>
         <span

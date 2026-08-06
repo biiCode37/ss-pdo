@@ -290,16 +290,16 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
 
         {/* Riwayat Catatan */}
         <div className="card glass" style={{ padding: '16px', marginBottom: '16px', borderRadius: '16px' }}>
-          <div style={{ fontSize: '14px', fontWeight: 800, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8' }}>
-            <MessageSquare size={18} style={{ color: '#38bdf8' }} />
+          <div style={{ fontSize: '14px', fontWeight: 800, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px', color: '#fcd34d' }}>
+            <MessageSquare size={18} style={{ color: '#fcd34d' }} />
             <span>Catatan & Keterangan Operasional</span>
           </div>
           {metrics.notes.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {metrics.notes.map((n, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: '#fdba74', fontWeight: 600, letterSpacing: '0.02em', background: 'rgba(249, 115, 22, 0.08)', padding: '8px 12px', borderRadius: '10px', borderLeft: '3px solid rgba(249, 115, 22, 0.6)' }}>
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: '#fdba74', fontWeight: 600, letterSpacing: '0.01em', background: 'rgba(249, 115, 22, 0.08)', padding: '8px 12px', borderRadius: '10px', borderLeft: '3px solid rgba(249, 115, 22, 0.6)' }}>
                   <AlertTriangle size={15} style={{ color: '#f97316', flexShrink: 0, marginTop: '1px' }} />
-                  <span style={{ lineHeight: 1.4, wordBreak: 'break-word', textTransform: 'uppercase' }}>{n}</span>
+                  <span style={{ lineHeight: 1.4, wordBreak: 'break-word', textTransform: 'capitalize' }}>{n}</span>
                 </div>
               ))}
             </div>
