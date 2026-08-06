@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { getMonthlyToaTrend } from "../services/googleSheets";
 import { DailyToaTrendSkeleton } from "./Skeletons";
+import { extractMonthYearLabel } from "../utils/analytics";
 
 interface Props {
   sheetId: string;
@@ -26,6 +27,11 @@ export function DailyToaTrendCard({
   onSelectTab,
   unitFilter,
 }: Props) {
+  const effectiveMonthLabel = useMemo(() => {
+    if (monthLabel) return monthLabel;
+    return extractMonthYearLabel(sheetId);
+  }, [monthLabel, sheetId]);
+
   const [trendData, setTrendData] = useState<
     { day: string; totalToa: number }[]
   >([]);
@@ -234,7 +240,7 @@ export function DailyToaTrendCard({
           }}
         >
           <Calendar size={12} />
-          {monthLabel || "Bulan Ini"}
+          {effectiveMonthLabel}
         </span>
       </div>
 
