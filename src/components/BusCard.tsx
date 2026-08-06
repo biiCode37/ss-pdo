@@ -292,16 +292,38 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
       return <span style={{ color: '#f87171', fontWeight: 500 }}>Belum Terisi</span>;
     }
 
+    // Hitung Total Pnp & Total KM untuk ringkasan kartu unit
+    const toaShift1Num = parseInt(String(formData.toaShift1 || bus.toaShift1 || '0'), 10) || 0;
+    const totalToaNum = parseInt(String(formData.totalToa || bus.totalToa || '0'), 10) || 0;
+    const manual1Num = parseInt(String(formData.manualShift1 || bus.manualShift1 || '0'), 10) || 0;
+    const manual2Num = parseInt(String(formData.manualShift2 || bus.manualShift2 || '0'), 10) || 0;
+
+    const totalToa = totalToaNum > 0 ? totalToaNum : toaShift1Num;
+    const totalPnp = totalToa + manual1Num + manual2Num;
+
+    const kmA1 = parseFloat(String(formData.kmAwal1 || bus.kmAwal1 || '0')) || 0;
+    const kmAk1 = parseFloat(String(formData.kmAkhir1 || bus.kmAkhir1 || '0')) || 0;
+    const kmS1 = kmAk1 > kmA1 ? kmAk1 - kmA1 : 0;
+
+    const kmA2 = parseFloat(String(formData.kmAwal2 || bus.kmAwal2 || '0')) || 0;
+    const kmAk2 = parseFloat(String(formData.kmAkhir2 || bus.kmAkhir2 || '0')) || 0;
+    const kmS2 = kmAk2 > kmA2 ? kmAk2 - kmA2 : 0;
+
+    const totalKm = kmS1 + kmS2;
+
     const parts: string[] = [];
-    if (bus.kmAwal1 || bus.kmAkhir1) {
+    if (totalKm > 0) {
+      parts.push(`Total KM: ${totalKm.toLocaleString('id-ID')} KM`);
+    } else if (bus.kmAwal1 || bus.kmAkhir1) {
       parts.push(`KM S1: ${bus.kmAwal1 || '-'}-${bus.kmAkhir1 || '-'}`);
     }
-    if (bus.kmAwal2 || bus.kmAkhir2) {
-      parts.push(`KM S2: ${bus.kmAwal2 || '-'}-${bus.kmAkhir2 || '-'}`);
+
+    if (totalPnp > 0) {
+      parts.push(`Total Pnp: ${totalPnp.toLocaleString('id-ID')} Pnp`);
+    } else if (bus.toaShift1 || bus.totalToa) {
+      parts.push(`TOA: ${bus.totalToa || bus.toaShift1 || '0'}`);
     }
-    if (bus.toaShift1) {
-      parts.push(`TOA S1: ${bus.toaShift1}`);
-    }
+
     if (parts.length === 0) {
       return <span style={{ color: '#f87171', fontWeight: 500 }}>Belum Terisi</span>;
     }
