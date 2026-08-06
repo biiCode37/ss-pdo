@@ -2656,30 +2656,30 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dailytoatrendcard",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "dailytoatrendcard.tsx"
     },
     {
       "label": "Props",
       "file_type": "code",
       "source_file": "src/components/DailyToaTrendCard.tsx",
-      "source_location": "L12",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_dailytoatrendcard_props",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
     {
       "label": "DailyToaTrendCard()",
       "file_type": "code",
       "source_file": "src/components/DailyToaTrendCard.tsx",
-      "source_location": "L21",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "src_components_dailytoatrendcard_dailytoatrendcard",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "dailytoatrendcard()"
     },
     {
@@ -2887,8 +2887,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_skeletons",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "skeletons.tsx"
     },
     {
@@ -2898,8 +2898,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonboxprops",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "skeletonboxprops"
     },
     {
@@ -2909,8 +2909,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonbox",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "skeletonbox()"
     },
     {
@@ -2920,8 +2920,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_components_skeletons_buscardskeleton",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "buscardskeleton()"
     },
     {
@@ -2931,8 +2931,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_components_skeletons_dailytoatrendskeleton",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "dailytoatrendskeleton()"
     },
     {
@@ -2942,8 +2942,8 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_components_skeletons_unitcardskeleton",
-      "community": 116,
-      "community_name": "Skeletons.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "unitcardskeleton()"
     },
     {
@@ -19858,7 +19858,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/DailyToaTrendCard.tsx",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dailytoatrendcard",
@@ -19869,7 +19869,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/DailyToaTrendCard.tsx",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dailytoatrendcard",
@@ -19928,6 +19928,30 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/components/DailyToaTrendCard.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_dailytoatrendcard",
+      "target": "src_utils_analytics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/DailyToaTrendCard.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_dailytoatrendcard",
+      "target": "src_utils_analytics_extractmonthyearlabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/components/UnitDetailModal.tsx",
       "source_location": "L6",
       "weight": 1.0,
@@ -19942,11 +19966,23 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/DailyToaTrendCard.tsx",
-      "source_location": "L78",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_dailytoatrendcard_dailytoatrendcard",
       "target": "src_services_googlesheets_getmonthlytoatrend"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/DailyToaTrendCard.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_dailytoatrendcard_dailytoatrendcard",
+      "target": "src_utils_analytics_extractmonthyearlabel"
     },
     {
       "relation": "imports",
@@ -33392,5 +33428,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0eec9fd32c31214152378204b8c9c9d8f33650fc"
+  "built_at_commit": "92721f141e6e4c908140352e8af8ba4fad98162c"
 }

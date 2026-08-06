@@ -100,13 +100,13 @@
     "semantic_hash": ""
   },
   "src/components/CompletionStatusCard.tsx": {
-    "mtime": 1785981778.2601945,
-    "ast_hash": "16eea420efe28d3e92f67ea932912118",
+    "mtime": 1785982155.1935751,
+    "ast_hash": "d248029cf01a5ee178313d5e029a7e77",
     "semantic_hash": ""
   },
   "src/components/DailyToaTrendCard.tsx": {
-    "mtime": 1785981733.6298163,
-    "ast_hash": "8a71eed1f6452cd25054e896236ed7f5",
+    "mtime": 1785982131.818922,
+    "ast_hash": "abc125645dbf708e566a06f1d705736d",
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
@@ -115,9 +115,9 @@
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
-    "mtime": 1785512699.72549,
-    "ast_hash": "51fcb3237d2d15558e70568dd5112c16",
-    "semantic_hash": "51fcb3237d2d15558e70568dd5112c16"
+    "mtime": 1785982159.9242072,
+    "ast_hash": "13edbf0aa639384f8e7b4837086520b8",
+    "semantic_hash": ""
   },
   "src/components/LoginScreen.tsx": {
     "mtime": 1785817639.0690026,
@@ -130,9 +130,9 @@
     "semantic_hash": ""
   },
   "src/components/ShiftComparisonCard.tsx": {
-    "mtime": 1785602899.565374,
-    "ast_hash": "3db6583865bee3a5639ad1bcde0acc81",
-    "semantic_hash": "3db6583865bee3a5639ad1bcde0acc81"
+    "mtime": 1785982169.781964,
+    "ast_hash": "4cec77f414229267d5bbc7eab59a7e61",
+    "semantic_hash": ""
   },
   "src/hooks/useDebounce.ts": {
     "mtime": 1783995520.0501454,
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
-    "mtime": 1785981768.4546862,
-    "ast_hash": "8c72f60f970aebabb2842ab6fbad995b",
+    "mtime": 1785982150.2401414,
+    "ast_hash": "0cf1769619be537124ab5985706175e0",
     "semantic_hash": ""
   },
   "src/components/UnitSummaryDashboard.tsx": {

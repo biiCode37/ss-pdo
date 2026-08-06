@@ -3,7 +3,10 @@ import type { BusData } from '../services/googleSheets';
 export interface UnitSummaryItem {
   unit: string;
   totalToa: number;
+  totalPassengers: number;
+  totalKm: number;
   isFilled: boolean;
+  notes: string[];
   noteCount: number;
 }
 
@@ -31,15 +34,15 @@ export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
   if (!data || data.length === 0) return [];
   
   return data.map((b) => {
-    const totalToaNum = parseInt(String(b.totalToa || '0'), 10) || 0;
-    const hasNote = !!(b.keterangan && String(b.keterangan).trim() !== '');
-    const isFilled = !!(b.toaShift1 || b.totalToa || b.kmAwal1);
-    
+    const metrics = calculateUnitMetrics(data, b.unit || '');
     return {
       unit: b.unit || 'Tanpa Nama',
-      totalToa: totalToaNum,
-      isFilled,
-      noteCount: hasNote ? 1 : 0,
+      totalToa: metrics.totalToa,
+      totalPassengers: metrics.totalPassengers,
+      totalKm: metrics.totalKm,
+      isFilled: metrics.totalPassengers > 0 || metrics.totalKm > 0 || metrics.notes.length > 0 || metrics.kmAwal1 !== '-',
+      notes: metrics.notes,
+      noteCount: metrics.notes.length,
     };
   });
 }
