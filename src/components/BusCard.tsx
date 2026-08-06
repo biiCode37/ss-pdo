@@ -336,19 +336,20 @@ function BusCardComponent({ bus, sheetId, tabName, headerMap, isQueued, addToQue
           style={{ 
             marginTop: '10px', 
             padding: '8px 12px', 
-            background: 'rgba(249, 115, 22, 0.1)', 
+            background: 'rgba(249, 115, 22, 0.08)', 
             borderRadius: '8px', 
-            borderLeft: '3px solid #f97316',
-            fontSize: '13px',
-            color: '#fb923c',
+            borderLeft: '3px solid rgba(249, 115, 22, 0.6)',
+            fontSize: '12px',
+            color: '#fdba74',
             fontWeight: 600,
+            letterSpacing: '0.02em',
             display: 'flex',
             gap: '8px',
             alignItems: 'flex-start',
             cursor: 'pointer'
           }}>
           <span style={{ fontSize: '14px', marginTop: '1px' }}>📝</span>
-          <span style={{ lineHeight: '1.4', wordBreak: 'break-word' }}>{formData.keterangan}</span>
+          <span style={{ lineHeight: '1.4', wordBreak: 'break-word', textTransform: 'uppercase' }}>{formData.keterangan}</span>
         </div>
       )}
 

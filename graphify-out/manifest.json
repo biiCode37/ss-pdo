@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "src/components/DailyToaTrendCard.tsx": {
-    "mtime": 1785978910.2687473,
-    "ast_hash": "59087f1897f1ac1ce4d361cc2b366eea",
+    "mtime": 1785981394.2004297,
+    "ast_hash": "57af63731f5103d09fc07bdb72ae8ce5",
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
-    "mtime": 1785981248.2791786,
-    "ast_hash": "683d51fd425f4bd03103c36a1ab6a9fb",
+    "mtime": 1785981408.4097672,
+    "ast_hash": "0ead18da1ac0be8dc8607e0b9d026fe3",
     "semantic_hash": ""
   },
   "src/components/UnitSummaryDashboard.tsx": {

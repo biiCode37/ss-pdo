@@ -103,8 +103,10 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
                   flex: 1,
                   fontSize: "12px",
                   lineHeight: 1.4,
-                  color: "#fb923c",
+                  color: "#fdba74",
                   fontWeight: 600,
+                  letterSpacing: "0.02em",
+                  textTransform: "uppercase",
                 }}
               >
                 {note.keterangan}
