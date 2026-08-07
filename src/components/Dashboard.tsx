@@ -699,7 +699,7 @@ export function Dashboard({ onLogout }: Props) {
                   }}
                 >
                   <p style={{ margin: "0 0 4px 0", fontSize: "14px" }}>
-                    <strong>Tab {item.tabName}</strong> — Baris {item.rowIndex}
+                    <strong>Tab {item.tabName}</strong> - Baris {item.rowIndex}
                   </p>
                   <p
                     style={{
@@ -718,7 +718,7 @@ export function Dashboard({ onLogout }: Props) {
                     {item.status === "failed" &&
                       `❌ Gagal setelah ${item.retryCount} percobaan`}
                     {item.status === "conflict" &&
-                      "⚠️ Tabrakan data — data server telah berubah"}
+                      "⚠️ Tabrakan data: Data server telah berubah"}
                   </p>
                   <div style={{ display: "flex", gap: "8px" }}>
                     {item.status === "failed" && (

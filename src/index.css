@@ -1,17 +1,18 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
   --bg-color: #0f172a;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --accent-color: #3b82f6;
-  --card-bg: rgba(30, 41, 59, 0.7);
-  --card-border: rgba(255, 255, 255, 0.1);
+  --card-bg: rgba(30, 41, 59, 0.75);
+  --card-border: rgba(255, 255, 255, 0.12);
   --input-bg: rgba(15, 23, 42, 0.6);
   --danger-color: #ef4444;
   --success-color: #10b981;
   --warning-color: #facc15;
   --orange-color: #fb923c;
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 [data-theme="light"] {
@@ -19,8 +20,8 @@
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --accent-color: #2563eb;
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --card-border: rgba(0, 0, 0, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(0, 0, 0, 0.08);
   --input-bg: rgba(241, 245, 249, 0.8);
   --warning-color: #eab308;
   --orange-color: #f97316;
@@ -31,6 +32,7 @@
   margin: 0;
   padding: 0;
   font-family:
+    "Plus Jakarta Sans",
     "Inter",
     -apple-system,
     BlinkMacSystemFont,
@@ -44,7 +46,7 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
-  min-height: 100vh;
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
 }
@@ -52,8 +54,8 @@ body {
 /* Glassmorphism Utilities */
 .glass {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
   border-radius: 16px;
 }
@@ -63,7 +65,7 @@ body {
   max-width: 480px;
   margin: 0 auto;
   padding: 16px 16px calc(76px + env(safe-area-inset-bottom, 0px)) 16px;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -71,19 +73,18 @@ body {
 /* App Header */
 .app-header {
   text-align: center;
-  padding: 24px 0;
+  padding: 20px 0 16px 0;
 }
 .app-header h1 {
   font-size: 24px;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent-color), #8b5cf6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
 }
 .app-header p {
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
   margin-top: 4px;
 }
 

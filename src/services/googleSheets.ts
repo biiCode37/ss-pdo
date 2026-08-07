@@ -123,7 +123,7 @@ export const signIn = async (): Promise<void> => {
       if (settled) return;
       settled = true;
       cleanup();
-      reject(new Error('Login timeout — tidak ada respons dari Google. Silakan coba lagi.'));
+      reject(new Error('Login timeout: tidak ada respons dari Google. Silakan coba lagi.'));
     }, 60000);
 
     window.addEventListener('google-login-success', handleSuccess);
@@ -303,7 +303,7 @@ export const reauthenticateSession = async (): Promise<void> => {
       if (settled) return;
       settled = true;
       cleanup();
-      reject(new Error('Perbaruan sesi timeout — tidak ada respons dari Google. Silakan coba lagi.'));
+      reject(new Error('Perbaruan sesi timeout: tidak ada respons dari Google. Silakan coba lagi.'));
     }, 60000);
 
     window.addEventListener('google-login-success', handleSuccess);
