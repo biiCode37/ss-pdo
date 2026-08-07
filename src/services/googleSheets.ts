@@ -1,5 +1,5 @@
 import { gapi } from 'gapi-script';
-import { upsertDailyUnitSummaries } from './routeService';
+import { upsertDailyUnitSummaries, logActivity } from './routeService';
 import type { DailyUnitSummary } from '../types/supabase';
 import { formatAccumulatedNotes } from '../utils/analytics';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
@@ -157,8 +157,8 @@ export const signOut = async () => {
   if (tokenStr) {
     try {
       const tokenObj = JSON.parse(tokenStr);
-      if (tokenObj.token) {
-        google.accounts.oauth2.revoke(tokenObj.token, () => {});
+      if (tokenObj.token && (window as any).google) {
+        (window as any).google.accounts.oauth2.revoke(tokenObj.token, () => {});
       }
     } catch (e) {}
   }
@@ -935,6 +935,15 @@ export const updateBusData = async (
           data: data
         }
       });
+
+      // Telemetry: Log UPDATE_BUS_DATA
+      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
+      const updatedFields = Object.keys(updates).filter(k => (updates as any)[k] !== undefined);
+      logActivity({
+        user_email: userEmail,
+        action: 'UPDATE_BUS_DATA',
+        details: { sheetId, tabName, rowIndex, updatedFields },
+      }).catch(() => {});
     } catch (error: any) {
       console.error('Error updating data', error);
       if (isAuthError(error)) {

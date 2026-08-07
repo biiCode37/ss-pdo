@@ -35,7 +35,7 @@ function readQueueFromStorage(): SyncItem[] {
   }
 }
 
-import { backupSyncQueue } from '../services/routeService';
+import { backupSyncQueue, logActivity } from '../services/routeService';
 import { parseIndonesianNumber } from '../utils/numberUtils';
 
 /** Tulis antrean ke localStorage dengan try-catch guard (ISS-06 fix) */
@@ -181,6 +181,14 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
 
         // Simpan ke Google Sheets
         await updateBusData(item.sheetId, item.tabName, item.rowIndex, item.updates, item.headerMap);
+
+        // Telemetry: Log SYNC_OFFLINE_QUEUE
+        const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
+        logActivity({
+          user_email: userEmail,
+          action: 'SYNC_OFFLINE_QUEUE',
+          details: { queueItemId: item.id, sheetId: item.sheetId, tabName: item.tabName, rowIndex: item.rowIndex },
+        }).catch(() => {});
 
         // BUG-01 FIX: Atomic remove — baca ulang localStorage SEKARANG, hapus HANYA item ini
         const freshQueue = readQueueFromStorage();
