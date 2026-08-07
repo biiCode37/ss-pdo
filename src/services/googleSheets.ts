@@ -1078,9 +1078,14 @@ export const getMonthlyToaTrend = async (
     }
   } catch (error) {
     console.error('Error fetching batch monthly TOA trend:', error);
+    if (isAuthError(error)) {
+      throw error;
+    }
+    // Retain 0 values for chart display but do not cache failed total results (ISS-08 fix)
     for (let day = 1; day <= maxDay; day++) {
       trendData.push({ day: day.toString(), totalToa: 0 });
     }
+    return trendData;
   }
 
   if (trendData.length > 0) {
@@ -1109,9 +1114,70 @@ export const getAccumulatedBusData = async (
       });
       valueRanges = response.result.valueRanges || [];
     } catch (_err) {
-      // Fallback if batchGet fails
-      const singleRes = await getBusData(sheetId, String(targetEndDay));
-      return singleRes;
+      console.warn('[GoogleSheets] batchGet failed for range accumulation, attempting per-day fallback:', _err);
+      // ISS-03 FIX: Fallback sequential per-day fetch yang TETAP MENGHORMATI rentang startDay-endDay
+      const fallbackUnitMap = new Map<string, BusData>();
+      const fallbackNotesMap = new Map<string, { day: number; note: string }[]>();
+      let fallbackHeaderMap: HeaderMap | null = null;
+
+      for (let day = targetStartDay; day <= targetEndDay; day++) {
+        try {
+          const dayRes = await getBusData(sheetId, String(day));
+          if (!fallbackHeaderMap && dayRes.headerMap) {
+            fallbackHeaderMap = dayRes.headerMap;
+          }
+          for (const bus of dayRes.data) {
+            const unitName = bus.unit;
+            if (!unitName) continue;
+            if (bus.keterangan) {
+              const notesArr = fallbackNotesMap.get(unitName) || [];
+              notesArr.push({ day, note: bus.keterangan });
+              fallbackNotesMap.set(unitName, notesArr);
+            }
+            const existing = fallbackUnitMap.get(unitName);
+            if (!existing) {
+              fallbackUnitMap.set(unitName, { ...bus });
+            } else {
+              const exToa1 = parseIndonesianNumber(existing.toaShift1);
+              const exMan1 = parseIndonesianNumber(existing.manualShift1);
+              const exToa2 = parseIndonesianNumber(existing.toaShift2);
+              const exMan2 = parseIndonesianNumber(existing.manualShift2);
+              const exTotToa = parseIndonesianNumber(existing.totalToa);
+              const exKmAkh1 = parseIndonesianNumber(existing.kmAkhir1);
+
+              const newToa1 = exToa1 + parseIndonesianNumber(bus.toaShift1);
+              const newMan1 = exMan1 + parseIndonesianNumber(bus.manualShift1);
+              const newToa2 = exToa2 + parseIndonesianNumber(bus.toaShift2);
+              const newMan2 = exMan2 + parseIndonesianNumber(bus.manualShift2);
+              const newTotToa = exTotToa + parseIndonesianNumber(bus.totalToa);
+              const newKmAkh1 = exKmAkh1 + parseIndonesianNumber(bus.kmAkhir1);
+
+              existing.toaShift1 = newToa1 > 0 ? String(newToa1) : '';
+              existing.manualShift1 = newMan1 > 0 ? String(newMan1) : '';
+              existing.toaShift2 = newToa2 > 0 ? String(newToa2) : '';
+              existing.manualShift2 = newMan2 > 0 ? String(newMan2) : '';
+              existing.totalToa = newTotToa > 0 ? String(newTotToa) : '';
+              existing.kmAkhir1 = newKmAkh1 > 0 ? String(newKmAkh1) : '0';
+            }
+          }
+        } catch (_dayErr) {
+          console.warn(`[GoogleSheets] Fallback fetch day ${day} skipped due to error:`, _dayErr);
+        }
+      }
+
+      for (const bus of fallbackUnitMap.values()) {
+        const rawNotes = fallbackNotesMap.get(bus.unit);
+        if (rawNotes && rawNotes.length > 0) {
+          bus.keterangan = formatAccumulatedNotes(rawNotes);
+        }
+      }
+
+      return {
+        data: Array.from(fallbackUnitMap.values()),
+        headerMap: fallbackHeaderMap || { unit: 0, toaShift1: 1, toaShift2: 2, manualShift1: 3, manualShift2: 4, totalToa: 5, kmAwal1: 6, kmAkhir1: 7, kmAwal2: 8, kmAkhir2: 9, keterangan: 10 },
+        missingColumns: [],
+        sheetSummary: {},
+      };
     }
 
     const unitMap = new Map<string, BusData>();
