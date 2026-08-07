@@ -55,4 +55,31 @@ describe('unitAnalytics helper', () => {
     expect(metrics.notes).toHaveLength(1);
     expect(metrics.notes[0]).toBe('Servis AC');
   });
+
+  it('correctly parses Indonesian formatted numbers with dot thousand separators and comma decimals (BUG-45)', () => {
+    const formattedData: BusData[] = [
+      {
+        rowIndex: 2,
+        unit: 'SAF-003',
+        toaShift1: '1.200',
+        toaShift2: '800',
+        manualShift1: '50',
+        manualShift2: '0',
+        totalToa: '2.000',
+        kmAwal1: '1.000,5',
+        kmAkhir1: '1.150,5',
+        kmAwal2: '1.150,5',
+        kmAkhir2: '1.250,5',
+        keterangan: '',
+        originalRow: [],
+      },
+    ];
+
+    const metrics = calculateUnitMetrics(formattedData, 'SAF-003');
+    expect(metrics.toaShift1).toBe(1200);
+    expect(metrics.totalToa).toBe(2000);
+    expect(metrics.kmShift1).toBe(150);
+    expect(metrics.kmShift2).toBe(100);
+    expect(metrics.totalKm).toBe(250);
+  });
 });

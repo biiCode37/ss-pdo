@@ -17,6 +17,7 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 - **Aturan Emas:** File asli Google Sheets adalah **Single Source of Truth (SSOT)**.
 - Nilai rangkuman dan statistik yang ditampilkan pada dashboard **HARUS MURNI** sesuai dengan nilai hasil rumus dari file sumbernya.
 - **Dilarang memotong atau membulatkan angka desimal** secara sepihak (tampilkan presisi murni hingga 10 desimal jika ada).
+- **Parsing Angka Spreadsheet:** Semua parsing angka dari data `BusData` / spreadsheet **WAJIB** menggunakan `parseIndonesianNumber()` dari `utils/numberUtils.ts`. Dilarang menggunakan `parseInt` atau `parseFloat` langsung pada field data spreadsheet untuk mencegah kesalahan parsing format desimal/ribuan Indonesia (`"."` dan `","`).
 
 ---
 

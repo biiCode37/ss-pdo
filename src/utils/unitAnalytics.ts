@@ -1,4 +1,5 @@
 import type { BusData } from '../services/googleSheets';
+import { parseIndonesianNumber } from './numberUtils';
 
 export type UnitShiftStatus = 'FULL_COMPLETE' | 'SHIFT_1_ONLY' | 'SHIFT_2_ONLY' | 'INCOMPLETE' | 'EMPTY';
 
@@ -47,8 +48,8 @@ export function getUnitShiftStatus(b: BusData): UnitShiftStatus {
   const hasS2KmAwal = hasValue(b.kmAwal2);
   const hasS2KmAkhir = hasValue(b.kmAkhir2);
   const hasS2Manual = hasValue(b.manualShift2);
-  const totalToaNum = parseInt(String(b.totalToa || '0'), 10) || 0;
-  const s1ToaNum = parseInt(String(b.toaShift1 || '0'), 10) || 0;
+  const totalToaNum = parseIndonesianNumber(b.totalToa);
+  const s1ToaNum = parseIndonesianNumber(b.toaShift1);
   const hasS2Toa = totalToaNum > s1ToaNum || (totalToaNum > 0 && !hasS1Toa);
 
   const hasS2 = hasS2Toa || hasS2KmAwal || hasS2KmAkhir || hasS2Manual;
@@ -105,24 +106,24 @@ export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitS
   const item = data.find((b) => b.unit === targetUnit);
   if (!item) return defaultResult;
 
-  const toaShift1 = parseInt(String(item.toaShift1 || '0'), 10) || 0;
-  const manualShift1 = parseInt(String(item.manualShift1 || '0'), 10) || 0;
+  const toaShift1 = parseIndonesianNumber(item.toaShift1);
+  const manualShift1 = parseIndonesianNumber(item.manualShift1);
   const totalShift1Pnp = toaShift1 + manualShift1;
 
-  const totalToaRaw = parseInt(String(item.totalToa || '0'), 10) || 0;
+  const totalToaRaw = parseIndonesianNumber(item.totalToa);
   const toaShift2 = Math.max(0, totalToaRaw - toaShift1);
-  const manualShift2 = parseInt(String(item.manualShift2 || '0'), 10) || 0;
+  const manualShift2 = parseIndonesianNumber(item.manualShift2);
   const totalShift2Pnp = toaShift2 + manualShift2;
 
   const totalToa = totalToaRaw > 0 ? totalToaRaw : (toaShift1 + toaShift2);
   const totalPassengers = totalToa + manualShift1 + manualShift2;
 
-  const kmAwal1Num = parseFloat(String(item.kmAwal1 || '0')) || 0;
-  const kmAkhir1Num = parseFloat(String(item.kmAkhir1 || '0')) || 0;
+  const kmAwal1Num = parseIndonesianNumber(item.kmAwal1);
+  const kmAkhir1Num = parseIndonesianNumber(item.kmAkhir1);
   const kmShift1 = kmAkhir1Num > kmAwal1Num ? kmAkhir1Num - kmAwal1Num : 0;
 
-  const kmAwal2Num = parseFloat(String(item.kmAwal2 || '0')) || 0;
-  const kmAkhir2Num = parseFloat(String(item.kmAkhir2 || '0')) || 0;
+  const kmAwal2Num = parseIndonesianNumber(item.kmAwal2);
+  const kmAkhir2Num = parseIndonesianNumber(item.kmAkhir2);
   const kmShift2 = kmAkhir2Num > kmAwal2Num ? kmAkhir2Num - kmAwal2Num : 0;
 
   const notes: string[] = [];

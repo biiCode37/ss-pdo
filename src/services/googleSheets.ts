@@ -614,8 +614,8 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
         let totalToaVal = getValue(row, headerMap.totalToa);
 
         if (!toaShift2Val && totalToaVal && toaShift1Val) {
-          const tot = parseInt(totalToaVal, 10) || 0;
-          const t1 = parseInt(toaShift1Val, 10) || 0;
+          const tot = parseIndonesianNumber(totalToaVal);
+          const t1 = parseIndonesianNumber(toaShift1Val);
           toaShift2Val = Math.max(0, tot - t1).toString();
         }
 

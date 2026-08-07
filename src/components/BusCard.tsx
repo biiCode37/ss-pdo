@@ -5,6 +5,7 @@ import { updateBusData, getBusRowData } from "../services/googleSheets";
 import { isNetworkError } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { slugifyUnitId } from "../utils/analytics";
+import { parseIndonesianNumber } from "../utils/numberUtils";
 import {
   Save,
   Loader2,
@@ -319,30 +320,20 @@ function BusCardComponent({
 
   const renderServerSummary = () => {
     // Hitung Total Pnp & Total KM untuk ringkasan kartu unit
-    const toaShift1Num =
-      parseInt(String(formData.toaShift1 || bus.toaShift1 || "0"), 10) || 0;
-    const totalToaNum =
-      parseInt(String(formData.totalToa || bus.totalToa || "0"), 10) || 0;
-    const manual1Num =
-      parseInt(String(formData.manualShift1 || bus.manualShift1 || "0"), 10) ||
-      0;
-    const manual2Num =
-      parseInt(String(formData.manualShift2 || bus.manualShift2 || "0"), 10) ||
-      0;
+    const toaShift1Num = parseIndonesianNumber(formData.toaShift1 || bus.toaShift1);
+    const totalToaNum = parseIndonesianNumber(formData.totalToa || bus.totalToa);
+    const manual1Num = parseIndonesianNumber(formData.manualShift1 || bus.manualShift1);
+    const manual2Num = parseIndonesianNumber(formData.manualShift2 || bus.manualShift2);
 
     const totalToa = totalToaNum > 0 ? totalToaNum : toaShift1Num;
     const totalPnp = totalToa + manual1Num + manual2Num;
 
-    const kmA1 =
-      parseFloat(String(formData.kmAwal1 || bus.kmAwal1 || "0")) || 0;
-    const kmAk1 =
-      parseFloat(String(formData.kmAkhir1 || bus.kmAkhir1 || "0")) || 0;
+    const kmA1 = parseIndonesianNumber(formData.kmAwal1 || bus.kmAwal1);
+    const kmAk1 = parseIndonesianNumber(formData.kmAkhir1 || bus.kmAkhir1);
     const kmS1 = kmAk1 > kmA1 ? kmAk1 - kmA1 : 0;
 
-    const kmA2 =
-      parseFloat(String(formData.kmAwal2 || bus.kmAwal2 || "0")) || 0;
-    const kmAk2 =
-      parseFloat(String(formData.kmAkhir2 || bus.kmAkhir2 || "0")) || 0;
+    const kmA2 = parseIndonesianNumber(formData.kmAwal2 || bus.kmAwal2);
+    const kmAk2 = parseIndonesianNumber(formData.kmAkhir2 || bus.kmAkhir2);
     const kmS2 = kmAk2 > kmA2 ? kmAk2 - kmA2 : 0;
 
     const totalKm = kmS1 + kmS2;
