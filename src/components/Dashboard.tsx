@@ -601,10 +601,12 @@ export function Dashboard({ onLogout }: Props) {
               monthLabel={extractMonthYearLabel(sheetUrl)}
               onSelectTab={handleSelectTab}
               onSelectUnit={(unit) => {
-                setMainTab("input");
+                setMainTab("units");
                 setTimeout(() => {
-                  const cardId = `bus-card-${slugifyUnitId(unit)}`;
-                  const el = document.getElementById(cardId);
+                  const slug = slugifyUnitId(unit);
+                  const el =
+                    document.getElementById(`unit-card-${slug}`) ||
+                    document.getElementById(`bus-card-${slug}`);
                   if (el) {
                     el.scrollIntoView({ behavior: "smooth", block: "center" });
                     el.classList.remove("bus-card-highlight");

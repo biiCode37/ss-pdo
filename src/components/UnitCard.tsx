@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
+import { slugifyUnitId } from "../utils/analytics";
 import {
   Bus,
   Navigation,
@@ -126,6 +127,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
 function UnitCardComponent({ item, onClick }: Props) {
   return (
     <div
+      id={`unit-card-${slugifyUnitId(item.unit)}`}
       onClick={onClick}
       className="bus-card glass"
       style={{
