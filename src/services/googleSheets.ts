@@ -71,6 +71,14 @@ export const initGoogleApi = async (): Promise<void> => {
 
                 // BUG-11: Mulai timer refresh token otomatis
                 startTokenRefreshTimer(tokenResponse.expires_in * 1000);
+
+                // Telemetry: Catat activity log LOGIN jika ini interactive login
+                const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'google_user';
+                logActivity({
+                  user_email: userEmail,
+                  action: 'LOGIN',
+                  details: { loginMethod: 'google_gis' },
+                }).catch(() => {});
               } else if (tokenResponse && tokenResponse.error) {
                 window.dispatchEvent(new CustomEvent('google-login-error', { detail: tokenResponse }));
               }
@@ -139,12 +147,18 @@ export const signIn = async (): Promise<void> => {
 };
 
 export const signOut = async () => {
+  const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'google_user';
+  logActivity({
+    user_email: userEmail,
+    action: 'LOGOUT',
+  }).catch(() => {});
+
   const tokenStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
   if (tokenStr) {
     try {
       const tokenObj = JSON.parse(tokenStr);
-      if ((window as any).google) {
-        (window as any).google.accounts.oauth2.revoke(tokenObj.token, () => {});
+      if (tokenObj.token) {
+        google.accounts.oauth2.revoke(tokenObj.token, () => {});
       }
     } catch (e) {}
   }
@@ -153,7 +167,9 @@ export const signOut = async () => {
   localStorage.removeItem('PDO_USER_EMAIL');
   localStorage.removeItem('PDO_USER_NAME');
   localStorage.removeItem('PDO_USER_AVATAR');
-  gapi.client.setToken(null);
+  if (gapi.client) {
+    gapi.client.setToken(null);
+  }
 };
 
 export const ensureValidToken = async (): Promise<void> => {

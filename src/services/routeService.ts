@@ -256,6 +256,14 @@ export async function createRouteWithSheet(params: {
     // 3. Refresh cache lokal
     await fetchRoutesWithSheets();
 
+    // Telemetry: Log CREATE_ROUTE
+    logActivity({
+      user_email: localStorage.getItem('PDO_USER_EMAIL') || 'admin',
+      action: 'CREATE_ROUTE',
+      route_code: params.routeCode,
+      details: { year: params.year, month: params.month, spreadsheetId: params.spreadsheetId },
+    }).catch(() => {});
+
     return { success: true };
   } catch (err: any) {
     console.error('[RouteService] Failed to create route with sheet:', err);
@@ -299,6 +307,13 @@ export async function deleteRouteSheet(sheetId: number, routeId: number): Promis
 
     // 3. Refresh cache lokal
     await fetchRoutesWithSheets();
+
+    // Telemetry: Log DELETE_ROUTE
+    logActivity({
+      user_email: localStorage.getItem('PDO_USER_EMAIL') || 'admin',
+      action: 'DELETE_ROUTE',
+      details: { sheetId, routeId },
+    }).catch(() => {});
 
     return { success: true };
   } catch (err: any) {

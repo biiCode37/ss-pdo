@@ -3,6 +3,7 @@ import { LoginScreen } from './components/LoginScreen';
 import { Dashboard } from './components/Dashboard';
 import { initGoogleApi, checkSignedInAsync, signOut, hasGoogleCreds } from './services/googleSheets';
 import type { AuthResult } from './services/googleSheets';
+import { useUserActivityTracking } from './hooks/useUserActivityTracking';
 
 import { formatUserError } from './utils/errorFormatter';
 
@@ -13,6 +14,10 @@ export default function App() {
   const [isApiReady, setIsApiReady] = useState(false);
   // BUG-15: Guard untuk mencegah double-init di StrictMode
   const initCalledRef = useRef(false);
+
+  // Telemetry: Heartbeat durasi aktif pengguna
+  const userEmail = localStorage.getItem('PDO_USER_EMAIL') || undefined;
+  useUserActivityTracking(isSignedIn, userEmail);
 
   const initializeApi = async () => {
     if (!hasGoogleCreds()) {
