@@ -35,9 +35,16 @@ function readQueueFromStorage(): SyncItem[] {
   }
 }
 
-/** Tulis antrean ke localStorage */
+import { backupSyncQueue } from '../services/routeService';
+import { parseIndonesianNumber } from '../utils/numberUtils';
+
+/** Tulis antrean ke localStorage dengan try-catch guard (ISS-06 fix) */
 function writeQueueToStorage(queue: SyncItem[]): void {
-  localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(queue));
+  try {
+    localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(queue));
+  } catch (err) {
+    console.error('[useOfflineSync] Gagal menulis antrean ke localStorage (Quota/Disabled?):', err);
+  }
 }
 
 /** Cek apakah error adalah auth error */
@@ -59,8 +66,18 @@ export function isNetworkError(err: any): boolean {
   return false;
 }
 
+/** Normalisasi nilai string/number untuk perbandingan snapshot yang stabil (ISS-11 fix) */
+function normalizeFieldValue(val: any): string {
+  if (val === undefined || val === null) return '';
+  const str = String(val).trim();
+  if (str === '') return '';
+  // Jika nilai bisa di-parse sebagai angka desimal/Indonesia, samakan representasi string angkanya
+  const num = parseIndonesianNumber(str, NaN);
+  if (!isNaN(num)) return String(num);
+  return str;
+}
 
-/** Deteksi collision: bandingkan data server dengan snapshot asli */
+/** Deteksi collision: bandingkan data server dengan snapshot asli secara ter-normalisasi (ISS-11 fix) */
 function detectCollision(
   remoteData: Partial<BusData>,
   originalSnapshot: Partial<BusData>
@@ -70,7 +87,9 @@ function detectCollision(
     'kmAwal1', 'kmAkhir1', 'kmAwal2', 'kmAkhir2', 'keterangan'
   ];
   for (const field of fieldsToCheck) {
-    if ((remoteData[field] || '') !== (originalSnapshot[field] || '')) {
+    const remoteNorm = normalizeFieldValue(remoteData[field]);
+    const origNorm = normalizeFieldValue(originalSnapshot[field]);
+    if (remoteNorm !== origNorm) {
       return true;
     }
   }
@@ -113,6 +132,18 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
       };
       const newQueue = [...filtered, newItem];
       writeQueueToStorage(newQueue);
+
+      // ISS-06 FIX: Backup item antrean ke Supabase secara background jika memungkinkan
+      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'offline_user';
+      backupSyncQueue({
+        user_email: userEmail,
+        spreadsheet_id: item.sheetId,
+        tab_name: item.tabName,
+        row_index: item.rowIndex,
+        payload: item.updates,
+        status: 'pending',
+      }).catch(_e => {});
+
       return newQueue;
     });
   }, []);
