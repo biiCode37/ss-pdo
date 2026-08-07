@@ -66,7 +66,7 @@ export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
   if (!data || data.length === 0) return [];
   
   return data.map((b) => {
-    const metrics = calculateUnitMetrics(data, b.unit || '');
+    const metrics = calculateUnitMetricsFromRow(b);
     return {
       unit: b.unit || 'Tanpa Nama',
       totalToa: metrics.totalToa,
@@ -80,32 +80,8 @@ export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
   });
 }
 
-export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitSummaryMetrics {
-  const defaultResult: UnitSummaryMetrics = {
-    unit: targetUnit,
-    toaShift1: 0,
-    manualShift1: 0,
-    totalShift1Pnp: 0,
-    toaShift2: 0,
-    manualShift2: 0,
-    totalShift2Pnp: 0,
-    totalToa: 0,
-    totalPassengers: 0,
-    kmAwal1: '-',
-    kmAkhir1: '-',
-    kmShift1: 0,
-    kmAwal2: '-',
-    kmAkhir2: '-',
-    kmShift2: 0,
-    totalKm: 0,
-    notes: [],
-  };
-
-  if (!data || !targetUnit) return defaultResult;
-
-  const item = data.find((b) => b.unit === targetUnit);
-  if (!item) return defaultResult;
-
+export function calculateUnitMetricsFromRow(item: BusData): UnitSummaryMetrics {
+  const targetUnit = item.unit || 'Tanpa Nama';
   const toaShift1 = parseIndonesianNumber(item.toaShift1);
   const manualShift1 = parseIndonesianNumber(item.manualShift1);
   const totalShift1Pnp = toaShift1 + manualShift1;
@@ -150,4 +126,33 @@ export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitS
     totalKm: kmShift1 + kmShift2,
     notes,
   };
+}
+
+export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitSummaryMetrics {
+  const defaultResult: UnitSummaryMetrics = {
+    unit: targetUnit,
+    toaShift1: 0,
+    manualShift1: 0,
+    totalShift1Pnp: 0,
+    toaShift2: 0,
+    manualShift2: 0,
+    totalShift2Pnp: 0,
+    totalToa: 0,
+    totalPassengers: 0,
+    kmAwal1: '-',
+    kmAkhir1: '-',
+    kmShift1: 0,
+    kmAwal2: '-',
+    kmAkhir2: '-',
+    kmShift2: 0,
+    totalKm: 0,
+    notes: [],
+  };
+
+  if (!data || !targetUnit) return defaultResult;
+
+  const item = data.find((b) => b.unit === targetUnit);
+  if (!item) return defaultResult;
+
+  return calculateUnitMetricsFromRow(item);
 }

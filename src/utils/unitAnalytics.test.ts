@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractUnitList, calculateUnitMetrics } from './unitAnalytics';
+import { extractUnitList, calculateUnitMetrics, calculateUnitMetricsFromRow } from './unitAnalytics';
 import type { BusData } from '../services/googleSheets';
 
 const mockBusData: BusData[] = [
@@ -81,5 +81,13 @@ describe('unitAnalytics helper', () => {
     expect(metrics.kmShift1).toBe(150);
     expect(metrics.kmShift2).toBe(100);
     expect(metrics.totalKm).toBe(250);
+  });
+
+  it('calculates metrics directly from row in O(1) time (BUG-46)', () => {
+    const row = mockBusData[0];
+    const metrics = calculateUnitMetricsFromRow(row);
+    expect(metrics.unit).toBe('SAF-001');
+    expect(metrics.totalToa).toBe(120);
+    expect(metrics.totalKm).toBe(100);
   });
 });

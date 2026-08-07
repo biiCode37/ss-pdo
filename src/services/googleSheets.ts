@@ -798,11 +798,23 @@ export const updateBusData = async (
   });
 };
 
+const monthlyToaTrendCache = new Map<string, { day: string; totalToa: number }[]>();
+
+export function clearMonthlyToaTrendCache(): void {
+  monthlyToaTrendCache.clear();
+}
+
 export const getMonthlyToaTrend = async (
   sheetId: string, 
   maxDay: number,
-  unitFilter?: string
+  unitFilter?: string,
+  bypassCache = false
 ): Promise<{ day: string; totalToa: number }[]> => {
+  const cacheKey = `${sheetId}_${maxDay}_${unitFilter || 'ALL'}`;
+  if (!bypassCache && monthlyToaTrendCache.has(cacheKey)) {
+    return monthlyToaTrendCache.get(cacheKey)!;
+  }
+
   return withAuthRetry(async () => {
     const trendData: { day: string; totalToa: number }[] = [];
     
@@ -940,6 +952,9 @@ export const getMonthlyToaTrend = async (
     }
   }
 
+  if (trendData.length > 0) {
+    monthlyToaTrendCache.set(cacheKey, trendData);
+  }
   return trendData;
   });
 };
