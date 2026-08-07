@@ -1,30 +1,77 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-  --bg-color: #0f172a;
+  --bg-color: #0b0f19;
+  --surface-color: #111827;
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --accent-color: #3b82f6;
-  --card-bg: rgba(30, 41, 59, 0.75);
+  --card-bg: rgba(17, 24, 39, 0.75);
   --card-border: rgba(255, 255, 255, 0.12);
-  --input-bg: rgba(15, 23, 42, 0.6);
+  --input-bg: rgba(15, 23, 42, 0.65);
   --danger-color: #ef4444;
   --success-color: #10b981;
   --warning-color: #facc15;
   --orange-color: #fb923c;
+
+  /* Semantic High-Contrast Shift & KPI Tokens (Dark Mode) */
+  --shift1-color: #38bdf8;
+  --shift1-bg: rgba(56, 189, 248, 0.12);
+  --shift1-border: rgba(56, 189, 248, 0.25);
+
+  --shift2-color: #c084fc;
+  --shift2-bg: rgba(192, 132, 252, 0.12);
+  --shift2-border: rgba(192, 132, 252, 0.25);
+
+  --total-color: #4ade80;
+  --total-bg: rgba(74, 222, 128, 0.12);
+  --total-border: rgba(74, 222, 128, 0.25);
+
+  --warning-text: #fdba74;
+  --warning-badge-bg: rgba(249, 115, 22, 0.12);
+
+  --danger-text: #fb7185;
+  --danger-badge-bg: rgba(244, 63, 94, 0.12);
+
+  --info-text: #60a5fa;
+  --info-badge-bg: rgba(96, 165, 250, 0.12);
+
   --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 [data-theme="light"] {
   --bg-color: #f8fafc;
+  --surface-color: #ffffff;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --accent-color: #2563eb;
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --card-border: rgba(0, 0, 0, 0.08);
-  --input-bg: rgba(241, 245, 249, 0.8);
-  --warning-color: #eab308;
-  --orange-color: #f97316;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --card-border: rgba(15, 23, 42, 0.08);
+  --input-bg: rgba(241, 245, 249, 0.9);
+  --warning-color: #d97706;
+  --orange-color: #ea580c;
+
+  /* Semantic High-Contrast Shift & KPI Tokens (Light Mode - High Readability) */
+  --shift1-color: #0284c7;
+  --shift1-bg: rgba(2, 132, 199, 0.08);
+  --shift1-border: rgba(2, 132, 199, 0.2);
+
+  --shift2-color: #7e22ce;
+  --shift2-bg: rgba(126, 34, 206, 0.08);
+  --shift2-border: rgba(126, 34, 206, 0.2);
+
+  --total-color: #15803d;
+  --total-bg: rgba(21, 128, 61, 0.08);
+  --total-border: rgba(21, 128, 61, 0.2);
+
+  --warning-text: #c2410c;
+  --warning-badge-bg: rgba(234, 88, 12, 0.1);
+
+  --danger-text: #be123c;
+  --danger-badge-bg: rgba(190, 18, 60, 0.1);
+
+  --info-text: #1d4ed8;
+  --info-badge-bg: rgba(29, 78, 216, 0.1);
 }
 
 * {

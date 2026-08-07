@@ -180,8 +180,8 @@ function UnitCardComponent({ item, onClick }: Props) {
       >
         {/* Total KM */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <Navigation size={13} style={{ color: "#38bdf8", flexShrink: 0 }} />
-          <strong style={{ color: "#38bdf8", fontWeight: 800 }}>
+          <Navigation size={13} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
+          <strong style={{ color: "var(--shift1-color)", fontWeight: 800 }}>
             {safeFormatNumber(item.totalKm)}
           </strong>{" "}
           <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
@@ -193,7 +193,7 @@ function UnitCardComponent({ item, onClick }: Props) {
 
         {/* Total Pnp */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <Users size={13} style={{ color: "#38bdf8", flexShrink: 0 }} />
+          <Users size={13} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
           <strong style={{ color: "var(--text-primary)", fontWeight: 800 }}>
             {safeFormatNumber(item.totalPassengers)}
           </strong>{" "}
@@ -208,7 +208,7 @@ function UnitCardComponent({ item, onClick }: Props) {
         <div
           style={{
             fontSize: "11px",
-            color: "#fdba74",
+            color: "var(--warning-text)",
             fontWeight: 600,
             letterSpacing: "0.01em",
             display: "flex",

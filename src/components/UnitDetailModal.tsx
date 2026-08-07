@@ -168,25 +168,25 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         {/* 3 Grid Executive Summary (Shift 1, Shift 2, Akumulasi Total) */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px', marginBottom: '20px' }}>
           {/* Grid 1: Shift 1 */}
-          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0.5) 100%)', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#38bdf8', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--shift1-bg)', border: '1px solid var(--shift1-border)' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--shift1-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span>Shift 1</span>
-              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)' }}>Operasional</span>
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--shift1-bg)', color: 'var(--shift1-color)', border: '1px solid var(--shift1-border)' }}>Operasional</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {/* 1. KM Paling Atas (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#38bdf8' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
                   <Navigation size={18} />
                 </div>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8', lineHeight: 1.1 }}>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--shift1-color)', lineHeight: 1.1 }}>
                   {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
                 </div>
               </div>
 
               {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#38bdf8' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
                   <Users size={18} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
@@ -196,7 +196,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
 
               {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
               {metrics.manualShift1 > 0 && (
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.25)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
                   TOA: <strong>{safeFormatNumber(metrics.toaShift1)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1)}</strong>
                 </div>
               )}
@@ -204,25 +204,25 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           </div>
 
           {/* Grid 2: Shift 2 */}
-          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(30, 41, 59, 0.4) 100%)', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#c084fc', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--shift2-bg)', border: '1px solid var(--shift2-border)' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--shift2-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span>Shift 2</span>
-              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(168, 85, 247, 0.15)' }}>Operasional</span>
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--shift2-bg)', color: 'var(--shift2-color)', border: '1px solid var(--shift2-border)' }}>Operasional</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {/* 1. KM Paling Atas (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#c084fc' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
                   <Navigation size={18} />
                 </div>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: '#c084fc', lineHeight: 1.1 }}>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--shift2-color)', lineHeight: 1.1 }}>
                   {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
                 </div>
               </div>
 
               {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#c084fc' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
                   <Users size={18} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
@@ -232,7 +232,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
 
               {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
               {metrics.manualShift2 > 0 && (
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
                   TOA: <strong>{safeFormatNumber(metrics.toaShift2)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift2)}</strong>
                 </div>
               )}
@@ -240,35 +240,35 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           </div>
 
           {/* Grid 3: Total Akumulasi (Shift 1 + 2) */}
-          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(30, 41, 59, 0.4) 100%)', border: '1px solid rgba(34, 197, 94, 0.25)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: '#4ade80', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--total-bg)', border: '1px solid var(--total-border)' }}>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--total-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span>Akumulasi Total</span>
-              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80' }}>Shift 1 + 2</span>
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--total-bg)', color: 'var(--total-color)', border: '1px solid var(--total-border)' }}>Shift 1 + 2</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {/* 1. KM Paling Atas (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#4ade80' }}>
+                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
                   <Navigation size={20} />
                 </div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#4ade80', lineHeight: 1.1 }}>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
                   {safeFormatNumber(metrics.totalKm)} <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
                 </div>
               </div>
 
               {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#4ade80' }}>
+                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
                   <Users size={20} />
                 </div>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: '#4ade80', lineHeight: 1.1 }}>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
                   {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
                 </div>
               </div>
 
               {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
               {(metrics.manualShift1 + metrics.manualShift2) > 0 && (
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
                   Total TOA: <strong>{safeFormatNumber(metrics.totalToa)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1 + metrics.manualShift2)}</strong>
                 </div>
               )}
@@ -294,8 +294,8 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           {metrics.notes.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {metrics.notes.map((n, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: '#fdba74', fontWeight: 600, letterSpacing: '0.02em', background: 'rgba(249, 115, 22, 0.08)', padding: '8px 12px', borderRadius: '10px', borderLeft: '3px solid rgba(249, 115, 22, 0.6)' }}>
-                  <AlertTriangle size={15} style={{ color: '#f97316', flexShrink: 0, marginTop: '1px' }} />
+                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: 'var(--warning-text)', fontWeight: 600, letterSpacing: '0.02em', background: 'var(--warning-badge-bg)', padding: '8px 12px', borderRadius: '10px', borderLeft: '3px solid var(--orange-color)' }}>
+                  <AlertTriangle size={15} style={{ color: 'var(--orange-color)', flexShrink: 0, marginTop: '1px' }} />
                   <span style={{ lineHeight: 1.4, wordBreak: 'break-word', textTransform: 'uppercase' }}>{n}</span>
                 </div>
               ))}

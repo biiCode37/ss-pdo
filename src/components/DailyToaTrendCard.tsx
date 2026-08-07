@@ -243,12 +243,11 @@ export function DailyToaTrendCard({
           marginBottom: "14px",
         }}
       >
-        {/* Terbanyak (Max) Card */}
+        {/* Tertinggi (Peak) Card */}
         <div
           style={{
-            background:
-              "linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(16, 185, 129, 0.04) 100%)",
-            border: "1px solid rgba(34, 197, 94, 0.22)",
+            background: "var(--total-bg)",
+            border: "1px solid var(--total-border)",
             borderRadius: "10px",
             padding: "8px 10px",
             display: "flex",
@@ -267,14 +266,14 @@ export function DailyToaTrendCard({
               gap: "3px",
             }}
           >
-            <Award size={11} style={{ color: "#4ade80" }} />
+            <Award size={11} style={{ color: "var(--total-color)" }} />
             Tertinggi
           </span>
           <span
             style={{
               fontSize: "14px",
               fontWeight: 700,
-              color: "#4ade80",
+              color: "var(--total-color)",
               lineHeight: "1.2",
             }}
           >
@@ -288,9 +287,8 @@ export function DailyToaTrendCard({
         {/* Terendah (Min) Card */}
         <div
           style={{
-            background:
-              "linear-gradient(135deg, rgba(244, 63, 94, 0.12) 0%, rgba(225, 29, 72, 0.04) 100%)",
-            border: "1px solid rgba(244, 63, 94, 0.22)",
+            background: "var(--danger-badge-bg)",
+            border: "1px solid var(--card-border)",
             borderRadius: "10px",
             padding: "8px 10px",
             display: "flex",
@@ -309,14 +307,14 @@ export function DailyToaTrendCard({
               gap: "3px",
             }}
           >
-            <TrendingDown size={11} style={{ color: "#fb7185" }} />
+            <TrendingDown size={11} style={{ color: "var(--danger-text)" }} />
             Terendah
           </span>
           <span
             style={{
               fontSize: "14px",
               fontWeight: 700,
-              color: "#fb7185",
+              color: "var(--danger-text)",
               lineHeight: "1.2",
             }}
           >
@@ -330,9 +328,8 @@ export function DailyToaTrendCard({
         {/* Rata-rata (Avg) Card */}
         <div
           style={{
-            background:
-              "linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.04) 100%)",
-            border: "1px solid rgba(59, 130, 246, 0.22)",
+            background: "var(--info-badge-bg)",
+            border: "1px solid var(--card-border)",
             borderRadius: "10px",
             padding: "8px 10px",
             display: "flex",
@@ -351,14 +348,14 @@ export function DailyToaTrendCard({
               gap: "3px",
             }}
           >
-            <Zap size={11} style={{ color: "#60a5fa" }} />
+            <Zap size={11} style={{ color: "var(--info-text)" }} />
             Rata-rata
           </span>
           <span
             style={{
               fontSize: "14px",
               fontWeight: 700,
-              color: "#60a5fa",
+              color: "var(--info-text)",
               lineHeight: "1.2",
             }}
           >

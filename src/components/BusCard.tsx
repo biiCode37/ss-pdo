@@ -421,9 +421,9 @@ function BusCardComponent({
             fontWeight: 700,
             padding: "3px 8px",
             borderRadius: "8px",
-            backgroundColor: "rgba(56, 189, 248, 0.12)",
-            color: "#38bdf8",
-            border: "1px solid rgba(56, 189, 248, 0.25)",
+            backgroundColor: "var(--shift1-bg)",
+            color: "var(--shift1-color)",
+            border: "1px solid var(--shift1-border)",
             display: "flex",
             alignItems: "center",
             gap: "4px",
@@ -442,15 +442,15 @@ function BusCardComponent({
             fontWeight: 700,
             padding: "3px 8px",
             borderRadius: "8px",
-            backgroundColor: "rgba(255, 255, 255, 0.08)",
+            backgroundColor: "var(--input-bg)",
             color: "var(--text-primary)",
-            border: "1px solid rgba(255, 255, 255, 0.12)",
+            border: "1px solid var(--card-border)",
             display: "flex",
             alignItems: "center",
             gap: "4px",
           }}
         >
-          <Users size={12} style={{ color: "#38bdf8", flexShrink: 0 }} />
+          <Users size={12} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
           <span>
             {totalPnp > 0 ? `${safeFormatNumber(totalPnp)} Pnp` : `0 Pnp`}
           </span>
@@ -492,7 +492,7 @@ function BusCardComponent({
           style={{
             margin: "0 20px 12px 20px",
             fontSize: "12px",
-            color: "#fdba74",
+            color: "var(--warning-text)",
             fontWeight: 600,
             letterSpacing: "0.01em",
             display: "flex",
@@ -503,7 +503,7 @@ function BusCardComponent({
         >
           <AlertTriangle
             size={14}
-            style={{ color: "#f97316", flexShrink: 0 }}
+            style={{ color: "var(--orange-color)", flexShrink: 0 }}
           />
           <span
             style={{
