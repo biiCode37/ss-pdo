@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-08-07)
 
 ## Corpus Check
-- 149 files · ~169,994 words
+- 153 files · ~172,788 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1553 nodes · 1842 edges · 147 communities (127 shown, 20 thin omitted)
+- 1607 nodes · 1901 edges · 150 communities (130 shown, 20 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1408137a`
+- Built from commit: `5cbbad09`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -134,9 +134,9 @@
 - vite
 - vite-plugin-pwa
 - vitest
-- BusCard.tsx
+- useOfflineSync.ts
 - googleSheets.ts
-- unitAnalytics.ts
+- BusCard.tsx
 - App.tsx
 - Dashboard.tsx
 - Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)
@@ -159,7 +159,10 @@
 - 8. DARK MODE PROTOCOL
 - @types/gapi.auth2
 - BottomNav.tsx
-- DailyToaTrendCard.tsx
+- Refactor 5 — Daftar Masalah SS_PDO
+- Refactor 5 — Prompt untuk AI Agent Code
+- Refactor 5 — Rekomendasi Solusi SS_PDO
+- unitAnalytics.ts
 
 ## God Nodes (most connected - your core abstractions)
 1. `Writing Skills` - 23 edges
@@ -176,19 +179,19 @@
 ## Surprising Connections (you probably didn't know these)
 - `Props` --references--> `BusData`  [EXTRACTED]
   src/components/AnalyticsDashboard.tsx → src/services/googleSheets.ts
+- `Props` --references--> `BusData`  [EXTRACTED]
+  src/components/UnitDetailModal.tsx → src/services/googleSheets.ts
 - `CrossPeriodSummaryResult` --references--> `BusData`  [EXTRACTED]
   src/services/routeService.ts → src/services/googleSheets.ts
+- `BusCardComponent()` --calls--> `getBusRowData()`  [EXTRACTED]
+  src/components/BusCard.tsx → src/services/googleSheets.ts
 - `BusCardComponent()` --calls--> `updateBusData()`  [EXTRACTED]
   src/components/BusCard.tsx → src/services/googleSheets.ts
-- `BusCardComponent()` --calls--> `slugifyUnitId()`  [EXTRACTED]
-  src/components/BusCard.tsx → src/utils/analytics.ts
-- `BusCardComponent()` --calls--> `formatUserError()`  [EXTRACTED]
-  src/components/BusCard.tsx → src/utils/errorFormatter.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (147 total, 20 thin omitted)
+## Communities (150 total, 20 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -199,8 +202,8 @@ Cohesion: 0.06
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
 ### Community 2 - "analytics.ts"
-Cohesion: 0.16
-Nodes (18): AnalyticsDashboard(), Props, CompletionStatusCard(), Props, KPICard(), Props, Props, ShiftComparisonCard() (+10 more)
+Cohesion: 0.14
+Nodes (22): AnalyticsDashboard(), Props, CompletionStatusCard(), Props, DailyToaTrendCard(), parseSelectedDay(), Props, KPICard() (+14 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -594,25 +597,25 @@ Nodes (4): name, private, type, version
 Cohesion: 0.50
 Nodes (4): 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10), VISUAL_DENSITY (Level 1-10)
 
-### Community 121 - "BusCard.tsx"
-Cohesion: 0.18
-Nodes (20): BusCard, BusCardComponent(), Props, BusList(), Props, Props, Props, useDebounce() (+12 more)
+### Community 121 - "useOfflineSync.ts"
+Cohesion: 0.39
+Nodes (8): detectCollision(), isAuthError(), readQueueFromStorage(), RETRY_DELAYS, useOfflineSync(), UseOfflineSyncOptions, writeQueueToStorage(), getBusRowData()
 
 ### Community 122 - "googleSheets.ts"
-Cohesion: 0.21
-Nodes (20): Dashboard(), detectHeaderRowAndBuildComposite(), ensureValidToken(), extractSheetId(), findColumnIndex(), getAccumulatedBusData(), getBusData(), getMonthlyToaTrend() (+12 more)
+Cohesion: 0.18
+Nodes (22): Dashboard(), detectHeaderRowAndBuildComposite(), ensureValidToken(), extractSheetId(), findColumnIndex(), getAccumulatedBusData(), getBusData(), getMonthlyToaTrend() (+14 more)
 
-### Community 123 - "unitAnalytics.ts"
+### Community 123 - "BusCard.tsx"
 Cohesion: 0.21
-Nodes (14): Props, renderStatusBadge(), UnitCard, UnitCardComponent(), slugifyUnitId(), calculateUnitMetrics(), calculateUnitMetricsFromRow(), extractAccumulatedUnitList() (+6 more)
+Nodes (13): BusCard, BusCardComponent(), FormattedNoteText(), Props, renderStatusBadge(), UnitCard, UnitCardComponent(), useDebounce() (+5 more)
 
 ### Community 124 - "App.tsx"
 Cohesion: 0.24
 Nodes (13): App(), LoginScreen(), Props, checkSignedIn(), getGoogleCreds(), hasGoogleCreds(), initGoogleApi(), signIn() (+5 more)
 
 ### Community 125 - "Dashboard.tsx"
-Cohesion: 0.25
-Nodes (9): react, Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton(), SwipeableContainer(), SwipeableContainerProps (+1 more)
+Cohesion: 0.19
+Nodes (16): react, Props, BusList(), Props, Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps (+8 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
 Cohesion: 0.20
@@ -686,29 +689,41 @@ Nodes (5): 5.A Sticky-Stack - Canonical Skeleton, 5.B Horizontal-Pan - Canonical
 Cohesion: 0.40
 Nodes (5): 8.A Token Strategy (pick one, stick to it), 8.B Do Not Prescribe Specific Colors Here, 8.C Default Mode, 8.D Test in Both Modes Before Finishing, 8. DARK MODE PROTOCOL
 
-### Community 146 - "DailyToaTrendCard.tsx"
+### Community 146 - "Refactor 5 — Daftar Masalah SS_PDO"
+Cohesion: 0.11
+Nodes (18): ISS-01 — State login terlalu optimistis, ISS-02 — Pencocokan sheet / rute terlalu rapuh, ISS-03 — Fallback akumulasi mengabaikan rentang tanggal, ISS-04 — Ekstraksi spreadsheet ID terlalu sempit, ISS-05 — Sinkronisasi cache latar belakang memakai identifikasi yang sama-sama rapuh, ISS-06 — localStorage jadi single point of failure, ISS-07 — Cache fallback bisa menampilkan data usang tanpa penanda yang jelas, ISS-08 — getMonthlyToaTrend bisa menyamaratakan error jadi nol (+10 more)
+
+### Community 147 - "Refactor 5 — Prompt untuk AI Agent Code"
+Cohesion: 0.12
+Nodes (16): Acceptance criteria, Aturan kerja, Batasan, Format output yang diminta, Ketentuan teknis wajib, Langkah implementasi, Misi, Output akhir yang diharapkan (+8 more)
+
+### Community 148 - "Refactor 5 — Rekomendasi Solusi SS_PDO"
+Cohesion: 0.12
+Nodes (15): Prinsip umum, Refactor 5 — Rekomendasi Solusi SS_PDO, SOL-01 — Validasi auth harus sinkron dan final, SOL-02 — Normalisasi identitas sheet/rute, SOL-03 — Perbaiki fallback akumulasi multi-hari, SOL-04 — Parser URL harus lebih toleran dan eksplisit, SOL-05 — Cache fallback harus transparan ke user, SOL-06 — Jangan samakan error total dengan nol (+7 more)
+
+### Community 149 - "unitAnalytics.ts"
 Cohesion: 0.44
-Nodes (6): DailyToaTrendCard(), parseSelectedDay(), Props, UnitDetailModal(), extractMonthYearLabel(), safeFormatNumber()
+Nodes (7): calculateUnitMetrics(), calculateUnitMetricsFromRow(), extractAccumulatedUnitList(), extractUnitList(), getUnitShiftStatus(), mockBusData, UnitSummaryMetrics
 
 ## Knowledge Gaps
-- **927 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+922 more)
+- **971 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+966 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `DailyToaTrendCard.tsx`, `BusCard.tsx`, `unitAnalytics.ts`, `App.tsx`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **Why does `react` connect `Dashboard.tsx` to `analytics.ts`, `plugins`, `routeService.ts`, `useOfflineSync.ts`, `BusCard.tsx`, `App.tsx`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `Dashboard.tsx`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `devDependencies` connect `devDependencies` to `@types/gapi.auth2`, `package.json`, `@types/react-dom`, `vite`, `vite-plugin-pwa`, `vitest`?**
-  _High betweenness centrality (0.001) - this node is a cross-community bridge._
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _927 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _971 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05576441102756892 - nodes in this community are weakly interconnected._
+- **Should `analytics.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.14039408866995073 - nodes in this community are weakly interconnected._
 - **Should `Test-Driven Development (TDD)` be split into smaller, more focused modules?**
   _Cohesion score 0.05 - nodes in this community are weakly interconnected._

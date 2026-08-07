@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1785820338.010444,
-    "ast_hash": "b59fa4befe80c550a50d5a3cfea8cb9b",
+    "mtime": 1786115609.2922647,
+    "ast_hash": "efbff7db25f4a93d7861274131a1d50a",
     "semantic_hash": ""
   },
   "src/components/AnalyticsDashboard.tsx": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
-    "mtime": 1786093040.154431,
-    "ast_hash": "79376d452968fbd8e222376a594424a7",
+    "mtime": 1786114324.8982303,
+    "ast_hash": "f8c9aca99a71b009a183d35bd64ebc7d",
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/components/CompletionStatusCard.tsx": {
-    "mtime": 1786093377.831802,
-    "ast_hash": "ff52134df2c94b07e1eff6825e0a08e3",
+    "mtime": 1786114707.5614479,
+    "ast_hash": "ad4aa44777bc4fa948b0a7e8be833bdb",
     "semantic_hash": ""
   },
   "src/components/DailyToaTrendCard.tsx": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1786091807.7758582,
-    "ast_hash": "60325f73fd99210b7de51f951c25be54",
+    "mtime": 1786115756.1547937,
+    "ast_hash": "0cb41a1a265906e7783dd3335e947fa7",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
-    "mtime": 1786090857.2576895,
-    "ast_hash": "e0e14d8de3e95f5675c3d57d17c47589",
+    "mtime": 1786115817.50373,
+    "ast_hash": "ffa20e13bb2c5be5e5212750eff64b80",
     "semantic_hash": ""
   },
   "src/components/ShiftComparisonCard.tsx": {
@@ -140,8 +140,8 @@
     "semantic_hash": "25ea3ba1194f00b323351fc530ffa501"
   },
   "src/hooks/useOfflineSync.ts": {
-    "mtime": 1785811151.294478,
-    "ast_hash": "1f0b6df29bc3396787a6743b157a4d64",
+    "mtime": 1786115898.1104505,
+    "ast_hash": "1f02a98e8090210c035ae7782155deff",
     "semantic_hash": ""
   },
   "src/main.tsx": {
@@ -150,8 +150,8 @@
     "semantic_hash": "787e5a07efeb2bf6209d5937195f2f68"
   },
   "src/services/googleSheets.ts": {
-    "mtime": 1786092658.38684,
-    "ast_hash": "56479e3ee79512ac479c40a1db0921bd",
+    "mtime": 1786115858.3070824,
+    "ast_hash": "eb377357204f8769813a43b73438e502",
     "semantic_hash": ""
   },
   "src/types/phantom-ui.d.ts": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1785822346.1866958,
-    "ast_hash": "151e15af8b72ece4ef10485bee450949",
+    "mtime": 1786115959.8396308,
+    "ast_hash": "50d1742e058443e1fbdf1515a71cfa8b",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "src/services/routeService.ts": {
-    "mtime": 1786092936.1104543,
-    "ast_hash": "265e84ca3ac1e77f4d63152456f008fb",
+    "mtime": 1786115799.997903,
+    "ast_hash": "fd9b0fc1ae928e8fc07648007a2dc20e",
     "semantic_hash": ""
   },
   "src/services/supabase.ts": {
@@ -675,13 +675,13 @@
     "semantic_hash": ""
   },
   "src/components/SwipeableContainer.tsx": {
-    "mtime": 1785949937.249235,
-    "ast_hash": "f31b5abaa4b2e5193611f36e84acaefd",
+    "mtime": 1786115930.81291,
+    "ast_hash": "7c3ae02f7cb63489f6871db2c4dc9be5",
     "semantic_hash": ""
   },
   "src/components/__tests__/SwipeableContainer.test.tsx": {
-    "mtime": 1785822242.0518737,
-    "ast_hash": "35147dbdc57421b02177a2ce2a8ff8b9",
+    "mtime": 1786115935.6263719,
+    "ast_hash": "01ea5732e909229b8065f2ca98aafb04",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-04-swipe-navigation-plan.md": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitCard.tsx": {
-    "mtime": 1786093053.8859117,
-    "ast_hash": "64cfc7deebb87412ebc5c3f4c330f997",
+    "mtime": 1786114331.815828,
+    "ast_hash": "6b09c16c6a7ac4405c15ddad4a02b15b",
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
@@ -795,8 +795,48 @@
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {
-    "mtime": 1786093364.8337443,
-    "ast_hash": "35b4adbd35fbfb6460d58dea0671eb25",
+    "mtime": 1786114700.1636112,
+    "ast_hash": "c3d47a5547e7ddc732966842845ed872",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_5/01_daftar_masalah_ss_pdo_refactor5.md": {
+    "mtime": 1786114214.917104,
+    "ast_hash": "dca07d28981d436b2b4457d48c073970",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_5/02_rekomendasi_solusi_ss_pdo_refactor5.md": {
+    "mtime": 1786114212.730945,
+    "ast_hash": "91e0e0ea40ae01fd63223cbe073b585b",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_5/03_prompt_ai_agent_ss_pdo_refactor5.md": {
+    "mtime": 1786114213.8225029,
+    "ast_hash": "b958a28846984d04ef3124538faed0fc",
+    "semantic_hash": ""
+  },
+  "src/utils/resultStatus.test.ts": {
+    "mtime": 1786115476.268266,
+    "ast_hash": "ece43965588816d9ffeefbbb93d610be",
+    "semantic_hash": ""
+  },
+  "src/utils/resultStatus.ts": {
+    "mtime": 1786115414.1815217,
+    "ast_hash": "701d2bd0671bb05b3cd34c00c623227b",
+    "semantic_hash": ""
+  },
+  "src/utils/sheetIdentity.test.ts": {
+    "mtime": 1786115444.7494576,
+    "ast_hash": "811a6e0b08bebf7ab0348753c97722a5",
+    "semantic_hash": ""
+  },
+  "src/utils/sheetIdentity.ts": {
+    "mtime": 1786115412.1165922,
+    "ast_hash": "1beb6c2123beaa21a39aac6e5f46f71c",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-1-brief.md": {
+    "mtime": 1786115319.3891268,
+    "ast_hash": "3c04fc9039741363398eb1bd95eb6fc5",
     "semantic_hash": ""
   }
 }

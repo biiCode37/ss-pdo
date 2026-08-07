@@ -101,12 +101,16 @@ export function CompletionStatusCard({
             >
               <span
                 style={{
-                  fontSize: "12px",
+                  fontSize: "11.5px",
                   fontWeight: 800,
                   color: "#ffffff",
                   background:
                     "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
-                  padding: "3px 10px",
+                  padding: "3px 8px",
+                  minWidth: "92px",
+                  display: "inline-flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   borderRadius: "6px",
                   letterSpacing: "0.3px",
                   boxShadow: "0 2px 6px rgba(59, 130, 246, 0.3)",
@@ -116,7 +120,7 @@ export function CompletionStatusCard({
               >
                 {note.unit}
               </span>
-              <span
+              <div
                 style={{
                   wordBreak: "break-word",
                   overflowWrap: "anywhere",
@@ -130,7 +134,7 @@ export function CompletionStatusCard({
                 }}
               >
                 <FormattedNoteText text={note.keterangan} />
-              </span>
+              </div>
             </div>
           ))}
         </div>

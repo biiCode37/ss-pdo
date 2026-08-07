@@ -120,9 +120,9 @@
   "118": "vite",
   "119": "vite-plugin-pwa",
   "120": "vitest",
-  "121": "BusCard.tsx",
+  "121": "useOfflineSync.ts",
   "122": "googleSheets.ts",
-  "123": "unitAnalytics.ts",
+  "123": "BusCard.tsx",
   "124": "App.tsx",
   "125": "Dashboard.tsx",
   "126": "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)",
@@ -145,5 +145,8 @@
   "143": "8. DARK MODE PROTOCOL",
   "144": "@types/gapi.auth2",
   "145": "BottomNav.tsx",
-  "146": "DailyToaTrendCard.tsx"
+  "146": "Refactor 5 — Daftar Masalah SS_PDO",
+  "147": "Refactor 5 — Prompt untuk AI Agent Code",
+  "148": "Refactor 5 — Rekomendasi Solusi SS_PDO",
+  "149": "unitAnalytics.ts"
 }

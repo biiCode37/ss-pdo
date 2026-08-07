@@ -215,23 +215,24 @@ function UnitCardComponent({ item, onClick }: Props) {
             fontWeight: 600,
             letterSpacing: "0.01em",
             display: "flex",
-            gap: "6px",
-            alignItems: "center",
+            gap: "8px",
+            alignItems: "flex-start",
           }}
         >
           <AlertTriangle
             size={13}
-            style={{ color: "#f97316", flexShrink: 0 }}
+            style={{ color: "#f97316", flexShrink: 0, marginTop: "2px" }}
           />
-          <span
+          <div
             style={{
+              flex: 1,
               lineHeight: "1.3",
               wordBreak: "break-word",
               textTransform: "uppercase",
             }}
           >
             <FormattedNoteText text={item.notes[0]} />
-          </span>
+          </div>
         </div>
       )}
     </div>
