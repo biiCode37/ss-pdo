@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapPin, Calendar, Plus, X, Loader2, Trash2, ChevronUp } from 'lucide-react';
-import { fetchRoutesWithSheets, createRouteWithSheet, deleteRouteSheet } from '../services/routeService';
+import { MapPin, Calendar, Plus, X, Loader2, ChevronUp } from 'lucide-react';
+import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
 import { extractSheetId } from '../services/googleSheets';
 import type { Route, RouteSheet } from '../types/supabase';
 
@@ -60,7 +60,6 @@ export function RouteSelectorCard({
   const [isMorphed, setIsMorphed] = useState(false);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   const [newRouteCode, setNewRouteCode] = useState('');
@@ -269,29 +268,6 @@ export function RouteSelectorCard({
     }
   };
 
-  const handleDeleteRoute = async () => {
-    if (!activeFlat) return;
-    if (!confirm(`Hapus sheet rute ${activeFlat.routeCode} (${MONTH_NAMES_ID[activeFlat.sheet.month]} ${activeFlat.sheet.year}) dari daftar?`)) {
-      return;
-    }
-
-    setIsDeleting(true);
-    const result = await deleteRouteSheet(activeFlat.sheet.id, activeFlat.routeId);
-    setIsDeleting(false);
-
-    if (result.success) {
-      const updatedRoutes = await loadRoutes();
-      const flat = flattenRoutes(updatedRoutes);
-      if (flat.length > 0) {
-        setSheetUrl(flat[0].sheet.sheet_url);
-      } else {
-        setSheetUrl('');
-      }
-    } else {
-      alert(result.message || 'Gagal menghapus rute');
-    }
-  };
-
   return (
     <div
       className={`morph-selector-card ${isMorphed ? 'morphed' : ''}`}
@@ -436,20 +412,7 @@ export function RouteSelectorCard({
               </div>
             </div>
 
-            {activeFlat ? (
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
-                <button
-                  type="button"
-                  className="btn btn-outline"
-                  style={{ width: 'auto', padding: '4px 10px', color: 'var(--danger-color)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}
-                  onClick={handleDeleteRoute}
-                  disabled={isDeleting}
-                  title="Hapus Sheet Ini"
-                >
-                  {isDeleting ? <Loader2 className="spinner" size={14} /> : <Trash2 size={14} />} Hapus Sheet Periode Ini
-                </button>
-              </div>
-            ) : selectedRouteCode ? (
+            {!activeFlat && selectedRouteCode ? (
               <div style={{ fontSize: '12px', color: 'var(--warning-color)', marginBottom: '8px' }}>
                 ⚠️ Belum ada sheet untuk rute {selectedRouteCode} periode {MONTH_NAMES_ID[selectedMonth]} {selectedYear}. Klik <b>+ Tambah Rute</b> untuk mendaftarkannya.
               </div>
