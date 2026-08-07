@@ -143,7 +143,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
       >
         {/* Top Handle Bar for Touch Swipe */}
         <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '16px' }}>
-          <div style={{ width: '40px', height: '4px', borderRadius: '2px', background: 'rgba(255, 255, 255, 0.2)' }} />
+          <div style={{ width: '40px', height: '4px', borderRadius: '2px', background: 'var(--text-secondary)', opacity: 0.3 }} />
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
