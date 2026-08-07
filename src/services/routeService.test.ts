@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { fetchRoutesWithSheets, upsertUserProfile, verifyUserProfile, logActivity, backupSyncQueue } from './routeService';
+import { fetchRoutesWithSheets, upsertUserProfile, verifyUserProfile, logActivity, sendUserHeartbeat, backupSyncQueue } from './routeService';
 import { supabase } from './supabase';
 
 // Mock localStorage in Node environment
@@ -180,6 +180,31 @@ describe('routeService', () => {
 
     expect(supabase.from).toHaveBeenCalledWith('activity_logs');
     expect(mockInsert).toHaveBeenCalledWith([logItem]);
+  });
+
+  it('sendUserHeartbeat updates last_active_at and total_active_seconds', async () => {
+    const mockUpdate = vi.fn().mockReturnValue({
+      eq: vi.fn().mockResolvedValue({ error: null }),
+    });
+    const mockSelect = vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        single: vi.fn().mockResolvedValue({ data: { total_active_seconds: 360 }, error: null }),
+      }),
+    });
+
+    (supabase.from as any).mockReturnValue({
+      select: mockSelect,
+      update: mockUpdate,
+    });
+
+    await sendUserHeartbeat('user@pusm.id', 180);
+
+    expect(supabase.from).toHaveBeenCalledWith('user_profiles');
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        total_active_seconds: 540,
+      })
+    );
   });
 
   it('backupSyncQueue invokes supabase insert with backup payload', async () => {

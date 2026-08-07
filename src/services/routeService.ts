@@ -137,9 +137,35 @@ export async function logActivity(log: ActivityLog): Promise<void> {
   if (!isSupabaseConfigured) return;
 
   try {
-    await supabase.from('activity_logs').insert([log]);
+    const userEmail = log.user_email || localStorage.getItem('PDO_USER_EMAIL') || 'unknown';
+    await supabase.from('activity_logs').insert([{ ...log, user_email: userEmail }]);
   } catch (err) {
     console.error('[RouteService] Failed to log activity:', err);
+  }
+}
+
+export async function sendUserHeartbeat(userEmail: string, secondsInterval: number = 180): Promise<void> {
+  if (!isSupabaseConfigured || !userEmail) return;
+
+  try {
+    const { data } = await supabase
+      .from('user_profiles')
+      .select('total_active_seconds')
+      .eq('email', userEmail)
+      .single();
+
+    const currentSeconds = Number(data?.total_active_seconds || 0);
+
+    await supabase
+      .from('user_profiles')
+      .update({
+        last_active_at: new Date().toISOString(),
+        total_active_seconds: currentSeconds + secondsInterval,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('email', userEmail);
+  } catch (_err) {
+    /* Non-blocking fail-safe */
   }
 }
 

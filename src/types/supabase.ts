@@ -31,6 +31,8 @@ export interface UserProfile {
   role: 'admin' | 'petugas';
   is_active?: boolean;
   last_login_at?: string;
+  last_active_at?: string;
+  total_active_seconds?: number;
   created_at?: string;
   updated_at?: string;
 }
