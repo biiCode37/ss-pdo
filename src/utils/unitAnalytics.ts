@@ -156,3 +156,61 @@ export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitS
 
   return calculateUnitMetricsFromRow(item);
 }
+
+export function extractAccumulatedUnitList(
+  allDaysData: Record<string, BusData[]>,
+  endDay: number
+): UnitSummaryItem[] {
+  const daysToInclude = Object.keys(allDaysData)
+    .map((d) => parseInt(d, 10))
+    .filter((d) => !isNaN(d) && d <= endDay)
+    .sort((a, b) => a - b);
+
+  if (daysToInclude.length === 0) return [];
+
+  const unitMap = new Map<string, { totalToa: number; totalManual: number; totalKm: number; notes: string[]; shiftStatus: UnitShiftStatus }>();
+
+  for (const day of daysToInclude) {
+    const dayData = allDaysData[String(day)] || [];
+    for (const b of dayData) {
+      if (!b.unit) continue;
+      const metrics = calculateUnitMetricsFromRow(b);
+      const existing = unitMap.get(b.unit);
+      if (!existing) {
+        unitMap.set(b.unit, {
+          totalToa: metrics.totalToa,
+          totalManual: metrics.manualShift1 + metrics.manualShift2,
+          totalKm: metrics.totalKm,
+          notes: [...metrics.notes],
+          shiftStatus: getUnitShiftStatus(b),
+        });
+      } else {
+        existing.totalToa += metrics.totalToa;
+        existing.totalManual += metrics.manualShift1 + metrics.manualShift2;
+        existing.totalKm += metrics.totalKm;
+        metrics.notes.forEach((n) => {
+          if (!existing.notes.includes(n)) existing.notes.push(n);
+        });
+        const currentStatus = getUnitShiftStatus(b);
+        if (currentStatus === 'FULL_COMPLETE') existing.shiftStatus = 'FULL_COMPLETE';
+      }
+    }
+  }
+
+  const result: UnitSummaryItem[] = [];
+  unitMap.forEach((val, unitKey) => {
+    const totalPnp = val.totalToa + val.totalManual;
+    result.push({
+      unit: unitKey,
+      totalToa: val.totalToa,
+      totalPassengers: totalPnp,
+      totalKm: val.totalKm,
+      isFilled: totalPnp > 0 || val.totalKm > 0 || val.notes.length > 0,
+      shiftStatus: val.shiftStatus,
+      notes: val.notes,
+      noteCount: val.notes.length,
+    });
+  });
+
+  return result;
+}

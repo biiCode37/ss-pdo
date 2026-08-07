@@ -186,3 +186,78 @@ export function extractMonthYearLabel(sheetUrl: string, routes?: Route[]): strin
   const currentYear = now.getFullYear();
   return `${capitalizedCurrentMonth} ${currentYear}`;
 }
+
+export function calculateAccumulatedAnalytics(
+  allDaysData: Record<string, BusData[]>,
+  endDay: number
+): AnalyticsSummary {
+  const daysToInclude = Object.keys(allDaysData)
+    .map((d) => parseInt(d, 10))
+    .filter((d) => !isNaN(d) && d <= endDay)
+    .sort((a, b) => a - b);
+
+  if (daysToInclude.length === 0) {
+    return calculateAnalytics([]);
+  }
+
+  const unitMap = new Map<string, BusData>();
+
+  for (const day of daysToInclude) {
+    const dayData = allDaysData[String(day)] || [];
+    for (const bus of dayData) {
+      if (!bus.unit) continue;
+      const existing = unitMap.get(bus.unit);
+      if (!existing) {
+        unitMap.set(bus.unit, { ...bus });
+      } else {
+        const kmA1 = safeParseNumber(bus.kmAwal1);
+        const kmAkh1 = safeParseNumber(bus.kmAkhir1);
+        const kmA2 = safeParseNumber(bus.kmAwal2);
+        const kmAkh2 = safeParseNumber(bus.kmAkhir2);
+        const kmS1 = kmAkh1 > kmA1 ? kmAkh1 - kmA1 : 0;
+        const kmS2 = kmAkh2 > kmA2 ? kmAkh2 - kmA2 : 0;
+
+        const exKmA1 = safeParseNumber(existing.kmAwal1);
+        const exKmAkh1 = safeParseNumber(existing.kmAkhir1);
+        const exKmA2 = safeParseNumber(existing.kmAwal2);
+        const exKmAkh2 = safeParseNumber(existing.kmAkhir2);
+        const exKmS1 = exKmAkh1 > exKmA1 ? exKmAkh1 - exKmA1 : 0;
+        const exKmS2 = exKmAkh2 > exKmA2 ? exKmAkh2 - exKmA2 : 0;
+
+        existing.toaShift1 = (
+          safeParseNumber(existing.toaShift1) + safeParseNumber(bus.toaShift1)
+        ).toString();
+        existing.manualShift1 = (
+          safeParseNumber(existing.manualShift1) + safeParseNumber(bus.manualShift1)
+        ).toString();
+        existing.toaShift2 = (
+          safeParseNumber(existing.toaShift2) + safeParseNumber(bus.toaShift2)
+        ).toString();
+        existing.manualShift2 = (
+          safeParseNumber(existing.manualShift2) + safeParseNumber(bus.manualShift2)
+        ).toString();
+        existing.totalToa = (
+          safeParseNumber(existing.totalToa) + safeParseNumber(bus.totalToa)
+        ).toString();
+
+        const totalBusKmS1 = exKmS1 + kmS1;
+        const totalBusKmS2 = exKmS2 + kmS2;
+
+        existing.kmAwal1 = "0";
+        existing.kmAkhir1 = totalBusKmS1.toString();
+        existing.kmAwal2 = "0";
+        existing.kmAkhir2 = totalBusKmS2.toString();
+
+        if (bus.keterangan && bus.keterangan.trim() !== "") {
+          const exNotes = existing.keterangan ? existing.keterangan.split(" | ") : [];
+          if (!exNotes.includes(bus.keterangan.trim())) {
+            exNotes.push(bus.keterangan.trim());
+            existing.keterangan = exNotes.join(" | ");
+          }
+        }
+      }
+    }
+  }
+
+  return calculateAnalytics(Array.from(unitMap.values()));
+}

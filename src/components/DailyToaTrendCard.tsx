@@ -609,7 +609,7 @@ export function DailyToaTrendCard({
           {/* Active Day Floating Metric Tooltip Badge */}
           {activeBar && (
             <g
-              transform={`translate(${Math.min(Math.max(activeBar.x + barWidth / 2, 52), chartWidth - 52)}, ${Math.max(activeBar.y - 24, 16)})`}
+              transform={`translate(${Math.min(Math.max(activeBar.x + barWidth / 2, 45), chartWidth - 45)}, ${Math.max(activeBar.y - 24, 16)})`}
               onClick={(e) => {
                 e.stopPropagation();
                 setActiveTooltipDay(null);
@@ -618,27 +618,26 @@ export function DailyToaTrendCard({
               style={{ cursor: "pointer" }}
             >
               <rect
-                x="-48"
+                x="-36"
                 y="-13"
-                width="96"
-                height="20"
-                rx="6"
-                fill="var(--card-bg, #0f172a)"
+                width="72"
+                height="21"
+                rx="7"
+                fill="#2563eb"
                 stroke="#60a5fa"
                 strokeWidth="1.5"
                 filter="url(#pillBlueGlow)"
               />
-              <polygon points="0,9 -4,7 4,7" fill="#60a5fa" />
+              <polygon points="0,10 -4,8 4,8" fill="#2563eb" />
               <text
                 x="0"
                 y="1.5"
-                fontSize="9.5"
-                fontWeight="700"
-                fill="#60a5fa"
+                fontSize="10"
+                fontWeight="800"
+                fill="#ffffff"
                 textAnchor="middle"
               >
-                Tgl {activeBar.day}:{" "}
-                {safeFormatNumber(activeBar.totalToa)} Pnp
+                Tgl {activeBar.day}
               </text>
             </g>
           )}

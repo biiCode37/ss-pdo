@@ -215,7 +215,6 @@ export function RouteSelectorCard({
     : selectedRouteCode
       ? `${selectedRouteCode} (${MONTH_NAMES_ID[selectedMonth]} ${selectedYear})`
       : 'Pilih Rute & Periode';
-  const displayTabName = currentTabName || selectedTab;
 
   const resetForm = () => {
     setNewRouteCode('');
@@ -284,7 +283,7 @@ export function RouteSelectorCard({
         </div>
         <div className="morph-pill-badge" style={{ flexShrink: 0, marginLeft: '8px' }}>
           <Calendar size={13} style={{ flexShrink: 0 }} />
-          <span>Tgl {displayTabName}</span>
+          <span>{selectedTab === 'AKUMULASI' ? `Akumulasi (1-${new Date().getDate()})` : `Tgl ${currentTabName || selectedTab}`}</span>
         </div>
       </div>
 
@@ -371,6 +370,7 @@ export function RouteSelectorCard({
                   onChange={(e) => setSelectedTab(e.target.value)}
                   style={{ width: '100%', padding: '8px' }}
                 >
+                  <option value="AKUMULASI">Akumulasi MTD (Tgl 1 - {new Date().getDate()})</option>
                   {days.map(day => (
                     <option key={day} value={day}>Tgl {day}</option>
                   ))}

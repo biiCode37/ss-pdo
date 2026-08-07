@@ -91,6 +91,29 @@ export function BusList({
 
   return (
     <div>
+      {tabName === "AKUMULASI" && (
+        <div
+          style={{
+            background: "rgba(59, 130, 246, 0.12)",
+            border: "1px solid rgba(59, 130, 246, 0.3)",
+            color: "var(--accent-color)",
+            padding: "10px 14px",
+            borderRadius: "12px",
+            fontSize: "12.5px",
+            fontWeight: 600,
+            marginBottom: "12px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <span>📊</span>
+          <span>
+            Rekapitulasi Akumulasi MTD (Tgl 1 - {new Date().getDate()}). Pilih tanggal harian pada form atau ketuk badge grafik untuk mengedit data harian spesifik.
+          </span>
+        </div>
+      )}
+
       <div
         className="progress-section glass"
         style={{ padding: "16px", marginBottom: "12px" }}

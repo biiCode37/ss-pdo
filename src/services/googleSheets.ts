@@ -958,3 +958,149 @@ export const getMonthlyToaTrend = async (
   return trendData;
   });
 };
+
+export const getAccumulatedBusData = async (
+  sheetId: string,
+  maxDay: number
+): Promise<{ data: BusData[]; headerMap: HeaderMap; missingColumns: string[]; sheetSummary: Record<string, number> }> => {
+  return withAuthRetry(async () => {
+    const today = new Date().getDate();
+    const targetEndDay = Math.min(maxDay, Math.max(1, today));
+
+    const ranges = Array.from({ length: targetEndDay }, (_, i) => `${i + 1}!A1:ZZ`);
+
+    let valueRanges: any[] = [];
+    try {
+      const response = await (gapi.client as any).sheets.spreadsheets.values.batchGet({
+        spreadsheetId: sheetId,
+        ranges,
+      });
+      valueRanges = response.result.valueRanges || [];
+    } catch (_err) {
+      // Fallback if batchGet fails
+      const singleRes = await getBusData(sheetId, String(targetEndDay));
+      return singleRes;
+    }
+
+    const unitMap = new Map<string, BusData>();
+    let firstHeaderMap: HeaderMap | null = null;
+
+    for (let idx = 0; idx < valueRanges.length; idx++) {
+      const vr = valueRanges[idx];
+      const rows = vr?.values;
+      if (!rows || rows.length === 0) continue;
+
+      const { headerRowIndex, isSubHeader, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
+      if (headerRowIndex === -1) continue;
+
+      const headerMap: HeaderMap = {
+        unit: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit),
+        toaShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift1),
+        toaShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift2),
+        manualShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift1),
+        manualShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift2),
+        totalToa: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.totalToa),
+        kmAwal1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAwal1),
+        kmAkhir1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAkhir1),
+        kmAwal2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAwal2),
+        kmAkhir2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAkhir2),
+        keterangan: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.keterangan),
+      };
+
+      if (!firstHeaderMap && headerMap.unit !== -1) {
+        firstHeaderMap = headerMap;
+      }
+
+      const startRowIdx = headerRowIndex + (isSubHeader ? 2 : 1);
+
+      for (let r = startRowIdx; r < rows.length; r++) {
+        const row = rows[r];
+        if (!row || row.length === 0) continue;
+
+        const getVal = (colIdx: number) => (colIdx !== -1 && row[colIdx] !== undefined ? String(row[colIdx]).trim() : "");
+        const unitName = getVal(headerMap.unit);
+        if (!unitName) continue;
+
+        const kmA1 = parseIndonesianNumber(getVal(headerMap.kmAwal1));
+        const kmAkh1 = parseIndonesianNumber(getVal(headerMap.kmAkhir1));
+        const kmA2 = parseIndonesianNumber(getVal(headerMap.kmAwal2));
+        const kmAkh2 = parseIndonesianNumber(getVal(headerMap.kmAkhir2));
+        const kmS1 = kmAkh1 > kmA1 ? kmAkh1 - kmA1 : 0;
+        const kmS2 = kmAkh2 > kmA2 ? kmAkh2 - kmA2 : 0;
+
+        const toa1 = parseIndonesianNumber(getVal(headerMap.toaShift1));
+        const man1 = parseIndonesianNumber(getVal(headerMap.manualShift1));
+        const toa2 = parseIndonesianNumber(getVal(headerMap.toaShift2));
+        const man2 = parseIndonesianNumber(getVal(headerMap.manualShift2));
+        const totToa = parseIndonesianNumber(getVal(headerMap.totalToa));
+        const ket = getVal(headerMap.keterangan);
+
+        const existing = unitMap.get(unitName);
+        if (!existing) {
+          unitMap.set(unitName, {
+            rowIndex: r + 1,
+            unit: unitName,
+            toaShift1: toa1 > 0 ? toa1.toString() : "",
+            manualShift1: man1 > 0 ? man1.toString() : "",
+            toaShift2: toa2 > 0 ? toa2.toString() : "",
+            manualShift2: man2 > 0 ? man2.toString() : "",
+            totalToa: totToa > 0 ? totToa.toString() : (toa1 + toa2).toString(),
+            kmAwal1: "0",
+            kmAkhir1: kmS1.toString(),
+            kmAwal2: "0",
+            kmAkhir2: kmS2.toString(),
+            keterangan: ket,
+            originalRow: row.map(String),
+          });
+        } else {
+          const exKmA1 = parseIndonesianNumber(existing.kmAwal1);
+          const exKmAkh1 = parseIndonesianNumber(existing.kmAkhir1);
+          const exKmA2 = parseIndonesianNumber(existing.kmAwal2);
+          const exKmAkh2 = parseIndonesianNumber(existing.kmAkhir2);
+          const exKmS1 = exKmAkh1 > exKmA1 ? exKmAkh1 - exKmA1 : 0;
+          const exKmS2 = exKmAkh2 > exKmA2 ? exKmAkh2 - exKmA2 : 0;
+
+          const newKmS1 = exKmS1 + kmS1;
+          const newKmS2 = exKmS2 + kmS2;
+
+          const exToa1 = parseIndonesianNumber(existing.toaShift1);
+          const exMan1 = parseIndonesianNumber(existing.manualShift1);
+          const exToa2 = parseIndonesianNumber(existing.toaShift2);
+          const exMan2 = parseIndonesianNumber(existing.manualShift2);
+          const exTotToa = parseIndonesianNumber(existing.totalToa);
+
+          const sumToa1 = exToa1 + toa1;
+          const sumMan1 = exMan1 + man1;
+          const sumToa2 = exToa2 + toa2;
+          const sumMan2 = exMan2 + man2;
+          const sumTotToa = exTotToa + (totToa > 0 ? totToa : toa1 + toa2);
+
+          existing.toaShift1 = sumToa1 > 0 ? sumToa1.toString() : "";
+          existing.manualShift1 = sumMan1 > 0 ? sumMan1.toString() : "";
+          existing.toaShift2 = sumToa2 > 0 ? sumToa2.toString() : "";
+          existing.manualShift2 = sumMan2 > 0 ? sumMan2.toString() : "";
+          existing.totalToa = sumTotToa > 0 ? sumTotToa.toString() : "";
+          existing.kmAwal1 = "0";
+          existing.kmAkhir1 = newKmS1.toString();
+          existing.kmAwal2 = "0";
+          existing.kmAkhir2 = newKmS2.toString();
+
+          if (ket) {
+            const exNotes = existing.keterangan ? existing.keterangan.split(" | ") : [];
+            if (!exNotes.includes(ket)) {
+              exNotes.push(ket);
+              existing.keterangan = exNotes.join(" | ");
+            }
+          }
+        }
+      }
+    }
+
+    return {
+      data: Array.from(unitMap.values()),
+      headerMap: firstHeaderMap || { unit: 0, toaShift1: 1, toaShift2: 2, manualShift1: 3, manualShift2: 4, totalToa: 5, kmAwal1: 6, kmAkhir1: 7, kmAwal2: 8, kmAkhir2: 9, keterangan: 10 },
+      missingColumns: [],
+      sheetSummary: {},
+    };
+  });
+};

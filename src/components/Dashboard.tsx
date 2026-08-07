@@ -3,6 +3,7 @@ import type { BusData, HeaderMap } from "../services/googleSheets";
 import {
   extractSheetId,
   getBusData,
+  getAccumulatedBusData,
   reauthenticateSession,
 } from "../services/googleSheets";
 import { BusList } from "./BusList";
@@ -47,16 +48,7 @@ export function Dashboard({ onLogout }: Props) {
     return "";
   });
 
-  const [selectedTab, setSelectedTab] = useState(() => {
-    try {
-      const saved = localStorage.getItem("PDO_LAST_VISITED");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.selectedTab) return String(parsed.selectedTab);
-      }
-    } catch (_e) {}
-    return new Date().getDate().toString();
-  });
+  const [selectedTab, setSelectedTab] = useState("AKUMULASI");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mainTab, setMainTab] = useState<"input" | "analytics" | "units">(
@@ -225,12 +217,17 @@ export function Dashboard({ onLogout }: Props) {
     }
 
     try {
+      const result =
+        tabToLoad === "AKUMULASI"
+          ? await getAccumulatedBusData(sheetId, new Date().getDate())
+          : await getBusData(sheetId, tabToLoad);
+
       const {
         data,
         headerMap,
         missingColumns: missing,
         sheetSummary: summary,
-      } = await getBusData(sheetId, tabToLoad);
+      } = result;
 
       if (currentRequestId !== requestIdRef.current) return;
 
