@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { MapPin, Calendar, Plus, X, Loader2, ChevronUp } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
-import { extractSheetId } from '../services/googleSheets';
+import { extractSpreadsheetId } from '../utils/sheetIdentity';
 import type { Route, RouteSheet } from '../types/supabase';
 
 const MONTH_NAMES_ID = [
@@ -137,9 +137,12 @@ export function RouteSelectorCard({
   // Sync 3-level dropdowns when active sheet changes
   useEffect(() => {
     if (flatSheets.length === 0) return;
-    const active = flatSheets.find(f =>
-      currentSheetId ? f.sheet.sheet_url.includes(currentSheetId) : f.sheet.sheet_url === sheetUrl
-    );
+    const targetId = currentSheetId || extractSpreadsheetId(sheetUrl);
+    const active = flatSheets.find(f => {
+      const fId = extractSpreadsheetId(f.sheet.sheet_url) || extractSpreadsheetId(f.sheet.spreadsheet_id);
+      return targetId && fId === targetId;
+    });
+
     if (active) {
       setSelectedRouteCode(active.routeCode);
       setSelectedMonth(active.sheet.month);
@@ -215,9 +218,12 @@ export function RouteSelectorCard({
   }, [isLoading, isDataLoaded]);
 
   // Cari info rute aktif berdasarkan sheetUrl/currentSheetId
-  const activeFlat = flatSheets.find(f =>
-    currentSheetId ? f.sheet.sheet_url.includes(currentSheetId) : f.sheet.sheet_url === sheetUrl
-  );
+  const targetId = currentSheetId || extractSpreadsheetId(sheetUrl);
+  const activeFlat = flatSheets.find(f => {
+    const fId = extractSpreadsheetId(f.sheet.sheet_url) || extractSpreadsheetId(f.sheet.spreadsheet_id);
+    return targetId && fId === targetId;
+  });
+
   const displayRouteTitle = activeFlat
     ? `${activeFlat.routeCode} (${MONTH_NAMES_ID[activeFlat.sheet.month]} ${activeFlat.sheet.year})`
     : selectedRouteCode
@@ -243,7 +249,7 @@ export function RouteSelectorCard({
       return;
     }
 
-    const spreadsheetId = extractSheetId(newRouteUrl.trim());
+    const spreadsheetId = extractSpreadsheetId(newRouteUrl.trim());
     if (!spreadsheetId) {
       setFormError('Link Google Sheets tidak valid. Pastikan Anda copy link dari Google Sheets.');
       return;

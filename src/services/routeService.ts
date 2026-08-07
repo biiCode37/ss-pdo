@@ -23,6 +23,7 @@ export async function fetchRoutesWithSheets(): Promise<Route[]> {
     if (error) throw error;
     if (data) {
       localStorage.setItem(CACHE_KEY_ROUTES, JSON.stringify(data));
+      localStorage.setItem('PDO_CACHE_ROUTES_TIMESTAMP', new Date().toISOString());
       return data;
     }
   } catch (err) {

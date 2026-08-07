@@ -762,9 +762,12 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
           const routes = JSON.parse(cached);
           let matchRoute: any = null;
           let matchSheet: any = null;
+          const targetCanonicalId = extractSpreadsheetId(sheetId);
           for (const r of routes) {
             for (const s of r.route_sheets || []) {
-              if (s.sheet_url.includes(sheetId) || sheetId.includes(s.spreadsheet_id)) {
+              const urlCanonical = extractSpreadsheetId(s.sheet_url);
+              const fieldCanonical = extractSpreadsheetId(s.spreadsheet_id);
+              if (targetCanonicalId && (urlCanonical === targetCanonicalId || fieldCanonical === targetCanonicalId)) {
                 matchRoute = r;
                 matchSheet = s;
                 break;
