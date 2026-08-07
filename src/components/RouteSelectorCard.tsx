@@ -367,8 +367,9 @@ export function RouteSelectorCard({
               )}
             </div>
 
-            {/* 3-Level Selector (Kode Rute, Bulan, Tahun) - BUG-41 */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '8px' }}>
+            {/* 2-Row Grid Layout: Row 1 (Rute & Tanggal), Row 2 (Bulan & Tahun) */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
+              {/* Row 1, Col 1: Rute */}
               <div>
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Rute</label>
                 <select
@@ -385,6 +386,22 @@ export function RouteSelectorCard({
                 </select>
               </div>
 
+              {/* Row 1, Col 2: Tanggal */}
+              <div>
+                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tanggal</label>
+                <select
+                  className="input-field"
+                  value={selectedTab}
+                  onChange={(e) => setSelectedTab(e.target.value)}
+                  style={{ width: '100%', padding: '8px' }}
+                >
+                  {days.map(day => (
+                    <option key={day} value={day}>Tgl {day}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Row 2, Col 1: Bulan */}
               <div>
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Bulan</label>
                 <select
@@ -401,6 +418,7 @@ export function RouteSelectorCard({
                 </select>
               </div>
 
+              {/* Row 2, Col 2: Tahun */}
               <div>
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tahun</label>
                 <select
@@ -505,19 +523,6 @@ export function RouteSelectorCard({
                 </button>
               </div>
             )}
-          </div>
-
-          <div className="input-group" style={{ marginBottom: 0 }}>
-            <label>Pilih Tanggal (Tab)</label>
-            <select
-              className="input-field"
-              value={selectedTab}
-              onChange={(e) => setSelectedTab(e.target.value)}
-            >
-              {days.map(day => (
-                <option key={day} value={day}>Tanggal {day}</option>
-              ))}
-            </select>
           </div>
 
           <button
