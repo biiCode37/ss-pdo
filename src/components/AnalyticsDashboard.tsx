@@ -26,7 +26,10 @@ export function AnalyticsDashboard({
   onSelectTab,
   onSelectUnit,
 }: Props) {
-  const summary = calculateAnalytics(busData, sheetSummary);
+  const summary = calculateAnalytics(
+    busData,
+    selectedTab === "AKUMULASI" ? undefined : sheetSummary,
+  );
 
   return (
     <div className="analytics-container">

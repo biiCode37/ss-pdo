@@ -110,7 +110,6 @@ export function RouteSelectorCard({
               if (parsed.routeCode) setSelectedRouteCode(parsed.routeCode);
               if (parsed.month) setSelectedMonth(parsed.month);
               if (parsed.year) setSelectedYear(parsed.year);
-              if (parsed.selectedTab) setSelectedTab(parsed.selectedTab);
               return;
             }
           }
