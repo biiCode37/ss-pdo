@@ -5,7 +5,7 @@ import { updateBusData, getBusRowData } from "../services/googleSheets";
 import { isNetworkError } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { slugifyUnitId } from "../utils/analytics";
-import { parseIndonesianNumber } from "../utils/numberUtils";
+import { parseIndonesianNumber, safeFormatNumber } from "../utils/numberUtils";
 import {
   Save,
   Loader2,
@@ -431,7 +431,7 @@ function BusCardComponent({
         >
           <Navigation size={12} style={{ flexShrink: 0 }} />
           <span>
-            {totalKm > 0 ? `${totalKm.toLocaleString("id-ID")} KM` : `0 KM`}
+            {totalKm > 0 ? `${safeFormatNumber(totalKm)} KM` : `0 KM`}
           </span>
         </div>
 
@@ -452,7 +452,7 @@ function BusCardComponent({
         >
           <Users size={12} style={{ color: "#38bdf8", flexShrink: 0 }} />
           <span>
-            {totalPnp > 0 ? `${totalPnp.toLocaleString("id-ID")} Pnp` : `0 Pnp`}
+            {totalPnp > 0 ? `${safeFormatNumber(totalPnp)} Pnp` : `0 Pnp`}
           </span>
         </div>
       </div>

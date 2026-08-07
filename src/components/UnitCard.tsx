@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { safeFormatNumber } from "../utils/numberUtils";
 import {
   Bus,
   Navigation,
@@ -181,7 +182,7 @@ function UnitCardComponent({ item, onClick }: Props) {
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <Navigation size={13} style={{ color: "#38bdf8", flexShrink: 0 }} />
           <strong style={{ color: "#38bdf8", fontWeight: 800 }}>
-            {item.totalKm.toLocaleString("id-ID")}
+            {safeFormatNumber(item.totalKm)}
           </strong>{" "}
           <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
             KM
@@ -194,7 +195,7 @@ function UnitCardComponent({ item, onClick }: Props) {
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <Users size={13} style={{ color: "#38bdf8", flexShrink: 0 }} />
           <strong style={{ color: "var(--text-primary)", fontWeight: 800 }}>
-            {item.totalPassengers.toLocaleString("id-ID")}
+            {safeFormatNumber(item.totalPassengers)}
           </strong>{" "}
           <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
             Pnp

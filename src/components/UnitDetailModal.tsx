@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle } from 'lucide-react';
 import type { BusData } from '../services/googleSheets';
 import { calculateUnitMetrics } from '../utils/unitAnalytics';
+import { safeFormatNumber } from '../utils/numberUtils';
 import { DailyToaTrendCard } from './DailyToaTrendCard';
 
 interface Props {
@@ -120,33 +121,29 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        className="glass"
         style={{
           width: '100%',
-          maxWidth: '640px',
-          maxHeight: '90vh',
-          height: '90vh',
-          backgroundColor: 'var(--surface-color, #1e293b)',
-          color: 'var(--text-primary, #f8fafc)',
+          maxWidth: '560px',
+          maxHeight: '88vh',
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          boxShadow: '0 -8px 32px rgba(0, 0, 0, 0.6)',
-          border: '1px solid var(--border-color, rgba(255,255,255,0.15))',
+          padding: '20px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px',
+          background: 'var(--bg-color)',
+          border: '1px solid var(--card-border)',
+          borderBottom: 'none',
+          boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.4)',
           transform: modalTransform,
-          transformOrigin: 'bottom center',
-          transition: isDragging
-            ? 'none'
-            : 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
-          willChange: 'transform',
-          touchAction: 'pan-y',
+          transition: isDragging ? 'none' : 'transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
         }}
       >
-        {/* Swipe Handle Bar */}
-        <div style={{ width: '100%', padding: '4px 0 12px 0', display: 'flex', justifyContent: 'center', cursor: 'grab' }}>
-          <div style={{ width: '44px', height: '5px', backgroundColor: 'var(--text-secondary, #94a3b8)', opacity: 0.5, borderRadius: '3px' }}></div>
+        {/* Top Handle Bar for Touch Swipe */}
+        <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '16px' }}>
+          <div style={{ width: '40px', height: '4px', borderRadius: '2px', background: 'rgba(255, 255, 255, 0.2)' }} />
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -183,7 +180,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                   <Navigation size={18} />
                 </div>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8', lineHeight: 1.1 }}>
-                  {metrics.kmShift1.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+                  {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
                 </div>
               </div>
 
@@ -193,14 +190,14 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                   <Users size={18} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {metrics.totalShift1Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                  {safeFormatNumber(metrics.totalShift1Pnp)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
                 </div>
               </div>
 
               {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
               {metrics.manualShift1 > 0 && (
                 <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.25)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  TOA: <strong>{metrics.toaShift1.toLocaleString('id-ID')}</strong> | Manual: <strong>{metrics.manualShift1.toLocaleString('id-ID')}</strong>
+                  TOA: <strong>{safeFormatNumber(metrics.toaShift1)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1)}</strong>
                 </div>
               )}
             </div>
@@ -219,7 +216,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                   <Navigation size={18} />
                 </div>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: '#c084fc', lineHeight: 1.1 }}>
-                  {metrics.kmShift2.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+                  {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
                 </div>
               </div>
 
@@ -229,14 +226,14 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                   <Users size={18} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {metrics.totalShift2Pnp.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                  {safeFormatNumber(metrics.totalShift2Pnp)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
                 </div>
               </div>
 
               {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
               {metrics.manualShift2 > 0 && (
                 <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
-                  TOA: <strong>{metrics.toaShift2.toLocaleString('id-ID')}</strong> | Manual: <strong>{metrics.manualShift2.toLocaleString('id-ID')}</strong>
+                  TOA: <strong>{safeFormatNumber(metrics.toaShift2)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift2)}</strong>
                 </div>
               )}
             </div>
@@ -255,7 +252,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                   <Navigation size={20} />
                 </div>
                 <div style={{ fontSize: '22px', fontWeight: 800, color: '#4ade80', lineHeight: 1.1 }}>
-                  {metrics.totalKm.toLocaleString('id-ID')} <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
+                  {safeFormatNumber(metrics.totalKm)} <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
                 </div>
               </div>
 
@@ -265,14 +262,14 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
                   <Users size={20} />
                 </div>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: '#4ade80', lineHeight: 1.1 }}>
-                  {metrics.totalPassengers.toLocaleString('id-ID')} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
+                  {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
                 </div>
               </div>
 
               {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
               {(metrics.manualShift1 + metrics.manualShift2) > 0 && (
                 <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'rgba(0,0,0,0.15)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px' }}>
-                  Total TOA: <strong>{metrics.totalToa.toLocaleString('id-ID')}</strong> | Manual: <strong>{(metrics.manualShift1 + metrics.manualShift2).toLocaleString('id-ID')}</strong>
+                  Total TOA: <strong>{safeFormatNumber(metrics.totalToa)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1 + metrics.manualShift2)}</strong>
                 </div>
               )}
             </div>

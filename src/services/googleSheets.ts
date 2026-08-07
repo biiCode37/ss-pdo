@@ -878,11 +878,11 @@ export const getMonthlyToaTrend = async (
           if (normalizedUnitFilter) {
             if (unitVal.toLowerCase() === normalizedUnitFilter) {
               unitFound = true;
-              let tot = totalToaColIdx !== -1 ? parseIndonesianNumber(row[totalToaColIdx]) : NaN;
-              let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx]) : NaN;
-              let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx]) : NaN;
-              let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx]) : NaN;
-              let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx]) : NaN;
+              let tot = totalToaColIdx !== -1 ? parseIndonesianNumber(row[totalToaColIdx], NaN) : NaN;
+              let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx], NaN) : NaN;
+              let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx], NaN) : NaN;
+              let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx], NaN) : NaN;
+              let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx], NaN) : NaN;
 
               if (!isNaN(tot)) {
                 unitDayTotal += tot;
@@ -896,10 +896,10 @@ export const getMonthlyToaTrend = async (
             }
           } else {
             // Bus data row for overall route
-            let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx]) : NaN;
-            let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx]) : NaN;
-            let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx]) : NaN;
-            let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx]) : NaN;
+            let toa1 = toaShift1ColIdx !== -1 ? parseIndonesianNumber(row[toaShift1ColIdx], NaN) : NaN;
+            let man1 = manualShift1ColIdx !== -1 ? parseIndonesianNumber(row[manualShift1ColIdx], NaN) : NaN;
+            let toa2 = toaShift2ColIdx !== -1 ? parseIndonesianNumber(row[toaShift2ColIdx], NaN) : NaN;
+            let man2 = manualShift2ColIdx !== -1 ? parseIndonesianNumber(row[manualShift2ColIdx], NaN) : NaN;
 
             if (!isNaN(toa1)) totalToaShift1 += toa1;
             if (!isNaN(man1)) totalManualShift1 += man1;

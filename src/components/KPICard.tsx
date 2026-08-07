@@ -7,9 +7,9 @@ interface Props {
 
 export function KPICard({ summary }: Props) {
   // Format numbers using Indonesian locale without rounding away decimals
-  const formatInt = (val: number) => val.toLocaleString('id-ID');
+  const formatInt = (val: number) => (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString('id-ID');
   const formatRaw = (val: number) =>
-    val.toLocaleString('id-ID', { maximumFractionDigits: 10 });
+    (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString('id-ID', { maximumFractionDigits: 10 });
 
   return (
     <div className="analytics-card glass">

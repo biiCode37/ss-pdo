@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { safeFormatNumber } from "../utils/numberUtils";
 import {
   BarChart2,
   Calendar,
@@ -277,7 +278,7 @@ export function DailyToaTrendCard({
               lineHeight: "1.2",
             }}
           >
-            {peakItem ? peakItem.totalToa.toLocaleString("id-ID") : "0"}
+            {peakItem ? safeFormatNumber(peakItem.totalToa) : "0"}
           </span>
           <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
             Tgl {peakItem ? peakItem.day : "-"}
@@ -319,7 +320,7 @@ export function DailyToaTrendCard({
               lineHeight: "1.2",
             }}
           >
-            {lowestItem ? lowestItem.totalToa.toLocaleString("id-ID") : "0"}
+            {lowestItem ? safeFormatNumber(lowestItem.totalToa) : "0"}
           </span>
           <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
             Tgl {lowestItem ? lowestItem.day : "-"}
@@ -361,7 +362,7 @@ export function DailyToaTrendCard({
               lineHeight: "1.2",
             }}
           >
-            {avgToa.toLocaleString("id-ID")}
+            {safeFormatNumber(avgToa)}
           </span>
           <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
             Pnp/Hari
@@ -640,7 +641,7 @@ export function DailyToaTrendCard({
                 textAnchor="middle"
               >
                 Tgl {activeBar.day}:{" "}
-                {activeBar.totalToa.toLocaleString("id-ID")} Pnp
+                {safeFormatNumber(activeBar.totalToa)} Pnp
               </text>
             </g>
           )}

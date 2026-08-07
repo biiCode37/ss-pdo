@@ -6,7 +6,7 @@ interface Props {
 }
 
 export function ShiftComparisonCard({ summary }: Props) {
-  const formatInt = (val: number) => val.toLocaleString("id-ID");
+  const formatInt = (val: number) => (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString("id-ID");
   const hasManualTickets = summary.grandTotalManual > 0;
 
   return (
