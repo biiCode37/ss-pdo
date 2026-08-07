@@ -1,5 +1,8 @@
 import { supabase, isSupabaseConfigured } from './supabase';
-import type { Route, UserProfile, ActivityLog, SyncQueueBackup } from '../types/supabase';
+import type { Route, UserProfile, ActivityLog, SyncQueueBackup, DailyUnitSummary } from '../types/supabase';
+import type { BusData } from './googleSheets';
+import { parseIndonesianNumber } from '../utils/numberUtils';
+import { formatAccumulatedNotes } from '../utils/analytics';
 
 const CACHE_KEY_ROUTES = 'PDO_CACHE_ROUTES';
 
@@ -255,4 +258,140 @@ export async function deleteRouteSheet(sheetId: number, routeId: number): Promis
     return { success: false, message: 'Gagal menghapus rute. Periksa koneksi internet Anda.' };
   }
 }
+
+/**
+  * Upsert batch ringkasan unit harian ke Supabase cache
+  */
+export async function upsertDailyUnitSummaries(summaries: DailyUnitSummary[]): Promise<void> {
+  if (!isSupabaseConfigured || !summaries || summaries.length === 0) return;
+
+  try {
+    const { error } = await supabase
+      .from('daily_unit_summaries')
+      .upsert(summaries, { onConflict: 'route_code,year,month,day,unit' });
+
+    if (error) {
+      console.warn('[RouteService] Failed to upsert daily unit summaries:', error);
+    }
+  } catch (err) {
+    console.warn('[RouteService] Error upserting daily unit summaries (offline?):', err);
+  }
+}
+
+export interface CrossPeriodSummaryResult {
+  data: BusData[];
+  totalDays: number;
+}
+
+/**
+  * Kueri akumulasi lintas bulan/tahun dari tabel Supabase daily_unit_summaries
+  */
+export async function getCrossPeriodAccumulation(
+  routeCode: string,
+  startYear: number,
+  startMonth: number,
+  startDay: number,
+  endYear: number,
+  endMonth: number,
+  endDay: number
+): Promise<CrossPeriodSummaryResult | null> {
+  if (!isSupabaseConfigured) return null;
+
+  try {
+    const startDateNum = startYear * 10000 + startMonth * 100 + startDay;
+    const endDateNum = endYear * 10000 + endMonth * 100 + endDay;
+
+    const { data, error } = await supabase
+      .from('daily_unit_summaries')
+      .select('*')
+      .eq('route_code', routeCode);
+
+    if (error || !data) return null;
+
+    const filtered = data.filter((row: any) => {
+      const dNum = row.year * 10000 + row.month * 100 + row.day;
+      return dNum >= startDateNum && dNum <= endDateNum;
+    });
+
+    if (filtered.length === 0) return null;
+
+    const unitMap = new Map<string, BusData>();
+    const unitNotesMap = new Map<string, { day: number; note: string }[]>();
+
+    filtered.forEach((row: any) => {
+      const unitName = row.unit;
+      const dayNum = Number(row.day || 1);
+      const existing = unitMap.get(unitName);
+
+      const toa1 = Number(row.toa_shift1 || 0);
+      const man1 = Number(row.manual_shift1 || 0);
+      const toa2 = Number(row.toa_shift2 || 0);
+      const man2 = Number(row.manual_shift2 || 0);
+      const totToa = Number(row.total_toa || (toa1 + toa2));
+      const km = Number(row.total_km || 0);
+      const ket = row.keterangan || '';
+
+      if (ket) {
+        const notesArr = unitNotesMap.get(unitName) || [];
+        notesArr.push({ day: dayNum, note: ket });
+        unitNotesMap.set(unitName, notesArr);
+      }
+
+      if (!existing) {
+        unitMap.set(unitName, {
+          rowIndex: 0,
+          unit: unitName,
+          toaShift1: toa1 > 0 ? String(toa1) : '',
+          manualShift1: man1 > 0 ? String(man1) : '',
+          toaShift2: toa2 > 0 ? String(toa2) : '',
+          manualShift2: man2 > 0 ? String(man2) : '',
+          totalToa: totToa > 0 ? String(totToa) : '',
+          kmAwal1: '0',
+          kmAkhir1: String(km),
+          kmAwal2: '0',
+          kmAkhir2: '0',
+          keterangan: ket,
+          originalRow: [],
+        });
+      } else {
+        const exKm = parseIndonesianNumber(existing.kmAkhir1);
+        const exToa1 = parseIndonesianNumber(existing.toaShift1);
+        const exMan1 = parseIndonesianNumber(existing.manualShift1);
+        const exToa2 = parseIndonesianNumber(existing.toaShift2);
+        const exMan2 = parseIndonesianNumber(existing.manualShift2);
+        const exTotToa = parseIndonesianNumber(existing.totalToa);
+
+        const newKm = exKm + km;
+        const sumToa1 = exToa1 + toa1;
+        const sumMan1 = exMan1 + man1;
+        const sumToa2 = exToa2 + toa2;
+        const sumMan2 = exMan2 + man2;
+        const sumTotToa = exTotToa + totToa;
+
+        existing.toaShift1 = sumToa1 > 0 ? String(sumToa1) : '';
+        existing.manualShift1 = sumMan1 > 0 ? String(sumMan1) : '';
+        existing.toaShift2 = sumToa2 > 0 ? String(sumToa2) : '';
+        existing.manualShift2 = sumMan2 > 0 ? String(sumMan2) : '';
+        existing.totalToa = sumTotToa > 0 ? String(sumTotToa) : '';
+        existing.kmAkhir1 = String(newKm);
+      }
+    });
+
+    for (const bus of unitMap.values()) {
+      const rawNotes = unitNotesMap.get(bus.unit);
+      if (rawNotes && rawNotes.length > 0) {
+        bus.keterangan = formatAccumulatedNotes(rawNotes);
+      }
+    }
+
+    return {
+      data: Array.from(unitMap.values()),
+      totalDays: new Set(filtered.map((r: any) => `${r.year}-${r.month}-${r.day}`)).size,
+    };
+  } catch (err) {
+    console.error('[RouteService] Error getting cross period accumulation:', err);
+    return null;
+  }
+}
+
 

@@ -33,6 +33,12 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
           return;
         }
 
+        if (verify.profile) {
+          if (verify.profile.full_name) localStorage.setItem('PDO_USER_NAME', verify.profile.full_name);
+          if (verify.profile.email) localStorage.setItem('PDO_USER_EMAIL', verify.profile.email);
+          if (verify.profile.avatar_url) localStorage.setItem('PDO_USER_AVATAR', verify.profile.avatar_url);
+        }
+
         // Sinkronkan profil user ke Supabase (fire-and-forget, tidak blocking)
         // ponytail: upsert async agar tidak memperlambat login
         upsertUserProfile({

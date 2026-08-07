@@ -1,5 +1,5 @@
 import type { BusData } from "../services/googleSheets";
-import { calculateAnalytics } from "../utils/analytics";
+import { calculateAnalytics, getFormattedDateBadge } from "../utils/analytics";
 import { KPICard } from "./KPICard";
 import { ShiftComparisonCard } from "./ShiftComparisonCard";
 import { CompletionStatusCard } from "./CompletionStatusCard";
@@ -14,6 +14,16 @@ interface Props {
   monthLabel?: string;
   onSelectTab?: (tab: string) => void;
   onSelectUnit?: (unit: string) => void;
+  activeMonth?: number;
+  activeYear?: number;
+  accRange?: {
+    startDay?: number;
+    startMonth?: number;
+    startYear?: number;
+    endDay?: number;
+    endMonth?: number;
+    endYear?: number;
+  } | null;
 }
 
 export function AnalyticsDashboard({
@@ -25,10 +35,20 @@ export function AnalyticsDashboard({
   monthLabel,
   onSelectTab,
   onSelectUnit,
+  activeMonth = new Date().getMonth() + 1,
+  activeYear = new Date().getFullYear(),
+  accRange,
 }: Props) {
   const summary = calculateAnalytics(
     busData,
     selectedTab === "AKUMULASI" ? undefined : sheetSummary,
+  );
+
+  const dateBadge = getFormattedDateBadge(
+    selectedTab,
+    activeMonth,
+    activeYear,
+    accRange,
   );
 
   return (
@@ -42,9 +62,13 @@ export function AnalyticsDashboard({
           onSelectTab={onSelectTab}
         />
       )}
-      <KPICard summary={summary} />
-      <ShiftComparisonCard summary={summary} />
-      <CompletionStatusCard summary={summary} onSelectUnit={onSelectUnit} />
+      <KPICard summary={summary} dateBadge={dateBadge} />
+      <ShiftComparisonCard summary={summary} dateBadge={dateBadge} />
+      <CompletionStatusCard
+        summary={summary}
+        onSelectUnit={onSelectUnit}
+        dateBadge={dateBadge}
+      />
     </div>
   );
 }

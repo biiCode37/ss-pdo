@@ -10,9 +10,19 @@ interface Props {
   busData: BusData[] | null;
   sheetId: string;
   selectedTab: string;
+  activeMonth?: number;
+  activeYear?: number;
+  accRange?: { startDay?: number; endDay?: number; startMonth?: number; endMonth?: number; startYear?: number; endYear?: number } | null;
 }
 
-export function UnitSummaryDashboard({ busData, sheetId, selectedTab }: Props) {
+export function UnitSummaryDashboard({
+  busData,
+  sheetId,
+  selectedTab,
+  activeMonth,
+  activeYear,
+  accRange,
+}: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
 
@@ -82,6 +92,9 @@ export function UnitSummaryDashboard({ busData, sheetId, selectedTab }: Props) {
           busData={busData}
           sheetId={sheetId}
           selectedTab={selectedTab}
+          activeMonth={activeMonth}
+          activeYear={activeYear}
+          accRange={accRange}
           onClose={() => setSelectedUnit(null)}
         />
       )}

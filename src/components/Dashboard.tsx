@@ -8,24 +8,24 @@ import {
 } from "../services/googleSheets";
 import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
-import { BottomNav } from "./BottomNav";
+import { ProfileMenuSheet } from "./ProfileMenuSheet";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { SwipeableContainer } from "./SwipeableContainer";
 import {
-  LogOut,
   CloudOff,
-  Sun,
-  Moon,
   RefreshCw,
   AlertTriangle,
   RotateCw,
   Trash2,
+  User,
 } from "lucide-react";
 import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
 
 import { UnitSummaryDashboard } from "./UnitSummaryDashboard";
+import { AccumulationSheet } from "./AccumulationSheet";
+import { getCrossPeriodAccumulation } from "../services/routeService";
 import {
   BusCardSkeleton,
   DailyToaTrendSkeleton,
@@ -48,7 +48,9 @@ export function Dashboard({ onLogout }: Props) {
     return "";
   });
 
-  const [selectedTab, setSelectedTab] = useState("AKUMULASI");
+  const [selectedTab, setSelectedTab] = useState(() =>
+    String(new Date().getDate()),
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mainTab, setMainTab] = useState<"input" | "analytics" | "units">(
@@ -80,6 +82,21 @@ export function Dashboard({ onLogout }: Props) {
 
   const [isAuthExpired, setIsAuthExpired] = useState(false);
   const [isReauthenticating, setIsReauthenticating] = useState(false);
+  const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  // ponytail: track custom accumulation range for startDay parameter
+  const [accRange, setAccRange] = useState<{
+    start: number;
+    end: number;
+  } | null>(null);
+  const [accRangeDetails, setAccRangeDetails] = useState<{
+    startDay: number;
+    startMonth: number;
+    startYear: number;
+    endDay: number;
+    endMonth: number;
+    endYear: number;
+  } | null>(null);
 
   // BUG-19: AbortController and Request ID tracking for race condition protection
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -183,6 +200,16 @@ export function Dashboard({ onLogout }: Props) {
     };
   }, []);
 
+  // ponytail: auto-load data akumulasi saat mount jika sheetUrl sudah ada dari localStorage
+  const autoLoadedRef = useRef(false);
+  useEffect(() => {
+    if (autoLoadedRef.current) return;
+    if (sheetUrl && !busData && !isLoading) {
+      autoLoadedRef.current = true;
+      handleLoadData(false);
+    }
+  }, [sheetUrl]);
+
   const handleLoadData = async (isRefresh = false, targetTab?: string) => {
     const tabToLoad = targetTab || selectedTab;
     if (!sheetUrl) {
@@ -217,10 +244,55 @@ export function Dashboard({ onLogout }: Props) {
     }
 
     try {
-      const result =
-        tabToLoad === "AKUMULASI"
-          ? await getAccumulatedBusData(sheetId, new Date().getDate())
-          : await getBusData(sheetId, tabToLoad);
+      let result: any = null;
+      if (tabToLoad === "AKUMULASI") {
+        let activeRouteCode = "";
+        try {
+          const cached = localStorage.getItem("PDO_CACHE_ROUTES");
+          if (cached) {
+            const routes = JSON.parse(cached);
+            for (const r of routes) {
+              for (const s of r.route_sheets || []) {
+                const sId = extractSheetId(s.sheet_url);
+                if (sId && sId === sheetId) {
+                  activeRouteCode = r.route_code;
+                  break;
+                }
+              }
+            }
+          }
+        } catch (_e) {}
+
+        if (activeRouteCode && accRangeDetails) {
+          const cross = await getCrossPeriodAccumulation(
+            activeRouteCode,
+            accRangeDetails.startYear,
+            accRangeDetails.startMonth,
+            accRangeDetails.startDay,
+            accRangeDetails.endYear,
+            accRangeDetails.endMonth,
+            accRangeDetails.endDay,
+          );
+          if (cross && cross.data.length > 0) {
+            result = {
+              data: cross.data,
+              headerMap: {},
+              missingColumns: [],
+              sheetSummary: {},
+            };
+          }
+        }
+
+        if (!result) {
+          result = await getAccumulatedBusData(
+            sheetId,
+            accRange?.end ?? new Date().getDate(),
+            accRange?.start ?? 1,
+          );
+        }
+      } else {
+        result = await getBusData(sheetId, tabToLoad);
+      }
 
       const {
         data,
@@ -401,83 +473,112 @@ export function Dashboard({ onLogout }: Props) {
           </button>
         </div>
       )}
+      {/* Sticky Freeze Header Block (Title, Profile, & Route Selector) */}
       <div
-        className="app-header"
+        className="sticky-top-block"
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          position: "sticky",
+          top: 0,
+          zIndex: 40,
+          background: "var(--bg-color)",
+          paddingTop: "12px",
+          paddingBottom: "4px",
+          marginTop: "-16px",
+          marginLeft: "-16px",
+          marginRight: "-16px",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
         }}
       >
-        <h1 style={{ margin: 0, textAlign: "left", fontSize: "20px" }}>
-          PDO Utara Spreadsheet Mobile
-        </h1>
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-          {queue.length > 0 && (
-            <div
-              onClick={() => setIsQueueModalOpen(true)}
+        <div
+          className="app-header"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "10px",
+            padding: 0,
+          }}
+        >
+          <h1 style={{ margin: 0, textAlign: "left", fontSize: "19px" }}>
+            PDO Utara Spreadsheet Mobile
+          </h1>
+          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+            {queue.length > 0 && (
+              <div
+                onClick={() => setIsQueueModalOpen(true)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  color: queue.some(
+                    (q) => q.status === "failed" || q.status === "conflict",
+                  )
+                    ? "var(--danger-color)"
+                    : "var(--warning-color)",
+                  fontSize: "13px",
+                  fontWeight: "bold",
+                  background: queue.some(
+                    (q) => q.status === "failed" || q.status === "conflict",
+                  )
+                    ? "rgba(239, 68, 68, 0.1)"
+                    : "rgba(234, 179, 8, 0.1)",
+                  padding: "4px 8px",
+                  borderRadius: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                {queue.some(
+                  (q) => q.status === "failed" || q.status === "conflict",
+                ) ? (
+                  <AlertTriangle size={16} />
+                ) : (
+                  <CloudOff size={16} />
+                )}
+                {queue.length} Tertunda
+              </div>
+            )}
+            <button
+              type="button"
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
-                color: queue.some(
-                  (q) => q.status === "failed" || q.status === "conflict",
-                )
-                  ? "var(--danger-color)"
-                  : "var(--warning-color)",
-                fontSize: "14px",
-                fontWeight: "bold",
-                background: queue.some(
-                  (q) => q.status === "failed" || q.status === "conflict",
-                )
-                  ? "rgba(239, 68, 68, 0.1)"
-                  : "rgba(234, 179, 8, 0.1)",
-                padding: "4px 8px",
-                borderRadius: "12px",
+                justifyContent: "center",
+                width: "36px",
+                height: "36px",
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, var(--accent-color), #2563eb)",
+                color: "#fff",
+                border: "none",
+                boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
                 cursor: "pointer",
+                transition: "transform 0.15s ease",
               }}
+              onClick={() => setIsProfileMenuOpen(true)}
+              title="Menu Profil & Navigasi"
             >
-              {queue.some(
-                (q) => q.status === "failed" || q.status === "conflict",
-              ) ? (
-                <AlertTriangle size={16} />
-              ) : (
-                <CloudOff size={16} />
-              )}
-              {queue.length} Tertunda
-            </div>
-          )}
-          <button
-            className="btn btn-outline"
-            style={{ padding: "8px" }}
-            onClick={toggleTheme}
-            title="Toggle Theme"
-          >
-            {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-          </button>
-          <button
-            className="btn btn-outline"
-            style={{ padding: "8px", color: "var(--danger-color)" }}
-            onClick={onLogout}
-            title="Logout"
-          >
-            <LogOut size={20} />
-          </button>
+              <User size={18} />
+            </button>
+          </div>
         </div>
-      </div>
 
-      <RouteSelectorCard
-        sheetUrl={sheetUrl}
-        setSheetUrl={setSheetUrl}
-        selectedTab={selectedTab}
-        setSelectedTab={handleSelectTab}
-        days={days}
-        isLoading={isLoading}
-        isDataLoaded={!!busData}
-        currentSheetId={currentSheetId}
-        currentTabName={currentTabName}
-        onLoadData={() => handleLoadData(false)}
-      />
+        <RouteSelectorCard
+          sheetUrl={sheetUrl}
+          setSheetUrl={setSheetUrl}
+          selectedTab={selectedTab}
+          setSelectedTab={handleSelectTab}
+          days={days}
+          isLoading={isLoading}
+          isDataLoaded={!!busData}
+          currentSheetId={currentSheetId}
+          currentTabName={currentTabName}
+          onLoadData={() => handleLoadData(false)}
+          accRange={accRangeDetails}
+        />
+      </div>
 
       {error && !isAuthExpired && (
         <div className="error-text" style={{ marginBottom: 16 }}>
@@ -574,6 +675,7 @@ export function Dashboard({ onLogout }: Props) {
               addToQueue={addToQueue}
               isLoading={isLoading}
               onUpdateBus={handleUpdateBus}
+              accRange={accRangeDetails}
             />
           </div>
 
@@ -589,34 +691,61 @@ export function Dashboard({ onLogout }: Props) {
               willChange: "opacity, transform",
             }}
           >
-            <AnalyticsDashboard
-              busData={busData}
-              sheetSummary={sheetSummary}
-              sheetId={currentSheetId}
-              selectedTab={selectedTab}
-              refreshKey={refreshKey}
-              monthLabel={extractMonthYearLabel(sheetUrl)}
-              onSelectTab={handleSelectTab}
-              onSelectUnit={(unit) => {
-                setMainTab("units");
-                setTimeout(() => {
-                  const slug = slugifyUnitId(unit);
-                  const el =
-                    document.getElementById(`unit-card-${slug}`) ||
-                    document.getElementById(`bus-card-${slug}`);
-                  if (el) {
-                    el.scrollIntoView({ behavior: "smooth", block: "center" });
-                    el.classList.remove("bus-card-highlight");
-                    // Trigger reflow to restart CSS animation if clicked repeatedly
-                    void el.offsetWidth;
-                    el.classList.add("bus-card-highlight");
-                    setTimeout(() => {
-                      el.classList.remove("bus-card-highlight");
-                    }, 6000);
+            {(() => {
+              let activeMonth = new Date().getMonth() + 1;
+              let activeYear = new Date().getFullYear();
+              try {
+                const cached = localStorage.getItem("PDO_CACHE_ROUTES");
+                if (cached) {
+                  const routes = JSON.parse(cached);
+                  for (const r of routes) {
+                    for (const s of r.route_sheets || []) {
+                      if (
+                        s.sheet_url === sheetUrl ||
+                        (sheetUrl && s.sheet_url.includes(sheetUrl))
+                      ) {
+                        activeMonth = s.month;
+                        activeYear = s.year;
+                        break;
+                      }
+                    }
                   }
-                }, 150);
-              }}
-            />
+                }
+              } catch (_e) {}
+
+              return (
+                <AnalyticsDashboard
+                  busData={busData}
+                  sheetSummary={sheetSummary}
+                  sheetId={currentSheetId}
+                  selectedTab={selectedTab}
+                  refreshKey={refreshKey}
+                  monthLabel={extractMonthYearLabel(sheetUrl)}
+                  activeMonth={activeMonth}
+                  activeYear={activeYear}
+                  accRange={accRangeDetails}
+                  onSelectTab={handleSelectTab}
+                  onSelectUnit={(unit) => {
+                    setMainTab("units");
+                    setTimeout(() => {
+                      const slug = slugifyUnitId(unit);
+                      const el =
+                        document.getElementById(`unit-card-${slug}`) ||
+                        document.getElementById(`bus-card-${slug}`);
+                      if (el) {
+                        el.scrollIntoView({ behavior: "smooth", block: "center" });
+                        el.classList.remove("bus-card-highlight");
+                        void el.offsetWidth;
+                        el.classList.add("bus-card-highlight");
+                        setTimeout(() => {
+                          el.classList.remove("bus-card-highlight");
+                        }, 6000);
+                      }
+                    }, 150);
+                  }}
+                />
+              );
+            })()}
           </div>
 
           <div
@@ -631,23 +760,44 @@ export function Dashboard({ onLogout }: Props) {
               willChange: "opacity, transform",
             }}
           >
-            <UnitSummaryDashboard
-              busData={busData}
-              sheetId={currentSheetId}
-              selectedTab={selectedTab}
-            />
+            {(() => {
+              let activeMonth = new Date().getMonth() + 1;
+              let activeYear = new Date().getFullYear();
+              try {
+                const cached = localStorage.getItem("PDO_CACHE_ROUTES");
+                if (cached) {
+                  const routes = JSON.parse(cached);
+                  for (const r of routes) {
+                    for (const s of r.route_sheets || []) {
+                      if (
+                        s.sheet_url === sheetUrl ||
+                        (sheetUrl && s.sheet_url.includes(sheetUrl))
+                      ) {
+                        activeMonth = s.month;
+                        activeYear = s.year;
+                        break;
+                      }
+                    }
+                  }
+                }
+              } catch (_e) {}
+
+              return (
+                <UnitSummaryDashboard
+                  busData={busData}
+                  sheetId={currentSheetId}
+                  selectedTab={selectedTab}
+                  activeMonth={activeMonth}
+                  activeYear={activeYear}
+                  accRange={accRangeDetails}
+                />
+              );
+            })()}
           </div>
         </SwipeableContainer>
       )}
 
-      <BottomNav
-        activeTab={mainTab}
-        onSelectTab={setMainTab}
-        pendingQueueCount={
-          queue.filter((q) => q.status === "pending" || q.status === "failed")
-            .length
-        }
-      />
+
 
       {isQueueModalOpen && (
         <div
@@ -812,6 +962,153 @@ export function Dashboard({ onLogout }: Props) {
           </div>
         </div>
       )}
+
+      {/* ponytail: ekstrak bulan & tahun rute aktif dari cache */}
+      {(() => {
+        const today = new Date();
+        let currentMonth = today.getMonth() + 1;
+        let currentYear = today.getFullYear();
+        try {
+          const cached = localStorage.getItem("PDO_CACHE_ROUTES");
+          if (cached) {
+            const routes = JSON.parse(cached);
+            for (const r of routes) {
+              for (const s of r.route_sheets || []) {
+                if (
+                  s.sheet_url === sheetUrl ||
+                  (sheetUrl && s.sheet_url.includes(sheetUrl))
+                ) {
+                  currentMonth = s.month;
+                  currentYear = s.year;
+                  break;
+                }
+              }
+            }
+          }
+        } catch (_e) {}
+
+        return (
+          <>
+            <AccumulationSheet
+              isOpen={isAccSheetOpen}
+              onClose={() => setIsAccSheetOpen(false)}
+              currentMonth={currentMonth}
+              currentYear={currentYear}
+              onApply={async (sDay, sMonth, sYear, eDay, eMonth, eYear) => {
+                setAccRangeDetails({
+                  startDay: sDay,
+                  startMonth: sMonth,
+                  startYear: sYear,
+                  endDay: eDay,
+                  endMonth: eMonth,
+                  endYear: eYear,
+                });
+                setAccRange({ start: sDay, end: eDay });
+                setSelectedTab("AKUMULASI");
+                setIsLoading(true);
+                setError(null);
+
+                try {
+                  // 1. Cari route_code aktif
+                  let activeRouteCode = "";
+                  const currentId = extractSheetId(sheetUrl);
+                  const cached = localStorage.getItem("PDO_CACHE_ROUTES");
+                  if (cached) {
+                    const routes = JSON.parse(cached);
+                    for (const r of routes) {
+                      for (const s of r.route_sheets || []) {
+                        const sId = extractSheetId(s.sheet_url);
+                        if (
+                          (sId && currentId && sId === currentId) ||
+                          s.sheet_url === sheetUrl ||
+                          (sheetUrl && sheetUrl.includes(s.sheet_url))
+                        ) {
+                          activeRouteCode = r.route_code;
+                          break;
+                        }
+                      }
+                    }
+                  }
+
+                  // 2. Coba kueri instan Supabase (Opsi B: Aggregation Layer Cache)
+                  let crossResult = null;
+                  if (activeRouteCode) {
+                    crossResult = await getCrossPeriodAccumulation(
+                      activeRouteCode,
+                      sYear,
+                      sMonth,
+                      sDay,
+                      eYear,
+                      eMonth,
+                      eDay,
+                    );
+                  }
+
+                  if (crossResult && crossResult.data.length > 0) {
+                    // Opsi B Supabase Cache Berhasil!
+                    setBusData(crossResult.data);
+                    setCurrentTabName("AKUMULASI");
+                    setSheetSummary({});
+                    setRefreshKey((prev) => prev + 1);
+                  } else {
+                    // Fallback Opsi A: Google Sheets API
+                    let targetSheetId = currentSheetId || extractSheetId(sheetUrl);
+                    if (cached && activeRouteCode) {
+                      const routes = JSON.parse(cached);
+                      const route = routes.find(
+                        (r: any) => r.route_code === activeRouteCode,
+                      );
+                      const matchSheet = route?.route_sheets?.find(
+                        (s: any) => s.month === eMonth && s.year === eYear,
+                      );
+                      if (matchSheet) {
+                        setSheetUrl(matchSheet.sheet_url);
+                        targetSheetId =
+                          matchSheet.spreadsheet_id ||
+                          extractSheetId(matchSheet.sheet_url);
+                      }
+                    }
+
+                    if (targetSheetId) {
+                      const result = await getAccumulatedBusData(targetSheetId, eDay, sDay);
+                      setBusData(result.data);
+                      setHeaderMap(result.headerMap);
+                      setCurrentSheetId(targetSheetId);
+                      setCurrentTabName("AKUMULASI");
+                      setMissingColumns(result.missingColumns);
+                      setSheetSummary(result.sheetSummary || {});
+                      setRefreshKey((prev) => prev + 1);
+                    }
+                  }
+                } catch (err: any) {
+                  setError(
+                    formatUserError(err, "Gagal memuat data akumulasi."),
+                  );
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+            />
+
+            <ProfileMenuSheet
+              isOpen={isProfileMenuOpen}
+              onClose={() => setIsProfileMenuOpen(false)}
+              activeTab={mainTab}
+              onSelectTab={setMainTab}
+              onOpenAccumulation={() => setIsAccSheetOpen(true)}
+              isDarkMode={theme === "dark"}
+              onToggleTheme={toggleTheme}
+              offlineQueueCount={
+                queue.filter(
+                  (q) => q.status === "pending" || q.status === "failed",
+                ).length
+              }
+              isOnline={isOnline}
+              onLogout={onLogout}
+            />
+          </>
+        );
+      })()}
     </div>
   );
 }

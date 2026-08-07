@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
-    "mtime": 1786093040.154431,
-    "ast_hash": "79376d452968fbd8e222376a594424a7",
+    "mtime": 1786079001.7672358,
+    "ast_hash": "0867b984011e0cf997e3a23b901abdef",
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/components/CompletionStatusCard.tsx": {
-    "mtime": 1786093377.831802,
-    "ast_hash": "ff52134df2c94b07e1eff6825e0a08e3",
+    "mtime": 1786090345.562528,
+    "ast_hash": "edb1d2051576891bebad767be79a4a5b",
     "semantic_hash": ""
   },
   "src/components/DailyToaTrendCard.tsx": {
@@ -160,13 +160,13 @@
     "semantic_hash": "b4ced384dc3e7d0eda223369e5c0156c"
   },
   "src/utils/analytics.test.ts": {
-    "mtime": 1786093088.7434995,
-    "ast_hash": "03e4afbe36e945b5b2829040a7b42e88",
+    "mtime": 1786092672.0340152,
+    "ast_hash": "02a4060f9c591c076e0f4a598b8d2025",
     "semantic_hash": ""
   },
   "src/utils/analytics.ts": {
-    "mtime": 1786093006.94341,
-    "ast_hash": "a4fc660376af728afe1e8bdef99c87d2",
+    "mtime": 1786092643.6767247,
+    "ast_hash": "d84fc296850c76b639b91e94178fd204",
     "semantic_hash": ""
   },
   "src/utils/errorFormatter.test.ts": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "src/services/routeService.ts": {
-    "mtime": 1786092936.1104543,
-    "ast_hash": "265e84ca3ac1e77f4d63152456f008fb",
+    "mtime": 1786085538.5572243,
+    "ast_hash": "ff96990ad5dd7e93d7bfcafd9a595b07",
     "semantic_hash": ""
   },
   "src/services/supabase.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "src/components/UnitCard.tsx": {
-    "mtime": 1786093053.8859117,
-    "ast_hash": "64cfc7deebb87412ebc5c3f4c330f997",
+    "mtime": 1786073549.8297455,
+    "ast_hash": "6c8fbc79013a50310c82230d7790d08a",
     "semantic_hash": ""
   },
   "src/components/UnitDetailModal.tsx": {
@@ -792,11 +792,6 @@
   "src/components/ProfileMenuSheet.tsx": {
     "mtime": 1786089081.3141105,
     "ast_hash": "7c4c763b21856b35ec4aff2b78f04767",
-    "semantic_hash": ""
-  },
-  "src/components/FormattedNoteText.tsx": {
-    "mtime": 1786093364.8337443,
-    "ast_hash": "35b4adbd35fbfb6460d58dea0671eb25",
     "semantic_hash": ""
   }
 }

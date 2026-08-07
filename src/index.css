@@ -117,7 +117,7 @@ body {
 .app-container {
   max-width: 480px;
   margin: 0 auto;
-  padding: 16px 16px calc(76px + env(safe-area-inset-bottom, 0px)) 16px;
+  padding: 16px 16px max(16px, env(safe-area-inset-bottom, 16px)) 16px;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -1088,7 +1088,8 @@ body {
     padding: 24px !important;
   }
 
-  .unit-detail-modal-content {
+  .unit-detail-modal-content,
+  .accumulation-sheet-content {
     border-radius: 24px !important;
     max-height: 85vh !important;
     border-bottom: 1px solid var(--card-border) !important;
@@ -1102,4 +1103,15 @@ body {
   .bottom-nav-wrapper {
     bottom: 20px !important;
   }
+}
+
+/* Bottom Sheet animations */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

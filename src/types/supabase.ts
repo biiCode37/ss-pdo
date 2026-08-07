@@ -58,3 +58,24 @@ export interface SyncQueueBackup {
   created_at?: string;
   synced_at?: string;
 }
+
+export interface DailyUnitSummary {
+  id?: number;
+  route_sheet_id?: number;
+  route_code: string;
+  year: number;
+  month: number;
+  day: number;
+  unit: string;
+  total_km: number;
+  toa_shift1: number;
+  manual_shift1: number;
+  toa_shift2: number;
+  manual_shift2: number;
+  total_toa: number;
+  total_passengers: number;
+  keterangan?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+

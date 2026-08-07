@@ -4,6 +4,7 @@ import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle } from 'lucide-
 import type { BusData } from '../services/googleSheets';
 import { calculateUnitMetrics } from '../utils/unitAnalytics';
 import { safeFormatNumber } from '../utils/numberUtils';
+import { getFormattedDateBadge } from '../utils/analytics';
 import { DailyToaTrendCard } from './DailyToaTrendCard';
 
 interface Props {
@@ -11,16 +12,32 @@ interface Props {
   busData: BusData[] | null;
   sheetId: string;
   selectedTab: string;
+  activeMonth?: number;
+  activeYear?: number;
+  accRange?: { startDay?: number; endDay?: number; startMonth?: number; endMonth?: number; startYear?: number; endYear?: number } | null;
   onClose: () => void;
 }
 
-export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }: Props) {
+export function UnitDetailModal({
+  unit,
+  busData,
+  sheetId,
+  selectedTab,
+  activeMonth,
+  activeYear,
+  accRange,
+  onClose,
+}: Props) {
   const [touchStartY, setTouchStartY] = useState(0);
   const [dragY, setDragY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const dateBadge = useMemo(() => {
+    return getFormattedDateBadge(selectedTab, activeMonth, activeYear, accRange);
+  }, [selectedTab, activeMonth, activeYear, accRange]);
 
   const metrics = useMemo(() => {
     return calculateUnitMetrics(busData || [], unit);
@@ -36,12 +53,11 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
     window.addEventListener('keydown', handleKeyDown);
     
     // Lock body scrolling when modal is active
-    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = '';
     };
   }, []);
 
@@ -166,114 +182,117 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           </button>
         </div>
 
-        {/* 3 Grid Executive Summary (Shift 1, Shift 2, Akumulasi Total) */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '10px', marginBottom: '20px' }}>
-          {/* Grid 1: Shift 1 */}
-          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--shift1-bg)', border: '1px solid var(--shift1-border)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--shift1-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Executive Summary: Row 1 (Shift 1 & Shift 2 Side-by-Side) */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
+          {/* Card 1: Shift 1 */}
+          <div className="card glass" style={{ padding: '12px', borderRadius: '16px', background: 'var(--shift1-bg)', border: '1px solid var(--shift1-border)' }}>
+            <div style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--shift1-color)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span>Shift 1</span>
-              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--shift1-bg)', color: 'var(--shift1-color)', border: '1px solid var(--shift1-border)' }}>Operasional</span>
+              {dateBadge && (
+                <span style={{ fontSize: '9.5px', padding: '2px 5px', borderRadius: '6px', background: 'var(--shift1-bg)', color: 'var(--shift1-color)', border: '1px solid var(--shift1-border)' }}>
+                  {dateBadge}
+                </span>
+              )}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {/* 1. KM Paling Atas (Menonjol & Simetris) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
-                  <Navigation size={18} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
+                  <Navigation size={16} />
                 </div>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--shift1-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
-                </div>
-              </div>
-
-              {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
-                  <Users size={18} />
-                </div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalShift1Pnp)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift1-color)', lineHeight: 1.1 }}>
+                  {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
                 </div>
               </div>
 
-              {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
+                  <Users size={16} />
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                  {safeFormatNumber(metrics.totalShift1Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                </div>
+              </div>
+
               {metrics.manualShift1 > 0 && (
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
-                  TOA: <strong>{safeFormatNumber(metrics.toaShift1)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1)}</strong>
+                <div style={{ fontSize: '10.5px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '3px 6px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
+                  TOA: <strong>{safeFormatNumber(metrics.toaShift1)}</strong> | Man: <strong>{safeFormatNumber(metrics.manualShift1)}</strong>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Grid 2: Shift 2 */}
-          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--shift2-bg)', border: '1px solid var(--shift2-border)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--shift2-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Card 2: Shift 2 */}
+          <div className="card glass" style={{ padding: '12px', borderRadius: '16px', background: 'var(--shift2-bg)', border: '1px solid var(--shift2-border)' }}>
+            <div style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--shift2-color)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span>Shift 2</span>
-              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--shift2-bg)', color: 'var(--shift2-color)', border: '1px solid var(--shift2-border)' }}>Operasional</span>
+              {dateBadge && (
+                <span style={{ fontSize: '9.5px', padding: '2px 5px', borderRadius: '6px', background: 'var(--shift2-bg)', color: 'var(--shift2-color)', border: '1px solid var(--shift2-border)' }}>
+                  {dateBadge}
+                </span>
+              )}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {/* 1. KM Paling Atas (Menonjol & Simetris) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
-                  <Navigation size={18} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
+                  <Navigation size={16} />
                 </div>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--shift2-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
-                </div>
-              </div>
-
-              {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
-                  <Users size={18} />
-                </div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalShift2Pnp)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift2-color)', lineHeight: 1.1 }}>
+                  {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
                 </div>
               </div>
 
-              {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
+                  <Users size={16} />
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                  {safeFormatNumber(metrics.totalShift2Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                </div>
+              </div>
+
               {metrics.manualShift2 > 0 && (
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
-                  TOA: <strong>{safeFormatNumber(metrics.toaShift2)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift2)}</strong>
+                <div style={{ fontSize: '10.5px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '3px 6px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
+                  TOA: <strong>{safeFormatNumber(metrics.toaShift2)}</strong> | Man: <strong>{safeFormatNumber(metrics.manualShift2)}</strong>
                 </div>
               )}
             </div>
           </div>
+        </div>
 
-          {/* Grid 3: Total Akumulasi (Shift 1 + 2) */}
-          <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--total-bg)', border: '1px solid var(--total-border)' }}>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--total-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span>Akumulasi Total</span>
-              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--total-bg)', color: 'var(--total-color)', border: '1px solid var(--total-border)' }}>Shift 1 + 2</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {/* 1. KM Paling Atas (Menonjol & Simetris) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
-                  <Navigation size={20} />
-                </div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalKm)} <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
-                </div>
+        {/* Executive Summary: Row 2 (Akumulasi Total Full Width) */}
+        <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--total-bg)', border: '1px solid var(--total-border)', marginBottom: '20px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--total-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span>Akumulasi Total</span>
+            {dateBadge && (
+              <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--total-bg)', color: 'var(--total-color)', border: '1px solid var(--total-border)' }}>
+                {dateBadge}
+              </span>
+            )}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
+                <Navigation size={18} />
               </div>
-
-              {/* 2. Jumlah Pnp di bawah KM (Menonjol & Simetris) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
-                  <Users size={20} />
-                </div>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
-                </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
+                {safeFormatNumber(metrics.totalKm)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
               </div>
-
-              {/* 3. Detail TOA & Manual Paling Bawah (Hanya Tampil Jika Penjualan Manual > 0) */}
-              {(metrics.manualShift1 + metrics.manualShift2) > 0 && (
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
-                  Total TOA: <strong>{safeFormatNumber(metrics.totalToa)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1 + metrics.manualShift2)}</strong>
-                </div>
-              )}
             </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
+                <Users size={18} />
+              </div>
+              <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
+                {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
+              </div>
+            </div>
+
+            {(metrics.manualShift1 + metrics.manualShift2) > 0 && (
+              <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
+                Total TOA: <strong>{safeFormatNumber(metrics.totalToa)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1 + metrics.manualShift2)}</strong>
+              </div>
+            )}
           </div>
         </div>
 

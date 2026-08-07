@@ -20,53 +20,56 @@
 ### Task 1: Analytics Calculation Utility (`src/utils/analytics.ts`)
 
 **Files:**
+
 - Create: `src/utils/analytics.ts`
 - Test: `src/utils/analytics.test.ts`
 
 **Interfaces:**
+
 - Consumes: `BusData` from `src/services/googleSheets.ts`
 - Produces: `AnalyticsSummary` interface and `calculateAnalytics(busData: BusData[]): AnalyticsSummary`
 
 - [ ] **Step 1: Define `AnalyticsSummary` interface and test skeleton in `src/utils/analytics.test.ts`**
 
 Create `src/utils/analytics.test.ts`:
+
 ```typescript
-import { calculateAnalytics } from './analytics';
-import type { BusData } from '../services/googleSheets';
+import { calculateAnalytics } from "./analytics";
+import type { BusData } from "../services/googleSheets";
 
 const mockBusData: BusData[] = [
   {
     rowIndex: 2,
-    unit: 'KMJ 1986',
-    toaShift1: '83',
-    manualShift1: '0',
-    toaShift2: '127',
-    manualShift2: '0',
-    totalToa: '210',
-    kmAwal1: '100',
-    kmAkhir1: '200',
-    kmAwal2: '200',
-    kmAkhir2: '300',
-    keterangan: ''
+    unit: "KMJ 1986",
+    toaShift1: "83",
+    manualShift1: "0",
+    toaShift2: "127",
+    manualShift2: "0",
+    totalToa: "210",
+    kmAwal1: "100",
+    kmAkhir1: "200",
+    kmAwal2: "200",
+    kmAkhir2: "300",
+    keterangan: "",
   },
   {
     rowIndex: 3,
-    unit: 'KMJ 1987',
-    toaShift1: '0',
-    manualShift1: '0',
-    toaShift2: '0',
-    manualShift2: '0',
-    totalToa: '0',
-    kmAwal1: '',
-    kmAkhir1: '',
-    kmAwal2: '',
-    kmAkhir2: '',
-    keterangan: 'NP 1'
-  }
+    unit: "KMJ 1987",
+    toaShift1: "0",
+    manualShift1: "0",
+    toaShift2: "0",
+    manualShift2: "0",
+    totalToa: "0",
+    kmAwal1: "",
+    kmAkhir1: "",
+    kmAwal2: "",
+    kmAkhir2: "",
+    keterangan: "NP 1",
+  },
 ];
 
-describe('calculateAnalytics', () => {
-  it('correctly calculates total KM, total passengers, and shift totals', () => {
+describe("calculateAnalytics", () => {
+  it("correctly calculates total KM, total passengers, and shift totals", () => {
     const summary = calculateAnalytics(mockBusData);
     expect(summary.totalKm).toBe(200); // (200-100) + (300-200)
     expect(summary.totalPassengers).toBe(210);
@@ -86,15 +89,16 @@ describe('calculateAnalytics', () => {
 - [ ] **Step 2: Implement `calculateAnalytics` in `src/utils/analytics.ts`**
 
 Create `src/utils/analytics.ts`:
+
 ```typescript
-import type { BusData } from '../services/googleSheets';
+import type { BusData } from "../services/googleSheets";
 
 export interface AnalyticsSummary {
   totalKm: number;
   totalPassengers: number;
   passengersPerKm: number;
   kmPerBus: number;
-  
+
   // Shift 1
   totalToaShift1: number;
   totalManualShift1: number;
@@ -147,7 +151,7 @@ export function calculateAnalytics(busData: BusData[]): AnalyticsSummary {
     totalToaShift2 += toa2;
     totalManualShift2 += man2;
 
-    const isFilled = busTotalKm > 0 || (toa1 + man1 + toa2 + man2) > 0;
+    const isFilled = busTotalKm > 0 || toa1 + man1 + toa2 + man2 > 0;
     if (isFilled) {
       filledBuses += 1;
     } else {
@@ -163,9 +167,12 @@ export function calculateAnalytics(busData: BusData[]): AnalyticsSummary {
 
   const totalBuses = busData.length;
   const unfilledBuses = totalBuses - filledBuses;
-  const completionPercentage = totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
-  const kmPerBus = filledBuses > 0 ? parseFloat((totalKm / filledBuses).toFixed(2)) : 0;
-  const passengersPerKm = totalKm > 0 ? parseFloat((totalPassengers / totalKm).toFixed(3)) : 0;
+  const completionPercentage =
+    totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
+  const kmPerBus =
+    filledBuses > 0 ? parseFloat((totalKm / filledBuses).toFixed(2)) : 0;
+  const passengersPerKm =
+    totalKm > 0 ? parseFloat((totalPassengers / totalKm).toFixed(3)) : 0;
 
   return {
     totalKm: parseFloat(totalKm.toFixed(2)),
@@ -184,7 +191,7 @@ export function calculateAnalytics(busData: BusData[]): AnalyticsSummary {
     filledBuses,
     unfilledBuses,
     unfilledUnits,
-    completionPercentage
+    completionPercentage,
   };
 }
 ```
@@ -206,33 +213,39 @@ git commit -m "feat(analytics): add operational metrics calculation helper"
 ### Task 2: Mobile Bottom Navigation Bar (`src/components/BottomNav.tsx`)
 
 **Files:**
+
 - Create: `src/components/BottomNav.tsx`
 
 **Interfaces:**
+
 - Consumes: `activeTab: 'input' | 'analytics'`, `onSelectTab: (tab: 'input' | 'analytics') => void`, `pendingQueueCount: number`
 - Produces: React component `BottomNav`
 
 - [ ] **Step 1: Create `src/components/BottomNav.tsx`**
 
 ```tsx
-import { ClipboardList, BarChart3 } from 'lucide-react';
+import { ClipboardList, BarChart3 } from "lucide-react";
 
 interface BottomNavProps {
-  activeTab: 'input' | 'analytics';
-  onSelectTab: (tab: 'input' | 'analytics') => void;
+  activeTab: "input" | "analytics";
+  onSelectTab: (tab: "input" | "analytics") => void;
   pendingQueueCount?: number;
 }
 
-export function BottomNav({ activeTab, onSelectTab, pendingQueueCount = 0 }: BottomNavProps) {
+export function BottomNav({
+  activeTab,
+  onSelectTab,
+  pendingQueueCount = 0,
+}: BottomNavProps) {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 px-4 py-2 flex justify-around items-center max-w-md mx-auto sm:max-w-xl">
       <button
         type="button"
-        onClick={() => onSelectTab('input')}
+        onClick={() => onSelectTab("input")}
         className={`flex flex-col items-center gap-1 py-1 px-4 rounded-xl transition-all ${
-          activeTab === 'input'
-            ? 'text-sky-400 font-bold bg-sky-500/10'
-            : 'text-slate-400 hover:text-slate-200'
+          activeTab === "input"
+            ? "text-sky-400 font-bold bg-sky-500/10"
+            : "text-slate-400 hover:text-slate-200"
         }`}
       >
         <div className="relative">
@@ -248,11 +261,11 @@ export function BottomNav({ activeTab, onSelectTab, pendingQueueCount = 0 }: Bot
 
       <button
         type="button"
-        onClick={() => onSelectTab('analytics')}
+        onClick={() => onSelectTab("analytics")}
         className={`flex flex-col items-center gap-1 py-1 px-4 rounded-xl transition-all ${
-          activeTab === 'analytics'
-            ? 'text-sky-400 font-bold bg-sky-500/10'
-            : 'text-slate-400 hover:text-slate-200'
+          activeTab === "analytics"
+            ? "text-sky-400 font-bold bg-sky-500/10"
+            : "text-slate-400 hover:text-slate-200"
         }`}
       >
         <BarChart3 className="w-5 h-5" />
@@ -275,20 +288,22 @@ git commit -m "feat(ui): add mobile BottomNav component"
 ### Task 3: Analytics Display Cards & Container (`AnalyticsDashboard.tsx`)
 
 **Files:**
+
 - Create: `src/components/KPICard.tsx`
 - Create: `src/components/ShiftComparisonCard.tsx`
 - Create: `src/components/CompletionStatusCard.tsx`
 - Create: `src/components/AnalyticsDashboard.tsx`
 
 **Interfaces:**
+
 - Consumes: `busData: BusData[]` from `Dashboard.tsx`
 - Produces: `AnalyticsDashboard` container component
 
 - [ ] **Step 1: Create `KPICard.tsx`**
 
 ```tsx
-import { Gauge, Users, TrendingUp, Bus } from 'lucide-react';
-import type { AnalyticsSummary } from '../utils/analytics';
+import { Gauge, Users, TrendingUp, Bus } from "lucide-react";
+import type { AnalyticsSummary } from "../utils/analytics";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -299,7 +314,7 @@ export function KPICard({ summary }: Props) {
     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg space-y-3">
       <div className="flex items-center gap-2 text-xs font-bold text-sky-400 uppercase tracking-wider">
         <Gauge className="w-4 h-4" />
-        <span>Produktivitas & KM Armada</span>
+        <span>Capaian Pelanggan & Km</span>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -309,7 +324,8 @@ export function KPICard({ summary }: Props) {
             TOTAL KM
           </div>
           <div className="text-xl font-black text-emerald-400 mt-1">
-            {summary.totalKm.toLocaleString('id-ID')} <span className="text-xs font-normal">KM</span>
+            {summary.totalKm.toLocaleString("id-ID")}{" "}
+            <span className="text-xs font-normal">KM</span>
           </div>
         </div>
 
@@ -319,7 +335,7 @@ export function KPICard({ summary }: Props) {
             PELANGGAN (TOA)
           </div>
           <div className="text-xl font-black text-sky-400 mt-1">
-            {summary.totalPassengers.toLocaleString('id-ID')}
+            {summary.totalPassengers.toLocaleString("id-ID")}
           </div>
         </div>
       </div>
@@ -327,11 +343,15 @@ export function KPICard({ summary }: Props) {
       <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/50 flex justify-between text-xs text-slate-300">
         <div className="flex items-center gap-1">
           <Bus className="w-3.5 h-3.5 text-slate-400" />
-          <span>KM/Bus: <b>{summary.kmPerBus} KM</b></span>
+          <span>
+            KM/Bus: <b>{summary.kmPerBus} KM</b>
+          </span>
         </div>
         <div className="flex items-center gap-1">
           <TrendingUp className="w-3.5 h-3.5 text-slate-400" />
-          <span>Pelanggan/KM: <b>{summary.passengersPerKm}</b></span>
+          <span>
+            Pelanggan/KM: <b>{summary.passengersPerKm}</b>
+          </span>
         </div>
       </div>
     </div>
@@ -342,8 +362,8 @@ export function KPICard({ summary }: Props) {
 - [ ] **Step 2: Create `ShiftComparisonCard.tsx`**
 
 ```tsx
-import { Sun, Moon } from 'lucide-react';
-import type { AnalyticsSummary } from '../utils/analytics';
+import { Sun, Moon } from "lucide-react";
+import type { AnalyticsSummary } from "../utils/analytics";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -365,15 +385,19 @@ export function ShiftComparisonCard({ summary }: Props) {
           </div>
           <div className="flex justify-between text-slate-300">
             <span>TOA:</span>
-            <span className="font-semibold">{summary.totalToaShift1.toLocaleString('id-ID')}</span>
+            <span className="font-semibold">
+              {summary.totalToaShift1.toLocaleString("id-ID")}
+            </span>
           </div>
           <div className="flex justify-between text-slate-300">
             <span>Manual:</span>
-            <span className="font-semibold">{summary.totalManualShift1.toLocaleString('id-ID')}</span>
+            <span className="font-semibold">
+              {summary.totalManualShift1.toLocaleString("id-ID")}
+            </span>
           </div>
           <div className="flex justify-between font-bold text-emerald-400 pt-1 border-t border-slate-800/60">
             <span>Total:</span>
-            <span>{summary.totalShift1.toLocaleString('id-ID')}</span>
+            <span>{summary.totalShift1.toLocaleString("id-ID")}</span>
           </div>
         </div>
 
@@ -385,15 +409,19 @@ export function ShiftComparisonCard({ summary }: Props) {
           </div>
           <div className="flex justify-between text-slate-300">
             <span>TOA:</span>
-            <span className="font-semibold">{summary.totalToaShift2.toLocaleString('id-ID')}</span>
+            <span className="font-semibold">
+              {summary.totalToaShift2.toLocaleString("id-ID")}
+            </span>
           </div>
           <div className="flex justify-between text-slate-300">
             <span>Manual:</span>
-            <span className="font-semibold">{summary.totalManualShift2.toLocaleString('id-ID')}</span>
+            <span className="font-semibold">
+              {summary.totalManualShift2.toLocaleString("id-ID")}
+            </span>
           </div>
           <div className="flex justify-between font-bold text-emerald-400 pt-1 border-t border-slate-800/60">
             <span>Total:</span>
-            <span>{summary.totalShift2.toLocaleString('id-ID')}</span>
+            <span>{summary.totalShift2.toLocaleString("id-ID")}</span>
           </div>
         </div>
       </div>
@@ -405,8 +433,8 @@ export function ShiftComparisonCard({ summary }: Props) {
 - [ ] **Step 3: Create `CompletionStatusCard.tsx`**
 
 ```tsx
-import { CheckCircle2, AlertCircle } from 'lucide-react';
-import type { AnalyticsSummary } from '../utils/analytics';
+import { CheckCircle2, AlertCircle } from "lucide-react";
+import type { AnalyticsSummary } from "../utils/analytics";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -417,7 +445,9 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg space-y-3">
       <div className="flex justify-between items-center text-xs">
-        <span className="font-bold text-pink-400 uppercase tracking-wider">Status Kelengkapan Armada</span>
+        <span className="font-bold text-pink-400 uppercase tracking-wider">
+          Status Kelengkapan Armada
+        </span>
         <span className="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
           {summary.completionPercentage}% Selesai
         </span>
@@ -444,7 +474,9 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
 
       {summary.unfilledUnits.length > 0 && (
         <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 space-y-1.5">
-          <span className="text-[11px] text-slate-400 font-medium">Unit Belum Lengkap:</span>
+          <span className="text-[11px] text-slate-400 font-medium">
+            Unit Belum Lengkap:
+          </span>
           <div className="flex flex-wrap gap-1.5">
             {summary.unfilledUnits.map((unit) => (
               <button
@@ -467,11 +499,11 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
 - [ ] **Step 4: Create `AnalyticsDashboard.tsx` Container**
 
 ```tsx
-import type { BusData } from '../services/googleSheets';
-import { calculateAnalytics } from '../utils/analytics';
-import { KPICard } from './KPICard';
-import { ShiftComparisonCard } from './ShiftComparisonCard';
-import { CompletionStatusCard } from './CompletionStatusCard';
+import type { BusData } from "../services/googleSheets";
+import { calculateAnalytics } from "../utils/analytics";
+import { KPICard } from "./KPICard";
+import { ShiftComparisonCard } from "./ShiftComparisonCard";
+import { CompletionStatusCard } from "./CompletionStatusCard";
 
 interface Props {
   busData: BusData[];
@@ -503,20 +535,24 @@ git commit -m "feat(ui): add AnalyticsDashboard components and cards"
 ### Task 4: Main Dashboard Integration (`src/components/Dashboard.tsx`)
 
 **Files:**
+
 - Modify: `src/components/Dashboard.tsx`
 
 **Interfaces:**
+
 - Incorporates `activeMainTab: 'input' | 'analytics'` state and renders `AnalyticsDashboard` or `BusList` accordingly, plus `BottomNav`.
 
 - [ ] **Step 1: Add main tab state and render condition in `Dashboard.tsx`**
 
 In `src/components/Dashboard.tsx`:
 Add state:
+
 ```tsx
-const [mainTab, setMainTab] = useState<'input' | 'analytics'>('input');
+const [mainTab, setMainTab] = useState<"input" | "analytics">("input");
 ```
 
 In render body:
+
 ```tsx
 {mainTab === 'input' ? (
   <BusList ... />

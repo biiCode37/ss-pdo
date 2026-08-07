@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { slugifyUnitId } from "../utils/analytics";
+import { FormattedNoteText } from "./FormattedNoteText";
 import {
   Bus,
   Navigation,
@@ -229,7 +230,7 @@ function UnitCardComponent({ item, onClick }: Props) {
               textTransform: "uppercase",
             }}
           >
-            {item.notes[0]}
+            <FormattedNoteText text={item.notes[0]} />
           </span>
         </div>
       )}

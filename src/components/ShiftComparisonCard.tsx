@@ -3,11 +3,14 @@ import type { AnalyticsSummary } from "../utils/analytics";
 
 interface Props {
   summary: AnalyticsSummary;
+  dateBadge?: string;
 }
 
-export function ShiftComparisonCard({ summary }: Props) {
-  const formatInt = (val: number) => (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString("id-ID");
-  const hasManualTickets = summary.grandTotalManual > 0;
+export function ShiftComparisonCard({ summary, dateBadge }: Props) {
+  const formatInt = (val: number) =>
+    (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString(
+      "id-ID",
+    );
 
   return (
     <div className="analytics-card glass">
@@ -16,28 +19,30 @@ export function ShiftComparisonCard({ summary }: Props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          marginBottom: "12px",
+          gap: "8px",
         }}
       >
         <div className="analytics-card-title">
           <Sun size={18} />
-          <span>Rekapitulasi TOA S1 vs S2</span>
+          <span>Komparasi Pelanggan</span>
         </div>
-        {hasManualTickets && (
+        {dateBadge && (
           <span
             style={{
               fontSize: "12px",
               fontWeight: 700,
-              color: "var(--warning-color)",
-              background: "rgba(245, 158, 11, 0.15)",
-              border: "1px solid rgba(245, 158, 11, 0.3)",
-              padding: "4px 10px",
-              borderRadius: "999px",
-              display: "flex",
-              alignItems: "center",
+              fontFamily: "monospace",
+              color: "var(--accent-color)",
+              background: "rgba(59, 130, 246, 0.1)",
+              border: "1px solid rgba(59, 130, 246, 0.25)",
+              padding: "3px 8px",
+              borderRadius: "6px",
               whiteSpace: "nowrap",
+              letterSpacing: "0.5px",
             }}
           >
-            {formatInt(summary.grandTotalManual)} Tiket Manual
+            {dateBadge}
           </span>
         )}
       </div>

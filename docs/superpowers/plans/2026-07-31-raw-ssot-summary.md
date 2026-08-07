@@ -19,11 +19,13 @@
 ### Task 1: Preserve Raw Floating-Point Precision (`src/services/googleSheets.ts` & `src/utils/analytics.ts`)
 
 **Files:**
+
 - Modify: `src/services/googleSheets.ts:400-415`
 - Modify: `src/utils/analytics.ts`
 - Modify: `src/utils/analytics.test.ts`
 
 **Interfaces:**
+
 - Consumes: Summary numbers from Google Sheets
 - Produces: Unrounded pure `AnalyticsSummary`
 
@@ -31,10 +33,13 @@
 
 In `src/services/googleSheets.ts`:
 Change:
+
 ```typescript
 sheetSummary[key] = parseFloat(Number(nextVal).toFixed(4));
 ```
+
 To:
+
 ```typescript
 sheetSummary[key] = Number(nextVal);
 ```
@@ -43,6 +48,7 @@ sheetSummary[key] = Number(nextVal);
 
 In `src/utils/analytics.ts`:
 Change:
+
 ```typescript
   return {
     totalKm: finalTotalKm,
@@ -56,17 +62,27 @@ Change:
 - [ ] **Step 3: Update `analytics.test.ts` to assert exact unrounded values**
 
 Update `src/utils/analytics.test.ts`:
-```typescript
-  const ssotSummary = calculateAnalytics(mockBusData, {
-    totalKm: 5589.06,
-    totalPassengers: 4670,
-    kmPerBus: 192.7262,
-    passengersPerKm: 0.83556011204
-  });
 
-  console.assert(ssotSummary.totalKm === 5589.06, 'SSOT totalKm preserved exact value');
-  console.assert(ssotSummary.kmPerBus === 192.7262, 'SSOT kmPerBus preserved exact value');
-  console.assert(ssotSummary.passengersPerKm === 0.83556011204, 'SSOT passengersPerKm preserved exact value');
+```typescript
+const ssotSummary = calculateAnalytics(mockBusData, {
+  totalKm: 5589.06,
+  totalPassengers: 4670,
+  kmPerBus: 192.7262,
+  passengersPerKm: 0.83556011204,
+});
+
+console.assert(
+  ssotSummary.totalKm === 5589.06,
+  "SSOT totalKm preserved exact value",
+);
+console.assert(
+  ssotSummary.kmPerBus === 192.7262,
+  "SSOT kmPerBus preserved exact value",
+);
+console.assert(
+  ssotSummary.passengersPerKm === 0.83556011204,
+  "SSOT passengersPerKm preserved exact value",
+);
 ```
 
 - [ ] **Step 4: Commit**
@@ -81,58 +97,75 @@ git commit -m "feat(analytics): preserve raw pure values from Google Sheets summ
 ### Task 2: Display Pure Raw Decimal Values in UI (`src/components/KPICard.tsx`)
 
 **Files:**
+
 - Modify: `src/components/KPICard.tsx`
 
 **Interfaces:**
+
 - Consumes: Raw `AnalyticsSummary`
 - Produces: Pure unrounded UI display
 
 - [ ] **Step 1: Update `KPICard.tsx` to display all decimal places**
 
 Update `KPICard.tsx`:
+
 ```tsx
 export function KPICard({ summary }: Props) {
-  const formatInt = (val: number) => val.toLocaleString('id-ID');
+  const formatInt = (val: number) => val.toLocaleString("id-ID");
   const formatRaw = (val: number) =>
-    val.toLocaleString('id-ID', { maximumFractionDigits: 10 });
+    val.toLocaleString("id-ID", { maximumFractionDigits: 10 });
 
   return (
     <div className="analytics-card glass">
-      <div className="analytics-card-title" style={{ color: 'var(--accent-color)' }}>
+      <div
+        className="analytics-card-title"
+        style={{ color: "var(--accent-color)" }}
+      >
         <Gauge size={18} />
-        <span>Produktivitas & KM Armada</span>
+        <span>Capaian Pelanggan & Km</span>
       </div>
 
       <div className="analytics-grid-2">
         <div className="analytics-stat-box">
           <div className="analytics-stat-label">
-            <Gauge size={14} style={{ color: 'var(--success-color)' }} />
+            <Gauge size={14} style={{ color: "var(--success-color)" }} />
             <span>TOTAL KM</span>
           </div>
-          <div className="analytics-stat-value" style={{ color: 'var(--success-color)' }}>
-            {formatRaw(summary.totalKm)} <span style={{ fontSize: '12px', fontWeight: 400 }}>KM</span>
+          <div
+            className="analytics-stat-value"
+            style={{ color: "var(--success-color)" }}
+          >
+            {formatRaw(summary.totalKm)}{" "}
+            <span style={{ fontSize: "12px", fontWeight: 400 }}>KM</span>
           </div>
         </div>
 
         <div className="analytics-stat-box">
           <div className="analytics-stat-label">
-            <Users size={14} style={{ color: 'var(--accent-color)' }} />
+            <Users size={14} style={{ color: "var(--accent-color)" }} />
             <span>PELANGGAN (TOA)</span>
           </div>
-          <div className="analytics-stat-value" style={{ color: 'var(--accent-color)' }}>
+          <div
+            className="analytics-stat-value"
+            style={{ color: "var(--accent-color)" }}
+          >
             {formatInt(summary.totalPassengers)}
           </div>
         </div>
       </div>
 
       <div className="analytics-sub-bar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <Bus size={16} />
-          <span>KM/Bus: <b>{formatRaw(summary.kmPerBus)} KM</b></span>
+          <span>
+            KM/Bus: <b>{formatRaw(summary.kmPerBus)} KM</b>
+          </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <TrendingUp size={16} />
-          <span>Kepadatan: <b>{formatRaw(summary.passengersPerKm)} Pnp/KM</b></span>
+          <span>
+            Kepadatan: <b>{formatRaw(summary.passengersPerKm)} Pnp/KM</b>
+          </span>
         </div>
       </div>
     </div>

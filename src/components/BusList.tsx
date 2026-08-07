@@ -15,6 +15,14 @@ interface Props {
   addToQueue: (item: Omit<SyncItem, "id" | "status">) => void;
   isLoading?: boolean;
   onUpdateBus?: (rowIndex: number, updates: Partial<BusData>) => void;
+  accRange?: {
+    startDay?: number;
+    startMonth?: number;
+    startYear?: number;
+    endDay?: number;
+    endMonth?: number;
+    endYear?: number;
+  } | null;
 }
 
 export function BusList({
@@ -26,6 +34,7 @@ export function BusList({
   addToQueue,
   isLoading = false,
   onUpdateBus,
+  accRange,
 }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
@@ -94,9 +103,9 @@ export function BusList({
       {tabName === "AKUMULASI" && (
         <div
           style={{
-            background: "rgba(59, 130, 246, 0.12)",
-            border: "1px solid rgba(59, 130, 246, 0.3)",
-            color: "var(--accent-color)",
+            background: "rgba(234, 179, 8, 0.15)",
+            border: "1px solid rgba(234, 179, 8, 0.4)",
+            color: "var(--warning-color, #eab308)",
             padding: "10px 14px",
             borderRadius: "12px",
             fontSize: "12.5px",
@@ -105,11 +114,25 @@ export function BusList({
             display: "flex",
             alignItems: "center",
             gap: "8px",
+            boxShadow: "0 2px 8px rgba(234, 179, 8, 0.15)",
           }}
         >
-          <span>📊</span>
+          <span style={{ fontSize: "16px" }}>⚠️</span>
           <span>
-            Rekapitulasi Akumulasi MTD (Tgl 1 - {new Date().getDate()}). Pilih tanggal harian pada form atau ketuk badge grafik untuk mengedit data harian spesifik.
+            Rekap Akumulasi (Tgl{" "}
+            {(() => {
+              const sDay = accRange?.startDay ?? 1;
+              const eDay = accRange?.endDay ?? new Date().getDate();
+              if (
+                accRange?.startMonth &&
+                accRange?.endMonth &&
+                (accRange.startMonth !== accRange.endMonth || accRange.startYear !== accRange.endYear)
+              ) {
+                return `${sDay}/${accRange.startMonth} - ${eDay}/${accRange.endMonth}`;
+              }
+              return `${sDay} - ${eDay}`;
+            })()}
+            ) aktif. Pilih tanggal harian spesifik untuk menginput data.
           </span>
         </div>
       )}

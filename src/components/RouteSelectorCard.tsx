@@ -20,6 +20,14 @@ interface Props {
   currentSheetId?: string;
   currentTabName?: string;
   onLoadData: () => void;
+  accRange?: {
+    startDay?: number;
+    startMonth?: number;
+    startYear?: number;
+    endDay?: number;
+    endMonth?: number;
+    endYear?: number;
+  } | null;
 }
 
 /** Flatten supabase routes ke daftar sheet dengan route info */
@@ -56,6 +64,7 @@ export function RouteSelectorCard({
   currentSheetId,
   currentTabName,
   onLoadData,
+  accRange,
 }: Props) {
   const [isMorphed, setIsMorphed] = useState(false);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
@@ -282,7 +291,22 @@ export function RouteSelectorCard({
         </div>
         <div className="morph-pill-badge" style={{ flexShrink: 0, marginLeft: '8px' }}>
           <Calendar size={13} style={{ flexShrink: 0 }} />
-          <span>{selectedTab === 'AKUMULASI' ? `Akumulasi (1-${new Date().getDate()})` : `Tgl ${currentTabName || selectedTab}`}</span>
+          <span>
+            {selectedTab === 'AKUMULASI'
+              ? (() => {
+                  const sDay = accRange?.startDay ?? 1;
+                  const eDay = accRange?.endDay ?? new Date().getDate();
+                  if (
+                    accRange?.startMonth &&
+                    accRange?.endMonth &&
+                    (accRange.startMonth !== accRange.endMonth || accRange.startYear !== accRange.endYear)
+                  ) {
+                    return `Akumulasi (${sDay}/${accRange.startMonth}-${eDay}/${accRange.endMonth})`;
+                  }
+                  return `Akumulasi (${sDay}-${eDay})`;
+                })()
+              : `Tgl ${currentTabName || selectedTab}`}
+          </span>
         </div>
       </div>
 
@@ -365,11 +389,11 @@ export function RouteSelectorCard({
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tanggal</label>
                 <select
                   className="input-field"
-                  value={selectedTab}
+                  value={selectedTab === 'AKUMULASI' ? '' : selectedTab}
                   onChange={(e) => setSelectedTab(e.target.value)}
                   style={{ width: '100%', padding: '8px' }}
                 >
-                  <option value="AKUMULASI">Akumulasi MTD (Tgl 1 - {new Date().getDate()})</option>
+                  <option value="" disabled>-- Pilih Tanggal --</option>
                   {days.map(day => (
                     <option key={day} value={day}>Tgl {day}</option>
                   ))}

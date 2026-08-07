@@ -261,3 +261,106 @@ export function calculateAccumulatedAnalytics(
 
   return calculateAnalytics(Array.from(unitMap.values()));
 }
+
+export function getFormattedDateBadge(
+  selectedTab: string,
+  activeMonth: number = new Date().getMonth() + 1,
+  activeYear: number = new Date().getFullYear(),
+  accRange?: {
+    startDay?: number;
+    startMonth?: number;
+    startYear?: number;
+    endDay?: number;
+    endMonth?: number;
+    endYear?: number;
+  } | null,
+): string {
+  const pad2 = (n: number) => String(n).padStart(2, "0");
+  const yr2 = (y: number) => String(y).slice(-2);
+
+  if (selectedTab === "AKUMULASI") {
+    const sDay = accRange?.startDay ?? 1;
+    const sMonth = accRange?.startMonth ?? activeMonth;
+    const sYear = accRange?.startYear ?? activeYear;
+
+    const eDay = accRange?.endDay ?? new Date().getDate();
+    const eMonth = accRange?.endMonth ?? activeMonth;
+    const eYear = accRange?.endYear ?? activeYear;
+
+    const sDayStr = pad2(sDay);
+    const sMonthStr = pad2(sMonth);
+    const sYrStr = yr2(sYear);
+
+    const eDayStr = pad2(eDay);
+    const eMonthStr = pad2(eMonth);
+    const eYrStr = yr2(eYear);
+
+    // Rule 1: Bulan & Tahun sama -> tampilkan hanya tanggal di start
+    if (sMonth === eMonth && sYear === eYear) {
+      return `${sDayStr} - ${eDayStr}/${eMonthStr}/${eYrStr}`;
+    }
+
+    // Rule 2: Tahun sama -> tampilkan tanggal & bulan di start
+    if (sYear === eYear) {
+      return `${sDayStr}/${sMonthStr} - ${eDayStr}/${eMonthStr}/${eYrStr}`;
+    }
+
+    // Rule 3: Tahun beda -> tampilkan tanggal, bulan & tahun di start
+    return `${sDayStr}/${sMonthStr}/${sYrStr} - ${eDayStr}/${eMonthStr}/${eYrStr}`;
+  }
+
+  const day = Number(selectedTab);
+  const activeDay = !isNaN(day) && day > 0 ? day : new Date().getDate();
+
+  return `${pad2(activeDay)}/${pad2(activeMonth)}/${yr2(activeYear)}`;
+}
+
+/**
+ * Format catatan/keterangan unit selama rentang akumulasi (Opsi C).
+ * Contoh: [{ day: 2, note: "Mogok" }, { day: 3, note: "Mogok" }, { day: 5, note: "Perbaikan AC" }]
+ * Output: "Tgl 2-3: Mogok | Tgl 5: Perbaikan AC"
+ */
+export function formatAccumulatedNotes(
+  notes: { day: number; note: string }[]
+): string {
+  if (!notes || notes.length === 0) return "";
+
+  const noteDaysMap = new Map<string, number[]>();
+  for (const item of notes) {
+    if (!item.note || !item.note.trim()) continue;
+    const cleanNote = item.note.trim();
+    const existingDays = noteDaysMap.get(cleanNote) || [];
+    if (!existingDays.includes(item.day)) {
+      existingDays.push(item.day);
+    }
+    noteDaysMap.set(cleanNote, existingDays);
+  }
+
+  if (noteDaysMap.size === 0) return "";
+
+  const resultParts: string[] = [];
+
+  for (const [note, days] of noteDaysMap.entries()) {
+    days.sort((a, b) => a - b);
+
+    const ranges: string[] = [];
+    let start = days[0];
+    let prev = days[0];
+
+    for (let i = 1; i < days.length; i++) {
+      if (days[i] === prev + 1) {
+        prev = days[i];
+      } else {
+        ranges.push(start === prev ? `${start}` : `${start}-${prev}`);
+        start = days[i];
+        prev = days[i];
+      }
+    }
+    ranges.push(start === prev ? `${start}` : `${start}-${prev}`);
+
+    const dayStr = ranges.join(", ");
+    resultParts.push(`Tgl ${dayStr}: ${note}`);
+  }
+
+  return resultParts.join(" • ");
+}

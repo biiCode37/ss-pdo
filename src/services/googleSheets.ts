@@ -1,4 +1,7 @@
 import { gapi } from 'gapi-script';
+import { upsertDailyUnitSummaries } from './routeService';
+import type { DailyUnitSummary } from '../types/supabase';
+import { formatAccumulatedNotes } from '../utils/analytics';
 
 export const getGoogleCreds = () => {
   return {
@@ -681,6 +684,62 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       }
     }
 
+    // ponytail: auto-sync ringkasan unit ke Supabase daily_unit_summaries secara background (fire-and-forget)
+    (async () => {
+      try {
+        const cached = localStorage.getItem('PDO_CACHE_ROUTES');
+        if (cached && tabName && !isNaN(parseInt(tabName, 10))) {
+          const day = parseInt(tabName, 10);
+          const routes = JSON.parse(cached);
+          let matchRoute: any = null;
+          let matchSheet: any = null;
+          for (const r of routes) {
+            for (const s of r.route_sheets || []) {
+              if (s.sheet_url.includes(sheetId) || sheetId.includes(s.spreadsheet_id)) {
+                matchRoute = r;
+                matchSheet = s;
+                break;
+              }
+            }
+          }
+          if (matchRoute && matchSheet) {
+            const summaries: DailyUnitSummary[] = data.map((bus) => {
+              const kmA1 = parseIndonesianNumber(bus.kmAwal1);
+              const kmAkh1 = parseIndonesianNumber(bus.kmAkhir1);
+              const kmA2 = parseIndonesianNumber(bus.kmAwal2);
+              const kmAkh2 = parseIndonesianNumber(bus.kmAkhir2);
+              const kmS1 = kmAkh1 > kmA1 ? kmAkh1 - kmA1 : 0;
+              const kmS2 = kmAkh2 > kmA2 ? kmAkh2 - kmA2 : 0;
+
+              const toa1 = parseIndonesianNumber(bus.toaShift1);
+              const man1 = parseIndonesianNumber(bus.manualShift1);
+              const toa2 = parseIndonesianNumber(bus.toaShift2);
+              const man2 = parseIndonesianNumber(bus.manualShift2);
+              const totToa = parseIndonesianNumber(bus.totalToa) || (toa1 + toa2);
+
+              return {
+                route_sheet_id: matchSheet.id,
+                route_code: matchRoute.route_code,
+                year: matchSheet.year,
+                month: matchSheet.month,
+                day,
+                unit: bus.unit,
+                total_km: kmS1 + kmS2,
+                toa_shift1: toa1,
+                manual_shift1: man1,
+                toa_shift2: toa2,
+                manual_shift2: man2,
+                total_toa: totToa,
+                total_passengers: totToa + man1 + man2,
+                keterangan: bus.keterangan || undefined,
+              };
+            });
+            await upsertDailyUnitSummaries(summaries);
+          }
+        }
+      } catch (_e) {}
+    })();
+
     return { data, headerMap, missingColumns, sheetSummary };
   } catch (error: any) {
     console.error('Error fetching data', error);
@@ -961,13 +1020,14 @@ export const getMonthlyToaTrend = async (
 
 export const getAccumulatedBusData = async (
   sheetId: string,
-  maxDay: number
+  maxDay: number,
+  startDay = 1
 ): Promise<{ data: BusData[]; headerMap: HeaderMap; missingColumns: string[]; sheetSummary: Record<string, number> }> => {
   return withAuthRetry(async () => {
-    const today = new Date().getDate();
-    const targetEndDay = Math.min(maxDay, Math.max(1, today));
+    const targetEndDay = Math.max(1, maxDay);
+    const targetStartDay = Math.max(1, Math.min(startDay, targetEndDay));
 
-    const ranges = Array.from({ length: targetEndDay }, (_, i) => `${i + 1}!A1:ZZ`);
+    const ranges = Array.from({ length: targetEndDay - targetStartDay + 1 }, (_, i) => `${targetStartDay + i}!A1:ZZ`);
 
     let valueRanges: any[] = [];
     try {
@@ -983,9 +1043,11 @@ export const getAccumulatedBusData = async (
     }
 
     const unitMap = new Map<string, BusData>();
+    const unitNotesMap = new Map<string, { day: number; note: string }[]>();
     let firstHeaderMap: HeaderMap | null = null;
 
     for (let idx = 0; idx < valueRanges.length; idx++) {
+      const dayNum = targetStartDay + idx;
       const vr = valueRanges[idx];
       const rows = vr?.values;
       if (!rows || rows.length === 0) continue;
@@ -1034,6 +1096,12 @@ export const getAccumulatedBusData = async (
         const man2 = parseIndonesianNumber(getVal(headerMap.manualShift2));
         const totToa = parseIndonesianNumber(getVal(headerMap.totalToa));
         const ket = getVal(headerMap.keterangan);
+
+        if (ket) {
+          const notesArr = unitNotesMap.get(unitName) || [];
+          notesArr.push({ day: dayNum, note: ket });
+          unitNotesMap.set(unitName, notesArr);
+        }
 
         const existing = unitMap.get(unitName);
         if (!existing) {
@@ -1084,15 +1152,15 @@ export const getAccumulatedBusData = async (
           existing.kmAkhir1 = newKmS1.toString();
           existing.kmAwal2 = "0";
           existing.kmAkhir2 = newKmS2.toString();
-
-          if (ket) {
-            const exNotes = existing.keterangan ? existing.keterangan.split(" | ") : [];
-            if (!exNotes.includes(ket)) {
-              exNotes.push(ket);
-              existing.keterangan = exNotes.join(" | ");
-            }
-          }
         }
+      }
+    }
+
+    // Format accumulated notes for each unit using Opsi C (e.g. "Tgl 2-3: Mogok | Tgl 5: Perbaikan AC")
+    for (const bus of unitMap.values()) {
+      const rawNotes = unitNotesMap.get(bus.unit);
+      if (rawNotes && rawNotes.length > 0) {
+        bus.keterangan = formatAccumulatedNotes(rawNotes);
       }
     }
 

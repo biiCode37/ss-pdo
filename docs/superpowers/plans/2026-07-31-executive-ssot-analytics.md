@@ -21,15 +21,18 @@
 ### Task 1: Google Sheets Summary Parser (`src/services/googleSheets.ts`)
 
 **Files:**
+
 - Modify: `src/services/googleSheets.ts:234-405`
 
 **Interfaces:**
+
 - Consumes: Google Sheets API rows
 - Produces: `sheetSummary: Record<string, number>` in `getBusData` return type
 
 - [ ] **Step 1: Update `getBusData` return signature in `src/services/googleSheets.ts`**
 
 Update `getBusData` return type to include `sheetSummary`:
+
 ```typescript
 export const getBusData = async (
   sheetId: string,
@@ -45,6 +48,7 @@ export const getBusData = async (
 - [ ] **Step 2: Add summary row parser in `getBusData`**
 
 After reading data rows, scan subsequent rows for summary labels:
+
 ```typescript
 const sheetSummary: Record<string, number> = {};
 
@@ -59,25 +63,44 @@ for (let i = dataStartIndex; i < rows.length; i++) {
     const str = String(cellVal).trim().toLowerCase();
 
     // Map summary labels to normalized keys
-    let key = '';
-    if (str.includes('total pelanggan/km') || str.includes('pelanggan/km')) key = 'passengersPerKm';
-    else if (str.includes('total pelanggan')) key = 'totalPassengers';
-    else if (str.includes('total km')) key = 'totalKm';
-    else if (str.includes('km/bus') || str.includes('km / bus')) key = 'kmPerBus';
-    else if (str.includes('total toa shift 1') || str.includes('total toa s1')) key = 'totalToaShift1';
-    else if (str.includes('total manual shift 1') || str.includes('total manual s1')) key = 'totalManualShift1';
-    else if (str.includes('total shift 1') || str.includes('total s1')) key = 'totalShift1';
-    else if (str.includes('total toa shift 2') || str.includes('total toa s2')) key = 'totalToaShift2';
-    else if (str.includes('total manual shift 2') || str.includes('total manual s2')) key = 'totalManualShift2';
-    else if (str.includes('total shift 2') || str.includes('total s2')) key = 'totalShift2';
-    else if (str.includes('total toa')) key = 'grandTotalToa';
-    else if (str.includes('total manual')) key = 'grandTotalManual';
+    let key = "";
+    if (str.includes("total pelanggan/km") || str.includes("pelanggan/km"))
+      key = "passengersPerKm";
+    else if (str.includes("total pelanggan")) key = "totalPassengers";
+    else if (str.includes("total km")) key = "totalKm";
+    else if (str.includes("km/bus") || str.includes("km / bus"))
+      key = "kmPerBus";
+    else if (str.includes("total toa shift 1") || str.includes("total toa s1"))
+      key = "totalToaShift1";
+    else if (
+      str.includes("total manual shift 1") ||
+      str.includes("total manual s1")
+    )
+      key = "totalManualShift1";
+    else if (str.includes("total shift 1") || str.includes("total s1"))
+      key = "totalShift1";
+    else if (str.includes("total toa shift 2") || str.includes("total toa s2"))
+      key = "totalToaShift2";
+    else if (
+      str.includes("total manual shift 2") ||
+      str.includes("total manual s2")
+    )
+      key = "totalManualShift2";
+    else if (str.includes("total shift 2") || str.includes("total s2"))
+      key = "totalShift2";
+    else if (str.includes("total toa")) key = "grandTotalToa";
+    else if (str.includes("total manual")) key = "grandTotalManual";
 
     if (key) {
       // Look for adjacent cell containing numeric value
       for (let offset = 1; offset <= 3; offset++) {
         const nextVal = row[colIdx + offset];
-        if (nextVal !== undefined && nextVal !== null && nextVal !== '' && !isNaN(Number(nextVal))) {
+        if (
+          nextVal !== undefined &&
+          nextVal !== null &&
+          nextVal !== "" &&
+          !isNaN(Number(nextVal))
+        ) {
           sheetSummary[key] = parseFloat(Number(nextVal).toFixed(4));
           break;
         }
@@ -104,20 +127,23 @@ git commit -m "feat(sheets): add summary row parser for SSOT metrics"
 ### Task 2: SSOT Analytics Calculator (`src/utils/analytics.ts`)
 
 **Files:**
+
 - Modify: `src/utils/analytics.ts`
 - Modify: `src/utils/analytics.test.ts`
 
 **Interfaces:**
+
 - Consumes: `busData: BusData[]`, `sheetSummary?: Record<string, number>`
 - Produces: Updated `calculateAnalytics` function
 
 - [ ] **Step 1: Update `calculateAnalytics` in `src/utils/analytics.ts`**
 
 Update `calculateAnalytics` signature and logic:
+
 ```typescript
 export function calculateAnalytics(
   busData: BusData[],
-  sheetSummary?: Record<string, number>
+  sheetSummary?: Record<string, number>,
 ): AnalyticsSummary {
   let totalKm = 0;
   let totalToaShift1 = 0;
@@ -153,7 +179,7 @@ export function calculateAnalytics(
     totalToaShift2 += toa2;
     totalManualShift2 += man2;
 
-    const isFilled = busTotalKm > 0 || (toa1 + man1 + toa2 + man2) > 0;
+    const isFilled = busTotalKm > 0 || toa1 + man1 + toa2 + man2 > 0;
     if (isFilled) {
       filledBuses += 1;
     } else {
@@ -169,7 +195,8 @@ export function calculateAnalytics(
 
   const totalBuses = busData.length;
   const unfilledBuses = totalBuses - filledBuses;
-  const completionPercentage = totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
+  const completionPercentage =
+    totalBuses > 0 ? Math.round((filledBuses / totalBuses) * 100) : 0;
 
   // Use sheetSummary SSOT values if available, otherwise calculate with Excel formula emulation (AVERAGEIF(KM > 0))
   const finalTotalKm = sheetSummary?.totalKm ?? parseFloat(totalKm.toFixed(2));
@@ -179,7 +206,8 @@ export function calculateAnalytics(
   const calcKmPerBus = activeBusCount > 0 ? totalKm / activeBusCount : 0;
   const finalKmPerBus = sheetSummary?.kmPerBus ?? calcKmPerBus;
 
-  const calcPnpPerKm = finalTotalKm > 0 ? finalTotalPassengers / finalTotalKm : 0;
+  const calcPnpPerKm =
+    finalTotalKm > 0 ? finalTotalPassengers / finalTotalKm : 0;
   const finalPnpPerKm = sheetSummary?.passengersPerKm ?? calcPnpPerKm;
 
   return {
@@ -199,7 +227,7 @@ export function calculateAnalytics(
     filledBuses,
     unfilledBuses,
     unfilledUnits,
-    completionPercentage
+    completionPercentage,
   };
 }
 ```
@@ -207,63 +235,79 @@ export function calculateAnalytics(
 - [ ] **Step 2: Update unit test in `src/utils/analytics.test.ts`**
 
 Update `src/utils/analytics.test.ts`:
+
 ```typescript
-import { calculateAnalytics } from './analytics';
-import type { BusData } from '../services/googleSheets';
+import { calculateAnalytics } from "./analytics";
+import type { BusData } from "../services/googleSheets";
 
 const mockBusData: BusData[] = [
   {
     rowIndex: 2,
-    unit: 'KMJ 1986',
-    toaShift1: '83',
-    toaShift2: '127',
-    manualShift1: '0',
-    manualShift2: '0',
-    totalToa: '210',
-    kmAwal1: '100',
-    kmAkhir1: '200',
-    kmAwal2: '200',
-    kmAkhir2: '300',
-    keterangan: '',
-    originalRow: []
+    unit: "KMJ 1986",
+    toaShift1: "83",
+    toaShift2: "127",
+    manualShift1: "0",
+    manualShift2: "0",
+    totalToa: "210",
+    kmAwal1: "100",
+    kmAkhir1: "200",
+    kmAwal2: "200",
+    kmAkhir2: "300",
+    keterangan: "",
+    originalRow: [],
   },
   {
     rowIndex: 3,
-    unit: 'KMJ 1987 (Mogok)',
-    toaShift1: '0',
-    toaShift2: '0',
-    manualShift1: '0',
-    manualShift2: '0',
-    totalToa: '0',
-    kmAwal1: '',
-    kmAkhir1: '',
-    kmAwal2: '',
-    kmAkhir2: '',
-    keterangan: 'NP 1',
-    originalRow: []
-  }
+    unit: "KMJ 1987 (Mogok)",
+    toaShift1: "0",
+    toaShift2: "0",
+    manualShift1: "0",
+    manualShift2: "0",
+    totalToa: "0",
+    kmAwal1: "",
+    kmAkhir1: "",
+    kmAwal2: "",
+    kmAkhir2: "",
+    keterangan: "NP 1",
+    originalRow: [],
+  },
 ];
 
 export function runAnalyticsTest() {
   // Test local calculation with AVERAGEIF(KM > 0)
   const localSummary = calculateAnalytics(mockBusData);
-  console.assert(localSummary.totalKm === 200, 'totalKm should be 200');
-  console.assert(localSummary.kmPerBus === 200, 'kmPerBus should be 200 (200 KM / 1 active bus)');
-  console.assert(localSummary.passengersPerKm === 1.05, 'passengersPerKm should be 1.05 (210 / 200)');
+  console.assert(localSummary.totalKm === 200, "totalKm should be 200");
+  console.assert(
+    localSummary.kmPerBus === 200,
+    "kmPerBus should be 200 (200 KM / 1 active bus)",
+  );
+  console.assert(
+    localSummary.passengersPerKm === 1.05,
+    "passengersPerKm should be 1.05 (210 / 200)",
+  );
 
   // Test SSOT priority from sheetSummary
   const ssotSummary = calculateAnalytics(mockBusData, {
     totalKm: 5589.06,
     totalPassengers: 4670,
     kmPerBus: 192.7262,
-    passengersPerKm: 0.8355
+    passengersPerKm: 0.8355,
   });
 
-  console.assert(ssotSummary.totalKm === 5589.1, 'SSOT totalKm formatted to 1 decimal');
-  console.assert(ssotSummary.kmPerBus === 192.7, 'SSOT kmPerBus formatted to 1 decimal');
-  console.assert(ssotSummary.passengersPerKm === 0.84, 'SSOT passengersPerKm formatted to 2 decimals');
+  console.assert(
+    ssotSummary.totalKm === 5589.1,
+    "SSOT totalKm formatted to 1 decimal",
+  );
+  console.assert(
+    ssotSummary.kmPerBus === 192.7,
+    "SSOT kmPerBus formatted to 1 decimal",
+  );
+  console.assert(
+    ssotSummary.passengersPerKm === 0.84,
+    "SSOT passengersPerKm formatted to 2 decimals",
+  );
 
-  console.log('✅ SSOT Executive Analytics unit test passed');
+  console.log("✅ SSOT Executive Analytics unit test passed");
 }
 
 runAnalyticsTest();
@@ -286,19 +330,22 @@ git commit -m "feat(analytics): implement SSOT priority and AVERAGEIF emulation 
 ### Task 3: Executive Formatting UI (`KPICard.tsx`, `ShiftComparisonCard.tsx`)
 
 **Files:**
+
 - Modify: `src/components/KPICard.tsx`
 - Modify: `src/components/ShiftComparisonCard.tsx`
 
 **Interfaces:**
+
 - Consumes: Updated `AnalyticsSummary`
 - Produces: Executive formatted cards
 
 - [ ] **Step 1: Update `KPICard.tsx` with executive formatting and Indonesian locale**
 
 Update `src/components/KPICard.tsx`:
+
 ```tsx
-import { Gauge, Users, TrendingUp, Bus } from 'lucide-react';
-import type { AnalyticsSummary } from '../utils/analytics';
+import { Gauge, Users, TrendingUp, Bus } from "lucide-react";
+import type { AnalyticsSummary } from "../utils/analytics";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -306,47 +353,64 @@ interface Props {
 
 export function KPICard({ summary }: Props) {
   // Format numbers using Indonesian locale
-  const formatInt = (val: number) => val.toLocaleString('id-ID');
+  const formatInt = (val: number) => val.toLocaleString("id-ID");
   const formatDec = (val: number, decimals: number) =>
-    val.toLocaleString('id-ID', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    val.toLocaleString("id-ID", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
 
   return (
     <div className="analytics-card glass">
-      <div className="analytics-card-title" style={{ color: 'var(--accent-color)' }}>
+      <div
+        className="analytics-card-title"
+        style={{ color: "var(--accent-color)" }}
+      >
         <Gauge size={18} />
-        <span>Produktivitas & KM Armada</span>
+        <span>Capaian Pelanggan & Km</span>
       </div>
 
       <div className="analytics-grid-2">
         <div className="analytics-stat-box">
           <div className="analytics-stat-label">
-            <Gauge size={14} style={{ color: 'var(--success-color)' }} />
+            <Gauge size={14} style={{ color: "var(--success-color)" }} />
             <span>TOTAL KM</span>
           </div>
-          <div className="analytics-stat-value" style={{ color: 'var(--success-color)' }}>
-            {formatDec(summary.totalKm, 1)} <span style={{ fontSize: '12px', fontWeight: 400 }}>KM</span>
+          <div
+            className="analytics-stat-value"
+            style={{ color: "var(--success-color)" }}
+          >
+            {formatDec(summary.totalKm, 1)}{" "}
+            <span style={{ fontSize: "12px", fontWeight: 400 }}>KM</span>
           </div>
         </div>
 
         <div className="analytics-stat-box">
           <div className="analytics-stat-label">
-            <Users size={14} style={{ color: 'var(--accent-color)' }} />
+            <Users size={14} style={{ color: "var(--accent-color)" }} />
             <span>PELANGGAN (TOA)</span>
           </div>
-          <div className="analytics-stat-value" style={{ color: 'var(--accent-color)' }}>
+          <div
+            className="analytics-stat-value"
+            style={{ color: "var(--accent-color)" }}
+          >
             {formatInt(summary.totalPassengers)}
           </div>
         </div>
       </div>
 
       <div className="analytics-sub-bar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <Bus size={16} />
-          <span>KM/Bus: <b>{formatDec(summary.kmPerBus, 1)} KM</b></span>
+          <span>
+            KM/Bus: <b>{formatDec(summary.kmPerBus, 1)} KM</b>
+          </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <TrendingUp size={16} />
-          <span>Kepadatan: <b>{formatDec(summary.passengersPerKm, 2)} Pnp/KM</b></span>
+          <span>
+            Kepadatan: <b>{formatDec(summary.passengersPerKm, 2)} Pnp/KM</b>
+          </span>
         </div>
       </div>
     </div>
@@ -357,39 +421,52 @@ export function KPICard({ summary }: Props) {
 - [ ] **Step 2: Update `ShiftComparisonCard.tsx` with Tiket Manual alert badge**
 
 Update `src/components/ShiftComparisonCard.tsx`:
+
 ```tsx
-import { Sun, Moon, AlertTriangle } from 'lucide-react';
-import type { AnalyticsSummary } from '../utils/analytics';
+import { Sun, Moon, AlertTriangle } from "lucide-react";
+import type { AnalyticsSummary } from "../utils/analytics";
 
 interface Props {
   summary: AnalyticsSummary;
 }
 
 export function ShiftComparisonCard({ summary }: Props) {
-  const formatInt = (val: number) => val.toLocaleString('id-ID');
+  const formatInt = (val: number) => val.toLocaleString("id-ID");
   const hasManualTickets = summary.grandTotalManual > 0;
 
   return (
     <div className="analytics-card glass">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div className="analytics-card-title" style={{ color: 'var(--warning-color)' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div
+          className="analytics-card-title"
+          style={{ color: "var(--warning-color)" }}
+        >
           <Sun size={18} />
           <span>Rekapitulasi Shift 1 vs Shift 2</span>
         </div>
         {hasManualTickets && (
-          <span style={{
-            fontSize: '10px',
-            fontWeight: 700,
-            color: 'var(--warning-color)',
-            background: 'rgba(245, 158, 11, 0.15)',
-            border: '1px solid rgba(245, 158, 11, 0.3)',
-            padding: '2px 8px',
-            borderRadius: '999px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px'
-          }}>
-            <AlertTriangle size={12} /> {formatInt(summary.grandTotalManual)} Tiket Manual
+          <span
+            style={{
+              fontSize: "10px",
+              fontWeight: 700,
+              color: "var(--warning-color)",
+              background: "rgba(245, 158, 11, 0.15)",
+              border: "1px solid rgba(245, 158, 11, 0.3)",
+              padding: "2px 8px",
+              borderRadius: "999px",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <AlertTriangle size={12} /> {formatInt(summary.grandTotalManual)}{" "}
+            Tiket Manual
           </span>
         )}
       </div>
@@ -397,7 +474,10 @@ export function ShiftComparisonCard({ summary }: Props) {
       <div className="analytics-grid-2">
         {/* Shift 1 */}
         <div className="shift-box">
-          <div className="shift-header" style={{ color: 'var(--warning-color)' }}>
+          <div
+            className="shift-header"
+            style={{ color: "var(--warning-color)" }}
+          >
             <Sun size={16} />
             <span>SHIFT 1</span>
           </div>
@@ -407,7 +487,14 @@ export function ShiftComparisonCard({ summary }: Props) {
           </div>
           <div className="shift-row">
             <span>Manual:</span>
-            <b style={{ color: summary.totalManualShift1 > 0 ? 'var(--warning-color)' : 'inherit' }}>
+            <b
+              style={{
+                color:
+                  summary.totalManualShift1 > 0
+                    ? "var(--warning-color)"
+                    : "inherit",
+              }}
+            >
               {formatInt(summary.totalManualShift1)}
             </b>
           </div>
@@ -419,7 +506,7 @@ export function ShiftComparisonCard({ summary }: Props) {
 
         {/* Shift 2 */}
         <div className="shift-box">
-          <div className="shift-header" style={{ color: '#a78bfa' }}>
+          <div className="shift-header" style={{ color: "#a78bfa" }}>
             <Moon size={16} />
             <span>SHIFT 2</span>
           </div>
@@ -429,7 +516,14 @@ export function ShiftComparisonCard({ summary }: Props) {
           </div>
           <div className="shift-row">
             <span>Manual:</span>
-            <b style={{ color: summary.totalManualShift2 > 0 ? 'var(--warning-color)' : 'inherit' }}>
+            <b
+              style={{
+                color:
+                  summary.totalManualShift2 > 0
+                    ? "var(--warning-color)"
+                    : "inherit",
+              }}
+            >
               {formatInt(summary.totalManualShift2)}
             </b>
           </div>
@@ -461,16 +555,19 @@ git commit -m "feat(ui): apply executive number formatting and manual ticket ale
 ### Task 4: Integration in `src/components/Dashboard.tsx` and `AnalyticsDashboard.tsx`
 
 **Files:**
+
 - Modify: `src/components/AnalyticsDashboard.tsx`
 - Modify: `src/components/Dashboard.tsx`
 
 **Interfaces:**
+
 - Consumes: `sheetSummary` from `getBusData`
 - Produces: Integrated SSOT dashboard
 
 - [ ] **Step 1: Pass `sheetSummary` prop through `AnalyticsDashboard.tsx`**
 
 In `src/components/AnalyticsDashboard.tsx`:
+
 ```tsx
 interface Props {
   busData: BusData[];
@@ -478,7 +575,11 @@ interface Props {
   onSelectUnit?: (unit: string) => void;
 }
 
-export function AnalyticsDashboard({ busData, sheetSummary, onSelectUnit }: Props) {
+export function AnalyticsDashboard({
+  busData,
+  sheetSummary,
+  onSelectUnit,
+}: Props) {
   const summary = calculateAnalytics(busData, sheetSummary);
 
   return (
@@ -495,13 +596,18 @@ export function AnalyticsDashboard({ busData, sheetSummary, onSelectUnit }: Prop
 
 In `src/components/Dashboard.tsx`:
 Add state:
+
 ```tsx
 const [sheetSummary, setSheetSummary] = useState<Record<string, number>>({});
 ```
 
 In `handleLoadData`:
+
 ```tsx
-const { data, headerMap, missingColumns, sheetSummary } = await getBusData(id, selectedTab);
+const { data, headerMap, missingColumns, sheetSummary } = await getBusData(
+  id,
+  selectedTab,
+);
 setBusData(data);
 setHeaderMap(headerMap);
 setMissingColumns(missingColumns);
@@ -509,6 +615,7 @@ setSheetSummary(sheetSummary || {});
 ```
 
 In render:
+
 ```tsx
 <AnalyticsDashboard
   busData={busData}

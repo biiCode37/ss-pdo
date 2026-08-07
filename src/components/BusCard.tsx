@@ -5,6 +5,7 @@ import { updateBusData, getBusRowData } from "../services/googleSheets";
 import { isNetworkError } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { slugifyUnitId } from "../utils/analytics";
+import { FormattedNoteText } from "./FormattedNoteText";
 import { parseIndonesianNumber, safeFormatNumber } from "../utils/numberUtils";
 import {
   Save,
@@ -185,6 +186,7 @@ function BusCardComponent({
     };
 
   const handleCopyKm = () => {
+    if (tabName === "AKUMULASI") return;
     if (formData.kmAkhir1) {
       isDirtyRef.current = true;
       setFormData((prev) => ({ ...prev, kmAwal2: prev.kmAkhir1 }));
@@ -196,6 +198,7 @@ function BusCardComponent({
   };
 
   const handleSave = async (forceOverwrite = false) => {
+    if (tabName === "AKUMULASI") return;
     // Validation
     const checkKm = (awal?: string, akhir?: string) => {
       if (awal && akhir) {
@@ -310,6 +313,7 @@ function BusCardComponent({
   };
 
   const isFieldDisabled = (fieldName: string) => {
+    if (tabName === "AKUMULASI") return true;
     if (isLoading) return true;
     if (activeCategory === "ALL") return false;
     // BUG-07: Field pelengkap (catatan/manual) selalu aktif, bukan kolom kerja utama
@@ -320,10 +324,18 @@ function BusCardComponent({
 
   const renderServerSummary = () => {
     // Hitung Total Pnp & Total KM untuk ringkasan kartu unit
-    const toaShift1Num = parseIndonesianNumber(formData.toaShift1 || bus.toaShift1);
-    const totalToaNum = parseIndonesianNumber(formData.totalToa || bus.totalToa);
-    const manual1Num = parseIndonesianNumber(formData.manualShift1 || bus.manualShift1);
-    const manual2Num = parseIndonesianNumber(formData.manualShift2 || bus.manualShift2);
+    const toaShift1Num = parseIndonesianNumber(
+      formData.toaShift1 || bus.toaShift1,
+    );
+    const totalToaNum = parseIndonesianNumber(
+      formData.totalToa || bus.totalToa,
+    );
+    const manual1Num = parseIndonesianNumber(
+      formData.manualShift1 || bus.manualShift1,
+    );
+    const manual2Num = parseIndonesianNumber(
+      formData.manualShift2 || bus.manualShift2,
+    );
 
     const totalToa = totalToaNum > 0 ? totalToaNum : toaShift1Num;
     const totalPnp = totalToa + manual1Num + manual2Num;
@@ -450,7 +462,10 @@ function BusCardComponent({
             gap: "4px",
           }}
         >
-          <Users size={12} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
+          <Users
+            size={12}
+            style={{ color: "var(--shift1-color)", flexShrink: 0 }}
+          />
           <span>
             {totalPnp > 0 ? `${safeFormatNumber(totalPnp)} Pnp` : `0 Pnp`}
           </span>
@@ -512,13 +527,36 @@ function BusCardComponent({
               textTransform: "uppercase",
             }}
           >
-            {formData.keterangan}
+            <FormattedNoteText text={formData.keterangan} />
           </span>
         </div>
       )}
 
       {isExpanded && (
         <div className="bus-card-content">
+          {tabName === "AKUMULASI" && (
+            <div
+              style={{
+                background: "rgba(234, 179, 8, 0.12)",
+                border: "1px solid rgba(234, 179, 8, 0.4)",
+                color: "var(--warning-color, #eab308)",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                fontWeight: 600,
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+              <span>
+                Penginputan dikunci pada mode Rekap Akumulasi. Pilih tanggal
+                harian spesifik untuk menginput data.
+              </span>
+            </div>
+          )}
           <div className="form-grid full">
             <div className="input-group">
               <label>TOA SHIFT 1</label>
@@ -895,11 +933,13 @@ function BusCardComponent({
           <button
             className="btn"
             onClick={() => handleSave(false)}
-            disabled={isLoading}
+            disabled={isLoading || tabName === "AKUMULASI"}
             style={{
               backgroundColor:
                 saveStatus === "success" ? "var(--success-color)" : "",
               marginTop: "8px",
+              opacity: tabName === "AKUMULASI" ? 0.6 : 1,
+              cursor: tabName === "AKUMULASI" ? "not-allowed" : "pointer",
             }}
           >
             {isLoading ? (
@@ -909,11 +949,13 @@ function BusCardComponent({
             ) : (
               <Save size={20} />
             )}
-            {isLoading
-              ? "Menyimpan..."
-              : saveStatus === "success"
-                ? "Tersimpan!"
-                : "Simpan Data"}
+            {tabName === "AKUMULASI"
+              ? "Dikunci (Mode Akumulasi)"
+              : isLoading
+                ? "Menyimpan..."
+                : saveStatus === "success"
+                  ? "Tersimpan!"
+                  : "Simpan Data"}
           </button>
         </div>
       )}

@@ -1,12 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
-import {
-  BarChart2,
-  Calendar,
-  Award,
-  Zap,
-  TrendingDown,
-} from "lucide-react";
+import { BarChart2, Calendar, Award, Zap, TrendingDown } from "lucide-react";
 import { getMonthlyToaTrend } from "../services/googleSheets";
 import { DailyToaTrendSkeleton } from "./Skeletons";
 import { extractMonthYearLabel } from "../utils/analytics";
@@ -18,6 +12,12 @@ interface Props {
   monthLabel?: string;
   onSelectTab?: (tab: string) => void;
   unitFilter?: string;
+}
+
+// ponytail: helper sederhana agar "AKUMULASI" → today, angka → parseInt
+function parseSelectedDay(tab: string): number {
+  if (tab === "AKUMULASI") return new Date().getDate();
+  return parseInt(tab, 10) || new Date().getDate();
 }
 
 export function DailyToaTrendCard({
@@ -41,18 +41,18 @@ export function DailyToaTrendCard({
 
   // Track max day for the chart so internal bar/badge clicks don't shrink the chart
   const [chartMaxDay, setChartMaxDay] = useState<number>(() => {
-    return Math.max(1, Math.min(31, parseInt(selectedTab, 10) || 1));
+    return Math.max(1, Math.min(31, parseSelectedDay(selectedTab)));
   });
 
   // When sheetId or refreshKey changes (e.g. user clicks "LOAD DATA" in header), reset chartMaxDay to selectedTab
   useEffect(() => {
-    const selectedNum = parseInt(selectedTab, 10) || 1;
+    const selectedNum = parseSelectedDay(selectedTab);
     setChartMaxDay(Math.max(1, Math.min(31, selectedNum)));
   }, [sheetId, refreshKey]);
 
   // When selectedTab increases beyond current chartMaxDay, expand chartMaxDay
   useEffect(() => {
-    const selectedNum = parseInt(selectedTab, 10) || 1;
+    const selectedNum = parseSelectedDay(selectedTab);
     if (selectedNum > chartMaxDay) {
       setChartMaxDay(Math.min(31, selectedNum));
     }
@@ -215,9 +215,23 @@ export function DailyToaTrendCard({
           marginBottom: "10px",
         }}
       >
-        <div className="analytics-card-title">
-          <BarChart2 size={18} />
-          <span>{unitFilter ? `Grafik TOA Harian (${unitFilter})` : 'Grafik TOA Harian 1 Rute'}</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+          <div className="analytics-card-title">
+            <BarChart2 size={18} />
+            <span>Grafik Pelanggan Harian</span>
+          </div>
+          {unitFilter && (
+            <div
+              style={{
+                fontSize: "11.5px",
+                fontWeight: 600,
+                color: "var(--accent-color)",
+                paddingLeft: "24px",
+              }}
+            >
+              {unitFilter}
+            </div>
+          )}
         </div>
         <span
           style={{

@@ -1,12 +1,18 @@
 import { FileText } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
+import { FormattedNoteText } from "./FormattedNoteText";
 
 interface Props {
   summary: AnalyticsSummary;
   onSelectUnit?: (unit: string) => void;
+  dateBadge?: string;
 }
 
-export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
+export function CompletionStatusCard({
+  summary,
+  onSelectUnit,
+  dateBadge,
+}: Props) {
   const hasNotes = summary.busesWithNotes.length > 0;
 
   return (
@@ -15,39 +21,52 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: hasNotes ? "12px" : 0,
+          alignItems: "flex-start",
+          marginBottom: "12px",
           gap: "8px",
-          flexWrap: "wrap",
         }}
       >
-        <div
-          className="analytics-card-title"
-          style={{ flex: "1 1 auto", minWidth: "160px" }}
-        >
+        <div className="analytics-card-title" style={{ marginTop: "2px" }}>
           <FileText size={18} />
           <span>Unit Dengan Keterangan Tertentu</span>
         </div>
-        <span
+        <div
           style={{
-            fontSize: "13px",
-            fontWeight: 800,
-            color: "var(--accent-color)",
-            background: "rgba(59, 130, 246, 0.15)",
-            padding: "4px 12px",
-            borderRadius: "9999px",
-            border: "1px solid rgba(59, 130, 246, 0.35)",
-            boxShadow: "0 2px 8px rgba(59, 130, 246, 0.2)",
-            whiteSpace: "nowrap",
-            letterSpacing: "0.2px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            gap: "3px",
             flexShrink: 0,
           }}
         >
-          {summary.busesWithNotes.length} Unit
-        </span>
+          {dateBadge && (
+            <span
+              style={{
+                fontSize: "12px",
+                fontWeight: 700,
+                fontFamily: "monospace",
+                color: "var(--accent-color)",
+                background: "rgba(59, 130, 246, 0.1)",
+                border: "1px solid rgba(59, 130, 246, 0.25)",
+                padding: "3px 8px",
+                borderRadius: "6px",
+                whiteSpace: "nowrap",
+                letterSpacing: "0.5px",
+              }}
+            >
+              {dateBadge}
+            </span>
+          )}
+          <span
+            style={{
+              fontSize: "11.5px",
+              fontWeight: 600,
+              color: hasNotes ? "var(--accent-color)" : "var(--text-secondary)",
+            }}
+          >
+            {hasNotes ? `${summary.busesWithNotes.length} Unit` : "0 Unit"}
+          </span>
+        </div>
       </div>
 
       {hasNotes ? (
@@ -68,7 +87,7 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
+                alignItems: "flex-start",
                 padding: "9px 12px",
                 background: "var(--input-bg)",
                 border: "1px solid var(--card-border)",
@@ -85,7 +104,8 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
                   fontSize: "12px",
                   fontWeight: 800,
                   color: "#ffffff",
-                  background: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
+                  background:
+                    "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
                   padding: "3px 10px",
                   borderRadius: "6px",
                   letterSpacing: "0.3px",
@@ -109,7 +129,7 @@ export function CompletionStatusCard({ summary, onSelectUnit }: Props) {
                   textTransform: "uppercase",
                 }}
               >
-                {note.keterangan}
+                <FormattedNoteText text={note.keterangan} />
               </span>
             </div>
           ))}

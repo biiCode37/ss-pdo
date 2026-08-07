@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateAnalytics } from './analytics';
+import { calculateAnalytics, formatAccumulatedNotes } from './analytics';
 import type { BusData } from '../services/googleSheets';
 
 const mockBusData: BusData[] = [
@@ -80,5 +80,21 @@ describe('calculateAnalytics', () => {
     expect(summary.totalToaShift1).toBe(1234);
     expect(summary.totalToaShift2).toBe(45.5);
     expect(summary.totalPassengers).toBe(1280); // Math.round(1234 + 45.5) = 1280
+  });
+});
+
+describe('formatAccumulatedNotes', () => {
+  it('formats consecutive and non-consecutive days with Opsi C style', () => {
+    const notes = [
+      { day: 2, note: 'Mogok' },
+      { day: 3, note: 'Mogok' },
+      { day: 5, note: 'Perbaikan AC' },
+      { day: 6, note: 'Mogok' },
+    ];
+    expect(formatAccumulatedNotes(notes)).toBe('Tgl 2-3, 6: Mogok • Tgl 5: Perbaikan AC');
+  });
+
+  it('returns empty string for empty input', () => {
+    expect(formatAccumulatedNotes([])).toBe('');
   });
 });
