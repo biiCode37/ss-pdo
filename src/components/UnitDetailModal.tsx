@@ -94,6 +94,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
 
   return createPortal(
     <div
+      className="modal-overlay unit-detail-modal-overlay"
       style={{
         position: 'fixed',
         top: 0,
@@ -121,7 +122,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="glass"
+        className="glass unit-detail-modal-content"
         style={{
           width: '100%',
           maxWidth: '560px',
@@ -131,7 +132,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
           padding: '20px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px',
-          background: 'var(--bg-color)',
+          background: 'var(--card-bg)',
           border: '1px solid var(--card-border)',
           borderBottom: 'none',
           boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.4)',
@@ -142,7 +143,7 @@ export function UnitDetailModal({ unit, busData, sheetId, selectedTab, onClose }
         }}
       >
         {/* Top Handle Bar for Touch Swipe */}
-        <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '16px' }}>
+        <div className="unit-detail-modal-handle" style={{ display: 'flex', justifyContent: 'center', paddingBottom: '16px' }}>
           <div style={{ width: '40px', height: '4px', borderRadius: '2px', background: 'var(--text-secondary)', opacity: 0.3 }} />
         </div>
 

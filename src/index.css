@@ -1031,3 +1031,38 @@ body {
     transform: translateX(100%);
   }
 }
+
+/* Responsive Web Desktop & Mobile PWA Consistency */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+@media (min-width: 768px) {
+  .modal-overlay {
+    align-items: center !important;
+    padding: 24px !important;
+  }
+
+  .unit-detail-modal-content {
+    border-radius: 24px !important;
+    max-height: 85vh !important;
+    border-bottom: 1px solid var(--card-border) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .unit-detail-modal-handle {
+    display: none !important;
+  }
+
+  .bottom-nav-wrapper {
+    bottom: 20px !important;
+  }
+}
