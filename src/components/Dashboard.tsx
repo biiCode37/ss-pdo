@@ -34,9 +34,10 @@ import {
 
 interface Props {
   onLogout: () => void;
+  needsReauth?: boolean;
 }
 
-export function Dashboard({ onLogout }: Props) {
+export function Dashboard({ onLogout, needsReauth }: Props) {
   const [sheetUrl, setSheetUrl] = useState(() => {
     try {
       const saved = localStorage.getItem("PDO_LAST_VISITED");
@@ -603,6 +604,44 @@ export function Dashboard({ onLogout }: Props) {
           ⚠️ Kolom berikut <strong>tidak terdeteksi</strong> di header sheet dan{" "}
           <strong>TIDAK akan tersimpan</strong>: {missingColumns.join(", ")}.
           Hubungi admin untuk memperbaiki header.
+        </div>
+      )}
+
+      {needsReauth && (
+        <div
+          className="card"
+          style={{
+            marginTop: "16px",
+            marginBottom: "16px",
+            backgroundColor: "rgba(239, 68, 68, 0.1)",
+            borderColor: "var(--danger-color, #ef4444)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+            padding: "12px 16px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--danger-color, #ef4444)" }}>
+            <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+            <span>Sesi Google perlu diperbarui untuk sinkronisasi data.</span>
+          </div>
+          <button
+            onClick={() => reauthenticateSession().catch(() => {})}
+            style={{
+              padding: "6px 12px",
+              backgroundColor: "var(--danger-color, #ef4444)",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              fontSize: "12px",
+              fontWeight: 600,
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Perbarui Sesi
+          </button>
         </div>
       )}
 

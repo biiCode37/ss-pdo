@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { LoginScreen } from './components/LoginScreen';
 import { Dashboard } from './components/Dashboard';
-import { initGoogleApi, checkSignedIn, signOut, hasGoogleCreds } from './services/googleSheets';
+import { initGoogleApi, checkSignedInAsync, signOut, hasGoogleCreds } from './services/googleSheets';
+import type { AuthResult } from './services/googleSheets';
 
 import { formatUserError } from './utils/errorFormatter';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [needsReauth, setNeedsReauth] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
   const [isApiReady, setIsApiReady] = useState(false);
   // BUG-15: Guard untuk mencegah double-init di StrictMode
@@ -22,7 +24,12 @@ export default function App() {
       setInitError(null);
       await initGoogleApi();
       setIsApiReady(true);
-      setIsSignedIn(checkSignedIn());
+      // ISS-01: Async token validation saat startup
+      const authResult: AuthResult = await checkSignedInAsync();
+      setIsSignedIn(authResult.authenticated);
+      if (authResult.reason === 'needs_reauth') {
+        setNeedsReauth(true);
+      }
     } catch (err: any) {
       setInitError(formatUserError(err, 'Gagal menginisialisasi layanan Google API.'));
     }
@@ -37,16 +44,26 @@ export default function App() {
   // Listen to session expiration / insufficient scope events
   useEffect(() => {
     const handleAuthExpired = () => {
-      // Menjaga status login tetap aktif (Aturan Emas #3: No Timeout/Logout Paksa).
-      // Pembaruan token ditangani oleh Dashboard secara inline/popup tanpa melempar pengguna ke LoginScreen.
+      // ISS-01: Set needs_reauth agar Dashboard menampilkan re-auth prompt
+      setNeedsReauth(true);
     };
     window.addEventListener('google-auth-expired', handleAuthExpired);
     return () => window.removeEventListener('google-auth-expired', handleAuthExpired);
   }, []);
 
+  // ISS-01: Listen for successful token refresh, clear needs_reauth
+  useEffect(() => {
+    const handleLoginSuccess = () => {
+      setNeedsReauth(false);
+    };
+    window.addEventListener('google-login-success', handleLoginSuccess);
+    return () => window.removeEventListener('google-login-success', handleLoginSuccess);
+  }, []);
+
   const handleLogout = async () => {
     await signOut();
     setIsSignedIn(false);
+    setNeedsReauth(false);
   };
 
   return (
@@ -54,7 +71,7 @@ export default function App() {
       {!isSignedIn ? (
         <LoginScreen onLoginSuccess={() => setIsSignedIn(true)} isApiReady={isApiReady} />
       ) : (
-        <Dashboard onLogout={handleLogout} />
+        <Dashboard onLogout={handleLogout} needsReauth={needsReauth} />
       )}
 
       {initError && (
@@ -65,3 +82,4 @@ export default function App() {
     </>
   );
 }
+

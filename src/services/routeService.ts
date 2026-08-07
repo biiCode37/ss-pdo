@@ -65,16 +65,15 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       };
     }
 
-    // Update last_login_at timestamp asynchronously (fire-and-forget)
-    // ponytail: bungkus IIFE async karena Supabase PromiseLike tidak punya .catch()
-    (async () => {
-      try {
-        await supabase
-          .from('user_profiles')
-          .update({ last_login_at: new Date().toISOString() })
-          .eq('email', email);
-      } catch (_e) { /* silent */ }
-    })();
+    // ISS-10 fix: Awaited last_login_at update — kegagalan tidak blocking login
+    try {
+      await supabase
+        .from('user_profiles')
+        .update({ last_login_at: new Date().toISOString() })
+        .eq('email', email);
+    } catch (_e) {
+      console.warn('[RouteService] last_login_at update failed (non-blocking):', _e);
+    }
 
     return {
       isAllowed: true,
@@ -105,9 +104,31 @@ export async function upsertUserProfile(profile: Partial<UserProfile> & { email:
       ],
       { onConflict: 'email' }
     );
-    if (error) console.error('[RouteService] Error upserting user profile:', error);
+    if (error) {
+      console.error('[RouteService] Error upserting user profile:', error);
+      // ISS-10 fix: Simpan pending sync ke localStorage agar bisa di-retry
+      try {
+        localStorage.setItem('PDO_PROFILE_SYNC_PENDING', JSON.stringify({
+          email: profile.email,
+          full_name: profile.full_name,
+          avatar_url: profile.avatar_url,
+          failedAt: new Date().toISOString(),
+        }));
+      } catch (_e) { /* localStorage bisa penuh */ }
+    } else {
+      // Berhasil — hapus pending sync jika ada
+      localStorage.removeItem('PDO_PROFILE_SYNC_PENDING');
+    }
   } catch (err) {
     console.warn('[RouteService] Failed to upsert user profile (offline?):', err);
+    try {
+      localStorage.setItem('PDO_PROFILE_SYNC_PENDING', JSON.stringify({
+        email: profile.email,
+        full_name: profile.full_name,
+        avatar_url: profile.avatar_url,
+        failedAt: new Date().toISOString(),
+      }));
+    } catch (_e) { /* silent */ }
   }
 }
 

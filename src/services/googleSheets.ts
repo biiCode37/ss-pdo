@@ -2,6 +2,7 @@ import { gapi } from 'gapi-script';
 import { upsertDailyUnitSummaries } from './routeService';
 import type { DailyUnitSummary } from '../types/supabase';
 import { formatAccumulatedNotes } from '../utils/analytics';
+import { extractSpreadsheetId } from '../utils/sheetIdentity';
 
 export const getGoogleCreds = () => {
   return {
@@ -335,6 +336,18 @@ export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
   }
 }
 
+/** Hasil validasi auth — ISS-01 fix */
+export interface AuthResult {
+  authenticated: boolean;
+  reason?: 'no_flag' | 'no_token' | 'token_invalid' | 'token_expired' | 'needs_reauth';
+}
+
+/**
+ * Cek status login secara sinkron (ISS-01 fix).
+ * Masih memvalidasi token ada dan bisa di-parse.
+ * ATURAN EMAS #3: Sesi permanen — jika flag ada tapi token rusak,
+ * tetap return true dan triggerkan silent refresh di background.
+ */
 export const checkSignedIn = (): boolean => {
   const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
   if (!isPersistentSignedIn) return false;
@@ -343,24 +356,81 @@ export const checkSignedIn = (): boolean => {
   if (tokenStr) {
     try {
       const tokenObj = JSON.parse(tokenStr);
-      if (tokenObj.token && gapi.client) {
+      // ISS-01: Validasi token benar-benar ada, bukan hanya flag
+      if (!tokenObj.token) {
+        // Token object rusak — triggerkan refresh, tapi tetap return true (Aturan Emas #3)
+        ensureValidToken();
+        return true;
+      }
+      if (gapi.client) {
         gapi.client.setToken({ access_token: tokenObj.token });
       }
       if (tokenObj.expiresAt && tokenObj.expiresAt > Date.now()) {
         startTokenRefreshTimer(tokenObj.expiresAt - Date.now());
       } else {
+        // Token expired — triggerkan refresh di background
         ensureValidToken();
       }
     } catch (e) {
+      // JSON parse gagal — token corrupt, triggerkan refresh
       ensureValidToken();
     }
   } else {
+    // Tidak ada token sama sekali — triggerkan refresh
     ensureValidToken();
   }
 
   // ATURAN EMAS #3: Sesi login dibuat PERMANEN tanpa batas waktu.
   // Selama PDO_IS_SIGNED_IN === 'true', tetap pertahankan pengguna di halaman utama!
   return true;
+};
+
+/**
+ * Validasi auth secara async — ISS-01 fix.
+ * Menunggu hasil validasi token sebelum mengembalikan status final.
+ * Gunakan ini saat cold start / page load.
+ */
+export const checkSignedInAsync = async (): Promise<AuthResult> => {
+  const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
+  if (!isPersistentSignedIn) return { authenticated: false, reason: 'no_flag' };
+
+  const tokenStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
+  if (!tokenStr) {
+    // Coba silent refresh
+    try {
+      await ensureValidToken();
+      // Cek lagi setelah refresh
+      const refreshedToken = localStorage.getItem('GAPI_ACCESS_TOKEN');
+      if (refreshedToken) {
+        const obj = JSON.parse(refreshedToken);
+        if (obj.token) return { authenticated: true };
+      }
+    } catch (_e) { /* silent */ }
+    // ATURAN EMAS #3: Tetap authenticated, tapi tandai needs_reauth
+    return { authenticated: true, reason: 'needs_reauth' };
+  }
+
+  try {
+    const tokenObj = JSON.parse(tokenStr);
+    if (!tokenObj.token) {
+      return { authenticated: true, reason: 'needs_reauth' };
+    }
+
+    if (gapi.client) {
+      gapi.client.setToken({ access_token: tokenObj.token });
+    }
+
+    if (tokenObj.expiresAt && tokenObj.expiresAt > Date.now()) {
+      startTokenRefreshTimer(tokenObj.expiresAt - Date.now());
+      return { authenticated: true };
+    }
+
+    // Token expired — coba refresh
+    await ensureValidToken();
+    return { authenticated: true, reason: tokenObj.expiresAt ? 'needs_reauth' : undefined };
+  } catch (_e) {
+    return { authenticated: true, reason: 'needs_reauth' };
+  }
 };
 
 // BUG-11: Timer refresh token proaktif
@@ -391,14 +461,13 @@ function stopTokenRefreshTimer() {
   }
 }
 
-export const extractSheetId = (urlOrId: string) => {
+/**
+ * @deprecated Gunakan extractSpreadsheetId() dari utils/sheetIdentity.ts.
+ * Dipertahankan untuk backward compat — delegasi ke helper canonical.
+ */
+export const extractSheetId = (urlOrId: string): string => {
   if (!urlOrId) return '';
-  // match /d/SPREADSHEET_ID/
-  const match = urlOrId.match(/\/d\/([a-zA-Z0-9-_]+)/);
-  if (match && match[1]) {
-    return match[1];
-  }
-  return urlOrId; // fallback if they just pasted the ID
+  return extractSpreadsheetId(urlOrId) ?? urlOrId;
 };
 
 export interface HeaderMap {
