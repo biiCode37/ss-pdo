@@ -148,6 +148,29 @@ describe('SwipeableContainer', () => {
     expect(onSwipeLeft).not.toHaveBeenCalled();
   });
 
+  it('ignores touch events if target or parent has data-no-swipe="true" attribute', () => {
+    const onSwipeLeft = vi.fn();
+
+    act(() => {
+      root.render(
+        <SwipeableContainer onSwipeLeft={onSwipeLeft}>
+          <div>
+            <div data-no-swipe="true">
+              <button id="attr-child-target">Clickable inside data-no-swipe</button>
+            </div>
+          </div>
+        </SwipeableContainer>
+      );
+    });
+
+    const attrTarget = container.querySelector('#attr-child-target')!;
+    act(() => {
+      attrTarget.dispatchEvent(createTouchEvent('touchstart', 200, 100, attrTarget));
+      attrTarget.dispatchEvent(createTouchEvent('touchend', 100, 100, attrTarget));
+    });
+    expect(onSwipeLeft).not.toHaveBeenCalled();
+  });
+
   it('ignores swipe if disabled or distance is below minSwipeDistance', () => {
     const onSwipeLeft = vi.fn();
 

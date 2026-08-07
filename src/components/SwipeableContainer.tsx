@@ -27,7 +27,7 @@ export const SwipeableContainer: React.FC<SwipeableContainerProps> = ({
     if (disabled) return;
 
     const target = e.target as HTMLElement | null;
-    if (target?.closest?.('input, textarea, select, .no-swipe, .route-date-tabs, .category-scroll-container')) {
+    if (target?.closest?.('input, textarea, select, .no-swipe, .route-date-tabs, .category-scroll-container, [data-no-swipe="true"]')) {
       startXRef.current = null;
       startYRef.current = null;
       return;
