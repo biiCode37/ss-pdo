@@ -6,6 +6,7 @@ import type { AuthResult } from './services/googleSheets';
 import { useUserActivityTracking } from './hooks/useUserActivityTracking';
 
 import { formatUserError } from './utils/errorFormatter';
+import { showErrorAlert } from './utils/alertUtils';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -46,6 +47,13 @@ export default function App() {
     initializeApi();
   }, []);
 
+  // Display initialization errors using SweetAlert2
+  useEffect(() => {
+    if (initError) {
+      showErrorAlert('Gagal Inisialisasi Layanan', initError);
+    }
+  }, [initError]);
+
   // Listen to session expiration / insufficient scope events
   useEffect(() => {
     const handleAuthExpired = () => {
@@ -77,12 +85,6 @@ export default function App() {
         <LoginScreen onLoginSuccess={() => setIsSignedIn(true)} isApiReady={isApiReady} />
       ) : (
         <Dashboard onLogout={handleLogout} needsReauth={needsReauth} />
-      )}
-
-      {initError && (
-        <div style={{ position: 'fixed', bottom: 20, left: 20, right: 20, background: 'var(--danger-color)', color: 'white', padding: '12px', borderRadius: '8px', textAlign: 'center', zIndex: 50 }}>
-          {initError}
-        </div>
       )}
     </>
   );

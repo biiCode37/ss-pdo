@@ -23,3 +23,16 @@ export function safeFormatNumber(val: any, fallback: number = 0, options?: Intl.
   const safeNum = isNaN(num) ? fallback : num;
   return safeNum.toLocaleString('id-ID', options);
 }
+
+/**
+ * Normalisasi nilai string/number untuk perbandingan integritas data yang stabil
+ */
+export function normalizeFieldValue(val: any): string {
+  if (val === undefined || val === null) return '';
+  const str = String(val).trim();
+  if (str === '' || str === '-') return '';
+  const num = parseIndonesianNumber(str, NaN);
+  if (!isNaN(num)) return String(num);
+  return str;
+}
+

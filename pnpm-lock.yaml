@@ -26,6 +26,9 @@ importers:
       react-dom:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
+      sweetalert2:
+        specifier: ^11.26.25
+        version: 11.26.25
       xlsx:
         specifier: ^0.18.5
         version: 0.18.5
@@ -621,8 +624,8 @@ packages:
   '@maxim_mazurok/gapi.client.discovery-v1@0.6.20200806':
     resolution: {integrity: sha512-QN6aGmIbLXcJW0SEf8tz9UWCpQTBMy2u4xSuZ04YofzMGknhWwMeUecySLntCZYAEstHzDoSgwxCf5Gb8GqIRQ==}
 
-  '@maxim_mazurok/gapi.client.sheets-v4@0.3.20260727':
-    resolution: {integrity: sha512-yml53fBh/P/Py7ksPQ+rHPBSIBKDHUlzw5yCsCfLXaTbzN9+cxhpCnz/qS2BvkzQjwpAUJnQYgV9SDv5qrOAKQ==}
+  '@maxim_mazurok/gapi.client.sheets-v4@0.3.20260810':
+    resolution: {integrity: sha512-w6FgJ2wp9m+CgJTjp48EE9e8oNjb43/+O010QJ4qX+L/cPBtfvxrakivRlzuOaqOuBe5iNHBMYipWrtRxdTyTQ==}
 
   '@napi-rs/wasm-runtime@1.1.6':
     resolution: {integrity: sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg==}
@@ -2061,6 +2064,9 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
+  sweetalert2@11.26.25:
+    resolution: {integrity: sha512-+hunCOJdJ6FLj04T9YSLvvZXRjsvIkTeTKP2e4VF8CaBias961BTnWiSFAy7F/CM5eq3QK2Rraoc5Gzftslvkg==}
+
   temp-dir@2.0.0:
     resolution: {integrity: sha512-aoBAniQmmwtcKp/7BzsH8Cxzv8OL736p7v1ihGb5e9DJ9kTwGWHrQrVB5+lfVDzfGrdRzXch+ig7LHaY1JTOrg==}
     engines: {node: '>=8'}
@@ -3098,7 +3104,7 @@ snapshots:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
 
-  '@maxim_mazurok/gapi.client.sheets-v4@0.3.20260727':
+  '@maxim_mazurok/gapi.client.sheets-v4@0.3.20260810':
     dependencies:
       '@types/gapi.client': 1.0.8
       '@types/gapi.client.discovery-v1': 0.0.4
@@ -3403,7 +3409,7 @@ snapshots:
 
   '@types/gapi.client.sheets@4.0.20201031':
     dependencies:
-      '@maxim_mazurok/gapi.client.sheets-v4': 0.3.20260727
+      '@maxim_mazurok/gapi.client.sheets-v4': 0.3.20260810
 
   '@types/gapi.client@1.0.8': {}
 
@@ -4507,6 +4513,8 @@ snapshots:
   strip-comments@2.0.1: {}
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  sweetalert2@11.26.25: {}
 
   temp-dir@2.0.0: {}
 

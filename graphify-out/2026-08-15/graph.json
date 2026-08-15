@@ -1820,8 +1820,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "ref_react",
-      "community": 125,
-      "community_name": "Dashboard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "react"
     },
     {
@@ -2480,8 +2480,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "app.tsx"
     },
     {
@@ -2491,8 +2491,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_app_app",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "app()"
     },
     {
@@ -2623,8 +2623,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_components_buscard_props",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
     {
@@ -2642,11 +2642,11 @@
       "label": "BusCard",
       "file_type": "code",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L405",
+      "source_location": "L419",
       "_origin": "ast",
       "id": "src_components_buscard_buscard",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 118,
+      "community_name": "BusCard.tsx",
       "norm_label": "buscard"
     },
     {
@@ -2656,8 +2656,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buslist",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "buslist.tsx"
     },
     {
@@ -2667,8 +2667,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_buslist_props",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
     {
@@ -2678,8 +2678,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_components_buslist_buslist",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "buslist()"
     },
     {
@@ -2854,8 +2854,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_loginscreen",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "loginscreen.tsx"
     },
     {
@@ -2865,8 +2865,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_loginscreen_props",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "props"
     },
     {
@@ -2876,8 +2876,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_loginscreen_loginscreen",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "loginscreen()"
     },
     {
@@ -2887,8 +2887,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_profilemenusheet",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "profilemenusheet.tsx"
     },
     {
@@ -2898,8 +2898,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_profilemenusheet_props",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "props"
     },
     {
@@ -2909,8 +2909,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "src_components_profilemenusheet_profilemenusheet",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "profilemenusheet()"
     },
     {
@@ -3085,8 +3085,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer",
-      "community": 125,
-      "community_name": "Dashboard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "swipeablecontainer.tsx"
     },
     {
@@ -3096,8 +3096,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainerprops",
-      "community": 125,
-      "community_name": "Dashboard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "swipeablecontainerprops"
     },
     {
@@ -3107,8 +3107,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainer",
-      "community": 125,
-      "community_name": "Dashboard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "swipeablecontainer()"
     },
     {
@@ -3206,8 +3206,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard",
-      "community": 149,
-      "community_name": "parseIndonesianNumber",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "unitsummarydashboard.tsx"
     },
     {
@@ -3217,8 +3217,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_props",
-      "community": 149,
-      "community_name": "parseIndonesianNumber",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
     {
@@ -3228,8 +3228,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_unitsummarydashboard",
-      "community": 149,
-      "community_name": "parseIndonesianNumber",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "unitsummarydashboard()"
     },
     {
@@ -3239,8 +3239,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_tests_swipeablecontainer_test",
-      "community": 125,
-      "community_name": "Dashboard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "swipeablecontainer.test.tsx"
     },
     {
@@ -3250,8 +3250,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_tests_useuseractivitytracking_test",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "useuseractivitytracking.test.tsx"
     },
     {
@@ -3261,8 +3261,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_hooks_tests_useuseractivitytracking_test_testcomponent",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "testcomponent()"
     },
     {
@@ -3272,8 +3272,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_usedebounce",
-      "community": 125,
-      "community_name": "Dashboard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "usedebounce.ts"
     },
     {
@@ -3283,8 +3283,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_hooks_usedebounce_usedebounce",
-      "community": 125,
-      "community_name": "Dashboard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "usedebounce()"
     },
     {
@@ -3302,7 +3302,7 @@
       "label": "RETRY_DELAYS",
       "file_type": "code",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L8",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_retry_delays",
       "community": 121,
@@ -3313,18 +3313,18 @@
       "label": "SyncItem",
       "file_type": "code",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L10",
+      "source_location": "L9",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_syncitem",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "syncitem"
     },
     {
       "label": "readQueueFromStorage()",
       "file_type": "code",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L23",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_readqueuefromstorage",
       "community": 121,
@@ -3365,10 +3365,21 @@
       "norm_label": "isnetworkerror()"
     },
     {
-      "label": "detectCollision()",
+      "label": "normalizeFieldValue()",
       "file_type": "code",
       "source_file": "src/hooks/useOfflineSync.ts",
       "source_location": "L70",
+      "_origin": "ast",
+      "id": "src_hooks_useofflinesync_normalizefieldvalue",
+      "community": 121,
+      "community_name": "useOfflineSync.ts",
+      "norm_label": "normalizefieldvalue()"
+    },
+    {
+      "label": "detectCollision()",
+      "file_type": "code",
+      "source_file": "src/hooks/useOfflineSync.ts",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_detectcollision",
       "community": 121,
@@ -3379,7 +3390,7 @@
       "label": "UseOfflineSyncOptions",
       "file_type": "code",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L92",
+      "source_location": "L99",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesyncoptions",
       "community": 121,
@@ -3390,7 +3401,7 @@
       "label": "useOfflineSync()",
       "file_type": "code",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L97",
+      "source_location": "L104",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesync",
       "community": 121,
@@ -3404,8 +3415,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useuseractivitytracking",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "useuseractivitytracking.ts"
     },
     {
@@ -3415,8 +3426,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_hooks_useuseractivitytracking_useuseractivitytracking",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "useuseractivitytracking()"
     },
     {
@@ -3426,8 +3437,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_main",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "main.tsx"
     },
     {
@@ -3448,8 +3459,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_services_googlesheets_getgooglecreds",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "getgooglecreds()"
     },
     {
@@ -3459,8 +3470,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_services_googlesheets_hasgooglecreds",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "hasgooglecreds()"
     },
     {
@@ -3470,8 +3481,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_services_googlesheets_initgoogleapi",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "initgoogleapi()"
     },
     {
@@ -3481,8 +3492,8 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "src_services_googlesheets_signin",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "signin()"
     },
     {
@@ -3492,8 +3503,8 @@
       "source_location": "L149",
       "_origin": "ast",
       "id": "src_services_googlesheets_signout",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "signout()"
     },
     {
@@ -3558,8 +3569,8 @@
       "source_location": "L356",
       "_origin": "ast",
       "id": "src_services_googlesheets_authresult",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "authresult"
     },
     {
@@ -3624,8 +3635,8 @@
       "source_location": "L489",
       "_origin": "ast",
       "id": "src_services_googlesheets_headermap",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "headermap"
     },
     {
@@ -3635,8 +3646,8 @@
       "source_location": "L493",
       "_origin": "ast",
       "id": "src_services_googlesheets_busdata",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "busdata"
     },
     {
@@ -3701,8 +3712,8 @@
       "source_location": "L842",
       "_origin": "ast",
       "id": "src_services_googlesheets_getbusrowdata",
-      "community": 121,
-      "community_name": "useOfflineSync.ts",
+      "community": 118,
+      "community_name": "BusCard.tsx",
       "norm_label": "getbusrowdata()"
     },
     {
@@ -3712,8 +3723,8 @@
       "source_location": "L885",
       "_origin": "ast",
       "id": "src_services_googlesheets_numbertocolumnname",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "numbertocolumnname()"
     },
     {
@@ -3723,8 +3734,8 @@
       "source_location": "L896",
       "_origin": "ast",
       "id": "src_services_googlesheets_updatebusdata",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 121,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "updatebusdata()"
     },
     {
@@ -3822,8 +3833,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_services_routeservice_verifyuserprofile",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "verifyuserprofile()"
     },
     {
@@ -3833,8 +3844,8 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_services_routeservice_upsertuserprofile",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "upsertuserprofile()"
     },
     {
@@ -3844,8 +3855,8 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "src_services_routeservice_logactivity",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 121,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "logactivity()"
     },
     {
@@ -3855,8 +3866,8 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "src_services_routeservice_senduserheartbeat",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "senduserheartbeat()"
     },
     {
@@ -3910,8 +3921,8 @@
       "source_location": "L344",
       "_origin": "ast",
       "id": "src_services_routeservice_crossperiodsummaryresult",
-      "community": 105,
-      "community_name": "routeService.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "crossperiodsummaryresult"
     },
     {
@@ -3921,8 +3932,8 @@
       "source_location": "L352",
       "_origin": "ast",
       "id": "src_services_routeservice_getcrossperiodaccumulation",
-      "community": 149,
-      "community_name": "parseIndonesianNumber",
+      "community": 2,
+      "community_name": "analytics.ts",
       "norm_label": "getcrossperiodaccumulation()"
     },
     {
@@ -4229,8 +4240,8 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "src_utils_alertutils_showerroralert",
-      "community": 124,
-      "community_name": "googleSheets.ts",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "showerroralert()"
     },
     {
@@ -4350,8 +4361,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_utils_analytics_slugifyunitid",
-      "community": 118,
-      "community_name": "BusCard.tsx",
+      "community": 149,
+      "community_name": "parseIndonesianNumber",
       "norm_label": "slugifyunitid()"
     },
     {
@@ -4427,8 +4438,8 @@
       "source_location": "L265",
       "_origin": "ast",
       "id": "src_utils_analytics_getformatteddatebadge",
-      "community": 2,
-      "community_name": "analytics.ts",
+      "community": 149,
+      "community_name": "parseIndonesianNumber",
       "norm_label": "getformatteddatebadge()"
     },
     {
@@ -4449,8 +4460,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorformatter_test",
-      "community": 118,
-      "community_name": "BusCard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "errorformatter.test.ts"
     },
     {
@@ -4460,8 +4471,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorformatter",
-      "community": 118,
-      "community_name": "BusCard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "errorformatter.ts"
     },
     {
@@ -4471,20 +4482,9 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_utils_errorformatter_formatusererror",
-      "community": 118,
-      "community_name": "BusCard.tsx",
+      "community": 90,
+      "community_name": "react",
       "norm_label": "formatusererror()"
-    },
-    {
-      "label": "numberUtils.test.ts",
-      "file_type": "code",
-      "source_file": "src/utils/numberUtils.test.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_utils_numberutils_test",
-      "community": 149,
-      "community_name": "parseIndonesianNumber",
-      "norm_label": "numberutils.test.ts"
     },
     {
       "label": "numberUtils.ts",
@@ -4518,17 +4518,6 @@
       "community": 149,
       "community_name": "parseIndonesianNumber",
       "norm_label": "safeformatnumber()"
-    },
-    {
-      "label": "normalizeFieldValue()",
-      "file_type": "code",
-      "source_file": "src/utils/numberUtils.ts",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "src_utils_numberutils_normalizefieldvalue",
-      "community": 149,
-      "community_name": "parseIndonesianNumber",
-      "norm_label": "normalizefieldvalue()"
     },
     {
       "label": "resultStatus.test.ts",
@@ -22872,7 +22861,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L405",
+      "source_location": "L419",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -22883,7 +22872,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L405",
+      "source_location": "L419",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -23163,18 +23152,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
-      "target": "src_utils_numberutils_normalizefieldvalue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusCard.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_buscard",
       "target": "src_utils_numberutils_parseindonesiannumber",
       "confidence_score": 1.0
     },
@@ -23231,7 +23208,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L135",
+      "source_location": "L142",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23255,7 +23232,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L127",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23267,7 +23244,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L173",
+      "source_location": "L187",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23279,7 +23256,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L159",
+      "source_location": "L173",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23291,7 +23268,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L116",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23303,7 +23280,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L110",
+      "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23315,7 +23292,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L133",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23327,7 +23304,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L169",
+      "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23339,7 +23316,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L316",
+      "source_location": "L330",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23351,7 +23328,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L154",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23363,19 +23340,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L100",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_buscard_buscardcomponent",
-      "target": "src_utils_numberutils_normalizefieldvalue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusCard.tsx",
-      "source_location": "L185",
+      "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23387,7 +23352,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L290",
+      "source_location": "L304",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -25795,7 +25760,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L70",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25828,7 +25793,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L23",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_hooks_useofflinesync",
+      "target": "src_hooks_useofflinesync_normalizefieldvalue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/useOfflineSync.ts",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25839,7 +25815,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25850,7 +25826,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25861,7 +25837,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L97",
+      "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25872,7 +25848,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L92",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25955,7 +25931,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L39",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25967,7 +25943,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L39",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25979,7 +25955,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L39",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -25991,7 +25967,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L4",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
@@ -26003,11 +25979,11 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L4",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync",
-      "target": "src_utils_numberutils_normalizefieldvalue",
+      "target": "src_utils_numberutils_parseindonesiannumber",
       "confidence_score": 1.0
     },
     {
@@ -26015,7 +25991,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L15",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_syncitem",
@@ -26027,7 +26003,7 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L16",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_syncitem",
@@ -26039,7 +26015,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L104",
+      "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26051,7 +26027,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L127",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26063,7 +26039,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L204",
+      "source_location": "L211",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26075,11 +26051,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L83",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_detectcollision",
-      "target": "src_utils_numberutils_normalizefieldvalue",
+      "target": "src_hooks_useofflinesync_normalizefieldvalue",
       "confidence_score": 1.0
     },
     {
@@ -26087,7 +26063,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L163",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_hooks_useofflinesync_normalizefieldvalue",
+      "target": "src_utils_numberutils_parseindonesiannumber",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/useOfflineSync.ts",
+      "source_location": "L170",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26100,7 +26088,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L194",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26111,7 +26099,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L93",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesyncoptions",
@@ -26124,7 +26112,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L162",
+      "source_location": "L169",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26136,7 +26124,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L176",
+      "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26148,7 +26136,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L131",
+      "source_location": "L138",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -26160,7 +26148,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/hooks/useOfflineSync.ts",
-      "source_location": "L180",
+      "source_location": "L187",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_hooks_useofflinesync_useofflinesync",
@@ -28723,65 +28711,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/utils/numberUtils.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_utils_numberutils_test",
-      "target": "src_utils_numberutils",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/utils/numberUtils.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_utils_numberutils_test",
-      "target": "src_utils_numberutils_normalizefieldvalue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/utils/numberUtils.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_utils_numberutils_test",
-      "target": "src_utils_numberutils_parseindonesiannumber",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/utils/numberUtils.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_utils_numberutils_test",
-      "target": "src_utils_numberutils_safeformatnumber",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/utils/numberUtils.ts",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_utils_numberutils",
-      "target": "src_utils_numberutils_normalizefieldvalue",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/numberUtils.ts",
@@ -28813,18 +28742,6 @@
       "_origin": "ast",
       "source": "src_utils_unitanalytics",
       "target": "src_utils_numberutils",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/utils/numberUtils.ts",
-      "source_location": "L34",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_utils_numberutils_normalizefieldvalue",
-      "target": "src_utils_numberutils_parseindonesiannumber",
       "confidence_score": 1.0
     },
     {

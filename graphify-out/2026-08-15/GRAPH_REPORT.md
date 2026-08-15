@@ -1,11 +1,11 @@
 # Graph Report - SS_PDO  (2026-08-15)
 
 ## Corpus Check
-- 166 files · ~180,269 words
+- 165 files · ~180,110 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1686 nodes · 2078 edges · 153 communities (134 shown, 19 thin omitted)
+- 1685 nodes · 2072 edges · 154 communities (135 shown, 19 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
@@ -103,6 +103,7 @@
 - Global Constraints
 - codex-tools.md
 - Pi Tool Mapping
+- react
 - Checklist for effective Skills
 - Core principles
 - File Organization
@@ -176,25 +177,25 @@
 6. `parseIndonesianNumber()` - 17 edges
 7. `Testing Skills With Subagents` - 16 edges
 8. `tasteskill: Anti-Slop Frontend Skill` - 16 edges
-9. `BusCardComponent()` - 15 edges
-10. `compilerOptions` - 15 edges
+9. `compilerOptions` - 15 edges
+10. `Code Review Reception` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Props` --references--> `BusData`  [EXTRACTED]
   src/components/AnalyticsDashboard.tsx → src/services/googleSheets.ts
 - `Props` --references--> `BusData`  [EXTRACTED]
   src/components/UnitDetailModal.tsx → src/services/googleSheets.ts
-- `Props` --references--> `BusData`  [EXTRACTED]
-  src/components/UnitSummaryDashboard.tsx → src/services/googleSheets.ts
-- `CrossPeriodSummaryResult` --references--> `BusData`  [EXTRACTED]
-  src/services/routeService.ts → src/services/googleSheets.ts
-- `App()` --calls--> `useUserActivityTracking()`  [EXTRACTED]
-  src/App.tsx → src/hooks/useUserActivityTracking.ts
+- `App()` --calls--> `checkSignedInAsync()`  [EXTRACTED]
+  src/App.tsx → src/services/googleSheets.ts
+- `AnalyticsDashboard()` --calls--> `getFormattedDateBadge()`  [EXTRACTED]
+  src/components/AnalyticsDashboard.tsx → src/utils/analytics.ts
+- `BusCardComponent()` --calls--> `updateBusData()`  [EXTRACTED]
+  src/components/BusCard.tsx → src/services/googleSheets.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (153 total, 19 thin omitted)
+## Communities (154 total, 19 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -205,7 +206,7 @@ Cohesion: 0.06
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
 ### Community 2 - "analytics.ts"
-Cohesion: 0.15
+Cohesion: 0.14
 Nodes (19): AnalyticsDashboard(), Props, CompletionStatusCard(), Props, FormattedNoteText(), KPICard(), Props, Props (+11 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
@@ -524,6 +525,10 @@ Nodes (3): Codex App Finishing, Environment Detection, Subagent dispatch require
 Cohesion: 0.50
 Nodes (3): Pi Tool Mapping, Subagents, Task lists
 
+### Community 90 - "react"
+Cohesion: 0.12
+Nodes (21): react, App(), LoginScreen(), Props, ProfileMenuSheet(), Props, SwipeableContainer(), SwipeableContainerProps (+13 more)
+
 ### Community 91 - "Checklist for effective Skills"
 Cohesion: 0.50
 Nodes (4): Checklist for effective Skills, Code and scripts, Core quality, Testing
@@ -549,8 +554,8 @@ Cohesion: 0.50
 Nodes (3): Global Constraints, Persistent Auth Session Implementation Plan, Task 1: Update Auth Session Persistence (`src/services/googleSheets.ts`)
 
 ### Community 105 - "routeService.ts"
-Cohesion: 0.09
-Nodes (35): AccumulationSheet(), MONTH_NAMES_ID, Props, LoginScreen(), Props, ProfileMenuSheet(), Props, FlatRouteSheet (+27 more)
+Cohesion: 0.14
+Nodes (22): AccumulationSheet(), MONTH_NAMES_ID, Props, FlatRouteSheet, flattenRoutes(), MONTH_NAMES_ID, Props, RouteSelectorCard() (+14 more)
 
 ### Community 106 - "Supabase Integration & Metadata Catalog Design Specification"
 Cohesion: 0.17
@@ -601,16 +606,16 @@ Cohesion: 0.17
 Nodes (11): 1. Overview & Objectives, 2. Database Schema Modifications, 3. Architecture & Service Layer Updates, 4. Instrumentation Points (Event Mapping), 5. Non-Blocking & Reliability Principles, 6. Verification Plan, A. Table `user_profiles` (Add Telemetry Columns), A. Telemetry & Heartbeat Helper (`src/services/routeService.ts`) (+3 more)
 
 ### Community 118 - "BusCard.tsx"
-Cohesion: 0.22
-Nodes (21): BusCardComponent(), Dashboard(), isNetworkError(), BusInputModalOptions, CATEGORY_META, getCurrentTheme(), pdoSwal, pdoToast (+13 more)
+Cohesion: 0.23
+Nodes (21): BusCard, BusCardComponent(), Dashboard(), isNetworkError(), getBusRowData(), BusInputModalOptions, CATEGORY_META, getCurrentTheme() (+13 more)
 
 ### Community 120 - "Evaluation and iteration"
 Cohesion: 0.50
 Nodes (4): Build evaluations first, Develop Skills iteratively with the agent, Evaluation and iteration, Observe how agents navigate Skills
 
 ### Community 121 - "useOfflineSync.ts"
-Cohesion: 0.22
-Nodes (16): BusCard, Props, BusList(), Props, detectCollision(), isAuthError(), readQueueFromStorage(), RETRY_DELAYS (+8 more)
+Cohesion: 0.28
+Nodes (12): detectCollision(), isAuthError(), normalizeFieldValue(), readQueueFromStorage(), RETRY_DELAYS, useOfflineSync(), UseOfflineSyncOptions, writeQueueToStorage() (+4 more)
 
 ### Community 122 - "File yang Harus Dibuat"
 Cohesion: 0.20
@@ -621,12 +626,12 @@ Cohesion: 0.39
 Nodes (6): cacheResult(), DataResult, DataSourceStatus, errorResult(), isStale(), liveResult()
 
 ### Community 124 - "googleSheets.ts"
-Cohesion: 0.17
-Nodes (25): App(), AuthResult, checkSignedIn(), checkSignedInAsync(), detectHeaderRowAndBuildComposite(), ensureValidToken(), findColumnIndex(), getAccumulatedBusData() (+17 more)
+Cohesion: 0.24
+Nodes (17): checkSignedIn(), checkSignedInAsync(), detectHeaderRowAndBuildComposite(), ensureValidToken(), findColumnIndex(), getAccumulatedBusData(), getBusData(), getMonthlyToaTrend() (+9 more)
 
 ### Community 125 - "Dashboard.tsx"
-Cohesion: 0.18
-Nodes (10): react, Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton(), SwipeableContainer(), SwipeableContainerProps (+2 more)
+Cohesion: 0.19
+Nodes (16): Props, BusList(), Props, Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton() (+8 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
 Cohesion: 0.20
@@ -717,8 +722,8 @@ Cohesion: 0.12
 Nodes (15): Prinsip umum, Refactor 5 — Rekomendasi Solusi SS_PDO, SOL-01 — Validasi auth harus sinkron dan final, SOL-02 — Normalisasi identitas sheet/rute, SOL-03 — Perbaiki fallback akumulasi multi-hari, SOL-04 — Parser URL harus lebih toleran dan eksplisit, SOL-05 — Cache fallback harus transparan ke user, SOL-06 — Jangan samakan error total dengan nol (+7 more)
 
 ### Community 149 - "parseIndonesianNumber"
-Cohesion: 0.14
-Nodes (25): DailyToaTrendCard(), parseSelectedDay(), Props, Props, renderStatusBadge(), UnitCard, UnitCardComponent(), Props (+17 more)
+Cohesion: 0.15
+Nodes (23): DailyToaTrendCard(), parseSelectedDay(), Props, Props, renderStatusBadge(), UnitCard, UnitCardComponent(), Props (+15 more)
 
 ### Community 150 - "Global Constraints"
 Cohesion: 0.29
@@ -732,12 +737,12 @@ Nodes (6): Global Constraints, Task 1: Supabase Service & Types Telemetry Helper
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `Dashboard.tsx` to `plugins`, `routeService.ts`, `parseIndonesianNumber`, `BusCard.tsx`, `useOfflineSync.ts`, `googleSheets.ts`?**
+- **Why does `react` connect `react` to `plugins`, `routeService.ts`, `parseIndonesianNumber`, `BusCard.tsx`, `useOfflineSync.ts`, `Dashboard.tsx`?**
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **Why does `plugins` connect `plugins` to `react`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `7. DIAL DEFINITIONS (Technical Reference)`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `plugins` connect `plugins` to `Dashboard.tsx`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
   _1000 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
@@ -745,4 +750,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05576441102756892 - nodes in this community are weakly interconnected._
 - **Should `analytics.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.1476923076923077 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.14153846153846153 - nodes in this community are weakly interconnected._

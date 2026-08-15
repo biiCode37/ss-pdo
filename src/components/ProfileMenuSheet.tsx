@@ -13,9 +13,9 @@ import {
   CloudOff,
   ChevronRight,
   ShieldCheck,
-  AlertTriangle,
 } from "lucide-react";
 import { verifyUserProfile } from "../services/routeService";
+import { showLogoutConfirm } from "../utils/alertUtils";
 
 interface Props {
   isOpen: boolean;
@@ -47,7 +47,6 @@ export function ProfileMenuSheet({
   const [isDragging, setIsDragging] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [userProfile, setUserProfile] = useState<{
     full_name: string;
     email: string;
@@ -63,7 +62,6 @@ export function ProfileMenuSheet({
     if (!isOpen) {
       setIsMounted(false);
       setIsClosing(false);
-      setShowLogoutConfirm(false);
       setDragY(0);
       return;
     }
@@ -600,108 +598,35 @@ export function ProfileMenuSheet({
 
         {/* SECTION 3: Manajemen Akun (Logout) */}
         <div>
-          {!showLogoutConfirm ? (
-            <button
-              type="button"
-              onClick={() => setShowLogoutConfirm(true)}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
-                padding: "12px",
-                borderRadius: "12px",
-                background: "rgba(239, 68, 68, 0.08)",
-                border: "1px solid rgba(239, 68, 68, 0.2)",
-                color: "#ef4444",
-                fontWeight: 700,
-                fontSize: "14px",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <LogOut size={18} />
-              <span>Keluar Akun (Logout)</span>
-            </button>
-          ) : (
-            <div
-              style={{
-                padding: "14px",
-                borderRadius: "14px",
-                background: "rgba(239, 68, 68, 0.08)",
-                border: "1px solid rgba(239, 68, 68, 0.25)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                animation: "fadeIn 0.15s ease",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  color: "#ef4444",
-                  fontWeight: 700,
-                  fontSize: "13.5px",
-                }}
-              >
-                <AlertTriangle size={18} />
-                <span>Konfirmasi Keluar Akun</span>
-              </div>
-              <p
-                style={{
-                  fontSize: "12px",
-                  color: "var(--text-secondary)",
-                  margin: 0,
-                  lineHeight: 1.4,
-                }}
-              >
-                Apakah Anda yakin ingin keluar? Sesi Anda akan diakhiri.
-              </p>
-              <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
-                <button
-                  type="button"
-                  onClick={() => setShowLogoutConfirm(false)}
-                  style={{
-                    flex: 1,
-                    padding: "9px 12px",
-                    borderRadius: "10px",
-                    background: "var(--bg-card)",
-                    border: "1px solid var(--border-color)",
-                    color: "var(--text-primary)",
-                    fontSize: "13px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
-                >
-                  Batal
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onLogout();
-                    handleDismiss();
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: "9px 12px",
-                    borderRadius: "10px",
-                    background: "#ef4444",
-                    border: "none",
-                    color: "#fff",
-                    fontSize: "13px",
-                    fontWeight: 700,
-                    cursor: "pointer",
-                    boxShadow: "0 2px 8px rgba(239, 68, 68, 0.4)",
-                  }}
-                >
-                  Ya, Keluar
-                </button>
-              </div>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={async () => {
+              const confirmed = await showLogoutConfirm();
+              if (confirmed) {
+                onLogout();
+                handleDismiss();
+              }
+            }}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              padding: "12px",
+              borderRadius: "12px",
+              background: "rgba(239, 68, 68, 0.08)",
+              border: "1px solid rgba(239, 68, 68, 0.2)",
+              color: "#ef4444",
+              fontWeight: 700,
+              fontSize: "14px",
+              cursor: "pointer",
+              transition: "all 0.15s ease",
+            }}
+          >
+            <LogOut size={18} />
+            <span>Keluar Akun (Logout)</span>
+          </button>
         </div>
       </div>
     </div>,

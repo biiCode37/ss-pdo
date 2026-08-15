@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
 import { BusCard } from "./BusCard";
-import { Search, Filter, CheckCircle2 } from "lucide-react";
+import { Search, Filter, CheckCircle2, SlidersHorizontal } from "lucide-react";
 import { BusCardSkeleton } from "./Skeletons";
 
 import type { SyncItem } from "../hooks/useOfflineSync";
@@ -190,60 +190,103 @@ export function BusList({
         </div>
       </div>
 
-      <div
-        className="category-scroll-container no-swipe"
-        style={{
-          display: "flex",
-          overflowX: "auto",
-          gap: "8px",
-          paddingBottom: "12px",
-          marginBottom: "16px",
-          scrollbarWidth: "none",
-        }}
-      >
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setActiveCategory(cat.id)}
-            className={`category-pill ${activeCategory === cat.id ? "active" : ""}`}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
-
-      <div
-        className="search-container"
-        style={{ display: "flex", gap: "8px", marginBottom: "16px" }}
-      >
-        <div className="search-input-wrapper" style={{ flex: 1 }}>
-          <Search className="search-icon" size={20} />
-          <input
-            type="text"
-            className="input-field search-input"
-            placeholder="Cari No. Body Unit..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <button
-          className={`btn ${showOnlyUnfinished ? "" : "btn-outline"}`}
+      {/* Dropdown Fokus Kolom & Pencarian */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
+        {/* Row 1: Dropdown Fokus Kolom */}
+        <div
           style={{
-            width: "auto",
-            padding: "0 16px",
             display: "flex",
-            gap: "8px",
             alignItems: "center",
+            gap: "10px",
+            background: "var(--card-bg)",
+            border: "1px solid var(--card-border)",
+            borderRadius: "14px",
+            padding: "8px 12px",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
           }}
-          onClick={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
         >
-          {showOnlyUnfinished ? (
-            <CheckCircle2 size={18} />
-          ) : (
-            <Filter size={18} />
-          )}
-          {showOnlyUnfinished ? "Sisa Unit" : "Filter"}
-        </button>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "var(--text-secondary)",
+              fontSize: "12.5px",
+              fontWeight: 700,
+              whiteSpace: "nowrap",
+            }}
+          >
+            <SlidersHorizontal size={15} style={{ color: "var(--accent-color)" }} />
+            <span>Fokus Kolom:</span>
+          </div>
+          <div style={{ flex: 1 }}>
+            <select
+              value={activeCategory}
+              onChange={(e) => setActiveCategory(e.target.value)}
+              className="input-field"
+              style={{
+                padding: "8px 32px 8px 12px",
+                fontSize: "13px",
+                fontWeight: 600,
+                borderRadius: "10px",
+                background: "var(--input-bg)",
+                border: "1px solid var(--card-border)",
+                cursor: "pointer",
+                height: "38px",
+                width: "100%",
+              }}
+            >
+              {categories.map((cat) => (
+                <option
+                  key={cat.id}
+                  value={cat.id}
+                  style={{ background: "var(--surface-color)", color: "var(--text-primary)" }}
+                >
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Row 2: Pencarian & Filter Sisa Unit */}
+        <div className="search-container" style={{ display: "flex", gap: "8px", margin: 0 }}>
+          <div className="search-input-wrapper" style={{ flex: 1 }}>
+            <Search className="search-icon" size={18} />
+            <input
+              type="text"
+              className="input-field search-input"
+              placeholder="Cari No. Body Unit..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ height: "40px", fontSize: "13.5px" }}
+            />
+          </div>
+          <button
+            className={`btn ${showOnlyUnfinished ? "" : "btn-outline"}`}
+            style={{
+              width: "auto",
+              padding: "0 14px",
+              display: "flex",
+              gap: "6px",
+              alignItems: "center",
+              height: "40px",
+              fontSize: "13px",
+              fontWeight: 600,
+              borderRadius: "12px",
+              whiteSpace: "nowrap",
+            }}
+            onClick={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
+          >
+            {showOnlyUnfinished ? (
+              <CheckCircle2 size={16} />
+            ) : (
+              <Filter size={16} />
+            )}
+            {showOnlyUnfinished ? "Sisa Unit" : "Filter"}
+          </button>
+        </div>
       </div>
 
       {isLoading ? (

@@ -22,6 +22,14 @@ import {
 import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
+import {
+  showDeleteQueueConfirm,
+  showAuthExpiredAlert,
+  showSuccessToast,
+  showErrorToast,
+  showInfoToast,
+  showWarningToast,
+} from "../utils/alertUtils";
 
 import { UnitSummaryDashboard } from "./UnitSummaryDashboard";
 import { AccumulationSheet } from "./AccumulationSheet";
@@ -116,18 +124,22 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       // BUG-06: Update busData saat sinkronisasi antrean berhasil
       // Ini mencegah false positive "Tabrakan Data" pada edit berikutnya
       handleUpdateBus(rowIndex, updates);
+      showSuccessToast("Data antrean berhasil disinkronkan ke Google Sheets!");
     },
     onAuthError: () => {
       // BUG-23: Handle auth error when offline sync queue encounters 401 session expiry
       setIsAuthExpired(true);
-      setError(
-        formatUserError(
-          { status: 401 },
-          "Sesi anda telah berakhir. Ketuk tombol 'Perbarui Sesi' untuk melanjutkan.",
-        ),
-      );
+      showAuthExpiredAlert(handleReauthenticate);
     },
   });
+
+  const handleDeleteQueueItem = async (itemId: string) => {
+    const confirmed = await showDeleteQueueConfirm();
+    if (confirmed) {
+      removeItem(itemId);
+      showSuccessToast("Item berhasil dihapus dari antrean.");
+    }
+  };
 
   const handleReauthenticate = async () => {
     setIsReauthenticating(true);
@@ -139,10 +151,13 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         handleLoadData(true, currentTabName);
       }
       processQueue();
+      showSuccessToast("Sesi berhasil diperbarui!");
     } catch (err: any) {
-      setError(
-        formatUserError(err, "Gagal memperbarui sesi. Silakan coba lagi."),
-      );
+      const errFormatted = formatUserError(err, "Gagal memperbarui sesi. Silakan coba lagi.");
+      setError(errFormatted);
+      if (errFormatted) {
+        showErrorToast(errFormatted);
+      }
     } finally {
       setIsReauthenticating(false);
     }
@@ -922,6 +937,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                           }}
                           onClick={() => {
                             retryItem(item.id);
+                            showInfoToast("Mencoba menyinkronkan kembali...");
                           }}
                         >
                           <RotateCw size={14} /> Coba Lagi
@@ -936,7 +952,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                             alignItems: "center",
                             gap: "4px",
                           }}
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => handleDeleteQueueItem(item.id)}
                         >
                           <Trash2 size={14} /> Hapus
                         </button>
@@ -953,7 +969,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                             alignItems: "center",
                             gap: "4px",
                           }}
-                          onClick={() => resolveConflict(item.id)}
+                          onClick={() => {
+                            resolveConflict(item.id);
+                            showInfoToast("Menggunakan data dari server.");
+                          }}
                         >
                           Gunakan Data Server
                         </button>
@@ -967,7 +986,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                             alignItems: "center",
                             gap: "4px",
                           }}
-                          onClick={() => forceConflictItem(item.id)}
+                          onClick={() => {
+                            forceConflictItem(item.id);
+                            showWarningToast("Menimpa data server dengan data lokal...");
+                          }}
                         >
                           Force Save
                         </button>
@@ -985,6 +1007,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                   onClick={() => {
                     processQueue();
                     setIsQueueModalOpen(false);
+                    showInfoToast("Memulai proses sinkronisasi antrean...");
                   }}
                 >
                   Sinkronkan Sekarang

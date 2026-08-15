@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import type { BusData, HeaderMap } from '../services/googleSheets';
 import { updateBusData, getBusRowData } from '../services/googleSheets';
+import { normalizeFieldValue } from '../utils/numberUtils';
 
 const QUEUE_STORAGE_KEY = 'PDO_SYNC_QUEUE';
 const MAX_RETRIES = 5;
@@ -36,7 +37,6 @@ function readQueueFromStorage(): SyncItem[] {
 }
 
 import { backupSyncQueue, logActivity } from '../services/routeService';
-import { parseIndonesianNumber } from '../utils/numberUtils';
 
 /** Tulis antrean ke localStorage dengan try-catch guard (ISS-06 fix) */
 function writeQueueToStorage(queue: SyncItem[]): void {
@@ -66,26 +66,19 @@ export function isNetworkError(err: any): boolean {
   return false;
 }
 
-/** Normalisasi nilai string/number untuk perbandingan snapshot yang stabil (ISS-11 fix) */
-function normalizeFieldValue(val: any): string {
-  if (val === undefined || val === null) return '';
-  const str = String(val).trim();
-  if (str === '') return '';
-  // Jika nilai bisa di-parse sebagai angka desimal/Indonesia, samakan representasi string angkanya
-  const num = parseIndonesianNumber(str, NaN);
-  if (!isNaN(num)) return String(num);
-  return str;
-}
-
-/** Deteksi collision: bandingkan data server dengan snapshot asli secara ter-normalisasi (ISS-11 fix) */
+/** Deteksi collision: bandingkan data server dengan snapshot asli secara ter-normalisasi pada kolom yang diubah */
 function detectCollision(
   remoteData: Partial<BusData>,
   originalSnapshot: Partial<BusData>
 ): boolean {
-  const fieldsToCheck: (keyof BusData)[] = [
-    'toaShift1', 'manualShift1', 'manualShift2', 'totalToa',
-    'kmAwal1', 'kmAkhir1', 'kmAwal2', 'kmAkhir2', 'keterangan'
-  ];
+  const snapshotKeys = Object.keys(originalSnapshot) as (keyof BusData)[];
+  const fieldsToCheck: (keyof BusData)[] = snapshotKeys.length > 0
+    ? snapshotKeys
+    : [
+        'toaShift1', 'manualShift1', 'manualShift2', 'totalToa',
+        'kmAwal1', 'kmAkhir1', 'kmAwal2', 'kmAkhir2', 'keterangan'
+      ];
+
   for (const field of fieldsToCheck) {
     const remoteNorm = normalizeFieldValue(remoteData[field]);
     const origNorm = normalizeFieldValue(originalSnapshot[field]);
