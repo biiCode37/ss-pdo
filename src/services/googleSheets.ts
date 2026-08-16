@@ -487,12 +487,14 @@ export const extractSheetId = (urlOrId: string): string => {
 };
 
 export interface HeaderMap {
-  [key: string]: number;
+  [key: string]: any;
 }
 
 export interface BusData {
   rowIndex: number; // 1-based index in the sheet
   unit: string;
+  tripPergi?: string;
+  tripPulang?: string;
   toaShift1: string;
   toaShift2: string;
   manualShift1: string;
@@ -619,8 +621,24 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       throw new Error('Tidak bisa menemukan kolom "No Body / Unit". Pastikan header berisikan kata "No Body" atau "Unit".');
     }
     
+    const unitIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
+    let tripPergiIdx = -1;
+    let tripPulangIdx = -1;
+    if (unitIdx !== -1) {
+      if (compositeHeaders[unitIdx + 1] && !compositeHeaders[unitIdx + 1].toLowerCase().includes("toa")) {
+        tripPergiIdx = unitIdx + 1;
+      }
+      if (compositeHeaders[unitIdx + 2] && !compositeHeaders[unitIdx + 2].toLowerCase().includes("toa")) {
+        tripPulangIdx = unitIdx + 2;
+      }
+    }
+
     const headerMap: HeaderMap = {
-      unit: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit),
+      unit: unitIdx,
+      tripPergi: tripPergiIdx,
+      tripPulang: tripPulangIdx,
+      tripPergiLabel: tripPergiIdx !== -1 ? compositeHeaders[tripPergiIdx] : 'Trip Pergi',
+      tripPulangLabel: tripPulangIdx !== -1 ? compositeHeaders[tripPulangIdx] : 'Trip Pulang',
       toaShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift1),
       toaShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift2),
       manualShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift1),
@@ -710,6 +728,8 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
         data.push({
           rowIndex: i + 1, // Sheets API uses 1-based index (A1)
           unit: String(unitVal),
+          tripPergi: getValue(row, headerMap.tripPergi),
+          tripPulang: getValue(row, headerMap.tripPulang),
           toaShift1: toaShift1Val,
           toaShift2: toaShift2Val || '0',
           manualShift1: getValue(row, headerMap.manualShift1),
@@ -866,6 +886,8 @@ export const getBusRowData = async (
     };
 
     return {
+      tripPergi: getValue(headerMap.tripPergi),
+      tripPulang: getValue(headerMap.tripPulang),
       toaShift1: getValue(headerMap.toaShift1),
       manualShift1: getValue(headerMap.manualShift1),
       manualShift2: getValue(headerMap.manualShift2),
@@ -915,6 +937,8 @@ export const updateBusData = async (
       }
     };
 
+    addUpdate('tripPergi', updates.tripPergi);
+    addUpdate('tripPulang', updates.tripPulang);
     addUpdate('toaShift1', updates.toaShift1);
     addUpdate('manualShift1', updates.manualShift1);
     addUpdate('manualShift2', updates.manualShift2);
@@ -950,6 +974,68 @@ export const updateBusData = async (
         throw error;
       }
       throw new Error(error?.result?.error?.message || 'Gagal menyimpan data.');
+    }
+  });
+};
+
+export const updateBulkBusData = async (
+  sheetId: string,
+  tabName: string,
+  updatesList: Array<{ rowIndex: number; updates: Partial<BusData> }>,
+  headerMap: HeaderMap
+): Promise<void> => {
+  return withAuthRetry(async () => {
+    const data: any[] = [];
+
+    for (const item of updatesList) {
+      const { rowIndex, updates } = item;
+      const addUpdate = (key: keyof HeaderMap, value: any) => {
+        const colIndex = headerMap[key];
+        if (colIndex !== undefined && colIndex !== -1 && value !== undefined) {
+          const colName = numberToColumnName(colIndex);
+          data.push({
+            range: `${tabName}!${colName}${rowIndex}`,
+            values: [[value]]
+          });
+        }
+      };
+
+      if (updates.tripPergi !== undefined) addUpdate('tripPergi', updates.tripPergi);
+      if (updates.tripPulang !== undefined) addUpdate('tripPulang', updates.tripPulang);
+      if (updates.toaShift1 !== undefined) addUpdate('toaShift1', updates.toaShift1);
+      if (updates.manualShift1 !== undefined) addUpdate('manualShift1', updates.manualShift1);
+      if (updates.manualShift2 !== undefined) addUpdate('manualShift2', updates.manualShift2);
+      if (updates.totalToa !== undefined) addUpdate('totalToa', updates.totalToa);
+      if (updates.kmAwal1 !== undefined) addUpdate('kmAwal1', updates.kmAwal1);
+      if (updates.kmAkhir1 !== undefined) addUpdate('kmAkhir1', updates.kmAkhir1);
+      if (updates.kmAwal2 !== undefined) addUpdate('kmAwal2', updates.kmAwal2);
+      if (updates.kmAkhir2 !== undefined) addUpdate('kmAkhir2', updates.kmAkhir2);
+      if (updates.keterangan !== undefined) addUpdate('keterangan', updates.keterangan);
+    }
+
+    if (data.length === 0) return;
+
+    try {
+      await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId: sheetId,
+        resource: {
+          valueInputOption: 'USER_ENTERED',
+          data: data
+        }
+      });
+
+      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
+      logActivity({
+        user_email: userEmail,
+        action: 'UPDATE_BULK_BUS_DATA',
+        details: { sheetId, tabName, unitCount: updatesList.length },
+      }).catch(() => {});
+    } catch (error: any) {
+      console.error('Error batch updating bulk bus data', error);
+      if (isAuthError(error)) {
+        throw error;
+      }
+      throw new Error(error?.result?.error?.message || 'Gagal menyimpan bulk data ke spreadsheet.');
     }
   });
 };

@@ -110,6 +110,28 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   // BUG-19: AbortController and Request ID tracking for race condition protection
   const abortControllerRef = useRef<AbortController | null>(null);
   const requestIdRef = useRef<number>(0);
+  const headerBlockRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = headerBlockRef.current;
+    if (!el) return;
+
+    const updateHeight = () => {
+      const h = el.offsetHeight;
+      document.documentElement.style.setProperty("--sticky-header-height", `${h}px`);
+    };
+
+    updateHeight();
+
+    const ro = new ResizeObserver(() => {
+      updateHeight();
+    });
+    ro.observe(el);
+
+    return () => {
+      ro.disconnect();
+    };
+  }, []);
 
   const {
     queue,
@@ -491,6 +513,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       )}
       {/* Sticky Freeze Header Block (Title, Profile, & Route Selector) */}
       <div
+        ref={headerBlockRef}
         className="sticky-top-block"
         style={{
           position: "sticky",

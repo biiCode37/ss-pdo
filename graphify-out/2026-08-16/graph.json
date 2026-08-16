@@ -1821,7 +1821,7 @@
       "_origin": "ast",
       "id": "ref_react",
       "community": 125,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "react"
     },
     {
@@ -2260,8 +2260,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_devdependencies_types_node",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 151,
+      "community_name": "@types/node",
       "norm_label": "@types/node"
     },
     {
@@ -2271,8 +2271,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "types_node",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 151,
+      "community_name": "@types/node",
       "norm_label": "@types/node"
     },
     {
@@ -2348,8 +2348,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "package_devdependencies_happy_dom",
-      "community": 151,
-      "community_name": "happy-dom",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "happy-dom"
     },
     {
@@ -2359,8 +2359,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "happy_dom",
-      "community": 151,
-      "community_name": "happy-dom",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "happy-dom"
     },
     {
@@ -2612,7 +2612,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buscard",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "buscard.tsx"
     },
@@ -2624,7 +2624,7 @@
       "_origin": "ast",
       "id": "src_components_buscard_props",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "props"
     },
     {
@@ -2634,7 +2634,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_components_buscard_buscardcomponent",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "buscardcomponent()"
     },
@@ -2642,45 +2642,12 @@
       "label": "BusCard",
       "file_type": "code",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L400",
+      "source_location": "L391",
       "_origin": "ast",
       "id": "src_components_buscard_buscard",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "buscard"
-    },
-    {
-      "label": "BusInputBottomSheet.tsx",
-      "file_type": "code",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_components_businputbottomsheet",
-      "community": 121,
-      "community_name": "BusCard.tsx",
-      "norm_label": "businputbottomsheet.tsx"
-    },
-    {
-      "label": "BusInputBottomSheetProps",
-      "file_type": "code",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "src_components_businputbottomsheet_businputbottomsheetprops",
-      "community": 121,
-      "community_name": "BusCard.tsx",
-      "norm_label": "businputbottomsheetprops"
-    },
-    {
-      "label": "BusInputBottomSheet()",
-      "file_type": "code",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "src_components_businputbottomsheet_businputbottomsheet",
-      "community": 121,
-      "community_name": "BusCard.tsx",
-      "norm_label": "businputbottomsheet()"
     },
     {
       "label": "BusList.tsx",
@@ -2689,7 +2656,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buslist",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "buslist.tsx"
     },
@@ -2701,7 +2668,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_props",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "props"
     },
     {
@@ -2711,7 +2678,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_components_buslist_buslist",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "buslist()"
     },
@@ -2799,7 +2766,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dashboard",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "dashboard.tsx"
     },
@@ -2810,7 +2777,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_components_dashboard_props",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
@@ -2822,7 +2789,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboard",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "dashboard()"
     },
     {
@@ -2920,7 +2887,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_profilemenusheet",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "profilemenusheet.tsx"
     },
@@ -2931,7 +2898,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_components_profilemenusheet_props",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
@@ -2942,7 +2909,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "src_components_profilemenusheet_profilemenusheet",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "profilemenusheet()"
     },
@@ -3052,8 +3019,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_skeletons",
-      "community": 149,
-      "community_name": "analytics.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "skeletons.tsx"
     },
     {
@@ -3063,8 +3030,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonboxprops",
-      "community": 149,
-      "community_name": "analytics.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "skeletonboxprops"
     },
     {
@@ -3074,8 +3041,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonbox",
-      "community": 149,
-      "community_name": "analytics.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "skeletonbox()"
     },
     {
@@ -3085,8 +3052,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_components_skeletons_buscardskeleton",
-      "community": 121,
-      "community_name": "BusCard.tsx",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "buscardskeleton()"
     },
     {
@@ -3096,8 +3063,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_components_skeletons_dailytoatrendskeleton",
-      "community": 149,
-      "community_name": "analytics.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "dailytoatrendskeleton()"
     },
     {
@@ -3107,8 +3074,8 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_components_skeletons_unitcardskeleton",
-      "community": 149,
-      "community_name": "analytics.ts",
+      "community": 125,
+      "community_name": "Dashboard.tsx",
       "norm_label": "unitcardskeleton()"
     },
     {
@@ -3119,7 +3086,7 @@
       "_origin": "ast",
       "id": "src_components_swipeablecontainer",
       "community": 125,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainer.tsx"
     },
     {
@@ -3130,7 +3097,7 @@
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainerprops",
       "community": 125,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainerprops"
     },
     {
@@ -3141,7 +3108,7 @@
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainer",
       "community": 125,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainer()"
     },
     {
@@ -3273,7 +3240,7 @@
       "_origin": "ast",
       "id": "src_components_tests_swipeablecontainer_test",
       "community": 125,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "swipeablecontainer.test.tsx"
     },
     {
@@ -3283,8 +3250,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_tests_useuseractivitytracking_test",
-      "community": 125,
-      "community_name": "react",
+      "community": 2,
+      "community_name": "routeService.ts",
       "norm_label": "useuseractivitytracking.test.tsx"
     },
     {
@@ -3294,8 +3261,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_hooks_tests_useuseractivitytracking_test_testcomponent",
-      "community": 125,
-      "community_name": "react",
+      "community": 2,
+      "community_name": "routeService.ts",
       "norm_label": "testcomponent()"
     },
     {
@@ -3306,7 +3273,7 @@
       "_origin": "ast",
       "id": "src_hooks_usedebounce",
       "community": 125,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedebounce.ts"
     },
     {
@@ -3317,7 +3284,7 @@
       "_origin": "ast",
       "id": "src_hooks_usedebounce_usedebounce",
       "community": 125,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedebounce()"
     },
     {
@@ -3328,7 +3295,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "useofflinesync.ts"
     },
     {
@@ -3339,7 +3306,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_retry_delays",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "retry_delays"
     },
     {
@@ -3350,7 +3317,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_syncitem",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "syncitem"
     },
     {
@@ -3361,7 +3328,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_readqueuefromstorage",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "readqueuefromstorage()"
     },
     {
@@ -3372,7 +3339,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_writequeuetostorage",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "writequeuetostorage()"
     },
     {
@@ -3383,7 +3350,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_isautherror",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "isautherror()"
     },
     {
@@ -3393,7 +3360,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_isnetworkerror",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "isnetworkerror()"
     },
@@ -3405,7 +3372,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_detectcollision",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "detectcollision()"
     },
     {
@@ -3416,7 +3383,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesyncoptions",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "useofflinesyncoptions"
     },
     {
@@ -3427,7 +3394,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesync",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "useofflinesync()"
     },
     {
@@ -3437,8 +3404,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useuseractivitytracking",
-      "community": 125,
-      "community_name": "react",
+      "community": 2,
+      "community_name": "routeService.ts",
       "norm_label": "useuseractivitytracking.ts"
     },
     {
@@ -3448,8 +3415,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_hooks_useuseractivitytracking_useuseractivitytracking",
-      "community": 125,
-      "community_name": "react",
+      "community": 2,
+      "community_name": "routeService.ts",
       "norm_label": "useuseractivitytracking()"
     },
     {
@@ -3481,8 +3448,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_services_googlesheets_getgooglecreds",
-      "community": 116,
-      "community_name": "App.tsx",
+      "community": 124,
+      "community_name": "googleSheets.ts",
       "norm_label": "getgooglecreds()"
     },
     {
@@ -3492,8 +3459,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_services_googlesheets_hasgooglecreds",
-      "community": 116,
-      "community_name": "App.tsx",
+      "community": 124,
+      "community_name": "googleSheets.ts",
       "norm_label": "hasgooglecreds()"
     },
     {
@@ -3503,8 +3470,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_services_googlesheets_initgoogleapi",
-      "community": 116,
-      "community_name": "App.tsx",
+      "community": 124,
+      "community_name": "googleSheets.ts",
       "norm_label": "initgoogleapi()"
     },
     {
@@ -3569,7 +3536,7 @@
       "source_location": "L293",
       "_origin": "ast",
       "id": "src_services_googlesheets_reauthenticatesession",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "reauthenticatesession()"
     },
@@ -3646,7 +3613,7 @@
       "source_location": "L484",
       "_origin": "ast",
       "id": "src_services_googlesheets_extractsheetid",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "extractsheetid()"
     },
@@ -3658,7 +3625,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_headermap",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "headermap"
     },
     {
@@ -3669,7 +3636,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_busdata",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "busdata"
     },
     {
@@ -3735,7 +3702,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_getbusrowdata",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "getbusrowdata()"
     },
     {
@@ -3745,8 +3712,8 @@
       "source_location": "L907",
       "_origin": "ast",
       "id": "src_services_googlesheets_numbertocolumnname",
-      "community": 121,
-      "community_name": "BusCard.tsx",
+      "community": 124,
+      "community_name": "googleSheets.ts",
       "norm_label": "numbertocolumnname()"
     },
     {
@@ -3756,8 +3723,8 @@
       "source_location": "L918",
       "_origin": "ast",
       "id": "src_services_googlesheets_updatebusdata",
-      "community": 121,
-      "community_name": "BusCard.tsx",
+      "community": 124,
+      "community_name": "googleSheets.ts",
       "norm_label": "updatebusdata()"
     },
     {
@@ -3767,8 +3734,8 @@
       "source_location": "L981",
       "_origin": "ast",
       "id": "src_services_googlesheets_updatebulkbusdata",
-      "community": 121,
-      "community_name": "BusCard.tsx",
+      "community": 124,
+      "community_name": "googleSheets.ts",
       "norm_label": "updatebulkbusdata()"
     },
     {
@@ -3866,7 +3833,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_services_routeservice_verifyuserprofile",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "verifyuserprofile()"
     },
@@ -3877,8 +3844,8 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_services_routeservice_upsertuserprofile",
-      "community": 116,
-      "community_name": "App.tsx",
+      "community": 2,
+      "community_name": "routeService.ts",
       "norm_label": "upsertuserprofile()"
     },
     {
@@ -3888,8 +3855,8 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "src_services_routeservice_logactivity",
-      "community": 121,
-      "community_name": "BusCard.tsx",
+      "community": 124,
+      "community_name": "googleSheets.ts",
       "norm_label": "logactivity()"
     },
     {
@@ -3899,8 +3866,8 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "src_services_routeservice_senduserheartbeat",
-      "community": 125,
-      "community_name": "react",
+      "community": 2,
+      "community_name": "routeService.ts",
       "norm_label": "senduserheartbeat()"
     },
     {
@@ -3911,7 +3878,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_backupsyncqueue",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "backupsyncqueue()"
     },
     {
@@ -3955,7 +3922,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_crossperiodsummaryresult",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "crossperiodsummaryresult"
     },
     {
@@ -3965,7 +3932,7 @@
       "source_location": "L352",
       "_origin": "ast",
       "id": "src_services_routeservice_getcrossperiodaccumulation",
-      "community": 118,
+      "community": 125,
       "community_name": "Dashboard.tsx",
       "norm_label": "getcrossperiodaccumulation()"
     },
@@ -4131,7 +4098,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_test",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "alertutils.test.ts"
     },
     {
@@ -4142,7 +4109,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "alertutils.ts"
     },
     {
@@ -4153,7 +4120,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_getcurrenttheme",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "getcurrenttheme()"
     },
     {
@@ -4164,7 +4131,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_pdoswal",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "pdoswal"
     },
     {
@@ -4175,7 +4142,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_pdotoast",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "pdotoast"
     },
     {
@@ -4186,7 +4153,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showtoast",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showtoast()"
     },
     {
@@ -4197,7 +4164,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showsuccesstoast",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showsuccesstoast()"
     },
     {
@@ -4208,7 +4175,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showerrortoast",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showerrortoast()"
     },
     {
@@ -4219,7 +4186,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showwarningtoast",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showwarningtoast()"
     },
     {
@@ -4230,7 +4197,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showinfotoast",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showinfotoast()"
     },
     {
@@ -4241,7 +4208,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showconfirmdialog",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showconfirmdialog()"
     },
     {
@@ -4252,7 +4219,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showlogoutconfirm",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showlogoutconfirm()"
     },
     {
@@ -4263,7 +4230,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showdeletequeueconfirm",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showdeletequeueconfirm()"
     },
     {
@@ -4273,8 +4240,8 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "src_utils_alertutils_showerroralert",
-      "community": 116,
-      "community_name": "App.tsx",
+      "community": 118,
+      "community_name": "BusCard.tsx",
       "norm_label": "showerroralert()"
     },
     {
@@ -4285,7 +4252,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showauthexpiredalert",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showauthexpiredalert()"
     },
     {
@@ -4295,7 +4262,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "src_utils_alertutils_showqueueconflictdialog",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "showqueueconflictdialog()"
     },
@@ -4307,7 +4274,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_businputmodaloptions",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "businputmodaloptions"
     },
     {
@@ -4318,7 +4285,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_category_meta",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "category_meta"
     },
     {
@@ -4329,7 +4296,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_showbusinputmodal",
       "community": 118,
-      "community_name": "Dashboard.tsx",
+      "community_name": "BusCard.tsx",
       "norm_label": "showbusinputmodal()"
     },
     {
@@ -4340,7 +4307,7 @@
       "_origin": "ast",
       "id": "src_utils_alertutils_bulktripmodaloptions",
       "community": 121,
-      "community_name": "BusCard.tsx",
+      "community_name": "useOfflineSync.ts",
       "norm_label": "bulktripmodaloptions"
     },
     {
@@ -4350,7 +4317,7 @@
       "source_location": "L755",
       "_origin": "ast",
       "id": "src_utils_alertutils_showbulktripmodal",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "showbulktripmodal()"
     },
@@ -4416,7 +4383,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_utils_analytics_slugifyunitid",
-      "community": 121,
+      "community": 118,
       "community_name": "BusCard.tsx",
       "norm_label": "slugifyunitid()"
     },
@@ -21444,18 +21411,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet",
-      "target": "ref_react",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/components/BusList.tsx",
       "source_location": "L1",
       "weight": 1.0,
@@ -22950,7 +22905,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L400",
+      "source_location": "L391",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -22961,7 +22916,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L400",
+      "source_location": "L391",
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
@@ -22978,30 +22933,6 @@
       "_origin": "ast",
       "source": "src_components_buscard",
       "target": "src_components_buscard_props",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusCard.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_buscard",
-      "target": "src_components_businputbottomsheet",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusCard.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_buscard",
-      "target": "src_components_businputbottomsheet_businputbottomsheet",
       "confidence_score": 1.0
     },
     {
@@ -23117,7 +23048,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23129,7 +23060,19 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard",
+      "target": "src_utils_alertutils_showbusinputmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/BusCard.tsx",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23141,7 +23084,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23153,7 +23096,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23165,7 +23108,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23177,7 +23120,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23237,7 +23180,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23249,7 +23192,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23261,7 +23204,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23273,7 +23216,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard",
@@ -23357,6 +23300,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
+      "source_location": "L172",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_buscardcomponent",
+      "target": "src_utils_alertutils_showbusinputmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/BusCard.tsx",
       "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
@@ -23405,7 +23360,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L170",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23417,7 +23372,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L314",
+      "source_location": "L316",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23453,7 +23408,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L182",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23465,7 +23420,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/BusCard.tsx",
-      "source_location": "L287",
+      "source_location": "L290",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_buscardcomponent",
@@ -23482,88 +23437,6 @@
       "_origin": "ast",
       "source": "src_components_buslist",
       "target": "src_components_buscard_buscard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet",
-      "target": "src_components_businputbottomsheet_businputbottomsheet",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet",
-      "target": "src_components_businputbottomsheet_businputbottomsheetprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet",
-      "target": "src_services_googlesheets",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet",
-      "target": "src_services_googlesheets_busdata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet",
-      "target": "src_services_googlesheets_headermap",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "generic_arg",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet_businputbottomsheetprops",
-      "target": "src_services_googlesheets_busdata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BusInputBottomSheet.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_businputbottomsheet_businputbottomsheetprops",
-      "target": "src_services_googlesheets_headermap",
       "confidence_score": 1.0
     },
     {

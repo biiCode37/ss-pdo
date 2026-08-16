@@ -5,13 +5,13 @@ import { isNetworkError } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
+import { BusInputBottomSheet } from "./BusInputBottomSheet";
 import { parseIndonesianNumber, safeFormatNumber, normalizeFieldValue } from "../utils/numberUtils";
 import {
   showSuccessToast,
   showErrorToast,
   showInfoToast,
   showWarningToast,
-  showBusInputModal,
   showQueueConflictDialog,
 } from "../utils/alertUtils";
 import {
@@ -19,7 +19,6 @@ import {
   Navigation,
   Users,
   AlertCircle,
-  Edit3,
   Loader2,
 } from "lucide-react";
 
@@ -164,21 +163,19 @@ function BusCardComponent({
     }
   };
 
-  const handleOpenModal = async () => {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+
+  const handleOpenModal = () => {
     if (tabName === "AKUMULASI") {
       showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
       return;
     }
+    setIsBottomSheetOpen(true);
+  };
 
-    const updates = await showBusInputModal({
-      bus: { ...bus, ...formData },
-      activeCategory,
-      tabName,
-    });
-
-    if (updates) {
-      await handleSaveUpdates(updates);
-    }
+  const handleSaveFromBottomSheet = async (updates: Partial<BusData>) => {
+    setIsBottomSheetOpen(false);
+    await handleSaveUpdates(updates);
   };
 
   const renderServerSummary = () => {
@@ -312,93 +309,91 @@ function BusCardComponent({
   };
 
   return (
-    <div
-      id={`bus-card-${slugifyUnitId(bus.unit)}`}
-      className="bus-card glass"
-      onClick={handleOpenModal}
-      style={{
-        cursor: tabName === "AKUMULASI" ? "default" : "pointer",
-        transition: "all 0.18s var(--ease-spring)",
-      }}
-    >
+    <>
       <div
-        className="bus-card-header"
+        id={`bus-card-${slugifyUnitId(bus.unit)}`}
+        className="bus-card glass"
+        onClick={handleOpenModal}
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "14px 16px",
+          cursor: tabName === "AKUMULASI" ? "default" : "pointer",
+          transition: "all 0.18s var(--ease-spring)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
-          {(saveStatus === "queued" || isQueued) && (
-            <span className="bus-card-status status-queued">
-              Menunggu Sinyal
-            </span>
-          )}
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {renderServerSummary()}
-          {tabName !== "AKUMULASI" && (
-            <div
-              style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "8px",
-                background: "rgba(59, 130, 246, 0.08)",
-                color: "var(--accent-color)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              {isLoading ? (
-                <Loader2 size={14} className="spinner" />
-              ) : (
-                <Edit3 size={14} />
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {formData.keterangan && formData.keterangan.trim() !== "" && (
         <div
+          className="bus-card-header"
           style={{
-            margin: "0 16px 14px 16px",
-            fontSize: "12px",
-            color: "var(--warning-text)",
-            fontWeight: 600,
-            letterSpacing: "0.01em",
             display: "flex",
-            gap: "8px",
-            alignItems: "flex-start",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "14px 16px",
           }}
         >
-          <AlertTriangle
-            size={14}
-            style={{
-              color: "var(--orange-color)",
-              flexShrink: 0,
-              marginTop: "2px",
-            }}
-          />
-          <div
-            style={{
-              flex: 1,
-              lineHeight: "1.4",
-              wordBreak: "break-word",
-              textTransform: "uppercase",
-            }}
-          >
-            <FormattedNoteText text={formData.keterangan} />
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
+            {(saveStatus === "queued" || isQueued) && (
+              <span className="bus-card-status status-queued">
+                Menunggu Sinyal
+              </span>
+            )}
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            {renderServerSummary()}
+            {isLoading && (
+              <Loader2
+                size={14}
+                className="spinner"
+                style={{ color: "var(--accent-color)", flexShrink: 0 }}
+              />
+            )}
           </div>
         </div>
-      )}
-    </div>
+
+        {formData.keterangan && formData.keterangan.trim() !== "" && (
+          <div
+            style={{
+              margin: "0 16px 14px 16px",
+              fontSize: "12px",
+              color: "var(--warning-text)",
+              fontWeight: 600,
+              letterSpacing: "0.01em",
+              display: "flex",
+              gap: "8px",
+              alignItems: "flex-start",
+            }}
+          >
+            <AlertTriangle
+              size={14}
+              style={{
+                color: "var(--orange-color)",
+                flexShrink: 0,
+                marginTop: "2px",
+              }}
+            />
+            <div
+              style={{
+                flex: 1,
+                lineHeight: "1.4",
+                wordBreak: "break-word",
+                textTransform: "uppercase",
+              }}
+            >
+              <FormattedNoteText text={formData.keterangan} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <BusInputBottomSheet
+        isOpen={isBottomSheetOpen}
+        onClose={() => setIsBottomSheetOpen(false)}
+        bus={{ ...bus, ...formData }}
+        activeCategory={activeCategory}
+        headerMap={headerMap}
+        onSave={handleSaveFromBottomSheet}
+        isLoading={isLoading}
+      />
+    </>
   );
 }
 

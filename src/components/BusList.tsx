@@ -1,7 +1,20 @@
 import { useState, useMemo } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
+import { updateBulkBusData } from "../services/googleSheets";
 import { BusCard } from "./BusCard";
-import { Search, Filter, CheckCircle2, SlidersHorizontal } from "lucide-react";
+import {
+  Search,
+  Filter,
+  CheckCircle2,
+  Loader2,
+  ChevronDown,
+} from "lucide-react";
+import {
+  showSuccessToast,
+  showErrorAlert,
+  showWarningToast,
+  showBulkTripModal,
+} from "../utils/alertUtils";
 import { BusCardSkeleton } from "./Skeletons";
 
 import type { SyncItem } from "../hooks/useOfflineSync";
@@ -39,6 +52,78 @@ export function BusList({
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [activeCategory, setActiveCategory] = useState("ALL");
+  const [bulkPergi, setBulkPergi] = useState("");
+  const [bulkPulang, setBulkPulang] = useState("");
+  const [isSubmittingBulk, setIsSubmittingBulk] = useState(false);
+
+  const handleOpenBulkTripModal = async () => {
+    if (!data || data.length === 0) return;
+    if (tabName === "AKUMULASI") {
+      showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
+      return;
+    }
+
+    const result = await showBulkTripModal({
+      currentPergi: bulkPergi,
+      currentPulang: bulkPulang,
+      headerMap,
+      unitCount: data.length,
+    });
+
+    if (!result) return;
+
+    setBulkPergi(result.tripPergi);
+    setBulkPulang(result.tripPulang);
+
+    setIsSubmittingBulk(true);
+    const updatesList = data.map((bus) => ({
+      rowIndex: bus.rowIndex,
+      updates: {
+        tripPergi: result.tripPergi,
+        tripPulang: result.tripPulang,
+      },
+    }));
+
+    try {
+      if (navigator.onLine) {
+        await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
+      } else {
+        data.forEach((bus) => {
+          addToQueue({
+            sheetId,
+            tabName,
+            rowIndex: bus.rowIndex,
+            updates: {
+              tripPergi: result.tripPergi,
+              tripPulang: result.tripPulang,
+            },
+            headerMap,
+            retryCount: 0,
+          });
+        });
+      }
+
+      if (onUpdateBus) {
+        data.forEach((bus) => {
+          onUpdateBus(bus.rowIndex, {
+            tripPergi: result.tripPergi,
+            tripPulang: result.tripPulang,
+          });
+        });
+      }
+
+      showSuccessToast(
+        `Trip Operasional (${result.tripPergi}/${result.tripPulang}) berhasil disimpan ke Spreadsheet untuk ${data.length} unit!`,
+      );
+    } catch (err: any) {
+      showErrorAlert(
+        "Gagal Menyimpan Set Jumlah Trip",
+        err.message || "Terjadi kesalahan saat menyimpan data ke spreadsheet.",
+      );
+    } finally {
+      setIsSubmittingBulk(false);
+    }
+  };
 
   const categories = [
     { id: "ALL", label: "Semua Kolom" },
@@ -100,192 +185,247 @@ export function BusList({
 
   return (
     <div>
-      {tabName === "AKUMULASI" && (
-        <div
-          style={{
-            background: "rgba(234, 179, 8, 0.15)",
-            border: "1px solid rgba(234, 179, 8, 0.4)",
-            color: "var(--warning-color, #eab308)",
-            padding: "10px 14px",
-            borderRadius: "12px",
-            fontSize: "12.5px",
-            fontWeight: 600,
-            marginBottom: "12px",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            boxShadow: "0 2px 8px rgba(234, 179, 8, 0.15)",
-          }}
-        >
-          <span style={{ fontSize: "16px" }}>⚠️</span>
-          <span>
-            Rekap Akumulasi (Tgl{" "}
-            {(() => {
-              const sDay = accRange?.startDay ?? 1;
-              const eDay = accRange?.endDay ?? new Date().getDate();
-              if (
-                accRange?.startMonth &&
-                accRange?.endMonth &&
-                (accRange.startMonth !== accRange.endMonth || accRange.startYear !== accRange.endYear)
-              ) {
-                return `${sDay}/${accRange.startMonth} - ${eDay}/${accRange.endMonth}`;
-              }
-              return `${sDay} - ${eDay}`;
-            })()}
-            ) aktif. Pilih tanggal harian spesifik untuk menginput data.
-          </span>
-        </div>
-      )}
-
-      <div
-        className="progress-section glass"
-        style={{ padding: "16px", marginBottom: "12px" }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "8px",
-          }}
-        >
-          <div style={{ fontWeight: "600", fontSize: "14px" }}>
-            {activeCategory === "ALL"
-              ? "Progres Harian"
-              : `Progres Kolom: ${categories.find((c) => c.id === activeCategory)?.label || activeCategory}`}
-          </div>
-          <div style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
-            <span
-              style={{
-                color:
-                  filledCount === totalCount
-                    ? "var(--success-color)"
-                    : "var(--text-primary)",
-                fontWeight: "bold",
-              }}
-            >
-              {filledCount}
-            </span>{" "}
-            / {totalCount} Unit
-          </div>
-        </div>
-        <div
-          className="progress-bar-bg"
-          style={{
-            height: "8px",
-            background: "rgba(0,0,0,0.1)",
-            borderRadius: "4px",
-            overflow: "hidden",
-          }}
-        >
+      <div className="sticky-buslist-header">
+        {tabName === "AKUMULASI" && (
           <div
-            className="progress-bar-fill"
             style={{
-              height: "100%",
-              background: "var(--accent-color)",
-              width: `${progressPercent}%`,
-              transition: "width 0.5s ease-out",
+              background: "rgba(234, 179, 8, 0.15)",
+              border: "1px solid rgba(234, 179, 8, 0.4)",
+              color: "var(--warning-color, #eab308)",
+              padding: "10px 14px",
+              borderRadius: "12px",
+              fontSize: "12.5px",
+              fontWeight: 600,
+              marginBottom: "12px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              boxShadow: "0 2px 8px rgba(234, 179, 8, 0.15)",
             }}
-          ></div>
-        </div>
-      </div>
+          >
+            <span style={{ fontSize: "16px" }}>⚠️</span>
+            <span>
+              Rekap Akumulasi (Tgl{" "}
+              {(() => {
+                const sDay = accRange?.startDay ?? 1;
+                const eDay = accRange?.endDay ?? new Date().getDate();
+                if (
+                  accRange?.startMonth &&
+                  accRange?.endMonth &&
+                  (accRange.startMonth !== accRange.endMonth ||
+                    accRange.startYear !== accRange.endYear)
+                ) {
+                  return `${sDay}/${accRange.startMonth} - ${eDay}/${accRange.endMonth}`;
+                }
+                return `${sDay} - ${eDay}`;
+              })()}
+              ) aktif. Pilih tanggal harian spesifik untuk menginput data.
+            </span>
+          </div>
+        )}
 
-      {/* Dropdown Fokus Kolom & Pencarian */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
-        {/* Row 1: Dropdown Fokus Kolom */}
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            background: "var(--card-bg)",
-            border: "1px solid var(--card-border)",
-            borderRadius: "14px",
-            padding: "8px 12px",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-          }}
+          className="progress-section glass"
+          style={{ padding: "16px", marginBottom: "12px" }}
         >
           <div
             style={{
               display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              gap: "6px",
-              color: "var(--text-secondary)",
-              fontSize: "12.5px",
-              fontWeight: 700,
-              whiteSpace: "nowrap",
+              marginBottom: "8px",
             }}
           >
-            <SlidersHorizontal size={15} style={{ color: "var(--accent-color)" }} />
-            <span>Fokus Kolom:</span>
+            <div style={{ fontWeight: "600", fontSize: "14px" }}>
+              {activeCategory === "ALL"
+                ? "Progres Harian"
+                : `Progres Kolom: ${categories.find((c) => c.id === activeCategory)?.label || activeCategory}`}
+            </div>
+            <div style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
+              <span
+                style={{
+                  color:
+                    filledCount === totalCount
+                      ? "var(--success-color)"
+                      : "var(--text-primary)",
+                  fontWeight: "bold",
+                }}
+              >
+                {filledCount}
+              </span>{" "}
+              / {totalCount} Unit
+            </div>
           </div>
-          <div style={{ flex: 1 }}>
-            <select
-              value={activeCategory}
-              onChange={(e) => setActiveCategory(e.target.value)}
-              className="input-field"
+          <div
+            className="progress-bar-bg"
+            style={{
+              height: "8px",
+              background: "rgba(0,0,0,0.1)",
+              borderRadius: "4px",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              className="progress-bar-fill"
               style={{
-                padding: "8px 32px 8px 12px",
+                height: "100%",
+                background: "var(--accent-color)",
+                width: `${progressPercent}%`,
+                transition: "width 0.5s ease-out",
+              }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Controls Container: Row 1 (Fokus Kolom + Set Jumlah Trip) & Row 2 (Search + Filter) */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          {/* Row 1: Set Jumlah Trip (Kiri) & Fokus Kolom (Kanan) */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: "8px",
+              alignItems: "center",
+            }}
+          >
+            {/* Set Jumlah Trip Trigger Button (Kiri) */}
+            <button
+              type="button"
+              onClick={handleOpenBulkTripModal}
+              disabled={isSubmittingBulk}
+              style={{
+                height: "40px",
+                padding: "0 12px",
+                borderRadius: "12px",
+                background: "var(--card-bg)",
+                border: "1px solid var(--card-border)",
+                color: "var(--text-primary)",
+                fontWeight: 600,
+                fontSize: "12.5px",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                whiteSpace: "nowrap",
+                cursor: "pointer",
+                boxShadow: "none",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                opacity: isSubmittingBulk ? 0.7 : 1,
+              }}
+              title={
+                bulkPergi && bulkPulang
+                  ? `Set Jumlah Trip: Pergi ${bulkPergi} · Pulang ${bulkPulang}`
+                  : "Set Jumlah Trip Armada"
+              }
+            >
+              {isSubmittingBulk && (
+                <Loader2
+                  size={14}
+                  className="spinner"
+                  style={{ color: "var(--accent-color)" }}
+                />
+              )}
+              <span style={{ color: "var(--text-primary)" }}>
+                Set Jumlah Trip
+                {bulkPergi && bulkPulang
+                  ? ` (${bulkPergi}/${bulkPulang})`
+                  : ""}
+              </span>
+            </button>
+
+            {/* Dropdown Fokus Kolom (Kanan) */}
+            <div style={{ position: "relative", width: "100%", minWidth: 0 }}>
+              <select
+                value={activeCategory}
+                onChange={(e) => setActiveCategory(e.target.value)}
+                className="input-field"
+                style={{
+                  height: "40px",
+                  padding: "0 34px 0 12px",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  borderRadius: "12px",
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--card-border)",
+                  color: "var(--text-primary)",
+                  cursor: "pointer",
+                  width: "100%",
+                  appearance: "none",
+                  WebkitAppearance: "none",
+                  MozAppearance: "none",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                }}
+              >
+                {categories.map((cat) => (
+                  <option
+                    key={cat.id}
+                    value={cat.id}
+                    style={{
+                      background: "var(--surface-color, #1e293b)",
+                      color: "var(--text-primary, #f8fafc)",
+                    }}
+                  >
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={16}
+                style={{
+                  position: "absolute",
+                  right: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "var(--text-secondary)",
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Row 2: Pencarian & Filter Sisa Unit */}
+          <div
+            className="search-container"
+            style={{ display: "flex", gap: "8px", margin: 0 }}
+          >
+            <div className="search-input-wrapper" style={{ flex: 1 }}>
+              <Search className="search-icon" size={18} />
+              <input
+                type="text"
+                className="input-field search-input"
+                placeholder="Cari No. Body Unit..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ height: "40px", fontSize: "13.5px" }}
+              />
+            </div>
+            <button
+              className={`btn ${showOnlyUnfinished ? "" : "btn-outline"}`}
+              style={{
+                width: "auto",
+                padding: "0 14px",
+                display: "flex",
+                gap: "6px",
+                alignItems: "center",
+                height: "40px",
                 fontSize: "13px",
                 fontWeight: 600,
-                borderRadius: "10px",
-                background: "var(--input-bg)",
-                border: "1px solid var(--card-border)",
-                cursor: "pointer",
-                height: "38px",
-                width: "100%",
+                borderRadius: "12px",
+                whiteSpace: "nowrap",
               }}
+              onClick={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
             >
-              {categories.map((cat) => (
-                <option
-                  key={cat.id}
-                  value={cat.id}
-                  style={{ background: "var(--surface-color)", color: "var(--text-primary)" }}
-                >
-                  {cat.label}
-                </option>
-              ))}
-            </select>
+              {showOnlyUnfinished ? (
+                <CheckCircle2 size={16} />
+              ) : (
+                <Filter size={16} />
+              )}
+              {showOnlyUnfinished ? "Sisa Unit" : "Filter"}
+            </button>
           </div>
-        </div>
-
-        {/* Row 2: Pencarian & Filter Sisa Unit */}
-        <div className="search-container" style={{ display: "flex", gap: "8px", margin: 0 }}>
-          <div className="search-input-wrapper" style={{ flex: 1 }}>
-            <Search className="search-icon" size={18} />
-            <input
-              type="text"
-              className="input-field search-input"
-              placeholder="Cari No. Body Unit..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ height: "40px", fontSize: "13.5px" }}
-            />
-          </div>
-          <button
-            className={`btn ${showOnlyUnfinished ? "" : "btn-outline"}`}
-            style={{
-              width: "auto",
-              padding: "0 14px",
-              display: "flex",
-              gap: "6px",
-              alignItems: "center",
-              height: "40px",
-              fontSize: "13px",
-              fontWeight: 600,
-              borderRadius: "12px",
-              whiteSpace: "nowrap",
-            }}
-            onClick={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
-          >
-            {showOnlyUnfinished ? (
-              <CheckCircle2 size={16} />
-            ) : (
-              <Filter size={16} />
-            )}
-            {showOnlyUnfinished ? "Sisa Unit" : "Filter"}
-          </button>
         </div>
       </div>
 

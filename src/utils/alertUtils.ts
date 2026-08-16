@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import type { SweetAlertIcon, SweetAlertPosition } from "sweetalert2";
-import type { BusData } from "../services/googleSheets";
+import type { BusData, HeaderMap } from "../services/googleSheets";
 
 /**
  * Mendapatkan tema aktif aplikasi (light atau dark) dari atribut HTML
@@ -243,6 +243,7 @@ export interface BusInputModalOptions {
   bus: BusData;
   activeCategory: string;
   tabName: string;
+  headerMap?: HeaderMap;
 }
 
 const CATEGORY_META: Record<
@@ -287,12 +288,19 @@ const CATEGORY_META: Record<
 export async function showBusInputModal(
   options: BusInputModalOptions,
 ): Promise<Partial<BusData> | null> {
-  const { bus, activeCategory } = options;
+  const { bus, activeCategory, headerMap } = options;
   const isAll = activeCategory === "ALL";
   const singleMeta = CATEGORY_META[activeCategory];
 
-  const hasManual1 = Boolean(bus.manualShift1 && bus.manualShift1.trim() !== "");
-  const hasManual2 = Boolean(bus.manualShift2 && bus.manualShift2.trim() !== "");
+  const tripPergiLabel = headerMap?.tripPergiLabel || "Trip Pergi";
+  const tripPulangLabel = headerMap?.tripPulangLabel || "Trip Pulang";
+
+  const hasManual1 = Boolean(
+    bus.manualShift1 && bus.manualShift1.trim() !== "",
+  );
+  const hasManual2 = Boolean(
+    bus.manualShift2 && bus.manualShift2.trim() !== "",
+  );
   const hasKeterangan = Boolean(bus.keterangan && bus.keterangan.trim() !== "");
 
   let formHtml = "";
@@ -453,6 +461,26 @@ export async function showBusInputModal(
     // Mode Semua Kolom (ALL)
     formHtml = `
       <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+        <div style="padding: 10px 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
+          <div style="font-size: 11px; font-weight: 800; color: var(--accent-color); margin-bottom: 8px; text-transform: uppercase;">
+            Trip Operasional
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px; line-height: 1.3;">
+                ${tripPergiLabel}
+              </label>
+              <input id="swal-input-tripPergi" type="number" inputmode="numeric" class="input-field" style="padding: 8px 10px; font-size: 14px; font-weight: 700; height: 36px;" value="${bus.tripPergi || ""}" placeholder="0" />
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px; line-height: 1.3;">
+                ${tripPulangLabel}
+              </label>
+              <input id="swal-input-tripPulang" type="number" inputmode="numeric" class="input-field" style="padding: 8px 10px; font-size: 14px; font-weight: 700; height: 36px;" value="${bus.tripPulang || ""}" placeholder="0" />
+            </div>
+          </div>
+        </div>
+
         <div style="padding: 10px; border-radius: 12px; background: rgba(56, 189, 248, 0.08); border: 1px solid var(--shift1-border);">
           <div style="font-size: 11px; font-weight: 800; color: var(--shift1-color); margin-bottom: 8px; text-transform: uppercase;">
             Shift 1
@@ -463,16 +491,8 @@ export async function showBusInputModal(
               <input id="swal-input-toaShift1" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 13.5px; height: 36px;" value="${bus.toaShift1 || ""}" placeholder="0" />
             </div>
             <div>
-              <label style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 2px;">Total TOA</label>
-              <input id="swal-input-totalToa" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 13.5px; height: 36px;" value="${bus.totalToa || ""}" placeholder="0" />
-            </div>
-            <div>
               <label style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 2px;">Manual S1</label>
               <input id="swal-input-manualShift1" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 13.5px; height: 36px;" value="${bus.manualShift1 || ""}" placeholder="0" />
-            </div>
-            <div>
-              <label style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 2px;">Manual S2</label>
-              <input id="swal-input-manualShift2" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 13.5px; height: 36px;" value="${bus.manualShift2 || ""}" placeholder="0" />
             </div>
             <div>
               <label style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 2px;">KM Awal S1</label>
@@ -490,6 +510,14 @@ export async function showBusInputModal(
             Shift 2
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div>
+              <label style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 2px;">Total TOA</label>
+              <input id="swal-input-totalToa" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 13.5px; height: 36px;" value="${bus.totalToa || ""}" placeholder="0" />
+            </div>
+            <div>
+              <label style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 2px;">Manual S2</label>
+              <input id="swal-input-manualShift2" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 13.5px; height: 36px;" value="${bus.manualShift2 || ""}" placeholder="0" />
+            </div>
             <div>
               <label style="font-size: 10.5px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 2px;">KM Awal S2</label>
               <input id="swal-input-kmAwal2" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 13.5px; height: 36px;" value="${bus.kmAwal2 || ""}" placeholder="0" />
@@ -632,24 +660,35 @@ export async function showBusInputModal(
         }
 
         // Validation for single KM fields against existing bus data
-        const kmA1 = singleMeta.key === "kmAwal1" ? inputElem?.value : bus.kmAwal1;
-        const kmAk1 = singleMeta.key === "kmAkhir1" ? inputElem?.value : bus.kmAkhir1;
-        const kmA2 = singleMeta.key === "kmAwal2" ? inputElem?.value : bus.kmAwal2;
-        const kmAk2 = singleMeta.key === "kmAkhir2" ? inputElem?.value : bus.kmAkhir2;
+        const kmA1 =
+          singleMeta.key === "kmAwal1" ? inputElem?.value : bus.kmAwal1;
+        const kmAk1 =
+          singleMeta.key === "kmAkhir1" ? inputElem?.value : bus.kmAkhir1;
+        const kmA2 =
+          singleMeta.key === "kmAwal2" ? inputElem?.value : bus.kmAwal2;
+        const kmAk2 =
+          singleMeta.key === "kmAkhir2" ? inputElem?.value : bus.kmAkhir2;
 
         if (kmA1 && kmAk1 && Number(kmAk1) < Number(kmA1)) {
-          Swal.showValidationMessage("KM Akhir S1 tidak boleh lebih kecil dari KM Awal S1");
+          Swal.showValidationMessage(
+            "KM Akhir S1 tidak boleh lebih kecil dari KM Awal S1",
+          );
           return false;
         }
         if (kmA2 && kmAk2 && Number(kmAk2) < Number(kmA2)) {
-          Swal.showValidationMessage("KM Akhir S2 tidak boleh lebih kecil dari KM Awal S2");
+          Swal.showValidationMessage(
+            "KM Akhir S2 tidak boleh lebih kecil dari KM Awal S2",
+          );
           return false;
         }
         if (kmAk1 && kmA2 && Number(kmA2) < Number(kmAk1)) {
-          Swal.showValidationMessage("KM Awal S2 tidak boleh lebih kecil dari KM Akhir S1");
+          Swal.showValidationMessage(
+            "KM Awal S2 tidak boleh lebih kecil dari KM Akhir S1",
+          );
           return false;
         }
-      } else {
+        const tripPergi = getVal("swal-input-tripPergi");
+        const tripPulang = getVal("swal-input-tripPulang");
         const toaShift1 = getVal("swal-input-toaShift1");
         const totalToa = getVal("swal-input-totalToa");
         const manualShift1 = getVal("swal-input-manualShift1");
@@ -661,18 +700,26 @@ export async function showBusInputModal(
         const keterangan = getVal("swal-input-keterangan");
 
         if (kmAwal1 && kmAkhir1 && Number(kmAkhir1) < Number(kmAwal1)) {
-          Swal.showValidationMessage("KM Akhir S1 tidak boleh lebih kecil dari KM Awal S1");
+          Swal.showValidationMessage(
+            "KM Akhir S1 tidak boleh lebih kecil dari KM Awal S1",
+          );
           return false;
         }
         if (kmAwal2 && kmAkhir2 && Number(kmAkhir2) < Number(kmAwal2)) {
-          Swal.showValidationMessage("KM Akhir S2 tidak boleh lebih kecil dari KM Awal S2");
+          Swal.showValidationMessage(
+            "KM Akhir S2 tidak boleh lebih kecil dari KM Awal S2",
+          );
           return false;
         }
         if (kmAkhir1 && kmAwal2 && Number(kmAwal2) < Number(kmAkhir1)) {
-          Swal.showValidationMessage("KM Awal S2 tidak boleh lebih kecil dari KM Akhir S1");
+          Swal.showValidationMessage(
+            "KM Awal S2 tidak boleh lebih kecil dari KM Akhir S1",
+          );
           return false;
         }
 
+        updates.tripPergi = tripPergi;
+        updates.tripPulang = tripPulang;
         updates.toaShift1 = toaShift1;
         updates.totalToa = totalToa;
         updates.manualShift1 = manualShift1;
@@ -695,4 +742,129 @@ export async function showBusInputModal(
   return null;
 }
 
+export interface BulkTripModalOptions {
+  currentPergi?: string;
+  currentPulang?: string;
+  headerMap?: HeaderMap;
+  unitCount: number;
+}
 
+/**
+ * Modal SweetAlert2 untuk mengatur target Trip Operasional secara Bulk ke seluruh armada unit bus
+ */
+export async function showBulkTripModal(
+  options: BulkTripModalOptions,
+): Promise<{ tripPergi: string; tripPulang: string } | null> {
+  const {
+    currentPergi = "",
+    currentPulang = "",
+    headerMap,
+    unitCount,
+  } = options;
+  const tripPergiLabel = headerMap?.tripPergiLabel || "Trip Pergi";
+  const tripPulangLabel = headerMap?.tripPulangLabel || "Trip Pulang";
+
+  const formHtml = `
+    <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
+      <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.45;">
+        Nilai di bawah akan langsung diterapkan ke seluruh <strong>${unitCount} unit bus</strong> pada rute ini dan disimpan ke spreadsheet.
+      </div>
+
+      <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
+            ${tripPergiLabel}
+          </label>
+          <input
+            id="swal-bulk-tripPergi"
+            type="number"
+            inputmode="numeric"
+            class="input-field"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; border: 1.5px solid var(--accent-color); width: 100%;"
+            value="${currentPergi}"
+            placeholder="0"
+          />
+        </div>
+
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
+            ${tripPulangLabel}
+          </label>
+          <input
+            id="swal-bulk-tripPulang"
+            type="number"
+            inputmode="numeric"
+            class="input-field"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; border: 1.5px solid var(--accent-color); width: 100%;"
+            value="${currentPulang}"
+            placeholder="0"
+          />
+        </div>
+      </div>
+    </div>
+  `;
+
+  const result = await pdoSwal.fire({
+    title: "Set Jumlah Trip Armada",
+    html: formHtml,
+    showCancelButton: true,
+    confirmButtonText: "Terapkan ke Semua Unit",
+    cancelButtonText: "Batal",
+    focusConfirm: false,
+    didOpen: () => {
+      const input = document.getElementById(
+        "swal-bulk-tripPergi",
+      ) as HTMLInputElement | null;
+      if (input) {
+        input.focus();
+        input.select();
+      }
+
+      // Enter keydown handler on inputs to submit
+      const inputs = [
+        input,
+        document.getElementById(
+          "swal-bulk-tripPulang",
+        ) as HTMLInputElement | null,
+      ];
+      inputs.forEach((elem) => {
+        if (elem) {
+          elem.addEventListener("keydown", (e: KeyboardEvent) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              pdoSwal.clickConfirm();
+            }
+          });
+        }
+      });
+    },
+    preConfirm: () => {
+      const pElem = document.getElementById(
+        "swal-bulk-tripPergi",
+      ) as HTMLInputElement | null;
+      const qElem = document.getElementById(
+        "swal-bulk-tripPulang",
+      ) as HTMLInputElement | null;
+
+      const pVal = pElem ? pElem.value : "";
+      const qVal = qElem ? qElem.value : "";
+
+      if (pVal.trim() === "" || qVal.trim() === "") {
+        pdoSwal.showValidationMessage(
+          "Harap isi nilai Trip Pergi dan Trip Pulang!",
+        );
+        return false;
+      }
+
+      return {
+        tripPergi: pVal,
+        tripPulang: qVal,
+      };
+    },
+  });
+
+  if (result.isConfirmed && result.value) {
+    return result.value;
+  }
+  return null;
+}
