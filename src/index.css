@@ -1356,11 +1356,67 @@ div:where(.swal2-container) .pdo-swal-toast {
   border-width: 2px !important;
 }
 
+/* SweetAlert2 Container & Mobile Keyboard Adaptation */
+div:where(.swal2-container).pdo-swal-container {
+  padding: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+@media (max-height: 650px) {
+  div:where(.swal2-container).pdo-swal-container {
+    align-items: flex-end !important;
+    padding-bottom: 8px !important;
+  }
+}
+
 /* Bus Input Modal Custom Styling */
 div:where(.swal2-container) .pdo-swal-bus-modal {
   width: 95% !important;
   max-width: 440px !important;
-  padding: 20px 16px !important;
+  max-height: calc(100dvh - 28px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+  background: var(--surface-color) !important;
+}
+
+div:where(.swal2-container) .pdo-swal-bus-modal.pdo-swal-popup-wide {
+  max-width: 500px !important;
+}
+
+div:where(.swal2-container) .pdo-swal-bus-modal .swal2-title {
+  padding: 16px 18px 12px 18px !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  font-size: 1.15rem !important;
+  text-align: left !important;
+}
+
+div:where(.swal2-container) .pdo-swal-bus-modal .swal2-html-container {
+  margin: 0 !important;
+  padding: 14px 18px !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  flex: 1 1 auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+div:where(.swal2-container) .pdo-swal-bus-modal .swal2-actions {
+  position: sticky !important;
+  bottom: 0 !important;
+  margin: 0 !important;
+  padding: 12px 18px !important;
+  background: var(--surface-color) !important;
+  border-top: 1px solid var(--card-border) !important;
+  z-index: 10 !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {

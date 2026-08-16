@@ -600,6 +600,16 @@ export async function showBusInputModal(
             pdoSwal.clickConfirm();
           }
         });
+
+        // Smart auto-scroll when input focused (Mobile Virtual Keyboard Friendly)
+        const inputs = popup.querySelectorAll<HTMLInputElement>("input");
+        inputs.forEach((input) => {
+          input.addEventListener("focus", () => {
+            setTimeout(() => {
+              input.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 180);
+          });
+        });
       }
 
       // Auto-focus primary input
@@ -811,6 +821,12 @@ export async function showBulkTripModal(
     confirmButtonText: "Terapkan ke Semua Unit",
     cancelButtonText: "Batal",
     focusConfirm: false,
+    customClass: {
+      container: "pdo-swal-container",
+      popup: "pdo-swal-popup pdo-swal-bus-modal",
+      confirmButton: "pdo-swal-confirm-btn",
+      cancelButton: "pdo-swal-cancel-btn",
+    },
     didOpen: () => {
       const input = document.getElementById(
         "swal-bulk-tripPergi",
@@ -820,23 +836,25 @@ export async function showBulkTripModal(
         input.select();
       }
 
-      // Enter keydown handler on inputs to submit
-      const inputs = [
-        input,
-        document.getElementById(
-          "swal-bulk-tripPulang",
-        ) as HTMLInputElement | null,
-      ];
-      inputs.forEach((elem) => {
-        if (elem) {
+      // Enter keydown handler & smart auto-scroll on inputs
+      const bulkPopup = pdoSwal.getPopup();
+      if (bulkPopup) {
+        const bulkInputs = bulkPopup.querySelectorAll<HTMLInputElement>("input");
+        bulkInputs.forEach((elem) => {
           elem.addEventListener("keydown", (e: KeyboardEvent) => {
             if (e.key === "Enter") {
               e.preventDefault();
               pdoSwal.clickConfirm();
             }
           });
-        }
-      });
+
+          elem.addEventListener("focus", () => {
+            setTimeout(() => {
+              elem.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 180);
+          });
+        });
+      }
     },
     preConfirm: () => {
       const pElem = document.getElementById(

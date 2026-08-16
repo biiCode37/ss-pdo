@@ -5,13 +5,13 @@ import { isNetworkError } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
-import { BusInputBottomSheet } from "./BusInputBottomSheet";
 import { parseIndonesianNumber, safeFormatNumber, normalizeFieldValue } from "../utils/numberUtils";
 import {
   showSuccessToast,
   showErrorToast,
   showInfoToast,
   showWarningToast,
+  showBusInputModal,
   showQueueConflictDialog,
 } from "../utils/alertUtils";
 import {
@@ -163,19 +163,22 @@ function BusCardComponent({
     }
   };
 
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-
-  const handleOpenModal = () => {
+  const handleOpenModal = async () => {
     if (tabName === "AKUMULASI") {
       showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
       return;
     }
-    setIsBottomSheetOpen(true);
-  };
 
-  const handleSaveFromBottomSheet = async (updates: Partial<BusData>) => {
-    setIsBottomSheetOpen(false);
-    await handleSaveUpdates(updates);
+    const updates = await showBusInputModal({
+      bus: { ...bus, ...formData },
+      activeCategory,
+      tabName,
+      headerMap,
+    });
+
+    if (updates) {
+      await handleSaveUpdates(updates);
+    }
   };
 
   const renderServerSummary = () => {
@@ -309,9 +312,8 @@ function BusCardComponent({
   };
 
   return (
-    <>
-      <div
-        id={`bus-card-${slugifyUnitId(bus.unit)}`}
+    <div
+      id={`bus-card-${slugifyUnitId(bus.unit)}`}
         className="bus-card glass"
         onClick={handleOpenModal}
         style={{
@@ -383,17 +385,6 @@ function BusCardComponent({
           </div>
         )}
       </div>
-
-      <BusInputBottomSheet
-        isOpen={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-        bus={{ ...bus, ...formData }}
-        activeCategory={activeCategory}
-        headerMap={headerMap}
-        onSave={handleSaveFromBottomSheet}
-        isLoading={isLoading}
-      />
-    </>
   );
 }
 
