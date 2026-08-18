@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1787033395.3251374,
-    "ast_hash": "9d615bf6252ec9612999f61724efdf9d",
+    "mtime": 1786893857.6434803,
+    "ast_hash": "080baa286c4f7b17d5bcac3d68256fdd",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "src/components/ProfileMenuSheet.tsx": {
-    "mtime": 1787033427.1995132,
-    "ast_hash": "2f60645b1936b86db758002754da134d",
+    "mtime": 1786893900.0207095,
+    "ast_hash": "caca95da823562ffd40f5fe9371fdccf",
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {

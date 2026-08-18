@@ -5,6 +5,7 @@ import {
   getBusData,
   getAccumulatedBusData,
   reauthenticateSession,
+  formatWholeSheet,
 } from "../services/googleSheets";
 import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
@@ -540,12 +541,86 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             alignItems: "center",
             marginBottom: "10px",
             padding: 0,
+            gap: "12px",
           }}
         >
-          <h1 style={{ margin: 0, textAlign: "left", fontSize: "19px" }}>
-            PDO Utara Spreadsheet Mobile
-          </h1>
-          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          {/* POJOK KIRI: Title PUSM & Helper Subtitle */}
+          <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+            <h1
+              style={{
+                margin: 0,
+                textAlign: "left",
+                fontSize: "20px",
+                fontWeight: 800,
+                letterSpacing: "-0.5px",
+                lineHeight: 1.15,
+                color: "var(--text-primary)",
+              }}
+            >
+              PUSM
+            </h1>
+            <span
+              style={{
+                fontSize: "10.5px",
+                color: "var(--text-secondary)",
+                fontWeight: 500,
+                letterSpacing: "0.2px",
+                whiteSpace: "nowrap",
+                lineHeight: 1.3,
+                marginTop: "1px",
+              }}
+            >
+              PDO Utara Spreadsheet Mobile
+            </span>
+          </div>
+
+          {/* POJOK KANAN: Halaman Aktif Badge + Queue Tertunda + Profile Icon */}
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
+              flexShrink: 0,
+            }}
+          >
+            {/* Nama Halaman Aktif */}
+            <div
+              onClick={() => setIsProfileMenuOpen(true)}
+              title="Halaman Aktif (Ketuk untuk membuka menu navigasi)"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "5px 11px",
+                borderRadius: "20px",
+                background: "rgba(59, 130, 246, 0.1)",
+                border: "1px solid rgba(59, 130, 246, 0.22)",
+                color: "var(--accent-color)",
+                fontSize: "11.5px",
+                fontWeight: 600,
+                whiteSpace: "nowrap",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <span
+                style={{
+                  width: "6px",
+                  height: "6px",
+                  borderRadius: "50%",
+                  background: "var(--accent-color)",
+                  boxShadow: "0 0 6px var(--accent-color)",
+                }}
+              />
+              <span>
+                {mainTab === "analytics"
+                  ? "Dashboard Analytics"
+                  : mainTab === "input"
+                    ? "Input SS (Harian)"
+                    : "Daftar Unit Armada"}
+              </span>
+            </div>
+
             {queue.length > 0 && (
               <div
                 onClick={() => setIsQueueModalOpen(true)}
@@ -558,7 +633,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                   )
                     ? "var(--danger-color)"
                     : "var(--warning-color)",
-                  fontSize: "13px",
+                  fontSize: "12px",
                   fontWeight: "bold",
                   background: queue.some(
                     (q) => q.status === "failed" || q.status === "conflict",
@@ -573,13 +648,14 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                 {queue.some(
                   (q) => q.status === "failed" || q.status === "conflict",
                 ) ? (
-                  <AlertTriangle size={16} />
+                  <AlertTriangle size={15} />
                 ) : (
-                  <CloudOff size={16} />
+                  <CloudOff size={15} />
                 )}
-                {queue.length} Tertunda
+                {queue.length}
               </div>
             )}
+
             <button
               type="button"
               style={{
@@ -1190,6 +1266,14 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               }
               isOnline={isOnline}
               onLogout={onLogout}
+              onFormatWholeSheet={async () => {
+                if (!currentSheetId || !currentTabName || !busData || !headerMap) {
+                  throw new Error("Data spreadsheet belum dimuat.");
+                }
+                await formatWholeSheet(currentSheetId, currentTabName, busData, headerMap);
+              }}
+              currentTabName={currentTabName}
+              hasActiveData={Boolean(currentSheetId && currentTabName && busData && busData.length > 0)}
             />
           </>
         );

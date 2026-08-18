@@ -14,9 +14,11 @@ import {
   showAuthExpiredAlert,
   showQueueConflictDialog,
   showBusInputModal,
+  showFormatSheetConfirm,
   pdoSwal,
   pdoToast,
 } from "./alertUtils";
+import { getKeteranganColor, getRowEndCol } from "./sheetColorUtils";
 
 describe("alertUtils", () => {
   beforeEach(() => {
@@ -386,6 +388,101 @@ describe("alertUtils", () => {
           }),
         }),
       );
+    });
+  });
+
+  describe("getKeteranganColor", () => {
+    it("returns skyblue for BA (1-4), NP1, and NP2", () => {
+      const skyblue = { red: 0.53, green: 0.81, blue: 0.98 };
+
+      expect(getKeteranganColor("BA.01 RADIATOR BOCOR")).toEqual(skyblue);
+      expect(getKeteranganColor("BA.02 AC PANAS")).toEqual(skyblue);
+      expect(getKeteranganColor("BA.03 SPION PATAH")).toEqual(skyblue);
+      expect(getKeteranganColor("BA.04 TERHAMBAT BANJIR")).toEqual(skyblue);
+      expect(getKeteranganColor("NP1")).toEqual(skyblue);
+      expect(getKeteranganColor("NP2")).toEqual(skyblue);
+    });
+
+    it("returns yellow for OFF", () => {
+      const yellow = { red: 1.0, green: 0.95, blue: 0.3 };
+
+      expect(getKeteranganColor("OFF")).toEqual(yellow);
+      expect(getKeteranganColor("OFF (LIBUR)")).toEqual(yellow);
+    });
+
+    it("returns red for TO EVDAL", () => {
+      const red = { red: 0.95, green: 0.35, blue: 0.35 };
+
+      expect(getKeteranganColor("TO EVDAL")).toEqual(red);
+      expect(getKeteranganColor("TO-EVDAL")).toEqual(red);
+    });
+
+    it("returns light green for other non-empty notes", () => {
+      const lightGreen = { red: 0.56, green: 0.93, blue: 0.56 };
+
+      expect(getKeteranganColor("GANTI BAN SERAP")).toEqual(lightGreen);
+      expect(getKeteranganColor("TUKAR BUS DI TERMINAL")).toEqual(lightGreen);
+      expect(getKeteranganColor("AC KURANG DINGIN")).toEqual(lightGreen);
+    });
+
+    it("returns null only for empty string or whitespace", () => {
+      expect(getKeteranganColor("")).toBeNull();
+      expect(getKeteranganColor("   ")).toBeNull();
+    });
+  });
+
+  describe("showFormatSheetConfirm", () => {
+    it("returns true when confirmed", async () => {
+      const swalSpy = vi
+        .spyOn(pdoSwal, "fire")
+        .mockResolvedValue({ isConfirmed: true } as any);
+
+      const result = await showFormatSheetConfirm("01-08-2026");
+
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: "Rapikan & Format Spreadsheet?",
+          html: expect.stringContaining("01-08-2026"),
+          icon: "question",
+        }),
+      );
+      expect(result).toBe(true);
+    });
+
+    it("returns false when dismissed", async () => {
+      vi.spyOn(pdoSwal, "fire").mockResolvedValue({ isConfirmed: false } as any);
+
+      const result = await showFormatSheetConfirm("01-08-2026");
+      expect(result).toBe(false);
+    });
+  });
+
+  describe("getRowEndCol", () => {
+    it("returns totalKmShift2 + 1 when totalKmShift2 is present", () => {
+      const headerMap = {
+        unit: 2,
+        kmAkhir2: 20,
+        totalKmShift1: 21,
+        totalKmShift2: 22,
+      };
+      expect(getRowEndCol(headerMap)).toBe(23);
+    });
+
+    it("returns totalKmShift1 + 2 when totalKmShift2 is missing", () => {
+      const headerMap = {
+        unit: 2,
+        kmAkhir2: 20,
+        totalKmShift1: 21,
+      };
+      expect(getRowEndCol(headerMap)).toBe(23);
+    });
+
+    it("returns kmAkhir2 + 3 when both total KM columns are missing from map", () => {
+      const headerMap = {
+        unit: 2,
+        kmAkhir2: 20,
+      };
+      expect(getRowEndCol(headerMap)).toBe(23);
     });
   });
 });

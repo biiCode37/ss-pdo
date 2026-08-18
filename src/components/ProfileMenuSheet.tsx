@@ -13,9 +13,18 @@ import {
   CloudOff,
   ChevronRight,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { verifyUserProfile } from "../services/routeService";
-import { showLogoutConfirm } from "../utils/alertUtils";
+import {
+  showLogoutConfirm,
+  showFormatSheetConfirm,
+  showToast,
+  showSuccessToast,
+  showWarningToast,
+  showErrorAlert,
+} from "../utils/alertUtils";
+import { formatUserError } from "../utils/errorFormatter";
 
 interface Props {
   isOpen: boolean;
@@ -28,6 +37,9 @@ interface Props {
   offlineQueueCount: number;
   isOnline: boolean;
   onLogout: () => void;
+  onFormatWholeSheet?: () => Promise<void>;
+  currentTabName?: string;
+  hasActiveData?: boolean;
 }
 
 export function ProfileMenuSheet({
@@ -35,12 +47,15 @@ export function ProfileMenuSheet({
   onClose,
   activeTab,
   onSelectTab,
-  onOpenAccumulation,
+  onOpenAccumulation: _onOpenAccumulation,
   isDarkMode,
   onToggleTheme,
   offlineQueueCount,
   isOnline,
   onLogout,
+  onFormatWholeSheet,
+  currentTabName,
+  hasActiveData,
 }: Props) {
   const [touchStartY, setTouchStartY] = useState(0);
   const [dragY, setDragY] = useState(0);
@@ -149,9 +164,36 @@ export function ProfileMenuSheet({
     handleDismiss();
   };
 
-  const handleAccumulationClick = () => {
-    onOpenAccumulation();
+  const [isFormatting, setIsFormatting] = useState(false);
+
+  const handleFormatSpreadsheetClick = async () => {
+    if (!onFormatWholeSheet) return;
+    if (!hasActiveData) {
+      showWarningToast("Pilih rute dan tanggal terlebih dahulu.");
+      return;
+    }
+
     handleDismiss();
+    const confirmed = await showFormatSheetConfirm(currentTabName || "aktif");
+    if (!confirmed) return;
+
+    try {
+      setIsFormatting(true);
+      showToast({
+        title: "Sedang merapikan spreadsheet...",
+        icon: "info",
+        timer: 2500,
+      });
+      await onFormatWholeSheet();
+      showSuccessToast("Spreadsheet berhasil dirapikan & diformat!");
+    } catch (err: any) {
+      showErrorAlert(
+        formatUserError(err, "Gagal menerapkan format spreadsheet.") ||
+          "Gagal menerapkan format spreadsheet.",
+      );
+    } finally {
+      setIsFormatting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -485,10 +527,54 @@ export function ProfileMenuSheet({
             FITUR & UTILITAS
           </span>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {/* Rekap Akumulasi */}
+            {/* Rekap Akumulasi (Disabled - Coming Soon) */}
             <button
               type="button"
-              onClick={handleAccumulationClick}
+              disabled={true}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "12px 14px",
+                borderRadius: "12px",
+                background: "var(--bg-secondary, rgba(0,0,0,0.03))",
+                border: "1px solid transparent",
+                color: "var(--text-secondary)",
+                fontWeight: 500,
+                fontSize: "13.5px",
+                cursor: "not-allowed",
+                opacity: 0.65,
+              }}
+              title="Fitur sedang dalam penyesuaian (Coming Soon)"
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              >
+                <Layers size={18} style={{ color: "var(--text-secondary)" }} />
+                <span>Rekap Akumulasi Lintas Periode</span>
+              </div>
+              <span
+                style={{
+                  fontSize: "10px",
+                  fontWeight: 700,
+                  padding: "2px 7px",
+                  borderRadius: "6px",
+                  background: "rgba(234, 179, 8, 0.15)",
+                  color: "var(--warning-color, #eab308)",
+                  border: "1px solid rgba(234, 179, 8, 0.3)",
+                  letterSpacing: "0.4px",
+                  textTransform: "uppercase",
+                }}
+              >
+                Coming Soon
+              </span>
+            </button>
+
+            {/* Rapikan & Format Spreadsheet */}
+            <button
+              type="button"
+              onClick={handleFormatSpreadsheetClick}
+              disabled={isFormatting}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -500,16 +586,28 @@ export function ProfileMenuSheet({
                 color: "var(--text-primary)",
                 fontWeight: 500,
                 fontSize: "13.5px",
-                cursor: "pointer",
+                cursor: isFormatting ? "wait" : "pointer",
+                opacity: isFormatting ? 0.7 : 1,
               }}
             >
               <div
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
-                <Layers size={18} style={{ color: "var(--accent-color)" }} />
-                <span>Rekap Akumulasi Lintas Periode</span>
+                <Sparkles size={18} style={{ color: "#38bdf8" }} />
+                <div style={{ textAlign: "left" }}>
+                  <div>Rapikan & Format Spreadsheet</div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "var(--text-secondary)",
+                      marginTop: "1px",
+                    }}
+                  >
+                    Terapkan perataan & warna baris ke Google Sheets
+                  </div>
+                </div>
               </div>
-              <ChevronRight size={16} style={{ opacity: 0.5 }} />
+              <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
             </button>
 
             {/* Toggle Theme */}

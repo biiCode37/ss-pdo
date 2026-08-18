@@ -14,6 +14,7 @@ import {
   showErrorAlert,
   showWarningToast,
   showBulkTripModal,
+  showBulkCopyKmModal,
 } from "../utils/alertUtils";
 import { BusCardSkeleton } from "./Skeletons";
 
@@ -76,26 +77,32 @@ export function BusList({
     setBulkPulang(result.tripPulang);
 
     setIsSubmittingBulk(true);
-    const updatesList = data.map((bus) => ({
-      rowIndex: bus.rowIndex,
-      updates: {
-        tripPergi: result.tripPergi,
-        tripPulang: result.tripPulang,
-      },
-    }));
+    const updatesList = data.map((bus) => {
+      const isOff =
+        bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
+      return {
+        rowIndex: bus.rowIndex,
+        updates: {
+          tripPergi: isOff ? "" : result.tripPergi,
+          tripPulang: isOff ? "" : result.tripPulang,
+        },
+      };
+    });
 
     try {
       if (navigator.onLine) {
         await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
       } else {
         data.forEach((bus) => {
+          const isOff =
+            bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
           addToQueue({
             sheetId,
             tabName,
             rowIndex: bus.rowIndex,
             updates: {
-              tripPergi: result.tripPergi,
-              tripPulang: result.tripPulang,
+              tripPergi: isOff ? "" : result.tripPergi,
+              tripPulang: isOff ? "" : result.tripPulang,
             },
             headerMap,
             retryCount: 0,
@@ -105,9 +112,11 @@ export function BusList({
 
       if (onUpdateBus) {
         data.forEach((bus) => {
+          const isOff =
+            bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
           onUpdateBus(bus.rowIndex, {
-            tripPergi: result.tripPergi,
-            tripPulang: result.tripPulang,
+            tripPergi: isOff ? "" : result.tripPergi,
+            tripPulang: isOff ? "" : result.tripPulang,
           });
         });
       }
@@ -118,6 +127,100 @@ export function BusList({
     } catch (err: any) {
       showErrorAlert(
         "Gagal Menyimpan Set Jumlah Trip",
+        err.message || "Terjadi kesalahan saat menyimpan data ke spreadsheet.",
+      );
+    } finally {
+      setIsSubmittingBulk(false);
+    }
+  };
+
+  const availableKmS1Buses = useMemo(() => {
+    return data.filter(
+      (b) =>
+        b.kmAkhir1 !== undefined &&
+        b.kmAkhir1 !== null &&
+        String(b.kmAkhir1).trim() !== "",
+    );
+  }, [data]);
+
+  const emptyKmAwal2Count = useMemo(() => {
+    return availableKmS1Buses.filter(
+      (b) => !b.kmAwal2 || String(b.kmAwal2).trim() === "",
+    ).length;
+  }, [availableKmS1Buses]);
+
+  const handleBulkCopyKmS1 = async () => {
+    if (tabName === "AKUMULASI") {
+      showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
+      return;
+    }
+
+    if (availableKmS1Buses.length === 0) {
+      showWarningToast(
+        "Tidak ada unit bus yang memiliki data KM Akhir Shift 1.",
+      );
+      return;
+    }
+
+    const mode = await showBulkCopyKmModal({
+      totalUnitsWithKmS1: availableKmS1Buses.length,
+      emptyKmAwal2Count,
+    });
+
+    if (!mode) return;
+
+    const targetBuses =
+      mode === "only_empty"
+        ? availableKmS1Buses.filter(
+            (b) => !b.kmAwal2 || String(b.kmAwal2).trim() === "",
+          )
+        : availableKmS1Buses;
+
+    if (targetBuses.length === 0) {
+      showWarningToast("Semua unit bus sudah memiliki nilai KM Awal Shift 2.");
+      return;
+    }
+
+    setIsSubmittingBulk(true);
+    const updatesList = targetBuses.map((bus) => ({
+      rowIndex: bus.rowIndex,
+      updates: {
+        kmAwal2: bus.kmAkhir1,
+      },
+    }));
+
+    try {
+      if (navigator.onLine) {
+        await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
+      } else {
+        targetBuses.forEach((bus) => {
+          addToQueue({
+            sheetId,
+            tabName,
+            rowIndex: bus.rowIndex,
+            updates: {
+              kmAwal2: bus.kmAkhir1,
+            },
+            headerMap,
+            retryCount: 0,
+          });
+        });
+      }
+
+      if (onUpdateBus) {
+        targetBuses.forEach((bus) => {
+          onUpdateBus(bus.rowIndex, {
+            kmAwal2: bus.kmAkhir1,
+          });
+        });
+      }
+
+      showSuccessToast(
+        `KM Akhir S1 berhasil disalin ke KM Awal S2 untuk ${targetBuses.length} unit bus!`,
+      );
+    } catch (err: any) {
+      showErrorAlert(
+        "Gagal Menyalin KM Massal",
         err.message || "Terjadi kesalahan saat menyimpan data ke spreadsheet.",
       );
     } finally {
@@ -426,6 +529,60 @@ export function BusList({
               {showOnlyUnfinished ? "Sisa Unit" : "Filter"}
             </button>
           </div>
+
+          {/* Contextual Action: Bulk Copy KM S1 to KM S2 (Hanya tampil saat tab KM Awal S2 aktif) */}
+          {activeCategory === "kmAwal2" && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "8px 12px",
+                borderRadius: "12px",
+                background: "rgba(56, 189, 248, 0.08)",
+                border:
+                  "1px solid var(--shift1-border, rgba(56, 189, 248, 0.25))",
+                animation: "fadeIn 0.2s ease-out forwards",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "var(--text-secondary)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span
+                  style={{
+                    fontWeight: 700,
+                    color: "var(--shift1-color, #38bdf8)",
+                  }}
+                >
+                  {availableKmS1Buses.length} unit
+                </span>
+                <span>punya KM Akhir S1</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleBulkCopyKmS1}
+                disabled={isSubmittingBulk || availableKmS1Buses.length === 0}
+                className="swal-copy-km-chip"
+                style={{
+                  padding: "6px 12px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  borderRadius: "8px",
+                  cursor:
+                    availableKmS1Buses.length === 0 ? "not-allowed" : "pointer",
+                  opacity: availableKmS1Buses.length === 0 ? 0.5 : 1,
+                }}
+              >
+                📋 Salin Semua KM S1
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

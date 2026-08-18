@@ -526,6 +526,8 @@ const HEADER_KEYWORDS: Record<string, string[]> = {
   kmAkhir1: ['kilometerakhirshift1', 'kmakhirshift1', 'kmakhir1', 'kmakhirshifti', 'kmakhirs1', 'kmakhirsi'],
   kmAwal2: ['kilometerawalshift2', 'kmawalshift2', 'kmawal2', 'kmawalshiftii', 'kmawals2', 'kmawalsii'],
   kmAkhir2: ['kilometerakhirshift2', 'kmakhirshift2', 'kmakhir2', 'kmakhirshiftii', 'kmakhirs2', 'kmakhirsii'],
+  totalKmShift1: ['totalkilometershift1', 'totalkmshift1', 'totalkm1', 'totalkms1'],
+  totalKmShift2: ['totalkilometershift2', 'totalkmshift2', 'totalkm2', 'totalkms2'],
   keterangan: ['keterangan', 'ket', 'notes', 'catatan'],
 };
 
@@ -648,6 +650,8 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       kmAkhir1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAkhir1),
       kmAwal2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAwal2),
       kmAkhir2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.kmAkhir2),
+      totalKmShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.totalKmShift1),
+      totalKmShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.totalKmShift2),
       keterangan: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.keterangan),
     };
 
@@ -915,6 +919,136 @@ const numberToColumnName = (num: number): string => {
   return col;
 };
 
+const tabGidCache = new Map<string, number>();
+
+/**
+ * Mendapatkan numeric sheetId / gid untuk tab tertentu di spreadsheet
+ */
+export const getTabGid = async (
+  sheetId: string,
+  tabName: string,
+): Promise<number | null> => {
+  const cacheKey = `${sheetId}:${tabName}`;
+  if (tabGidCache.has(cacheKey)) {
+    return tabGidCache.get(cacheKey)!;
+  }
+
+  try {
+    const res = await (gapi.client as any).sheets.spreadsheets.get({
+      spreadsheetId: sheetId,
+      fields: "sheets(properties(sheetId,title))",
+    });
+    const sheets = res.result?.sheets || [];
+    for (const s of sheets) {
+      if (
+        s.properties?.title === tabName &&
+        typeof s.properties?.sheetId === "number"
+      ) {
+        tabGidCache.set(cacheKey, s.properties.sheetId);
+        return s.properties.sheetId;
+      }
+    }
+  } catch (e) {
+    console.warn("[GoogleSheets] Failed to fetch tab GID for cell formatting:", e);
+  }
+  return null;
+};
+
+import { extractRouteNameFromHeaders } from '../utils/routeValidation';
+
+export interface SpreadsheetInspectionResult {
+  success: boolean;
+  routeName?: string;
+  tabNames: string[];
+  message?: string;
+}
+
+/**
+ * Memeriksa aksesibilitas dan membaca struktur header spreadsheet (termasuk deteksi nama trayek)
+ */
+export const inspectSpreadsheetHeader = async (
+  sheetId: string,
+): Promise<SpreadsheetInspectionResult> => {
+  return withAuthRetry(async () => {
+    try {
+      // 1. Ambil daftar tab
+      const metaRes = await (gapi.client as any).sheets.spreadsheets.get({
+        spreadsheetId: sheetId,
+        fields: "sheets(properties(sheetId,title))",
+      });
+
+      const sheets = metaRes.result?.sheets || [];
+      const tabNames = sheets
+        .map((s: any) => s.properties?.title)
+        .filter((t: any): t is string => Boolean(t));
+
+      if (tabNames.length === 0) {
+        return {
+          success: false,
+          tabNames: [],
+          message: 'Spreadsheet tidak memiliki tab lembar kerja.',
+        };
+      }
+
+      // 2. Baca 5 baris pertama dari tab pertama untuk analisis header
+      const firstTab = tabNames[0];
+      const dataRes = await (gapi.client as any).sheets.spreadsheets.values.get({
+        spreadsheetId: sheetId,
+        range: `${firstTab}!A1:ZZ5`,
+      });
+
+      const rows = dataRes.result?.values || [];
+      let detectedRouteName: string | undefined;
+
+      if (rows.length > 0) {
+        const { headerRowIndex, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
+
+        if (headerRowIndex !== -1 && compositeHeaders.length > 0) {
+          const unitIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
+          let tripPergiLabel: string | undefined;
+          let tripPulangLabel: string | undefined;
+
+          if (unitIdx !== -1) {
+            if (compositeHeaders[unitIdx + 1] && !compositeHeaders[unitIdx + 1].toLowerCase().includes("toa")) {
+              tripPergiLabel = compositeHeaders[unitIdx + 1];
+            }
+            if (compositeHeaders[unitIdx + 2] && !compositeHeaders[unitIdx + 2].toLowerCase().includes("toa")) {
+              tripPulangLabel = compositeHeaders[unitIdx + 2];
+            }
+          }
+
+          const extractedName = extractRouteNameFromHeaders(tripPergiLabel, tripPulangLabel);
+          if (extractedName) {
+            detectedRouteName = extractedName;
+          }
+        }
+      }
+
+      return {
+        success: true,
+        routeName: detectedRouteName,
+        tabNames,
+      };
+    } catch (err: any) {
+      console.warn('[GoogleSheets] Failed to inspect spreadsheet:', err);
+      if (isAuthError(err)) {
+        throw err;
+      }
+      return {
+        success: false,
+        tabNames: [],
+        message:
+          err?.result?.error?.message ||
+          'Tidak dapat mengakses spreadsheet. Pastikan izin akses link dibuka untuk publik atau akun Anda telah terotorisasi.',
+      };
+    }
+  });
+};
+
+import { getKeteranganColor, getRowEndCol } from '../utils/sheetColorUtils';
+export type { GoogleColor } from '../utils/sheetColorUtils';
+export { getKeteranganColor, getRowEndCol };
+
 export const updateBusData = async (
   sheetId: string, 
   tabName: string, 
@@ -925,15 +1059,17 @@ export const updateBusData = async (
   return withAuthRetry(async () => {
     // We construct individual updates for each cell to avoid overwriting formulas
     const data: any[] = [];
+    const formatCells: Array<{ colIndex: number; rowIndex: number }> = [];
     
     const addUpdate = (key: keyof HeaderMap, value: any) => {
       const colIndex = headerMap[key];
-      if (colIndex !== -1 && value !== undefined) {
+      if (colIndex !== undefined && colIndex !== -1 && value !== undefined) {
         const colName = numberToColumnName(colIndex);
         data.push({
           range: `${tabName}!${colName}${rowIndex}`,
           values: [[value]]
         });
+        formatCells.push({ colIndex, rowIndex });
       }
     };
 
@@ -959,6 +1095,80 @@ export const updateBusData = async (
           data: data
         }
       });
+
+      // Format sel: Normal text (Bold untuk Keterangan), Horizontal Center, Vertical Middle, Wrap Text & Row Color
+      try {
+        const tabGid = await getTabGid(sheetId, tabName);
+        if (tabGid !== null) {
+          const requests: any[] = [];
+
+          if (formatCells.length > 0) {
+            for (const cell of formatCells) {
+              const isKet =
+                headerMap.keterangan !== undefined &&
+                cell.colIndex === headerMap.keterangan;
+              requests.push({
+                repeatCell: {
+                  range: {
+                    sheetId: tabGid,
+                    startRowIndex: cell.rowIndex - 1,
+                    endRowIndex: cell.rowIndex,
+                    startColumnIndex: cell.colIndex,
+                    endColumnIndex: cell.colIndex + 1,
+                  },
+                  cell: {
+                    userEnteredFormat: {
+                      textFormat: { bold: isKet },
+                      horizontalAlignment: "CENTER",
+                      verticalAlignment: "MIDDLE",
+                      wrapStrategy: "WRAP",
+                    },
+                  },
+                  fields: "userEnteredFormat(textFormat.bold,horizontalAlignment,verticalAlignment,wrapStrategy)",
+                },
+              });
+            }
+          }
+
+          // Pewarnaan baris (dari No Body sampai kolom Total KM Shift 2) jika kolom Keterangan diperbarui
+          if (updates.keterangan !== undefined) {
+            const startCol =
+              headerMap.unit !== undefined && headerMap.unit !== -1
+                ? headerMap.unit
+                : 0;
+            const endCol = getRowEndCol(headerMap);
+
+            const rowColor = getKeteranganColor(updates.keterangan);
+
+            requests.push({
+              repeatCell: {
+                range: {
+                  sheetId: tabGid,
+                  startRowIndex: rowIndex - 1,
+                  endRowIndex: rowIndex,
+                  startColumnIndex: startCol,
+                  endColumnIndex: endCol,
+                },
+                cell: {
+                  userEnteredFormat: {
+                    backgroundColor: rowColor || { red: 1, green: 1, blue: 1 },
+                  },
+                },
+                fields: "userEnteredFormat.backgroundColor",
+              },
+            });
+          }
+
+          if (requests.length > 0) {
+            await (gapi.client as any).sheets.spreadsheets.batchUpdate({
+              spreadsheetId: sheetId,
+              resource: { requests },
+            });
+          }
+        }
+      } catch (formatErr) {
+        console.warn("[GoogleSheets] Cell formatting notice (values saved):", formatErr);
+      }
 
       // Telemetry: Log UPDATE_BUS_DATA
       const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
@@ -986,6 +1196,7 @@ export const updateBulkBusData = async (
 ): Promise<void> => {
   return withAuthRetry(async () => {
     const data: any[] = [];
+    const formatCells: Array<{ colIndex: number; rowIndex: number }> = [];
 
     for (const item of updatesList) {
       const { rowIndex, updates } = item;
@@ -997,6 +1208,7 @@ export const updateBulkBusData = async (
             range: `${tabName}!${colName}${rowIndex}`,
             values: [[value]]
           });
+          formatCells.push({ colIndex, rowIndex });
         }
       };
 
@@ -1024,6 +1236,81 @@ export const updateBulkBusData = async (
         }
       });
 
+      // Format sel bulk: Normal text (Bold untuk Keterangan), Horizontal Center, Vertical Middle, Wrap Text & Row Color
+      try {
+        const tabGid = await getTabGid(sheetId, tabName);
+        if (tabGid !== null) {
+          const requests: any[] = [];
+
+          if (formatCells.length > 0) {
+            for (const cell of formatCells) {
+              const isKet =
+                headerMap.keterangan !== undefined &&
+                cell.colIndex === headerMap.keterangan;
+              requests.push({
+                repeatCell: {
+                  range: {
+                    sheetId: tabGid,
+                    startRowIndex: cell.rowIndex - 1,
+                    endRowIndex: cell.rowIndex,
+                    startColumnIndex: cell.colIndex,
+                    endColumnIndex: cell.colIndex + 1,
+                  },
+                  cell: {
+                    userEnteredFormat: {
+                      textFormat: { bold: isKet },
+                      horizontalAlignment: "CENTER",
+                      verticalAlignment: "MIDDLE",
+                      wrapStrategy: "WRAP",
+                    },
+                  },
+                  fields: "userEnteredFormat(textFormat.bold,horizontalAlignment,verticalAlignment,wrapStrategy)",
+                },
+              });
+            }
+          }
+
+          const startCol =
+            headerMap.unit !== undefined && headerMap.unit !== -1
+              ? headerMap.unit
+              : 0;
+          const endCol = getRowEndCol(headerMap);
+
+          for (const item of updatesList) {
+            if (item.updates.keterangan !== undefined) {
+              const rowColor = getKeteranganColor(item.updates.keterangan);
+              requests.push({
+                repeatCell: {
+                  range: {
+                    sheetId: tabGid,
+                    startRowIndex: item.rowIndex - 1,
+                    endRowIndex: item.rowIndex,
+                    startColumnIndex: startCol,
+                    endColumnIndex: endCol,
+                  },
+                  cell: {
+                    userEnteredFormat: {
+                      backgroundColor:
+                        rowColor || { red: 1, green: 1, blue: 1 },
+                    },
+                  },
+                  fields: "userEnteredFormat.backgroundColor",
+                },
+              });
+            }
+          }
+
+          if (requests.length > 0) {
+            await (gapi.client as any).sheets.spreadsheets.batchUpdate({
+              spreadsheetId: sheetId,
+              resource: { requests },
+            });
+          }
+        }
+      } catch (formatErr) {
+        console.warn("[GoogleSheets] Bulk cell formatting notice (values saved):", formatErr);
+      }
+
       const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
       logActivity({
         user_email: userEmail,
@@ -1036,6 +1323,127 @@ export const updateBulkBusData = async (
         throw error;
       }
       throw new Error(error?.result?.error?.message || 'Gagal menyimpan bulk data ke spreadsheet.');
+    }
+  });
+};
+
+export const formatWholeSheet = async (
+  sheetId: string,
+  tabName: string,
+  buses: BusData[],
+  headerMap: HeaderMap,
+): Promise<void> => {
+  return withAuthRetry(async () => {
+    if (!buses || buses.length === 0) return;
+
+    const tabGid = await getTabGid(sheetId, tabName);
+    if (tabGid === null) {
+      throw new Error("Tidak dapat menemukan ID tab spreadsheet.");
+    }
+
+    const startCol =
+      headerMap.unit !== undefined && headerMap.unit !== -1
+        ? headerMap.unit
+        : 0;
+    const endCol = getRowEndCol(headerMap);
+
+    const minRowIndex = Math.min(...buses.map((b) => b.rowIndex));
+    const maxRowIndex = Math.max(...buses.map((b) => b.rowIndex));
+
+    const requests: any[] = [];
+
+    // 1. Format dasar seluruh grid data: Normal text, Center horizontal, Middle vertical, Wrap text
+    requests.push({
+      repeatCell: {
+        range: {
+          sheetId: tabGid,
+          startRowIndex: minRowIndex - 1,
+          endRowIndex: maxRowIndex,
+          startColumnIndex: startCol,
+          endColumnIndex: endCol,
+        },
+        cell: {
+          userEnteredFormat: {
+            textFormat: { bold: false },
+            horizontalAlignment: "CENTER",
+            verticalAlignment: "MIDDLE",
+            wrapStrategy: "WRAP",
+          },
+        },
+        fields:
+          "userEnteredFormat(textFormat.bold,horizontalAlignment,verticalAlignment,wrapStrategy)",
+      },
+    });
+
+    // 1b. Format khusus kolom Keterangan: BOLD
+    if (headerMap.keterangan !== undefined && headerMap.keterangan !== -1) {
+      requests.push({
+        repeatCell: {
+          range: {
+            sheetId: tabGid,
+            startRowIndex: minRowIndex - 1,
+            endRowIndex: maxRowIndex,
+            startColumnIndex: headerMap.keterangan,
+            endColumnIndex: headerMap.keterangan + 1,
+          },
+          cell: {
+            userEnteredFormat: {
+              textFormat: { bold: true },
+              horizontalAlignment: "CENTER",
+              verticalAlignment: "MIDDLE",
+              wrapStrategy: "WRAP",
+            },
+          },
+          fields:
+            "userEnteredFormat(textFormat.bold,horizontalAlignment,verticalAlignment,wrapStrategy)",
+        },
+      });
+    }
+
+    // 2. Format warna latar belakang baris berdasarkan status Keterangan setiap unit bus (No Body s/d Total KM Shift 2)
+    for (const bus of buses) {
+      const rowColor = getKeteranganColor(bus.keterangan);
+      requests.push({
+        repeatCell: {
+          range: {
+            sheetId: tabGid,
+            startRowIndex: bus.rowIndex - 1,
+            endRowIndex: bus.rowIndex,
+            startColumnIndex: startCol,
+            endColumnIndex: endCol,
+          },
+          cell: {
+            userEnteredFormat: {
+              backgroundColor: rowColor || { red: 1, green: 1, blue: 1 },
+            },
+          },
+          fields: "userEnteredFormat.backgroundColor",
+        },
+      });
+    }
+
+    try {
+      await (gapi.client as any).sheets.spreadsheets.batchUpdate({
+        spreadsheetId: sheetId,
+        resource: { requests },
+      });
+
+      // Telemetry: Log FORMAT_WHOLE_SHEET
+      const userEmail =
+        localStorage.getItem("PDO_USER_EMAIL") || "field_operator";
+      logActivity({
+        user_email: userEmail,
+        action: "FORMAT_WHOLE_SHEET",
+        details: { sheetId, tabName, busCount: buses.length },
+      }).catch(() => {});
+    } catch (error: any) {
+      console.error("Error formatting whole sheet", error);
+      if (isAuthError(error)) {
+        throw error;
+      }
+      throw new Error(
+        error?.result?.error?.message || "Gagal menerapkan format spreadsheet.",
+      );
     }
   });
 };

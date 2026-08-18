@@ -1479,3 +1479,199 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 .swal-revealed-field {
   animation: swalBackdropIn 0.15s ease-out forwards;
 }
+
+/* Segmented Tabs for Mode ALL */
+.swal-segmented-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  background: var(--input-bg, rgba(255, 255, 255, 0.04));
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  margin-bottom: 6px;
+}
+
+.swal-segment-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 7px 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.32, 0.72, 0, 1);
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.swal-segment-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.swal-segment-btn.active {
+  background: var(--card-bg, #0f172a);
+  color: var(--text-primary);
+  border-color: var(--card-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.swal-panel-section {
+  animation: fadeIn 0.18s ease-out forwards;
+}
+
+/* Copy KM S1 Quick Chip Button */
+.swal-copy-km-chip {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--shift1-color, #38bdf8);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+  user-select: none;
+}
+
+.swal-copy-km-chip:hover {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: var(--shift1-color, #38bdf8);
+}
+
+.swal-copy-km-chip:active {
+  transform: scale(0.95);
+}
+
+/* Smart Keterangan Input Group & Chips */
+.swal-note-chip {
+  background: var(--surface-color, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+  color: var(--text-secondary);
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s ease;
+  user-select: none;
+  line-height: 1.2;
+}
+
+.swal-note-chip:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--text-primary);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.swal-note-chip.active {
+  background: var(--accent-color, #38bdf8);
+  color: #000 !important;
+  border-color: var(--accent-color, #38bdf8);
+  font-weight: 800;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.swal-note-chip[data-type="ba"] {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+.swal-note-chip[data-type="ba"]:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border-color: #ef4444;
+}
+
+.swal-note-chip[data-type="ba"].active {
+  background: #ef4444 !important;
+  color: #fff !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+.swal-note-chip-clear {
+  background: transparent;
+  border: 1px dashed var(--card-border, rgba(255, 255, 255, 0.15));
+  color: var(--text-secondary);
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.swal-note-chip-clear:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Formatted Note Badges on Bus Cards */
+.note-badge-ba {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.note-badge-off {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: var(--text-secondary, #94a3b8);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.note-badge-np {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #fb923c;
+  font-weight: 800;
+  font-size: 11px;
+}
+
+.note-badge-to {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  color: #818cf8;
+  font-weight: 800;
+  font-size: 11px;
+}

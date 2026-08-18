@@ -3,6 +3,11 @@ import type { Route, UserProfile, ActivityLog, SyncQueueBackup, DailyUnitSummary
 import type { BusData } from './googleSheets';
 import { parseIndonesianNumber } from '../utils/numberUtils';
 import { formatAccumulatedNotes } from '../utils/analytics';
+import {
+  formatRouteCode,
+  validateRouteCode,
+  validateGoogleSheetsUrl,
+} from '../utils/routeValidation';
 
 const CACHE_KEY_ROUTES = 'PDO_CACHE_ROUTES';
 
@@ -196,14 +201,26 @@ export async function createRouteWithSheet(params: {
     return { success: false, message: 'Layanan Supabase belum dikonfigurasi.' };
   }
 
-  const finalRouteName = params.routeName || params.routeCode;
+  const formattedCode = formatRouteCode(params.routeCode);
+  const codeValidation = validateRouteCode(formattedCode);
+  if (!codeValidation.isValid) {
+    return { success: false, message: codeValidation.error };
+  }
+
+  const urlValidation = validateGoogleSheetsUrl(params.sheetUrl);
+  if (!urlValidation.isValid) {
+    return { success: false, message: urlValidation.error };
+  }
+
+  const spreadsheetId = urlValidation.spreadsheetId || params.spreadsheetId;
+  const finalRouteName = params.routeName || formattedCode;
 
   try {
     // 1. Cek apakah route sudah ada berdasarkan route_code
     const { data: existingRoute } = await supabase
       .from('routes')
       .select('id')
-      .eq('route_code', params.routeCode)
+      .eq('route_code', formattedCode)
       .single();
 
     let routeId: number;
@@ -220,7 +237,7 @@ export async function createRouteWithSheet(params: {
       const { data: newRoute, error: routeError } = await supabase
         .from('routes')
         .insert([{
-          route_code: params.routeCode,
+          route_code: formattedCode,
           route_name: finalRouteName,
           is_active: true,
         }])
@@ -240,7 +257,7 @@ export async function createRouteWithSheet(params: {
         route_id: routeId,
         year: params.year,
         month: params.month,
-        spreadsheet_id: params.spreadsheetId,
+        spreadsheet_id: spreadsheetId,
         sheet_url: params.sheetUrl,
         tab_name: 'PDO',
       }]);
@@ -248,7 +265,7 @@ export async function createRouteWithSheet(params: {
     if (sheetError) {
       // Unique constraint violation = sheet untuk periode ini sudah ada
       if (sheetError.code === '23505') {
-        return { success: false, message: `Rute ${params.routeCode} sudah memiliki data untuk periode ${params.month}/${params.year}.` };
+        return { success: false, message: `Rute ${formattedCode} sudah memiliki data untuk periode ${params.month}/${params.year}.` };
       }
       return { success: false, message: `Gagal menyimpan data sheet: ${sheetError.message}` };
     }
@@ -260,8 +277,8 @@ export async function createRouteWithSheet(params: {
     logActivity({
       user_email: localStorage.getItem('PDO_USER_EMAIL') || 'admin',
       action: 'CREATE_ROUTE',
-      route_code: params.routeCode,
-      details: { year: params.year, month: params.month, spreadsheetId: params.spreadsheetId },
+      route_code: formattedCode,
+      details: { year: params.year, month: params.month, spreadsheetId },
     }).catch(() => {});
 
     return { success: true };

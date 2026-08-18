@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapPin, Calendar, Plus, X, Loader2, ChevronUp } from 'lucide-react';
+import { MapPin, Calendar, Plus, X, Loader2, ChevronUp, CheckCircle, AlertCircle } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
+import { inspectSpreadsheetHeader } from '../services/googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
+import {
+  validateRouteCode,
+  validateGoogleSheetsUrl,
+} from '../utils/routeValidation';
 import type { Route, RouteSheet } from '../types/supabase';
 
 const MONTH_NAMES_ID = [
@@ -71,10 +76,16 @@ export function RouteSelectorCard({
   const [isSaving, setIsSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const [newRouteCode, setNewRouteCode] = useState('');
+  const [newRouteCodeSuffix, setNewRouteCodeSuffix] = useState('');
   const [newRouteUrl, setNewRouteUrl] = useState('');
   const [newMonth, setNewMonth] = useState(new Date().getMonth() + 1);
   const [newYear, setNewYear] = useState(new Date().getFullYear());
+
+  // Live Spreadsheet Check State
+  const [detectedRouteName, setDetectedRouteName] = useState<string | null>(null);
+  const [isCheckingLink, setIsCheckingLink] = useState(false);
+  const [checkStatus, setCheckStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
+  const [checkMessage, setCheckMessage] = useState<string | null>(null);
 
   // 3-Level Selection State (BUG-41)
   const [selectedRouteCode, setSelectedRouteCode] = useState<string>('');
@@ -84,6 +95,51 @@ export function RouteSelectorCard({
   const prevLoadingRef = useRef(isLoading);
   const [routes, setRoutes] = useState<Route[]>([]);
   const flatSheets = flattenRoutes(routes);
+
+  // Live check inspection saat user mengisi link Google Sheets
+  useEffect(() => {
+    if (!isAddingRoute || !newRouteUrl.trim()) {
+      setCheckStatus('idle');
+      setCheckMessage(null);
+      setDetectedRouteName(null);
+      return;
+    }
+
+    const validation = validateGoogleSheetsUrl(newRouteUrl);
+    if (!validation.isValid || !validation.spreadsheetId) {
+      setCheckStatus('invalid');
+      setCheckMessage(validation.error || 'Link Google Sheets tidak valid.');
+      setDetectedRouteName(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsCheckingLink(true);
+      setCheckStatus('checking');
+      setCheckMessage('Memeriksa akses Google Sheets...');
+
+      const result = await inspectSpreadsheetHeader(validation.spreadsheetId!);
+      setIsCheckingLink(false);
+
+      if (result.success) {
+        setCheckStatus('valid');
+        setDetectedRouteName(result.routeName || null);
+        setCheckMessage(
+          result.routeName
+            ? `Terhubung: ${result.routeName}`
+            : 'Spreadsheet terhubung & siap digunakan',
+        );
+      } else {
+        setCheckStatus('invalid');
+        setCheckMessage(
+          result.message || 'Tidak dapat mengakses spreadsheet.',
+        );
+        setDetectedRouteName(null);
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [newRouteUrl, isAddingRoute]);
 
   // Dropdown lists
   const routeCodes = Array.from(new Set(flatSheets.map(f => f.routeCode))).sort();
@@ -97,6 +153,31 @@ export function RouteSelectorCard({
         .map(f => f.sheet.year)
     )
   ).sort((a, b) => b - a);
+
+  // Proactive duplicate detection (real-time)
+  const fullNewRouteCode = newRouteCodeSuffix.trim() ? `JAK.${newRouteCodeSuffix.trim()}` : '';
+  const newSpreadsheetId = extractSpreadsheetId(newRouteUrl.trim());
+
+  const duplicateRouteSheet = isAddingRoute && fullNewRouteCode
+    ? flatSheets.find(
+        f => f.routeCode === fullNewRouteCode && f.sheet.month === newMonth && f.sheet.year === newYear
+      )
+    : null;
+
+  const duplicateSpreadsheetSheet = isAddingRoute && newSpreadsheetId
+    ? flatSheets.find(
+        f => {
+          const fId = extractSpreadsheetId(f.sheet.sheet_url) || extractSpreadsheetId(f.sheet.spreadsheet_id);
+          return fId === newSpreadsheetId && f.sheet.month === newMonth && f.sheet.year === newYear;
+        }
+      )
+    : null;
+
+  const duplicateWarningMessage = duplicateRouteSheet
+    ? `Rute ${fullNewRouteCode} untuk periode ${MONTH_NAMES_ID[newMonth]} ${newYear} sudah terdaftar.`
+    : duplicateSpreadsheetSheet && duplicateSpreadsheetSheet.routeCode !== fullNewRouteCode
+      ? `Spreadsheet ini sudah terdaftar untuk rute ${duplicateSpreadsheetSheet.routeCode} pada periode ${MONTH_NAMES_ID[newMonth]} ${newYear}.`
+      : null;
 
   // Load routes dari Supabase / cache lokal
   const loadRoutes = async () => {
@@ -231,27 +312,50 @@ export function RouteSelectorCard({
       : 'Pilih Rute & Periode';
 
   const resetForm = () => {
-    setNewRouteCode('');
+    setNewRouteCodeSuffix('');
     setNewRouteUrl('');
     setNewMonth(new Date().getMonth() + 1);
     setNewYear(new Date().getFullYear());
     setFormError(null);
+    setCheckStatus('idle');
+    setCheckMessage(null);
+    setDetectedRouteName(null);
     setIsAddingRoute(false);
   };
 
-  const handleSaveRoute = async () => {
-    if (!newRouteCode.trim()) {
-      setFormError('Kode Rute wajib diisi (misal: JAK.76)');
-      return;
+  const handleRouteCodeSuffixInput = (val: string) => {
+    let cleaned = val.toUpperCase().replace(/\s+/g, '');
+    if (cleaned.startsWith('JAK.')) {
+      cleaned = cleaned.substring(4);
+    } else if (cleaned.startsWith('JAK')) {
+      cleaned = cleaned.substring(3).replace(/^[^A-Z0-9]+/, '');
     }
-    if (!newRouteUrl.trim()) {
-      setFormError('Link Google Sheets wajib diisi');
+    const sanitized = cleaned.replace(/[^A-Z0-9]/g, '');
+    setNewRouteCodeSuffix(sanitized);
+    if (formError) setFormError(null);
+  };
+
+  const handleSaveRoute = async () => {
+    if (duplicateWarningMessage) {
+      setFormError(duplicateWarningMessage);
       return;
     }
 
-    const spreadsheetId = extractSpreadsheetId(newRouteUrl.trim());
-    if (!spreadsheetId) {
-      setFormError('Link Google Sheets tidak valid. Pastikan Anda copy link dari Google Sheets.');
+    if (!newRouteCodeSuffix.trim()) {
+      setFormError('Nomor / kode rute wajib diisi (misal: 115, 76, 78A).');
+      return;
+    }
+
+    const fullRouteCode = `JAK.${newRouteCodeSuffix.trim()}`;
+    const codeValidation = validateRouteCode(fullRouteCode);
+    if (!codeValidation.isValid) {
+      setFormError(codeValidation.error || 'Kode Rute tidak valid.');
+      return;
+    }
+
+    const urlValidation = validateGoogleSheetsUrl(newRouteUrl);
+    if (!urlValidation.isValid || !urlValidation.spreadsheetId) {
+      setFormError(urlValidation.error || 'Link Google Sheets tidak valid.');
       return;
     }
 
@@ -259,12 +363,12 @@ export function RouteSelectorCard({
     setFormError(null);
 
     const result = await createRouteWithSheet({
-      routeCode: newRouteCode.trim().toUpperCase(),
-      routeName: newRouteCode.trim().toUpperCase(),
+      routeCode: fullRouteCode,
+      routeName: detectedRouteName || fullRouteCode,
       year: newYear,
       month: newMonth,
       sheetUrl: newRouteUrl.trim(),
-      spreadsheetId,
+      spreadsheetId: urlValidation.spreadsheetId,
     });
 
     setIsSaving(false);
@@ -272,10 +376,13 @@ export function RouteSelectorCard({
     if (result.success) {
       await loadRoutes();
       setSheetUrl(newRouteUrl.trim());
-      setSelectedRouteCode(newRouteCode.trim().toUpperCase());
+      setSelectedRouteCode(fullRouteCode);
       setSelectedMonth(newMonth);
       setSelectedYear(newYear);
       resetForm();
+      setTimeout(() => {
+        onLoadData();
+      }, 100);
     } else {
       setFormError(result.message || 'Gagal menyimpan rute.');
     }
@@ -457,14 +564,52 @@ export function RouteSelectorCard({
                   </button>
                 </div>
 
-                <input
-                  type="text"
-                  className="input-field"
-                  placeholder="Kode Rute (misal: JAK.76)"
-                  value={newRouteCode}
-                  onChange={(e) => setNewRouteCode(e.target.value)}
-                  style={{ marginBottom: '8px' }}
-                />
+                <div style={{ marginBottom: '8px' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'stretch',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                      border: '1px solid var(--input-border, rgba(255, 255, 255, 0.15))',
+                      background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '0 12px',
+                        background: 'rgba(59, 130, 246, 0.15)',
+                        color: 'var(--accent-color, #3b82f6)',
+                        fontWeight: 800,
+                        fontSize: '13px',
+                        letterSpacing: '0.5px',
+                        borderRight: '1px solid var(--input-border, rgba(255, 255, 255, 0.15))',
+                        userSelect: 'none',
+                      }}
+                    >
+                      JAK.
+                    </div>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="Kode rute (misal: 115, 76, 78A)"
+                      value={newRouteCodeSuffix}
+                      onChange={(e) => handleRouteCodeSuffixInput(e.target.value)}
+                      style={{
+                        flex: 1,
+                        border: 'none',
+                        borderRadius: 0,
+                        background: 'transparent',
+                        padding: '8px 12px',
+                      }}
+                    />
+                  </div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '3px', marginLeft: '2px' }}>
+                    Ketik nomor / kode trayek (contoh: <strong>115</strong>, <strong>76</strong>, <strong>78A</strong>)
+                  </div>
+                </div>
 
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
                   <select
@@ -495,8 +640,50 @@ export function RouteSelectorCard({
                   placeholder="Link Google Sheets..."
                   value={newRouteUrl}
                   onChange={(e) => setNewRouteUrl(e.target.value)}
-                  style={{ marginBottom: '8px' }}
+                  style={{ marginBottom: checkStatus !== 'idle' ? '4px' : '8px' }}
                 />
+
+                {/* Proactive Duplicate Warning Banner */}
+                {duplicateWarningMessage && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '11px',
+                      color: '#f59e0b',
+                      background: 'rgba(245, 158, 11, 0.12)',
+                      border: '1px solid rgba(245, 158, 11, 0.35)',
+                      borderRadius: '8px',
+                      padding: '8px 10px',
+                      marginBottom: '8px',
+                      lineHeight: '1.4',
+                    }}
+                  >
+                    <AlertCircle size={15} style={{ flexShrink: 0 }} />
+                    <span>{duplicateWarningMessage}</span>
+                  </div>
+                )}
+
+                {/* Live Status Inspection Badge */}
+                {checkStatus === 'checking' && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-color)', marginBottom: '8px' }}>
+                    <Loader2 className="spinner" size={13} />
+                    <span>{checkMessage || 'Memeriksa akses Google Sheets...'}</span>
+                  </div>
+                )}
+                {checkStatus === 'valid' && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#10b981', marginBottom: '8px', fontWeight: 600 }}>
+                    <CheckCircle size={14} />
+                    <span>{checkMessage}</span>
+                  </div>
+                )}
+                {checkStatus === 'invalid' && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--danger-color)', marginBottom: '8px' }}>
+                    <AlertCircle size={14} />
+                    <span>{checkMessage}</span>
+                  </div>
+                )}
 
                 {formError && (
                   <div className="error-text" style={{ marginBottom: '8px', fontSize: '12px' }}>
@@ -508,7 +695,7 @@ export function RouteSelectorCard({
                   type="button"
                   className="btn"
                   onClick={handleSaveRoute}
-                  disabled={isSaving}
+                  disabled={isSaving || isCheckingLink || Boolean(duplicateWarningMessage)}
                 >
                   {isSaving ? <Loader2 className="spinner" size={18} /> : null}
                   {isSaving ? 'Menyimpan...' : 'Simpan Rute'}
