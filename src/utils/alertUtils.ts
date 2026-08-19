@@ -1439,7 +1439,7 @@ export async function showFormatSheetConfirm(
     html: `
       <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; text-align: left;">
         Sistem akan merapikan seluruh baris data pada tanggal <strong>${tabName}</strong> di Google Sheets asli:
-        <div style="margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2);">
+        <div style="margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(62, 207, 142, 0.08); border: 1px solid rgba(62, 207, 142, 0.2);">
           <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Standar Format yang Diterapkan:</div>
           <div style="font-size: 12px; color: var(--text-secondary);">
             • <strong>Teks & Perataan:</strong> Normal (tidak bold), Rata Tengah Horizontal & Vertikal, Wrap Text.<br/>

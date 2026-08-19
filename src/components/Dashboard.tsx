@@ -12,13 +12,13 @@ import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { SwipeableContainer } from "./SwipeableContainer";
+import { BottomNav } from "./BottomNav";
 import {
   CloudOff,
   RefreshCw,
   AlertTriangle,
   RotateCw,
   Trash2,
-  User,
 } from "lucide-react";
 import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
@@ -574,7 +574,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             </span>
           </div>
 
-          {/* POJOK KANAN: Halaman Aktif Badge + Queue Tertunda + Profile Icon */}
+          {/* POJOK KANAN: Active Page Name Badge + Status Antrean Offline */}
           <div
             style={{
               display: "flex",
@@ -585,22 +585,20 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           >
             {/* Nama Halaman Aktif */}
             <div
-              onClick={() => setIsProfileMenuOpen(true)}
-              title="Halaman Aktif (Ketuk untuk membuka menu navigasi)"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "5px 11px",
+                padding: "4px 10px",
                 borderRadius: "20px",
-                background: "rgba(59, 130, 246, 0.1)",
-                border: "1px solid rgba(59, 130, 246, 0.22)",
+                background: "rgba(62, 207, 142, 0.1)",
+                border: "1px solid rgba(62, 207, 142, 0.22)",
                 color: "var(--accent-color)",
-                fontSize: "11.5px",
-                fontWeight: 600,
+                fontSize: "12px",
+                fontWeight: 700,
+                letterSpacing: "0.2px",
                 whiteSpace: "nowrap",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
+                userSelect: "none",
               }}
             >
               <span
@@ -613,11 +611,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                 }}
               />
               <span>
-                {mainTab === "analytics"
-                  ? "Dashboard Analytics"
-                  : mainTab === "input"
-                    ? "Input SS (Harian)"
-                    : "Daftar Unit Armada"}
+                {mainTab === "input"
+                  ? "Input SS"
+                  : mainTab === "analytics"
+                    ? "Dashboard"
+                    : "Daftar Unit"}
               </span>
             </div>
 
@@ -638,45 +636,31 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                   background: queue.some(
                     (q) => q.status === "failed" || q.status === "conflict",
                   )
-                    ? "rgba(239, 68, 68, 0.1)"
-                    : "rgba(234, 179, 8, 0.1)",
+                    ? "rgba(247, 85, 85, 0.12)"
+                    : "rgba(245, 158, 11, 0.12)",
                   padding: "4px 8px",
-                  borderRadius: "12px",
+                  borderRadius: "20px",
                   cursor: "pointer",
+                  border:
+                    "1px solid " +
+                    (queue.some(
+                      (q) => q.status === "failed" || q.status === "conflict",
+                    )
+                      ? "rgba(247, 85, 85, 0.25)"
+                      : "rgba(245, 158, 11, 0.25)"),
                 }}
+                title="Buka antrean sinkronisasi"
               >
                 {queue.some(
                   (q) => q.status === "failed" || q.status === "conflict",
                 ) ? (
-                  <AlertTriangle size={15} />
+                  <AlertTriangle size={14} />
                 ) : (
-                  <CloudOff size={15} />
+                  <CloudOff size={14} />
                 )}
-                {queue.length}
+                <span>{queue.length}</span>
               </div>
             )}
-
-            <button
-              type="button"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "36px",
-                height: "36px",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, var(--accent-color), #2563eb)",
-                color: "#fff",
-                border: "none",
-                boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
-                cursor: "pointer",
-                transition: "transform 0.15s ease",
-              }}
-              onClick={() => setIsProfileMenuOpen(true)}
-              title="Menu Profil & Navigasi"
-            >
-              <User size={18} />
-            </button>
           </div>
         </div>
 
@@ -1251,11 +1235,20 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               }}
             />
 
+            <BottomNav
+              activeTab={mainTab}
+              onSelectTab={setMainTab}
+              onOpenMore={() => setIsProfileMenuOpen(true)}
+              pendingQueueCount={
+                queue.filter(
+                  (q) => q.status === "pending" || q.status === "failed",
+                ).length
+              }
+            />
+
             <ProfileMenuSheet
               isOpen={isProfileMenuOpen}
               onClose={() => setIsProfileMenuOpen(false)}
-              activeTab={mainTab}
-              onSelectTab={setMainTab}
               onOpenAccumulation={() => setIsAccSheetOpen(true)}
               isDarkMode={theme === "dark"}
               onToggleTheme={toggleTheme}

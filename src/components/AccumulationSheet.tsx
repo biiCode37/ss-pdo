@@ -522,8 +522,8 @@ export function AccumulationSheet({
         {/* Preview Badge */}
         <div
           style={{
-            background: "rgba(59, 130, 246, 0.08)",
-            border: "1px solid rgba(59, 130, 246, 0.2)",
+            background: "rgba(62, 207, 142, 0.1)",
+            border: "1px solid rgba(62, 207, 142, 0.25)",
             borderRadius: "10px",
             padding: "10px 14px",
             marginBottom: "16px",

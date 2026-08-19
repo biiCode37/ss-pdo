@@ -63,7 +63,10 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
   };
 
   return (
-    <div className="app-container" style={{ justifyContent: "center" }}>
+    <div
+      className="app-container"
+      style={{ justifyContent: "center", paddingBottom: "16px" }}
+    >
       <div
         className="glass"
         style={{ padding: "40px 24px", textAlign: "center" }}
@@ -71,9 +74,10 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
         <h1
           style={{
             fontSize: "28px",
-            fontWeight: 700,
+            fontWeight: 800,
+            letterSpacing: "-0.5px",
             marginBottom: "8px",
-            background: "linear-gradient(135deg, var(--accent-color), #8b5cf6)",
+            background: "var(--title-gradient)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",

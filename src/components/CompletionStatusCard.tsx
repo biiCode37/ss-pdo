@@ -46,8 +46,8 @@ export function CompletionStatusCard({
                 fontWeight: 700,
                 fontFamily: "monospace",
                 color: "var(--accent-color)",
-                background: "rgba(59, 130, 246, 0.1)",
-                border: "1px solid rgba(59, 130, 246, 0.25)",
+                background: "rgba(62, 207, 142, 0.12)",
+                border: "1px solid rgba(62, 207, 142, 0.25)",
                 padding: "3px 8px",
                 borderRadius: "6px",
                 whiteSpace: "nowrap",
@@ -103,9 +103,9 @@ export function CompletionStatusCard({
                 style={{
                   fontSize: "11.5px",
                   fontWeight: 800,
-                  color: "#ffffff",
+                  color: "#061a10",
                   background:
-                    "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
+                    "linear-gradient(135deg, #3ECF8E 0%, #24B47E 100%)",
                   padding: "3px 8px",
                   minWidth: "92px",
                   display: "inline-flex",
@@ -113,7 +113,7 @@ export function CompletionStatusCard({
                   alignItems: "center",
                   borderRadius: "6px",
                   letterSpacing: "0.3px",
-                  boxShadow: "0 2px 6px rgba(59, 130, 246, 0.3)",
+                  boxShadow: "0 2px 6px rgba(62, 207, 142, 0.35)",
                   whiteSpace: "nowrap",
                   flexShrink: 0,
                 }}

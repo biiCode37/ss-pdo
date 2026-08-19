@@ -443,17 +443,17 @@ export function DailyToaTrendCard({
           }}
         >
           <defs>
-            {/* Active Tapped Pill Bar Gradient (Electric / Royal Blue) */}
+            {/* Active Highlighted Tapped Pill Bar Gradient (Emerald) */}
             <linearGradient
-              id="activeBluePillGradient"
+              id="activePillGradient"
               x1="0"
               y1="0"
               x2="0"
               y2="1"
             >
-              <stop offset="0%" stopColor="#60a5fa" stopOpacity="1" />
-              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.85" />
+              <stop offset="0%" stopColor="#3ECF8E" stopOpacity="1" />
+              <stop offset="50%" stopColor="#24B47E" stopOpacity="0.95" />
+              <stop offset="100%" stopColor="#059669" stopOpacity="0.85" />
             </linearGradient>
 
             {/* Increase Trend Pill Bar Gradient (Emerald Green) */}
@@ -489,7 +489,7 @@ export function DailyToaTrendCard({
               <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0.3" />
             </linearGradient>
 
-            {/* Glowing Drop Shadow Filter for Active Tapped Blue Bar */}
+            {/* Glowing Drop Shadow Filter for Active Tapped Bar */}
             <filter
               id="pillBlueGlow"
               x="-40%"
@@ -501,7 +501,7 @@ export function DailyToaTrendCard({
                 dx="0"
                 dy="2.5"
                 stdDeviation="3.5"
-                floodColor="#3b82f6"
+                floodColor="#3ECF8E"
                 floodOpacity="0.75"
               />
             </filter>
@@ -637,12 +637,12 @@ export function DailyToaTrendCard({
                 width="72"
                 height="21"
                 rx="7"
-                fill="#2563eb"
-                stroke="#60a5fa"
+                fill="#059669"
+                stroke="#3ECF8E"
                 strokeWidth="1.5"
                 filter="url(#pillBlueGlow)"
               />
-              <polygon points="0,10 -4,8 4,8" fill="#2563eb" />
+              <polygon points="0,10 -4,8 4,8" fill="#059669" />
               <text
                 x="0"
                 y="1.5"

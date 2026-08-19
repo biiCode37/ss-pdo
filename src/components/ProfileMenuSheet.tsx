@@ -3,9 +3,6 @@ import { createPortal } from "react-dom";
 import {
   X,
   User,
-  BarChart3,
-  Edit3,
-  Bus,
   Layers,
   Sun,
   Moon,
@@ -29,9 +26,7 @@ import { formatUserError } from "../utils/errorFormatter";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  activeTab: "analytics" | "input" | "units";
-  onSelectTab: (tab: "analytics" | "input" | "units") => void;
-  onOpenAccumulation: () => void;
+  onOpenAccumulation?: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
   offlineQueueCount: number;
@@ -45,8 +40,6 @@ interface Props {
 export function ProfileMenuSheet({
   isOpen,
   onClose,
-  activeTab,
-  onSelectTab,
   onOpenAccumulation: _onOpenAccumulation,
   isDarkMode,
   onToggleTheme,
@@ -72,6 +65,7 @@ export function ProfileMenuSheet({
     avatar_url: localStorage.getItem("PDO_USER_AVATAR") || undefined,
   });
   const contentRef = useRef<HTMLDivElement>(null);
+  const mountTimeRef = useRef(0);
 
   useEffect(() => {
     if (!isOpen) {
@@ -80,6 +74,8 @@ export function ProfileMenuSheet({
       setDragY(0);
       return;
     }
+
+    mountTimeRef.current = Date.now();
 
     // Ambil data profil dari localStorage & sync dari Supabase DB
     const cachedEmail = localStorage.getItem("PDO_USER_EMAIL") || "";
@@ -109,7 +105,7 @@ export function ProfileMenuSheet({
       });
     }
 
-    requestAnimationFrame(() => setIsMounted(true));
+    const frameId = requestAnimationFrame(() => setIsMounted(true));
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") handleDismiss();
@@ -119,6 +115,7 @@ export function ProfileMenuSheet({
     document.body.style.overflow = "hidden";
 
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
@@ -157,11 +154,6 @@ export function ProfileMenuSheet({
     }
     setTouchStartY(0);
     setIsDragging(false);
-  };
-
-  const handleTabClick = (tab: "analytics" | "input" | "units") => {
-    onSelectTab(tab);
-    handleDismiss();
   };
 
   const [isFormatting, setIsFormatting] = useState(false);
@@ -231,7 +223,11 @@ export function ProfileMenuSheet({
           "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
         willChange: "opacity, background-color",
       }}
-      onClick={handleDismiss}
+      onClick={(e) => {
+        if (e.target !== e.currentTarget) return;
+        if (Date.now() - mountTimeRef.current < 250) return;
+        handleDismiss();
+      }}
       onTouchStart={(e) => e.stopPropagation()}
       onTouchMove={(e) => e.stopPropagation()}
     >
@@ -255,7 +251,7 @@ export function ProfileMenuSheet({
           background: "var(--card-bg)",
           border: "1px solid var(--card-border)",
           borderBottom: "none",
-          boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.4)",
+          boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
           transform: modalTransform,
           transition: isDragging
             ? "none"
@@ -290,9 +286,9 @@ export function ProfileMenuSheet({
             alignItems: "center",
             justifyContent: "space-between",
             padding: "12px 14px",
-            background: "rgba(59, 130, 246, 0.06)",
+            background: "rgba(62, 207, 142, 0.06)",
             borderRadius: "16px",
-            border: "1px solid rgba(59, 130, 246, 0.15)",
+            border: "1px solid rgba(62, 207, 142, 0.18)",
             marginBottom: "20px",
           }}
         >
@@ -307,7 +303,7 @@ export function ProfileMenuSheet({
                   borderRadius: "50%",
                   objectFit: "cover",
                   flexShrink: 0,
-                  boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
+                  boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
                 }}
               />
             ) : (
@@ -317,13 +313,13 @@ export function ProfileMenuSheet({
                   height: "42px",
                   borderRadius: "50%",
                   background:
-                    "linear-gradient(135deg, var(--accent-color), #2563eb)",
+                    "linear-gradient(135deg, #3ECF8E, #24B47E)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#fff",
+                  color: "#061a10",
                   flexShrink: 0,
-                  boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
+                  boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
                 }}
               >
                 <User size={22} />
@@ -375,142 +371,13 @@ export function ProfileMenuSheet({
               color: "var(--text-secondary)",
               padding: "6px",
             }}
+            title="Tutup Menu"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* SECTION 1: Navigasi Utama */}
-        <div style={{ marginBottom: "20px" }}>
-          <span
-            style={{
-              fontSize: "10.5px",
-              fontWeight: 700,
-              letterSpacing: "0.5px",
-              color: "var(--text-secondary)",
-              textTransform: "uppercase",
-              display: "block",
-              marginBottom: "8px",
-              paddingLeft: "4px",
-            }}
-          >
-            NAVIGASI HALAMAN
-          </span>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {/* Dashboard Tab */}
-            <button
-              type="button"
-              onClick={() => handleTabClick("analytics")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background:
-                  activeTab === "analytics"
-                    ? "rgba(59, 130, 246, 0.12)"
-                    : "var(--bg-secondary, rgba(0,0,0,0.03))",
-                border:
-                  activeTab === "analytics"
-                    ? "1px solid rgba(59, 130, 246, 0.3)"
-                    : "1px solid transparent",
-                color:
-                  activeTab === "analytics"
-                    ? "var(--accent-color)"
-                    : "var(--text-primary)",
-                fontWeight: activeTab === "analytics" ? 700 : 500,
-                fontSize: "13.5px",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <BarChart3 size={18} />
-                <span>Dashboard Analytics</span>
-              </div>
-              <ChevronRight size={16} style={{ opacity: 0.5 }} />
-            </button>
-
-            {/* Input SS Tab */}
-            <button
-              type="button"
-              onClick={() => handleTabClick("input")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background:
-                  activeTab === "input"
-                    ? "rgba(59, 130, 246, 0.12)"
-                    : "var(--bg-secondary, rgba(0,0,0,0.03))",
-                border:
-                  activeTab === "input"
-                    ? "1px solid rgba(59, 130, 246, 0.3)"
-                    : "1px solid transparent",
-                color:
-                  activeTab === "input"
-                    ? "var(--accent-color)"
-                    : "var(--text-primary)",
-                fontWeight: activeTab === "input" ? 700 : 500,
-                fontSize: "13.5px",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <Edit3 size={18} />
-                <span>Input SS (Form Harian)</span>
-              </div>
-              <ChevronRight size={16} style={{ opacity: 0.5 }} />
-            </button>
-
-            {/* Unit Tab */}
-            <button
-              type="button"
-              onClick={() => handleTabClick("units")}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background:
-                  activeTab === "units"
-                    ? "rgba(59, 130, 246, 0.12)"
-                    : "var(--bg-secondary, rgba(0,0,0,0.03))",
-                border:
-                  activeTab === "units"
-                    ? "1px solid rgba(59, 130, 246, 0.3)"
-                    : "1px solid transparent",
-                color:
-                  activeTab === "units"
-                    ? "var(--accent-color)"
-                    : "var(--text-primary)",
-                fontWeight: activeTab === "units" ? 700 : 500,
-                fontSize: "13.5px",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <Bus size={18} />
-                <span>Daftar Unit Armada</span>
-              </div>
-              <ChevronRight size={16} style={{ opacity: 0.5 }} />
-            </button>
-          </div>
-        </div>
-
-        {/* SECTION 2: Fitur & Utilitas */}
+        {/* SECTION: Fitur & Utilitas */}
         <div style={{ marginBottom: "20px" }}>
           <span
             style={{
@@ -537,8 +404,8 @@ export function ProfileMenuSheet({
                 justifyContent: "space-between",
                 padding: "12px 14px",
                 borderRadius: "12px",
-                background: "var(--bg-secondary, rgba(0,0,0,0.03))",
-                border: "1px solid transparent",
+                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+                border: "1px solid var(--card-border)",
                 color: "var(--text-secondary)",
                 fontWeight: 500,
                 fontSize: "13.5px",
@@ -559,9 +426,9 @@ export function ProfileMenuSheet({
                   fontWeight: 700,
                   padding: "2px 7px",
                   borderRadius: "6px",
-                  background: "rgba(234, 179, 8, 0.15)",
-                  color: "var(--warning-color, #eab308)",
-                  border: "1px solid rgba(234, 179, 8, 0.3)",
+                  background: "rgba(245, 158, 11, 0.15)",
+                  color: "var(--warning-color, #f59e0b)",
+                  border: "1px solid rgba(245, 158, 11, 0.3)",
                   letterSpacing: "0.4px",
                   textTransform: "uppercase",
                 }}
@@ -581,8 +448,8 @@ export function ProfileMenuSheet({
                 justifyContent: "space-between",
                 padding: "12px 14px",
                 borderRadius: "12px",
-                background: "var(--bg-secondary, rgba(0,0,0,0.03))",
-                border: "1px solid transparent",
+                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+                border: "1px solid var(--card-border)",
                 color: "var(--text-primary)",
                 fontWeight: 500,
                 fontSize: "13.5px",
@@ -593,7 +460,7 @@ export function ProfileMenuSheet({
               <div
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
-                <Sparkles size={18} style={{ color: "#38bdf8" }} />
+                <Sparkles size={18} style={{ color: "var(--accent-color)" }} />
                 <div style={{ textAlign: "left" }}>
                   <div>Rapikan & Format Spreadsheet</div>
                   <div
@@ -620,8 +487,8 @@ export function ProfileMenuSheet({
                 justifyContent: "space-between",
                 padding: "12px 14px",
                 borderRadius: "12px",
-                background: "var(--bg-secondary, rgba(0,0,0,0.03))",
-                border: "1px solid transparent",
+                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+                border: "1px solid var(--card-border)",
                 color: "var(--text-primary)",
                 fontWeight: 500,
                 fontSize: "13.5px",
@@ -632,9 +499,9 @@ export function ProfileMenuSheet({
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
                 {isDarkMode ? (
-                  <Sun size={18} style={{ color: "#eab308" }} />
+                  <Sun size={18} style={{ color: "#f59e0b" }} />
                 ) : (
-                  <Moon size={18} style={{ color: "#6366f1" }} />
+                  <Moon size={18} style={{ color: "var(--accent-color)" }} />
                 )}
                 <span>Mode Tampilan</span>
               </div>
@@ -643,10 +510,10 @@ export function ProfileMenuSheet({
                   fontSize: "12px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
-                  background: "var(--bg-card)",
+                  background: "var(--surface-color)",
                   padding: "4px 8px",
                   borderRadius: "6px",
-                  border: "1px solid var(--border-color)",
+                  border: "1px solid var(--card-border)",
                 }}
               >
                 {isDarkMode ? "Dark Mode" : "Light Mode"}
@@ -662,9 +529,9 @@ export function ProfileMenuSheet({
                   justifyContent: "space-between",
                   padding: "12px 14px",
                   borderRadius: "12px",
-                  background: "rgba(234, 179, 8, 0.08)",
-                  border: "1px solid rgba(234, 179, 8, 0.2)",
-                  color: "var(--warning-color, #eab308)",
+                  background: "rgba(245, 158, 11, 0.08)",
+                  border: "1px solid rgba(245, 158, 11, 0.2)",
+                  color: "var(--warning-color, #f59e0b)",
                   fontWeight: 600,
                   fontSize: "13px",
                 }}
@@ -678,7 +545,7 @@ export function ProfileMenuSheet({
                 {offlineQueueCount > 0 && (
                   <span
                     style={{
-                      background: "#eab308",
+                      background: "#f59e0b",
                       color: "#000",
                       padding: "2px 8px",
                       borderRadius: "10px",
@@ -694,7 +561,7 @@ export function ProfileMenuSheet({
           </div>
         </div>
 
-        {/* SECTION 3: Manajemen Akun (Logout) */}
+        {/* SECTION: Manajemen Akun (Logout) */}
         <div>
           <button
             type="button"
@@ -713,9 +580,9 @@ export function ProfileMenuSheet({
               gap: "8px",
               padding: "12px",
               borderRadius: "12px",
-              background: "rgba(239, 68, 68, 0.08)",
-              border: "1px solid rgba(239, 68, 68, 0.2)",
-              color: "#ef4444",
+              background: "rgba(247, 85, 85, 0.08)",
+              border: "1px solid rgba(247, 85, 85, 0.2)",
+              color: "var(--danger-color, #f75555)",
               fontWeight: 700,
               fontSize: "14px",
               cursor: "pointer",

@@ -1,14 +1,16 @@
-import { ClipboardList, BarChart3, Bus } from "lucide-react";
+import { ClipboardList, BarChart3, Bus, MoreHorizontal } from "lucide-react";
 
 interface BottomNavProps {
   activeTab: "input" | "analytics" | "units";
   onSelectTab: (tab: "input" | "analytics" | "units") => void;
+  onOpenMore: () => void;
   pendingQueueCount?: number;
 }
 
 export function BottomNav({
   activeTab,
   onSelectTab,
+  onOpenMore,
   pendingQueueCount = 0,
 }: BottomNavProps) {
   const handleTabClick = (tab: "input" | "analytics" | "units") => {
@@ -34,41 +36,53 @@ export function BottomNav({
 
         <button
           type="button"
-          onPointerDown={() => handleTabClick("input")}
           onClick={() => handleTabClick("input")}
           className={`bottom-nav-item ${activeTab === "input" ? "active" : ""}`}
+          title="Input SS"
+          aria-label="Input SS"
         >
           <div className="bottom-nav-icon-wrapper">
-            <ClipboardList size={18} />
+            <ClipboardList size={20} />
             {pendingQueueCount > 0 && (
               <span className="bottom-nav-badge">{pendingQueueCount}</span>
             )}
           </div>
-          <span>Input SS</span>
         </button>
 
         <button
           type="button"
-          onPointerDown={() => handleTabClick("analytics")}
           onClick={() => handleTabClick("analytics")}
           className={`bottom-nav-item ${activeTab === "analytics" ? "active" : ""}`}
+          title="Dashboard"
+          aria-label="Dashboard"
         >
           <div className="bottom-nav-icon-wrapper">
-            <BarChart3 size={18} />
+            <BarChart3 size={20} />
           </div>
-          <span>Dashboard</span>
         </button>
 
         <button
           type="button"
-          onPointerDown={() => handleTabClick("units")}
           onClick={() => handleTabClick("units")}
           className={`bottom-nav-item ${activeTab === "units" ? "active" : ""}`}
+          title="Daftar Unit"
+          aria-label="Daftar Unit"
         >
           <div className="bottom-nav-icon-wrapper">
-            <Bus size={18} />
+            <Bus size={20} />
           </div>
-          <span>Unit</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onOpenMore}
+          className="bottom-nav-item"
+          title="Lainnya"
+          aria-label="Lainnya"
+        >
+          <div className="bottom-nav-icon-wrapper">
+            <MoreHorizontal size={20} />
+          </div>
         </button>
       </nav>
     </div>

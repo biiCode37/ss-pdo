@@ -165,7 +165,7 @@ export function UnitDetailModal({
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ padding: '8px', borderRadius: '12px', background: 'rgba(59, 130, 246, 0.15)', color: 'var(--accent-color)' }}>
+            <div style={{ padding: '8px', borderRadius: '12px', background: 'rgba(62, 207, 142, 0.15)', color: 'var(--accent-color)' }}>
               <Bus size={22} />
             </div>
             <div>
