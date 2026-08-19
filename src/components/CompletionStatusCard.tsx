@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { FileText } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
@@ -8,7 +9,7 @@ interface Props {
   dateBadge?: string;
 }
 
-export function CompletionStatusCard({
+function CompletionStatusCardComponent({
   summary,
   onSelectUnit,
   dateBadge,
@@ -153,3 +154,5 @@ export function CompletionStatusCard({
     </div>
   );
 }
+
+export const CompletionStatusCard = memo(CompletionStatusCardComponent);

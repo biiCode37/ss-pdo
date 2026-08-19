@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { ClipboardList, BarChart3, Bus, MoreHorizontal } from "lucide-react";
 
 interface BottomNavProps {
@@ -7,7 +8,7 @@ interface BottomNavProps {
   pendingQueueCount?: number;
 }
 
-export function BottomNav({
+function BottomNavComponent({
   activeTab,
   onSelectTab,
   onOpenMore,
@@ -88,3 +89,5 @@ export function BottomNav({
     </div>
   );
 }
+
+export const BottomNav = memo(BottomNavComponent);

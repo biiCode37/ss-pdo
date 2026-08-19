@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo } from "react";
 import { Search, Bus } from "lucide-react";
 import type { BusData } from "../services/googleSheets";
 import { extractUnitList } from "../utils/unitAnalytics";
@@ -15,7 +15,7 @@ interface Props {
   accRange?: { startDay?: number; endDay?: number; startMonth?: number; endMonth?: number; startYear?: number; endYear?: number } | null;
 }
 
-export function UnitSummaryDashboard({
+function UnitSummaryDashboardComponent({
   busData,
   sheetId,
   selectedTab,
@@ -101,3 +101,5 @@ export function UnitSummaryDashboard({
     </div>
   );
 }
+
+export const UnitSummaryDashboard = memo(UnitSummaryDashboardComponent);

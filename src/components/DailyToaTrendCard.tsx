@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { BarChart2, Calendar, Award, Zap, TrendingDown } from "lucide-react";
 import { getMonthlyToaTrend } from "../services/googleSheets";
@@ -20,7 +20,7 @@ function parseSelectedDay(tab: string): number {
   return parseInt(tab, 10) || new Date().getDate();
 }
 
-export function DailyToaTrendCard({
+function DailyToaTrendCardComponent({
   sheetId,
   selectedTab,
   refreshKey = 0,
@@ -267,7 +267,6 @@ export function DailyToaTrendCard({
             display: "flex",
             flexDirection: "column",
             gap: "2px",
-            backdropFilter: "blur(4px)",
           }}
         >
           <span
@@ -308,7 +307,6 @@ export function DailyToaTrendCard({
             display: "flex",
             flexDirection: "column",
             gap: "2px",
-            backdropFilter: "blur(4px)",
           }}
         >
           <span
@@ -349,7 +347,6 @@ export function DailyToaTrendCard({
             display: "flex",
             flexDirection: "column",
             gap: "2px",
-            backdropFilter: "blur(4px)",
           }}
         >
           <span
@@ -701,3 +698,5 @@ export function DailyToaTrendCard({
     </div>
   );
 }
+
+export const DailyToaTrendCard = memo(DailyToaTrendCardComponent);

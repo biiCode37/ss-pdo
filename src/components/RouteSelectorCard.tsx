@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { MapPin, Calendar, Plus, X, Loader2, ChevronUp, CheckCircle, AlertCircle } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
 import { inspectSpreadsheetHeader } from '../services/googleSheets';
@@ -58,7 +58,7 @@ function flattenRoutes(routes: Route[]): FlatRouteSheet[] {
   return result;
 }
 
-export function RouteSelectorCard({
+function RouteSelectorCardComponent({
   sheetUrl,
   setSheetUrl,
   selectedTab,
@@ -717,3 +717,5 @@ export function RouteSelectorCard({
     </div>
   );
 }
+
+export const RouteSelectorCard = memo(RouteSelectorCardComponent);

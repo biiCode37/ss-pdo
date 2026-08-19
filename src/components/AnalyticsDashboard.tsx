@@ -1,3 +1,4 @@
+import { useMemo, memo } from "react";
 import type { BusData } from "../services/googleSheets";
 import { calculateAnalytics, getFormattedDateBadge } from "../utils/analytics";
 import { KPICard } from "./KPICard";
@@ -26,7 +27,7 @@ interface Props {
   } | null;
 }
 
-export function AnalyticsDashboard({
+function AnalyticsDashboardComponent({
   busData,
   sheetSummary,
   sheetId = "",
@@ -39,16 +40,24 @@ export function AnalyticsDashboard({
   activeYear = new Date().getFullYear(),
   accRange,
 }: Props) {
-  const summary = calculateAnalytics(
-    busData,
-    selectedTab === "AKUMULASI" ? undefined : sheetSummary,
+  const summary = useMemo(
+    () =>
+      calculateAnalytics(
+        busData,
+        selectedTab === "AKUMULASI" ? undefined : sheetSummary,
+      ),
+    [busData, selectedTab, sheetSummary],
   );
 
-  const dateBadge = getFormattedDateBadge(
-    selectedTab,
-    activeMonth,
-    activeYear,
-    accRange,
+  const dateBadge = useMemo(
+    () =>
+      getFormattedDateBadge(
+        selectedTab,
+        activeMonth,
+        activeYear,
+        accRange,
+      ),
+    [selectedTab, activeMonth, activeYear, accRange],
   );
 
   return (
@@ -72,3 +81,5 @@ export function AnalyticsDashboard({
     </div>
   );
 }
+
+export const AnalyticsDashboard = memo(AnalyticsDashboardComponent);

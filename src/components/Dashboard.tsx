@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
 import {
   extractSheetId,
@@ -107,6 +107,31 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     endMonth: number;
     endYear: number;
   } | null>(null);
+
+  // Memoized activeMonth and activeYear from cached routes
+  const { activeMonth, activeYear } = useMemo(() => {
+    let month = new Date().getMonth() + 1;
+    let year = new Date().getFullYear();
+    try {
+      const cached = localStorage.getItem("PDO_CACHE_ROUTES");
+      if (cached) {
+        const routes = JSON.parse(cached);
+        for (const r of routes) {
+          for (const s of r.route_sheets || []) {
+            if (
+              s.sheet_url === sheetUrl ||
+              (sheetUrl && s.sheet_url.includes(sheetUrl))
+            ) {
+              month = s.month;
+              year = s.year;
+              break;
+            }
+          }
+        }
+      }
+    } catch (_e) {}
+    return { activeMonth: month, activeYear: year };
+  }, [sheetUrl]);
 
   // BUG-19: AbortController and Request ID tracking for race condition protection
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -529,8 +554,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           paddingLeft: "16px",
           paddingRight: "16px",
           boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
         }}
       >
         <div
@@ -756,18 +779,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           onSwipeLeft={handleSwipeNextTab}
           onSwipeRight={handleSwipePrevTab}
         >
-          <div
-            style={{
-              visibility: mainTab === "input" ? "visible" : "hidden",
-              height: mainTab === "input" ? "auto" : 0,
-              overflow: mainTab === "input" ? "visible" : "hidden",
-              opacity: mainTab === "input" ? 1 : 0,
-              transform: mainTab === "input" ? "scale(1)" : "scale(0.985)",
-              transition:
-                "opacity 0.15s cubic-bezier(0.32, 0.72, 0, 1), transform 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
-              willChange: "opacity, transform",
-            }}
-          >
+          <div style={{ display: mainTab === "input" ? "block" : "none" }}>
             {missingColumns.length > 0 && (
               <div
                 className="card"
@@ -816,120 +828,48 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             />
           </div>
 
-          <div
-            style={{
-              visibility: mainTab === "analytics" ? "visible" : "hidden",
-              height: mainTab === "analytics" ? "auto" : 0,
-              overflow: mainTab === "analytics" ? "visible" : "hidden",
-              opacity: mainTab === "analytics" ? 1 : 0,
-              transform: mainTab === "analytics" ? "scale(1)" : "scale(0.985)",
-              transition:
-                "opacity 0.15s cubic-bezier(0.32, 0.72, 0, 1), transform 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
-              willChange: "opacity, transform",
-            }}
-          >
-            {(() => {
-              let activeMonth = new Date().getMonth() + 1;
-              let activeYear = new Date().getFullYear();
-              try {
-                const cached = localStorage.getItem("PDO_CACHE_ROUTES");
-                if (cached) {
-                  const routes = JSON.parse(cached);
-                  for (const r of routes) {
-                    for (const s of r.route_sheets || []) {
-                      if (
-                        s.sheet_url === sheetUrl ||
-                        (sheetUrl && s.sheet_url.includes(sheetUrl))
-                      ) {
-                        activeMonth = s.month;
-                        activeYear = s.year;
-                        break;
-                      }
-                    }
-                  }
-                }
-              } catch (_e) {}
-
-              return (
-                <AnalyticsDashboard
-                  busData={busData}
-                  sheetSummary={sheetSummary}
-                  sheetId={currentSheetId}
-                  selectedTab={selectedTab}
-                  refreshKey={refreshKey}
-                  monthLabel={extractMonthYearLabel(sheetUrl)}
-                  activeMonth={activeMonth}
-                  activeYear={activeYear}
-                  accRange={accRangeDetails}
-                  onSelectTab={handleSelectTab}
-                  onSelectUnit={(unit) => {
-                    setMainTab("units");
+          <div style={{ display: mainTab === "analytics" ? "block" : "none" }}>
+            <AnalyticsDashboard
+              busData={busData}
+              sheetSummary={sheetSummary}
+              sheetId={currentSheetId}
+              selectedTab={selectedTab}
+              refreshKey={refreshKey}
+              monthLabel={extractMonthYearLabel(sheetUrl)}
+              activeMonth={activeMonth}
+              activeYear={activeYear}
+              accRange={accRangeDetails}
+              onSelectTab={handleSelectTab}
+              onSelectUnit={(unit) => {
+                setMainTab("units");
+                setTimeout(() => {
+                  const slug = slugifyUnitId(unit);
+                  const el =
+                    document.getElementById(`unit-card-${slug}`) ||
+                    document.getElementById(`bus-card-${slug}`);
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "center" });
+                    el.classList.remove("bus-card-highlight");
+                    void el.offsetWidth;
+                    el.classList.add("bus-card-highlight");
                     setTimeout(() => {
-                      const slug = slugifyUnitId(unit);
-                      const el =
-                        document.getElementById(`unit-card-${slug}`) ||
-                        document.getElementById(`bus-card-${slug}`);
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth", block: "center" });
-                        el.classList.remove("bus-card-highlight");
-                        void el.offsetWidth;
-                        el.classList.add("bus-card-highlight");
-                        setTimeout(() => {
-                          el.classList.remove("bus-card-highlight");
-                        }, 6000);
-                      }
-                    }, 150);
-                  }}
-                />
-              );
-            })()}
+                      el.classList.remove("bus-card-highlight");
+                    }, 6000);
+                  }
+                }, 150);
+              }}
+            />
           </div>
 
-          <div
-            style={{
-              visibility: mainTab === "units" ? "visible" : "hidden",
-              height: mainTab === "units" ? "auto" : 0,
-              overflow: mainTab === "units" ? "visible" : "hidden",
-              opacity: mainTab === "units" ? 1 : 0,
-              transform: mainTab === "units" ? "scale(1)" : "scale(0.985)",
-              transition:
-                "opacity 0.15s cubic-bezier(0.32, 0.72, 0, 1), transform 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
-              willChange: "opacity, transform",
-            }}
-          >
-            {(() => {
-              let activeMonth = new Date().getMonth() + 1;
-              let activeYear = new Date().getFullYear();
-              try {
-                const cached = localStorage.getItem("PDO_CACHE_ROUTES");
-                if (cached) {
-                  const routes = JSON.parse(cached);
-                  for (const r of routes) {
-                    for (const s of r.route_sheets || []) {
-                      if (
-                        s.sheet_url === sheetUrl ||
-                        (sheetUrl && s.sheet_url.includes(sheetUrl))
-                      ) {
-                        activeMonth = s.month;
-                        activeYear = s.year;
-                        break;
-                      }
-                    }
-                  }
-                }
-              } catch (_e) {}
-
-              return (
-                <UnitSummaryDashboard
-                  busData={busData}
-                  sheetId={currentSheetId}
-                  selectedTab={selectedTab}
-                  activeMonth={activeMonth}
-                  activeYear={activeYear}
-                  accRange={accRangeDetails}
-                />
-              );
-            })()}
+          <div style={{ display: mainTab === "units" ? "block" : "none" }}>
+            <UnitSummaryDashboard
+              busData={busData}
+              sheetId={currentSheetId}
+              selectedTab={selectedTab}
+              activeMonth={activeMonth}
+              activeYear={activeYear}
+              accRange={accRangeDetails}
+            />
           </div>
         </SwipeableContainer>
       )}

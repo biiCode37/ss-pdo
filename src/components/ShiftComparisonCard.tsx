@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Sun, Moon } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 
@@ -6,7 +7,7 @@ interface Props {
   dateBadge?: string;
 }
 
-export function ShiftComparisonCard({ summary, dateBadge }: Props) {
+function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
   const formatInt = (val: number) =>
     (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString(
       "id-ID",
@@ -112,3 +113,5 @@ export function ShiftComparisonCard({ summary, dateBadge }: Props) {
     </div>
   );
 }
+
+export const ShiftComparisonCard = memo(ShiftComparisonCardComponent);

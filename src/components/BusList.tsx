@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
 import { updateBulkBusData } from "../services/googleSheets";
 import { BusCard } from "./BusCard";
@@ -39,7 +39,7 @@ interface Props {
   } | null;
 }
 
-export function BusList({
+function BusListComponent({
   data,
   sheetId,
   tabName,
@@ -239,27 +239,32 @@ export function BusList({
   ];
 
   // Logic selesai bergantung pada kategori yang aktif
-  const isBusFilled = (bus: BusData) => {
-    const hasValue = (val: any) =>
-      val !== undefined && val !== null && String(val).trim() !== "";
-    if (activeCategory === "ALL") {
-      return !!(
-        hasValue(bus.toaShift1) &&
-        hasValue(bus.totalToa) &&
-        hasValue(bus.kmAwal1) &&
-        hasValue(bus.kmAkhir1) &&
-        hasValue(bus.kmAwal2) &&
-        hasValue(bus.kmAkhir2)
-      );
-    } else {
-      return hasValue(bus[activeCategory as keyof BusData]);
-    }
-  };
+  const isBusFilled = useCallback(
+    (bus: BusData) => {
+      const hasValue = (val: any) =>
+        val !== undefined && val !== null && String(val).trim() !== "";
+      if (activeCategory === "ALL") {
+        return !!(
+          hasValue(bus.toaShift1) &&
+          hasValue(bus.totalToa) &&
+          hasValue(bus.kmAwal1) &&
+          hasValue(bus.kmAkhir1) &&
+          hasValue(bus.kmAwal2) &&
+          hasValue(bus.kmAkhir2)
+        );
+      } else {
+        return hasValue(bus[activeCategory as keyof BusData]);
+      }
+    },
+    [activeCategory],
+  );
 
-  const filledCount = data.filter(isBusFilled).length;
-  const totalCount = data.length;
-  const progressPercent =
-    totalCount === 0 ? 0 : Math.round((filledCount / totalCount) * 100);
+  const { filledCount, totalCount, progressPercent } = useMemo(() => {
+    const filled = data.filter(isBusFilled).length;
+    const total = data.length;
+    const percent = total === 0 ? 0 : Math.round((filled / total) * 100);
+    return { filledCount: filled, totalCount: total, progressPercent: percent };
+  }, [data, isBusFilled]);
 
   const filteredData = useMemo(() => {
     let result = data;
@@ -412,9 +417,7 @@ export function BusList({
                 whiteSpace: "nowrap",
                 cursor: "pointer",
                 boxShadow: "none",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                transition: "opacity 0.12s ease",
                 opacity: isSubmittingBulk ? 0.7 : 1,
               }}
               title={
@@ -458,8 +461,6 @@ export function BusList({
                   appearance: "none",
                   WebkitAppearance: "none",
                   MozAppearance: "none",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
                 }}
               >
                 {categories.map((cat) => (
@@ -623,3 +624,5 @@ export function BusList({
     </div>
   );
 }
+
+export const BusList = memo(BusListComponent);

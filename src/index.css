@@ -114,11 +114,9 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* Glassmorphism Utilities */
+/* Card Surface Utilities */
 .glass {
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
   border-radius: 16px;
 }
@@ -181,8 +179,6 @@ body {
   padding-left: 16px;
   padding-right: 16px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   margin-bottom: 12px;
 }
 
@@ -198,10 +194,8 @@ body {
   border-radius: 12px;
   cursor: pointer;
   margin-bottom: 10px;
-  transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
   color: var(--text-primary);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 .bulk-trip-trigger-btn:active {
@@ -267,7 +261,7 @@ body {
   padding: 12px 16px;
   border-radius: 12px;
   font-size: 16px;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.12s ease;
 }
 .input-field:focus {
   outline: none;
@@ -317,11 +311,11 @@ select.input-field {
 }
 .bus-card {
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 .bus-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 .bus-card-header {
   padding: 16px 20px;
@@ -380,7 +374,7 @@ select.input-field {
   border-top: 1px solid var(--card-border);
   margin-top: 4px;
   padding-top: 16px;
-  animation: slideDown 0.3s ease forwards;
+  animation: slideDown 0.2s ease forwards;
 }
 
 @keyframes slideDown {
@@ -406,7 +400,7 @@ select.input-field {
 
 /* Loading Spinner */
 .spinner {
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 @keyframes spin {
   from {
@@ -444,7 +438,7 @@ select.input-field {
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
 .category-pill:hover {
   background: rgba(255, 255, 255, 0.1);
@@ -494,7 +488,7 @@ select.input-field {
     0 4px 12px -2px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.12s ease;
 }
 
 /* Solid Light Mode Background Override */
@@ -519,7 +513,7 @@ body.light-mode .bottom-nav {
   box-shadow:
     0 4px 14px rgba(62, 207, 142, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
   pointer-events: none;
 }
@@ -558,9 +552,7 @@ body.light-mode .bottom-nav {
   color: var(--text-secondary);
   cursor: pointer;
   touch-action: manipulation;
-  transition:
-    color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.12s ease;
+  transition: color 0.1s ease, transform 0.1s ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -583,7 +575,7 @@ body.light-mode .bottom-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform 0.12s ease;
 }
 
 .bottom-nav-item.active .bottom-nav-icon-wrapper {
@@ -619,8 +611,6 @@ body.light-mode .bottom-nav {
   padding: 16px;
   border-radius: 16px;
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
@@ -759,7 +749,7 @@ body.light-mode .bottom-nav {
   height: 100%;
   background: linear-gradient(90deg, var(--accent-color), var(--success-color));
   border-radius: 999px;
-  transition: width 0.5s ease-in-out;
+  transition: width 0.3s ease;
 }
 
 .unfilled-tag {
@@ -779,12 +769,10 @@ body.light-mode .bottom-nav {
   transform: translateY(-1px);
 }
 
-/* Smooth Morphing Selector Card (iOS Fluid Style) */
+/* Morphing Selector Card (iOS Fluid Style) */
 .morph-selector-card {
   position: relative;
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
   border-radius: 20px;
   padding: 16px;
@@ -792,15 +780,13 @@ body.light-mode .bottom-nav {
   overflow: hidden;
   max-height: 480px;
   opacity: 1;
-  transform: translateZ(0);
-  will-change: max-height, border-radius, background-color, padding, box-shadow;
   transition:
-    max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1),
-    padding 0.45s cubic-bezier(0.32, 0.72, 0, 1),
-    border-radius 0.45s cubic-bezier(0.32, 0.72, 0, 1),
-    background-color 0.4s ease,
-    box-shadow 0.4s ease,
-    border-color 0.4s ease;
+    max-height 0.3s cubic-bezier(0.32, 0.72, 0, 1),
+    padding 0.25s cubic-bezier(0.32, 0.72, 0, 1),
+    border-radius 0.25s cubic-bezier(0.32, 0.72, 0, 1),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 }
 
@@ -839,8 +825,8 @@ body.light-mode .bottom-nav {
   justify-content: space-between;
   gap: 8px;
   transition:
-    opacity 0.3s ease 0.1s,
-    transform 0.4s cubic-bezier(0.32, 0.72, 0, 1) 0.1s;
+    opacity 0.15s ease 0.05s,
+    transform 0.2s ease 0.05s;
 }
 
 .morph-pill-content.hidden {
@@ -903,8 +889,8 @@ body.light-mode .bottom-nav {
   flex-direction: column;
   gap: 12px;
   transition:
-    opacity 0.25s ease,
-    transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    opacity 0.15s ease,
+    transform 0.2s ease;
 }
 
 .morph-form-content.hidden {
@@ -944,7 +930,7 @@ body.light-mode .bottom-nav {
   letter-spacing: 0.2px;
   white-space: nowrap;
   box-shadow: 0 2px 8px rgba(56, 189, 248, 0.1);
-  transition: all 0.2s ease;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
 }
 
 [data-theme="light"] .morph-pill-badge {
@@ -965,7 +951,7 @@ body.light-mode .bottom-nav {
   display: flex;
   align-items: center;
   gap: 4px;
-  transition: all 0.2s ease;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
 
 .morph-pill-edit-btn:hover {
@@ -1068,14 +1054,13 @@ body {
 .trend-bar-rect {
   transform-box: fill-box;
   transform-origin: bottom center;
-  will-change: transform, height, opacity;
-  animation: trendBarRise 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation: trendBarRise 0.25s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   transition:
-    transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
-    y 0.35s cubic-bezier(0.32, 0.72, 0, 1),
-    height 0.35s cubic-bezier(0.32, 0.72, 0, 1),
-    fill 0.2s ease,
-    filter 0.2s ease;
+    transform 0.2s ease,
+    y 0.2s ease,
+    height 0.2s ease,
+    fill 0.12s ease,
+    filter 0.12s ease;
 }
 
 /* Premium Skeleton Shimmer Effect */
@@ -1339,8 +1324,6 @@ div:where(.swal2-container) .pdo-swal-toast {
   border: 1px solid var(--card-border) !important;
   border-radius: 14px !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
   padding: 12px 18px !important;
   font-family: inherit !important;
   margin-top: 10px !important;

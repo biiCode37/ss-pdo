@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Gauge, Users, UserCheck, Bus } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 
@@ -6,7 +7,7 @@ interface Props {
   dateBadge?: string;
 }
 
-export function KPICard({ summary, dateBadge }: Props) {
+function KPICardComponent({ summary, dateBadge }: Props) {
   // Format numbers using Indonesian locale without rounding away decimals
   const formatInt = (val: number) =>
     (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString(
@@ -155,3 +156,5 @@ export function KPICard({ summary, dateBadge }: Props) {
     </div>
   );
 }
+
+export const KPICard = memo(KPICardComponent);
