@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, memo } from "react";
+import { useState, useEffect, useMemo, useId, memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { BarChart2, Calendar, Award, Zap, TrendingDown } from "lucide-react";
 import { getMonthlyToaTrend } from "../services/googleSheets";
@@ -28,6 +28,9 @@ function DailyToaTrendCardComponent({
   onSelectTab,
   unitFilter,
 }: Props) {
+  const rawId = useId();
+  const idPrefix = useMemo(() => "toa_" + rawId.replace(/[^a-zA-Z0-9]/g, "") + "_", [rawId]);
+
   const effectiveMonthLabel = useMemo(() => {
     if (monthLabel) return monthLabel;
     return extractMonthYearLabel(sheetId);
@@ -440,21 +443,21 @@ function DailyToaTrendCardComponent({
           }}
         >
           <defs>
-            {/* Active Highlighted Tapped Pill Bar Gradient (Emerald) */}
+            {/* Active Highlighted Tapped Pill Bar Gradient (Vibrant Electric Blue) */}
             <linearGradient
-              id="activePillGradient"
+              id={`${idPrefix}activePillGradient`}
               x1="0"
               y1="0"
               x2="0"
               y2="1"
             >
-              <stop offset="0%" stopColor="#3ECF8E" stopOpacity="1" />
-              <stop offset="50%" stopColor="#24B47E" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="#059669" stopOpacity="0.85" />
+              <stop offset="0%" stopColor="#60a5fa" stopOpacity="1" />
+              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.95" />
+              <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.85" />
             </linearGradient>
 
             {/* Increase Trend Pill Bar Gradient (Emerald Green) */}
-            <linearGradient id="upPillGradient" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id={`${idPrefix}upPillGradient`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#4ade80" stopOpacity="0.85" />
               <stop offset="50%" stopColor="#22c55e" stopOpacity="0.6" />
               <stop offset="100%" stopColor="#059669" stopOpacity="0.25" />
@@ -462,7 +465,7 @@ function DailyToaTrendCardComponent({
 
             {/* Slight Decrease Pill Bar Gradient (Coral / Amber Red) */}
             <linearGradient
-              id="slightDownPillGradient"
+              id={`${idPrefix}slightDownPillGradient`}
               x1="0"
               y1="0"
               x2="0"
@@ -475,7 +478,7 @@ function DailyToaTrendCardComponent({
 
             {/* Drastic Decrease Pill Bar Gradient (Deep Crimson Red) */}
             <linearGradient
-              id="drasticDownPillGradient"
+              id={`${idPrefix}drasticDownPillGradient`}
               x1="0"
               y1="0"
               x2="0"
@@ -486,9 +489,9 @@ function DailyToaTrendCardComponent({
               <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0.3" />
             </linearGradient>
 
-            {/* Glowing Drop Shadow Filter for Active Tapped Bar */}
+            {/* Glowing Drop Shadow Filter for Active Tapped Bar (Blue Glow) */}
             <filter
-              id="pillBlueGlow"
+              id={`${idPrefix}pillGlow`}
               x="-40%"
               y="-40%"
               width="180%"
@@ -498,8 +501,8 @@ function DailyToaTrendCardComponent({
                 dx="0"
                 dy="2.5"
                 stdDeviation="3.5"
-                floodColor="#3ECF8E"
-                floodOpacity="0.75"
+                floodColor="#38bdf8"
+                floodOpacity="0.8"
               />
             </filter>
           </defs>
@@ -537,12 +540,12 @@ function DailyToaTrendCardComponent({
           {bars.map((bar, idx) => {
             const rx = Math.min(3, barWidth / 2);
             const fillUrl = bar.isSelected
-              ? "url(#activeBluePillGradient)"
+              ? `url(#${idPrefix}activePillGradient)`
               : bar.trendType === "up"
-                ? "url(#upPillGradient)"
+                ? `url(#${idPrefix}upPillGradient)`
                 : bar.trendType === "slight_down"
-                  ? "url(#slightDownPillGradient)"
-                  : "url(#drasticDownPillGradient)";
+                  ? `url(#${idPrefix}slightDownPillGradient)`
+                  : `url(#${idPrefix}drasticDownPillGradient)`;
 
             return (
               <g
@@ -563,7 +566,7 @@ function DailyToaTrendCardComponent({
                   rx={rx}
                   ry={rx}
                   fill={fillUrl}
-                  filter={bar.isSelected ? "url(#pillBlueGlow)" : undefined}
+                  filter={bar.isSelected ? `url(#${idPrefix}pillGlow)` : undefined}
                   className="trend-bar-rect"
                   style={{ animationDelay: `${idx * 16}ms` }}
                 />
@@ -618,40 +621,51 @@ function DailyToaTrendCardComponent({
             )}
 
           {/* Active Day Floating Metric Tooltip Badge */}
-          {activeBar && (
-            <g
-              transform={`translate(${Math.min(Math.max(activeBar.x + barWidth / 2, 45), chartWidth - 45)}, ${Math.max(activeBar.y - 24, 16)})`}
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveTooltipDay(null);
-                onSelectTab?.(activeBar.day);
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <rect
-                x="-36"
-                y="-13"
-                width="72"
-                height="21"
-                rx="7"
-                fill="#059669"
-                stroke="#3ECF8E"
-                strokeWidth="1.5"
-                filter="url(#pillBlueGlow)"
-              />
-              <polygon points="0,10 -4,8 4,8" fill="#059669" />
-              <text
-                x="0"
-                y="1.5"
-                fontSize="10"
-                fontWeight="800"
-                fill="#ffffff"
-                textAnchor="middle"
+          {activeBar && (() => {
+            const badgeText = safeFormatNumber(activeBar.totalToa);
+            const badgeWidth = Math.max(54, badgeText.length * 8 + 18);
+            const halfWidth = badgeWidth / 2;
+            const clampedX = Math.min(
+              Math.max(activeBar.x + barWidth / 2, halfWidth + 4),
+              chartWidth - halfWidth - 4,
+            );
+            const clampedY = Math.max(activeBar.y - 24, 16);
+
+            return (
+              <g
+                transform={`translate(${clampedX}, ${clampedY})`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveTooltipDay(null);
+                  onSelectTab?.(activeBar.day);
+                }}
+                style={{ cursor: "pointer" }}
               >
-                Tgl {activeBar.day}
-              </text>
-            </g>
-          )}
+                <rect
+                  x={-halfWidth}
+                  y="-13"
+                  width={badgeWidth}
+                  height="21"
+                  rx="7"
+                  fill="#1d4ed8"
+                  stroke="#60a5fa"
+                  strokeWidth="1.5"
+                  filter={`url(#${idPrefix}pillGlow)`}
+                />
+                <polygon points="0,10 -4,8 4,8" fill="#1d4ed8" />
+                <text
+                  x="0"
+                  y="1.5"
+                  fontSize="10"
+                  fontWeight="800"
+                  fill="#ffffff"
+                  textAnchor="middle"
+                >
+                  {badgeText}
+                </text>
+              </g>
+            );
+          })()}
 
           {/* Render X-Axis Date Labels */}
           {bars.map((bar) => {

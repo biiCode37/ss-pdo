@@ -1036,29 +1036,26 @@ body {
   }
 }
 
-/* Smooth Fluid Spring Growth & GPU Accelerated Transition for TOA Trend Chart Bars */
+/* Smooth Fluid Spring Growth for TOA Trend Chart Bars */
 @keyframes trendBarRise {
   0% {
-    transform: scaleY(0);
-    opacity: 0;
-  }
-  70% {
-    opacity: 0.95;
+    opacity: 0.3;
+    transform: scaleY(0.2);
   }
   100% {
-    transform: scaleY(1);
     opacity: 1;
+    transform: scaleY(1);
   }
 }
 
 .trend-bar-rect {
   transform-box: fill-box;
   transform-origin: bottom center;
-  animation: trendBarRise 0.25s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation: trendBarRise 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   transition:
-    transform 0.2s ease,
-    y 0.2s ease,
-    height 0.2s ease,
+    transform 0.15s ease,
+    y 0.15s ease,
+    height 0.15s ease,
     fill 0.12s ease,
     filter 0.12s ease;
 }

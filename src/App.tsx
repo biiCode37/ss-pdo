@@ -3,6 +3,7 @@ import { LoginScreen } from './components/LoginScreen';
 import { Dashboard } from './components/Dashboard';
 import { initGoogleApi, checkSignedInAsync, signOut, hasGoogleCreds } from './services/googleSheets';
 import type { AuthResult } from './services/googleSheets';
+import { verifyUserProfile } from './services/routeService';
 import { useUserActivityTracking } from './hooks/useUserActivityTracking';
 
 import { formatUserError } from './utils/errorFormatter';
@@ -32,6 +33,27 @@ export default function App() {
       setIsApiReady(true);
       // ISS-01: Async token validation saat startup
       const authResult: AuthResult = await checkSignedInAsync();
+
+      if (authResult.authenticated) {
+        // BUG-38: Verifikasi profil Supabase saat cold-start auto-login
+        // Sebelumnya hanya cek Google token tanpa cek allowlist user_profiles
+        const email = localStorage.getItem('PDO_USER_EMAIL') || '';
+        if (email) {
+          const verify = await verifyUserProfile(email);
+          if (!verify.isAllowed) {
+            // User tidak terdaftar/nonaktif — paksa logout
+            await signOut();
+            setIsSignedIn(false);
+            return;
+          }
+        } else {
+          // Tidak ada email tersimpan — tidak bisa verifikasi, paksa logout
+          await signOut();
+          setIsSignedIn(false);
+          return;
+        }
+      }
+
       setIsSignedIn(authResult.authenticated);
       if (authResult.reason === 'needs_reauth') {
         setNeedsReauth(true);

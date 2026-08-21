@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "src/components/LoginScreen.tsx": {
-    "mtime": 1787279685.5702212,
-    "ast_hash": "645d8d0fc9536713d36b3e1d457decaf",
+    "mtime": 1787229083.1024876,
+    "ast_hash": "5d766d204b282f83dc46bb4ffe1165db",
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
@@ -570,8 +570,8 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1787280355.3687365,
-    "ast_hash": "f4e132f3d9a79ebddb8519288ccdb1e3",
+    "mtime": 1787227317.3282843,
+    "ast_hash": "a8b0727520415cf0028bac7d8f054abf",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_1/01-daftar-masalah.md": {

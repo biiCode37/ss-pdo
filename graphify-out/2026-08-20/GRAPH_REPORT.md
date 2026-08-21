@@ -1,7 +1,7 @@
 # Graph Report - SS_PDO  (2026-08-20)
 
 ## Corpus Check
-- 171 files · ~239,181 words
+- 171 files · ~238,508 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -158,13 +158,13 @@
 - 5. CONTEXT-AWARE PROACTIVITY
 - 8. DARK MODE PROTOCOL
 - 📱 Spec Desain: Progressive Disclosure Chips pada Modal Input SweetAlert2
-- 7. DIAL DEFINITIONS (Technical Reference)
+- 1. THE THREE DIALS (Core Configuration)
 - Refactor 5 — Daftar Masalah SS_PDO
 - Refactor 5 — Prompt untuk AI Agent Code
 - Refactor 5 — Rekomendasi Solusi SS_PDO
 - App.tsx
 - Global Constraints
-- happy-dom
+- @types/node
 - 2. Rincian Ketentuan & Spesifikasi
 - vitest
 - Global Constraints
@@ -552,7 +552,7 @@ Nodes (3): Global Constraints, Persistent Auth Session Implementation Plan, Task
 
 ### Community 105 - "googleSheets.ts"
 Cohesion: 0.14
-Nodes (30): AuthResult, checkSignedIn(), detectHeaderRowAndBuildComposite(), ensureValidToken(), extractSheetId(), findColumnIndex(), formatWholeSheet(), getAccumulatedBusData() (+22 more)
+Nodes (31): AuthResult, checkSignedIn(), detectHeaderRowAndBuildComposite(), ensureValidToken(), extractSheetId(), findColumnIndex(), formatWholeSheet(), getAccumulatedBusData() (+23 more)
 
 ### Community 106 - "Supabase Integration & Metadata Catalog Design Specification"
 Cohesion: 0.17
@@ -564,7 +564,7 @@ Nodes (7): Global Constraints, Supabase Integration Implementation Plan, Task 1:
 
 ### Community 108 - "devDependencies"
 Cohesion: 0.12
-Nodes (17): oxlint, devDependencies, oxlint, @types/gapi.auth2, @types/gapi.client.sheets, @types/node, @types/react, typescript (+9 more)
+Nodes (17): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.auth2, @types/gapi.client.sheets, @types/react (+9 more)
 
 ### Community 109 - "Daftar Masalah v3 — Proyek SS_PDO / SPUM (Sistem Pencatatan Shift Bus)"
 Cohesion: 0.13
@@ -596,7 +596,7 @@ Nodes (4): name, private, type, version
 
 ### Community 116 - "analytics.ts"
 Cohesion: 0.09
-Nodes (29): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, DailyToaTrendCard, DailyToaTrendCardComponent(), parseSelectedDay() (+21 more)
+Nodes (28): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, DailyToaTrendCard, DailyToaTrendCardComponent(), parseSelectedDay() (+20 more)
 
 ### Community 117 - "Design Document — User Activity & Audit Telemetry System"
 Cohesion: 0.17
@@ -652,7 +652,7 @@ Nodes (10): 10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know), Anim
 
 ### Community 131 - "tasteskill: Anti-Slop Frontend Skill"
 Cohesion: 0.20
-Nodes (10): 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration), 2.A When to reach for a real design system (use official packages), 2.B When the brief is an aesthetic, not a system (+2 more)
+Nodes (10): 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 2.A When to reach for a real design system (use official packages), 2.B When the brief is an aesthetic, not a system, 2. BRIEF → DESIGN SYSTEM MAP, 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10) (+2 more)
 
 ### Community 132 - "Daftar Masalah v4 — Proyek SS_PDO / SPUM"
 Cohesion: 0.20
@@ -706,9 +706,9 @@ Nodes (5): 8.A Token Strategy (pick one, stick to it), 8.B Do Not Prescribe Spec
 Cohesion: 0.22
 Nodes (8): 1. Latar Belakang & Masalah, 2. Tujuan & Sasaran, 3. Rincian Teknis & Alur Interaksi, 4. Kriteria Keberhasilan (Quality Gates), A. Tampilan Berdasarkan Kategori Kolom, B. Interaksi & Event Binding (`didOpen` & Keydown), C. Styling Token CSS, 📱 Spec Desain: Progressive Disclosure Chips pada Modal Input SweetAlert2
 
-### Community 145 - "7. DIAL DEFINITIONS (Technical Reference)"
+### Community 145 - "1. THE THREE DIALS (Core Configuration)"
 Cohesion: 0.50
-Nodes (4): 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10), VISUAL_DENSITY (Level 1-10)
+Nodes (4): 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration)
 
 ### Community 146 - "Refactor 5 — Daftar Masalah SS_PDO"
 Cohesion: 0.11
@@ -750,7 +750,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `Dashboard.tsx`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `7. DIAL DEFINITIONS (Technical Reference)`?**
+- **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `1. THE THREE DIALS (Core Configuration)`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
   _1013 weakly-connected nodes found - possible documentation gaps or missing edges._

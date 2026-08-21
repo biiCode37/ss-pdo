@@ -19,9 +19,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {
-        name: "PUSM",
+        name: "PUSM - PDO Utara Spreadsheet Mobile",
         short_name: "PUSM",
-        description: "PDO Utara Spreadsheet Mobile",
+        description: "PUSM - PDO Utara Spreadsheet Mobile",
         theme_color: "#0f172a",
         background_color: "#0f172a",
         display: "standalone",
