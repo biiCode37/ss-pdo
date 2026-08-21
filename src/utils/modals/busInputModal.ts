@@ -1,6 +1,7 @@
 import { pdoSwal } from "../alertUtils";
 import type { BusData, HeaderMap } from "../../services/googleSheets";
 import { parseIndonesianNumber } from "../numberUtils";
+import { normalizeKeterangan, parseKeterangan } from "../keteranganUtils";
 
 export interface BusModalOptions {
   bus: BusData;
@@ -67,13 +68,24 @@ function renderSmartKeteranganSection(
   wrapperId: string = "swal-wrapper-keterangan",
   isRevealed: boolean = true,
 ) {
-  const cleanVal = (initialKeterangan || "").trim();
-  const baMatch = cleanVal.match(/^(BA\.0[1-4])(?:\s*(.*))?$/i);
-  const initialPrefix = baMatch ? baMatch[1].toUpperCase() : "";
-  const initialDetail = baMatch ? baMatch[2] || "" : cleanVal;
-  const isFixedVal = ["OFF", "NP1", "NP2", "TO EVDAL"].includes(
-    cleanVal.toUpperCase(),
-  );
+  const parsed = parseKeterangan(initialKeterangan);
+  const initialPrefix = parsed.prefix || "";
+  const initialDetail = parsed.detail;
+  const isFixedVal = parsed.isFixed;
+  const cleanVal = parsed.fixedValue || parsed.normalized;
+
+  const isBa02 = initialPrefix === "BA.02";
+  const isNp1 = isBa02 && initialDetail.toUpperCase() === "NP1";
+  const isNp2 = isBa02 && initialDetail.toUpperCase() === "NP2";
+  const isCustomBa02 =
+    isBa02 && !isNp1 && !isNp2 && initialDetail.trim() !== "";
+  const ba02SelectedOption = isNp1
+    ? "NP1"
+    : isNp2
+      ? "NP2"
+      : isCustomBa02
+        ? "__CUSTOM__"
+        : "";
 
   return `
     <div id="${escapeHtml(wrapperId)}" class="swal-revealed-field" style="display: ${isRevealed ? "block" : "none"}; margin-top: 4px;">
@@ -87,41 +99,75 @@ function renderSmartKeteranganSection(
       <!-- Quick Preset & Prefix Chips -->
       <div class="swal-note-chips-bar" style="display: flex; flex-wrap: wrap; gap: 5px; align-items: center; margin-bottom: 8px;">
         <button type="button" class="swal-note-chip ${cleanVal.toUpperCase() === "OFF" ? "active" : ""}" data-type="fixed" data-val="OFF">OFF</button>
-        <button type="button" class="swal-note-chip ${cleanVal.toUpperCase() === "NP1" ? "active" : ""}" data-type="fixed" data-val="NP1">NP1</button>
-        <button type="button" class="swal-note-chip ${cleanVal.toUpperCase() === "NP2" ? "active" : ""}" data-type="fixed" data-val="NP2">NP2</button>
         <button type="button" class="swal-note-chip ${cleanVal.toUpperCase() === "TO EVDAL" ? "active" : ""}" data-type="fixed" data-val="TO EVDAL">TO EVDAL</button>
         
-        <button type="button" class="swal-note-chip ${initialPrefix === "BA.01" ? "active" : ""}" data-type="ba" data-val="BA.01">⚠️ BA.01</button>
-        <button type="button" class="swal-note-chip ${initialPrefix === "BA.02" ? "active" : ""}" data-type="ba" data-val="BA.02">⚠️ BA.02</button>
-        <button type="button" class="swal-note-chip ${initialPrefix === "BA.03" ? "active" : ""}" data-type="ba" data-val="BA.03">⚠️ BA.03</button>
-        <button type="button" class="swal-note-chip ${initialPrefix === "BA.04" ? "active" : ""}" data-type="ba" data-val="BA.04">⚠️ BA.04</button>
+        <button type="button" class="swal-note-chip ${initialPrefix === "BA.01" ? "active" : ""}" data-type="ba" data-val="BA.01">BA.01</button>
+        <button type="button" class="swal-note-chip ${initialPrefix === "BA.02" ? "active" : ""}" data-type="ba" data-val="BA.02">BA.02</button>
+        <button type="button" class="swal-note-chip ${initialPrefix === "BA.03" ? "active" : ""}" data-type="ba" data-val="BA.03">BA.03</button>
+        <button type="button" class="swal-note-chip ${initialPrefix === "BA.04" ? "active" : ""}" data-type="ba" data-val="BA.04">BA.04</button>
 
         <button type="button" class="swal-note-chip-clear" id="swal-btn-clear-note">✕ Hapus</button>
       </div>
 
-      <!-- Input Group with Static Locked Prefix (Prefix tidak bisa diedit/dihapus di input) -->
-      <div id="swal-note-input-group" style="display: flex; align-items: center; width: 100%; border: 1.5px solid var(--card-border); border-radius: 10px; background: var(--input-bg, var(--card-bg)); overflow: hidden; height: 40px; transition: border-color 0.2s;">
-        <div id="swal-note-prefix-badge" style="display: ${initialPrefix ? "flex" : "none"}; padding: 0 8px; height: 100%; align-items: center; justify-content: center; background: rgba(239, 68, 68, 0.15); color: #f87171; font-weight: 800; font-size: 11.5px; border-right: 1px solid rgba(239, 68, 68, 0.3); white-space: nowrap; user-select: none; gap: 4px;">
+      <!-- Input Group with Static Locked Prefix & Conditional BA.02 Dropdown -->
+      <div id="swal-note-input-group" style="display: flex; align-items: center; width: 100%; border: 1.5px solid var(--card-border); border-radius: 10px; background: var(--input-bg, var(--card-bg)); overflow: hidden; min-height: 40px; transition: border-color 0.2s;">
+        <div id="swal-note-prefix-badge" style="display: ${initialPrefix ? "flex" : "none"}; padding: 0 8px; height: 40px; align-items: center; justify-content: center; background: rgba(239, 68, 68, 0.15); color: #f87171; font-weight: 800; font-size: 11.5px; border-right: 1px solid rgba(239, 68, 68, 0.3); white-space: nowrap; user-select: none; gap: 4px;">
           <span id="swal-note-prefix-text">${escapeHtml(initialPrefix)}</span>
           <button type="button" id="swal-btn-remove-prefix" title="Lepas prefix" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; font-weight: 800; font-size: 11px; opacity: 0.7;">✕</button>
         </div>
 
+        <!-- Container Dropdown khusus BA.02 dengan Custom Chevron Icon -->
+        <div
+          id="swal-select-ba02-wrapper"
+          style="display: ${isBa02 && !isCustomBa02 ? "flex" : "none"}; align-items: center; position: relative; width: 100%; flex: 1; height: 40px;"
+        >
+          <select
+            id="swal-select-ba02-detail"
+            class="input-field pdo-swal-select"
+            style="width: 100%; height: 100%; border: none; background: transparent; padding: 0 28px 0 10px; font-size: 13px; font-weight: 700; border-radius: 0; outline: none; box-shadow: none; cursor: pointer; appearance: none; -webkit-appearance: none; color: ${ba02SelectedOption === "" ? "var(--text-secondary)" : "var(--text-primary)"};"
+          >
+            <option value="" ${ba02SelectedOption === "" ? "selected" : ""} style="color: var(--text-secondary);">-- Pilih Keterangan BA.02 --</option>
+            <option value="NP1" ${ba02SelectedOption === "NP1" ? "selected" : ""}>NP1</option>
+            <option value="NP2" ${ba02SelectedOption === "NP2" ? "selected" : ""}>NP2</option>
+            <option value="__CUSTOM__" ${ba02SelectedOption === "__CUSTOM__" ? "selected" : ""}>Lainnya... (ketik manual)</option>
+          </select>
+          <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-secondary); display: flex; align-items: center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Input Text Field (Full Width saat mode manual atau BA lainnya) -->
         <input
           id="swal-input-keterangan"
           type="text"
           class="input-field"
-          placeholder="${isFixedVal ? "Nilai tetap terkunci" : initialPrefix ? "Ketik detail kendala/alasan..." : "Catatan unit..."}"
-          value="${escapeHtml(isFixedVal ? cleanVal.toUpperCase() : initialDetail)}"
+          placeholder="${isFixedVal ? "Nilai tetap terkunci" : isBa02 ? "Ketik alasan/kendala..." : initialPrefix ? "Ketik detail kendala/alasan..." : "Catatan unit..."}"
+          value="${escapeHtml(isFixedVal ? cleanVal.toUpperCase() : isBa02 && !isCustomBa02 ? "" : initialDetail)}"
           ${isFixedVal ? "readonly" : ""}
-          style="flex: 1; border: none; background: transparent; padding: 0 10px; font-size: 13px; height: 100%; border-radius: 0; outline: none; box-shadow: none; ${isFixedVal ? "cursor: default; font-weight: 700;" : ""}"
+          style="display: ${isBa02 && !isCustomBa02 ? "none" : "block"}; flex: 1; border: none; background: transparent; padding: 0 10px; font-size: 13px; height: 40px; border-radius: 0; outline: none; box-shadow: none; ${isFixedVal ? "cursor: default; font-weight: 700;" : ""}"
         />
+
+        <!-- Tombol Kembali ke Dropdown (Icon Only, borderless, transparan dengan padding pemisah) -->
+        <button
+          type="button"
+          id="swal-btn-switch-dropdown"
+          title="Kembali ke pilihan dropdown"
+          style="display: ${isCustomBa02 ? "flex" : "none"}; align-items: center; justify-content: center; width: 34px; height: 40px; background: transparent; color: var(--text-secondary); border: none; outline: none; box-shadow: none; cursor: pointer; padding: 0 10px 0 4px; flex-shrink: 0; transition: color 0.2s;"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+        </button>
       </div>
     </div>
   `;
 }
 
 /**
- * Setup event listeners untuk Smart Keterangan Input (Chips, Prefix Badge, Clear)
+ * Setup event listeners untuk Smart Keterangan Input (Chips, Prefix Badge, Clear, BA.02 Dropdown)
  */
 function setupSmartKeteranganLogic(popup: HTMLElement) {
   const chips = popup.querySelectorAll<HTMLButtonElement>(".swal-note-chip");
@@ -135,9 +181,74 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
   const removePrefixBtn = popup.querySelector<HTMLButtonElement>(
     "#swal-btn-remove-prefix",
   );
+  const ba02Wrapper = popup.querySelector<HTMLElement>(
+    "#swal-select-ba02-wrapper",
+  );
+  const ba02Select = popup.querySelector<HTMLSelectElement>(
+    "#swal-select-ba02-detail",
+  );
+  const switchDropdownBtn = popup.querySelector<HTMLButtonElement>(
+    "#swal-btn-switch-dropdown",
+  );
   const noteInput = popup.querySelector<HTMLInputElement>(
     "#swal-input-keterangan",
   );
+
+  const updateBa02UI = () => {
+    if (!ba02Select || !ba02Wrapper || !noteInput) return;
+    const val = ba02Select.value;
+    if (val === "__CUSTOM__") {
+      ba02Wrapper.style.display = "none";
+      noteInput.style.display = "block";
+      noteInput.readOnly = false;
+      noteInput.style.cursor = "text";
+      noteInput.style.fontWeight = "normal";
+      noteInput.placeholder = "Ketik alasan/kendala...";
+      if (switchDropdownBtn) switchDropdownBtn.style.display = "flex";
+      noteInput.focus();
+    } else if (val === "NP1" || val === "NP2") {
+      ba02Wrapper.style.display = "flex";
+      ba02Wrapper.style.width = "100%";
+      ba02Wrapper.style.flex = "1";
+      if (switchDropdownBtn) switchDropdownBtn.style.display = "none";
+      noteInput.style.display = "none";
+      noteInput.value = "";
+      ba02Select.style.color = "var(--text-primary)";
+    } else {
+      // Placeholder selected ("")
+      ba02Wrapper.style.display = "flex";
+      ba02Wrapper.style.width = "100%";
+      ba02Wrapper.style.flex = "1";
+      if (switchDropdownBtn) switchDropdownBtn.style.display = "none";
+      noteInput.style.display = "none";
+      noteInput.value = "";
+      ba02Select.style.color = "var(--text-secondary)";
+    }
+  };
+
+  if (ba02Select) {
+    ba02Select.addEventListener("change", updateBa02UI);
+  }
+
+  if (switchDropdownBtn) {
+    switchDropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (ba02Select) {
+        ba02Select.value = "";
+        ba02Select.style.color = "var(--text-secondary)";
+      }
+      if (noteInput) {
+        noteInput.value = "";
+        noteInput.style.display = "none";
+      }
+      if (switchDropdownBtn) switchDropdownBtn.style.display = "none";
+      if (ba02Wrapper) {
+        ba02Wrapper.style.display = "flex";
+        ba02Wrapper.style.width = "100%";
+        ba02Wrapper.style.flex = "1";
+      }
+    });
+  }
 
   chips.forEach((chip) => {
     chip.addEventListener("click", () => {
@@ -153,27 +264,45 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
           prefixText.innerText = val;
           prefixBadge.style.display = "flex";
         }
-        if (noteInput) {
-          noteInput.readOnly = false;
-          noteInput.style.cursor = "text";
-          noteInput.style.fontWeight = "normal";
-          noteInput.placeholder = "Ketik detail kendala/alasan...";
-          // Jika sebelumnya isi input adalah preset fixed, bersihkan input detail
-          if (
-            ["OFF", "NP1", "NP2", "TO EVDAL"].includes(
-              noteInput.value.trim().toUpperCase(),
-            )
-          ) {
-            noteInput.value = "";
+
+        if (val === "BA.02") {
+          updateBa02UI();
+        } else {
+          if (ba02Wrapper) {
+            ba02Wrapper.style.display = "none";
           }
-          noteInput.focus();
+          if (switchDropdownBtn) {
+            switchDropdownBtn.style.display = "none";
+          }
+          if (noteInput) {
+            noteInput.style.display = "block";
+            noteInput.readOnly = false;
+            noteInput.style.cursor = "text";
+            noteInput.style.fontWeight = "normal";
+            noteInput.placeholder = "Ketik detail kendala/alasan...";
+            if (
+              ["OFF", "TO EVDAL", "NP1", "NP2"].includes(
+                noteInput.value.trim().toUpperCase(),
+              )
+            ) {
+              noteInput.value = "";
+            }
+            noteInput.focus();
+          }
         }
       } else if (type === "fixed") {
-        // Fixed preset mode: nilai tetap, terkunci read-only, tidak dapat diedit atau ditambah teks
+        // Fixed preset mode (OFF, TO EVDAL)
         if (prefixBadge) {
           prefixBadge.style.display = "none";
         }
+        if (ba02Wrapper) {
+          ba02Wrapper.style.display = "none";
+        }
+        if (switchDropdownBtn) {
+          switchDropdownBtn.style.display = "none";
+        }
         if (noteInput) {
+          noteInput.style.display = "block";
           noteInput.value = val;
           noteInput.readOnly = true;
           noteInput.style.cursor = "default";
@@ -188,8 +317,11 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
     removePrefixBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       if (prefixBadge) prefixBadge.style.display = "none";
+      if (ba02Wrapper) ba02Wrapper.style.display = "none";
+      if (switchDropdownBtn) switchDropdownBtn.style.display = "none";
       chips.forEach((c) => c.classList.remove("active"));
       if (noteInput) {
+        noteInput.style.display = "block";
         noteInput.readOnly = false;
         noteInput.style.cursor = "text";
         noteInput.style.fontWeight = "normal";
@@ -203,7 +335,14 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
     clearBtn.addEventListener("click", () => {
       chips.forEach((c) => c.classList.remove("active"));
       if (prefixBadge) prefixBadge.style.display = "none";
+      if (ba02Wrapper) ba02Wrapper.style.display = "none";
+      if (switchDropdownBtn) switchDropdownBtn.style.display = "none";
+      if (ba02Select) {
+        ba02Select.value = "";
+        ba02Select.style.color = "var(--text-secondary)";
+      }
       if (noteInput) {
+        noteInput.style.display = "block";
         noteInput.value = "";
         noteInput.readOnly = false;
         noteInput.style.cursor = "text";
@@ -231,13 +370,13 @@ export async function showBusInputModal(
   // Progressive Disclosure: cek apakah kolom opsional sudah terisi
   const hasManual1 = Boolean(
     bus.manualShift1 &&
-      bus.manualShift1 !== "0" &&
-      bus.manualShift1.trim() !== "",
+    bus.manualShift1 !== "0" &&
+    bus.manualShift1.trim() !== "",
   );
   const hasManual2 = Boolean(
     bus.manualShift2 &&
-      bus.manualShift2 !== "0" &&
-      bus.manualShift2.trim() !== "",
+    bus.manualShift2 !== "0" &&
+    bus.manualShift2.trim() !== "",
   );
   const hasKeterangan = Boolean(bus.keterangan && bus.keterangan.trim() !== "");
 
@@ -441,11 +580,15 @@ export async function showBusInputModal(
             <label style="display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
               ${escapeHtml(singleMeta.label)}
             </label>
-            ${activeCategory === "kmAwal2" && bus.kmAkhir1 ? `
+            ${
+              activeCategory === "kmAwal2" && bus.kmAkhir1
+                ? `
               <button type="button" id="swal-btn-copy-km-single" class="swal-copy-km-chip" title="Salin nilai KM Akhir Shift 1">
                 📋 Salin KM S1 (${escapeHtml(bus.kmAkhir1)})
               </button>
-            ` : ""}
+            `
+                : ""
+            }
           </div>
           <input
             id="swal-input-single"
@@ -496,8 +639,9 @@ export async function showBusInputModal(
       if (isAll) {
         const segBtns =
           popup.querySelectorAll<HTMLButtonElement>(".swal-segment-btn");
-        const panelSections =
-          popup.querySelectorAll<HTMLElement>(".swal-panel-section");
+        const panelSections = popup.querySelectorAll<HTMLElement>(
+          ".swal-panel-section",
+        );
 
         segBtns.forEach((btn) => {
           btn.addEventListener("click", () => {
@@ -668,22 +812,48 @@ export async function showBusInputModal(
         prefixBadge && prefixBadge.style.display !== "none";
       const prefix =
         isPrefixActive && prefixText ? prefixText.innerText.trim() : "";
+      const ba02Select = popup.querySelector<HTMLSelectElement>(
+        "#swal-select-ba02-detail",
+      );
+      const ba02Wrapper = popup.querySelector<HTMLElement>(
+        "#swal-select-ba02-wrapper",
+      );
+      const isBa02Active =
+        prefix === "BA.02" &&
+        ba02Wrapper &&
+        ba02Wrapper.style.display !== "none";
 
       const noteInput = popup.querySelector<HTMLInputElement>(
         "#swal-input-keterangan",
       );
-      const rawNote = noteInput ? noteInput.value.trim() : "";
+
+      let rawNote = "";
+      if (isBa02Active && ba02Select) {
+        if (ba02Select.value === "NP1") {
+          rawNote = "NP1";
+        } else if (ba02Select.value === "NP2") {
+          rawNote = "NP2";
+        } else if (ba02Select.value === "__CUSTOM__") {
+          rawNote = noteInput ? noteInput.value.trim() : "";
+        } else {
+          // Placeholder "-- Pilih Keterangan BA.02 --" ("")
+          rawNote = "";
+        }
+      } else {
+        rawNote = noteInput ? noteInput.value.trim() : "";
+      }
 
       let resolvedKeterangan = rawNote;
       if (prefix) {
         resolvedKeterangan = rawNote ? `${prefix} ${rawNote}` : prefix;
       }
+      resolvedKeterangan = normalizeKeterangan(resolvedKeterangan);
 
       // Validasi logika berdasarkan status Keterangan (OFF, NP1, NP2, dll)
       const upperKet = resolvedKeterangan.toUpperCase();
       const isOffUnit = upperKet === "OFF";
-      const isNp1Unit = upperKet === "NP1";
-      const isNp2Unit = upperKet === "NP2";
+      const isNp1Unit = /\bNP1\b/i.test(upperKet);
+      const isNp2Unit = /\bNP2\b/i.test(upperKet);
 
       if (!isAll && singleMeta) {
         // --- Single Column Mode PreConfirm ---
@@ -855,7 +1025,10 @@ export async function showBusInputModal(
         if (headerMap?.tripPergi !== undefined && headerMap.tripPergi !== -1) {
           updates.tripPergi = tripPergi;
         }
-        if (headerMap?.tripPulang !== undefined && headerMap.tripPulang !== -1) {
+        if (
+          headerMap?.tripPulang !== undefined &&
+          headerMap.tripPulang !== -1
+        ) {
           updates.tripPulang = tripPulang;
         }
 

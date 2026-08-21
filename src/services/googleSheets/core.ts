@@ -1,6 +1,7 @@
 import { gapi } from 'gapi-script';
 import { isAuthError } from '../../utils/errorClassifier';
 import { parseIndonesianNumber } from '../../utils/numberUtils';
+import { normalizeKeterangan } from '../../utils/keteranganUtils';
 import { extractSpreadsheetId } from '../../utils/sheetIdentity';
 import { getRoutesFromCache, findSheetInRoutes } from '../../utils/cacheUtils';
 import { upsertDailyUnitSummaries } from '../routeService';
@@ -302,7 +303,7 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
             kmAkhir1: kmAkhir1Val,
             kmAwal2: kmAwal2Val,
             kmAkhir2: kmAkhir2Val,
-            keterangan: getValue(row, headerMap.keterangan),
+            keterangan: normalizeKeterangan(getValue(row, headerMap.keterangan)),
             originalRow: row
           });
         } else {
@@ -454,7 +455,7 @@ export const getBusRowData = async (
         kmAkhir1: getValue(headerMap.kmAkhir1),
         kmAwal2: getValue(headerMap.kmAwal2),
         kmAkhir2: getValue(headerMap.kmAkhir2),
-        keterangan: getValue(headerMap.keterangan),
+        keterangan: normalizeKeterangan(getValue(headerMap.keterangan)),
       };
     } catch (error: any) {
       throw new Error(error?.result?.error?.message || 'Gagal melakukan pengecekan data.');

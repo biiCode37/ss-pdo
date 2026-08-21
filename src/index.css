@@ -1659,3 +1659,34 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   font-weight: 800;
   font-size: 11px;
 }
+
+/* SweetAlert / Modal Select Styling */
+.pdo-swal-select {
+  color: var(--text-primary) !important;
+  background-color: transparent !important;
+}
+
+.pdo-swal-select option {
+  background-color: #1e1e1e !important;
+  color: #ededed !important;
+  padding: 8px 12px;
+}
+
+[data-theme="light"] .pdo-swal-select option {
+  background-color: #ffffff !important;
+  color: #171717 !important;
+}
+
+#swal-btn-switch-dropdown {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: var(--text-secondary) !important;
+}
+
+#swal-btn-switch-dropdown:hover {
+  color: var(--text-primary) !important;
+}
+
+

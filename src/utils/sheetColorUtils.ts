@@ -1,3 +1,5 @@
+import { normalizeKeterangan } from './keteranganUtils';
+
 export interface GoogleColor {
   red: number;
   green: number;
@@ -14,7 +16,8 @@ export interface GoogleColor {
  */
 export const getKeteranganColor = (keterangan?: string): GoogleColor | null => {
   if (!keterangan || !keterangan.trim()) return null;
-  const upper = keterangan.trim().toUpperCase();
+  const normalized = normalizeKeterangan(keterangan);
+  const upper = normalized.toUpperCase();
 
   // 1. BA.01 - BA.04, NP1, NP2 -> Skyblue (Biru Muda)
   // // ponytail: clean regex replaces multiple redundant .includes checks

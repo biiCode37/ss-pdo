@@ -1,3 +1,5 @@
+import { parseKeterangan } from "../utils/keteranganUtils";
+
 /**
  * Komponen pembantu untuk merender teks keterangan/catatan dengan
  * smart visual badging profesional (BA.01-04, OFF, NP1/NP2, TO EVDAL) dan simbol bullet point.
@@ -12,11 +14,12 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
     const trimmed = itemText.trim();
     if (!trimmed) return null;
 
-    // 1. BA.01 - BA.04 Prefix Detection (Preserves ⚠️ icon as critical trouble indicator)
-    const baMatch = trimmed.match(/^(BA\.0[1-4])(?:\s*[-:]?\s*(.*))?$/i);
-    if (baMatch) {
-      const prefix = baMatch[1].toUpperCase();
-      const detail = baMatch[2]?.trim();
+    const parsed = parseKeterangan(trimmed);
+
+    // 1. BA.01 - BA.04 Prefix Detection - Clean Professional Badge
+    if (parsed.prefix) {
+      const prefix = parsed.prefix;
+      const detail = parsed.detail;
       return (
         <div
           key={key}
@@ -28,7 +31,7 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
             lineHeight: 1.4,
           }}
         >
-          <span className="note-badge-ba">⚠️ {prefix}</span>
+          <span className="note-badge-ba">{prefix}</span>
           {detail && (
             <span
               style={{
@@ -45,6 +48,23 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
     }
 
     // 2. OFF (Libur) Detection - Clean Professional Badge
+    if (parsed.isFixed && parsed.fixedValue === "OFF") {
+      return (
+        <div
+          key={key}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            lineHeight: 1.4,
+          }}
+        >
+          <span className="note-badge-off">OFF</span>
+        </div>
+      );
+    }
+
+    // 2b. Standalone OFF with parenthesis
     if (/^OFF(?:\s*\(.*\))?$/i.test(trimmed)) {
       return (
         <div

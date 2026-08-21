@@ -1,6 +1,7 @@
 import { gapi } from 'gapi-script';
 import { isAuthError } from '../../utils/errorClassifier';
 import { getKeteranganColor, getRowEndCol } from '../../utils/sheetColorUtils';
+import { normalizeKeterangan } from '../../utils/keteranganUtils';
 import { logActivity } from '../routeService';
 import type { BusData, HeaderMap } from './types';
 import { withAuthRetry } from './auth';
@@ -40,7 +41,7 @@ export const updateBusData = async (
     if (updates.kmAkhir1 !== undefined) addUpdate('kmAkhir1', updates.kmAkhir1);
     if (updates.kmAwal2 !== undefined) addUpdate('kmAwal2', updates.kmAwal2);
     if (updates.kmAkhir2 !== undefined) addUpdate('kmAkhir2', updates.kmAkhir2);
-    if (updates.keterangan !== undefined) addUpdate('keterangan', updates.keterangan);
+    if (updates.keterangan !== undefined) addUpdate('keterangan', normalizeKeterangan(updates.keterangan));
 
     if (data.length === 0) return; // Nothing to update
 
@@ -179,7 +180,7 @@ export const updateBulkBusData = async (
       if (updates.kmAkhir1 !== undefined) addUpdate('kmAkhir1', updates.kmAkhir1);
       if (updates.kmAwal2 !== undefined) addUpdate('kmAwal2', updates.kmAwal2);
       if (updates.kmAkhir2 !== undefined) addUpdate('kmAkhir2', updates.kmAkhir2);
-      if (updates.keterangan !== undefined) addUpdate('keterangan', updates.keterangan);
+      if (updates.keterangan !== undefined) addUpdate('keterangan', normalizeKeterangan(updates.keterangan));
     }
 
     if (data.length === 0) return;
@@ -306,6 +307,37 @@ export const formatWholeSheet = async (
 
     const minRowIndex = Math.min(...buses.map((b) => b.rowIndex));
     const maxRowIndex = Math.max(...buses.map((b) => b.rowIndex));
+
+    // 0. Auto-standardisasi nilai teks Keterangan di spreadsheet asli (misal: "ba01" -> "BA.01", "np 1" -> "NP1")
+    if (headerMap.keterangan !== undefined && headerMap.keterangan !== -1) {
+      const ketColName = numberToColumnName(headerMap.keterangan);
+      const valueUpdates: any[] = [];
+      for (const bus of buses) {
+        if (bus.keterangan) {
+          const normalizedKet = normalizeKeterangan(bus.keterangan);
+          if (normalizedKet !== bus.keterangan) {
+            valueUpdates.push({
+              range: `${tabName}!${ketColName}${bus.rowIndex}`,
+              values: [[normalizedKet]],
+            });
+            bus.keterangan = normalizedKet;
+          }
+        }
+      }
+      if (valueUpdates.length > 0) {
+        try {
+          await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
+            spreadsheetId: sheetId,
+            resource: {
+              valueInputOption: "USER_ENTERED",
+              data: valueUpdates,
+            },
+          });
+        } catch (valErr) {
+          console.warn("[GoogleSheets] Gagal memperbarui standardisasi nilai keterangan di spreadsheet:", valErr);
+        }
+      }
+    }
 
     const requests: any[] = [];
 

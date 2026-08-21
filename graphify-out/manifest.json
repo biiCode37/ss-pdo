@@ -795,8 +795,8 @@
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {
-    "mtime": 1787034031.9885435,
-    "ast_hash": "ce8d6a070889211519427c5f6b8998a7",
+    "mtime": 1787323982.0298407,
+    "ast_hash": "7f5ecd348d9b9d0314a28cf73b9addf3",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_5/01_daftar_masalah_ss_pdo_refactor5.md": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "src/utils/sheetColorUtils.ts": {
-    "mtime": 1787322418.5792317,
-    "ast_hash": "c478e559248b1264e9cc67ad77406468",
+    "mtime": 1787323487.694491,
+    "ast_hash": "9c47d9805201dc59252df745cd719ce1",
     "semantic_hash": ""
   },
   "src/utils/routeValidation.test.ts": {
@@ -960,8 +960,8 @@
     "semantic_hash": ""
   },
   "src/utils/modals/busInputModal.ts": {
-    "mtime": 1787322418.5757363,
-    "ast_hash": "9c02f0e59c182ba6e25cf8debe13a743",
+    "mtime": 1787327640.6621213,
+    "ast_hash": "15ec6e0ba8ffb90f84f83c7662f2cf1e",
     "semantic_hash": ""
   },
   "src/hooks/__tests__/useOfflineSync.test.tsx": {
@@ -980,8 +980,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/core.ts": {
-    "mtime": 1787322418.5591364,
-    "ast_hash": "f1a3897bb178b165a2c5683c4e054b1a",
+    "mtime": 1787323524.1431286,
+    "ast_hash": "62e3457d4878b8af9b24acf5db0d8f31",
     "semantic_hash": ""
   },
   "src/services/googleSheets/index.ts": {
@@ -990,8 +990,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/mutations.ts": {
-    "mtime": 1787322418.561556,
-    "ast_hash": "416eff0ac8c9f5911de5f2e7deddc957",
+    "mtime": 1787323537.0718567,
+    "ast_hash": "79b89c7b420560ca61d6ba446ade2193",
     "semantic_hash": ""
   },
   "src/services/googleSheets/types.ts": {
@@ -1052,6 +1052,16 @@
   "refactor-ss-pdo/refact_6/other/03-aturan-ai-agent-v6.md": {
     "mtime": 1787322418.5359576,
     "ast_hash": "2f35eea4cbc80565ee4c6aae912a1931",
+    "semantic_hash": ""
+  },
+  "src/utils/keteranganUtils.test.ts": {
+    "mtime": 1787324288.470428,
+    "ast_hash": "66e451555094933fa119932e10d43be1",
+    "semantic_hash": ""
+  },
+  "src/utils/keteranganUtils.ts": {
+    "mtime": 1787324282.4834197,
+    "ast_hash": "68daf759437b54f194ae81e31e327e4f",
     "semantic_hash": ""
   }
 }
