@@ -296,7 +296,7 @@ function RouteSelectorCardComponent({
       setIsMorphed(true);
     }
     prevLoadingRef.current = isLoading;
-  }, [isLoading, isDataLoaded]);
+  }, [isLoading, isDataLoaded, isMorphed]);
 
   // Cari info rute aktif berdasarkan sheetUrl/currentSheetId
   const targetId = currentSheetId || extractSpreadsheetId(sheetUrl);

@@ -6,37 +6,30 @@ export interface GoogleColor {
 
 /**
  * Menentukan warna latar belakang sel baris di Google Sheets berdasarkan status Keterangan:
- * - BA.01 s/d BA.04, NP1, NP2: Skyblue (Biru Muda)
- * - OFF: Kuning (Yellow)
- * - TO EVDAL: Merah (Red)
- * - Lainnya / Kosong: Putih (Reset Color)
+ * - BA.01 s/d BA.04, NP1, NP2: Skyblue (Biru Muda) - Prioritas 1
+ * - TO EVDAL: Merah (Red) - Prioritas 2
+ * - OFF: Kuning (Yellow) - Prioritas 3 (wajib word boundary agar tidak salah deteksi kata seperti 'OFFICE')
+ * - Catatan Bebas / Lainnya: Hijau Muda (Light Green) - Prioritas 4
+ * - Kosong: null (Reset Color / Putih)
  */
 export const getKeteranganColor = (keterangan?: string): GoogleColor | null => {
   if (!keterangan || !keterangan.trim()) return null;
   const upper = keterangan.trim().toUpperCase();
 
-  // 1. OFF -> Kuning (Yellow)
-  if (/^OFF(?:\s*\(.*\))?$/i.test(upper) || upper.includes("OFF")) {
-    return { red: 1.0, green: 0.95, blue: 0.3 };
+  // 1. BA.01 - BA.04, NP1, NP2 -> Skyblue (Biru Muda)
+  // // ponytail: clean regex replaces multiple redundant .includes checks
+  if (/BA\.0[1-4]/i.test(upper) || /\bNP\s*[-.]?\s*[12]\b/i.test(upper)) {
+    return { red: 0.53, green: 0.81, blue: 0.98 };
   }
 
   // 2. TO EVDAL -> Merah (Red)
-  if (/TO\s*[-.]?\s*EVDAL/i.test(upper) || upper.includes("EVDAL")) {
+  if (/\bTO\s*[-.]?\s*EVDAL\b/i.test(upper)) {
     return { red: 0.95, green: 0.35, blue: 0.35 };
   }
 
-  // 3. BA.01 - BA.04, NP1, NP2 -> Skyblue (Biru Muda)
-  if (
-    /BA\.0[1-4]/i.test(upper) ||
-    /NP\s*[-.]?\s*[12]/i.test(upper) ||
-    upper.includes("BA.01") ||
-    upper.includes("BA.02") ||
-    upper.includes("BA.03") ||
-    upper.includes("BA.04") ||
-    upper.includes("NP1") ||
-    upper.includes("NP2")
-  ) {
-    return { red: 0.53, green: 0.81, blue: 0.98 };
+  // 3. OFF -> Kuning (Yellow) - Cek dengan word boundary agar tidak match kata majemuk
+  if (/\bOFF\b/i.test(upper)) {
+    return { red: 1.0, green: 0.95, blue: 0.3 };
   }
 
   // 4. Catatan Bebas / Keterangan Lainnya -> Hijau Muda (Light Green)

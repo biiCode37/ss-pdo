@@ -1,16 +1,16 @@
-# Graph Report - SS_PDO  (2026-08-20)
+# Graph Report - SS_PDO  (2026-08-21)
 
 ## Corpus Check
-- 171 files · ~239,181 words
+- 200 files · ~255,013 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1735 nodes · 2219 edges · 155 communities (137 shown, 18 thin omitted)
+- 2024 nodes · 2621 edges · 176 communities (158 shown, 18 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eb1a07d3`
+- Built from commit: `f37ccb0a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -118,7 +118,7 @@
 - rules/graphify.md
 - workflows/graphify.md
 - progress.md
-- googleSheets.ts
+- 🛠️ Rekomendasi Solusi — SS_PDO Refactor 6
 - Supabase Integration & Metadata Catalog Design Specification
 - Global Constraints
 - devDependencies
@@ -129,16 +129,16 @@
 - Global Constraints
 - scripts
 - package.json
-- analytics.ts
+- alertUtils.ts
 - Design Document — User Activity & Audit Telemetry System
-- BusCard.tsx
+- utils/analytics.ts
 - vite-plugin-pwa
 - Evaluation and iteration
-- alertUtils.ts
+- @types/node
 - File yang Harus Dibuat
 - resultStatus.ts
 - Dashboard.tsx
-- useOfflineSync.ts
+- App.tsx
 - Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)
 - Global Constraints
 - Appendix B - Canonical Sources (read these before reinventing)
@@ -158,57 +158,89 @@
 - 5. CONTEXT-AWARE PROACTIVITY
 - 8. DARK MODE PROTOCOL
 - 📱 Spec Desain: Progressive Disclosure Chips pada Modal Input SweetAlert2
-- 7. DIAL DEFINITIONS (Technical Reference)
+- 📋 Laporan Before-After — Batch 7: Sinkronisasi Audit & Penguatan Benteng Keamanan
 - Refactor 5 — Daftar Masalah SS_PDO
 - Refactor 5 — Prompt untuk AI Agent Code
 - Refactor 5 — Rekomendasi Solusi SS_PDO
-- App.tsx
+- googleSheets.ts
 - Global Constraints
-- happy-dom
+- Daftar Masalah v5 — Proyek SS_PDO / SPUM
 - 2. Rincian Ketentuan & Spesifikasi
 - vitest
 - Global Constraints
+- 📋 Laporan Before-After — Batch 1: Penanganan Masalah Nyata di Layar Pengguna
+- 2. 🛡️ Aturan Emas Mutlak (Non-Negotiable Golden Rules)
+- A. SERVICE LAYER — `googleSheets.ts` (1832 baris, GOD FILE)
+- D. UI/UX COMPONENTS
+- 🔍 Audit Temuan Masalah — SS_PDO Refactor 6
+- B. SERVICE LAYER — `routeService.ts`
+- C. HOOK LAYER
+- G. CONFIGURATION & BUILD
+- I. REACT PATTERNS & PERFORMANCE
+- E. SUPABASE & INFRASTRUCTURE
+- H. KEAMANAN & PRIVASI
+- 📋 Laporan Before-After — Batch 2: Keandalan & Kenyamanan Saat Bekerja Offline
+- 📋 Laporan Before-After — Batch 4: Penataan Ruang & Peningkatan Kecepatan Tampilan
+- 📋 Laporan Before-After — Batch 5: Penjelasan Tampilan & Penanganan Kejadian Khusus
+- 📋 Laporan Before-After — Batch 6: Kerapian Aplikasi, Ikon Instalasi di HP, & Penataan Modul Utama
+- 📋 Laporan Before-After — Batch 3: Pembersihan Mesin, Penghematan Memori HP, & Keamanan
+- BusData
+- 🌟 Ringkasan Lengkap Before-After — Inisiatif Refactor 6
+- Rekomendasi Solusi v5 — Proyek SS_PDO / SPUM
+- Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM
+- 7. DIAL DEFINITIONS (Technical Reference)
 
 ## God Nodes (most connected - your core abstractions)
-1. `react` - 26 edges
-2. `BusData` - 23 edges
+1. `react` - 27 edges
+2. `BusData` - 26 edges
 3. `Writing Skills` - 23 edges
-4. `Dashboard()` - 18 edges
-5. `compilerOptions` - 18 edges
-6. `parseIndonesianNumber()` - 17 edges
+4. `Dashboard()` - 21 edges
+5. `parseIndonesianNumber()` - 21 edges
+6. `compilerOptions` - 19 edges
 7. `Testing Skills With Subagents` - 16 edges
 8. `tasteskill: Anti-Slop Frontend Skill` - 16 edges
 9. `BusCardComponent()` - 15 edges
-10. `compilerOptions` - 15 edges
+10. `HeaderMap` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Props` --references--> `BusData`  [EXTRACTED]
-  src/components/AnalyticsDashboard.tsx → src/services/googleSheets.ts
-- `Props` --references--> `BusData`  [EXTRACTED]
-  src/components/UnitDetailModal.tsx → src/services/googleSheets.ts
-- `App()` --calls--> `useUserActivityTracking()`  [EXTRACTED]
-  src/App.tsx → src/hooks/useUserActivityTracking.ts
-- `App()` --calls--> `showErrorAlert()`  [EXTRACTED]
-  src/App.tsx → src/utils/alertUtils.ts
-- `BusCardComponent()` --calls--> `getBusRowData()`  [EXTRACTED]
-  src/components/BusCard.tsx → src/services/googleSheets.ts
+- `UseOfflineSyncOptions` --references--> `BusData`  [EXTRACTED]
+  src/hooks/useOfflineSync.ts → src/services/googleSheets/types.ts
+- `CrossPeriodSummaryResult` --references--> `BusData`  [EXTRACTED]
+  src/services/routeService.ts → src/services/googleSheets/types.ts
+- `App()` --calls--> `checkSignedInAsync()`  [EXTRACTED]
+  src/App.tsx → src/services/googleSheets/auth.ts
+- `App()` --calls--> `hasGoogleCreds()`  [EXTRACTED]
+  src/App.tsx → src/services/googleSheets/auth.ts
+- `App()` --calls--> `initGoogleApi()`  [EXTRACTED]
+  src/App.tsx → src/services/googleSheets/auth.ts
 
 ## Import Cycles
-- None detected.
+- 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
+- 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 
-## Communities (155 total, 18 thin omitted)
+## Communities (176 total, 18 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
 Nodes (55): bootstrapPage(), brandMarkup(), broadcast(), browserLauncherForPlatform(), chmodOwnerOnly(), clients, companionUrl(), computeAcceptKey() (+47 more)
 
 ### Community 1 - "design_system.py"
-Cohesion: 0.06
+Cohesion: 0.05
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
 ### Community 2 - "routeService.ts"
-Cohesion: 0.11
-Nodes (30): AccumulationSheet(), MONTH_NAMES_ID, Props, FlatRouteSheet, flattenRoutes(), MONTH_NAMES_ID, Props, RouteSelectorCard (+22 more)
+Cohesion: 0.05
+Nodes (85): AccumulationSheet(), MONTH_NAMES_ID, Props, FlatRouteSheet, flattenRoutes(), MONTH_NAMES_ID, Props, RouteSelectorCard (+77 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -220,7 +252,7 @@ Nodes (8): plugins, rules, react/only-export-components, react/rules-of-hooks, $
 
 ### Community 5 - "compilerOptions"
 Cohesion: 0.08
-Nodes (23): DOM, src, vite/client, compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, erasableSyntaxOnly, jsx (+15 more)
+Nodes (24): DOM, src, vite/client, compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, erasableSyntaxOnly, jsx (+16 more)
 
 ### Community 6 - "dependencies"
 Cohesion: 0.12
@@ -550,9 +582,9 @@ Nodes (3): Global Constraints, Task 1: Update BusCard.tsx (Auto-Focus & Enter-to
 Cohesion: 0.50
 Nodes (3): Global Constraints, Persistent Auth Session Implementation Plan, Task 1: Update Auth Session Persistence (`src/services/googleSheets.ts`)
 
-### Community 105 - "googleSheets.ts"
-Cohesion: 0.14
-Nodes (30): AuthResult, checkSignedIn(), detectHeaderRowAndBuildComposite(), ensureValidToken(), extractSheetId(), findColumnIndex(), formatWholeSheet(), getAccumulatedBusData() (+22 more)
+### Community 105 - "🛠️ Rekomendasi Solusi — SS_PDO Refactor 6"
+Cohesion: 0.04
+Nodes (45): Batch 1: 🔴 Bug Kritis User-Facing (P1) [✅ SELESAI], Batch 2: 🟠 Reliability & UX (P2) [✅ SELESAI], Batch 3: 🟡 Maintainability & Code Health (P3) [✅ SELESAI], Batch 4: 🟡 Architecture & Refactoring (P3) [✅ SELESAI], Batch 5: 🟡 Testing, Edge Cases, & Hardening (P3) [✅ SELESAI], Batch 6: 🟡 Configuration, PWA Polish, & Service Modularization (P3) [✅ SELESAI], Batch 7: 🛡️ Security & Hardening Sync (Audit External V6) [✅ Selesai], BUG-48 — Stored XSS Hardening di Seluruh Titik Interpolasi HTML (+37 more)
 
 ### Community 106 - "Supabase Integration & Metadata Catalog Design Specification"
 Cohesion: 0.17
@@ -564,7 +596,7 @@ Nodes (7): Global Constraints, Supabase Integration Implementation Plan, Task 1:
 
 ### Community 108 - "devDependencies"
 Cohesion: 0.12
-Nodes (17): oxlint, devDependencies, oxlint, @types/gapi.auth2, @types/gapi.client.sheets, @types/node, @types/react, typescript (+9 more)
+Nodes (17): happy-dom, oxlint, devDependencies, happy-dom, oxlint, @types/gapi.auth2, @types/gapi.client.sheets, @types/react (+9 more)
 
 ### Community 109 - "Daftar Masalah v3 — Proyek SS_PDO / SPUM (Sistem Pencatatan Shift Bus)"
 Cohesion: 0.13
@@ -594,25 +626,21 @@ Nodes (6): scripts, build, dev, lint, preview, test
 Cohesion: 0.40
 Nodes (4): name, private, type, version
 
-### Community 116 - "analytics.ts"
-Cohesion: 0.09
-Nodes (29): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, DailyToaTrendCard, DailyToaTrendCardComponent(), parseSelectedDay() (+21 more)
+### Community 116 - "alertUtils.ts"
+Cohesion: 0.22
+Nodes (22): BusCardComponent(), Dashboard(), ProfileMenuSheet(), Props, QueueModal(), reauthenticateSession(), BulkCopyKmModalOptions, getCurrentTheme() (+14 more)
 
 ### Community 117 - "Design Document — User Activity & Audit Telemetry System"
 Cohesion: 0.17
 Nodes (11): 1. Overview & Objectives, 2. Database Schema Modifications, 3. Architecture & Service Layer Updates, 4. Instrumentation Points (Event Mapping), 5. Non-Blocking & Reliability Principles, 6. Verification Plan, A. Table `user_profiles` (Add Telemetry Columns), A. Telemetry & Heartbeat Helper (`src/services/routeService.ts`) (+3 more)
 
-### Community 118 - "BusCard.tsx"
-Cohesion: 0.16
-Nodes (22): BusCardComponent(), Props, renderStatusBadge(), UnitCard, UnitCardComponent(), UnitSummaryDashboardComponent(), isNetworkError(), BulkCopyKmModalOptions (+14 more)
+### Community 118 - "utils/analytics.ts"
+Cohesion: 0.13
+Nodes (18): AnalyticsDashboard, AnalyticsDashboardComponent(), CompletionStatusCard, Props, FormattedNoteText(), KPICard, Props, Props (+10 more)
 
 ### Community 120 - "Evaluation and iteration"
 Cohesion: 0.50
 Nodes (4): Build evaluations first, Develop Skills iteratively with the agent, Evaluation and iteration, Observe how agents navigate Skills
-
-### Community 121 - "alertUtils.ts"
-Cohesion: 0.18
-Nodes (26): BusCard, BusList, BusListComponent(), Dashboard(), ProfileMenuSheet(), Props, CATEGORY_META, getCurrentTheme() (+18 more)
 
 ### Community 122 - "File yang Harus Dibuat"
 Cohesion: 0.20
@@ -623,12 +651,12 @@ Cohesion: 0.39
 Nodes (6): cacheResult(), DataResult, DataSourceStatus, errorResult(), isStale(), liveResult()
 
 ### Community 124 - "Dashboard.tsx"
-Cohesion: 0.16
+Cohesion: 0.15
 Nodes (11): react, BottomNav, BottomNavProps, Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton() (+3 more)
 
-### Community 125 - "useOfflineSync.ts"
-Cohesion: 0.19
-Nodes (18): Props, Props, Props, detectCollision(), isAuthError(), readQueueFromStorage(), RETRY_DELAYS, SyncItem (+10 more)
+### Community 125 - "App.tsx"
+Cohesion: 0.20
+Nodes (13): App(), LegalModals(), LegalModalsProps, LegalModalType, LoginScreen(), Props, TestComponent(), useUserActivityTracking() (+5 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
 Cohesion: 0.20
@@ -706,9 +734,9 @@ Nodes (5): 8.A Token Strategy (pick one, stick to it), 8.B Do Not Prescribe Spec
 Cohesion: 0.22
 Nodes (8): 1. Latar Belakang & Masalah, 2. Tujuan & Sasaran, 3. Rincian Teknis & Alur Interaksi, 4. Kriteria Keberhasilan (Quality Gates), A. Tampilan Berdasarkan Kategori Kolom, B. Interaksi & Event Binding (`didOpen` & Keydown), C. Styling Token CSS, 📱 Spec Desain: Progressive Disclosure Chips pada Modal Input SweetAlert2
 
-### Community 145 - "7. DIAL DEFINITIONS (Technical Reference)"
-Cohesion: 0.50
-Nodes (4): 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10), VISUAL_DENSITY (Level 1-10)
+### Community 145 - "📋 Laporan Before-After — Batch 7: Sinkronisasi Audit & Penguatan Benteng Keamanan"
+Cohesion: 0.13
+Nodes (14): 1. Penyisipan Pengaman XSS pada Seluruh Kolom Input Bus (BUG-48), 2. Penyeragaman Standar Pembaca ID Spreadsheet (BUG-49), 3. Pelacakan Jam Kerja yang Lebih Akurat & Tahan Mode Tidur (BUG-50), 4. Transparansi Catatan Waktu Aktif di Menu Profil (BUG-52), 📋 Laporan Before-After — Batch 7: Sinkronisasi Audit & Penguatan Benteng Keamanan, 📊 Rangkuman Perubahan Batch 7, 🔴 Sebelum Diperbaiki (Before):, 🔴 Sebelum Diperbaiki (Before): (+6 more)
 
 ### Community 146 - "Refactor 5 — Daftar Masalah SS_PDO"
 Cohesion: 0.11
@@ -722,13 +750,17 @@ Nodes (16): Acceptance criteria, Aturan kerja, Batasan, Format output yang dimin
 Cohesion: 0.12
 Nodes (15): Prinsip umum, Refactor 5 — Rekomendasi Solusi SS_PDO, SOL-01 — Validasi auth harus sinkron dan final, SOL-02 — Normalisasi identitas sheet/rute, SOL-03 — Perbaiki fallback akumulasi multi-hari, SOL-04 — Parser URL harus lebih toleran dan eksplisit, SOL-05 — Cache fallback harus transparan ke user, SOL-06 — Jangan samakan error total dengan nol (+7 more)
 
-### Community 149 - "App.tsx"
-Cohesion: 0.25
-Nodes (13): App(), LoginScreen(), ModalType, Props, checkSignedInAsync(), getGoogleCreds(), hasGoogleCreds(), initGoogleApi() (+5 more)
+### Community 149 - "googleSheets.ts"
+Cohesion: 0.16
+Nodes (21): DailyToaTrendCard, DailyToaTrendCardComponent(), parseSelectedDay(), Props, Props, renderStatusBadge(), UnitCard, UnitCardComponent() (+13 more)
 
 ### Community 150 - "Global Constraints"
 Cohesion: 0.29
 Nodes (6): Global Constraints, Task 1: Supabase Service & Types Telemetry Helpers, Task 2: Activity Tracking Hook (`useUserActivityTracking`), Task 3: Instrumentation of Auth, Route Events, & App Integration, Task 4: Instrumentation of Data Updates & Offline Sync, User Activity & Telemetry System Implementation Plan
+
+### Community 151 - "Daftar Masalah v5 — Proyek SS_PDO / SPUM"
+Cohesion: 0.17
+Nodes (11): BUG-48 — Stored XSS: interpolasi HTML tanpa escaping di modal input SweetAlert2, BUG-49 — Perbaikan ISS-02/ISS-04 belum sepenuhnya menyebar, BUG-50 — Pelacakan aktivitas user: durasi tidak akurat & error dibungkam total, BUG-51 — Baseline collision-check masih dari props langsung (ISS-11, perlu verifikasi lanjutan), BUG-52 — Tidak ada transparansi ke user soal pelacakan aktivitas, Daftar Masalah v5 — Proyek SS_PDO / SPUM, 🔴 KRITIS, 🟡 MINOR (+3 more)
 
 ### Community 152 - "2. Rincian Ketentuan & Spesifikasi"
 Cohesion: 0.22
@@ -738,25 +770,109 @@ Nodes (8): 1. Latar Belakang & Tujuan, 2. Rincian Ketentuan & Spesifikasi, 3. Re
 Cohesion: 0.29
 Nodes (6): Global Constraints, Plan Review Checklist, Route Validation & Formatting Implementation Plan, Task 1: Route Validation Pure Utility Module, Task 2: Live Connection & Header Inspection Service, Task 3: UI Enhancement in RouteSelectorCard
 
+### Community 155 - "📋 Laporan Before-After — Batch 1: Penanganan Masalah Nyata di Layar Pengguna"
+Cohesion: 0.11
+Nodes (17): 1. Tampilan Grafik Tren Penumpang Saat Internet Gangguan (SOL-R6-007), 2. Pengisian Kolom Keterangan pada Mode Ringkasan (SOL-R6-021), 3. Warna Otomatis pada Baris Bus di Google Sheets (SOL-R6-025), 4. Alur Masuk Akun Google (Login) yang Lebih Lancar (SOL-R6-002 & 003), 5. Keamanan dari Karakter Aneh saat Mengetik Catatan (SOL-R6-022), 📋 Laporan Before-After — Batch 1: Penanganan Masalah Nyata di Layar Pengguna, 📊 Rangkuman Perubahan Batch 1, 🔴 Sebelum Diperbaiki (Before): (+9 more)
+
+### Community 156 - "2. 🛡️ Aturan Emas Mutlak (Non-Negotiable Golden Rules)"
+Cohesion: 0.11
+Nodes (18): 1. Misi & Peran AI Agent, 1. Single Source of Truth (SSOT) Google Sheets, 2. 🛡️ Aturan Emas Mutlak (Non-Negotiable Golden Rules), 2. Mobile-First & Responsive UX, 3. 🏗️ Batasan Teknis & Ketentuan Arsitektur, 3. Sesi Login Permanen (No Timeout), 4. 📋 Alur & Protokol Eksekusi Bertahap (Tersinkronisasi), 4. Tooling & Package Manager (Wajib PNPM) (+10 more)
+
+### Community 157 - "A. SERVICE LAYER — `googleSheets.ts` (1832 baris, GOD FILE)"
+Cohesion: 0.18
+Nodes (11): A. SERVICE LAYER — `googleSheets.ts` (1832 baris, GOD FILE), R6-001 🔴 CRITICAL — God File: `googleSheets.ts` Terlalu Besar & Campur Aduk, R6-002 🔴 CRITICAL — Race Condition: `signIn()` Resolve Sebelum `userinfo` Fetch Selesai, R6-003 🟠 HIGH — `logActivity` di `signIn()` Membaca Email yang Mungkin Stale, R6-004 🟠 HIGH — `signIn()` Selalu `prompt: 'consent'` — UX Buruk untuk Re-login, R6-005 🟠 HIGH — `refreshTokenInteractiveOrSilent` Error Handler Resolve Tanpa Reject, R6-006 🟡 MEDIUM — `checkSignedIn()` (Sync) vs `checkSignedInAsync()` — Duplikasi Logik, R6-007 🔴 CRITICAL — `getMonthlyToaTrend` Kembalikan Dummy Data Saat Error (+3 more)
+
+### Community 158 - "D. UI/UX COMPONENTS"
+Cohesion: 0.20
+Nodes (10): D. UI/UX COMPONENTS, R6-017 🔴 CRITICAL — `Dashboard` Inline `localStorage.getItem` Parsing Tanpa Guard, R6-018 🟠 HIGH — `Dashboard` Duplikasi Logika `localStorage.getItem('PDO_CACHE_ROUTES')` (5x), R6-019 🟠 HIGH — `Dashboard` IIFE Render Pattern Menyulitkan React Tree, R6-020 🔴 CRITICAL — `alertUtils.ts` God File (1468 baris), R6-021 🟠 HIGH — `showBusInputModal` Mode ALL: Keterangan Input Duplikat, R6-022 🟡 MEDIUM — `showBusInputModal` Inline HTML dengan Template Literal Rawan XSS, R6-023 🟠 HIGH — `BusList` Props Type Mismatch untuk `addToQueue` (+2 more)
+
+### Community 159 - "🔍 Audit Temuan Masalah — SS_PDO Refactor 6"
+Cohesion: 0.22
+Nodes (8): 🔍 Audit Temuan Masalah — SS_PDO Refactor 6, F. DATA INTEGRITY & PARSING, J. TESTING GAPS, Klasifikasi Severitas, R6-028 🟠 HIGH — `numberUtils.parseIndonesianNumber` Ambiguitas `4.670`, R6-029 🟡 MEDIUM — `getAccumulatedBusData` KM Akumulasi Tidak Mempertahankan Detail, R6-038 🟡 MEDIUM — Test Coverage Tidak Merata, Ringkasan Statistik
+
+### Community 160 - "B. SERVICE LAYER — `routeService.ts`"
+Cohesion: 0.50
+Nodes (4): B. SERVICE LAYER — `routeService.ts`, R6-011 🟠 HIGH — `verifyUserProfile` Fail-Closed pada Network Error, R6-012 🟡 MEDIUM — `sendUserHeartbeat` Read-then-Write Race Condition, R6-013 🟡 MEDIUM — `getCrossPeriodAccumulation` Filter Client-Side
+
+### Community 161 - "C. HOOK LAYER"
+Cohesion: 0.50
+Nodes (4): C. HOOK LAYER, R6-014 🔴 CRITICAL — `useOfflineSync.isAuthError` Berbeda dengan `googleSheets.isAuthError`, R6-015 🟠 HIGH — `useOfflineSync.processQueue` Closure Stale `options`, R6-016 🟡 MEDIUM — `useOfflineSync` SyncItem ID Menggunakan `Date.now()`
+
+### Community 162 - "G. CONFIGURATION & BUILD"
+Cohesion: 0.50
+Nodes (4): G. CONFIGURATION & BUILD, R6-030 🟡 MEDIUM — PWA Manifest Icons Tidak Lengkap, R6-031 🟢 LOW — `package.json` Name Generik `"app"`, R6-032 🟢 LOW — `tsconfig.app.json` Belum Diverifikasi Strict Mode
+
+### Community 163 - "I. REACT PATTERNS & PERFORMANCE"
+Cohesion: 0.50
+Nodes (4): I. REACT PATTERNS & PERFORMANCE, R6-035 🟠 HIGH — `Dashboard` State Management Overload (25+ useState), R6-036 🟡 MEDIUM — `LoginScreen` 1374 Baris, Kebanyakan Inline JSX/CSS, R6-037 🟡 MEDIUM — `useEffect` Dependencies Warning di `Dashboard`
+
+### Community 164 - "E. SUPABASE & INFRASTRUCTURE"
+Cohesion: 0.67
+Nodes (3): E. SUPABASE & INFRASTRUCTURE, R6-026 🟡 MEDIUM — `supabase.ts` Placeholder URL Saat Tidak Dikonfigurasi, R6-027 🟠 HIGH — Tidak Ada Mekanisme Migrasi/Versioning Cache `localStorage`
+
+### Community 165 - "H. KEAMANAN & PRIVASI"
+Cohesion: 0.67
+Nodes (3): H. KEAMANAN & PRIVASI, R6-033 🟠 HIGH — Token Google Disimpan di localStorage Tanpa Enkripsi, R6-034 🟡 MEDIUM — `signOut` Silent Error di Revoke Token
+
+### Community 166 - "📋 Laporan Before-After — Batch 2: Keandalan & Kenyamanan Saat Bekerja Offline"
+Cohesion: 0.13
+Nodes (14): 1. Tetap Bisa Buka Aplikasi Saat Internet Mati Total (SOL-R6-011), 2. Pengalaman Perpanjangan Sesi Akun Google (SOL-R6-004 & SOL-R6-005), 3. Antrean Penyimpanan Data Saat Offline yang Lebih Kuat (SOL-R6-015 & SOL-R6-016), 4. Pembersihan Memori Otomatis Saat Ada Pembaruan Aplikasi (SOL-R6-027), 📋 Laporan Before-After — Batch 2: Keandalan & Kenyamanan Saat Bekerja Offline, 📊 Rangkuman Perubahan Batch 2, 🔴 Sebelum Diperbaiki (Before):, 🔴 Sebelum Diperbaiki (Before): (+6 more)
+
+### Community 167 - "📋 Laporan Before-After — Batch 4: Penataan Ruang & Peningkatan Kecepatan Tampilan"
+Cohesion: 0.13
+Nodes (14): 1. Layar Masuk (Login) Terbuka Jauh Lebih Cepat di HP Petugas (SOL-R6-036), 2. Dialog Pengisian Angka Bus yang Lebih Cepat Terbuka (SOL-R6-020), 3. Pindah Tab dan Cek Laporan Akumulasi Menjadi Lebih Halus (SOL-R6-019), 4. Kotak Dialog Antrean Offline yang Mandiri (SOL-R6-035), 📋 Laporan Before-After — Batch 4: Penataan Ruang & Peningkatan Kecepatan Tampilan, 📊 Rangkuman Perubahan Batch 4, 🔴 Sebelum Diperbaiki (Before):, 🔴 Sebelum Diperbaiki (Before): (+6 more)
+
+### Community 168 - "📋 Laporan Before-After — Batch 5: Penjelasan Tampilan & Penanganan Kejadian Khusus"
+Cohesion: 0.13
+Nodes (14): 1. Penanda Jelas pada Angka Kilometer di Mode Akumulasi (SOL-R6-029), 2. Proses Keluar Akun (Logout) yang Tidak Pernah Macet (SOL-R6-034), 3. Tombol Muat Ulang (Refresh) yang Selalu Terhubung ke Grafik (SOL-R6-037), 4. Benteng Pengujian Otomatis (153 Uji Robot) (SOL-R6-038), 📋 Laporan Before-After — Batch 5: Penjelasan Tampilan & Penanganan Kejadian Khusus, 📊 Rangkuman Perubahan Batch 5, 🔴 Sebelum Diperbaiki (Before):, 🔴 Sebelum Diperbaiki (Before): (+6 more)
+
+### Community 169 - "📋 Laporan Before-After — Batch 6: Kerapian Aplikasi, Ikon Instalasi di HP, & Penataan Modul Utama"
+Cohesion: 0.13
+Nodes (14): 1. Ikon Aplikasi Saat Ditambahkan ke Layar Utama HP (SOL-R6-030), 2. Identitas Resmi Aplikasi (SOL-R6-031), 3. Ketelitian Ekstra pada Seluruh Baris Kode (SOL-R6-032), 4. Pembongkaran "File Raksasa" Google Sheets Menjadi 5 Lemari Rapi (SOL-R6-001), 📋 Laporan Before-After — Batch 6: Kerapian Aplikasi, Ikon Instalasi di HP, & Penataan Modul Utama, 📊 Rangkuman Perubahan Batch 6, 🔴 Sebelum Diperbaiki (Before):, 🔴 Sebelum Diperbaiki (Before): (+6 more)
+
+### Community 170 - "📋 Laporan Before-After — Batch 3: Pembersihan Mesin, Penghematan Memori HP, & Keamanan"
+Cohesion: 0.17
+Nodes (11): 1. Pembatasan Memori Penyimpanan Spreadsheet (SOL-R6-008), 2. Pembuangan Jalur Kode Usang / Bekas Percobaan (SOL-R6-006), 3. Keamanan Alamat Server Database (SOL-R6-026), 📋 Laporan Before-After — Batch 3: Pembersihan Mesin, Penghematan Memori HP, & Keamanan, 📊 Rangkuman Perubahan Batch 3, 🔴 Sebelum Diperbaiki (Before):, 🔴 Sebelum Diperbaiki (Before):, 🔴 Sebelum Diperbaiki (Before): (+3 more)
+
+### Community 171 - "BusData"
+Cohesion: 0.15
+Nodes (22): Props, BusCard, Props, BusList, BusListComponent(), Props, QueueModalProps, Props (+14 more)
+
+### Community 172 - "🌟 Ringkasan Lengkap Before-After — Inisiatif Refactor 6"
+Cohesion: 0.33
+Nodes (5): 📁 Daftar Dokumen Lengkap di Folder `after_refact/`, 🎯 Mengapa Refactor 6 Ini Dilakukan?, 🗺️ Peta Perubahan per Batch (Sebelum vs Sesudah), 🌟 Ringkasan Lengkap Before-After — Inisiatif Refactor 6, 📊 Tabel Perbandingan Singkat Sebelum vs Sesudah
+
+### Community 173 - "Rekomendasi Solusi v5 — Proyek SS_PDO / SPUM"
+Cohesion: 0.18
+Nodes (10): Kelompok Perbaikan, 🔴 KRITIS, 🟡 MINOR, Rekomendasi Solusi v5 — Proyek SS_PDO / SPUM, 🟠 SEDANG, Solusi BUG-48 — Stored XSS di modal SweetAlert2, Solusi BUG-49 — Selesaikan migrasi fix ISS-02/ISS-04, Solusi BUG-50 — Akurasi & observability pelacakan aktivitas (+2 more)
+
+### Community 174 - "Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM"
+Cohesion: 0.25
+Nodes (7): 1. Prioritas Mutlak Tertinggi: BUG-48 (Keamanan — XSS), 2. Urutan Prioritas Setelah Bagian 1, 3. Prinsip Kerja Tambahan Khusus Babak Ini, 4. Batasan Teknis, 5. Kapan Harus Berhenti dan Bertanya ke Manusia, 6. Pelaporan Progres, Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM
+
+### Community 175 - "7. DIAL DEFINITIONS (Technical Reference)"
+Cohesion: 0.50
+Nodes (4): 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10), VISUAL_DENSITY (Level 1-10)
+
 ## Knowledge Gaps
-- **1013 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1008 more)
+- **1192 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1187 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `Dashboard.tsx` to `routeService.ts`, `plugins`, `analytics.ts`, `App.tsx`, `BusCard.tsx`, `alertUtils.ts`, `useOfflineSync.ts`?**
+- **Why does `react` connect `Dashboard.tsx` to `routeService.ts`, `plugins`, `BusData`, `alertUtils.ts`, `googleSheets.ts`, `utils/analytics.ts`, `App.tsx`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `Dashboard.tsx`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `7. DIAL DEFINITIONS (Technical Reference)`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `7. DIAL DEFINITIONS (Technical Reference)`, `8. DARK MODE PROTOCOL`?**
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _1013 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1192 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.05576441102756892 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05451127819548872 - nodes in this community are weakly interconnected._
 - **Should `routeService.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.11382113821138211 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05436156763590392 - nodes in this community are weakly interconnected._

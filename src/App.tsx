@@ -8,6 +8,7 @@ import { useUserActivityTracking } from './hooks/useUserActivityTracking';
 
 import { formatUserError } from './utils/errorFormatter';
 import { showErrorAlert } from './utils/alertUtils';
+import { checkAndMigrateCache } from './utils/cacheUtils';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -22,6 +23,9 @@ export default function App() {
   useUserActivityTracking(isSignedIn, userEmail);
 
   const initializeApi = async () => {
+    // Migrasi cache schema versi jika perlu (SOL-R6-027)
+    checkAndMigrateCache();
+
     if (!hasGoogleCreds()) {
       setInitError(formatUserError('API Credentials missing'));
       return;

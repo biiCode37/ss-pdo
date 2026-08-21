@@ -561,6 +561,13 @@ export function ProfileMenuSheet({
           </div>
         </div>
 
+        {/* Catatan Transparansi Aktivitas */}
+        <div style={{ textAlign: "center", padding: "0 8px 2px 8px" }}>
+          <p style={{ fontSize: "11px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.4, opacity: 0.8 }}>
+            ⏱️ Waktu aktif sesi tercatat otomatis untuk pemantauan operasional.
+          </p>
+        </div>
+
         {/* SECTION: Manajemen Akun (Logout) */}
         <div>
           <button

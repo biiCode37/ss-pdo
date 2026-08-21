@@ -8,6 +8,7 @@ import {
   validateRouteCode,
   validateGoogleSheetsUrl,
 } from '../utils/routeValidation';
+import { isNetworkError } from '../utils/errorClassifier';
 
 const CACHE_KEY_ROUTES = 'PDO_CACHE_ROUTES';
 
@@ -50,6 +51,9 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
     };
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
+  const cacheKey = `PDO_LAST_VERIFIED_PROFILE_${normalizedEmail}`;
+
   try {
     const { data, error } = await supabase
       .from('user_profiles')
@@ -71,7 +75,15 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       };
     }
 
-    // ISS-10 fix: Awaited last_login_at update — kegagalan tidak blocking login
+    // Simpan cache profil yang berhasil diverifikasi untuk offline fallback
+    try {
+      localStorage.setItem(cacheKey, JSON.stringify({
+        profile: data,
+        verifiedAt: new Date().toISOString(),
+      }));
+    } catch (_e) {}
+
+    // Awaited last_login_at update — kegagalan tidak blocking login
     try {
       await supabase
         .from('user_profiles')
@@ -86,10 +98,30 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       profile: data as UserProfile,
     };
   } catch (err) {
-    console.error('[RouteService] Error verifying user profile (fail-closed):', err);
+    console.warn('[RouteService] Error verifying user profile, checking offline cache fallback:', err);
+    
+    // Fail-graceful: Cek cache profil lokal jika terjadi gangguan koneksi/offline
+    if (isNetworkError(err)) {
+      try {
+        const cachedRaw = localStorage.getItem(cacheKey);
+        if (cachedRaw) {
+          const { profile, verifiedAt } = JSON.parse(cachedRaw);
+          const daysSince = (Date.now() - new Date(verifiedAt).getTime()) / 86400000;
+          // Valid jika masih dalam window 30 hari dan status aktif
+          if (daysSince <= 30 && profile && profile.is_active) {
+            console.log('[RouteService] User profile verified via offline cache fallback.');
+            return {
+              isAllowed: true,
+              profile: profile as UserProfile,
+            };
+          }
+        }
+      } catch (_cacheErr) {}
+    }
+
     return {
       isAllowed: false,
-      message: 'Tidak dapat memverifikasi akun Anda saat ini karena gangguan sistem/koneksi. Silakan coba beberapa saat lagi atau hubungi Admin PUSM.',
+      message: 'Tidak dapat memverifikasi akun Anda saat ini karena gangguan koneksi. Pastikan perangkat Anda terhubung ke internet untuk verifikasi pertama.',
     };
   }
 }

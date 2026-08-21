@@ -163,6 +163,34 @@ describe('routeService', () => {
     expect(result.message).toContain('dinonaktifkan');
   });
 
+  it('verifyUserProfile falls back to cached active profile on network error', async () => {
+    const cachedProfile = {
+      id: 5,
+      email: 'offline@pusm.id',
+      full_name: 'Petugas Offline',
+      role: 'petugas',
+      is_active: true,
+    };
+
+    localStorage.setItem(
+      'PDO_LAST_VERIFIED_PROFILE_offline@pusm.id',
+      JSON.stringify({
+        profile: cachedProfile,
+        verifiedAt: new Date().toISOString(),
+      })
+    );
+
+    (supabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockRejectedValue(new TypeError('Failed to fetch')),
+    });
+
+    const result = await verifyUserProfile('offline@pusm.id');
+    expect(result.isAllowed).toBe(true);
+    expect(result.profile?.full_name).toBe('Petugas Offline');
+  });
+
   it('logActivity invokes supabase insert with activity payload', async () => {
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     (supabase.from as any).mockReturnValue({

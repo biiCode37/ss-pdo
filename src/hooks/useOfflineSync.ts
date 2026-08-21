@@ -47,24 +47,8 @@ function writeQueueToStorage(queue: SyncItem[]): void {
   }
 }
 
-/** Cek apakah error adalah auth error */
-function isAuthError(err: any): boolean {
-  if (err?.status === 401) return true;
-  const msg = err?.message || '';
-  return msg.includes('Auth') || msg.includes('Credentials') || msg.includes('API Credentials missing');
-}
-
-/** Cek apakah error adalah error jaringan (bukan error permanen dari Google API) */
-export function isNetworkError(err: any): boolean {
-  // Tidak ada koneksi internet
-  if (!navigator.onLine) return true;
-  // Fetch gagal (DNS/timeout/connection refused)
-  if (err instanceof TypeError && err.message.includes('Failed to fetch')) return true;
-  if (err instanceof TypeError && err.message.includes('NetworkError')) return true;
-  // Tidak ada status code = kemungkinan network error
-  if (!err?.status && !err?.result?.error?.code) return true;
-  return false;
-}
+import { isAuthError, isNetworkError } from '../utils/errorClassifier';
+export { isNetworkError };
 
 /** Deteksi collision: bandingkan data server dengan snapshot asli secara ter-normalisasi pada kolom yang diubah */
 function detectCollision(
@@ -98,6 +82,11 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
   const [queue, setQueue] = useState<SyncItem[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
   const isSyncingRef = useRef(false);
+  const optionsRef = useRef(options);
+
+  useEffect(() => {
+    optionsRef.current = options;
+  });
 
   // Load initial queue
   useEffect(() => {
@@ -117,9 +106,13 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
       const filtered = currentQueue.filter(
         q => !(q.sheetId === item.sheetId && q.tabName === item.tabName && q.rowIndex === item.rowIndex)
       );
+      const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : Date.now().toString() + Math.random().toString(36).substring(2, 7);
+
       const newItem: SyncItem = {
         ...item,
-        id: Date.now().toString(),
+        id: uniqueId,
         status: 'pending',
         retryCount: 0,
       };
@@ -190,8 +183,8 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
         setQueue(afterRemove);
 
         // BUG-06: Notify Dashboard agar busData di-update
-        if (options?.onSyncSuccess) {
-          options.onSyncSuccess(item.rowIndex, item.sheetId, item.tabName, item.updates);
+        if (optionsRef.current?.onSyncSuccess) {
+          optionsRef.current.onSyncSuccess(item.rowIndex, item.sheetId, item.tabName, item.updates);
         }
 
         // Jeda sebelum item berikutnya (rate limit Google API)
@@ -202,8 +195,8 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
       } catch (err: any) {
         // Auth error: hentikan semua pemrosesan, beri tahu user
         if (isAuthError(err)) {
-          if (options?.onAuthError) {
-            options.onAuthError();
+          if (optionsRef.current?.onAuthError) {
+            optionsRef.current.onAuthError();
           }
           break;
         }
@@ -238,7 +231,7 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
 
     isSyncingRef.current = false;
     setIsSyncing(false);
-  }, [options]);
+  }, []);
 
   /** Retry manual satu item yang berstatus 'failed' atau 'conflict' */
   const retryItem = useCallback((itemId: string) => {
@@ -262,16 +255,16 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
   const resolveConflict = useCallback(async (itemId: string) => {
     const currentQueue = readQueueFromStorage();
     const item = currentQueue.find(q => q.id === itemId);
-    if (item && options?.onSyncSuccess) {
+    if (item && optionsRef.current?.onSyncSuccess) {
       try {
         const remoteData = await getBusRowData(item.sheetId, item.tabName, item.rowIndex, item.headerMap);
-        options.onSyncSuccess(item.rowIndex, item.sheetId, item.tabName, remoteData);
+        optionsRef.current.onSyncSuccess(item.rowIndex, item.sheetId, item.tabName, remoteData);
       } catch (err) {
         console.error("Failed to fetch server data on resolve conflict:", err);
       }
     }
     removeItem(itemId);
-  }, [removeItem, options]);
+  }, [removeItem]);
 
   /** Force save item yang conflict */
   const forceConflictItem = useCallback((itemId: string) => {

@@ -214,14 +214,15 @@ function BusCardComponent({
     if (activeCategory !== "ALL") {
       const val = formData[activeCategory as keyof BusData] || bus[activeCategory as keyof BusData];
       const isFilled = val !== undefined && val !== null && String(val).trim() !== "";
+      const isAccumulation = tabName.toUpperCase() === "AKUMULASI";
       const categoryLabels: Record<string, string> = {
         toaShift1: "TOA S1",
         totalToa: "Total TOA",
         manualShift1: "Manual S1",
         manualShift2: "Manual S2",
-        kmAwal1: "KM Awal S1",
+        kmAwal1: isAccumulation ? "KM Awal S1 (Akumulasi)" : "KM Awal S1",
         kmAkhir1: "KM Akhir S1",
-        kmAwal2: "KM Awal S2",
+        kmAwal2: isAccumulation ? "KM Awal S2 (Akumulasi)" : "KM Awal S2",
         kmAkhir2: "KM Akhir S2",
       };
       const label = categoryLabels[activeCategory] || activeCategory;

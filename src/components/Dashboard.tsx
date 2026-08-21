@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
 import {
-  extractSheetId,
   getBusData,
   getAccumulatedBusData,
   reauthenticateSession,
   formatWholeSheet,
 } from "../services/googleSheets";
+import { extractSpreadsheetId } from "../utils/sheetIdentity";
 import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
@@ -17,9 +17,8 @@ import {
   CloudOff,
   RefreshCw,
   AlertTriangle,
-  RotateCw,
-  Trash2,
 } from "lucide-react";
+import { QueueModal } from "./QueueModal";
 import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
@@ -35,6 +34,11 @@ import {
 import { UnitSummaryDashboard } from "./UnitSummaryDashboard";
 import { AccumulationSheet } from "./AccumulationSheet";
 import { getCrossPeriodAccumulation } from "../services/routeService";
+import {
+  getMonthYearForSheet,
+  getRouteCodeForSheet,
+  getRoutesFromCache,
+} from "../utils/cacheUtils";
 import {
   BusCardSkeleton,
   DailyToaTrendSkeleton,
@@ -108,28 +112,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     endYear: number;
   } | null>(null);
 
-  // Memoized activeMonth and activeYear from cached routes
+  // Memoized activeMonth and activeYear from cached routes (SOL-R6-017 / SOL-R6-018)
   const { activeMonth, activeYear } = useMemo(() => {
-    let month = new Date().getMonth() + 1;
-    let year = new Date().getFullYear();
-    try {
-      const cached = localStorage.getItem("PDO_CACHE_ROUTES");
-      if (cached) {
-        const routes = JSON.parse(cached);
-        for (const r of routes) {
-          for (const s of r.route_sheets || []) {
-            if (
-              s.sheet_url === sheetUrl ||
-              (sheetUrl && s.sheet_url.includes(sheetUrl))
-            ) {
-              month = s.month;
-              year = s.year;
-              break;
-            }
-          }
-        }
-      }
-    } catch (_e) {}
+    const { month, year } = getMonthYearForSheet(sheetUrl);
     return { activeMonth: month, activeYear: year };
   }, [sheetUrl]);
 
@@ -281,7 +266,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       return;
     }
 
-    const sheetId = extractSheetId(sheetUrl);
+    const sheetId = extractSpreadsheetId(sheetUrl);
     if (!sheetId) {
       setError(
         "Link tidak valid. Pastikan Anda meng-copy link dari Google Sheets.",
@@ -310,22 +295,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     try {
       let result: any = null;
       if (tabToLoad === "AKUMULASI") {
-        let activeRouteCode = "";
-        try {
-          const cached = localStorage.getItem("PDO_CACHE_ROUTES");
-          if (cached) {
-            const routes = JSON.parse(cached);
-            for (const r of routes) {
-              for (const s of r.route_sheets || []) {
-                const sId = extractSheetId(s.sheet_url);
-                if (sId && sId === sheetId) {
-                  activeRouteCode = r.route_code;
-                  break;
-                }
-              }
-            }
-          }
-        } catch (_e) {}
+        const activeRouteCode = getRouteCodeForSheet(sheetId || sheetUrl);
 
         if (activeRouteCode && accRangeDetails) {
           const cross = await getCrossPeriodAccumulation(
@@ -876,341 +846,143 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
 
 
-      {isQueueModalOpen && (
-        <div
-          onClick={() => setIsQueueModalOpen(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 100,
-            padding: "16px",
-            backdropFilter: "blur(4px)",
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: "var(--bg-card)",
-              color: "var(--text-primary)",
-              borderRadius: "12px",
-              padding: "20px",
-              width: "100%",
-              maxWidth: "420px",
-              maxHeight: "80vh",
-              overflowY: "auto",
-              boxShadow: "var(--shadow)",
-              border: "1px solid var(--border-color)",
-            }}
-          >
-            <h2
-              style={{ fontSize: "1.1rem", marginTop: 0, marginBottom: "16px" }}
-            >
-              Antrean Sinkronisasi
-            </h2>
-            {queue.length === 0 ? (
-              <p style={{ color: "var(--text-secondary)" }}>
-                Tidak ada antrean.
-              </p>
-            ) : (
-              queue.map((item) => (
-                <div
-                  key={item.id}
-                  style={{
-                    padding: "12px 0",
-                    borderBottom: "1px solid var(--border-color)",
-                  }}
-                >
-                  <p style={{ margin: "0 0 4px 0", fontSize: "14px" }}>
-                    <strong>Tab {item.tabName}</strong> - Baris {item.rowIndex}
-                  </p>
-                  <p
-                    style={{
-                      margin: "0 0 8px 0",
-                      fontSize: "13px",
-                      color:
-                        item.status === "pending"
-                          ? "var(--warning-color)"
-                          : item.status === "conflict"
-                            ? "var(--accent-color)"
-                            : "var(--danger-color)",
-                    }}
-                  >
-                    {item.status === "pending" &&
-                      `⏳ Menunggu (percobaan ke-${(item.retryCount || 0) + 1})`}
-                    {item.status === "failed" &&
-                      `❌ Gagal setelah ${item.retryCount} percobaan`}
-                    {item.status === "conflict" &&
-                      "⚠️ Tabrakan data: Data server telah berubah"}
-                  </p>
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    {item.status === "failed" && (
-                      <>
-                        <button
-                          className="btn btn-outline"
-                          style={{
-                            padding: "4px 10px",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                          onClick={() => {
-                            retryItem(item.id);
-                            showInfoToast("Mencoba menyinkronkan kembali...");
-                          }}
-                        >
-                          <RotateCw size={14} /> Coba Lagi
-                        </button>
-                        <button
-                          className="btn btn-outline"
-                          style={{
-                            padding: "4px 10px",
-                            fontSize: "12px",
-                            color: "var(--danger-color)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                          onClick={() => handleDeleteQueueItem(item.id)}
-                        >
-                          <Trash2 size={14} /> Hapus
-                        </button>
-                      </>
-                    )}
-                    {item.status === "conflict" && (
-                      <>
-                        <button
-                          className="btn btn-outline"
-                          style={{
-                            padding: "4px 10px",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                          onClick={() => {
-                            resolveConflict(item.id);
-                            showInfoToast("Menggunakan data dari server.");
-                          }}
-                        >
-                          Gunakan Data Server
-                        </button>
-                        <button
-                          className="btn"
-                          style={{
-                            padding: "4px 10px",
-                            fontSize: "12px",
-                            background: "var(--danger-color)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                          onClick={() => {
-                            forceConflictItem(item.id);
-                            showWarningToast("Menimpa data server dengan data lokal...");
-                          }}
-                        >
-                          Force Save
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))
-            )}
-            <div style={{ display: "flex", gap: "8px", marginTop: "16px" }}>
-              {queue.some((q) => q.status === "pending") && (
-                <button
-                  className="btn"
-                  style={{ flex: 1 }}
-                  onClick={() => {
-                    processQueue();
-                    setIsQueueModalOpen(false);
-                    showInfoToast("Memulai proses sinkronisasi antrean...");
-                  }}
-                >
-                  Sinkronkan Sekarang
-                </button>
-              )}
-              <button
-                className="btn btn-outline"
-                style={{ flex: 1 }}
-                onClick={() => setIsQueueModalOpen(false)}
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <QueueModal
+        isOpen={isQueueModalOpen}
+        onClose={() => setIsQueueModalOpen(false)}
+        queue={queue}
+        onRetry={(id) => {
+          retryItem(id);
+          showInfoToast("Mencoba menyinkronkan kembali...");
+        }}
+        onDelete={handleDeleteQueueItem}
+        onResolveConflict={(id) => {
+          resolveConflict(id);
+          showInfoToast("Menggunakan data dari server.");
+        }}
+        onForceConflict={(id) => {
+          forceConflictItem(id);
+          showWarningToast("Menimpa data server dengan data lokal...");
+        }}
+        onProcessQueue={processQueue}
+      />
 
-      {/* ponytail: ekstrak bulan & tahun rute aktif dari cache */}
-      {(() => {
-        const today = new Date();
-        let currentMonth = today.getMonth() + 1;
-        let currentYear = today.getFullYear();
-        try {
-          const cached = localStorage.getItem("PDO_CACHE_ROUTES");
-          if (cached) {
-            const routes = JSON.parse(cached);
-            for (const r of routes) {
-              for (const s of r.route_sheets || []) {
-                if (
-                  s.sheet_url === sheetUrl ||
-                  (sheetUrl && s.sheet_url.includes(sheetUrl))
-                ) {
-                  currentMonth = s.month;
-                  currentYear = s.year;
-                  break;
+      <AccumulationSheet
+        isOpen={isAccSheetOpen}
+        onClose={() => setIsAccSheetOpen(false)}
+        currentMonth={activeMonth}
+        currentYear={activeYear}
+        onApply={async (sDay, sMonth, sYear, eDay, eMonth, eYear) => {
+          setAccRangeDetails({
+            startDay: sDay,
+            startMonth: sMonth,
+            startYear: sYear,
+            endDay: eDay,
+            endMonth: eMonth,
+            endYear: eYear,
+          });
+          setAccRange({ start: sDay, end: eDay });
+          setSelectedTab("AKUMULASI");
+          setIsLoading(true);
+          setError(null);
+
+          try {
+            // 1. Cari route_code aktif via cacheUtils (SOL-R6-017 / SOL-R6-018)
+            const activeRouteCode = getRouteCodeForSheet(sheetUrl);
+
+            // 2. Coba kueri instan Supabase (Opsi B: Aggregation Layer Cache)
+            let crossResult = null;
+            if (activeRouteCode) {
+              crossResult = await getCrossPeriodAccumulation(
+                activeRouteCode,
+                sYear,
+                sMonth,
+                sDay,
+                eYear,
+                eMonth,
+                eDay,
+              );
+            }
+
+            if (crossResult && crossResult.data.length > 0) {
+              // Opsi B Supabase Cache Berhasil!
+              setBusData(crossResult.data);
+              setCurrentTabName("AKUMULASI");
+              setSheetSummary({});
+              setRefreshKey((prev) => prev + 1);
+            } else {
+              // Fallback Opsi A: Google Sheets API
+              let targetSheetId = currentSheetId || extractSpreadsheetId(sheetUrl);
+              if (activeRouteCode) {
+                const routes = getRoutesFromCache();
+                const route = routes.find(
+                  (r: any) => r.route_code === activeRouteCode,
+                );
+                const matchSheet = route?.route_sheets?.find(
+                  (s: any) => s.month === eMonth && s.year === eYear,
+                );
+                if (matchSheet) {
+                  const mUrl = matchSheet.sheet_url;
+                  setSheetUrl(mUrl);
+                  targetSheetId =
+                    extractSpreadsheetId(matchSheet.spreadsheet_id) ||
+                    extractSpreadsheetId(mUrl);
                 }
+              }
+
+              if (targetSheetId) {
+                const result = await getAccumulatedBusData(targetSheetId, eDay, sDay);
+                setBusData(result.data);
+                setHeaderMap(result.headerMap);
+                setCurrentSheetId(targetSheetId);
+                setCurrentTabName("AKUMULASI");
+                setMissingColumns(result.missingColumns);
+                setSheetSummary(result.sheetSummary || {});
+                setRefreshKey((prev) => prev + 1);
               }
             }
+          } catch (err: any) {
+            setError(
+              formatUserError(err, "Gagal memuat data akumulasi."),
+            );
+          } finally {
+            setIsLoading(false);
           }
-        } catch (_e) {}
+        }}
+      />
 
-        return (
-          <>
-            <AccumulationSheet
-              isOpen={isAccSheetOpen}
-              onClose={() => setIsAccSheetOpen(false)}
-              currentMonth={currentMonth}
-              currentYear={currentYear}
-              onApply={async (sDay, sMonth, sYear, eDay, eMonth, eYear) => {
-                setAccRangeDetails({
-                  startDay: sDay,
-                  startMonth: sMonth,
-                  startYear: sYear,
-                  endDay: eDay,
-                  endMonth: eMonth,
-                  endYear: eYear,
-                });
-                setAccRange({ start: sDay, end: eDay });
-                setSelectedTab("AKUMULASI");
-                setIsLoading(true);
-                setError(null);
+      <BottomNav
+        activeTab={mainTab}
+        onSelectTab={setMainTab}
+        onOpenMore={() => setIsProfileMenuOpen(true)}
+        pendingQueueCount={
+          queue.filter(
+            (q) => q.status === "pending" || q.status === "failed",
+          ).length
+        }
+      />
 
-                try {
-                  // 1. Cari route_code aktif
-                  let activeRouteCode = "";
-                  const currentId = extractSheetId(sheetUrl);
-                  const cached = localStorage.getItem("PDO_CACHE_ROUTES");
-                  if (cached) {
-                    const routes = JSON.parse(cached);
-                    for (const r of routes) {
-                      for (const s of r.route_sheets || []) {
-                        const sId = extractSheetId(s.sheet_url);
-                        if (
-                          (sId && currentId && sId === currentId) ||
-                          s.sheet_url === sheetUrl ||
-                          (sheetUrl && sheetUrl.includes(s.sheet_url))
-                        ) {
-                          activeRouteCode = r.route_code;
-                          break;
-                        }
-                      }
-                    }
-                  }
-
-                  // 2. Coba kueri instan Supabase (Opsi B: Aggregation Layer Cache)
-                  let crossResult = null;
-                  if (activeRouteCode) {
-                    crossResult = await getCrossPeriodAccumulation(
-                      activeRouteCode,
-                      sYear,
-                      sMonth,
-                      sDay,
-                      eYear,
-                      eMonth,
-                      eDay,
-                    );
-                  }
-
-                  if (crossResult && crossResult.data.length > 0) {
-                    // Opsi B Supabase Cache Berhasil!
-                    setBusData(crossResult.data);
-                    setCurrentTabName("AKUMULASI");
-                    setSheetSummary({});
-                    setRefreshKey((prev) => prev + 1);
-                  } else {
-                    // Fallback Opsi A: Google Sheets API
-                    let targetSheetId = currentSheetId || extractSheetId(sheetUrl);
-                    if (cached && activeRouteCode) {
-                      const routes = JSON.parse(cached);
-                      const route = routes.find(
-                        (r: any) => r.route_code === activeRouteCode,
-                      );
-                      const matchSheet = route?.route_sheets?.find(
-                        (s: any) => s.month === eMonth && s.year === eYear,
-                      );
-                      if (matchSheet) {
-                        setSheetUrl(matchSheet.sheet_url);
-                        targetSheetId =
-                          matchSheet.spreadsheet_id ||
-                          extractSheetId(matchSheet.sheet_url);
-                      }
-                    }
-
-                    if (targetSheetId) {
-                      const result = await getAccumulatedBusData(targetSheetId, eDay, sDay);
-                      setBusData(result.data);
-                      setHeaderMap(result.headerMap);
-                      setCurrentSheetId(targetSheetId);
-                      setCurrentTabName("AKUMULASI");
-                      setMissingColumns(result.missingColumns);
-                      setSheetSummary(result.sheetSummary || {});
-                      setRefreshKey((prev) => prev + 1);
-                    }
-                  }
-                } catch (err: any) {
-                  setError(
-                    formatUserError(err, "Gagal memuat data akumulasi."),
-                  );
-                } finally {
-                  setIsLoading(false);
-                }
-              }}
-            />
-
-            <BottomNav
-              activeTab={mainTab}
-              onSelectTab={setMainTab}
-              onOpenMore={() => setIsProfileMenuOpen(true)}
-              pendingQueueCount={
-                queue.filter(
-                  (q) => q.status === "pending" || q.status === "failed",
-                ).length
-              }
-            />
-
-            <ProfileMenuSheet
-              isOpen={isProfileMenuOpen}
-              onClose={() => setIsProfileMenuOpen(false)}
-              onOpenAccumulation={() => setIsAccSheetOpen(true)}
-              isDarkMode={theme === "dark"}
-              onToggleTheme={toggleTheme}
-              offlineQueueCount={
-                queue.filter(
-                  (q) => q.status === "pending" || q.status === "failed",
-                ).length
-              }
-              isOnline={isOnline}
-              onLogout={onLogout}
-              onFormatWholeSheet={async () => {
-                if (!currentSheetId || !currentTabName || !busData || !headerMap) {
-                  throw new Error("Data spreadsheet belum dimuat.");
-                }
-                await formatWholeSheet(currentSheetId, currentTabName, busData, headerMap);
-              }}
-              currentTabName={currentTabName}
-              hasActiveData={Boolean(currentSheetId && currentTabName && busData && busData.length > 0)}
-            />
-          </>
-        );
-      })()}
+      <ProfileMenuSheet
+        isOpen={isProfileMenuOpen}
+        onClose={() => setIsProfileMenuOpen(false)}
+        onOpenAccumulation={() => setIsAccSheetOpen(true)}
+        isDarkMode={theme === "dark"}
+        onToggleTheme={toggleTheme}
+        offlineQueueCount={
+          queue.filter(
+            (q) => q.status === "pending" || q.status === "failed",
+          ).length
+        }
+        isOnline={isOnline}
+        onLogout={onLogout}
+        onFormatWholeSheet={async () => {
+          if (!currentSheetId || !currentTabName || !busData || !headerMap) {
+            throw new Error("Data spreadsheet belum dimuat.");
+          }
+          await formatWholeSheet(currentSheetId, currentTabName, busData, headerMap);
+        }}
+        currentTabName={currentTabName}
+        hasActiveData={Boolean(currentSheetId && currentTabName && busData && busData.length > 0)}
+      />
     </div>
   );
 }

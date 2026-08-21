@@ -76,4 +76,31 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 - Kumpulkan beberapa perubahan kecil dalam satu sesi/fitur sebelum melakukan commit agar riwayat commit Git tetap rapi, bersih, dan tidak terlalu banyak.
 - Lakukan `git commit` hanya jika fitur utama telah selesai, ada milestone penting, atau diminta langsung oleh User.
 
+---
+
+## 🛡️ 9. Standar Keamanan, Kualitas Kode, & Pencegahan Regresi
+
+Aturan di bawah ini dirumuskan berdasarkan evaluasi menyeluruh dari siklus **Refactor 6** untuk memastikan tidak ada celah keamanan atau penurunan kualitas di masa depan:
+
+1. **Aturan Global Grep (*Zero Call-Site Left Behind*):**
+   - Setiap kali membuat fungsi baru pengganti (misalnya: utilitas parsing angka, ekstraksi ID spreadsheet `extractSpreadsheetId`, modal dialog, atau classifier error), AI **WAJIB melakukan pencarian teks global (`grep_search`) ke seluruh folder `src/`** untuk memigrasikan SEMUA pemanggilan lama tanpa sisa sebelum menandai pekerjaan selesai. Dilarang meninggalkan fungsi lama setengah terpakai.
+
+2. **Sanitasi Wajib untuk SweetAlert2 & Template Literal HTML (Anti-XSS):**
+   - Dilarang keras memasukkan data/variabel dinamis ke dalam template string HTML (`` `...${value}...` ``) tanpa membungkusnya dengan `escapeHtml(value)` dari `src/utils/modals/busInputModal.ts` atau `src/utils/alertUtils.ts`.
+   - Proteksi otomatis JSX React tidak berlaku di HTML mentah SweetAlert2. Seluruh input angka, teks, label, dan placeholder wajib di-escape.
+
+3. **Transparansi Error & Dilarang `.catch(() => {})` Kosong:**
+   - **Sisi Pengguna (Frontend):** Dilarang menyamarkan kegagalan jaringan menjadi angka 0 (misal pada grafik tren penumpang atau kartu ringkasan bus). Selalu tampilkan pesan ramah non-teknis dan tombol coba lagi (*retry*).
+   - **Sisi Pengembang (Log):** Dilarang membuat blok `.catch(() => {})` kosong tanpa jejak. Minimal sertakan `console.warn('[NamaModul] Gagal melakukan aksi:', err)` agar kegagalan jaringan atau database terdeteksi di log.
+
+4. **Batas Ukuran File & Modularitas (*Anti God-File*):**
+   - Jika suatu file servis atau komponen mendekati 400–500 baris atau mulai menangani lebih dari 1 domain tanggung jawab, wajib dipecah menjadi modul-modul mandiri yang rapi (seperti struktur `src/services/googleSheets/` atau `src/utils/modals/`).
+
+5. **Quality Gates Otomatis Sebelum Menyatakan Selesai:**
+   - AI dilarang menyatakan suatu pekerjaan selesai sebelum menjalankan dan memastikan:
+     1. `pnpm vitest run src/` ➔ Seluruh unit test lulus 100% tanpa kegagalan.
+     2. `pnpm run build` ➔ TypeScript Strict Mode (`tsc -b`) dan Vite build lulus 0 error.
+     3. `graphify update .` ➔ Graf pengetahuan kode terbarukan.
+
+
 

@@ -35,7 +35,7 @@ Setiap baris kode yang ditulis atau diubah **TIDAK BOLEH** melanggar 7 aturan em
 - Jika auth benar-benar gagal, tampilkan dialog/banner yang ramah pengguna dengan tombol satu ketukan untuk login ulang tanpa menghilangkan state input yang sedang dikerjakan.
 
 ### 4. Tooling & Package Manager (Wajib PNPM)
-- Gunakan **`pnpm`** untuk seluruh perintah instalasi dan build (`pnpm install`, `pnpm run build`, `pnpm test`).
+- Gunakan **`pnpm`** untuk seluruh perintah instalasi dan build (`pnpm install`, `pnpm run build`, `pnpm vitest run`).
 - Gunakan **`pnpm dlx`** jika memerlukan eksekutor binary.
 - Dilarang membuat file `package-lock.json` atau `yarn.lock`.
 
@@ -77,70 +77,80 @@ Saat memecah file raksasa (*God Files*) seperti `src/services/googleSheets.ts` d
 
 ---
 
-## 4. 📋 Alur & Protokol Eksekusi Bertahap
+## 4. 📋 Alur & Protokol Eksekusi Bertahap (Tersinkronisasi)
 
-Eksekusi perbaikan **WAJIB** mengikuti urutan batch di bawah ini. Jangan melompat ke Batch berikutnya sebelum batch sebelumnya terverifikasi lulus build.
+Eksekusi perbaikan **WAJIB** mengikuti urutan batch di bawah ini. Status pengerjaan telah diselaraskan dengan implementasi riil pada codebase:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  BATCH 1: 🔴 Bug Kritis User-Facing (P1)                     │
+│  BATCH 1: 🔴 Bug Kritis User-Facing (P1) [✅ SELESAI]        │
 │  - SOL-R6-007: Indikator Error pada Chart Tren              │
 │  - SOL-R6-021: Fix Input Keterangan Mode ALL                │
 │  - SOL-R6-025: Urutan Prioritas Warna Keterangan            │
-│  - SOL-R6-002: Login Flow Await UserInfo                    │
+│  - SOL-R6-002 & 003: Login Flow Await UserInfo              │
 │  - SOL-R6-014: Unifikasi isAuthError (errorClassifier.ts)   │
 │  - SOL-R6-022: Sanitasi HTML Modal (escapeHtml)             │
 └──────────────────────────────┬──────────────────────────────┘
-                               │ (Verifikasi & Build)
+                               │ (Verifikasi & Build PASS)
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  BATCH 2: 🟠 Reliability & UX (P2)                          │
+│  BATCH 2: 🟠 Reliability & UX (P2) [✅ SELESAI]             │
 │  - SOL-R6-011: Offline Fallback Login Supabase              │
 │  - SOL-R6-004: OAuth Prompt Conditional                     │
 │  - SOL-R6-005: Fix Error Handler refreshToken               │
 │  - SOL-R6-009: Telemetri Sync Supabase + Retry              │
-│  - SOL-R6-015: Stabilkan processQueue useOfflineSync        │
+│  - SOL-R6-015: Stabilkan processQueue useOfflineSync (useRef)│
 │  - SOL-R6-027: Versioning localStorage Cache                │
 │  - SOL-R6-017 & 018: Centralized Cache Utility              │
 └──────────────────────────────┬──────────────────────────────┘
-                               │ (Verifikasi & Build)
+                               │ (Verifikasi & Build PASS)
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  BATCH 3: 🟠 Structural Refactor (P2)                       │
-│  - SOL-R6-001: Pecah googleSheets.ts (Auth, Read, Write,    │
-│                Header, Inspector) + Barrel Re-export        │
-│  - SOL-R6-020: Pecah alertUtils.ts (SwalBase, Toasts,       │
-│                Modals) + Barrel Re-export                   │
-│  - SOL-R6-019: Hapus IIFE Render Pattern di Dashboard       │
-└──────────────────────────────┬──────────────────────────────┘
-                               │ (Verifikasi & Build)
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│  BATCH 4: 🟡 Cleanup, Optimization, & Hardening (P3)        │
+│  BATCH 3: 🟡 Maintainability & Code Health (P3) [✅ SELESAI]│
 │  - SOL-R6-006: Hapus Dead Code checkSignedIn()              │
-│  - SOL-R6-008: Cache Eviction tabGidCache                   │
-│  - SOL-R6-010: Top-level Import Cleanups                    │
-│  - SOL-R6-016: Gunakan crypto.randomUUID()                  │
+│  - SOL-R6-008: Cache Eviction & Capping tabGidCache (50 max)│
+│  - SOL-R6-010: Top-level Import Cleanups di googleSheets.ts │
+│  - SOL-R6-016: Gunakan crypto.randomUUID() di useOfflineSync│
 │  - SOL-R6-024: Simplifikasi Regex sheetColorUtils           │
 │  - SOL-R6-026: Guard Client Supabase Tanpa Placeholder URL  │
-│  - SOL-R6-029: Label KM Awal Akumulasi                      │
-│  - SOL-R6-034: Log Warning Revoke Token                     │
-│  - SOL-R6-037: Fix useEffect Dependencies                   │
 └──────────────────────────────┬──────────────────────────────┘
-                               │ (Verifikasi & Build)
+                               │ (Verifikasi & Build PASS)
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  BATCH 5: 🟡 Testing & Quality Gates (P3)                   │
+│  BATCH 4: 🟡 Architecture & Refactoring (P3) [✅ SELESAI]   │
+│  - SOL-R6-036: Ekstraksi Legal Modals (LegalModals.tsx)     │
+│  - SOL-R6-020: Ekstraksi Modal Input Bus (busInputModal.ts) │
+│  - SOL-R6-035: Ekstraksi QueueModal dari Dashboard.tsx      │
+│  - SOL-R6-019: Hapus Inline IIFE Render Pattern di Dashboard│
+└──────────────────────────────┬──────────────────────────────┘
+                               │ (Verifikasi & Build PASS)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│  BATCH 5: 🟡 Testing & Edge Cases (P3) [✅ SELESAI]         │
 │  - SOL-R6-038: Unit Test sheetColorUtils, useOfflineSync,   │
 │                errorClassifier, numberUtils edge cases      │
+│  - SOL-R6-029: Label "(Akumulasi)" di KM Awal Mode Akumulasi│
+│  - SOL-R6-034: Log Warning saat OAuth Token Revoke Gagal    │
+│  - SOL-R6-037: Audit & Fix useEffect Dependencies           │
 └──────────────────────────────┬──────────────────────────────┘
-                               │ (Verifikasi & Build)
+                               │ (Verifikasi & Build PASS)
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  BATCH 6: 🟡 Configuration & PWA Polish (P3)                │
+│  BATCH 6: 🟡 Configuration & PWA Polish (P3) [✅ SELESAI]   │
 │  - SOL-R6-030: Kelengkapan PWA Manifest & Icons             │
 │  - SOL-R6-031: Package Name Standardization                 │
-│  - SOL-R6-032: Verifikasi TS Strict Mode                    │
+│  - SOL-R6-032: Verifikasi & Hardening TS Strict Mode        │
+│  - SOL-R6-001: Modularisasi Total googleSheets.ts (Barrel)  │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ (Verifikasi & Build PASS)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│  BATCH 7: 🛡️ Security & Hardening Sync [✅ SELESAI]         │
+│  - BUG-48: Stored XSS 100% Escaped di Seluruh Modal Input   │
+│  - BUG-49: Migrasi Penuh Canonical extractSpreadsheetId     │
+│  - BUG-50: Akurasi Jam Kerja Dinamis & Log Warning Error    │
+│  - BUG-51: Collision Check Baseline Verification            │
+│  - BUG-52: Catatan Transparansi Aktivitas di Menu Profil    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -169,9 +179,9 @@ Sebelum menyatakan suatu batch atau seluruh Refactor 6 selesai, AI Agent wajib m
 
 2. **Automated Unit Tests:**
    ```bash
-   pnpm test
+   pnpm vitest run
    ```
-   *Semua test case wajib berstatus passing.*
+   *Semua test case wajib berstatus passing (140/140+ passing).*
 
 3. **Verifikasi Tampilan & Tema (UI/UX Check):**
    - [ ] Light Mode: Kontras teks dan border jelas, warna badge status sesuai.
@@ -200,7 +210,7 @@ Setiap kali menyelesaikan tahapan pengerjaan, AI Agent wajib memberikan laporan 
 
 ### 🧪 Status Verifikasi & Quality Gates
 - **Build (`pnpm run build`):** ✅ Passed / ❌ Failed
-- **Tests (`pnpm test`):** ✅ X passed, 0 failed
+- **Tests (`pnpm vitest run`):** ✅ X passed, 0 failed
 - **Light/Dark Mode Check:** ✅ Terverifikasi kontras dan layout
 
 ### 💡 Catatan Khusus & Mitigasi Risiko

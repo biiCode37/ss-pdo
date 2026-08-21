@@ -160,24 +160,14 @@ const MONTH_NAMES_ID = [
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
 
-export function extractMonthYearLabel(sheetUrl: string, routes?: Route[]): string {
-  let routeList = routes;
-  if (!routeList) {
-    try {
-      const cached = localStorage.getItem('PDO_CACHE_ROUTES');
-      if (cached) routeList = JSON.parse(cached);
-    } catch (_e) {}
-  }
+import { getRoutesFromCache, findSheetInRoutes } from './cacheUtils';
 
-  if (routeList && Array.isArray(routeList)) {
-    for (const r of routeList) {
-      for (const s of r.route_sheets || []) {
-        if (s.sheet_url === sheetUrl || (sheetUrl && (s.sheet_url.includes(sheetUrl) || sheetUrl.includes(s.spreadsheet_id)))) {
-          const monthName = MONTH_NAMES_ID[s.month] || '';
-          return monthName ? `${monthName} ${s.year}` : `${s.year}`;
-        }
-      }
-    }
+export function extractMonthYearLabel(sheetUrl: string, routes?: Route[]): string {
+  const routeList = routes || getRoutesFromCache();
+  const match = findSheetInRoutes(routeList, sheetUrl);
+  if (match) {
+    const monthName = MONTH_NAMES_ID[match.sheet.month] || '';
+    return monthName ? `${monthName} ${match.sheet.year}` : `${match.sheet.year}`;
   }
 
   const now = new Date();

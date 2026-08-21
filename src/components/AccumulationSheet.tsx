@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X, Layers } from "lucide-react";
 import { fetchRoutesWithSheets } from "../services/routeService";
+import { getRoutesFromCache } from "../utils/cacheUtils";
 
 const MONTH_NAMES_ID = [
   "",
@@ -94,11 +95,8 @@ export function AccumulationSheet({
   useEffect(() => {
     const loadDbPeriods = async () => {
       try {
-        let cachedRoutes: any[] = [];
-        const cachedStr = localStorage.getItem("PDO_CACHE_ROUTES");
-        if (cachedStr) {
-          cachedRoutes = JSON.parse(cachedStr);
-        } else {
+        let cachedRoutes = getRoutesFromCache();
+        if (cachedRoutes.length === 0) {
           cachedRoutes = await fetchRoutesWithSheets();
         }
 

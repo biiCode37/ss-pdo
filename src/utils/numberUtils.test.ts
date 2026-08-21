@@ -18,13 +18,23 @@ describe('numberUtils', () => {
       expect(parseIndonesianNumber('1.234,56')).toBe(1234.56);
     });
 
+    it('maintains high decimal precision according to SSOT Golden Rule', () => {
+      expect(parseIndonesianNumber('123,1234567891')).toBeCloseTo(123.1234567891, 10);
+      expect(parseIndonesianNumber('0,0000000001')).toBeCloseTo(0.0000000001, 10);
+    });
+
     it('handles empty, null, dash, and invalid values gracefully', () => {
       expect(parseIndonesianNumber('')).toBe(0);
       expect(parseIndonesianNumber(null)).toBe(0);
       expect(parseIndonesianNumber(undefined)).toBe(0);
       expect(parseIndonesianNumber('-')).toBe(0);
       expect(parseIndonesianNumber('#REF!')).toBe(0);
+      expect(parseIndonesianNumber('#VALUE!')).toBe(0);
       expect(parseIndonesianNumber('invalid', -1)).toBe(-1);
+    });
+
+    it('handles negative Indonesian formatted numbers', () => {
+      expect(parseIndonesianNumber('-1.234,5')).toBe(-1234.5);
     });
   });
 
@@ -55,6 +65,12 @@ describe('numberUtils', () => {
     it('formats number to Indonesian locale', () => {
       expect(safeFormatNumber(1234567)).toBe('1.234.567');
       expect(safeFormatNumber('1234567')).toBe('1.234.567');
+    });
+
+    it('formats 0 and empty gracefully', () => {
+      expect(safeFormatNumber(0)).toBe('0');
+      expect(safeFormatNumber('')).toBe('0');
+      expect(safeFormatNumber(null)).toBe('0');
     });
   });
 });

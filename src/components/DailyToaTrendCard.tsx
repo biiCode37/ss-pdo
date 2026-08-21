@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useId, memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
-import { BarChart2, Calendar, Award, Zap, TrendingDown } from "lucide-react";
+import { BarChart2, Calendar, Award, Zap, TrendingDown, AlertCircle } from "lucide-react";
 import { getMonthlyToaTrend } from "../services/googleSheets";
 import { DailyToaTrendSkeleton } from "./Skeletons";
 import { extractMonthYearLabel } from "../utils/analytics";
@@ -40,6 +40,7 @@ function DailyToaTrendCardComponent({
     { day: string; totalToa: number }[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [activeTooltipDay, setActiveTooltipDay] = useState<string | null>(null);
 
   // Track max day for the chart so internal bar/badge clicks don't shrink the chart
@@ -51,7 +52,7 @@ function DailyToaTrendCardComponent({
   useEffect(() => {
     const selectedNum = parseSelectedDay(selectedTab);
     setChartMaxDay(Math.max(1, Math.min(31, selectedNum)));
-  }, [sheetId, refreshKey]);
+  }, [sheetId, refreshKey, selectedTab]);
 
   // When selectedTab increases beyond current chartMaxDay, expand chartMaxDay
   useEffect(() => {
@@ -59,7 +60,7 @@ function DailyToaTrendCardComponent({
     if (selectedNum > chartMaxDay) {
       setChartMaxDay(Math.min(31, selectedNum));
     }
-  }, [selectedTab]);
+  }, [selectedTab, chartMaxDay]);
 
   useEffect(() => {
     // Reset tooltip when active tab changes
@@ -84,18 +85,27 @@ function DailyToaTrendCardComponent({
 
     let isMounted = true;
     setIsLoading(true);
+    setHasError(false);
 
-    getMonthlyToaTrend(sheetId, chartMaxDay, unitFilter).then((data) => {
-      if (isMounted) {
-        setTrendData(data);
-        setIsLoading(false);
-      }
-    });
+    getMonthlyToaTrend(sheetId, chartMaxDay, unitFilter)
+      .then((data) => {
+        if (isMounted) {
+          setTrendData(data);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.warn("[DailyToaTrendCard] Gagal memuat tren:", err);
+          setHasError(true);
+          setIsLoading(false);
+        }
+      });
 
     return () => {
       isMounted = false;
     };
-  }, [sheetId, chartMaxDay, unitFilter]);
+  }, [sheetId, chartMaxDay, unitFilter, refreshKey]);
 
   const chartMetrics = useMemo(() => {
     if (trendData.length === 0) return null;
@@ -184,6 +194,73 @@ function DailyToaTrendCardComponent({
 
   if (isLoading) {
     return <DailyToaTrendSkeleton />;
+  }
+
+  if (hasError) {
+    return (
+      <div
+        className="analytics-card glass"
+        style={{ position: "relative", overflow: "hidden" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "10px",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <div className="analytics-card-title">
+              <BarChart2 size={18} />
+              <span>Grafik Pelanggan Harian</span>
+            </div>
+            {unitFilter && (
+              <div
+                style={{
+                  fontSize: "11.5px",
+                  fontWeight: 600,
+                  color: "var(--accent-color)",
+                  paddingLeft: "24px",
+                }}
+              >
+                {unitFilter}
+              </div>
+            )}
+          </div>
+          <span
+            style={{
+              fontSize: "11px",
+              fontWeight: 700,
+              color: "var(--text-secondary)",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <Calendar size={12} />
+            {effectiveMonthLabel}
+          </span>
+        </div>
+        <div
+          style={{
+            padding: "14px 16px",
+            borderRadius: "10px",
+            background: "rgba(245, 158, 11, 0.08)",
+            border: "1px solid rgba(245, 158, 11, 0.25)",
+            color: "var(--warning-text, #d97706)",
+            fontSize: "12.5px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginTop: "4px",
+          }}
+        >
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
+          <span>Data grafik tren tidak dapat dimuat saat ini. Silakan periksa koneksi internet Anda.</span>
+        </div>
+      </div>
+    );
   }
 
   if (!chartMetrics) return null;
