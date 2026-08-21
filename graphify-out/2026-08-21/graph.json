@@ -2260,8 +2260,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_devdependencies_types_node",
-      "community": 151,
-      "community_name": "@types/node",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/node"
     },
     {
@@ -2271,8 +2271,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "types_node",
-      "community": 151,
-      "community_name": "@types/node",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/node"
     },
     {
@@ -2348,8 +2348,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "package_devdependencies_happy_dom",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 151,
+      "community_name": "happy-dom",
       "norm_label": "happy-dom"
     },
     {
@@ -2359,8 +2359,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "happy_dom",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 151,
+      "community_name": "happy-dom",
       "norm_label": "happy-dom"
     },
     {
@@ -25616,7 +25616,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/LoginScreen.tsx",
-      "source_location": "L81",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen_loginscreen",
@@ -25628,7 +25628,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/LoginScreen.tsx",
-      "source_location": "L92",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen_loginscreen",
@@ -25640,7 +25640,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/LoginScreen.tsx",
-      "source_location": "L111",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen_loginscreen",
@@ -25652,7 +25652,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/LoginScreen.tsx",
-      "source_location": "L90",
+      "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen_loginscreen",
@@ -25664,7 +25664,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/LoginScreen.tsx",
-      "source_location": "L129",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen_loginscreen",
@@ -44265,5 +44265,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "111cc81ede181b7600d3cfb7bacc5e538f2760b5"
+  "built_at_commit": "eb1a07d328b65df3ef577edfe4642ed6c8aa885c"
 }

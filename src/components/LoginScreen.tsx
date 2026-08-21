@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn, signOut } from "../services/googleSheets";
 import { verifyUserProfile, upsertUserProfile } from "../services/routeService";
 import {
@@ -34,6 +34,45 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [activeModal, setActiveModal] = useState<ModalType>(null);
   const [showSheetsScopeDetails, setShowSheetsScopeDetails] = useState(false);
+
+  // Dukungan URL Hash langsung untuk verifikasi crawler Google (#privacy, #terms, #developer)
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace("#", "").toLowerCase();
+      if (
+        hash === "privacy" ||
+        hash === "privacypolicy" ||
+        hash === "privacy-policy"
+      ) {
+        setActiveModal("privacy");
+      } else if (
+        hash === "terms" ||
+        hash === "termsofservice" ||
+        hash === "terms-of-service"
+      ) {
+        setActiveModal("terms");
+      } else if (hash === "developer" || hash === "contact") {
+        setActiveModal("developer");
+      }
+    };
+
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
+  const closeModal = () => {
+    setActiveModal(null);
+    if (window.location.hash) {
+      try {
+        history.replaceState(
+          null,
+          "",
+          window.location.pathname + window.location.search,
+        );
+      } catch {}
+    }
+  };
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -147,17 +186,32 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
 
         <h1
           style={{
-            fontSize: "32px",
+            fontSize: "30px",
             fontWeight: 800,
             letterSpacing: "-0.5px",
-            marginBottom: "4px",
+            marginBottom: "6px",
             background: "var(--title-gradient)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",
+            lineHeight: 1.2,
           }}
+          aria-label="PUSM - PDO Utara Spreadsheet Mobile"
         >
           PUSM
+          <span
+            style={{
+              display: "block",
+              fontSize: "17px",
+              fontWeight: 700,
+              color: "var(--text-primary)",
+              marginTop: "4px",
+              letterSpacing: "-0.2px",
+              WebkitTextFillColor: "initial",
+            }}
+          >
+            PDO Utara Spreadsheet Mobile
+          </span>
         </h1>
 
         <div
@@ -174,7 +228,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             letterSpacing: "0.3px",
           }}
         >
-          PDO Utara Spreadsheet Mobile
+          Operasional Mikrotrans Transjakarta
         </div>
 
         <p
@@ -976,8 +1030,13 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             marginBottom: "12px",
           }}
         >
-          <button
-            onClick={() => setActiveModal("privacy")}
+          <a
+            href="#privacy"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.hash = "privacy";
+              setActiveModal("privacy");
+            }}
             style={{
               background: "none",
               border: "none",
@@ -988,13 +1047,19 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
               alignItems: "center",
               gap: "4px",
               padding: "4px",
+              textDecoration: "none",
             }}
           >
             <ShieldCheck size={14} /> Kebijakan Privasi
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveModal("terms")}
+          <a
+            href="#terms"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.hash = "terms";
+              setActiveModal("terms");
+            }}
             style={{
               background: "none",
               border: "none",
@@ -1005,13 +1070,19 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
               alignItems: "center",
               gap: "4px",
               padding: "4px",
+              textDecoration: "none",
             }}
           >
             <FileText size={14} /> Syarat & Ketentuan
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveModal("developer")}
+          <a
+            href="#developer"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.hash = "developer";
+              setActiveModal("developer");
+            }}
             style={{
               background: "none",
               border: "none",
@@ -1022,10 +1093,11 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
               alignItems: "center",
               gap: "4px",
               padding: "4px",
+              textDecoration: "none",
             }}
           >
             <Mail size={14} /> Kontak Pengembang
-          </button>
+          </a>
         </div>
 
         <p
@@ -1056,7 +1128,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             padding: "16px",
             animation: "fadeIn 0.2s ease-out",
           }}
-          onClick={() => setActiveModal(null)}
+          onClick={closeModal}
         >
           <div
             className="glass"
@@ -1101,7 +1173,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
                 {activeModal === "developer" && "Informasi Kontak Pengembang"}
               </h3>
               <button
-                onClick={() => setActiveModal(null)}
+                onClick={closeModal}
                 style={{
                   background: "none",
                   border: "none",
@@ -1124,7 +1196,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
                 }}
               >
                 <p>
-                  <strong>Terakhir Diperbarui: 20 Agustus 2026</strong>
+                  <strong>Terakhir Diperbarui: 21 Agustus 2026</strong>
                 </p>
                 <p>
                   Aplikasi <strong>PUSM</strong> (
@@ -1169,10 +1241,10 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
                   Bila ada pertanyaan atau kendala seputar privasi data, Anda
                   dapat menghubungi kami melalui email:{" "}
                   <a
-                    href="mailto:muhammadabyn37@gmail.com"
+                    href="mailto:bionex37@gmail.com"
                     style={{ color: "#3ECF8E" }}
                   >
-                    muhammadabyn37@gmail.com
+                    bionex37@gmail.com
                   </a>
                   .
                 </p>
@@ -1189,7 +1261,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
                 }}
               >
                 <p>
-                  <strong>Terakhir Diperbarui: 20 Agustus 2026</strong>
+                  <strong>Terakhir Diperbarui: 21 Agustus 2026</strong>
                 </p>
                 <p>
                   Dengan menggunakan aplikasi <strong>PUSM</strong>, Anda
@@ -1283,7 +1355,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             <div style={{ marginTop: "20px", textAlign: "right" }}>
               <button
                 className="btn"
-                onClick={() => setActiveModal(null)}
+                onClick={closeModal}
                 style={{
                   padding: "8px 18px",
                   fontSize: "13px",
