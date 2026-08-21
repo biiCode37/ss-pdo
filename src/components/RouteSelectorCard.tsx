@@ -290,13 +290,13 @@ function RouteSelectorCardComponent({
     }
   };
 
-  // Auto morph saat data berhasil di-load
+  // Auto morph saat data berhasil selesai di-load (transisi dari loading -> selesai)
   useEffect(() => {
-    if ((prevLoadingRef.current && !isLoading && isDataLoaded) || (isDataLoaded && !isMorphed && !isLoading && !prevLoadingRef.current)) {
+    if (prevLoadingRef.current && !isLoading && isDataLoaded) {
       setIsMorphed(true);
     }
     prevLoadingRef.current = isLoading;
-  }, [isLoading, isDataLoaded, isMorphed]);
+  }, [isLoading, isDataLoaded]);
 
   // Cari info rute aktif berdasarkan sheetUrl/currentSheetId
   const targetId = currentSheetId || extractSpreadsheetId(sheetUrl);
