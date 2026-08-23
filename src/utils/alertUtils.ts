@@ -4,10 +4,12 @@ import type { HeaderMap } from "../services/googleSheets";
 import {
   showBusInputModal,
   escapeHtml,
+  getSatsetMode,
+  setSatsetMode,
   type BusModalOptions,
 } from "./modals/busInputModal";
 
-export { showBusInputModal, escapeHtml };
+export { showBusInputModal, escapeHtml, getSatsetMode, setSatsetMode };
 export type { BusModalOptions };
 
 /**

@@ -10,6 +10,45 @@ export interface BusModalOptions {
   tabName?: string;
 }
 
+const SATSET_STORAGE_KEY = "pdo_satset_mode";
+
+/**
+ * Mendapatkan status Mode Satset (Auto-Next Bus) dari localStorage
+ */
+export function getSatsetMode(): boolean {
+  try {
+    return localStorage.getItem(SATSET_STORAGE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Menyimpan status Mode Satset ke localStorage
+ */
+export function setSatsetMode(enabled: boolean): void {
+  try {
+    localStorage.setItem(SATSET_STORAGE_KEY, enabled ? "true" : "false");
+  } catch {
+    // Ignore localStorage errors
+  }
+}
+
+/**
+ * Merender tombol toggle kapsul Mode Satset
+ */
+export function renderSatsetToggle(isSatset: boolean): string {
+  return `
+    <div class="pdo-satset-toggle-wrapper">
+      <button type="button" id="swal-toggle-satset" class="pdo-satset-toggle ${isSatset ? "active" : ""}" title="Mode Satset: Otomatis lanjut ke bus berikutnya saat simpan">
+        <span class="satset-icon">⚡</span>
+        <span>Mode Satset</span>
+        <span class="satset-status-badge">${isSatset ? "ON" : "OFF"}</span>
+      </button>
+    </div>
+  `;
+}
+
 const SINGLE_COLUMN_META: Record<
   string,
   { label: string; placeholder: string; key: keyof BusData }
@@ -381,12 +420,15 @@ export async function showBusInputModal(
   const hasKeterangan = Boolean(bus.keterangan && bus.keterangan.trim() !== "");
 
   // Tentukan HTML Formulir berdasarkan Mode Kolom Aktif
+  const isSatset = getSatsetMode();
+  const satsetToggleHtml = renderSatsetToggle(isSatset);
   let formHtml = "";
 
   if (isAll) {
     // Mode Semua Kolom (ALL): Segmented Quick-Switch Tabs
     formHtml = `
       <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 8px; text-align: left;">
+        ${satsetToggleHtml}
         
         <!-- Segmented Tab Switcher -->
         <div class="swal-segmented-bar">
@@ -486,6 +528,7 @@ export async function showBusInputModal(
     // Mode Khusus TOA S1: TOA Shift 1 + Progressive Chips (Manual S1 & Keterangan)
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
+        ${satsetToggleHtml}
         <div>
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             TOA Shift 1
@@ -530,6 +573,7 @@ export async function showBusInputModal(
     // Mode Khusus Total TOA: Total TOA + Progressive Chips (Manual S2 & Keterangan)
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
+        ${satsetToggleHtml}
         <div>
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             Total TOA
@@ -575,6 +619,7 @@ export async function showBusInputModal(
     const currentVal = (bus[singleMeta.key] as string) || "";
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
+        ${satsetToggleHtml}
         <div>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <label style="display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
@@ -856,6 +901,24 @@ export async function showBusInputModal(
             if (input) input.focus();
           }
           chipKet.style.display = "none";
+        });
+      }
+
+      // Handler Toggle Mode Satset (Auto-Next Bus)
+      const toggleSatsetBtn = popup.querySelector<HTMLButtonElement>(
+        "#swal-toggle-satset",
+      );
+      if (toggleSatsetBtn) {
+        toggleSatsetBtn.addEventListener("click", () => {
+          const nextState = !getSatsetMode();
+          setSatsetMode(nextState);
+          if (nextState) {
+            toggleSatsetBtn.classList.add("active");
+          } else {
+            toggleSatsetBtn.classList.remove("active");
+          }
+          const badge = toggleSatsetBtn.querySelector(".satset-status-badge");
+          if (badge) badge.textContent = nextState ? "ON" : "OFF";
         });
       }
     },

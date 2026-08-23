@@ -1689,4 +1689,61 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   color: var(--text-primary) !important;
 }
 
+/* Satset Mode Toggle (Auto-Next) */
+.pdo-satset-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.pdo-satset-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
+  background: var(--card-bg, rgba(255, 255, 255, 0.05));
+  color: var(--text-secondary);
+  transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.pdo-satset-toggle:hover {
+  border-color: var(--accent-color, #38bdf8);
+  color: var(--text-primary);
+}
+
+.pdo-satset-toggle.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.pdo-satset-toggle.active .satset-icon {
+  color: #10b981;
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.6));
+}
+
+.pdo-satset-toggle .satset-status-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 6px;
+  background: rgba(120, 120, 120, 0.18);
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.pdo-satset-toggle.active .satset-status-badge {
+  background: #10b981;
+  color: #ffffff;
+}
+
 

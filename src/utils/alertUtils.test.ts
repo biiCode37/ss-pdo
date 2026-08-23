@@ -15,6 +15,8 @@ import {
   showQueueConflictDialog,
   showBusInputModal,
   showFormatSheetConfirm,
+  getSatsetMode,
+  setSatsetMode,
   pdoSwal,
   pdoToast,
 } from "./alertUtils";
@@ -537,6 +539,78 @@ describe("alertUtils", () => {
           html: expect.stringContaining("654321"),
         }),
       );
+    });
+
+    it("renders Satset Mode toggle in the modal header", async () => {
+      setSatsetMode(false);
+      const swalSpy = vi.spyOn(pdoSwal, "fire").mockResolvedValue({
+        isConfirmed: false,
+      } as any);
+
+      await showBusInputModal({
+        bus: mockBus,
+        activeCategory: "ALL",
+        tabName: "01-08-2026",
+      });
+
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          html: expect.stringContaining("Mode Satset"),
+        }),
+      );
+    });
+
+    it("toggles Satset Mode state in localStorage when clicked in DOM", async () => {
+      setSatsetMode(false);
+      expect(getSatsetMode()).toBe(false);
+
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+
+      await showBusInputModal({
+        bus: mockBus,
+        activeCategory: "toaShift1",
+        tabName: "01-08-2026",
+      });
+
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      // Execute didOpen logic manually on DOM
+      capturedOptions.didOpen();
+
+      const toggleBtn = popupDiv.querySelector<HTMLButtonElement>(
+        "#swal-toggle-satset",
+      );
+      expect(toggleBtn).not.toBeNull();
+
+      // Klik 1: Switch to ON
+      toggleBtn?.click();
+      expect(getSatsetMode()).toBe(true);
+      expect(toggleBtn?.classList.contains("active")).toBe(true);
+
+      // Klik 2: Switch to OFF
+      toggleBtn?.click();
+      expect(getSatsetMode()).toBe(false);
+      expect(toggleBtn?.classList.contains("active")).toBe(false);
+
+      document.body.removeChild(popupDiv);
+    });
+  });
+
+  describe("Satset Mode Helpers", () => {
+    it("reads and writes boolean values correctly to localStorage", () => {
+      setSatsetMode(true);
+      expect(getSatsetMode()).toBe(true);
+
+      setSatsetMode(false);
+      expect(getSatsetMode()).toBe(false);
     });
   });
 

@@ -16,6 +16,7 @@ import {
   showBulkTripModal,
   showBulkCopyKmModal,
 } from "../utils/alertUtils";
+import { getSatsetMode } from "../utils/modals/busInputModal";
 import { BusCardSkeleton } from "./Skeletons";
 
 import type { SyncItem } from "../hooks/useOfflineSync";
@@ -289,7 +290,45 @@ function BusListComponent({
     }
 
     return result;
-  }, [data, searchQuery, showOnlyUnfinished, activeCategory]);
+  }, [data, searchQuery, showOnlyUnfinished, activeCategory, isBusFilled]);
+
+  // Handler Auto-Next Bus ketika Mode Satset aktif
+  const handleSaveAndNext = useCallback(
+    (savedBus: BusData) => {
+      if (!getSatsetMode()) return;
+
+      // Jeda mikro 120ms agar transisi antar modal terasa sangat mulus
+      setTimeout(() => {
+        const currentIndex = filteredData.findIndex(
+          (b) => b.rowIndex === savedBus.rowIndex,
+        );
+
+        // Cari unit berikutnya yang belum terisi di daftar terfilter
+        let nextBus = filteredData
+          .slice(currentIndex + 1)
+          .find((b) => b.rowIndex !== savedBus.rowIndex && !isBusFilled(b));
+
+        // Jika dari posisi saat ini ke bawah sudah terisi semua, cari dari atas daftar
+        if (!nextBus) {
+          nextBus = filteredData
+            .slice(0, currentIndex)
+            .find((b) => b.rowIndex !== savedBus.rowIndex && !isBusFilled(b));
+        }
+
+        if (nextBus) {
+          const nextCardEl = document.querySelector<HTMLElement>(
+            `[data-bus-row="${nextBus.rowIndex}"]`,
+          );
+          if (nextCardEl) {
+            nextCardEl.click();
+          }
+        } else {
+          showSuccessToast("🎉 Semua unit pada filter ini telah selesai diisi!");
+        }
+      }, 120);
+    },
+    [filteredData, isBusFilled],
+  );
 
   return (
     <div>
@@ -612,6 +651,7 @@ function BusListComponent({
                     ? (updates) => onUpdateBus(bus.rowIndex, updates)
                     : undefined
                 }
+                onSaveAndNext={handleSaveAndNext}
               />
             ))
           ) : (

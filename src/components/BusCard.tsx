@@ -7,13 +7,13 @@ import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
 import { parseIndonesianNumber, safeFormatNumber, normalizeFieldValue } from "../utils/numberUtils";
 import {
-  showSuccessToast,
   showErrorToast,
   showInfoToast,
   showWarningToast,
   showBusInputModal,
   showQueueConflictDialog,
 } from "../utils/alertUtils";
+import { getSatsetMode } from "../utils/modals/busInputModal";
 import {
   AlertTriangle,
   Navigation,
@@ -31,6 +31,7 @@ interface Props {
   addToQueue: (item: any) => void;
   activeCategory: string;
   onUpdateBus?: (updates: Partial<BusData>) => void;
+  onSaveAndNext?: (savedBus: BusData) => void;
 }
 
 function BusCardComponent({
@@ -42,6 +43,7 @@ function BusCardComponent({
   addToQueue,
   activeCategory,
   onUpdateBus,
+  onSaveAndNext,
 }: Props) {
   const [formData, setFormData] = useState<Partial<BusData>>({
     toaShift1: bus.toaShift1 || "",
@@ -81,6 +83,20 @@ function BusCardComponent({
   ) => {
     if (tabName === "AKUMULASI") return;
 
+    // 1. Optimistic Update Instan di UI (0 ms latency)
+    const mergedData = { ...formData, ...updates };
+    setFormData(mergedData);
+    setSaveStatus("success");
+    if (onUpdateBus) {
+      onUpdateBus(mergedData);
+    }
+
+    // 2. Jika Mode Satset aktif, langsung picu navigasi ke bus berikutnya
+    if (getSatsetMode() && onSaveAndNext) {
+      onSaveAndNext({ ...bus, ...mergedData });
+    }
+
+    // 3. Sinkronisasi ke Google Sheets di Background (Non-blocking)
     setIsLoading(true);
     try {
       if (!forceOverwrite) {
@@ -122,17 +138,10 @@ function BusCardComponent({
         }
       }
 
-      const mergedData = { ...formData, ...updates };
       await updateBusData(sheetId, tabName, bus.rowIndex, updates, headerMap);
-      setFormData(mergedData);
       setSaveStatus("success");
-      if (onUpdateBus) {
-        onUpdateBus(mergedData);
-      }
-      showSuccessToast(`Data unit ${bus.unit} tersimpan!`);
     } catch (err: any) {
       if (isNetworkError(err)) {
-        const mergedData = { ...formData, ...updates };
         const originalSnapshot: Partial<BusData> = {};
         for (const field of Object.keys(updates) as (keyof BusData)[]) {
           (originalSnapshot as any)[field] = bus[field];
@@ -145,14 +154,13 @@ function BusCardComponent({
           headerMap,
           originalSnapshot,
         });
-        setFormData(mergedData);
         setSaveStatus("queued");
         showInfoToast(`Unit ${bus.unit} disimpan ke antrean offline`);
       } else {
         setSaveStatus("idle");
         const formattedErr = formatUserError(
           err,
-          "Gagal menyimpan data bus. Silakan coba lagi.",
+          "Gagal menyimpan data bus ke Google Sheets.",
         );
         if (formattedErr) {
           showErrorToast(formattedErr);
@@ -315,13 +323,14 @@ function BusCardComponent({
   return (
     <div
       id={`bus-card-${slugifyUnitId(bus.unit)}`}
-        className="bus-card glass"
-        onClick={handleOpenModal}
-        style={{
-          cursor: tabName === "AKUMULASI" ? "default" : "pointer",
-          transition: "all 0.18s var(--ease-spring)",
-        }}
-      >
+      data-bus-row={bus.rowIndex}
+      className="bus-card glass"
+      onClick={handleOpenModal}
+      style={{
+        cursor: tabName === "AKUMULASI" ? "default" : "pointer",
+        transition: "all 0.18s var(--ease-spring)",
+      }}
+    >
         <div
           className="bus-card-header"
           style={{
