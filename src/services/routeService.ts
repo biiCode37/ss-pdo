@@ -506,4 +506,219 @@ export async function getCrossPeriodAccumulation(
   }
 }
 
+/**
+ * Mengambil seluruh profil pengguna dari Supabase
+ */
+export async function fetchAllUserProfiles(): Promise<UserProfile[]> {
+  if (!isSupabaseConfigured) return [];
+  try {
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      console.error('[RouteService] Error fetching user profiles:', error);
+      return [];
+    }
+    return (data as UserProfile[]) || [];
+  } catch (err) {
+    console.error('[RouteService] Failed to fetch user profiles:', err);
+    return [];
+  }
+}
+
+/**
+ * Menambahkan user baru ke whitelist sistem
+ */
+export async function addUserProfile(params: {
+  email: string;
+  full_name: string;
+  role: 'superadmin' | 'admin' | 'petugas';
+  notes?: string;
+  created_by?: string;
+}): Promise<{ success: boolean; message?: string }> {
+  if (!isSupabaseConfigured) {
+    return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
+  }
+  try {
+    const cleanEmail = params.email.trim().toLowerCase();
+    const { error } = await supabase.from('user_profiles').insert([
+      {
+        email: cleanEmail,
+        full_name: params.full_name.trim(),
+        role: params.role,
+        notes: params.notes?.trim() || null,
+        created_by: params.created_by || null,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+    ]);
+    if (error) {
+      if (error.code === '23505') {
+        return { success: false, message: 'Email tersebut sudah terdaftar di sistem.' };
+      }
+      return { success: false, message: `Gagal menambahkan pengguna: ${error.message}` };
+    }
+
+    // Catat ke audit trail
+    await logActivity({
+      user_email: params.created_by || 'system',
+      action: 'USER_ADDED',
+      details: {
+        target_email: cleanEmail,
+        target_name: params.full_name,
+        assigned_role: params.role,
+        notes: params.notes,
+      },
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, message: err?.message || 'Terjadi kesalahan sistem.' };
+  }
+}
+
+/**
+ * Mengubah role akun pengguna
+ */
+export async function updateUserProfileRole(
+  targetEmail: string,
+  newRole: 'superadmin' | 'admin' | 'petugas',
+  updatedBy: string,
+): Promise<{ success: boolean; message?: string }> {
+  if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
+  try {
+    const { error } = await supabase
+      .from('user_profiles')
+      .update({
+        role: newRole,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('email', targetEmail);
+
+    if (error) {
+      return { success: false, message: `Gagal mengubah peran: ${error.message}` };
+    }
+
+    await logActivity({
+      user_email: updatedBy,
+      action: 'USER_ROLE_CHANGED',
+      details: {
+        target_email: targetEmail,
+        new_role: newRole,
+      },
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, message: err?.message || 'Terjadi kesalahan.' };
+  }
+}
+
+/**
+ * Mengaktifkan atau menonaktifkan akun pengguna
+ */
+export async function toggleUserProfileStatus(
+  targetEmail: string,
+  isActive: boolean,
+  updatedBy: string,
+): Promise<{ success: boolean; message?: string }> {
+  if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
+  try {
+    const { error } = await supabase
+      .from('user_profiles')
+      .update({
+        is_active: isActive,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('email', targetEmail);
+
+    if (error) {
+      return { success: false, message: `Gagal mengubah status akun: ${error.message}` };
+    }
+
+    await logActivity({
+      user_email: updatedBy,
+      action: 'USER_STATUS_CHANGED',
+      details: {
+        target_email: targetEmail,
+        new_status: isActive ? 'active' : 'inactive',
+      },
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, message: err?.message || 'Terjadi kesalahan.' };
+  }
+}
+
+/**
+ * Mencabut / menghapus akses pengguna dari sistem
+ */
+export async function revokeUserProfile(
+  targetEmail: string,
+  revokedBy: string,
+): Promise<{ success: boolean; message?: string }> {
+  if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
+  try {
+    const { error } = await supabase
+      .from('user_profiles')
+      .delete()
+      .eq('email', targetEmail);
+
+    if (error) {
+      return { success: false, message: `Gagal menghapus pengguna: ${error.message}` };
+    }
+
+    await logActivity({
+      user_email: revokedBy,
+      action: 'USER_REVOKED',
+      details: {
+        target_email: targetEmail,
+      },
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, message: err?.message || 'Terjadi kesalahan.' };
+  }
+}
+
+/**
+ * Mengambil log aktivitas untuk audit
+ */
+export async function fetchActivityLogs(options?: {
+  limit?: number;
+  userEmail?: string;
+  actionPrefix?: string;
+}): Promise<ActivityLog[]> {
+  if (!isSupabaseConfigured) return [];
+  try {
+    let query = supabase
+      .from('activity_logs')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(options?.limit || 100);
+
+    if (options?.userEmail) {
+      query = query.eq('user_email', options.userEmail);
+    }
+    if (options?.actionPrefix) {
+      query = query.ilike('action', `${options.actionPrefix}%`);
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      console.error('[RouteService] Error fetching activity logs:', error);
+      return [];
+    }
+    return (data as ActivityLog[]) || [];
+  } catch (err) {
+    console.error('[RouteService] Failed to fetch activity logs:', err);
+    return [];
+  }
+}
+
+
 

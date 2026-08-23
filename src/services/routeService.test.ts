@@ -1,5 +1,18 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { fetchRoutesWithSheets, upsertUserProfile, verifyUserProfile, logActivity, sendUserHeartbeat, backupSyncQueue } from './routeService';
+import {
+  fetchRoutesWithSheets,
+  upsertUserProfile,
+  verifyUserProfile,
+  logActivity,
+  sendUserHeartbeat,
+  backupSyncQueue,
+  fetchAllUserProfiles,
+  addUserProfile,
+  updateUserProfileRole,
+  toggleUserProfileStatus,
+  revokeUserProfile,
+  fetchActivityLogs,
+} from './routeService';
 import { supabase } from './supabase';
 
 // Mock localStorage in Node environment
@@ -254,5 +267,117 @@ describe('routeService', () => {
 
     expect(supabase.from).toHaveBeenCalledWith('sync_queue_backups');
     expect(mockInsert).toHaveBeenCalledWith([backupItem]);
+  });
+
+  it('fetchAllUserProfiles fetches all users ordered by created_at desc', async () => {
+    const mockUsers = [
+      { id: 1, email: 'super@pusm.id', role: 'superadmin', full_name: 'Super' },
+      { id: 2, email: 'admin@pusm.id', role: 'admin', full_name: 'Admin' },
+    ];
+    const mockSelect = vi.fn().mockReturnValue({
+      order: vi.fn().mockResolvedValue({ data: mockUsers, error: null }),
+    });
+    (supabase.from as any).mockReturnValue({ select: mockSelect });
+
+    const users = await fetchAllUserProfiles();
+    expect(supabase.from).toHaveBeenCalledWith('user_profiles');
+    expect(users).toHaveLength(2);
+    expect(users[0].role).toBe('superadmin');
+  });
+
+  it('addUserProfile inserts user and logs USER_ADDED activity', async () => {
+    const mockInsert = vi.fn().mockResolvedValue({ error: null });
+    (supabase.from as any).mockReturnValue({ insert: mockInsert });
+
+    const result = await addUserProfile({
+      email: 'newpetugas@pusm.id',
+      full_name: 'Petugas Baru',
+      role: 'petugas',
+      notes: 'Shift Siang',
+      created_by: 'admin@pusm.id',
+    });
+
+    expect(result.success).toBe(true);
+    expect(mockInsert).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          email: 'newpetugas@pusm.id',
+          role: 'petugas',
+          is_active: true,
+        }),
+      ])
+    );
+  });
+
+  it('updateUserProfileRole updates role and logs USER_ROLE_CHANGED', async () => {
+    const mockUpdate = vi.fn().mockReturnValue({
+      eq: vi.fn().mockResolvedValue({ error: null }),
+    });
+    const mockInsert = vi.fn().mockResolvedValue({ error: null });
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'user_profiles') return { update: mockUpdate };
+      if (table === 'activity_logs') return { insert: mockInsert };
+      return {};
+    });
+
+    const result = await updateUserProfileRole('target@pusm.id', 'admin', 'superadmin@pusm.id');
+    expect(result.success).toBe(true);
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        role: 'admin',
+      })
+    );
+  });
+
+  it('toggleUserProfileStatus updates is_active and logs USER_STATUS_CHANGED', async () => {
+    const mockUpdate = vi.fn().mockReturnValue({
+      eq: vi.fn().mockResolvedValue({ error: null }),
+    });
+    const mockInsert = vi.fn().mockResolvedValue({ error: null });
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'user_profiles') return { update: mockUpdate };
+      if (table === 'activity_logs') return { insert: mockInsert };
+      return {};
+    });
+
+    const result = await toggleUserProfileStatus('target@pusm.id', false, 'admin@pusm.id');
+    expect(result.success).toBe(true);
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        is_active: false,
+      })
+    );
+  });
+
+  it('revokeUserProfile deletes user and logs USER_REVOKED', async () => {
+    const mockDelete = vi.fn().mockReturnValue({
+      eq: vi.fn().mockResolvedValue({ error: null }),
+    });
+    const mockInsert = vi.fn().mockResolvedValue({ error: null });
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'user_profiles') return { delete: mockDelete };
+      if (table === 'activity_logs') return { insert: mockInsert };
+      return {};
+    });
+
+    const result = await revokeUserProfile('baduser@pusm.id', 'superadmin@pusm.id');
+    expect(result.success).toBe(true);
+    expect(mockDelete).toHaveBeenCalled();
+  });
+
+  it('fetchActivityLogs queries activity_logs with limit and optional filters', async () => {
+    const mockLogs = [
+      { id: 1, action: 'USER_ADDED', user_email: 'admin@pusm.id' },
+    ];
+    const mockLimit = vi.fn().mockResolvedValue({ data: mockLogs, error: null });
+    const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
+    const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
+
+    (supabase.from as any).mockReturnValue({ select: mockSelect });
+
+    const logs = await fetchActivityLogs({ limit: 50 });
+    expect(supabase.from).toHaveBeenCalledWith('activity_logs');
+    expect(logs).toHaveLength(1);
+    expect(logs[0].action).toBe('USER_ADDED');
   });
 });

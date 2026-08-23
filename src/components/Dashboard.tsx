@@ -10,6 +10,8 @@ import { extractSpreadsheetId } from "../utils/sheetIdentity";
 import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
+import { UserManagementSheet } from "./UserManagementSheet";
+import { AuditLogSheet } from "./AuditLogSheet";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
@@ -98,6 +100,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const [isReauthenticating, setIsReauthenticating] = useState(false);
   const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
+  const [isAuditLogOpen, setIsAuditLogOpen] = useState(false);
   // ponytail: track custom accumulation range for startDay parameter
   const [accRange, setAccRange] = useState<{
     start: number;
@@ -965,6 +969,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         isOpen={isProfileMenuOpen}
         onClose={() => setIsProfileMenuOpen(false)}
         onOpenAccumulation={() => setIsAccSheetOpen(true)}
+        onOpenUserManagement={() => setIsUserManagementOpen(true)}
+        onOpenAuditLogs={() => setIsAuditLogOpen(true)}
         isDarkMode={theme === "dark"}
         onToggleTheme={toggleTheme}
         offlineQueueCount={
@@ -982,6 +988,21 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         }}
         currentTabName={currentTabName}
         hasActiveData={Boolean(currentSheetId && currentTabName && busData && busData.length > 0)}
+      />
+
+      <UserManagementSheet
+        isOpen={isUserManagementOpen}
+        onClose={() => setIsUserManagementOpen(false)}
+        currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
+        currentUserRole={(localStorage.getItem("PDO_USER_ROLE") as any) || "petugas"}
+        isDarkMode={theme === "dark"}
+      />
+
+      <AuditLogSheet
+        isOpen={isAuditLogOpen}
+        onClose={() => setIsAuditLogOpen(false)}
+        currentUserRole={(localStorage.getItem("PDO_USER_ROLE") as any) || "petugas"}
+        isDarkMode={theme === "dark"}
       />
     </div>
   );

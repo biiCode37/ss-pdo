@@ -9,8 +9,9 @@ import {
   LogOut,
   CloudOff,
   ChevronRight,
-  ShieldCheck,
   Sparkles,
+  Users,
+  History,
 } from "lucide-react";
 import { verifyUserProfile, upsertUserProfile } from "../services/routeService";
 import { fetchGoogleUserProfile } from "../services/googleSheets/auth";
@@ -23,11 +24,14 @@ import {
   showErrorAlert,
 } from "../utils/alertUtils";
 import { formatUserError } from "../utils/errorFormatter";
+import { RoleBadge } from "./RoleBadge";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   onOpenAccumulation?: () => void;
+  onOpenUserManagement?: () => void;
+  onOpenAuditLogs?: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
   offlineQueueCount: number;
@@ -42,6 +46,8 @@ export function ProfileMenuSheet({
   isOpen,
   onClose,
   onOpenAccumulation: _onOpenAccumulation,
+  onOpenUserManagement,
+  onOpenAuditLogs,
   isDarkMode,
   onToggleTheme,
   offlineQueueCount,
@@ -60,10 +66,12 @@ export function ProfileMenuSheet({
     full_name: string;
     email: string;
     avatar_url?: string;
+    role?: 'superadmin' | 'admin' | 'petugas';
   }>({
     full_name: localStorage.getItem("PDO_USER_NAME") || "Petugas Operasional",
     email: localStorage.getItem("PDO_USER_EMAIL") || "pdo.utara@transjakarta.co.id",
     avatar_url: localStorage.getItem("PDO_USER_AVATAR") || undefined,
+    role: (localStorage.getItem("PDO_USER_ROLE") as any) || "petugas",
   });
   const contentRef = useRef<HTMLDivElement>(null);
   const mountTimeRef = useRef(0);
@@ -125,12 +133,15 @@ export function ProfileMenuSheet({
             full_name: profile.full_name || prev.full_name || cachedEmail,
             email: profile.email || prev.email,
             avatar_url: effectiveAvatar || prev.avatar_url,
+            role: profile.role || prev.role || "petugas",
           }));
 
           if (profile.full_name)
             localStorage.setItem("PDO_USER_NAME", profile.full_name);
           if (profile.email)
             localStorage.setItem("PDO_USER_EMAIL", profile.email);
+          if (profile.role)
+            localStorage.setItem("PDO_USER_ROLE", profile.role);
           if (effectiveAvatar)
             localStorage.setItem("PDO_USER_AVATAR", effectiveAvatar);
         }
@@ -379,10 +390,7 @@ export function ProfileMenuSheet({
                 <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
                   {userProfile.full_name}
                 </span>
-                <ShieldCheck
-                  size={14}
-                  style={{ color: "var(--accent-color)", flexShrink: 0 }}
-                />
+                <RoleBadge role={userProfile.role} size="xs" />
               </div>
               <span
                 style={{
@@ -392,6 +400,7 @@ export function ProfileMenuSheet({
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
+                  marginTop: "2px",
                 }}
               >
                 {userProfile.email}
@@ -413,6 +422,105 @@ export function ProfileMenuSheet({
             <X size={20} />
           </button>
         </div>
+
+        {/* SECTION: Administrasi Sistem (Khusus Superadmin & Admin) */}
+        {(userProfile.role === "superadmin" || userProfile.role === "admin") && (
+          <div style={{ marginBottom: "20px" }}>
+            <span
+              style={{
+                fontSize: "10.5px",
+                fontWeight: 700,
+                letterSpacing: "0.5px",
+                color: "var(--text-secondary)",
+                textTransform: "uppercase",
+                display: "block",
+                marginBottom: "8px",
+                paddingLeft: "4px",
+              }}
+            >
+              ADMINISTRASI SISTEM
+            </span>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              {/* Kelola Pengguna */}
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenUserManagement?.();
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "12px 14px",
+                  borderRadius: "12px",
+                  background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+                  border: "1px solid var(--card-border)",
+                  color: "var(--text-primary)",
+                  fontWeight: 500,
+                  fontSize: "13.5px",
+                  cursor: "pointer",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <Users size={18} style={{ color: "#3b82f6" }} />
+                  <div style={{ textAlign: "left" }}>
+                    <div>Kelola Pengguna</div>
+                    <div
+                      style={{
+                        fontSize: "11px",
+                        color: "var(--text-secondary)",
+                        marginTop: "1px",
+                      }}
+                    >
+                      Atur akun, peran (role), & status aktif
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+              </button>
+
+              {/* Log Aktivitas & Audit */}
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenAuditLogs?.();
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "12px 14px",
+                  borderRadius: "12px",
+                  background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+                  border: "1px solid var(--card-border)",
+                  color: "var(--text-primary)",
+                  fontWeight: 500,
+                  fontSize: "13.5px",
+                  cursor: "pointer",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <History size={18} style={{ color: "#10b981" }} />
+                  <div style={{ textAlign: "left" }}>
+                    <div>Log Aktivitas & Audit</div>
+                    <div
+                      style={{
+                        fontSize: "11px",
+                        color: "var(--text-secondary)",
+                        marginTop: "1px",
+                      }}
+                    >
+                      Riwayat tindakan dan input operasional
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* SECTION: Fitur & Utilitas */}
         <div style={{ marginBottom: "20px" }}>

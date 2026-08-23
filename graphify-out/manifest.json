@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1787322418.5377717,
-    "ast_hash": "bfc0cedaa296dac468897d76dd7e860e",
+    "mtime": 1787495686.5552373,
+    "ast_hash": "af643394109354d6d22aa2db2e513650",
     "semantic_hash": ""
   },
   "src/components/AnalyticsDashboard.tsx": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1787322418.5437045,
-    "ast_hash": "ca1a9929cf1ac9f8ad1772a199951094",
+    "mtime": 1787495662.7050962,
+    "ast_hash": "1ea0c8a44af0f8a8b1b9c688ed79fc4e",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "src/components/LoginScreen.tsx": {
-    "mtime": 1787464463.1883073,
-    "ast_hash": "071c12a14e1e7f93d6a707006aa2dbb3",
+    "mtime": 1787495683.8039563,
+    "ast_hash": "0f79ac9e7b6a1c48af8f6e9a4c04af94",
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "src/services/routeService.ts": {
-    "mtime": 1787322418.5648463,
-    "ast_hash": "6d3a16cba8c28e9ad6f90f2e64549d2d",
+    "mtime": 1787495485.7731287,
+    "ast_hash": "7a143d701774d6c8f214dc4f895d7ae9",
     "semantic_hash": ""
   },
   "src/services/supabase.ts": {
@@ -655,8 +655,8 @@
     "semantic_hash": ""
   },
   "src/types/supabase.ts": {
-    "mtime": 1786762500.679413,
-    "ast_hash": "5d11184cb4f8033ffec0c83f53a4f00f",
+    "mtime": 1787495471.3210552,
+    "ast_hash": "b269ed4a27278972331d92142c47ec62",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-04-supabase-integration.md": {
@@ -670,8 +670,8 @@
     "semantic_hash": ""
   },
   "src/services/routeService.test.ts": {
-    "mtime": 1787322418.5637133,
-    "ast_hash": "9ac72c68cf9df2b359a79c255109676f",
+    "mtime": 1787495533.5606737,
+    "ast_hash": "cfdf5e8be39e62e79d1032b6fb259604",
     "semantic_hash": ""
   },
   "src/components/SwipeableContainer.tsx": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "src/components/ProfileMenuSheet.tsx": {
-    "mtime": 1787464463.1883073,
-    "ast_hash": "a74fd6fc54ef0637d921bbc25311ee14",
+    "mtime": 1787495775.9605148,
+    "ast_hash": "164318e430f0bbd35d41587c45e3f280",
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {
@@ -860,7 +860,7 @@
     "semantic_hash": ""
   },
   "src/utils/alertUtils.test.ts": {
-    "mtime": 1787468220.5624788,
+    "mtime": 1787468605.7727678,
     "ast_hash": "2011d0eba90a0c18e929c4e7785568db",
     "semantic_hash": ""
   },
@@ -960,7 +960,7 @@
     "semantic_hash": ""
   },
   "src/utils/modals/busInputModal.ts": {
-    "mtime": 1787468195.8047945,
+    "mtime": 1787468605.7771294,
     "ast_hash": "0ae7ee28408fef0f219a504612efca62",
     "semantic_hash": ""
   },
@@ -1067,6 +1067,36 @@
   "docs/superpowers/specs/2026-08-23-satset-mode-design.md": {
     "mtime": 1787464463.0884707,
     "ast_hash": "01f9b1b03dd315342a2dfd5bceb76f02",
+    "semantic_hash": ""
+  },
+  "src/components/AuditLogSheet.tsx": {
+    "mtime": 1787495770.7652001,
+    "ast_hash": "ce90f32cdca5689a1c78e99abdb29c52",
+    "semantic_hash": ""
+  },
+  "src/components/RoleBadge.test.tsx": {
+    "mtime": 1787495716.4237864,
+    "ast_hash": "b51cb47758d3e5c73e8dd49d1cac0a28",
+    "semantic_hash": ""
+  },
+  "src/components/RoleBadge.tsx": {
+    "mtime": 1787495548.3404016,
+    "ast_hash": "3d96da7fc16fc1e9a67a02d7b9eceba0",
+    "semantic_hash": ""
+  },
+  "src/components/UserManagementSheet.tsx": {
+    "mtime": 1787495816.9326935,
+    "ast_hash": "a9114b8f8972db9daa50e38ecd997c50",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-08-23-user-role-management-plan.md": {
+    "mtime": 1787495459.3155942,
+    "ast_hash": "78ad9af8404173bd20d0f18baeedc143",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-08-23-user-role-management-design.md": {
+    "mtime": 1787495429.012811,
+    "ast_hash": "e580b2d8bc0120ae3d6f8916a212d2ea",
     "semantic_hash": ""
   }
 }

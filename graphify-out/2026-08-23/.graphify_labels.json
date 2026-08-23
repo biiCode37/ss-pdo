@@ -1,7 +1,7 @@
 {
   "0": "server.cjs",
   "1": "design_system.py",
-  "2": "core.ts",
+  "2": "routeService.ts",
   "3": "Test-Driven Development (TDD)",
   "4": "plugins",
   "5": "compilerOptions",
@@ -117,9 +117,9 @@
   "115": "package.json",
   "116": "alertUtils.ts",
   "117": "Design Document — User Activity & Audit Telemetry System",
-  "118": "BusData",
+  "118": "numberUtils.ts",
   "119": "vite-plugin-pwa",
-  "120": "routeService.ts",
+  "120": "BusData",
   "121": "utils/analytics.ts",
   "122": "File yang Harus Dibuat",
   "123": "resultStatus.ts",
@@ -148,7 +148,7 @@
   "146": "Refactor 5 — Daftar Masalah SS_PDO",
   "147": "Refactor 5 — Prompt untuk AI Agent Code",
   "148": "Refactor 5 — Rekomendasi Solusi SS_PDO",
-  "149": "App.tsx",
+  "149": "auth.ts",
   "150": "Global Constraints",
   "151": "Daftar Masalah v5 — Proyek SS_PDO / SPUM",
   "152": "2. Rincian Ketentuan & Spesifikasi",
@@ -175,6 +175,6 @@
   "173": "Rekomendasi Solusi v5 — Proyek SS_PDO / SPUM",
   "174": "Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM",
   "175": "7. DIAL DEFINITIONS (Technical Reference)",
-  "176": "Evaluation and iteration",
+  "176": "Anti-patterns to avoid",
   "177": "@types/node"
 }

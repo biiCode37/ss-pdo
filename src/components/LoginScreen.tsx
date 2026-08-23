@@ -101,6 +101,8 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             localStorage.setItem("PDO_USER_NAME", verify.profile.full_name);
           if (verify.profile.email)
             localStorage.setItem("PDO_USER_EMAIL", verify.profile.email);
+          if (verify.profile.role)
+            localStorage.setItem("PDO_USER_ROLE", verify.profile.role);
         }
 
         const finalAvatar =

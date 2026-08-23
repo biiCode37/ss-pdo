@@ -28,8 +28,10 @@ export interface UserProfile {
   email: string;
   full_name: string;
   avatar_url?: string;
-  role: 'admin' | 'petugas';
+  role: 'superadmin' | 'admin' | 'petugas';
   is_active?: boolean;
+  created_by?: string;
+  notes?: string;
   last_login_at?: string;
   last_active_at?: string;
   total_active_seconds?: number;

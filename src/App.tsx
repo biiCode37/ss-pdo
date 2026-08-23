@@ -50,6 +50,9 @@ export default function App() {
             setIsSignedIn(false);
             return;
           }
+          if (verify.profile?.role) {
+            localStorage.setItem('PDO_USER_ROLE', verify.profile.role);
+          }
         } else {
           // Tidak ada email tersimpan — tidak bisa verifikasi, paksa logout
           await signOut();
