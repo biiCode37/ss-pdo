@@ -425,15 +425,20 @@ export async function showBusInputModal(
     bus.manualShift2.trim() !== "",
   );
   const hasKeterangan = Boolean(bus.keterangan && bus.keterangan.trim() !== "");
-
-  // Tentukan HTML Formulir berdasarkan Mode Kolom Aktif
   const isSatset = getSatsetMode();
+  const headerHtml = `
+    <div class="swal-bus-modal-header" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; margin-bottom: 10px; border-bottom: 1px solid var(--card-border);">
+      <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px;">${escapeHtml(bus.unit)}</span>
+      ${renderSatsetToggle(isSatset)}
+    </div>
+  `;
   let formHtml = "";
 
   if (isAll) {
     // Mode Semua Kolom (ALL): Segmented Quick-Switch Tabs
     formHtml = `
       <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 8px; text-align: left;">
+        ${headerHtml}
         
         <!-- Segmented Tab Switcher -->
         <div class="swal-segmented-bar">
@@ -533,6 +538,7 @@ export async function showBusInputModal(
     // Mode Khusus TOA S1: TOA Shift 1 + Progressive Chips (Manual S1 & Keterangan)
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
+        ${headerHtml}
         <div>
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             TOA Shift 1
@@ -577,6 +583,7 @@ export async function showBusInputModal(
     // Mode Khusus Total TOA: Total TOA + Progressive Chips (Manual S2 & Keterangan)
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
+        ${headerHtml}
         <div>
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             Total TOA
@@ -622,6 +629,7 @@ export async function showBusInputModal(
     const currentVal = (bus[singleMeta.key] as string) || "";
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
+        ${headerHtml}
         <div>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <label style="display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
@@ -686,16 +694,8 @@ export async function showBusInputModal(
     `;
   }
 
-  const titleHtml = `
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-      <span style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary);">${escapeHtml(bus.unit)}</span>
-      ${renderSatsetToggle(isSatset)}
-    </div>
-  `;
-
   // Tampilkan Modal SweetAlert2
   const result = await pdoSwal.fire({
-    title: titleHtml,
     html: formHtml,
     showCancelButton: true,
     confirmButtonText: "Simpan",

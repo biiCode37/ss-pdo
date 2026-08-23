@@ -291,7 +291,11 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: expect.stringContaining("MB-01"),
+          html: expect.stringContaining("MB-01"),
+        }),
+      );
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
           html: expect.stringContaining("swal-input-manualShift1"),
         }),
       );
@@ -310,7 +314,11 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: expect.stringContaining("MB-01"),
+          html: expect.stringContaining("MB-01"),
+        }),
+      );
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
           html: expect.stringContaining("swal-input-manualShift2"),
         }),
       );
@@ -335,7 +343,11 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: expect.stringContaining("MB-01"),
+          html: expect.stringContaining("MB-01"),
+        }),
+      );
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
           html: expect.stringContaining("swal-chip-manualShift1"),
         }),
       );
@@ -365,7 +377,11 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: expect.stringContaining("MB-01"),
+          html: expect.stringContaining("MB-01"),
+        }),
+      );
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
           html: expect.stringContaining('style="display: block;"'),
         }),
       );
@@ -384,7 +400,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: expect.stringContaining("MB-01"),
+          html: expect.stringContaining("MB-01"),
           customClass: expect.objectContaining({
             popup: expect.stringContaining("pdo-swal-popup-wide"),
           }),
@@ -555,7 +571,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: expect.stringContaining("swal-toggle-satset"),
+          html: expect.stringContaining("swal-toggle-satset"),
         }),
       );
     });
@@ -577,7 +593,7 @@ describe("alertUtils", () => {
       });
 
       const popupDiv = document.createElement("div");
-      popupDiv.innerHTML = `${capturedOptions.title}${capturedOptions.html}`;
+      popupDiv.innerHTML = capturedOptions.html;
       document.body.appendChild(popupDiv);
 
       vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
