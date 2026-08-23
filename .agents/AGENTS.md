@@ -70,11 +70,18 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 
 ---
 
-## 📌 8. Kebijakan Commit Git (Hindari Over-Commit)
+## 📌 8. Kebijakan Branch & Commit Git (Wajib `devmode`)
 
-- **Aturan Emas:** Dilarang melakukan `git commit` untuk perubahan-perubahan kecil / mikro (seperti tweaking spacing, penyesuaian teks kecil, ganti warna/padding, dll).
-- Kumpulkan beberapa perubahan kecil dalam satu sesi/fitur sebelum melakukan commit agar riwayat commit Git tetap rapi, bersih, dan tidak terlalu banyak.
-- Lakukan `git commit` hanya jika fitur utama telah selesai, ada milestone penting, atau diminta langsung oleh User.
+- **Aturan Emas Branch `devmode`:**
+  - Seluruh pengerjaan kode, debugging, penambahan fitur, dan perbaikan bug **WAJIB dan HARUS dilakukan pada branch `devmode`**.
+  - Dilarang keras melakukan perubahan langsung di branch `main` atau `production`.
+- **Workflow Deploy & Pengujian (Vercel Preview):**
+  - Deployment untuk branch `devmode` berstatus **Preview Deployment** (bukan Production).
+  - Push ke remote branch `devmode` hanya dilakukan ketika pengguna memberikan instruksi eksplisit: *"push devmode"*.
+- **Format Judul Commit (Ringkas & Padat):**
+  - Judul commit wajib seringkas mungkin (maksimal **≤ 50 karakter**) dan jelas menggunakan format Conventional Commits (contoh: `fix: input TOA S1`, `feat: dropdown BA.02`). Dilarang membuat judul panjang bertele-tele.
+- **Hindari Over-Commit:**
+  - Dilarang melakukan `git commit` untuk perubahan-perubahan mikro (seperti tweaking spacing kecil, padding, dll). Kumpulkan beberapa perubahan kecil dalam satu sesi fitur sebelum commit.
 
 ---
 
