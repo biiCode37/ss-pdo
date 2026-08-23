@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "src/components/LoginScreen.tsx": {
-    "mtime": 1787322418.5452955,
-    "ast_hash": "766131db18070b141d7f1137828b8585",
+    "mtime": 1787463135.133139,
+    "ast_hash": "071c12a14e1e7f93d6a707006aa2dbb3",
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "src/components/ProfileMenuSheet.tsx": {
-    "mtime": 1787322418.5469663,
-    "ast_hash": "b12ff471f2e386976390ad511e00c1a4",
+    "mtime": 1787463201.8953042,
+    "ast_hash": "a74fd6fc54ef0637d921bbc25311ee14",
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {
@@ -975,8 +975,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/auth.ts": {
-    "mtime": 1787322418.5586054,
-    "ast_hash": "dd469de01fe157880bd776138b7094ee",
+    "mtime": 1787463086.4558926,
+    "ast_hash": "d430cf1fd6b3f643b202aef61654fec2",
     "semantic_hash": ""
   },
   "src/services/googleSheets/core.ts": {

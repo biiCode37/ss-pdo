@@ -499,13 +499,106 @@ describe("alertUtils", () => {
 
       const kmInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-single");
       expect(kmInput).not.toBeNull();
-      if (kmInput) kmInput.value = "150000";
+      if (kmInput) kmInput.value = "1050";
 
       const updates = capturedOptions.preConfirm();
       expect(updates).toEqual(
         expect.objectContaining({
-          kmAwal1: "150000",
+          kmAwal1: "1050",
         }),
+      );
+
+      document.body.removeChild(popupDiv);
+    });
+
+    it("preConfirm rejects KM Akhir smaller than KM Awal in single column mode", async () => {
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+      const showValidationSpy = vi.spyOn(pdoSwal, "showValidationMessage");
+
+      await showBusInputModal({
+        bus: { ...mockBus, kmAwal1: "1000" },
+        activeCategory: "kmAkhir1",
+        tabName: "01-08-2026",
+      });
+
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      const kmInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-single");
+      if (kmInput) kmInput.value = "900"; // 900 < 1000
+
+      const result = capturedOptions.preConfirm();
+      expect(result).toBe(false);
+      expect(showValidationSpy).toHaveBeenCalledWith(
+        expect.stringContaining("tidak boleh lebih kecil"),
+      );
+
+      document.body.removeChild(popupDiv);
+    });
+
+    it("preConfirm rejects KM Akhir exceeding MAX_SHIFT_DISTANCE_KM in single column mode", async () => {
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+      const showValidationSpy = vi.spyOn(pdoSwal, "showValidationMessage");
+
+      await showBusInputModal({
+        bus: { ...mockBus, kmAwal1: "282164" },
+        activeCategory: "kmAkhir1",
+        tabName: "01-08-2026",
+      });
+
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      const kmInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-single");
+      if (kmInput) kmInput.value = "382251"; // +100087 KM > 350 KM
+
+      const result = capturedOptions.preConfirm();
+      expect(result).toBe(false);
+      expect(showValidationSpy).toHaveBeenCalledWith(
+        expect.stringContaining("melebihi batas maksimal wajar"),
+      );
+
+      document.body.removeChild(popupDiv);
+    });
+
+    it("preConfirm rejects Total TOA smaller than TOA Shift 1 in single column mode", async () => {
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+      const showValidationSpy = vi.spyOn(pdoSwal, "showValidationMessage");
+
+      await showBusInputModal({
+        bus: { ...mockBus, toaShift1: "150" },
+        activeCategory: "totalToa",
+        tabName: "01-08-2026",
+      });
+
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      const totalToaInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-totalToa");
+      if (totalToaInput) totalToaInput.value = "100"; // 100 < 150
+
+      const result = capturedOptions.preConfirm();
+      expect(result).toBe(false);
+      expect(showValidationSpy).toHaveBeenCalledWith(
+        expect.stringContaining("tidak boleh lebih kecil dari TOA Shift 1"),
       );
 
       document.body.removeChild(popupDiv);

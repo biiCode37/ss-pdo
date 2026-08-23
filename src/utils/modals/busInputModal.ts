@@ -56,6 +56,77 @@ export function renderSatsetToggle(isSatset: boolean): string {
   `;
 }
 
+/** Batas maksimal jarak tempuh wajar operasional per shift (KM) */
+export const MAX_SHIFT_DISTANCE_KM = 350;
+
+/** Batas maksimal ritase trip per hari */
+export const MAX_TRIP_COUNT = 20;
+
+/**
+ * Memvalidasi pasangan KM Awal dan KM Akhir
+ * Mengembalikan pesan error (string) jika tidak valid, atau null jika valid.
+ */
+export function validateKmPair(
+  kmAwalRaw: string,
+  kmAkhirRaw: string,
+  shiftLabel: string,
+): string | null {
+  if (!kmAwalRaw || !kmAkhirRaw) return null;
+  const numAwal = parseIndonesianNumber(kmAwalRaw, NaN);
+  const numAkhir = parseIndonesianNumber(kmAkhirRaw, NaN);
+  if (isNaN(numAwal) || isNaN(numAkhir)) return null;
+
+  if (numAkhir > 0 && numAkhir < numAwal) {
+    return `KM Akhir ${shiftLabel} (${kmAkhirRaw}) tidak boleh lebih kecil dari KM Awal (${kmAwalRaw})!`;
+  }
+
+  const diff = numAkhir - numAwal;
+  if (diff > MAX_SHIFT_DISTANCE_KM) {
+    return `Jarak tempuh ${shiftLabel} (+${diff} KM) melebihi batas maksimal wajar (${MAX_SHIFT_DISTANCE_KM} KM). Periksa kembali angka yang dimasukkan!`;
+  }
+
+  return null;
+}
+
+/**
+ * Memvalidasi perbandingan Total TOA Shift 2 terhadap TOA Shift 1
+ * Mengembalikan pesan error (string) jika tidak valid, atau null jika valid.
+ */
+export function validateToaPair(
+  toaShift1Raw: string,
+  totalToaRaw: string,
+): string | null {
+  if (!toaShift1Raw || !totalToaRaw) return null;
+  const numToaS1 = parseIndonesianNumber(toaShift1Raw, NaN);
+  const numTotToa = parseIndonesianNumber(totalToaRaw, NaN);
+  if (isNaN(numToaS1) || isNaN(numTotToa)) return null;
+
+  if (numTotToa > 0 && numTotToa < numToaS1) {
+    return `Total TOA (${totalToaRaw}) tidak boleh lebih kecil dari TOA Shift 1 (${toaShift1Raw})!`;
+  }
+
+  return null;
+}
+
+/**
+ * Memvalidasi nilai trip
+ * Mengembalikan pesan error (string) jika tidak valid, atau null jika valid.
+ */
+export function validateTripCount(
+  tripRaw: string,
+  fieldLabel: string,
+): string | null {
+  if (!tripRaw || tripRaw.trim() === "") return null;
+  const numTrip = parseIndonesianNumber(tripRaw, NaN);
+  if (isNaN(numTrip) || numTrip < 0) {
+    return `Nilai ${fieldLabel} harus berupa angka positif!`;
+  }
+  if (numTrip > MAX_TRIP_COUNT) {
+    return `Jumlah ${fieldLabel} tidak boleh lebih dari ${MAX_TRIP_COUNT}!`;
+  }
+  return null;
+}
+
 const SINGLE_COLUMN_META: Record<
   string,
   { label: string; placeholder: string; key: keyof BusData }
@@ -848,6 +919,8 @@ export async function showBusInputModal(
           const diff = inputNum - kmAwalNum;
           if (diff < 0) {
             refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 700;">(⚠️ Lebih kecil)</span>`;
+          } else if (diff > MAX_SHIFT_DISTANCE_KM) {
+            refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 800;">(⚠️ +${diff} KM - Melebihi ${MAX_SHIFT_DISTANCE_KM} KM)</span>`;
           } else {
             refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--success-color, #22c55e); font-weight: 700;">(+${diff} KM)</span>`;
           }
@@ -1026,6 +1099,56 @@ export async function showBusInputModal(
           }
         }
 
+        // Validasi Relasional & Batas Maksimal Kolom Tunggal
+        if (val !== "" && !isOffUnit) {
+          if (activeCategory === "kmAkhir1") {
+            const kmErr = validateKmPair(bus.kmAwal1 || "", val, "Shift 1");
+            if (kmErr) {
+              pdoSwal.showValidationMessage(kmErr);
+              return false;
+            }
+          } else if (activeCategory === "kmAkhir2") {
+            const kmErr = validateKmPair(bus.kmAwal2 || "", val, "Shift 2");
+            if (kmErr) {
+              pdoSwal.showValidationMessage(kmErr);
+              return false;
+            }
+          } else if (activeCategory === "kmAwal1" && bus.kmAkhir1) {
+            const kmErr = validateKmPair(val, bus.kmAkhir1, "Shift 1");
+            if (kmErr) {
+              pdoSwal.showValidationMessage(kmErr);
+              return false;
+            }
+          } else if (activeCategory === "kmAwal2" && bus.kmAkhir2) {
+            const kmErr = validateKmPair(val, bus.kmAkhir2, "Shift 2");
+            if (kmErr) {
+              pdoSwal.showValidationMessage(kmErr);
+              return false;
+            }
+          } else if (activeCategory === "toaShift1" && bus.totalToa) {
+            const toaErr = validateToaPair(val, bus.totalToa);
+            if (toaErr) {
+              pdoSwal.showValidationMessage(toaErr);
+              return false;
+            }
+          } else if (activeCategory === "totalToa" && bus.toaShift1) {
+            const toaErr = validateToaPair(bus.toaShift1, val);
+            if (toaErr) {
+              pdoSwal.showValidationMessage(toaErr);
+              return false;
+            }
+          } else if (
+            activeCategory === "tripPergi" ||
+            activeCategory === "tripPulang"
+          ) {
+            const tripErr = validateTripCount(val, singleMeta.label);
+            if (tripErr) {
+              pdoSwal.showValidationMessage(tripErr);
+              return false;
+            }
+          }
+        }
+
         // Simpan nilai kolom spesifik
         const isTargetOff =
           isOffUnit ||
@@ -1145,53 +1268,35 @@ export async function showBusInputModal(
             .querySelector<HTMLInputElement>("#swal-input-kmAkhir2")
             ?.value.trim() || "";
 
-        // Validasi KM Akhir >= KM Awal Shift 1
-        if (kmAwal1 !== "" && kmAkhir1 !== "") {
-          const numAwal1 = parseIndonesianNumber(kmAwal1, NaN);
-          const numAkhir1 = parseIndonesianNumber(kmAkhir1, NaN);
-          if (
-            !isNaN(numAwal1) &&
-            !isNaN(numAkhir1) &&
-            numAkhir1 > 0 &&
-            numAkhir1 < numAwal1
-          ) {
-            pdoSwal.showValidationMessage(
-              "KM Akhir Shift 1 tidak boleh lebih kecil dari KM Awal!",
-            );
-            return false;
-          }
+        // Validasi Trip
+        const tripPergiErr = validateTripCount(tripPergi, "Trip Pergi");
+        if (tripPergiErr) {
+          pdoSwal.showValidationMessage(tripPergiErr);
+          return false;
+        }
+        const tripPulangErr = validateTripCount(tripPulang, "Trip Pulang");
+        if (tripPulangErr) {
+          pdoSwal.showValidationMessage(tripPulangErr);
+          return false;
         }
 
-        // Validasi KM Akhir >= KM Awal Shift 2
-        if (kmAwal2 !== "" && kmAkhir2 !== "") {
-          const numAwal2 = parseIndonesianNumber(kmAwal2, NaN);
-          const numAkhir2 = parseIndonesianNumber(kmAkhir2, NaN);
-          if (
-            !isNaN(numAwal2) &&
-            !isNaN(numAkhir2) &&
-            numAkhir2 > 0 &&
-            numAkhir2 < numAwal2
-          ) {
-            pdoSwal.showValidationMessage(
-              "KM Akhir Shift 2 tidak boleh lebih kecil dari KM Awal!",
-            );
+        // Validasi KM Shift 1, Shift 2 & Total TOA
+        if (!isOffUnit) {
+          const km1Err = validateKmPair(kmAwal1, kmAkhir1, "Shift 1");
+          if (km1Err) {
+            pdoSwal.showValidationMessage(km1Err);
             return false;
           }
-        }
 
-        // Validasi Total TOA Shift 2 >= TOA Shift 1
-        if (toaShift1 !== "" && totalToa !== "") {
-          const numToaS1 = parseIndonesianNumber(toaShift1, NaN);
-          const numTotToa = parseIndonesianNumber(totalToa, NaN);
-          if (
-            !isNaN(numToaS1) &&
-            !isNaN(numTotToa) &&
-            numTotToa > 0 &&
-            numTotToa < numToaS1
-          ) {
-            pdoSwal.showValidationMessage(
-              "Total TOA Shift 2 tidak boleh lebih kecil dari TOA Shift 1!",
-            );
+          const km2Err = validateKmPair(kmAwal2, kmAkhir2, "Shift 2");
+          if (km2Err) {
+            pdoSwal.showValidationMessage(km2Err);
+            return false;
+          }
+
+          const toaErr = validateToaPair(toaShift1, totalToa);
+          if (toaErr) {
+            pdoSwal.showValidationMessage(toaErr);
             return false;
           }
         }
