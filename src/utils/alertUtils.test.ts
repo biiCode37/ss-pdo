@@ -291,7 +291,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "MB-01",
+          title: expect.stringContaining("MB-01"),
           html: expect.stringContaining("swal-input-manualShift1"),
         }),
       );
@@ -310,7 +310,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "MB-01",
+          title: expect.stringContaining("MB-01"),
           html: expect.stringContaining("swal-input-manualShift2"),
         }),
       );
@@ -335,7 +335,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "MB-01",
+          title: expect.stringContaining("MB-01"),
           html: expect.stringContaining("swal-chip-manualShift1"),
         }),
       );
@@ -365,7 +365,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "MB-01",
+          title: expect.stringContaining("MB-01"),
           html: expect.stringContaining('style="display: block;"'),
         }),
       );
@@ -384,7 +384,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "MB-01",
+          title: expect.stringContaining("MB-01"),
           customClass: expect.objectContaining({
             popup: expect.stringContaining("pdo-swal-popup-wide"),
           }),
@@ -541,7 +541,7 @@ describe("alertUtils", () => {
       );
     });
 
-    it("renders Satset Mode toggle in the modal header", async () => {
+    it("renders Satset Mode continuous toggle icon in the modal title header", async () => {
       setSatsetMode(false);
       const swalSpy = vi.spyOn(pdoSwal, "fire").mockResolvedValue({
         isConfirmed: false,
@@ -555,7 +555,7 @@ describe("alertUtils", () => {
 
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          html: expect.stringContaining("Mode Satset"),
+          title: expect.stringContaining("swal-toggle-satset"),
         }),
       );
     });
@@ -577,7 +577,7 @@ describe("alertUtils", () => {
       });
 
       const popupDiv = document.createElement("div");
-      popupDiv.innerHTML = capturedOptions.html;
+      popupDiv.innerHTML = `${capturedOptions.title}${capturedOptions.html}`;
       document.body.appendChild(popupDiv);
 
       vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);

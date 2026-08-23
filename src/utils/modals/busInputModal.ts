@@ -35,17 +35,24 @@ export function setSatsetMode(enabled: boolean): void {
 }
 
 /**
- * Merender tombol toggle kapsul Mode Satset
+ * Merender tombol toggle Mode Satset / Beruntun (Icon Only)
  */
 export function renderSatsetToggle(isSatset: boolean): string {
   return `
-    <div class="pdo-satset-toggle-wrapper">
-      <button type="button" id="swal-toggle-satset" class="pdo-satset-toggle ${isSatset ? "active" : ""}" title="Mode Satset: Otomatis lanjut ke bus berikutnya saat simpan">
-        <span class="satset-icon">⚡</span>
-        <span>Mode Satset</span>
-        <span class="satset-status-badge">${isSatset ? "ON" : "OFF"}</span>
-      </button>
-    </div>
+    <button
+      type="button"
+      id="swal-toggle-satset"
+      class="pdo-satset-toggle ${isSatset ? "active" : ""}"
+      title="${isSatset ? "Mode Beruntun Aktif (Auto-Next Bus)" : "Aktifkan Mode Beruntun (Auto-Next Bus)"}"
+      aria-label="Mode Beruntun"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="satset-icon">
+        <path d="m17 2 4 4-4 4"></path>
+        <path d="M3 11v-1a4 4 0 0 1 4-4h14"></path>
+        <path d="m7 22-4-4 4-4"></path>
+        <path d="M21 13v1a4 4 0 0 1-4 4H3"></path>
+      </svg>
+    </button>
   `;
 }
 
@@ -421,14 +428,12 @@ export async function showBusInputModal(
 
   // Tentukan HTML Formulir berdasarkan Mode Kolom Aktif
   const isSatset = getSatsetMode();
-  const satsetToggleHtml = renderSatsetToggle(isSatset);
   let formHtml = "";
 
   if (isAll) {
     // Mode Semua Kolom (ALL): Segmented Quick-Switch Tabs
     formHtml = `
       <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 8px; text-align: left;">
-        ${satsetToggleHtml}
         
         <!-- Segmented Tab Switcher -->
         <div class="swal-segmented-bar">
@@ -528,7 +533,6 @@ export async function showBusInputModal(
     // Mode Khusus TOA S1: TOA Shift 1 + Progressive Chips (Manual S1 & Keterangan)
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
-        ${satsetToggleHtml}
         <div>
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             TOA Shift 1
@@ -573,7 +577,6 @@ export async function showBusInputModal(
     // Mode Khusus Total TOA: Total TOA + Progressive Chips (Manual S2 & Keterangan)
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
-        ${satsetToggleHtml}
         <div>
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             Total TOA
@@ -619,7 +622,6 @@ export async function showBusInputModal(
     const currentVal = (bus[singleMeta.key] as string) || "";
     formHtml = `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
-        ${satsetToggleHtml}
         <div>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <label style="display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
@@ -684,9 +686,16 @@ export async function showBusInputModal(
     `;
   }
 
+  const titleHtml = `
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <span style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary);">${escapeHtml(bus.unit)}</span>
+      ${renderSatsetToggle(isSatset)}
+    </div>
+  `;
+
   // Tampilkan Modal SweetAlert2
   const result = await pdoSwal.fire({
-    title: bus.unit,
+    title: titleHtml,
     html: formHtml,
     showCancelButton: true,
     confirmButtonText: "Simpan",
@@ -904,21 +913,23 @@ export async function showBusInputModal(
         });
       }
 
-      // Handler Toggle Mode Satset (Auto-Next Bus)
+      // Handler Toggle Mode Satset / Beruntun (Auto-Next Bus)
       const toggleSatsetBtn = popup.querySelector<HTMLButtonElement>(
         "#swal-toggle-satset",
       );
       if (toggleSatsetBtn) {
-        toggleSatsetBtn.addEventListener("click", () => {
+        toggleSatsetBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           const nextState = !getSatsetMode();
           setSatsetMode(nextState);
           if (nextState) {
             toggleSatsetBtn.classList.add("active");
+            toggleSatsetBtn.title = "Mode Beruntun Aktif (Auto-Next Bus)";
           } else {
             toggleSatsetBtn.classList.remove("active");
+            toggleSatsetBtn.title = "Aktifkan Mode Beruntun (Auto-Next Bus)";
           }
-          const badge = toggleSatsetBtn.querySelector(".satset-status-badge");
-          if (badge) badge.textContent = nextState ? "ON" : "OFF";
         });
       }
     },
