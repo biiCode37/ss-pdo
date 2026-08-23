@@ -492,6 +492,52 @@ describe("alertUtils", () => {
 
       document.body.removeChild(popupDiv);
     });
+
+    it("renders KM Awal S1 reference banner when activeCategory is kmAkhir1", async () => {
+      const swalSpy = vi.spyOn(pdoSwal, "fire").mockResolvedValue({
+        isConfirmed: false,
+      } as any);
+
+      await showBusInputModal({
+        bus: { ...mockBus, kmAwal1: "123456" },
+        activeCategory: "kmAkhir1",
+        tabName: "01-08-2026",
+      });
+
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          html: expect.stringContaining("KM Awal S1 (Acuan):"),
+        }),
+      );
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          html: expect.stringContaining("123456"),
+        }),
+      );
+    });
+
+    it("renders KM Awal S2 reference banner when activeCategory is kmAkhir2", async () => {
+      const swalSpy = vi.spyOn(pdoSwal, "fire").mockResolvedValue({
+        isConfirmed: false,
+      } as any);
+
+      await showBusInputModal({
+        bus: { ...mockBus, kmAwal2: "654321" },
+        activeCategory: "kmAkhir2",
+        tabName: "01-08-2026",
+      });
+
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          html: expect.stringContaining("KM Awal S2 (Acuan):"),
+        }),
+      );
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          html: expect.stringContaining("654321"),
+        }),
+      );
+    });
   });
 
   describe("getKeteranganColor", () => {
