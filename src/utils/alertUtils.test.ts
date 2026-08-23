@@ -604,6 +604,37 @@ describe("alertUtils", () => {
       document.body.removeChild(popupDiv);
     });
 
+    it("preConfirm rejects TOA exceeding 3 digits (max 999)", async () => {
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+      const showValidationSpy = vi.spyOn(pdoSwal, "showValidationMessage");
+
+      await showBusInputModal({
+        bus: mockBus,
+        activeCategory: "toaShift1",
+        tabName: "01-08-2026",
+      });
+
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      const toaInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-toaShift1");
+      if (toaInput) toaInput.value = "1200"; // 4 digits > 999
+
+      const result = capturedOptions.preConfirm();
+      expect(result).toBe(false);
+      expect(showValidationSpy).toHaveBeenCalledWith(
+        expect.stringContaining("tidak boleh lebih dari 3 digit"),
+      );
+
+      document.body.removeChild(popupDiv);
+    });
+
     it("renders KM Awal S1 reference banner when activeCategory is kmAkhir1", async () => {
       const swalSpy = vi.spyOn(pdoSwal, "fire").mockResolvedValue({
         isConfirmed: false,

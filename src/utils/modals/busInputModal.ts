@@ -57,7 +57,10 @@ export function renderSatsetToggle(isSatset: boolean): string {
 }
 
 /** Batas maksimal jarak tempuh wajar operasional per shift (KM) */
-export const MAX_SHIFT_DISTANCE_KM = 350;
+export const MAX_SHIFT_DISTANCE_KM = 230;
+
+/** Batas maksimal digit/nilai TOA & Manual (maksimal 3 digit angka) */
+export const MAX_TOA_VALUE = 999;
 
 /** Batas maksimal ritase trip per hari */
 export const MAX_TRIP_COUNT = 20;
@@ -85,6 +88,25 @@ export function validateKmPair(
     return `Jarak tempuh ${shiftLabel} (+${diff} KM) melebihi batas maksimal wajar (${MAX_SHIFT_DISTANCE_KM} KM). Periksa kembali angka yang dimasukkan!`;
   }
 
+  return null;
+}
+
+/**
+ * Memvalidasi nilai TOA dan Manual (maksimal 3 digit / <= 999)
+ * Mengembalikan pesan error (string) jika tidak valid, atau null jika valid.
+ */
+export function validateToaValue(
+  valRaw: string,
+  fieldLabel: string,
+): string | null {
+  if (!valRaw || valRaw.trim() === "") return null;
+  const num = parseIndonesianNumber(valRaw, NaN);
+  if (isNaN(num) || num < 0) {
+    return `Nilai ${fieldLabel} harus berupa angka positif!`;
+  }
+  if (num > MAX_TOA_VALUE) {
+    return `Nilai ${fieldLabel} tidak boleh lebih dari 3 digit (maksimal ${MAX_TOA_VALUE})!`;
+  }
   return null;
 }
 
@@ -1125,16 +1147,39 @@ export async function showBusInputModal(
               pdoSwal.showValidationMessage(kmErr);
               return false;
             }
-          } else if (activeCategory === "toaShift1" && bus.totalToa) {
-            const toaErr = validateToaPair(val, bus.totalToa);
-            if (toaErr) {
-              pdoSwal.showValidationMessage(toaErr);
+          } else if (activeCategory === "toaShift1") {
+            const toaValErr = validateToaValue(val, "TOA Shift 1");
+            if (toaValErr) {
+              pdoSwal.showValidationMessage(toaValErr);
               return false;
             }
-          } else if (activeCategory === "totalToa" && bus.toaShift1) {
-            const toaErr = validateToaPair(bus.toaShift1, val);
-            if (toaErr) {
-              pdoSwal.showValidationMessage(toaErr);
+            if (bus.totalToa) {
+              const toaErr = validateToaPair(val, bus.totalToa);
+              if (toaErr) {
+                pdoSwal.showValidationMessage(toaErr);
+                return false;
+              }
+            }
+          } else if (activeCategory === "totalToa") {
+            const totValErr = validateToaValue(val, "Total TOA");
+            if (totValErr) {
+              pdoSwal.showValidationMessage(totValErr);
+              return false;
+            }
+            if (bus.toaShift1) {
+              const toaErr = validateToaPair(bus.toaShift1, val);
+              if (toaErr) {
+                pdoSwal.showValidationMessage(toaErr);
+                return false;
+              }
+            }
+          } else if (
+            activeCategory === "manualShift1" ||
+            activeCategory === "manualShift2"
+          ) {
+            const manErr = validateToaValue(val, singleMeta.label);
+            if (manErr) {
+              pdoSwal.showValidationMessage(manErr);
               return false;
             }
           } else if (
@@ -1182,11 +1227,9 @@ export async function showBusInputModal(
               m1Wrapper && m1Wrapper.style.display !== "none";
             if (isM1Revealed || m1Val !== (bus.manualShift1 || "")) {
               if (m1Val !== "") {
-                const numM1 = parseIndonesianNumber(m1Val, NaN);
-                if (isNaN(numM1) || numM1 < 0) {
-                  pdoSwal.showValidationMessage(
-                    "Manual Shift 1 harus berupa angka!",
-                  );
+                const m1Err = validateToaValue(m1Val, "Manual Shift 1");
+                if (m1Err) {
+                  pdoSwal.showValidationMessage(m1Err);
                   return false;
                 }
                 updates.manualShift1 = isOffUnit || isNp1Unit ? "" : m1Val;
@@ -1211,11 +1254,9 @@ export async function showBusInputModal(
               m2Wrapper && m2Wrapper.style.display !== "none";
             if (isM2Revealed || m2Val !== (bus.manualShift2 || "")) {
               if (m2Val !== "") {
-                const numM2 = parseIndonesianNumber(m2Val, NaN);
-                if (isNaN(numM2) || numM2 < 0) {
-                  pdoSwal.showValidationMessage(
-                    "Manual Shift 2 harus berupa angka!",
-                  );
+                const m2Err = validateToaValue(m2Val, "Manual Shift 2");
+                if (m2Err) {
+                  pdoSwal.showValidationMessage(m2Err);
                   return false;
                 }
                 updates.manualShift2 = isOffUnit || isNp2Unit ? "" : m2Val;
@@ -1277,6 +1318,28 @@ export async function showBusInputModal(
         const tripPulangErr = validateTripCount(tripPulang, "Trip Pulang");
         if (tripPulangErr) {
           pdoSwal.showValidationMessage(tripPulangErr);
+          return false;
+        }
+
+        // Validasi Batas Nilai TOA & Manual (Maksimal 3 digit)
+        const toa1ValErr = validateToaValue(toaShift1, "TOA Shift 1");
+        if (toa1ValErr) {
+          pdoSwal.showValidationMessage(toa1ValErr);
+          return false;
+        }
+        const man1ValErr = validateToaValue(manualShift1, "Manual Shift 1");
+        if (man1ValErr) {
+          pdoSwal.showValidationMessage(man1ValErr);
+          return false;
+        }
+        const totToaValErr = validateToaValue(totalToa, "Total TOA");
+        if (totToaValErr) {
+          pdoSwal.showValidationMessage(totToaValErr);
+          return false;
+        }
+        const man2ValErr = validateToaValue(manualShift2, "Manual Shift 2");
+        if (man2ValErr) {
+          pdoSwal.showValidationMessage(man2ValErr);
           return false;
         }
 
