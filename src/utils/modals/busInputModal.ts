@@ -857,8 +857,26 @@ export async function showBusInputModal(
 
       if (!isAll && singleMeta) {
         // --- Single Column Mode PreConfirm ---
-        const singleInput =
-          popup.querySelector<HTMLInputElement>("#swal-input-single");
+        let singleInput: HTMLInputElement | null = null;
+        if (activeCategory === "toaShift1") {
+          singleInput = popup.querySelector<HTMLInputElement>(
+            "#swal-input-toaShift1",
+          );
+        } else if (activeCategory === "totalToa") {
+          singleInput = popup.querySelector<HTMLInputElement>(
+            "#swal-input-totalToa",
+          );
+        } else {
+          singleInput =
+            popup.querySelector<HTMLInputElement>("#swal-input-single");
+        }
+
+        if (!singleInput) {
+          singleInput = popup.querySelector<HTMLInputElement>(
+            ".swal-bus-input-container input[type='number']",
+          );
+        }
+
         const val = singleInput ? singleInput.value.trim() : "";
 
         // Validasi input angka jika diisi
@@ -871,7 +889,11 @@ export async function showBusInputModal(
         }
 
         // Simpan nilai kolom spesifik
-        (updates as any)[singleMeta.key] = isOffUnit ? "" : val;
+        const isTargetOff =
+          isOffUnit ||
+          (activeCategory === "toaShift1" && isNp1Unit) ||
+          (activeCategory === "totalToa" && isOffUnit);
+        (updates as any)[singleMeta.key] = isTargetOff ? "" : val;
 
         // Simpan catatan jika ada perubahan/terbuka
         const wrapperKet = popup.querySelector<HTMLElement>(
@@ -885,46 +907,60 @@ export async function showBusInputModal(
           updates.keterangan = resolvedKeterangan;
         }
 
-        // Khusus kolom TOA Shift 1: cek manualShift1 jika di-reveal
+        // Khusus kolom TOA Shift 1: cek manualShift1 jika di-reveal atau berubah
         if (activeCategory === "toaShift1") {
+          const m1Wrapper = popup.querySelector<HTMLElement>(
+            "#swal-wrapper-manualShift1",
+          );
           const m1Input = popup.querySelector<HTMLInputElement>(
             "#swal-input-manualShift1",
           );
           if (m1Input) {
             const m1Val = m1Input.value.trim();
-            if (m1Val !== "") {
-              const numM1 = parseIndonesianNumber(m1Val, NaN);
-              if (isNaN(numM1) || numM1 < 0) {
-                pdoSwal.showValidationMessage(
-                  "Manual Shift 1 harus berupa angka!",
-                );
-                return false;
+            const isM1Revealed =
+              m1Wrapper && m1Wrapper.style.display !== "none";
+            if (isM1Revealed || m1Val !== (bus.manualShift1 || "")) {
+              if (m1Val !== "") {
+                const numM1 = parseIndonesianNumber(m1Val, NaN);
+                if (isNaN(numM1) || numM1 < 0) {
+                  pdoSwal.showValidationMessage(
+                    "Manual Shift 1 harus berupa angka!",
+                  );
+                  return false;
+                }
+                updates.manualShift1 = isOffUnit || isNp1Unit ? "" : m1Val;
+              } else {
+                updates.manualShift1 = "";
               }
-              updates.manualShift1 = isOffUnit || isNp1Unit ? "" : m1Val;
-            } else if (bus.manualShift1) {
-              updates.manualShift1 = isOffUnit || isNp1Unit ? "" : "";
             }
           }
         }
 
-        // Khusus kolom Total TOA: cek manualShift2 jika di-reveal
+        // Khusus kolom Total TOA: cek manualShift2 jika di-reveal atau berubah
         if (activeCategory === "totalToa") {
+          const m2Wrapper = popup.querySelector<HTMLElement>(
+            "#swal-wrapper-manualShift2",
+          );
           const m2Input = popup.querySelector<HTMLInputElement>(
             "#swal-input-manualShift2",
           );
           if (m2Input) {
             const m2Val = m2Input.value.trim();
-            if (m2Val !== "") {
-              const numM2 = parseIndonesianNumber(m2Val, NaN);
-              if (isNaN(numM2) || numM2 < 0) {
-                pdoSwal.showValidationMessage(
-                  "Manual Shift 2 harus berupa angka!",
-                );
-                return false;
+            const isM2Revealed =
+              m2Wrapper && m2Wrapper.style.display !== "none";
+            if (isM2Revealed || m2Val !== (bus.manualShift2 || "")) {
+              if (m2Val !== "") {
+                const numM2 = parseIndonesianNumber(m2Val, NaN);
+                if (isNaN(numM2) || numM2 < 0) {
+                  pdoSwal.showValidationMessage(
+                    "Manual Shift 2 harus berupa angka!",
+                  );
+                  return false;
+                }
+                updates.manualShift2 = isOffUnit || isNp2Unit ? "" : m2Val;
+              } else {
+                updates.manualShift2 = "";
               }
-              updates.manualShift2 = isOffUnit || isNp2Unit ? "" : m2Val;
-            } else if (bus.manualShift2) {
-              updates.manualShift2 = isOffUnit || isNp2Unit ? "" : "";
             }
           }
         }

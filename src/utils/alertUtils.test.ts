@@ -389,6 +389,109 @@ describe("alertUtils", () => {
         }),
       );
     });
+
+    it("preConfirm correctly extracts toaShift1 and manualShift1 from DOM", async () => {
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+
+      await showBusInputModal({
+        bus: mockBus,
+        activeCategory: "toaShift1",
+        tabName: "01-08-2026",
+      });
+
+      expect(capturedOptions).not.toBeNull();
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      // Set input value
+      const toaInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-toaShift1");
+      expect(toaInput).not.toBeNull();
+      if (toaInput) toaInput.value = "175";
+
+      const updates = capturedOptions.preConfirm();
+      expect(updates).toEqual(
+        expect.objectContaining({
+          toaShift1: "175",
+        }),
+      );
+
+      document.body.removeChild(popupDiv);
+    });
+
+    it("preConfirm correctly extracts totalToa and manualShift2 from DOM", async () => {
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+
+      await showBusInputModal({
+        bus: mockBus,
+        activeCategory: "totalToa",
+        tabName: "01-08-2026",
+      });
+
+      expect(capturedOptions).not.toBeNull();
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      const totalToaInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-totalToa");
+      expect(totalToaInput).not.toBeNull();
+      if (totalToaInput) totalToaInput.value = "280";
+
+      const updates = capturedOptions.preConfirm();
+      expect(updates).toEqual(
+        expect.objectContaining({
+          totalToa: "280",
+        }),
+      );
+
+      document.body.removeChild(popupDiv);
+    });
+
+    it("preConfirm correctly extracts KM single input from DOM", async () => {
+      let capturedOptions: any = null;
+      vi.spyOn(pdoSwal, "fire").mockImplementation((options: any) => {
+        capturedOptions = options;
+        return Promise.resolve({ isConfirmed: false } as any);
+      });
+
+      await showBusInputModal({
+        bus: mockBus,
+        activeCategory: "kmAwal1",
+        tabName: "01-08-2026",
+      });
+
+      expect(capturedOptions).not.toBeNull();
+      const popupDiv = document.createElement("div");
+      popupDiv.innerHTML = capturedOptions.html;
+      document.body.appendChild(popupDiv);
+
+      vi.spyOn(pdoSwal, "getPopup").mockReturnValue(popupDiv as any);
+
+      const kmInput = popupDiv.querySelector<HTMLInputElement>("#swal-input-single");
+      expect(kmInput).not.toBeNull();
+      if (kmInput) kmInput.value = "150000";
+
+      const updates = capturedOptions.preConfirm();
+      expect(updates).toEqual(
+        expect.objectContaining({
+          kmAwal1: "150000",
+        }),
+      );
+
+      document.body.removeChild(popupDiv);
+    });
   });
 
   describe("getKeteranganColor", () => {

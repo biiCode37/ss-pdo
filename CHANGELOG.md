@@ -5,6 +5,11 @@ Semua perubahan penting dalam proyek ini akan didokumentasikan di dalam file ini
 Format pencatatan berdasarkan [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 dan proyek ini mematuhi [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-08-23
+
+### Fixed
+- **[BUG-18] Ekstraksi Nilai Input pada Mode Kolom Spesifik TOA S1 & Total TOA:** Memperbaiki selektor elemen DOM pada fungsi `preConfirm` di `busInputModal.ts`. Sebelumnya, mode spesifik mencari `#swal-input-single`, sedangkan form menghasilkan ID khusus (`#swal-input-toaShift1` & `#swal-input-totalToa`), yang menyebabkan input pengguna terkirim kosong `""` ke Google Sheets dan terhapus di kartu aplikasi.
+
 ## [1.6.0] - 2026-08-02
 
 ### Added
