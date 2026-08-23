@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { verifyUserProfile } from "../services/routeService";
+import { verifyUserProfile, upsertUserProfile } from "../services/routeService";
+import { fetchGoogleUserProfile } from "../services/googleSheets/auth";
 import {
   showLogoutConfirm,
   showFormatSheetConfirm,
@@ -90,17 +91,48 @@ export function ProfileMenuSheet({
       });
     }
 
+    // Jika avatar belum ada di localStorage, ambil langsung dari Google UserInfo API
+    if (!cachedAvatar) {
+      fetchGoogleUserProfile().then((info) => {
+        if (info && info.picture) {
+          setUserProfile((prev) => ({
+            ...prev,
+            avatar_url: info.picture,
+            full_name: info.name || prev.full_name,
+          }));
+          if (cachedEmail) {
+            upsertUserProfile({
+              email: cachedEmail,
+              full_name: info.name || cachedName || cachedEmail,
+              avatar_url: info.picture,
+            }).catch(() => {});
+          }
+        }
+      });
+    }
+
     if (cachedEmail) {
       verifyUserProfile(cachedEmail).then((res) => {
         if (res.profile) {
-          setUserProfile({
-            full_name: res.profile.full_name || cachedEmail,
-            email: res.profile.email,
-            avatar_url: res.profile.avatar_url || undefined,
-          });
-          if (res.profile.full_name) localStorage.setItem("PDO_USER_NAME", res.profile.full_name);
-          if (res.profile.email) localStorage.setItem("PDO_USER_EMAIL", res.profile.email);
-          if (res.profile.avatar_url) localStorage.setItem("PDO_USER_AVATAR", res.profile.avatar_url);
+          const profile = res.profile;
+          const effectiveAvatar =
+            profile.avatar_url ||
+            cachedAvatar ||
+            localStorage.getItem("PDO_USER_AVATAR") ||
+            undefined;
+
+          setUserProfile((prev) => ({
+            full_name: profile.full_name || prev.full_name || cachedEmail,
+            email: profile.email || prev.email,
+            avatar_url: effectiveAvatar || prev.avatar_url,
+          }));
+
+          if (profile.full_name)
+            localStorage.setItem("PDO_USER_NAME", profile.full_name);
+          if (profile.email)
+            localStorage.setItem("PDO_USER_EMAIL", profile.email);
+          if (effectiveAvatar)
+            localStorage.setItem("PDO_USER_AVATAR", effectiveAvatar);
         }
       });
     }
@@ -297,6 +329,12 @@ export function ProfileMenuSheet({
               <img
                 src={userProfile.avatar_url}
                 alt={userProfile.full_name}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.currentTarget as HTMLElement).style.display = "none";
+                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (fallback) fallback.style.display = "flex";
+                }}
                 style={{
                   width: "42px",
                   height: "42px",
@@ -306,25 +344,24 @@ export function ProfileMenuSheet({
                   boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
                 }}
               />
-            ) : (
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "50%",
-                  background:
-                    "linear-gradient(135deg, #3ECF8E, #24B47E)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#061a10",
-                  flexShrink: 0,
-                  boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
-                }}
-              >
-                <User size={22} />
-              </div>
-            )}
+            ) : null}
+            <div
+              style={{
+                width: "42px",
+                height: "42px",
+                borderRadius: "50%",
+                background:
+                  "linear-gradient(135deg, #3ECF8E, #24B47E)",
+                display: userProfile.avatar_url ? "none" : "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#061a10",
+                flexShrink: 0,
+                boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
+              }}
+            >
+              <User size={22} />
+            </div>
             <div style={{ minWidth: 0, overflow: "hidden" }}>
               <div
                 style={{

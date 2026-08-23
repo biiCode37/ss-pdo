@@ -2260,8 +2260,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "package_devdependencies_types_node",
-      "community": 121,
-      "community_name": "@types/node",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/node"
     },
     {
@@ -2271,8 +2271,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "types_node",
-      "community": 121,
-      "community_name": "@types/node",
+      "community": 108,
+      "community_name": "devDependencies",
       "norm_label": "@types/node"
     },
     {
@@ -2348,8 +2348,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "package_devdependencies_happy_dom",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 121,
+      "community_name": "happy-dom",
       "norm_label": "happy-dom"
     },
     {
@@ -2359,8 +2359,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "happy_dom",
-      "community": 108,
-      "community_name": "devDependencies",
+      "community": 121,
+      "community_name": "happy-dom",
       "norm_label": "happy-dom"
     },
     {
@@ -36230,7 +36230,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/modals/busInputModal.ts",
-      "source_location": "L430",
+      "source_location": "L428",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_modals_businputmodal_showbusinputmodal",
@@ -36254,7 +36254,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/modals/busInputModal.ts",
-      "source_location": "L692",
+      "source_location": "L432",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_modals_businputmodal_showbusinputmodal",
@@ -36278,7 +36278,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/modals/busInputModal.ts",
-      "source_location": "L454",
+      "source_location": "L431",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_modals_businputmodal_showbusinputmodal",
@@ -36290,7 +36290,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/modals/busInputModal.ts",
-      "source_location": "L527",
+      "source_location": "L532",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_utils_modals_businputmodal_showbusinputmodal",
@@ -52869,5 +52869,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "90eeb1dfe53782086d2beb890152ae3094e57429"
+  "built_at_commit": "43ae19feba46c38b9c72934a922244b0e36fb78d"
 }

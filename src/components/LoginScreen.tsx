@@ -101,16 +101,24 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             localStorage.setItem("PDO_USER_NAME", verify.profile.full_name);
           if (verify.profile.email)
             localStorage.setItem("PDO_USER_EMAIL", verify.profile.email);
-          if (verify.profile.avatar_url)
-            localStorage.setItem("PDO_USER_AVATAR", verify.profile.avatar_url);
+        }
+
+        const finalAvatar =
+          userAvatar ||
+          verify.profile?.avatar_url ||
+          localStorage.getItem("PDO_USER_AVATAR") ||
+          "";
+
+        if (finalAvatar) {
+          localStorage.setItem("PDO_USER_AVATAR", finalAvatar);
         }
 
         // Sinkronkan profil user ke Supabase (fire-and-forget, tidak blocking)
         // ponytail: upsert async agar tidak memperlambat login
         upsertUserProfile({
           email: userEmail,
-          full_name: userName || userEmail,
-          avatar_url: userAvatar || undefined,
+          full_name: userName || verify.profile?.full_name || userEmail,
+          avatar_url: finalAvatar || undefined,
         }).catch(() => {
           // Gagal upsert bukan fatal — user tetap bisa masuk
         });

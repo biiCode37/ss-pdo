@@ -325,6 +325,51 @@ export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
 }
 
 /**
+ * Mengambil profil akun Google (nama, email, avatar/picture) via Google OAuth UserInfo API
+ */
+export const fetchGoogleUserProfile = async (): Promise<{ email?: string; name?: string; picture?: string } | null> => {
+  let token = '';
+  if (typeof gapi !== 'undefined' && gapi.client) {
+    const gapiToken = gapi.client.getToken();
+    if (gapiToken && gapiToken.access_token) {
+      token = gapiToken.access_token;
+    }
+  }
+
+  if (!token) {
+    const tokenStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
+    if (tokenStr) {
+      try {
+        const tokenObj = JSON.parse(tokenStr);
+        if (tokenObj && tokenObj.token) {
+          token = tokenObj.token;
+        }
+      } catch (_e) {}
+    }
+  }
+
+  if (!token) return null;
+
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      const info = await res.json();
+      if (info) {
+        if (info.email) localStorage.setItem('PDO_USER_EMAIL', info.email);
+        if (info.name) localStorage.setItem('PDO_USER_NAME', info.name);
+        if (info.picture) localStorage.setItem('PDO_USER_AVATAR', info.picture);
+        return info;
+      }
+    }
+  } catch (e) {
+    console.warn('[Auth] Gagal mengambil profil userinfo dari Google:', e);
+  }
+  return null;
+};
+
+/**
  * Validasi auth secara async — ISS-01 fix.
  * Menunggu hasil validasi token sebelum mengembalikan status final.
  * Gunakan ini saat cold start / page load.
@@ -342,7 +387,12 @@ export const checkSignedInAsync = async (): Promise<AuthResult> => {
       const refreshedToken = localStorage.getItem('GAPI_ACCESS_TOKEN');
       if (refreshedToken) {
         const obj = JSON.parse(refreshedToken);
-        if (obj.token) return { authenticated: true };
+        if (obj.token) {
+          if (!localStorage.getItem('PDO_USER_AVATAR')) {
+            fetchGoogleUserProfile().catch(() => {});
+          }
+          return { authenticated: true };
+        }
       }
     } catch (_e) { /* silent */ }
     // ATURAN EMAS #3: Tetap authenticated, tapi tandai needs_reauth
@@ -357,6 +407,10 @@ export const checkSignedInAsync = async (): Promise<AuthResult> => {
 
     if (gapi.client) {
       gapi.client.setToken({ access_token: tokenObj.token });
+    }
+
+    if (!localStorage.getItem('PDO_USER_AVATAR')) {
+      fetchGoogleUserProfile().catch(() => {});
     }
 
     if (tokenObj.expiresAt && tokenObj.expiresAt > Date.now()) {
