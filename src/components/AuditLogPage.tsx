@@ -12,6 +12,9 @@ import {
   Trash2,
   Bus,
   FileSpreadsheet,
+  LogIn,
+  LogOut,
+  CloudUpload,
 } from 'lucide-react';
 import type { ActivityLog } from '../types/supabase';
 import { fetchActivityLogs } from '../services/routeService';
@@ -25,6 +28,30 @@ interface AuditLogPageProps {
 
 type LogCategory = 'all' | 'users' | 'bus_input' | 'system';
 
+interface FormattedActionMeta {
+  title: string;
+  description: string;
+  chips?: string[];
+  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>;
+  color: string;
+  bg: string;
+  categoryTag?: string;
+}
+
+const FIELD_LABEL_MAP: Record<string, string> = {
+  ritase1: 'Ritase 1',
+  ritase2: 'Ritase 2',
+  penumpang: 'Penumpang',
+  pendapatan: 'Pendapatan',
+  keterangan: 'Keterangan',
+  manual1: 'Manual S1',
+  manual2: 'Manual S2',
+  jam1: 'Jam S1',
+  jam2: 'Jam S2',
+  kmAwal: 'KM Awal',
+  kmAkhir: 'KM Akhir',
+};
+
 export const AuditLogPage: React.FC<AuditLogPageProps> = ({
   onBack,
   currentUserRole = 'petugas',
@@ -34,8 +61,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<LogCategory>('all');
 
-  // BUG-56: Guard RBAC internal (defense-in-depth) — halaman audit hanya
-  // untuk admin/superadmin; jangan bergantung pada gating parent saja.
+  // BUG-56: Guard RBAC internal (defense-in-depth)
   useEffect(() => {
     if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
       showErrorAlert('Akses Terbatas', 'Halaman ini hanya dapat diakses oleh Admin atau Superadmin.').then(() => onBack());
@@ -49,8 +75,6 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
       setLogs(data);
     } catch (err: any) {
       console.error('[AuditLog] Gagal memuat audit logs:', err);
-      // BUG-64: Tampilkan error — sebelumnya hanya console.error sehingga
-      // halaman terlihat "kosong" padahal sebenarnya gagal dimuat.
       showErrorAlert(
         'Gagal Memuat Log',
         err?.message ||
@@ -66,81 +90,165 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
-  // Helper: Format action to user-friendly representation
-  const formatAction = (log: ActivityLog) => {
+  // Helper: Format action to user-friendly human representation
+  const formatAction = (log: ActivityLog): FormattedActionMeta => {
     const action = log.action || '';
     const details = (log.details as any) || {};
 
-    if (action === 'USER_ADDED') {
+    if (action === 'LOGIN') {
+      const method = details.loginMethod === 'google_gis' ? 'Google OAuth (GIS)' : 'Google Account';
       return {
-        title: 'Pengguna Baru Ditambahkan',
-        description: `Mendaftarkan ${details.target_email || 'pengguna'} sebagai peran ${details.assigned_role || 'petugas'}`,
-        icon: UserPlus,
+        title: 'Login Berhasil',
+        description: `Autentikasi sesi via ${method}`,
+        icon: LogIn,
         color: '#10b981',
-        bg: 'rgba(16, 185, 129, 0.15)',
-      };
-    }
-    if (action === 'USER_ROLE_CHANGED') {
-      return {
-        title: 'Perubahan Peran Pengguna',
-        description: `Mengubah peran ${details.target_email || 'pengguna'} menjadi ${details.new_role || ''}`,
-        icon: ShieldCheck,
-        color: '#f59e0b',
-        bg: 'rgba(245, 158, 11, 0.15)',
-      };
-    }
-    if (action === 'USER_STATUS_CHANGED') {
-      const statusText = details.new_status ? 'Diaktifkan' : 'Dinonaktifkan';
-      return {
-        title: `Status Akun ${statusText}`,
-        description: `Mengubah status akun ${details.target_email || 'pengguna'} menjadi ${statusText.toLowerCase()}`,
-        icon: ToggleLeft,
-        color: details.new_status ? '#10b981' : '#ef4444',
-        bg: details.new_status ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-      };
-    }
-    if (action === 'USER_REVOKED') {
-      return {
-        title: 'Akses Pengguna Dicabut',
-        description: `Menghapus akses login untuk akun ${details.target_email || 'pengguna'}`,
-        icon: Trash2,
-        color: '#ef4444',
-        bg: 'rgba(239, 68, 68, 0.15)',
-      };
-    }
-    if (action.includes('BUS') || action.includes('INPUT') || action.includes('SAVE')) {
-      return {
-        title: 'Input / Simpan Data Bus',
-        description: `${action} pada rute ${log.route_code || '-'}`,
-        icon: Bus,
-        color: '#3b82f6',
-        bg: 'rgba(59, 130, 246, 0.15)',
-      };
-    }
-    if (action.includes('FORMAT') || action.includes('SHEET')) {
-      return {
-        title: 'Perapian Format Spreadsheet',
-        description: `Format spreadsheet diterapkan pada rute ${log.route_code || '-'}`,
-        icon: FileSpreadsheet,
-        color: '#8b5cf6',
-        bg: 'rgba(139, 92, 246, 0.15)',
+        bg: 'rgba(16, 185, 129, 0.12)',
+        categoryTag: 'Sistem',
       };
     }
 
+    if (action === 'LOGOUT') {
+      return {
+        title: 'Sesi Logout',
+        description: 'Pengguna keluar dari aplikasi',
+        icon: LogOut,
+        color: '#64748b',
+        bg: 'rgba(100, 116, 139, 0.12)',
+        categoryTag: 'Sistem',
+      };
+    }
+
+    if (action === 'USER_ADDED') {
+      const roleName = details.assigned_role === 'superadmin' ? 'Superadmin' : details.assigned_role === 'admin' ? 'Admin' : 'Petugas Operasional';
+      return {
+        title: 'Pengguna Baru Didaftarkan',
+        description: `Mendaftarkan ${details.target_email || 'pengguna'} sebagai ${roleName}`,
+        chips: details.notes ? [`Catatan: ${details.notes}`] : undefined,
+        icon: UserPlus,
+        color: '#10b981',
+        bg: 'rgba(16, 185, 129, 0.12)',
+        categoryTag: 'Pengguna',
+      };
+    }
+
+    if (action === 'USER_ROLE_CHANGED') {
+      const newRole = details.new_role === 'superadmin' ? 'Superadmin' : details.new_role === 'admin' ? 'Admin' : 'Petugas Operasional';
+      return {
+        title: 'Perubahan Peran Pengguna',
+        description: `Mengubah peran ${details.target_email || 'pengguna'} menjadi ${newRole}`,
+        icon: ShieldCheck,
+        color: '#f59e0b',
+        bg: 'rgba(245, 158, 11, 0.12)',
+        categoryTag: 'Pengguna',
+      };
+    }
+
+    if (action === 'USER_STATUS_CHANGED') {
+      const isActive = details.new_status === 'active' || details.new_status === true;
+      const statusText = isActive ? 'Diaktifkan' : 'Dinonaktifkan';
+      return {
+        title: `Status Akun ${statusText}`,
+        description: `Akun ${details.target_email || 'pengguna'} telah ${statusText.toLowerCase()}`,
+        icon: ToggleLeft,
+        color: isActive ? '#10b981' : '#ef4444',
+        bg: isActive ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+        categoryTag: 'Pengguna',
+      };
+    }
+
+    if (action === 'USER_REVOKED') {
+      return {
+        title: 'Akses Pengguna Dicabut',
+        description: `Mencabut akses whitelist dan menonaktifkan akun ${details.target_email || 'pengguna'}`,
+        icon: Trash2,
+        color: '#ef4444',
+        bg: 'rgba(239, 68, 68, 0.12)',
+        categoryTag: 'Pengguna',
+      };
+    }
+
+    if (action === 'UPDATE_BUS_DATA' || action.includes('BUS') || action.includes('INPUT') || action.includes('SAVE')) {
+      const tabDesc = details.tabName ? `Tab: ${details.tabName}` : 'Spreadsheet Operasional';
+      const rowDesc = details.rowIndex ? ` · Baris ${details.rowIndex}` : '';
+      const chips: string[] = [];
+
+      if (Array.isArray(details.updatedFields) && details.updatedFields.length > 0) {
+        details.updatedFields.forEach((f: string) => {
+          chips.push(FIELD_LABEL_MAP[f] || f);
+        });
+      }
+
+      return {
+        title: 'Input / Simpan Data Bus',
+        description: `${tabDesc}${rowDesc}`,
+        chips: chips.length > 0 ? chips : undefined,
+        icon: Bus,
+        color: '#3b82f6',
+        bg: 'rgba(59, 130, 246, 0.12)',
+        categoryTag: 'Operasional',
+      };
+    }
+
+    if (action === 'QUEUE_SYNCED' || action.includes('SYNC')) {
+      return {
+        title: 'Sinkronisasi Antrean Offline',
+        description: details.count ? `Menyinkronkan ${details.count} perubahan data lokal ke spreadsheet` : 'Data offline berhasil disinkronkan ke server',
+        icon: CloudUpload,
+        color: '#06b6d4',
+        bg: 'rgba(6, 182, 212, 0.12)',
+        categoryTag: 'Sinkronisasi',
+      };
+    }
+
+    if (action === 'DELETE_ROUTE') {
+      return {
+        title: 'Hapus Rute / Spreadsheet',
+        description: `Menghapus konfigurasi rute ${log.route_code || ''} dari sistem`,
+        icon: Trash2,
+        color: '#ef4444',
+        bg: 'rgba(239, 68, 68, 0.12)',
+        categoryTag: 'Konfigurasi',
+      };
+    }
+
+    if (action.includes('FORMAT') || action.includes('SHEET')) {
+      return {
+        title: 'Perapian Format Spreadsheet',
+        description: `Format spreadsheet diperbarui pada rute ${log.route_code || '-'}`,
+        icon: FileSpreadsheet,
+        color: '#8b5cf6',
+        bg: 'rgba(139, 92, 246, 0.12)',
+        categoryTag: 'Format',
+      };
+    }
+
+    // Generic fallback: format details cleanly without raw JSON braces
+    let fallbackDesc = 'Aktivitas sistem tercatat';
+    if (typeof details === 'object' && details !== null) {
+      const entries = Object.entries(details)
+        .filter(([_, v]) => v !== undefined && v !== null && typeof v !== 'object')
+        .map(([k, v]) => `${k}: ${v}`);
+      if (entries.length > 0) {
+        fallbackDesc = entries.join(' · ');
+      }
+    }
+
     return {
-      title: action,
-      description: JSON.stringify(details),
+      title: action.replace(/_/g, ' '),
+      description: fallbackDesc,
       icon: History,
       color: '#94a3b8',
-      bg: 'rgba(148, 163, 184, 0.15)',
+      bg: 'rgba(148, 163, 184, 0.12)',
+      categoryTag: 'Sistem',
     };
   };
 
   const filteredLogs = useMemo(() => {
-    return logs.filter((log) => {      const act = log.action || '';
+    return logs.filter((log) => {
+      const act = log.action || '';
       if (activeCategory === 'users' && !act.startsWith('USER_')) return false;
       if (activeCategory === 'bus_input' && !act.includes('BUS') && !act.includes('SAVE') && !act.includes('INPUT')) return false;
-      if (activeCategory === 'system' && (act.startsWith('USER_') || act.includes('BUS'))) return false;
+      if (activeCategory === 'system' && (act.startsWith('USER_') || act.includes('BUS') || act.includes('SAVE') || act.includes('INPUT'))) return false;
 
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
@@ -191,60 +299,68 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '12px',
+            gap: '8px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
             <button
               onClick={onBack}
               className="btn btn-outline"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                padding: '8px 14px',
-                borderRadius: '12px',
-                fontSize: '13.5px',
+                gap: '5px',
+                padding: '7px 11px',
+                borderRadius: '10px',
+                fontSize: '12.5px',
                 fontWeight: 600,
                 border: '1px solid var(--card-border, rgba(255,255,255,0.15))',
                 background: 'rgba(255,255,255,0.05)',
                 color: 'var(--text-primary, #f8fafc)',
                 cursor: 'pointer',
+                flexShrink: 0,
+                transition: 'all 0.15s ease',
               }}
               title="Kembali ke Dashboard"
             >
-              <ArrowLeft size={17} />
-              <span>Kembali</span>
+              <ArrowLeft size={16} />
+              <span className="hidden sm:inline">Kembali</span>
             </button>
 
-            <div>
+            <div style={{ minWidth: 0 }}>
               <h1
                 style={{
                   margin: 0,
-                  fontSize: '17px',
+                  fontSize: '15.5px',
                   fontWeight: 700,
                   color: 'var(--text-primary, #f8fafc)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '6px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 }}
               >
-                <History size={19} className="text-amber-500" />
-                Log Aktivitas & Audit
+                <History size={18} className="text-amber-500" style={{ flexShrink: 0 }} />
+                <span>Log Aktivitas & Audit</span>
               </h1>
               <p
                 style={{
                   margin: 0,
-                  fontSize: '11.5px',
+                  fontSize: '11px',
                   color: 'var(--text-secondary, #94a3b8)',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 }}
               >
-                {filteredLogs.length} riwayat aktivitas tercatat
+                {filteredLogs.length} riwayat tercatat
               </p>
             </div>
           </div>
 
-          <div>
+          <div style={{ flexShrink: 0 }}>
             <button
               onClick={loadLogs}
               disabled={isLoading}
@@ -252,20 +368,21 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                padding: '8px 12px',
+                gap: '5px',
+                padding: '7px 12px',
                 borderRadius: '10px',
                 border: '1px solid var(--card-border, rgba(255,255,255,0.12))',
                 background: 'rgba(255,255,255,0.04)',
                 color: 'var(--text-secondary, #94a3b8)',
-                fontSize: '13px',
+                fontSize: '12.5px',
                 fontWeight: 600,
                 cursor: 'pointer',
+                transition: 'all 0.15s ease',
               }}
               title="Muat Ulang Riwayat Log"
             >
-              <RefreshCw size={15} className={isLoading ? 'animate-spin' : ''} />
-              <span className="hidden sm:inline">Muat Ulang</span>
+              <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
+              <span>Muat Ulang</span>
             </button>
           </div>
         </div>
@@ -281,7 +398,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
           padding: '16px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '16px',
+          gap: '14px',
           paddingBottom: 'calc(40px + env(safe-area-inset-bottom, 0px))',
         }}
       >
@@ -290,7 +407,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '10px',
           }}
         >
           {/* Search Box */}
@@ -301,10 +418,10 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
             }}
           >
             <Search
-              size={17}
+              size={16}
               style={{
                 position: 'absolute',
-                left: '14px',
+                left: '13px',
                 top: '50%',
                 transform: 'translateY(-50%)',
                 color: 'var(--text-secondary, #94a3b8)',
@@ -317,12 +434,12 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
               placeholder="Cari aktivitas, user, atau rute..."
               style={{
                 width: '100%',
-                padding: '10px 14px 10px 40px',
+                padding: '9px 13px 9px 38px',
                 borderRadius: '12px',
                 border: '1px solid var(--card-border, rgba(255,255,255,0.12))',
                 background: 'var(--card-bg, rgba(30, 41, 59, 0.6))',
                 color: 'var(--text-primary, #f8fafc)',
-                fontSize: '13.5px',
+                fontSize: '13px',
                 outline: 'none',
                 boxSizing: 'border-box',
               }}
@@ -340,9 +457,9 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
             }}
           >
             {[
-              { key: 'all', label: 'Semua Aktivitas' },
-              { key: 'users', label: 'Manajemen Pengguna' },
+              { key: 'all', label: 'Semua' },
               { key: 'bus_input', label: 'Input Operasional' },
+              { key: 'users', label: 'Pengguna' },
               { key: 'system', label: 'Sistem' },
             ].map((tab) => {
               const isActive = activeCategory === tab.key;
@@ -363,10 +480,13 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
                     color: isActive ? '#fbbf24' : 'var(--text-secondary, #94a3b8)',
                     whiteSpace: 'nowrap',
                     cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     transition: 'all 0.15s ease',
                   }}
                 >
-                  {tab.label}
+                  <span>{tab.label}</span>
                 </button>
               );
             })}
@@ -427,18 +547,19 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
                     background: 'var(--card-bg, rgba(30, 41, 59, 0.7))',
                     border: '1px solid var(--card-border, rgba(255,255,255,0.08))',
                     borderRadius: '14px',
-                    padding: '14px 16px',
+                    padding: '13px 15px',
                     display: 'flex',
                     alignItems: 'flex-start',
-                    gap: '14px',
+                    gap: '12px',
+                    transition: 'all 0.15s ease',
                   }}
                 >
                   {/* Action Icon */}
                   <div
                     style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '12px',
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '11px',
                       background: meta.bg,
                       color: meta.color,
                       display: 'flex',
@@ -447,7 +568,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
                       flexShrink: 0,
                     }}
                   >
-                    <IconComp size={20} />
+                    <IconComp size={18} />
                   </div>
 
                   {/* Body Content */}
@@ -457,19 +578,39 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: '8px',
+                        gap: '6px',
                         flexWrap: 'wrap',
                       }}
                     >
-                      <span
-                        style={{
-                          fontWeight: 700,
-                          fontSize: '13.5px',
-                          color: 'var(--text-primary, #f8fafc)',
-                        }}
-                      >
-                        {meta.title}
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
+                        <span
+                          style={{
+                            fontWeight: 700,
+                            fontSize: '13.5px',
+                            color: 'var(--text-primary, #f8fafc)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {meta.title}
+                        </span>
+                        {meta.categoryTag && (
+                          <span
+                            style={{
+                              fontSize: '10px',
+                              fontWeight: 600,
+                              padding: '1px 6px',
+                              borderRadius: '5px',
+                              background: 'rgba(255, 255, 255, 0.06)',
+                              color: 'var(--text-secondary, #94a3b8)',
+                              border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                            }}
+                          >
+                            {meta.categoryTag}
+                          </span>
+                        )}
+                      </div>
 
                       {createdAt && (
                         <div
@@ -496,7 +637,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
 
                     <p
                       style={{
-                        margin: '4px 0 8px',
+                        margin: '4px 0 6px',
                         fontSize: '12.5px',
                         color: 'var(--text-secondary, #94a3b8)',
                         lineHeight: 1.4,
@@ -505,15 +646,45 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
                       {meta.description}
                     </p>
 
+                    {/* Field Chips (if updatedFields present) */}
+                    {meta.chips && meta.chips.length > 0 && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: '4px',
+                          margin: '4px 0 8px',
+                        }}
+                      >
+                        {meta.chips.map((chip, idx) => (
+                          <span
+                            key={idx}
+                            style={{
+                              fontSize: '10.5px',
+                              fontWeight: 500,
+                              padding: '1px 7px',
+                              borderRadius: '6px',
+                              background: 'rgba(59, 130, 246, 0.12)',
+                              color: '#93c5fd',
+                              border: '1px solid rgba(59, 130, 246, 0.2)',
+                            }}
+                          >
+                            {chip}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
                     {/* Footer / User tag */}
                     <div
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '12px',
+                        gap: '10px',
                         fontSize: '11.5px',
                         color: 'var(--text-secondary, #64748b)',
                         flexWrap: 'wrap',
+                        marginTop: meta.chips && meta.chips.length > 0 ? '0' : '4px',
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

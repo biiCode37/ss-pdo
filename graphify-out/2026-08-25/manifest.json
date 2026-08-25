@@ -425,18 +425,18 @@
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
-    "mtime": 1787638707.270944,
-    "ast_hash": "7c6145b3421cd30d3c8f955a769b575e",
+    "mtime": 1787446724.2777207,
+    "ast_hash": "535499a54ef64799760b7ed11aa361dc",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1787638715.916068,
-    "ast_hash": "d202eb56273ae73ab213d4dd91b9c043",
+    "mtime": 1785673158.2019541,
+    "ast_hash": "df66a8657c07af75e1118047173d26e3",
     "semantic_hash": ""
   },
   "docs/PROJECT_STATUS.md": {
-    "mtime": 1787638736.0237718,
-    "ast_hash": "c80adf67101c633f01c01ebd425c2077",
+    "mtime": 1785599196.9097395,
+    "ast_hash": "1c7508c1b8614d3176092e906e8f7505",
     "semantic_hash": ""
   },
   "docs/adr/0001-refactoring-and-ux-enhancements.md": {
@@ -1122,11 +1122,6 @@
   "supabase/migrations/20260826010000_soft_delete_user_policy.sql": {
     "mtime": 1787632132.0985749,
     "ast_hash": "4467db7fb0528d01af6f3620afbaf6dc",
-    "semantic_hash": ""
-  },
-  "docs/adr/0002-supabase-rbac-and-audit-trail.md": {
-    "mtime": 1787638748.075053,
-    "ast_hash": "740e8bf2644c0669a11c49e9852b54a4",
     "semantic_hash": ""
   }
 }

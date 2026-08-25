@@ -698,7 +698,7 @@ export async function toggleUserProfileStatus(
 }
 
 /**
- * Mencabut / menghapus akses pengguna dari sistem
+ * Mencabut / menonaktifkan akses pengguna dari sistem (Soft Delete / is_active: false)
  */
 export async function revokeUserProfile(
   targetEmail: string,
@@ -708,20 +708,22 @@ export async function revokeUserProfile(
   try {
     const { data, error } = await supabase
       .from('user_profiles')
-      .delete()
+      .update({
+        is_active: false,
+        updated_at: new Date().toISOString(),
+      })
       .eq('email', targetEmail)
       .select('email');
 
     if (error) {
-      return { success: false, message: `Gagal menghapus pengguna: ${error.message}` };
+      return { success: false, message: `Gagal mencabut akses pengguna: ${error.message}` };
     }
 
-    // BUG-63: Deteksi zero-row — sebelumnya DELETE yang diblokir policy
-    // (tanpa error, 0 baris) tetap ditandai sukses & tercatat di audit.
+    // Deteksi zero-row — RLS policy memblokir atau akun tidak ditemukan
     if (!data || data.length === 0) {
       return {
         success: false,
-        message: `Tidak ada baris yang terhapus untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun sudah tidak ada.`,
+        message: `Tidak ada baris yang diperbarui untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun tidak ditemukan.`,
       };
     }
 

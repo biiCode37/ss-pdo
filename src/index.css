@@ -1314,6 +1314,94 @@ div:where(.swal2-container) .pdo-swal-popup .swal2-actions {
   transform: scale(0.97) !important;
 }
 
+/* SweetAlert2 Modern Icons */
+div:where(.swal2-container) .pdo-swal-popup .swal2-icon {
+  margin: 4px auto 14px auto !important;
+  width: 3.2em !important;
+  height: 3.2em !important;
+  border-width: 2.5px !important;
+  font-size: 13px !important;
+}
+
+div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-warning {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.08) !important;
+}
+
+div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-error {
+  border-color: rgba(239, 68, 68, 0.45) !important;
+  color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-success {
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-question {
+  border-color: rgba(59, 130, 246, 0.45) !important;
+  color: #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* SweetAlert2 Modern Form Elements */
+.pdo-swal-input,
+.pdo-swal-select {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 10px 14px !important;
+  border-radius: 12px !important;
+  font-size: 13.5px !important;
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.15)) !important;
+  background: var(--input-bg, rgba(255, 255, 255, 0.05)) !important;
+  color: var(--text-primary, #f8fafc) !important;
+  outline: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  margin: 0 !important;
+  font-family: inherit !important;
+}
+
+[data-theme="light"] .pdo-swal-input,
+[data-theme="light"] .pdo-swal-select {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.pdo-swal-select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 16px !important;
+  padding-right: 36px !important;
+}
+
+.pdo-swal-select option {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="light"] .pdo-swal-select option {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.pdo-swal-input:focus,
+.pdo-swal-select:focus {
+  border-color: var(--accent-color, #3ecf8e) !important;
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.2) !important;
+}
+
+.pdo-swal-input::placeholder {
+  color: var(--text-secondary, #64748b) !important;
+  opacity: 0.7 !important;
+}
+
 /* SweetAlert2 Toast Custom Styling */
 div:where(.swal2-container) .pdo-swal-toast {
   background: var(--surface-color) !important;
@@ -1720,5 +1808,26 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.7));
 }
 
+/* Role Badges Styling & Theming */
+.role-badge-pill {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+}
 
+[data-theme="light"] .role-badge-superadmin {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(168, 85, 247, 0.12)) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #b45309 !important;
+}
 
+[data-theme="light"] .role-badge-admin {
+  background: rgba(14, 165, 233, 0.12) !important;
+  border-color: rgba(14, 165, 233, 0.35) !important;
+  color: #0369a1 !important;
+}
+
+[data-theme="light"] .role-badge-petugas {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #047857 !important;
+}

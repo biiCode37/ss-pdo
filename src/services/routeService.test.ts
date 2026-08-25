@@ -401,22 +401,26 @@ describe('routeService', () => {
     );
   });
 
-  it('revokeUserProfile deletes user and logs USER_REVOKED', async () => {
-    const mockDelete = vi.fn().mockReturnValue({
+  it('revokeUserProfile deactivates user (is_active: false) and logs USER_REVOKED', async () => {
+    const mockUpdate = vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
         select: vi.fn().mockResolvedValue({ data: [{ email: 'baduser@pusm.id' }], error: null }),
       }),
     });
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { delete: mockDelete };
+      if (table === 'user_profiles') return { update: mockUpdate };
       if (table === 'activity_logs') return { insert: mockInsert };
       return {};
     });
 
     const result = await revokeUserProfile('baduser@pusm.id', 'superadmin@pusm.id');
     expect(result.success).toBe(true);
-    expect(mockDelete).toHaveBeenCalled();
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        is_active: false,
+      })
+    );
   });
 
   it('fetchActivityLogs queries activity_logs with limit and optional filters', async () => {
@@ -466,20 +470,20 @@ describe('routeService', () => {
     expect(result.message).toContain('Tidak ada baris yang berubah');
   });
 
-  it('revokeUserProfile reports failure when no rows were deleted', async () => {
-    const mockDelete = vi.fn().mockReturnValue({
+  it('revokeUserProfile reports failure when no rows were updated', async () => {
+    const mockUpdate = vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
         select: vi.fn().mockResolvedValue({ data: [], error: null }),
       }),
     });
     (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { delete: mockDelete };
+      if (table === 'user_profiles') return { update: mockUpdate };
       return {};
     });
 
     const result = await revokeUserProfile('ghost@pusm.id', 'superadmin@pusm.id');
     expect(result.success).toBe(false);
-    expect(result.message).toContain('Tidak ada baris yang terhapus');
+    expect(result.message).toContain('Tidak ada baris yang');
   });
 
   it('updateUserProfileRole reports failure when no rows were updated', async () => {

@@ -4,26 +4,20 @@ import {
   UserPlus,
   Search,
   Users,
-  CheckCircle2,
-  XCircle,
-  Edit2,
-  Trash2,
   RefreshCw,
   Clock,
-  Mail,
-  FileText,
 } from 'lucide-react';
-import Swal from 'sweetalert2';
 import type { UserProfile } from '../types/supabase';
 import {
   fetchAllUserProfiles,
   addUserProfile,
   updateUserProfileRole,
   toggleUserProfileStatus,
-  revokeUserProfile,
+  upsertUserProfile,
 } from '../services/routeService';
+import { fetchGoogleUserProfile } from '../services/googleSheets/auth';
 import { RoleBadge } from './RoleBadge';
-import { escapeHtml, showSuccessToast, showErrorAlert } from '../utils/alertUtils';
+import { escapeHtml, showSuccessToast, showErrorAlert, pdoSwal } from '../utils/alertUtils';
 
 interface UserManagementPageProps {
   onBack: () => void;
@@ -33,6 +27,59 @@ interface UserManagementPageProps {
 }
 
 type FilterTab = 'all' | 'superadmin' | 'admin' | 'petugas' | 'inactive';
+
+const UserCardAvatar: React.FC<{
+  user: UserProfile;
+  isSelf: boolean;
+}> = ({ user, isSelf }) => {
+  const [imgError, setImgError] = useState(false);
+  const effectiveAvatar =
+    user.avatar_url ||
+    (isSelf ? localStorage.getItem('PDO_USER_AVATAR') || undefined : undefined);
+
+  if (effectiveAvatar && !imgError) {
+    return (
+      <img
+        src={effectiveAvatar}
+        alt={user.full_name || user.email}
+        referrerPolicy="no-referrer"
+        crossOrigin="anonymous"
+        onError={() => setImgError(true)}
+        style={{
+          width: '42px',
+          height: '42px',
+          borderRadius: '12px',
+          objectFit: 'cover',
+          border: '1px solid var(--card-border, rgba(255, 255, 255, 0.15))',
+          flexShrink: 0,
+        }}
+      />
+    );
+  }
+
+  const initial = (user.full_name || user.email || '?').trim().charAt(0).toUpperCase();
+
+  return (
+    <div
+      style={{
+        width: '42px',
+        height: '42px',
+        borderRadius: '12px',
+        background: 'rgba(59, 130, 246, 0.12)',
+        border: '1px solid rgba(59, 130, 246, 0.25)',
+        color: '#60a5fa',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700,
+        fontSize: '15px',
+        flexShrink: 0,
+      }}
+    >
+      {initial}
+    </div>
+  );
+};
 
 export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   onBack,
@@ -48,7 +95,18 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     setIsLoading(true);
     try {
       const data = await fetchAllUserProfiles();
-      setUsers(data);
+      const cachedAvatar = localStorage.getItem('PDO_USER_AVATAR');
+      const enrichedData = data.map((u) => {
+        if (
+          u.email.toLowerCase() === currentUserEmail.toLowerCase() &&
+          !u.avatar_url &&
+          cachedAvatar
+        ) {
+          return { ...u, avatar_url: cachedAvatar };
+        }
+        return u;
+      });
+      setUsers(enrichedData);
     } catch (err) {
       console.error('[UserManagement] Gagal memuat user:', err);
       showErrorAlert('Gagal Memuat Data', 'Tidak dapat memuat daftar pengguna dari server.');
@@ -60,6 +118,27 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   useEffect(() => {
     loadUsers();
     window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // Sync avatar from Google if missing
+    if (!localStorage.getItem('PDO_USER_AVATAR')) {
+      fetchGoogleUserProfile().then((info) => {
+        if (info && info.picture) {
+          localStorage.setItem('PDO_USER_AVATAR', info.picture);
+          upsertUserProfile({
+            email: currentUserEmail,
+            full_name: info.name || currentUserEmail,
+            avatar_url: info.picture,
+          }).catch(() => {});
+          setUsers((prev) =>
+            prev.map((u) =>
+              u.email.toLowerCase() === currentUserEmail.toLowerCase()
+                ? { ...u, avatar_url: info.picture }
+                : u
+            )
+          );
+        }
+      }).catch(() => {});
+    }
   }, []);
 
   // Filtering Logic
@@ -129,35 +208,40 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
         <option value="petugas">Petugas Operasional (Input Data Saja)</option>
       `;
 
-    const { value: formValues } = await Swal.fire({
-      title: '<h3 style="margin:0;font-size:18px;font-weight:700;color:var(--text-primary)">Tambah Pengguna Baru</h3>',
+    const { value: formValues } = await pdoSwal.fire({
+      title: 'Tambah Pengguna Baru',
       html: `
-        <div style="text-align:left;font-size:13px;display:flex;flex-direction:column;gap:12px;margin-top:10px;">
+        <div style="text-align:left;font-size:13px;display:flex;flex-direction:column;gap:14px;margin-top:6px;">
           <div>
-            <label style="display:block;margin-bottom:4px;font-weight:600;color:var(--text-secondary)">Email Akun Google <span style="color:#ef4444">*</span></label>
-            <input id="swal-email" type="email" placeholder="contoh@gmail.com" class="swal2-input" style="margin:0;width:100%;font-size:13.5px;padding:8px 12px;border-radius:10px;box-sizing:border-box;" />
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Email Akun Google <span style="color:#ef4444">*</span></label>
+            <input id="swal-email" type="email" placeholder="contoh@gmail.com" class="pdo-swal-input" />
           </div>
           <div>
-            <label style="display:block;margin-bottom:4px;font-weight:600;color:var(--text-secondary)">Nama Lengkap</label>
-            <input id="swal-name" type="text" placeholder="Nama Petugas / Pengawas" class="swal2-input" style="margin:0;width:100%;font-size:13.5px;padding:8px 12px;border-radius:10px;box-sizing:border-box;" />
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Nama Lengkap</label>
+            <input id="swal-name" type="text" placeholder="Nama Petugas / Pengawas" class="pdo-swal-input" />
           </div>
           <div>
-            <label style="display:block;margin-bottom:4px;font-weight:600;color:var(--text-secondary)">Peran / Hak Akses</label>
-            <select id="swal-role" class="swal2-select" style="margin:0;width:100%;font-size:13.5px;padding:8px 12px;border-radius:10px;box-sizing:border-box;">
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Peran / Hak Akses</label>
+            <select id="swal-role" class="pdo-swal-select">
               ${roleOptionsHtml}
             </select>
           </div>
           <div>
-            <label style="display:block;margin-bottom:4px;font-weight:600;color:var(--text-secondary)">Catatan Tugas (Opsional)</label>
-            <input id="swal-notes" type="text" placeholder="Misal: Petugas Koridor 1, Shift Pagi" class="swal2-input" style="margin:0;width:100%;font-size:13.5px;padding:8px 12px;border-radius:10px;box-sizing:border-box;" />
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Catatan Tugas (Opsional)</label>
+            <input id="swal-notes" type="text" placeholder="Misal: Koridor 1 Shift Pagi" class="pdo-swal-input" />
           </div>
         </div>
       `,
       showCancelButton: true,
       confirmButtonText: 'Simpan & Beri Akses',
       cancelButtonText: 'Batal',
-      confirmButtonColor: '#3b82f6',
-      cancelButtonColor: '#64748b',
+      customClass: {
+        container: 'pdo-swal-container',
+        popup: 'pdo-swal-popup',
+        confirmButton: 'pdo-swal-confirm-btn',
+        cancelButton: 'pdo-swal-cancel-btn',
+      },
+      buttonsStyling: false,
       focusConfirm: false,
       preConfirm: () => {
         const email = (document.getElementById('swal-email') as HTMLInputElement)?.value?.trim();
@@ -166,7 +250,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
         const notes = (document.getElementById('swal-notes') as HTMLInputElement)?.value?.trim();
 
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-          Swal.showValidationMessage('Masukkan format email yang valid!');
+          pdoSwal.showValidationMessage('Masukkan format email yang valid!');
           return false;
         }
 
@@ -199,12 +283,12 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       return;
     }
 
-    const { value: newRole } = await Swal.fire({
-      title: `<h3 style="margin:0;font-size:18px;font-weight:700;color:var(--text-primary)">Ubah Peran Pengguna</h3>`,
+    const { value: newRole } = await pdoSwal.fire({
+      title: 'Ubah Peran Pengguna',
       html: `
-        <div style="text-align:left;font-size:13px;margin-top:10px;">
-          <p style="margin:0 0 10px;color:var(--text-secondary)">Pilih peran baru untuk <strong>${escapeHtml(user.email)}</strong>:</p>
-          <select id="swal-new-role" class="swal2-select" style="margin:0;width:100%;font-size:14px;padding:8px 12px;border-radius:10px;">
+        <div style="text-align:left;font-size:13px;margin-top:6px;">
+          <p style="margin:0 0 10px;color:var(--text-secondary);font-size:12.5px;">Pilih peran baru untuk <strong style="color:var(--text-primary)">${escapeHtml(user.email)}</strong>:</p>
+          <select id="swal-new-role" class="pdo-swal-select">
             <option value="petugas" ${user.role === 'petugas' ? 'selected' : ''}>Petugas Operasional (Input Data Saja)</option>
             <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin (Kelola Petugas & Rute)</option>
             <option value="superadmin" ${user.role === 'superadmin' ? 'selected' : ''}>Superadmin (Kuasa Penuh)</option>
@@ -214,8 +298,13 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       showCancelButton: true,
       confirmButtonText: 'Simpan Perubahan',
       cancelButtonText: 'Batal',
-      confirmButtonColor: '#3b82f6',
-      cancelButtonColor: '#64748b',
+      customClass: {
+        container: 'pdo-swal-container',
+        popup: 'pdo-swal-popup',
+        confirmButton: 'pdo-swal-confirm-btn',
+        cancelButton: 'pdo-swal-cancel-btn',
+      },
+      buttonsStyling: false,
       preConfirm: () => {
         return (document.getElementById('swal-new-role') as HTMLSelectElement)?.value;
       },
@@ -256,15 +345,22 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     const nextStatus = user.is_active === false ? true : false;
     const actionText = nextStatus ? 'mengaktifkan' : 'menonaktifkan';
 
-    const { isConfirmed } = await Swal.fire({
-      title: `<h3 style="margin:0;font-size:18px;font-weight:700;color:var(--text-primary)">Konfirmasi Status Akun</h3>`,
-      html: `<p style="margin:0;font-size:13.5px;color:var(--text-secondary)">Apakah Anda yakin ingin <strong>${actionText}</strong> akses login untuk <strong>${escapeHtml(user.email)}</strong>?</p>`,
+    const { isConfirmed } = await pdoSwal.fire({
+      title: 'Konfirmasi Status Akun',
+      html: `<p style="margin:0;font-size:13.5px;color:var(--text-secondary);line-height:1.5;">Apakah Anda yakin ingin <strong>${actionText}</strong> akses login untuk <strong style="color:var(--text-primary)">${escapeHtml(user.email)}</strong>?</p>`,
       icon: nextStatus ? 'question' : 'warning',
       showCancelButton: true,
       confirmButtonText: nextStatus ? 'Ya, Aktifkan' : 'Ya, Nonaktifkan',
       cancelButtonText: 'Batal',
-      confirmButtonColor: nextStatus ? '#10b981' : '#ef4444',
-      cancelButtonColor: '#64748b',
+      customClass: {
+        container: 'pdo-swal-container',
+        popup: 'pdo-swal-popup',
+        confirmButton: nextStatus
+          ? 'pdo-swal-confirm-btn'
+          : 'pdo-swal-confirm-btn pdo-swal-confirm-danger-btn',
+        cancelButton: 'pdo-swal-cancel-btn',
+      },
+      buttonsStyling: false,
     });
 
     if (isConfirmed) {
@@ -276,46 +372,6 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
         );
       } else {
         showErrorAlert('Gagal', res.message || 'Gagal mengubah status akun.');
-      }
-    }
-  };
-
-  // Handle Revoke User Access
-  const handleRevoke = async (user: UserProfile) => {
-    if (currentUserRole !== 'superadmin') {
-      showErrorAlert('Akses Terbatas', 'Hanya Superadmin yang berwenang mencabut akses pengguna.');
-      return;
-    }
-
-    const isSelf = user.email.toLowerCase() === currentUserEmail.toLowerCase();
-    if (isSelf) {
-      showErrorAlert('Aksi Ditolak', 'Anda tidak dapat menghapus akun Anda sendiri.');
-      return;
-    }
-
-    const { isConfirmed } = await Swal.fire({
-      title: `<h3 style="margin:0;font-size:18px;font-weight:700;color:#ef4444">Cabut Akses Pengguna?</h3>`,
-      html: `
-        <div style="font-size:13px;color:var(--text-secondary);text-align:left;line-height:1.5;">
-          <p style="margin:0 0 8px;">Anda akan mencabut akses whitelist untuk <strong>${escapeHtml(user.email)}</strong> (${escapeHtml(user.full_name || 'Tanpa Nama')}).</p>
-          <p style="margin:0;color:#ef4444;font-size:12px;">Akun ini tidak akan dapat login lagi ke aplikasi sampai didaftarkan kembali.</p>
-        </div>
-      `,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Ya, Cabut Akses',
-      cancelButtonText: 'Batal',
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#64748b',
-    });
-
-    if (isConfirmed) {
-      const res = await revokeUserProfile(user.email, currentUserEmail);
-      if (res.success) {
-        showSuccessToast(`Akses ${escapeHtml(user.email)} telah dicabut.`);
-        setUsers((prev) => prev.filter((u) => u.email !== user.email));
-      } else {
-        showErrorAlert('Gagal', res.message || 'Gagal mencabut akses.');
       }
     }
   };
@@ -351,66 +407,74 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '12px',
+            gap: '8px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
             <button
               onClick={onBack}
               className="btn btn-outline"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                padding: '8px 14px',
-                borderRadius: '12px',
-                fontSize: '13.5px',
+                gap: '5px',
+                padding: '7px 11px',
+                borderRadius: '10px',
+                fontSize: '12.5px',
                 fontWeight: 600,
                 border: '1px solid var(--card-border, rgba(255,255,255,0.15))',
                 background: 'rgba(255,255,255,0.05)',
                 color: 'var(--text-primary, #f8fafc)',
                 cursor: 'pointer',
+                flexShrink: 0,
+                transition: 'all 0.15s ease',
               }}
               title="Kembali ke Dashboard"
             >
-              <ArrowLeft size={17} />
-              <span>Kembali</span>
+              <ArrowLeft size={16} />
+              <span className="hidden sm:inline">Kembali</span>
             </button>
 
-            <div>
+            <div style={{ minWidth: 0 }}>
               <h1
                 style={{
-                  margin: 0,
-                  fontSize: '17px',
-                  fontWeight: 700,
-                  color: 'var(--text-primary, #f8fafc)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-              >
-                <Users size={19} className="text-blue-500" />
-                Manajemen Pengguna
+                margin: 0,
+                fontSize: '15.5px',
+                fontWeight: 700,
+                color: 'var(--text-primary, #f8fafc)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+                <Users size={18} className="text-blue-500" style={{ flexShrink: 0 }} />
+                <span>Manajemen Pengguna</span>
               </h1>
               <p
                 style={{
                   margin: 0,
-                  fontSize: '11.5px',
+                  fontSize: '11px',
                   color: 'var(--text-secondary, #94a3b8)',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 }}
               >
-                {counts.active} akun aktif dari total {counts.all} terdaftar
+                {counts.active} aktif dari total {counts.all} terdaftar
               </p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
             <button
               onClick={loadUsers}
               disabled={isLoading}
               className="btn btn-outline"
               style={{
-                padding: '8px',
+                padding: '7px 9px',
                 borderRadius: '10px',
                 border: '1px solid var(--card-border, rgba(255,255,255,0.12))',
                 background: 'rgba(255,255,255,0.04)',
@@ -419,10 +483,11 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                transition: 'all 0.15s ease',
               }}
               title="Muat Ulang Daftar User"
             >
-              <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
+              <RefreshCw size={15} className={isLoading ? 'animate-spin' : ''} />
             </button>
 
             <button
@@ -430,20 +495,22 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                padding: '8px 14px',
+                gap: '5px',
+                padding: '7px 13px',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
                 color: '#ffffff',
                 border: 'none',
-                fontSize: '13px',
+                fontSize: '12.5px',
                 fontWeight: 600,
                 cursor: 'pointer',
                 boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.15s ease',
               }}
             >
-              <UserPlus size={16} />
-              <span className="hidden sm:inline">Tambah Akun</span>
+              <UserPlus size={15} />
+              <span>Tambah</span>
             </button>
           </div>
         </div>
@@ -640,111 +707,65 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                     boxShadow: isSelf ? '0 0 20px rgba(59, 130, 246, 0.1)' : 'none',
                   }}
                 >
-                  {/* Top Section: Avatar, Name, Email, Role */}
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                    {user.avatar_url ? (
-                      <img
-                        src={user.avatar_url}
-                        alt={user.full_name || user.email}
-                        style={{
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '12px',
-                          objectFit: 'cover',
-                          border: '1px solid var(--card-border, rgba(255,255,255,0.12))',
-                          flexShrink: 0,
-                        }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '12px',
-                          background: 'rgba(59, 130, 246, 0.12)',
-                          color: '#60a5fa',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 700,
-                          fontSize: '16px',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {(user.full_name || user.email).charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                  {/* Top Section: Avatar & Info (Left) | Role & Status Badge (Top-Right) */}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
+                    {/* Left: Avatar + Full Name + Email */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
+                      <UserCardAvatar user={user} isSelf={isSelf} />
 
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                        <span
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                          <span
+                            style={{
+                              fontWeight: 700,
+                              fontSize: '14px',
+                              color: 'var(--text-primary, #f8fafc)',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {user.full_name || 'Tanpa Nama'}
+                          </span>
+                          {isSelf && (
+                            <span
+                              style={{
+                                fontSize: '10px',
+                                fontWeight: 700,
+                                padding: '1px 5px',
+                                borderRadius: '5px',
+                                background: 'rgba(59, 130, 246, 0.2)',
+                                color: '#60a5fa',
+                              }}
+                            >
+                              Anda
+                            </span>
+                          )}
+                        </div>
+
+                        <div
                           style={{
-                            fontWeight: 700,
-                            fontSize: '14px',
-                            color: 'var(--text-primary, #f8fafc)',
-                            whiteSpace: 'nowrap',
+                            fontSize: '12px',
+                            color: 'var(--text-secondary, #94a3b8)',
+                            marginTop: '2px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
                           }}
+                          title={user.email}
                         >
-                          {user.full_name || 'Tanpa Nama'}
-                        </span>
-                        {isSelf && (
-                          <span
-                            style={{
-                              fontSize: '10.5px',
-                              fontWeight: 700,
-                              padding: '1px 6px',
-                              borderRadius: '6px',
-                              background: 'rgba(59, 130, 246, 0.2)',
-                              color: '#60a5fa',
-                            }}
-                          >
-                            Anda
-                          </span>
-                        )}
-                      </div>
-
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          fontSize: '12px',
-                          color: 'var(--text-secondary, #94a3b8)',
-                          marginTop: '2px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        <Mail size={12} style={{ flexShrink: 0 }} />
-                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {user.email}
-                        </span>
+                        </div>
                       </div>
+                    </div>
 
-                      <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <RoleBadge role={user.role || 'petugas'} />
-                        {!isActive && (
-                          <span
-                            style={{
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              padding: '2px 7px',
-                              borderRadius: '6px',
-                              background: 'rgba(239, 68, 68, 0.15)',
-                              color: '#f87171',
-                            }}
-                          >
-                            Nonaktif
-                          </span>
-                        )}
-                      </div>
+                    {/* Top-Right: Role Badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                      <RoleBadge role={user.role || 'petugas'} />
                     </div>
                   </div>
 
-                  {/* Notes / Sub-info */}
+                  {/* Notes / Sub-info without decorative icon */}
                   {user.notes && (
                     <div
                       style={{
@@ -754,17 +775,14 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                         border: '1px solid var(--card-border, rgba(255, 255, 255, 0.05))',
                         fontSize: '11.5px',
                         color: 'var(--text-secondary, #94a3b8)',
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '6px',
+                        lineHeight: 1.4,
                       }}
                     >
-                      <FileText size={13} style={{ marginTop: '2px', flexShrink: 0 }} />
                       <span>{user.notes}</span>
                     </div>
                   )}
 
-                  {/* Metadata Row: Last login & Creator */}
+                  {/* Metadata Row: Last login & Creator (Clock icon preserved) */}
                   <div
                     style={{
                       display: 'flex',
@@ -797,88 +815,109 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                     )}
                   </div>
 
-                  {/* Actions Section */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: '8px',
-                      paddingTop: '8px',
-                      borderTop: '1px solid var(--card-border, rgba(255, 255, 255, 0.05))',
-                    }}
-                  >
-                    {/* Toggle Active Status Button */}
-                    <button
-                      onClick={() => handleToggleStatus(user)}
-                      disabled={isSelf}
+                  {/* Actions Section (Only for non-superadmin users) */}
+                  {user.role !== 'superadmin' && (
+                    <div
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '5px',
-                        padding: '6px 10px',
-                        borderRadius: '8px',
-                        fontSize: '11.5px',
-                        fontWeight: 600,
-                        border: '1px solid',
-                        borderColor: isActive ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)',
-                        background: isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                        color: isActive ? '#34d399' : '#f87171',
-                        cursor: isSelf ? 'not-allowed' : 'pointer',
-                        opacity: isSelf ? 0.5 : 1,
+                        justifyContent: 'space-between',
+                        gap: '8px',
+                        paddingTop: '8px',
+                        borderTop: '1px solid var(--card-border, rgba(255, 255, 255, 0.05))',
                       }}
-                      title={isSelf ? 'Tidak bisa menonaktifkan akun sendiri' : 'Ubah status aktif/nonaktif'}
                     >
-                      {isActive ? <CheckCircle2 size={13} /> : <XCircle size={13} />}
-                      <span>{isActive ? 'Aktif' : 'Nonaktif'}</span>
-                    </button>
-
-                    {/* Role & Delete Actions */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      {currentUserRole === 'superadmin' && (
-                        <button
-                          onClick={() => handleEditRole(user)}
+                      {/* Interactive iOS-style Toggle Switch */}
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={isActive}
+                        onClick={() => handleToggleStatus(user)}
+                        disabled={isSelf}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          background: 'transparent',
+                          border: 'none',
+                          padding: '2px 0',
+                          cursor: isSelf ? 'not-allowed' : 'pointer',
+                          opacity: isSelf ? 0.45 : 1,
+                          outline: 'none',
+                        }}
+                        title={
+                          isSelf
+                            ? 'Tidak bisa menonaktifkan akun sendiri'
+                            : isActive
+                            ? 'Klik untuk menonaktifkan status akun'
+                            : 'Klik untuk mengaktifkan status akun'
+                        }
+                      >
+                        <div
                           style={{
+                            width: '36px',
+                            height: '20px',
+                            borderRadius: '9999px',
+                            background: isActive ? '#10b981' : 'rgba(255, 255, 255, 0.16)',
+                            border: isActive
+                              ? '1px solid rgba(16, 185, 129, 0.4)'
+                              : '1px solid var(--card-border, rgba(255, 255, 255, 0.15))',
+                            position: 'relative',
+                            transition: 'background-color 0.25s cubic-bezier(0.32, 0.72, 0, 1), border-color 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '4px',
-                            padding: '6px 10px',
-                            borderRadius: '8px',
-                            fontSize: '11.5px',
+                            boxSizing: 'border-box',
+                            padding: '2px',
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: '14px',
+                              height: '14px',
+                              borderRadius: '50%',
+                              background: '#ffffff',
+                              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
+                              transform: isActive ? 'translateX(16px)' : 'translateX(0px)',
+                              transition: 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+                            }}
+                          />
+                        </div>
+                        <span
+                          style={{
+                            fontSize: '12px',
                             fontWeight: 600,
-                            border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
-                            background: 'rgba(255, 255, 255, 0.05)',
-                            color: 'var(--text-primary, #f8fafc)',
-                            cursor: 'pointer',
+                            color: isActive ? '#34d399' : 'var(--text-secondary, #94a3b8)',
+                            userSelect: 'none',
                           }}
-                          title="Ubah Peran / Role"
                         >
-                          <Edit2 size={12} />
-                          <span>Ubah Peran</span>
-                        </button>
-                      )}
+                          {isActive ? 'Aktif' : 'Nonaktif'}
+                        </span>
+                      </button>
 
-                      {currentUserRole === 'superadmin' && !isSelf && (
-                        <button
-                          onClick={() => handleRevoke(user)}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            padding: '6px 8px',
-                            borderRadius: '8px',
-                            fontSize: '11.5px',
-                            border: '1px solid rgba(239, 68, 68, 0.25)',
-                            background: 'rgba(239, 68, 68, 0.08)',
-                            color: '#f87171',
-                            cursor: 'pointer',
-                          }}
-                          title="Cabut Akses Pengguna"
-                        >
-                          <Trash2 size={13} />
-                        </button>
-                      )}
+                      {/* Role Actions (Clean text button) */}
+                      <div>
+                        {currentUserRole === 'superadmin' && (
+                          <button
+                            onClick={() => handleEditRole(user)}
+                            style={{
+                              padding: '6px 12px',
+                              borderRadius: '8px',
+                              fontSize: '11.5px',
+                              fontWeight: 600,
+                              border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
+                              background: 'rgba(255, 255, 255, 0.05)',
+                              color: 'var(--text-primary, #f8fafc)',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                            title="Ubah Peran / Role"
+                          >
+                            Ubah Peran
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               );
             })}

@@ -5,6 +5,23 @@ Semua perubahan penting dalam proyek ini akan didokumentasikan di dalam file ini
 Format pencatatan berdasarkan [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 dan proyek ini mematuhi [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-08-25
+
+### Added
+- **Sistem Role-Based Access Control (RBAC) Supabase:** Menerapkan 3 tingkatan peran pengguna (*Superadmin*, *Admin*, *Petugas*) yang diamankan menggunakan Supabase Row-Level Security (RLS).
+- **Halaman Kelola Pengguna (User Management):** Antarmuka modern untuk Superadmin dan Admin guna mendaftarkan akun baru, mengelola status aktif/nonaktif dengan iOS-style Toggle Switch, mengubah peran akun, dan melihat riwayat login pengguna.
+- **Halaman Log Aktivitas & Jejak Audit (Audit Trail):** Pencatatan menyeluruh setiap aktivitas operasional (login, input baris bus, pembaruan status, sinkronisasi offline) dengan filter kategori (*Semua, Input Operasional, Pengguna, Sistem*), chip indikator field dinamis, dan modal inspeksi payload log.
+- **Sistem Theming SweetAlert2 Terpadu (Dark/Light Mode):** Penggantian dialog alert bawaan dengan `pdoSwal` yang mematuhi design token aplikasi, mendukung glassmorphism gelap dan tema terang, serta styling form modal (`.pdo-swal-input`, `.pdo-swal-select`).
+- **Komponen RoleBadge:** Indikator visual peran akun dengan kontras tinggi (Superadmin emas-ungu, Admin biru langit, Petugas hijau zamrud) dengan icon dan container badge pil terstruktur.
+
+### Changed
+- **Penyempurnaan Tampilan Tab Kategori Audit Log:** Menghilangkan badge counter angka pada tab kategori log agar antarmuka lebih bersih dan fokus.
+- **Peningkatan Keamanan Kartu Superadmin:** Tombol toggle nonaktif dan tombol ubah peran dihilangkan secara otomatis pada kartu Superadmin untuk mencegah penonaktifan atau perubahan peran yang tidak disengaja.
+- **Optimasi Render Foto Profil Google:** Menambahkan atribut `referrerPolicy="no-referrer"` dan fallback monogram inisial nama/email serta sinkronisasi otomatis Google User Info ke Supabase.
+
+### Fixed
+- **Soft-Delete User Revoke:** Memperbaiki sistem pencabutan akses pengguna agar hanya memperbarui kolom `is_active = FALSE` di database Supabase alih-alih menghapus baris secara permanen (*hard delete*).
+
 ## [1.6.1] - 2026-08-23
 
 ### Fixed

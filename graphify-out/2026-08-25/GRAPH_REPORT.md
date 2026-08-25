@@ -1,11 +1,11 @@
 # Graph Report - SS_PDO  (2026-08-25)
 
 ## Corpus Check
-- 215 files · ~272,271 words
+- 214 files · ~271,171 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2121 nodes · 2825 edges · 183 communities (164 shown, 19 thin omitted)
+- 2103 nodes · 2808 edges · 183 communities (164 shown, 19 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
@@ -17,7 +17,7 @@
 ## Community Hubs (Navigation)
 - server.cjs
 - design_system.py
-- RouteSelectorCard.tsx
+- routeService.ts
 - Test-Driven Development (TDD)
 - plugins
 - compilerOptions
@@ -103,7 +103,7 @@
 - Global Constraints
 - codex-tools.md
 - Pi Tool Mapping
-- routeService.ts
+- 1. THE THREE DIALS (Core Configuration)
 - Checklist for effective Skills
 - Core principles
 - File Organization
@@ -131,14 +131,14 @@
 - package.json
 - Dashboard.tsx
 - Design Document — User Activity & Audit Telemetry System
-- Keputusan Arsitektur & Teknikal
+- googleSheets.ts
 - react
 - App.tsx
 - utils/analytics.ts
 - File yang Harus Dibuat
 - resultStatus.ts
-- AuditLogPage.tsx
-- getStoredUserRole
+- DailyToaTrendCard.tsx
+- BusCard.tsx
 - Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)
 - Global Constraints
 - Appendix B - Canonical Sources (read these before reinventing)
@@ -162,11 +162,10 @@
 - Refactor 5 — Daftar Masalah SS_PDO
 - Refactor 5 — Prompt untuk AI Agent Code
 - Refactor 5 — Rekomendasi Solusi SS_PDO
-- Evaluation and iteration
+- Anti-patterns to avoid
 - Global Constraints
 - Daftar Masalah v5 — Proyek SS_PDO / SPUM
 - 2. Rincian Ketentuan & Spesifikasi
-- 7. DIAL DEFINITIONS (Technical Reference)
 - Global Constraints
 - 📋 Laporan Before-After — Batch 1: Penanganan Masalah Nyata di Layar Pengguna
 - 2. 🛡️ Aturan Emas Mutlak (Non-Negotiable Golden Rules)
@@ -188,7 +187,8 @@
 - 🌟 Ringkasan Lengkap Before-After — Inisiatif Refactor 6
 - Rekomendasi Solusi v5 — Proyek SS_PDO / SPUM
 - Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM
-- alertUtils.ts
+- BusData
+- core.ts
 - @types/gapi.client.sheets
 - 🛡️ Spesifikasi Desain: Manajemen Role Pengguna & Audit Trail (Superadmin, Admin, Petugas)
 - 2. Rincian Task Implementasi
@@ -212,14 +212,14 @@
 ## Surprising Connections (you probably didn't know these)
 - `Props` --references--> `BusData`  [EXTRACTED]
   src/components/AnalyticsDashboard.tsx → src/services/googleSheets/types.ts
+- `Props` --references--> `BusData`  [EXTRACTED]
+  src/components/UnitDetailModal.tsx → src/services/googleSheets/types.ts
+- `Props` --references--> `BusData`  [EXTRACTED]
+  src/components/UnitSummaryDashboard.tsx → src/services/googleSheets/types.ts
 - `App()` --calls--> `useUserActivityTracking()`  [EXTRACTED]
   src/App.tsx → src/hooks/useUserActivityTracking.ts
-- `App()` --calls--> `checkSignedInAsync()`  [EXTRACTED]
+- `App()` --calls--> `hasGoogleCreds()`  [EXTRACTED]
   src/App.tsx → src/services/googleSheets/auth.ts
-- `App()` --calls--> `showErrorAlert()`  [EXTRACTED]
-  src/App.tsx → src/utils/alertUtils.ts
-- `AccumulationSheet()` --calls--> `fetchRoutesWithSheets()`  [EXTRACTED]
-  src/components/AccumulationSheet.tsx → src/services/routeService.ts
 
 ## Import Cycles
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
@@ -245,9 +245,9 @@ Nodes (55): bootstrapPage(), brandMarkup(), broadcast(), browserLauncherForPlatf
 Cohesion: 0.05
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
-### Community 2 - "RouteSelectorCard.tsx"
-Cohesion: 0.18
-Nodes (19): FlatRouteSheet, flattenRoutes(), MONTH_NAMES_ID, Props, RouteSelectorCard, RouteSelectorCardComponent(), extractSheetId(), createRouteWithSheet() (+11 more)
+### Community 2 - "routeService.ts"
+Cohesion: 0.07
+Nodes (55): AccumulationSheet(), MONTH_NAMES_ID, Props, AuditLogPageProps, FIELD_LABEL_MAP, FormattedActionMeta, LogCategory, FlatRouteSheet (+47 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -326,8 +326,8 @@ Cohesion: 0.10
 Nodes (19): Bulletproofing Elements, Creation Log: Systematic Debugging Skill, Enhancement 1: TDD Reference, Extraction Decisions, Final Outcome, Initial Version, Iterations, Key Insight (+11 more)
 
 ### Community 30 - "Changelog"
-Cohesion: 0.08
-Nodes (24): [1.0.0] - Initial Release, [1.2.0] - (Earlier), [1.3.0] - 2026-07-14, [1.4.0] - 2026-07-14, [1.5.0] - 2026-07-26, [1.6.0] - 2026-08-02, [1.6.1] - 2026-08-23, [1.7.0] - 2026-08-25 (+16 more)
+Cohesion: 0.10
+Nodes (20): [1.0.0] - Initial Release, [1.2.0] - (Earlier), [1.3.0] - 2026-07-14, [1.4.0] - 2026-07-14, [1.5.0] - 2026-07-26, [1.6.0] - 2026-08-02, [1.6.1] - 2026-08-23, Added (+12 more)
 
 ### Community 31 - "Code Review Reception"
 Cohesion: 0.11
@@ -378,8 +378,8 @@ Cohesion: 0.17
 Nodes (11): Common Failures, Key Patterns, Overview, Rationalization Prevention, Red Flags - STOP, The Bottom Line, The Gate Function, The Iron Law (+3 more)
 
 ### Community 43 - "[Analysis Title]"
-Cohesion: 0.17
-Nodes (12): Advanced: Skills with executable code, [Analysis Title], Anti-patterns to avoid, Avoid offering too many options, Avoid Windows-style paths, Conditional workflow pattern, Examples pattern, Executive summary (+4 more)
+Cohesion: 0.15
+Nodes (13): Advanced: Skills with executable code, [Analysis Title], Build evaluations first, Conditional workflow pattern, Develop Skills iteratively with the agent, Evaluation and iteration, Examples pattern, Executive summary (+5 more)
 
 ### Community 44 - "Executing Plans"
 Cohesion: 0.18
@@ -414,8 +414,8 @@ Cohesion: 0.20
 Nodes (9): 1. Atomic Queue Operations & Collision Guard, 2. Robust Google API Auth Lifecycle, 3. Fallback Parsing `KM 1` & `KM 2`, 4. Visual UX Redesign: Subtitle Dinamis per-Tab Kategori, ADR 0001: Refactoring Antrean Sync Offline, Autentikasi, dan Dynamic UX Card, Keputusan Arsitektur & Teknikal, Konsekuensi, Konteks (+1 more)
 
 ### Community 52 - "⚡ 2. Fitur & Keputusan Teknis Utama yang Telah Selesai (Completed)"
-Cohesion: 0.15
-Nodes (12): 🏗️ 1. Gambaran Umum Proyek, ⚡ 2. Fitur & Keputusan Teknis Utama yang Telah Selesai (Completed), 📁 3. File Utama & Struktur Kode, 🎯 4. Cara Penggunaan Dokumen Ini dalam Sesi Baru, A. Autentikasi & Multi-Role Access Control (Supabase RBAC), B. Halaman Manajemen Pengguna (User Management), C. Log Aktivitas & Jejak Audit (Audit Trail), D. Sistem Dialog & Theming SweetAlert2 Terpadu (+4 more)
+Cohesion: 0.20
+Nodes (9): 🏗️ 1. Gambaran Umum Proyek, ⚡ 2. Fitur & Keputusan Teknis Utama yang Telah Selesai (Completed), 📁 3. File Utama & Struktur Kode, 🎯 4. Cara Penggunaan Dokumen Ini dalam Sesi Baru, A. Autentikasi & Sesi Pengguna (Persistent Auth Session), B. Form Pemilihan Rute & Tanggal (Morphing Selector Card - iOS Style), C. Kartu Analitik & Nilai Rangkuman Murni (Pure SSOT Summary), D. Kartu Status Kelengkapan Armada & Auto-Scroll Highlight (+1 more)
 
 ### Community 53 - "Core Architecture"
 Cohesion: 0.20
@@ -565,9 +565,9 @@ Nodes (3): Codex App Finishing, Environment Detection, Subagent dispatch require
 Cohesion: 0.50
 Nodes (3): Pi Tool Mapping, Subagents, Task lists
 
-### Community 90 - "routeService.ts"
-Cohesion: 0.20
-Nodes (18): FilterTab, UserManagementPage(), UserManagementPageProps, addUserProfile(), fetchAllUserProfiles(), logActivity(), revokeUserProfile(), localStorageMock (+10 more)
+### Community 90 - "1. THE THREE DIALS (Core Configuration)"
+Cohesion: 0.50
+Nodes (4): 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration)
 
 ### Community 91 - "Checklist for effective Skills"
 Cohesion: 0.50
@@ -638,28 +638,28 @@ Cohesion: 0.40
 Nodes (4): name, private, type, version
 
 ### Community 116 - "Dashboard.tsx"
-Cohesion: 0.18
-Nodes (18): AccumulationSheet(), MONTH_NAMES_ID, Props, BottomNav, BottomNavProps, BusList, Dashboard(), Props (+10 more)
+Cohesion: 0.16
+Nodes (28): Dashboard(), Props, ProfileMenuSheet(), Props, QueueModal(), reauthenticateSession(), getCrossPeriodAccumulation(), tryOfflineProfileFallback() (+20 more)
 
 ### Community 117 - "Design Document — User Activity & Audit Telemetry System"
 Cohesion: 0.17
 Nodes (11): 1. Overview & Objectives, 2. Database Schema Modifications, 3. Architecture & Service Layer Updates, 4. Instrumentation Points (Event Mapping), 5. Non-Blocking & Reliability Principles, 6. Verification Plan, A. Table `user_profiles` (Add Telemetry Columns), A. Telemetry & Heartbeat Helper (`src/services/routeService.ts`) (+3 more)
 
-### Community 118 - "Keputusan Arsitektur & Teknikal"
-Cohesion: 0.18
-Nodes (10): 1. Multi-Role RBAC & Row-Level Security (RLS), 2. Kebijakan Soft-Delete pada Akun Pengguna, 3. Log Aktivitas & Jejak Audit (Audit Trail), 4. Proteksi & UX Kartu Pengguna, 5. Sistem Modal Terpadu SweetAlert2 (`pdoSwal`), ADR 0002: Supabase RBAC, Soft-Delete User Policy, dan Audit Trail, Keputusan Arsitektur & Teknikal, Konsekuensi (+2 more)
+### Community 118 - "googleSheets.ts"
+Cohesion: 0.15
+Nodes (20): Props, renderStatusBadge(), UnitCard, UnitCardComponent(), Props, UnitDetailModal(), Props, UnitSummaryDashboard (+12 more)
 
 ### Community 119 - "react"
-Cohesion: 0.19
-Nodes (8): react, RoleBadge(), RoleBadgeProps, SwipeableContainer(), SwipeableContainerProps, TestComponent(), useUserActivityTracking(), sendUserHeartbeat()
+Cohesion: 0.17
+Nodes (7): react, BottomNav, BottomNavProps, RoleBadge(), RoleBadgeProps, SwipeableContainer(), SwipeableContainerProps
 
 ### Community 120 - "App.tsx"
 Cohesion: 0.22
-Nodes (14): App(), LegalModals(), LegalModalsProps, LegalModalType, LoginScreen(), Props, getGoogleCreds(), hasGoogleCreds() (+6 more)
+Nodes (12): App(), AuditLogPage(), LegalModals(), LegalModalsProps, LegalModalType, LoginScreen(), Props, checkSignedInAsync() (+4 more)
 
 ### Community 121 - "utils/analytics.ts"
-Cohesion: 0.07
-Nodes (45): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, DailyToaTrendCard, DailyToaTrendCardComponent(), parseSelectedDay() (+37 more)
+Cohesion: 0.12
+Nodes (19): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, DailyToaTrendCard, KPICard, Props (+11 more)
 
 ### Community 122 - "File yang Harus Dibuat"
 Cohesion: 0.20
@@ -669,13 +669,13 @@ Nodes (9): 1. `src/utils/sheetIdentity.ts`, 2. `src/utils/resultStatus.ts`, 3. `
 Cohesion: 0.39
 Nodes (6): cacheResult(), DataResult, DataSourceStatus, errorResult(), isStale(), liveResult()
 
-### Community 124 - "AuditLogPage.tsx"
-Cohesion: 0.33
-Nodes (6): AuditLogPage(), AuditLogPageProps, FIELD_LABEL_MAP, FormattedActionMeta, LogCategory, fetchActivityLogs()
+### Community 124 - "DailyToaTrendCard.tsx"
+Cohesion: 0.24
+Nodes (8): DailyToaTrendCardComponent(), parseSelectedDay(), Props, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton(), extractMonthYearLabel()
 
-### Community 125 - "getStoredUserRole"
-Cohesion: 0.60
-Nodes (3): getStoredUserRole(), UserRole, VALID_ROLES
+### Community 125 - "BusCard.tsx"
+Cohesion: 0.19
+Nodes (22): BusCard, BusCardComponent(), BusListComponent(), showBulkCopyKmModal(), showBulkTripModal(), escapeHtml(), getSatsetMode(), MAX_SHIFT_DISTANCE_KM (+14 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
 Cohesion: 0.20
@@ -699,7 +699,7 @@ Nodes (10): 10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know), Anim
 
 ### Community 131 - "tasteskill: Anti-Slop Frontend Skill"
 Cohesion: 0.20
-Nodes (10): 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration), 2.A When to reach for a real design system (use official packages), 2.B When the brief is an aesthetic, not a system (+2 more)
+Nodes (10): 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 2.A When to reach for a real design system (use official packages), 2.B When the brief is an aesthetic, not a system, 2. BRIEF → DESIGN SYSTEM MAP, 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10) (+2 more)
 
 ### Community 132 - "Daftar Masalah v4 — Proyek SS_PDO / SPUM"
 Cohesion: 0.20
@@ -769,9 +769,9 @@ Nodes (16): Acceptance criteria, Aturan kerja, Batasan, Format output yang dimin
 Cohesion: 0.12
 Nodes (15): Prinsip umum, Refactor 5 — Rekomendasi Solusi SS_PDO, SOL-01 — Validasi auth harus sinkron dan final, SOL-02 — Normalisasi identitas sheet/rute, SOL-03 — Perbaiki fallback akumulasi multi-hari, SOL-04 — Parser URL harus lebih toleran dan eksplisit, SOL-05 — Cache fallback harus transparan ke user, SOL-06 — Jangan samakan error total dengan nol (+7 more)
 
-### Community 149 - "Evaluation and iteration"
-Cohesion: 0.50
-Nodes (4): Build evaluations first, Develop Skills iteratively with the agent, Evaluation and iteration, Observe how agents navigate Skills
+### Community 149 - "Anti-patterns to avoid"
+Cohesion: 0.67
+Nodes (3): Anti-patterns to avoid, Avoid offering too many options, Avoid Windows-style paths
 
 ### Community 150 - "Global Constraints"
 Cohesion: 0.29
@@ -784,10 +784,6 @@ Nodes (11): BUG-48 — Stored XSS: interpolasi HTML tanpa escaping di modal inpu
 ### Community 152 - "2. Rincian Ketentuan & Spesifikasi"
 Cohesion: 0.22
 Nodes (8): 1. Latar Belakang & Tujuan, 2. Rincian Ketentuan & Spesifikasi, 3. Rencana Pengujian (Testing Strategy), A. Aturan Validasi & Format Kode Rute, B. Validasi & Sanitasi Link Google Sheets, C. Deteksi Nama Trayek & Penentuan Periode, D. Alur UX & Transisi Data, Spesifikasi Desain: Pemformatan & Validasi Pendaftaran Rute Baru
-
-### Community 153 - "7. DIAL DEFINITIONS (Technical Reference)"
-Cohesion: 0.50
-Nodes (4): 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10), VISUAL_DENSITY (Level 1-10)
 
 ### Community 154 - "Global Constraints"
 Cohesion: 0.29
@@ -873,9 +869,13 @@ Nodes (10): Kelompok Perbaikan, 🔴 KRITIS, 🟡 MINOR, Rekomendasi Solusi v5 �
 Cohesion: 0.25
 Nodes (7): 1. Prioritas Mutlak Tertinggi: BUG-48 (Keamanan — XSS), 2. Urutan Prioritas Setelah Bagian 1, 3. Prinsip Kerja Tambahan Khusus Babak Ini, 4. Batasan Teknis, 5. Kapan Harus Berhenti dan Bertanya ke Manusia, 6. Pelaporan Progres, Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM
 
-### Community 176 - "alertUtils.ts"
-Cohesion: 0.06
-Nodes (94): BusCard, BusCardComponent(), Props, BusListComponent(), Props, FormattedNoteText(), ProfileMenuSheet(), Props (+86 more)
+### Community 175 - "BusData"
+Cohesion: 0.18
+Nodes (18): Props, BusList, Props, QueueModalProps, TestHookComponent(), detectCollision(), readQueueFromStorage(), SyncItem (+10 more)
+
+### Community 176 - "core.ts"
+Cohesion: 0.12
+Nodes (36): FormattedNoteText(), getAccumulatedBusData(), getMonthlyToaTrend(), inspectSpreadsheetHeader(), monthlyToaTrendCache, ensureValidToken(), getGoogleCreds(), hasGoogleCreds() (+28 more)
 
 ### Community 178 - "🛡️ Spesifikasi Desain: Manajemen Role Pengguna & Audit Trail (Superadmin, Admin, Petugas)"
 Cohesion: 0.13
@@ -886,24 +886,24 @@ Cohesion: 0.20
 Nodes (9): 1. Global Constraints & Quality Gates, 2. Rincian Task Implementasi, 📋 Implementation Plan: Manajemen Role Pengguna (Superadmin, Admin, Petugas) & Audit Trail, Task 1: Pembaruan TypeScript Types (`src/types/supabase.ts`), Task 2: Service Layer & Audit Log Functions (`src/services/routeService.ts`), Task 3: Komponen Presentasional `RoleBadge.tsx` & Integrasi `ProfileMenuSheet.tsx`, Task 4: Komponen Sheet `UserManagementSheet.tsx`, Task 5: Komponen Sheet `AuditLogSheet.tsx` (+1 more)
 
 ## Knowledge Gaps
-- **1242 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1237 more)
+- **1228 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1223 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `RouteSelectorCard.tsx`, `plugins`, `alertUtils.ts`, `Dashboard.tsx`, `App.tsx`, `utils/analytics.ts`, `routeService.ts`, `AuditLogPage.tsx`?**
+- **Why does `react` connect `react` to `routeService.ts`, `plugins`, `BusData`, `Dashboard.tsx`, `googleSheets.ts`, `App.tsx`, `utils/analytics.ts`, `DailyToaTrendCard.tsx`, `BusCard.tsx`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._
-- **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `7. DIAL DEFINITIONS (Technical Reference)`?**
+- **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `1. THE THREE DIALS (Core Configuration)`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Why does `Writing Skills` connect `Writing Skills` to `Skill Discovery Optimization (SDO)`, `Testing Skills With Subagents`, `Bulletproofing Skills Against Rationalization`, `Anti-Patterns`, `Testing All Skill Types`, `RED-GREEN-REFACTOR for Skills`, `File Organization`, `Skill Types`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _1242 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1228 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05451127819548872 - nodes in this community are weakly interconnected._
-- **Should `Test-Driven Development (TDD)` be split into smaller, more focused modules?**
-  _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+- **Should `routeService.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.07042253521126761 - nodes in this community are weakly interconnected._

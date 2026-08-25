@@ -12,9 +12,10 @@ Keunggulan utama aplikasi ini adalah dukungannya terhadap mode **Offline-First**
 - **Offline-First & Atomic Queueing:** Data disimpan secara atomik per-item di `localStorage`. Antrean tidak akan macet (*no head-of-line blocking*) jika ada 1 error non-auth, dengan fitur retry backoff bertahap (2s -> 5s -> 15s -> 60s).
 - **Auto-save Drafts Cerdas:** Menyimpan input yang sedang diketik secara lokal via `useDebounce`. Memiliki *dirty tracking* sehingga draft kosong tidak pernah menimpa data valid di server.
 - **Optimistic Concurrency Control (Pencegahan Tabrakan Data):** Pengecekan *pre-flight* sebelum menyimpan. Jika data di Google Sheets telah diubah oleh petugas lain, aplikasi akan menampilkan **Tabel Perbandingan Data Server vs Input Anda** dengan opsi *Gunakan Data Server* atau *Tetap Timpa (Force Save)*.
+- **Role-Based Access Control (RBAC) & Manajemen Pengguna:** Manajemen hak akses bertingkat (*Superadmin*, *Admin*, *Petugas*) berbasis Supabase dengan kebijakan keamanan Row-Level Security (RLS), pelacakan sesi login permanen, dan *soft-delete protection*.
+- **Log Aktivitas & Jejak Audit (Audit Trail):** Pencatatan terperinci untuk seluruh operasi bus, penambahan/perubahan user, dan sinkronisasi antrean offline dengan filter kategori interaktif.
+- **Sistem Theming Gelap & Terang Terpadu:** Penggunaan token CSS variabel adaptif untuk seluruh antarmuka, grafik analitik, kartu pengguna, hingga dialog modal SweetAlert2 (`pdoSwal`).
 - **Dynamic Live Subtitle Card per-Tab Kategori:** Header card (saat tertutup) menampilkan nilai live dari server sesuai tab kategori yang aktif. Jika cell kosong, menampilkan indikator **`Belum Terisi`** berwarna merah soft (`#f87171`).
-- **Proaktif Token Refresh:** Timer proaktif yang secara otomatis memperbarui token akses Google OAuth 5 menit sebelum kedaluwarsa tanpa mengganggu alur kerja pengguna.
-- **Visibilitas Modal Antrean & Validation Warning:** Indikator badge antrean dengan modal terperinci untuk mengelola item antrean yang tertunda, gagal, atau berkonflik. Menampilkan warning banner jika ada kolom header sheet yang tidak terdeteksi.
 
 ---
 
@@ -23,8 +24,10 @@ Keunggulan utama aplikasi ini adalah dukungannya terhadap mode **Offline-First**
 - **Framework:** React 19 + TypeScript (`strict: true`)
 - **Build Tool:** Vite 8
 - **PWA:** `vite-plugin-pwa`
+- **Database & Auth Layer:** Supabase Postgres + Row-Level Security (RLS) + Google GIS OAuth 2.0
 - **Google API:** `gapi-script` (`@types/gapi.client.sheets`) + Google Identity Services (GIS)
-- **UI & Icons:** CSS Variables (Sistem Tema Light/Dark), `lucide-react`, `@aejkatappaja/phantom-ui` (Skeleton UI)
+- **UI & Modal System:** Pure Vanilla CSS Tokens (Light/Dark Mode), `lucide-react`, `sweetalert2` (Themed), `@aejkatappaja/phantom-ui`
+- **Testing & Quality Gates:** Vitest, TypeScript Strict Mode, Graphify AST Knowledge Graph
 - **Package Manager:** `pnpm`
 
 ---
@@ -47,11 +50,16 @@ Pastikan Anda memiliki [Node.js](https://nodejs.org) (Node LTS disarankan) dan `
 
 ## 🔑 Konfigurasi Lingkungan (Environment Variables)
 
-Buat file `.env` di *root* proyek (atau copy dari `.env.example`) dan isi kredensial Google API:
+Buat file `.env` di *root* proyek (atau copy dari `.env.example`) dan isi kredensial Google API serta Supabase:
 
 ```env
+# Google Sheets API & OAuth
 VITE_GAPI_CLIENT_ID=GANTI_DENGAN_GOOGLE_CLIENT_ID_ANDA
 VITE_GAPI_API_KEY=GANTI_DENGAN_GOOGLE_API_KEY_ANDA
+
+# Supabase Database & RBAC
+VITE_SUPABASE_URL=GANTI_DENGAN_SUPABASE_PROJECT_URL_ANDA
+VITE_SUPABASE_ANON_KEY=GANTI_DENGAN_SUPABASE_ANON_KEY_ANDA
 ```
 
 > **Catatan:** Pastikan OAuth App di Google Cloud Console Anda sudah memasukkan URL aplikasi (misal `http://localhost:5173`) pada kolom **Authorized JavaScript origins**.
