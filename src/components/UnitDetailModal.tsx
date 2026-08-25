@@ -28,12 +28,14 @@ export function UnitDetailModal({
   accRange,
   onClose,
 }: Props) {
-  const [touchStartY, setTouchStartY] = useState(0);
-  const [dragY, setDragY] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const touchStartYRef = useRef(0);
+  const touchStartTimeRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const currentDragYRef = useRef(0);
 
   const dateBadge = useMemo(() => {
     return getFormattedDateBadge(selectedTab, activeMonth, activeYear, accRange);
@@ -70,46 +72,64 @@ export function UnitDetailModal({
   const handleTouchStart = (e: React.TouchEvent) => {
     e.stopPropagation();
     if (contentRef.current && contentRef.current.scrollTop <= 0) {
-      setTouchStartY(e.touches[0].clientY);
-      setIsDragging(true);
+      touchStartYRef.current = e.touches[0].clientY;
+      touchStartTimeRef.current = Date.now();
+      isDraggingRef.current = true;
+      currentDragYRef.current = 0;
     }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     e.stopPropagation();
-    if (!isDragging || touchStartY === 0) return;
+    if (!isDraggingRef.current || touchStartYRef.current === 0) return;
     const currentY = e.touches[0].clientY;
-    const diff = currentY - touchStartY;
-    if (diff > 0) {
-      setDragY(diff);
+    const diff = currentY - touchStartYRef.current;
+    if (diff > 0 && contentRef.current) {
+      currentDragYRef.current = diff;
+      contentRef.current.style.transition = 'none';
+      contentRef.current.style.transform = `translateY(${diff}px) scale(${Math.max(0.95, 1 - diff / 2000)})`;
+      if (overlayRef.current) {
+        overlayRef.current.style.transition = 'none';
+        const opacity = Math.max(0.2, 0.65 - diff / 500);
+        overlayRef.current.style.backgroundColor = `rgba(0, 0, 0, ${opacity})`;
+      }
     }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     e.stopPropagation();
-    if (dragY > 90) {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    const diff = currentDragYRef.current;
+    const duration = Date.now() - touchStartTimeRef.current;
+    const velocity = duration > 0 ? diff / duration : 0;
+    touchStartYRef.current = 0;
+
+    if (diff > 60 || (diff > 25 && velocity > 0.35)) {
+      if (contentRef.current) {
+        contentRef.current.style.transition = 'transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
+        contentRef.current.style.transform = 'translateY(100%) scale(0.95)';
+      }
+      if (overlayRef.current) {
+        overlayRef.current.style.transition = 'opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
+        overlayRef.current.style.opacity = '0';
+      }
       handleDismiss();
     } else {
-      setDragY(0);
+      if (contentRef.current) {
+        contentRef.current.style.transition = 'transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
+        contentRef.current.style.transform = 'translateY(0px) scale(1)';
+      }
+      if (overlayRef.current) {
+        overlayRef.current.style.transition = 'background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
+        overlayRef.current.style.backgroundColor = 'rgba(0, 0, 0, 0.65)';
+      }
     }
-    setTouchStartY(0);
-    setIsDragging(false);
   };
-
-  const opacityValue = isClosing
-    ? 0
-    : isMounted
-    ? Math.max(0.15, 0.65 - dragY / 400)
-    : 0;
-
-  const modalTransform = isClosing
-    ? 'translateY(100%) scale(0.95)'
-    : !isMounted
-    ? 'translateY(100%) scale(0.95)'
-    : `translateY(${dragY}px) scale(${Math.max(0.92, 1 - dragY / 1500)})`;
 
   return createPortal(
     <div
+      ref={overlayRef}
       className="modal-overlay unit-detail-modal-overlay"
       style={{
         position: 'fixed',
@@ -121,7 +141,7 @@ export function UnitDetailModal({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-end',
-        backgroundColor: `rgba(0, 0, 0, ${opacityValue})`,
+        backgroundColor: 'rgba(0, 0, 0, 0.65)',
         backdropFilter: 'blur(6px)',
         WebkitBackdropFilter: 'blur(6px)',
         opacity: isClosing ? 0 : isMounted ? 1 : 0,
@@ -152,8 +172,8 @@ export function UnitDetailModal({
           border: '1px solid var(--card-border)',
           borderBottom: 'none',
           boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.4)',
-          transform: modalTransform,
-          transition: isDragging ? 'none' : 'transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
+          transform: isClosing || !isMounted ? 'translateY(100%) scale(0.95)' : 'translateY(0px) scale(1)',
+          transition: 'transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
         }}

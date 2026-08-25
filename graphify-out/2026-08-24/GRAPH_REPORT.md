@@ -1,7 +1,7 @@
 # Graph Report - SS_PDO  (2026-08-24)
 
 ## Corpus Check
-- 209 files · ~267,183 words
+- 209 files · ~268,026 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -226,11 +226,11 @@
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
-- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
-- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 
 ## Communities (181 total, 18 thin omitted)
@@ -245,7 +245,7 @@ Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctua
 
 ### Community 2 - "routeService.ts"
 Cohesion: 0.08
-Nodes (53): AccumulationSheet(), MONTH_NAMES_ID, Props, AuditLogPage(), AuditLogPageProps, LogCategory, FlatRouteSheet, flattenRoutes() (+45 more)
+Nodes (53): AccumulationSheet(), MONTH_NAMES_ID, Props, AuditLogSheet(), AuditLogSheetProps, LogCategory, FlatRouteSheet, flattenRoutes() (+45 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
