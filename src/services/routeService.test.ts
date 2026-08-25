@@ -359,7 +359,9 @@ describe('routeService', () => {
 
   it('updateUserProfileRole updates role and logs USER_ROLE_CHANGED', async () => {
     const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({ error: null }),
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockResolvedValue({ data: [{ email: 'target@pusm.id' }], error: null }),
+      }),
     });
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     (supabase.from as any).mockImplementation((table: string) => {
@@ -379,7 +381,9 @@ describe('routeService', () => {
 
   it('toggleUserProfileStatus updates is_active and logs USER_STATUS_CHANGED', async () => {
     const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({ error: null }),
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockResolvedValue({ data: [{ email: 'target@pusm.id' }], error: null }),
+      }),
     });
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     (supabase.from as any).mockImplementation((table: string) => {
@@ -399,7 +403,9 @@ describe('routeService', () => {
 
   it('revokeUserProfile deletes user and logs USER_REVOKED', async () => {
     const mockDelete = vi.fn().mockReturnValue({
-      eq: vi.fn().mockResolvedValue({ error: null }),
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockResolvedValue({ data: [{ email: 'baduser@pusm.id' }], error: null }),
+      }),
     });
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     (supabase.from as any).mockImplementation((table: string) => {
@@ -427,5 +433,68 @@ describe('routeService', () => {
     expect(supabase.from).toHaveBeenCalledWith('activity_logs');
     expect(logs).toHaveLength(1);
     expect(logs[0].action).toBe('USER_ADDED');
+  });
+
+  // BUG-64: Error kini fail-loud, bukan array kosong diam-diam
+  it('fetchActivityLogs throws when supabase returns an error', async () => {
+    const mockLimit = vi.fn().mockResolvedValue({
+      data: null,
+      error: { message: 'permission denied' },
+    });
+    const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
+    const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
+
+    (supabase.from as any).mockReturnValue({ select: mockSelect });
+
+    await expect(fetchActivityLogs()).rejects.toThrow('permission denied');
+  });
+
+  // BUG-63: Silent RLS filtering (sukses dengan 0 baris) harus dilaporkan gagal
+  it('toggleUserProfileStatus reports failure when no rows were updated', async () => {
+    const mockUpdate = vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockResolvedValue({ data: [], error: null }),
+      }),
+    });
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'user_profiles') return { update: mockUpdate };
+      return {};
+    });
+
+    const result = await toggleUserProfileStatus('ghost@pusm.id', false, 'admin@pusm.id');
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Tidak ada baris yang berubah');
+  });
+
+  it('revokeUserProfile reports failure when no rows were deleted', async () => {
+    const mockDelete = vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockResolvedValue({ data: [], error: null }),
+      }),
+    });
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'user_profiles') return { delete: mockDelete };
+      return {};
+    });
+
+    const result = await revokeUserProfile('ghost@pusm.id', 'superadmin@pusm.id');
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Tidak ada baris yang terhapus');
+  });
+
+  it('updateUserProfileRole reports failure when no rows were updated', async () => {
+    const mockUpdate = vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        select: vi.fn().mockResolvedValue({ data: [], error: null }),
+      }),
+    });
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'user_profiles') return { update: mockUpdate };
+      return {};
+    });
+
+    const result = await updateUserProfileRole('ghost@pusm.id', 'admin', 'superadmin@pusm.id');
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Tidak ada baris yang berubah');
   });
 });

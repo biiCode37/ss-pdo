@@ -47,8 +47,15 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
     try {
       const data = await fetchActivityLogs({ limit: 150 });
       setLogs(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error('[AuditLog] Gagal memuat audit logs:', err);
+      // BUG-64: Tampilkan error — sebelumnya hanya console.error sehingga
+      // halaman terlihat "kosong" padahal sebenarnya gagal dimuat.
+      showErrorAlert(
+        'Gagal Memuat Log',
+        err?.message ||
+          'Tidak dapat memuat riwayat aktivitas dari server. Periksa koneksi internet Anda.',
+      );
     } finally {
       setIsLoading(false);
     }

@@ -614,16 +614,26 @@ export async function updateUserProfileRole(
 ): Promise<{ success: boolean; message?: string }> {
   if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('user_profiles')
       .update({
         role: newRole,
         updated_at: new Date().toISOString(),
       })
-      .eq('email', targetEmail);
+      .eq('email', targetEmail)
+      .select('email');
 
     if (error) {
       return { success: false, message: `Gagal mengubah peran: ${error.message}` };
+    }
+
+    // BUG-63: RLS bisa memfilter operasi TANPA error (PostgREST sukses
+    // dengan 0 baris). Tanpa cek ini, UI menampilkan sukses palsu.
+    if (!data || data.length === 0) {
+      return {
+        success: false,
+        message: `Tidak ada baris yang berubah untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun tidak ditemukan.`,
+      };
     }
 
     await logActivity({
@@ -651,16 +661,25 @@ export async function toggleUserProfileStatus(
 ): Promise<{ success: boolean; message?: string }> {
   if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('user_profiles')
       .update({
         is_active: isActive,
         updated_at: new Date().toISOString(),
       })
-      .eq('email', targetEmail);
+      .eq('email', targetEmail)
+      .select('email');
 
     if (error) {
       return { success: false, message: `Gagal mengubah status akun: ${error.message}` };
+    }
+
+    // BUG-63: Deteksi zero-row — blokir silent RLS tidak boleh tampil sukses
+    if (!data || data.length === 0) {
+      return {
+        success: false,
+        message: `Tidak ada baris yang berubah untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun tidak ditemukan.`,
+      };
     }
 
     await logActivity({
@@ -687,13 +706,23 @@ export async function revokeUserProfile(
 ): Promise<{ success: boolean; message?: string }> {
   if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('user_profiles')
       .delete()
-      .eq('email', targetEmail);
+      .eq('email', targetEmail)
+      .select('email');
 
     if (error) {
       return { success: false, message: `Gagal menghapus pengguna: ${error.message}` };
+    }
+
+    // BUG-63: Deteksi zero-row — sebelumnya DELETE yang diblokir policy
+    // (tanpa error, 0 baris) tetap ditandai sukses & tercatat di audit.
+    if (!data || data.length === 0) {
+      return {
+        success: false,
+        message: `Tidak ada baris yang terhapus untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun sudah tidak ada.`,
+      };
     }
 
     await logActivity({
@@ -711,7 +740,9 @@ export async function revokeUserProfile(
 }
 
 /**
- * Mengambil log aktivitas untuk audit
+ * Mengambil log aktivitas untuk audit.
+ * BUG-64: Fail-loud — error sebelumnya ditelan jadi array kosong sehingga
+ * halaman audit menampilkan "0 riwayat" tanpa tanda ada masalah.
  */
 export async function fetchActivityLogs(options?: {
   limit?: number;
@@ -719,30 +750,25 @@ export async function fetchActivityLogs(options?: {
   actionPrefix?: string;
 }): Promise<ActivityLog[]> {
   if (!isSupabaseConfigured) return [];
-  try {
-    let query = supabase
-      .from('activity_logs')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(options?.limit || 100);
+  let query = supabase
+    .from('activity_logs')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(options?.limit || 100);
 
-    if (options?.userEmail) {
-      query = query.eq('user_email', options.userEmail);
-    }
-    if (options?.actionPrefix) {
-      query = query.ilike('action', `${options.actionPrefix}%`);
-    }
-
-    const { data, error } = await query;
-    if (error) {
-      console.error('[RouteService] Error fetching activity logs:', error);
-      return [];
-    }
-    return (data as ActivityLog[]) || [];
-  } catch (err) {
-    console.error('[RouteService] Failed to fetch activity logs:', err);
-    return [];
+  if (options?.userEmail) {
+    query = query.eq('user_email', options.userEmail);
   }
+  if (options?.actionPrefix) {
+    query = query.ilike('action', `${options.actionPrefix}%`);
+  }
+
+  const { data, error } = await query;
+  if (error) {
+    console.error('[RouteService] Error fetching activity logs:', error);
+    throw new Error(error.message || 'Gagal memuat log aktivitas.');
+  }
+  return (data as ActivityLog[]) || [];
 }
 
 
