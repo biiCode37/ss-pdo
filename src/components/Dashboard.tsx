@@ -24,6 +24,7 @@ import { QueueModal } from "./QueueModal";
 import { useOfflineSync } from "../hooks/useOfflineSync";
 import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
+import { getStoredUserRole } from "../utils/roleStorage";
 import {
   showDeleteQueueConfirm,
   showAuthExpiredAlert,
@@ -121,8 +122,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     return { activeMonth: month, activeYear: year };
   }, [sheetUrl]);
 
-  // BUG-19: AbortController and Request ID tracking for race condition protection
-  const abortControllerRef = useRef<AbortController | null>(null);
+  // BUG-19: Request ID tracking for race condition protection
+  // (AbortController dihapus — signal tidak pernah di-wire ke gapi client,
+  //  proteksi race aktual sudah ditangani requestIdRef di bawah)
   const requestIdRef = useRef<number>(0);
   const headerBlockRef = useRef<HTMLDivElement>(null);
 
@@ -260,6 +262,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       autoLoadedRef.current = true;
       handleLoadData(false);
     }
+    // Guard ref mencegah double-run; dependensi lain sengaja stabil
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sheetUrl]);
 
   const handleLoadData = async (isRefresh = false, targetTab?: string) => {
@@ -277,13 +281,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       return;
     }
 
-    // BUG-19: Abort previous request & increment request ID to ignore stale responses
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
+    // BUG-19: Increment request ID to ignore stale responses
     requestIdRef.current += 1;
     const currentRequestId = requestIdRef.current;
 
@@ -424,7 +422,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       <UserManagementPage
         onBack={() => setCurrentView('dashboard')}
         currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
-        currentUserRole={(localStorage.getItem("PDO_USER_ROLE") as any) || "petugas"}
+        currentUserRole={getStoredUserRole()}
         isDarkMode={theme === "dark"}
       />
     );
@@ -434,7 +432,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     return (
       <AuditLogPage
         onBack={() => setCurrentView('dashboard')}
-        currentUserRole={(localStorage.getItem("PDO_USER_ROLE") as any) || "petugas"}
+        currentUserRole={getStoredUserRole()}
         isDarkMode={theme === "dark"}
       />
     );

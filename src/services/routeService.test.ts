@@ -204,6 +204,54 @@ describe('routeService', () => {
     expect(result.profile?.full_name).toBe('Petugas Offline');
   });
 
+  // BUG-45: Error jaringan dari Supabase datang sebagai {data:null,error}
+  // (bukan exception) — fallback cache harus tetap terjangkau.
+  it('verifyUserProfile falls back to cached active profile when supabase resolves with non-PGRST116 error', async () => {
+    const cachedProfile = {
+      id: 6,
+      email: 'weaksignal@pusm.id',
+      full_name: 'Petugas Sinyal Lemah',
+      role: 'petugas',
+      is_active: true,
+    };
+
+    localStorage.setItem(
+      'PDO_LAST_VERIFIED_PROFILE_weaksignal@pusm.id',
+      JSON.stringify({
+        profile: cachedProfile,
+        verifiedAt: new Date().toISOString(),
+      })
+    );
+
+    (supabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: null,
+        error: { code: 'XX402', message: 'Failed to fetch' },
+      }),
+    });
+
+    const result = await verifyUserProfile('weaksignal@pusm.id');
+    expect(result.isAllowed).toBe(true);
+    expect(result.profile?.full_name).toBe('Petugas Sinyal Lemah');
+  });
+
+  it('addUserProfile rejects invalid email format without hitting database', async () => {
+    const mockInsert = vi.fn();
+    (supabase.from as any).mockReturnValue({ insert: mockInsert });
+
+    const result = await addUserProfile({
+      email: 'bukan-email-valid',
+      full_name: 'Tanpa Email Valid',
+      role: 'petugas',
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('email tidak valid');
+    expect(mockInsert).not.toHaveBeenCalled();
+  });
+
   it('logActivity invokes supabase insert with activity payload', async () => {
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     (supabase.from as any).mockReturnValue({

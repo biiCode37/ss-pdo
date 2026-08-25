@@ -420,7 +420,25 @@ export const checkSignedInAsync = async (): Promise<AuthResult> => {
 
     // Token expired — coba refresh
     await ensureValidToken();
-    return { authenticated: true, reason: tokenObj.expiresAt ? 'needs_reauth' : undefined };
+
+    // BUG-46: Re-read token SETELAH refresh. Sebelumnya selalu return
+    // 'needs_reauth' walau silent refresh berhasil & token baru tersimpan,
+    // sehingga banner "sesi kedaluwarsa" muncul palsu setiap cold-start.
+    try {
+      const refreshedStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
+      if (refreshedStr) {
+        const fresh = JSON.parse(refreshedStr);
+        if (fresh.token && fresh.expiresAt && fresh.expiresAt > Date.now()) {
+          if (gapi.client) {
+            gapi.client.setToken({ access_token: fresh.token });
+          }
+          startTokenRefreshTimer(fresh.expiresAt - Date.now());
+          return { authenticated: true };
+        }
+      }
+    } catch (_e) { /* fallthrough */ }
+
+    return { authenticated: true, reason: 'needs_reauth' };
   } catch (_e) {
     return { authenticated: true, reason: 'needs_reauth' };
   }

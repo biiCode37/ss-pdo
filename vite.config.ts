@@ -13,6 +13,29 @@ export default defineConfig({
       "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
     },
   },
+  build: {
+    // PERF: Pisahkan chunk vendor agar cache browser lebih efektif & parse
+    // awal lebih ringan (chunk tunggal >500kB memicu warning & TTI lambat
+    // pada jaringan lapangan yang lambat).
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes("node_modules")) {
+            if (id.includes("@supabase")) return "vendor-supabase";
+            if (id.includes("sweetalert2")) return "vendor-swal";
+            if (
+              id.includes("/react/") ||
+              id.includes("/react-dom/") ||
+              id.includes("scheduler")
+            ) {
+              return "vendor-react";
+            }
+          }
+          return undefined;
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({

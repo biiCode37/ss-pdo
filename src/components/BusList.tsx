@@ -290,7 +290,7 @@ function BusListComponent({
     }
 
     return result;
-  }, [data, searchQuery, showOnlyUnfinished, activeCategory, isBusFilled]);
+  }, [data, searchQuery, showOnlyUnfinished, isBusFilled]);
 
   // Handler Auto-Next Bus ketika Mode Satset aktif
   const handleSaveAndNext = useCallback(

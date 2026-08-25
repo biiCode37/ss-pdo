@@ -7,6 +7,7 @@ import {
   validateRouteCode,
   validateGoogleSheetsUrl,
 } from '../utils/routeValidation';
+import { getFormattedDateBadge } from '../utils/analytics';
 import type { Route, RouteSheet } from '../types/supabase';
 
 const MONTH_NAMES_ID = [
@@ -114,26 +115,40 @@ function RouteSelectorCardComponent({
     }
 
     const timer = setTimeout(async () => {
+      // BUG-48: Token pembatal — hasil inspeksi stale (user sudah mengganti
+      // link) tidak boleh menimpa status/URL terkini.
+      const checkedUrl = newRouteUrl;
+      const checkedId = validation.spreadsheetId!;
       setIsCheckingLink(true);
       setCheckStatus('checking');
       setCheckMessage('Memeriksa akses Google Sheets...');
 
-      const result = await inspectSpreadsheetHeader(validation.spreadsheetId!);
-      setIsCheckingLink(false);
+      try {
+        const result = await inspectSpreadsheetHeader(checkedId);
 
-      if (result.success) {
-        setCheckStatus('valid');
-        setDetectedRouteName(result.routeName || null);
-        setCheckMessage(
-          result.routeName
-            ? `Terhubung: ${result.routeName}`
-            : 'Spreadsheet terhubung & siap digunakan',
-        );
-      } else {
+        if (newRouteUrl !== checkedUrl) return; // Stale — abaikan
+
+        setIsCheckingLink(false);
+        if (result.success) {
+          setCheckStatus('valid');
+          setDetectedRouteName(result.routeName || null);
+          setCheckMessage(
+            result.routeName
+              ? `Terhubung: ${result.routeName}`
+              : 'Spreadsheet terhubung & siap digunakan',
+          );
+        } else {
+          setCheckStatus('invalid');
+          setCheckMessage(
+            result.message || 'Tidak dapat mengakses spreadsheet.',
+          );
+          setDetectedRouteName(null);
+        }
+      } catch (_err) {
+        if (newRouteUrl !== checkedUrl) return;
+        setIsCheckingLink(false);
         setCheckStatus('invalid');
-        setCheckMessage(
-          result.message || 'Tidak dapat mengakses spreadsheet.',
-        );
+        setCheckMessage('Tidak dapat mengakses spreadsheet.');
         setDetectedRouteName(null);
       }
     }, 600);
@@ -359,6 +374,13 @@ function RouteSelectorCardComponent({
       return;
     }
 
+    // BUG-49: Validasi tahun — input number bisa kosong (Number('') = 0)
+    // atau di luar rentang wajar; min/max HTML hanya membatasi spinner.
+    if (!Number.isInteger(newYear) || newYear < 2020 || newYear > 2099) {
+      setFormError('Tahun tidak valid. Isi tahun antara 2020 - 2099.');
+      return;
+    }
+
     setIsSaving(true);
     setFormError(null);
 
@@ -405,19 +427,10 @@ function RouteSelectorCardComponent({
         <div className="morph-pill-badge" style={{ flexShrink: 0, marginLeft: '8px' }}>
           <Calendar size={13} style={{ flexShrink: 0 }} />
           <span>
+            {/* BUG-50: Gunakan formatter kanonik agar rentang lintas bulan/
+                tahun tampil lengkap (mis. 01/08/25 - 31/09/25), bukan ambigu */}
             {selectedTab === 'AKUMULASI'
-              ? (() => {
-                  const sDay = accRange?.startDay ?? 1;
-                  const eDay = accRange?.endDay ?? new Date().getDate();
-                  if (
-                    accRange?.startMonth &&
-                    accRange?.endMonth &&
-                    (accRange.startMonth !== accRange.endMonth || accRange.startYear !== accRange.endYear)
-                  ) {
-                    return `Akumulasi (${sDay}/${accRange.startMonth}-${eDay}/${accRange.endMonth})`;
-                  }
-                  return `Akumulasi (${sDay}-${eDay})`;
-                })()
+              ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth, selectedYear, accRange)})`
               : `Tgl ${currentTabName || selectedTab}`}
           </span>
         </div>
@@ -627,7 +640,10 @@ function RouteSelectorCardComponent({
                     className="input-field"
                     placeholder="Tahun"
                     value={newYear}
-                    onChange={(e) => setNewYear(Number(e.target.value))}
+                    onChange={(e) => {
+                      const parsed = parseInt(e.target.value, 10);
+                      setNewYear(isNaN(parsed) ? new Date().getFullYear() : parsed);
+                    }}
                     style={{ width: '90px' }}
                     min={2020}
                     max={2099}

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import type { ActivityLog } from '../types/supabase';
 import { fetchActivityLogs } from '../services/routeService';
+import { showErrorAlert } from '../utils/alertUtils';
 
 interface AuditLogPageProps {
   onBack: () => void;
@@ -26,11 +27,20 @@ type LogCategory = 'all' | 'users' | 'bus_input' | 'system';
 
 export const AuditLogPage: React.FC<AuditLogPageProps> = ({
   onBack,
+  currentUserRole = 'petugas',
 }) => {
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<LogCategory>('all');
+
+  // BUG-56: Guard RBAC internal (defense-in-depth) — halaman audit hanya
+  // untuk admin/superadmin; jangan bergantung pada gating parent saja.
+  useEffect(() => {
+    if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
+      showErrorAlert('Akses Terbatas', 'Halaman ini hanya dapat diakses oleh Admin atau Superadmin.').then(() => onBack());
+    }
+  }, [currentUserRole, onBack]);
 
   const loadLogs = async () => {
     setIsLoading(true);
@@ -112,7 +122,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
 
     return {
       title: action,
-      description: typeof details === 'string' ? details : JSON.stringify(details),
+      description: JSON.stringify(details),
       icon: History,
       color: '#94a3b8',
       bg: 'rgba(148, 163, 184, 0.15)',
@@ -120,8 +130,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
   };
 
   const filteredLogs = useMemo(() => {
-    return logs.filter((log) => {
-      const act = log.action || '';
+    return logs.filter((log) => {      const act = log.action || '';
       if (activeCategory === 'users' && !act.startsWith('USER_')) return false;
       if (activeCategory === 'bus_input' && !act.includes('BUS') && !act.includes('SAVE') && !act.includes('INPUT')) return false;
       if (activeCategory === 'system' && (act.startsWith('USER_') || act.includes('BUS'))) return false;
@@ -139,6 +148,9 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
     });
   }, [logs, activeCategory, searchQuery]);
 
+  // Cegah render konten sensitif untuk role tanpa akses (pending redirect)
+  const isAuthorized = currentUserRole === 'superadmin' || currentUserRole === 'admin';
+
   return (
     <div
       style={{
@@ -150,6 +162,8 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
         flexDirection: 'column',
       }}
     >
+      {!isAuthorized ? null : (
+      <>
       {/* Sticky Top Navigation Bar */}
       <header
         style={{
@@ -524,6 +538,8 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
           </div>
         )}
       </main>
+      </>
+      )}
     </div>
   );
 };

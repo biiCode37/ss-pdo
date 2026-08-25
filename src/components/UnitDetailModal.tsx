@@ -30,6 +30,7 @@ export function UnitDetailModal({
 }: Props) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const isClosingRef = useRef(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const touchStartYRef = useRef(0);
@@ -47,27 +48,33 @@ export function UnitDetailModal({
 
   useEffect(() => {
     // Trigger entrance morphing animation after mount
-    requestAnimationFrame(() => setIsMounted(true));
+    const frameId = requestAnimationFrame(() => setIsMounted(true));
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleDismiss();
+      if (e.key === 'Escape') handleDismissRef.current();
     };
     window.addEventListener('keydown', handleKeyDown);
-    
+
     // Lock body scrolling when modal is active
     document.body.style.overflow = 'hidden';
 
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
     };
   }, []);
 
   const handleDismiss = () => {
-    if (isClosing) return;
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
     setIsClosing(true);
     setTimeout(onClose, 220);
   };
+
+  // BUG-58: Ref agar listener Escape memanggil handleDismiss terbaru
+  const handleDismissRef = useRef(handleDismiss);
+  handleDismissRef.current = handleDismiss;
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.stopPropagation();

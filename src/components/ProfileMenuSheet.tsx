@@ -24,6 +24,7 @@ import {
   showErrorAlert,
 } from "../utils/alertUtils";
 import { formatUserError } from "../utils/errorFormatter";
+import { getStoredUserRole } from "../utils/roleStorage";
 import { RoleBadge } from "./RoleBadge";
 
 interface Props {
@@ -45,7 +46,7 @@ interface Props {
 export function ProfileMenuSheet({
   isOpen,
   onClose,
-  onOpenAccumulation: _onOpenAccumulation,
+  onOpenAccumulation,
   onOpenUserManagement,
   onOpenAuditLogs,
   isDarkMode,
@@ -59,6 +60,9 @@ export function ProfileMenuSheet({
 }: Props) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  // BUG-57: Avatar gagal load dilacak via state agar fallback bisa pulih
+  // saat URL baru tersedia (sebelumnya display:none imperatif permanen).
+  const [avatarFailed, setAvatarFailed] = useState(false);
   const [userProfile, setUserProfile] = useState<{
     full_name: string;
     email: string;
@@ -68,7 +72,7 @@ export function ProfileMenuSheet({
     full_name: localStorage.getItem("PDO_USER_NAME") || "Petugas Operasional",
     email: localStorage.getItem("PDO_USER_EMAIL") || "pdo.utara@transjakarta.co.id",
     avatar_url: localStorage.getItem("PDO_USER_AVATAR") || undefined,
-    role: (localStorage.getItem("PDO_USER_ROLE") as any) || "petugas",
+    role: getStoredUserRole(),
   });
   const contentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -82,6 +86,7 @@ export function ProfileMenuSheet({
     if (!isOpen) {
       setIsMounted(false);
       setIsClosing(false);
+      isClosingRef.current = false;
       return;
     }
 
@@ -97,7 +102,7 @@ export function ProfileMenuSheet({
         full_name: cachedName || "Petugas Operasional",
         email: cachedEmail || "pdo.utara@transjakarta.co.id",
         avatar_url: cachedAvatar || undefined,
-        role: (localStorage.getItem("PDO_USER_ROLE") as any) || "petugas",
+        role: getStoredUserRole(),
       });
     }
 
@@ -153,7 +158,7 @@ export function ProfileMenuSheet({
     const frameId = requestAnimationFrame(() => setIsMounted(true));
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleDismiss();
+      if (e.key === "Escape") handleDismissRef.current();
     };
     window.addEventListener("keydown", handleKeyDown);
 
@@ -167,10 +172,17 @@ export function ProfileMenuSheet({
   }, [isOpen]);
 
   const handleDismiss = () => {
-    if (isClosing) return;
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
     setIsClosing(true);
     setTimeout(onClose, 220);
   };
+
+  // BUG-58: Ref agar listener Escape memanggil handleDismiss terbaru
+  // (closure lama selalu melihat isClosing=false → dismiss ganda)
+  const isClosingRef = useRef(false);
+  const handleDismissRef = useRef(handleDismiss);
+  handleDismissRef.current = handleDismiss;
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.stopPropagation();
@@ -354,16 +366,12 @@ export function ProfileMenuSheet({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
-            {userProfile.avatar_url ? (
+            {userProfile.avatar_url && !avatarFailed ? (
               <img
                 src={userProfile.avatar_url}
                 alt={userProfile.full_name}
                 referrerPolicy="no-referrer"
-                onError={(e) => {
-                  (e.currentTarget as HTMLElement).style.display = "none";
-                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                  if (fallback) fallback.style.display = "flex";
-                }}
+                onError={() => setAvatarFailed(true)}
                 style={{
                   width: "42px",
                   height: "42px",
@@ -373,24 +381,25 @@ export function ProfileMenuSheet({
                   boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
                 }}
               />
-            ) : null}
-            <div
-              style={{
-                width: "42px",
-                height: "42px",
-                borderRadius: "50%",
-                background:
-                  "linear-gradient(135deg, #3ECF8E, #24B47E)",
-                display: userProfile.avatar_url ? "none" : "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#061a10",
-                flexShrink: 0,
-                boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
-              }}
-            >
-              <User size={22} />
-            </div>
+            ) : (
+              <div
+                style={{
+                  width: "42px",
+                  height: "42px",
+                  borderRadius: "50%",
+                  background:
+                    "linear-gradient(135deg, #3ECF8E, #24B47E)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#061a10",
+                  flexShrink: 0,
+                  boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
+                }}
+              >
+                <User size={22} />
+              </div>
+            )}
             <div style={{ minWidth: 0, overflow: "hidden" }}>
               <div
                 style={{
@@ -557,10 +566,16 @@ export function ProfileMenuSheet({
             FITUR & UTILITAS
           </span>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {/* Rekap Akumulasi (Disabled - Coming Soon) */}
+            {/* Rekap Akumulasi Lintas Periode */}
+            {/* BUG-59: Fitur sebelumnya hard-coded disabled "Coming Soon"
+                padahal AccumulationSheet sudah lengkap & handler tersambung
+                dari Dashboard — aktifkan wiring yang benar. */}
             <button
               type="button"
-              disabled={true}
+              onClick={() => {
+                handleDismiss();
+                onOpenAccumulation?.();
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -569,35 +584,19 @@ export function ProfileMenuSheet({
                 borderRadius: "12px",
                 background: "var(--bg-secondary, rgba(255,255,255,0.03))",
                 border: "1px solid var(--card-border)",
-                color: "var(--text-secondary)",
+                color: "var(--text-primary)",
                 fontWeight: 500,
                 fontSize: "13.5px",
-                cursor: "not-allowed",
-                opacity: 0.65,
+                cursor: "pointer",
               }}
-              title="Fitur sedang dalam penyesuaian (Coming Soon)"
             >
               <div
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
-                <Layers size={18} style={{ color: "var(--text-secondary)" }} />
+                <Layers size={18} style={{ color: "var(--accent-color)" }} />
                 <span>Rekap Akumulasi Lintas Periode</span>
               </div>
-              <span
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  padding: "2px 7px",
-                  borderRadius: "6px",
-                  background: "rgba(245, 158, 11, 0.15)",
-                  color: "var(--warning-color, #f59e0b)",
-                  border: "1px solid rgba(245, 158, 11, 0.3)",
-                  letterSpacing: "0.4px",
-                  textTransform: "uppercase",
-                }}
-              >
-                Coming Soon
-              </span>
+              <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
             </button>
 
             {/* Rapikan & Format Spreadsheet */}

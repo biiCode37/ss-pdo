@@ -8,7 +8,6 @@ import {
   validateRouteCode,
   validateGoogleSheetsUrl,
 } from '../utils/routeValidation';
-import { isNetworkError } from '../utils/errorClassifier';
 
 const CACHE_KEY_ROUTES = 'PDO_CACHE_ROUTES';
 
@@ -61,10 +60,27 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       .eq('email', email)
       .single();
 
+    // BUG-45: Bedakan "belum terdaftar" (PGRST116 = no rows) dari error
+    // jaringan/server. Sebelumnya SEMUA error dianggap belum terdaftar,
+    // sehingga fallback cache offline di catch() tidak pernah terjangkau —
+    // petugas yang sudah terdaftar tetap ditolak saat sinyal lemah.
     if (error || !data) {
+      const errorCode = (error as any)?.code;
+      if (!errorCode || errorCode === 'PGRST116') {
+        // PGRST116: benar-benar tidak ada baris untuk email ini
+        return {
+          isAllowed: false,
+          message: `Akun Google Anda (${email}) belum terdaftar dalam sistem PUSM. Silakan hubungi Admin untuk pendaftaran akses.`,
+        };
+      }
+
+      // Error lain (jaringan/server) → coba fallback cache offline
+      const fallback = tryOfflineProfileFallback(normalizedEmail);
+      if (fallback) return fallback;
+
       return {
         isAllowed: false,
-        message: `Akun Google Anda (${email}) belum terdaftar dalam sistem PUSM. Silakan hubungi Admin untuk pendaftaran akses.`,
+        message: 'Tidak dapat memverifikasi akun Anda saat ini karena gangguan koneksi. Pastikan perangkat Anda terhubung ke internet.',
       };
     }
 
@@ -99,31 +115,36 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
     };
   } catch (err) {
     console.warn('[RouteService] Error verifying user profile, checking offline cache fallback:', err);
-    
+
     // Fail-graceful: Cek cache profil lokal jika terjadi gangguan koneksi/offline
-    if (isNetworkError(err)) {
-      try {
-        const cachedRaw = localStorage.getItem(cacheKey);
-        if (cachedRaw) {
-          const { profile, verifiedAt } = JSON.parse(cachedRaw);
-          const daysSince = (Date.now() - new Date(verifiedAt).getTime()) / 86400000;
-          // Valid jika masih dalam window 30 hari dan status aktif
-          if (daysSince <= 30 && profile && profile.is_active) {
-            console.log('[RouteService] User profile verified via offline cache fallback.');
-            return {
-              isAllowed: true,
-              profile: profile as UserProfile,
-            };
-          }
-        }
-      } catch (_cacheErr) {}
-    }
+    const fallback = tryOfflineProfileFallback(normalizedEmail);
+    if (fallback) return fallback;
 
     return {
       isAllowed: false,
       message: 'Tidak dapat memverifikasi akun Anda saat ini karena gangguan koneksi. Pastikan perangkat Anda terhubung ke internet untuk verifikasi pertama.',
     };
   }
+}
+
+/** Fallback verifikasi via cache profil lokal (window 30 hari + status aktif) */
+function tryOfflineProfileFallback(normalizedEmail: string): { isAllowed: true; profile: UserProfile } | null {
+  if (!normalizedEmail) return null;
+  try {
+    const cachedRaw = localStorage.getItem(`PDO_LAST_VERIFIED_PROFILE_${normalizedEmail}`);
+    if (!cachedRaw) return null;
+    const { profile, verifiedAt } = JSON.parse(cachedRaw);
+    const daysSince = (Date.now() - new Date(verifiedAt).getTime()) / 86400000;
+    // Valid jika masih dalam window 30 hari dan status aktif
+    if (daysSince <= 30 && profile && profile.is_active) {
+      console.log('[RouteService] User profile verified via offline cache fallback.');
+      return {
+        isAllowed: true,
+        profile: profile as UserProfile,
+      };
+    }
+  } catch (_cacheErr) {}
+  return null;
 }
 
 export async function upsertUserProfile(profile: Partial<UserProfile> & { email: string; full_name: string }): Promise<void> {
@@ -542,6 +563,10 @@ export async function addUserProfile(params: {
   }
   try {
     const cleanEmail = params.email.trim().toLowerCase();
+    // Validasi format email ketat di service layer (UI hanya includes('@'))
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
+      return { success: false, message: 'Format email tidak valid.' };
+    }
     const { error } = await supabase.from('user_profiles').insert([
       {
         email: cleanEmail,

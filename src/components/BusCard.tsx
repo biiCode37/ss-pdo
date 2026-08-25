@@ -12,6 +12,7 @@ import {
   showWarningToast,
   showBusInputModal,
   showQueueConflictDialog,
+  escapeHtml,
 } from "../utils/alertUtils";
 import { getSatsetMode } from "../utils/modals/busInputModal";
 import {
@@ -86,7 +87,8 @@ function BusCardComponent({
     // 1. Optimistic Update Instan di UI (0 ms latency)
     const mergedData = { ...formData, ...updates };
     setFormData(mergedData);
-    setSaveStatus("success");
+    // BUG-62: Jangan tandai 'success' sebelum tersimpan — biarkan netral
+    // hingga hasil aktual (sukses / queued / error) diketahui.
     if (onUpdateBus) {
       onUpdateBus(mergedData);
     }
@@ -155,7 +157,7 @@ function BusCardComponent({
           originalSnapshot,
         });
         setSaveStatus("queued");
-        showInfoToast(`Unit ${bus.unit} disimpan ke antrean offline`);
+        showInfoToast(`Unit ${escapeHtml(bus.unit)} disimpan ke antrean offline`);
       } else {
         setSaveStatus("idle");
         const formattedErr = formatUserError(

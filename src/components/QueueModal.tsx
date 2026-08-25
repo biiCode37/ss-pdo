@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { RotateCw, Trash2 } from "lucide-react";
 import type { SyncItem } from "../hooks/useOfflineSync";
 import { showInfoToast, showWarningToast } from "../utils/alertUtils";
@@ -23,11 +24,31 @@ export function QueueModal({
   onForceConflict,
   onProcessQueue,
 }: QueueModalProps) {
+  // BUG-60: Escape-to-close + body scroll lock + ARIA dialog
+  // (sebelumnya satu-satunya modal tanpa keyboard exit & scroll lock)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <div
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Antrean Sinkronisasi"
       style={{
         position: "fixed",
         inset: 0,

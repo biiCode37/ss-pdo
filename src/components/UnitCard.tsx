@@ -16,7 +16,8 @@ import type { UnitSummaryItem, UnitShiftStatus } from "../utils/unitAnalytics";
 
 interface Props {
   item: UnitSummaryItem;
-  onClick: () => void;
+  /** Callback stabil berparameter unit — memo(UnitCard) jadi efektif */
+  onSelectUnit: (unit: string) => void;
 }
 
 function renderStatusBadge(status: UnitShiftStatus) {
@@ -125,11 +126,24 @@ function renderStatusBadge(status: UnitShiftStatus) {
   }
 }
 
-function UnitCardComponent({ item, onClick }: Props) {
+function UnitCardComponent({ item, onSelectUnit }: Props) {
+  // BUG-61: Kartu interaktif kini dapat diakses keyboard & screen reader
+  const handleClick = () => onSelectUnit(item.unit);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onSelectUnit(item.unit);
+    }
+  };
+
   return (
     <div
       id={`unit-card-${slugifyUnitId(item.unit)}`}
-      onClick={onClick}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`Lihat detail unit ${item.unit}`}
       className="bus-card glass"
       style={{
         padding: "12px 14px",

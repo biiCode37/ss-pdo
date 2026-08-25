@@ -46,21 +46,30 @@ export function AccumulationSheet({
   const defaultMonth = currentMonth || today.getMonth() + 1;
   const defaultYear = currentYear || today.getFullYear();
 
+  /** Jumlah hari valid untuk bulan/tahun tertentu (BUG-51: cegah 31 Feb) */
+  const getDaysInMonth = (month: number, year: number): number =>
+    new Date(year, month, 0).getDate();
+
   const [startMonth, setStartMonth] = useState(defaultMonth);
   const [startYear, setStartYear] = useState(defaultYear);
   const [startDay, setStartDay] = useState(1);
 
   const [endMonth, setEndMonth] = useState(defaultMonth);
   const [endYear, setEndYear] = useState(defaultYear);
-  const [endDay, setEndDay] = useState(
-    defaultMonth === today.getMonth() + 1 ? today.getDate() : 31,
-  );
+  const [endDay, setEndDay] = useState(() => {
+    if (defaultMonth === today.getMonth() + 1 && defaultYear === today.getFullYear()) {
+      return today.getDate();
+    }
+    return getDaysInMonth(defaultMonth, defaultYear);
+  });
 
   const [availableMonths, setAvailableMonths] = useState<number[]>([]);
   const [availableYears, setAvailableYears] = useState<number[]>([]);
+  const [rangeError, setRangeError] = useState<string | null>(null);
 
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const isClosingRef = useRef(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const touchStartYRef = useRef(0);
@@ -72,14 +81,26 @@ export function AccumulationSheet({
     if (!isOpen) {
       setIsMounted(false);
       setIsClosing(false);
+      isClosingRef.current = false;
       return;
     }
 
+    // BUG-52: Reset penuh state tanggal setiap kali sheet dibuka — sebelumnya
+    // startDay/endDay mempertahankan nilai sesi terakhir (persist parsial).
+    setStartDay(1);
+    if (currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear()) {
+      setEndDay(today.getDate());
+    } else {
+      setEndDay(getDaysInMonth(defaultMonth, defaultYear));
+    }
+    setRangeError(null);
+
     // Trigger entrance morphing animation after mount
-    requestAnimationFrame(() => setIsMounted(true));
+    // BUG-53: simpan frame id & batalkan di cleanup (konsisten ProfileMenuSheet)
+    const frameId = requestAnimationFrame(() => setIsMounted(true));
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleDismiss();
+      if (e.key === "Escape") handleDismissRef.current();
     };
     window.addEventListener("keydown", handleKeyDown);
 
@@ -87,13 +108,15 @@ export function AccumulationSheet({
     document.body.style.overflow = "hidden";
 
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
-  }, [isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, currentMonth, currentYear]);
 
   useEffect(() => {
-    const loadDbPeriods = async () => {
+    const loadDbPeriods = async (candidateStartMonth: number, candidateStartYear: number) => {
       try {
         let cachedRoutes = getRoutesFromCache();
         if (cachedRoutes.length === 0) {
@@ -118,23 +141,23 @@ export function AccumulationSheet({
           setAvailableMonths(mSet);
           setAvailableYears(ySet);
 
-          if (mSet.length > 0) {
-            if (!mSet.includes(startMonth)) {
-              setStartMonth(mSet[0]);
-              setEndMonth(mSet[mSet.length - 1]);
-            }
+          // BUG-54: Bandingkan terhadap kandidat eksplisit (nilai reset),
+          // bukan state closure yang basi sebelum reset sinkron efektif.
+          if (mSet.length > 0 && !mSet.includes(candidateStartMonth)) {
+            setStartMonth(mSet[0]);
+            setEndMonth(mSet[mSet.length - 1]);
           }
-          if (ySet.length > 0) {
-            if (!ySet.includes(startYear)) {
-              setStartYear(ySet[0]);
-              setEndYear(ySet[0]);
-            }
+          if (ySet.length > 0 && !ySet.includes(candidateStartYear)) {
+            setStartYear(ySet[0]);
+            setEndYear(ySet[0]);
           }
         }
       } catch (_e) {}
     };
 
     if (isOpen) {
+      const baseMonth = currentMonth || defaultMonth;
+      const baseYear = currentYear || defaultYear;
       if (currentMonth) {
         setStartMonth(currentMonth);
         setEndMonth(currentMonth);
@@ -143,15 +166,20 @@ export function AccumulationSheet({
         setStartYear(currentYear);
         setEndYear(currentYear);
       }
-      loadDbPeriods();
+      loadDbPeriods(baseMonth, baseYear);
     }
   }, [isOpen, currentMonth, currentYear]);
 
   const handleDismiss = () => {
-    if (isClosing) return;
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
     setIsClosing(true);
     setTimeout(onClose, 220);
   };
+
+  // Ref agar listener Escape selalu memanggil handleDismiss terbaru
+  const handleDismissRef = useRef(handleDismiss);
+  handleDismissRef.current = handleDismiss;
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.stopPropagation();
@@ -212,13 +240,36 @@ export function AccumulationSheet({
   };
 
   const handleApply = () => {
-    onApply(startDay, startMonth, startYear, endDay, endMonth, endYear);
+    // BUG-51: Validasi rentang — tolak rentang terbalik & tanggal mustahil
+    const startNum = startYear * 10000 + startMonth * 100 + Math.min(startDay, getDaysInMonth(startMonth, startYear));
+    const endNum = endYear * 10000 + endMonth * 100 + Math.min(endDay, getDaysInMonth(endMonth, endYear));
+    if (startNum > endNum) {
+      setRangeError("Periode 'Dari' harus lebih awal atau sama dengan periode 'Sampai'.");
+      return;
+    }
+
+    setRangeError(null);
+    onApply(
+      Math.min(startDay, getDaysInMonth(startMonth, startYear)),
+      startMonth,
+      startYear,
+      Math.min(endDay, getDaysInMonth(endMonth, endYear)),
+      endMonth,
+      endYear,
+    );
     handleDismiss();
   };
 
   if (!isOpen) return null;
 
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  // BUG-51: Daftar hari mengikuti jumlah hari riil bulan terpilih
+  // (sebelumnya selalu 1-31 sehingga "31 Februari" mungkin dipilih).
+  const days = Array.from({ length: getDaysInMonth(startMonth, startYear) }, (_, i) => i + 1);
+  const endDays = Array.from({ length: getDaysInMonth(endMonth, endYear) }, (_, i) => i + 1);
+
+  // Clamp nilai hari bila melebihi jumlah hari bulan aktif
+  const safeStartDay = Math.min(startDay, days.length);
+  const safeEndDay = Math.min(endDay, endDays.length);
 
   const renderMonthOptions = (selectedVal: number) => {
     const list = availableMonths.length > 0 ? availableMonths : [selectedVal];
@@ -392,7 +443,7 @@ export function AccumulationSheet({
               </label>
               <select
                 className="input-field"
-                value={startDay}
+                value={safeStartDay}
                 onChange={(e) => setStartDay(Number(e.target.value))}
                 style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
               >
@@ -479,11 +530,11 @@ export function AccumulationSheet({
               </label>
               <select
                 className="input-field"
-                value={endDay}
+                value={safeEndDay}
                 onChange={(e) => setEndDay(Number(e.target.value))}
                 style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
               >
-                {days.map((d) => (
+                {endDays.map((d) => (
                   <option key={d} value={d}>
                     Tgl {d}
                   </option>
@@ -551,11 +602,30 @@ export function AccumulationSheet({
         >
           <Layers size={14} style={{ flexShrink: 0 }} />
           <span>
-            Rentang: {startDay} {MONTH_NAMES_ID[startMonth] || startMonth}{" "}
-            {startYear} — {endDay} {MONTH_NAMES_ID[endMonth] || endMonth}{" "}
+            Rentang: {safeStartDay} {MONTH_NAMES_ID[startMonth] || startMonth}{" "}
+            {startYear} — {safeEndDay} {MONTH_NAMES_ID[endMonth] || endMonth}{" "}
             {endYear}
           </span>
         </div>
+
+        {/* Error Validasi Rentang */}
+        {rangeError && (
+          <div
+            role="alert"
+            style={{
+              background: "rgba(239, 68, 68, 0.12)",
+              border: "1px solid rgba(239, 68, 68, 0.35)",
+              borderRadius: "10px",
+              padding: "10px 14px",
+              marginBottom: "16px",
+              fontSize: "12.5px",
+              color: "var(--danger-color, #ef4444)",
+              fontWeight: 600,
+            }}
+          >
+            ⚠️ {rangeError}
+          </div>
+        )}
 
         {/* Tombol Apply */}
         <button

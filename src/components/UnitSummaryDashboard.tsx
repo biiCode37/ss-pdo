@@ -1,4 +1,4 @@
-import { useState, useMemo, memo } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import { Search, Bus } from "lucide-react";
 import type { BusData } from "../services/googleSheets";
 import { extractUnitList } from "../utils/unitAnalytics";
@@ -37,6 +37,11 @@ function UnitSummaryDashboardComponent({
     return unitList.filter((u) => u.unit.toLowerCase().includes(q));
   }, [unitList, searchQuery]);
 
+  // BUG-61: Stabilkan callback agar memo(UnitCard) benar-benar efektif
+  const handleSelectUnit = useCallback((unit: string) => {
+    setSelectedUnit(unit);
+  }, []);
+
   return (
     <div style={{ marginTop: "0px" }}>
       {/* Header & Search */}
@@ -68,7 +73,7 @@ function UnitSummaryDashboardComponent({
             <UnitCard
               key={item.unit}
               item={item}
-              onClick={() => setSelectedUnit(item.unit)}
+              onSelectUnit={handleSelectUnit}
             />
           ))}
         </div>

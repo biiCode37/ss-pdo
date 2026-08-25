@@ -111,6 +111,13 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
 
   // Handle Add User Modal
   const handleOpenAddUserModal = async () => {
+    // BUG-55: Guard RBAC internal — sebelumnya hanya mengandalkan gating di
+    // parent; role localStorage rusak/stale bisa membuka UI tambah user.
+    if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
+      showErrorAlert('Akses Terbatas', 'Hanya Admin atau Superadmin yang berwenang menambahkan pengguna.');
+      return;
+    }
+
     const isSuper = currentUserRole === 'superadmin';
     const roleOptionsHtml = isSuper
       ? `
@@ -158,7 +165,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
         const role = (document.getElementById('swal-role') as HTMLSelectElement)?.value as any;
         const notes = (document.getElementById('swal-notes') as HTMLInputElement)?.value?.trim();
 
-        if (!email || !email.includes('@')) {
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
           Swal.showValidationMessage('Masukkan format email yang valid!');
           return false;
         }
@@ -177,7 +184,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       });
 
       if (res.success) {
-        showSuccessToast(`Pengguna ${formValues.email} berhasil ditambahkan!`);
+        showSuccessToast(`Pengguna ${escapeHtml(formValues.email)} berhasil ditambahkan!`);
         loadUsers();
       } else {
         showErrorAlert('Gagal Menambah Pengguna', res.message || 'Terjadi kesalahan sistem.');
@@ -217,7 +224,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     if (newRole && newRole !== user.role) {
       const res = await updateUserProfileRole(user.email, newRole as any, currentUserEmail);
       if (res.success) {
-        showSuccessToast(`Peran ${user.email} diubah menjadi ${newRole}.`);
+        showSuccessToast(`Peran ${escapeHtml(user.email)} diubah menjadi ${escapeHtml(newRole)}.`);
         setUsers((prev) =>
           prev.map((u) => (u.email === user.email ? { ...u, role: newRole as any } : u))
         );
@@ -229,6 +236,12 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
 
   // Handle Toggle Active Status
   const handleToggleStatus = async (user: UserProfile) => {
+    // BUG-55: Guard RBAC internal untuk toggle status
+    if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
+      showErrorAlert('Akses Terbatas', 'Hanya Admin atau Superadmin yang berwenang mengubah status akun.');
+      return;
+    }
+
     const isSelf = user.email.toLowerCase() === currentUserEmail.toLowerCase();
     if (isSelf) {
       showErrorAlert('Aksi Ditolak', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
@@ -257,7 +270,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     if (isConfirmed) {
       const res = await toggleUserProfileStatus(user.email, nextStatus, currentUserEmail);
       if (res.success) {
-        showSuccessToast(`Akun ${user.email} berhasil di${nextStatus ? 'aktifkan' : 'nonaktifkan'}.`);
+        showSuccessToast(`Akun ${escapeHtml(user.email)} berhasil di${nextStatus ? 'aktifkan' : 'nonaktifkan'}.`);
         setUsers((prev) =>
           prev.map((u) => (u.email === user.email ? { ...u, is_active: nextStatus } : u))
         );
@@ -299,7 +312,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     if (isConfirmed) {
       const res = await revokeUserProfile(user.email, currentUserEmail);
       if (res.success) {
-        showSuccessToast(`Akses ${user.email} telah dicabut.`);
+        showSuccessToast(`Akses ${escapeHtml(user.email)} telah dicabut.`);
         setUsers((prev) => prev.filter((u) => u.email !== user.email));
       } else {
         showErrorAlert('Gagal', res.message || 'Gagal mencabut akses.');

@@ -5,7 +5,6 @@ import { normalizeFieldValue } from '../utils/numberUtils';
 
 const QUEUE_STORAGE_KEY = 'PDO_SYNC_QUEUE';
 const MAX_RETRIES = 5;
-const RETRY_DELAYS = [2000, 5000, 15000, 60000, 60000]; // Backoff bertahap
 
 export interface SyncItem {
   id: string;
@@ -96,42 +95,42 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
   /**
    * Tambah item ke antrean — atomic read-modify-write (BUG-01 fix)
    * Jika baris yang sama sudah ada di antrean, ganti dengan data terbaru.
+   * BUG-47: Side effect (localStorage write + backup network) dikeluarkan
+   * dari setState updater — updater bisa di-invoke 2x oleh StrictMode,
+   * menyebabkan backup ganda & race tulis storage.
    */
   const addToQueue = useCallback((
     item: Omit<SyncItem, 'id' | 'status' | 'retryCount'>
   ) => {
-    setQueue(_prev => {
-      // Baca langsung dari localStorage untuk menghindari data basi
-      const currentQueue = readQueueFromStorage();
-      const filtered = currentQueue.filter(
-        q => !(q.sheetId === item.sheetId && q.tabName === item.tabName && q.rowIndex === item.rowIndex)
-      );
-      const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
-        ? crypto.randomUUID()
-        : Date.now().toString() + Math.random().toString(36).substring(2, 7);
+    // Baca langsung dari localStorage untuk menghindari data basi
+    const currentQueue = readQueueFromStorage();
+    const filtered = currentQueue.filter(
+      q => !(q.sheetId === item.sheetId && q.tabName === item.tabName && q.rowIndex === item.rowIndex)
+    );
+    const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : Date.now().toString() + Math.random().toString(36).substring(2, 7);
 
-      const newItem: SyncItem = {
-        ...item,
-        id: uniqueId,
-        status: 'pending',
-        retryCount: 0,
-      };
-      const newQueue = [...filtered, newItem];
-      writeQueueToStorage(newQueue);
+    const newItem: SyncItem = {
+      ...item,
+      id: uniqueId,
+      status: 'pending',
+      retryCount: 0,
+    };
+    const newQueue = [...filtered, newItem];
+    writeQueueToStorage(newQueue);
+    setQueue(newQueue);
 
-      // ISS-06 FIX: Backup item antrean ke Supabase secara background jika memungkinkan
-      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'offline_user';
-      backupSyncQueue({
-        user_email: userEmail,
-        spreadsheet_id: item.sheetId,
-        tab_name: item.tabName,
-        row_index: item.rowIndex,
-        payload: item.updates,
-        status: 'pending',
-      }).catch(_e => {});
-
-      return newQueue;
-    });
+    // ISS-06 FIX: Backup item antrean ke Supabase secara background jika memungkinkan
+    const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'offline_user';
+    backupSyncQueue({
+      user_email: userEmail,
+      spreadsheet_id: item.sheetId,
+      tab_name: item.tabName,
+      row_index: item.rowIndex,
+      payload: item.updates,
+      status: 'pending',
+    }).catch(_e => {});
   }, []);
 
   /**
@@ -212,18 +211,17 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
           );
           writeQueueToStorage(updated);
           setQueue(updated);
-          // BUG-25: Item baru saja ditandai 'failed' — langsung lanjut tanpa menunggu delay retry lama
           continue;
         } else {
-          // Increment retry counter
+          // Increment retry counter. Retry berikutnya dijalankan oleh
+          // scheduler periodik (45s) / event online — BUG-47: delay inline
+          // dihapus karena hanya menghambat item antrean lain tanpa efek
+          // (retryCount sudah persist; item tidak diproses ulang di loop ini).
           const updated = freshQueue.map(q =>
             q.id === item.id ? { ...q, retryCount: newRetryCount } : q
           );
           writeQueueToStorage(updated);
           setQueue(updated);
-
-          const delay = RETRY_DELAYS[Math.min(newRetryCount - 1, RETRY_DELAYS.length - 1)];
-          await new Promise(resolve => setTimeout(resolve, delay));
           continue;
         }
       }
