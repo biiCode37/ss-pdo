@@ -85,7 +85,7 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
 
   useEffect(() => {
     optionsRef.current = options;
-  });
+  }, [options]);
 
   // Load initial queue
   useEffect(() => {

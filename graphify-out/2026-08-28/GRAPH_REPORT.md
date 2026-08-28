@@ -1,11 +1,11 @@
 # Graph Report - SS_PDO  (2026-08-28)
 
 ## Corpus Check
-- 218 files · ~274,154 words
+- 218 files · ~273,158 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2139 nodes · 2870 edges · 188 communities (169 shown, 19 thin omitted)
+- 2133 nodes · 2861 edges · 188 communities (169 shown, 19 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
@@ -138,7 +138,7 @@
 - File yang Harus Dibuat
 - resultStatus.ts
 - AuditLogPage.tsx
-- googleSheets.ts
+- numberUtils.ts
 - Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)
 - Global Constraints
 - Appendix B - Canonical Sources (read these before reinventing)
@@ -193,7 +193,7 @@
 - @types/gapi.client.sheets
 - 🛡️ Spesifikasi Desain: Manajemen Role Pengguna & Audit Trail (Superadmin, Admin, Petugas)
 - 2. Rincian Task Implementasi
-- busInputModal.ts
+- BusCard.tsx
 - @types/react
 - typescript
 - vite
@@ -217,28 +217,28 @@
 ## Surprising Connections (you probably didn't know these)
 - `Props` --references--> `BusData`  [EXTRACTED]
   src/components/AnalyticsDashboard.tsx → src/services/googleSheets/types.ts
+- `CrossPeriodSummaryResult` --references--> `BusData`  [EXTRACTED]
+  src/services/routeService.ts → src/services/googleSheets/types.ts
 - `App()` --calls--> `useUserActivityTracking()`  [EXTRACTED]
   src/App.tsx → src/hooks/useUserActivityTracking.ts
 - `App()` --calls--> `showErrorAlert()`  [EXTRACTED]
   src/App.tsx → src/utils/alertUtils.ts
 - `App()` --calls--> `checkAndMigrateCache()`  [EXTRACTED]
   src/App.tsx → src/utils/cacheUtils.ts
-- `App()` --calls--> `initHistoryNavigation()`  [EXTRACTED]
-  src/App.tsx → src/utils/historyNavigation.ts
 
 ## Import Cycles
+- 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
-- 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
+- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
-- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/core.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
 - 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/services/googleSheets.ts`
-- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/auth.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
-- 5-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/mutations.ts -> src/services/routeService.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 
 ## Communities (188 total, 19 thin omitted)
 
@@ -251,8 +251,8 @@ Cohesion: 0.05
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
 ### Community 2 - "RouteSelectorCard.tsx"
-Cohesion: 0.21
-Nodes (17): FlatRouteSheet, flattenRoutes(), MONTH_NAMES_ID, Props, RouteSelectorCard, RouteSelectorCardComponent(), extractSheetId(), createRouteWithSheet() (+9 more)
+Cohesion: 0.18
+Nodes (19): FlatRouteSheet, flattenRoutes(), MONTH_NAMES_ID, Props, RouteSelectorCard, RouteSelectorCardComponent(), extractSheetId(), createRouteWithSheet() (+11 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -571,8 +571,8 @@ Cohesion: 0.50
 Nodes (3): Pi Tool Mapping, Subagents, Task lists
 
 ### Community 90 - "routeService.ts"
-Cohesion: 0.18
-Nodes (20): FilterTab, UserManagementPage(), UserManagementPageProps, activityLogCache, ActivityLogCacheEntry, addUserProfile(), deleteRouteSheet(), fetchAllUserProfiles() (+12 more)
+Cohesion: 0.21
+Nodes (17): FilterTab, UserManagementPage(), UserManagementPageProps, fetchGoogleUserProfile(), addUserProfile(), CrossPeriodSummaryResult, deleteRouteSheet(), fetchAllUserProfiles() (+9 more)
 
 ### Community 91 - "Checklist for effective Skills"
 Cohesion: 0.50
@@ -655,16 +655,16 @@ Cohesion: 0.18
 Nodes (10): 1. Multi-Role RBAC & Row-Level Security (RLS), 2. Kebijakan Soft-Delete pada Akun Pengguna, 3. Log Aktivitas & Jejak Audit (Audit Trail), 4. Proteksi & UX Kartu Pengguna, 5. Sistem Modal Terpadu SweetAlert2 (`pdoSwal`), ADR 0002: Supabase RBAC, Soft-Delete User Policy, dan Audit Trail, Keputusan Arsitektur & Teknikal, Konsekuensi (+2 more)
 
 ### Community 119 - "Dashboard.tsx"
-Cohesion: 0.09
-Nodes (22): react, BottomNav, BottomNavProps, BusList, AuditLogPage, Props, UserManagementPage, RoleBadge() (+14 more)
+Cohesion: 0.11
+Nodes (17): react, BottomNav, BottomNavProps, Props, RoleBadge(), RoleBadgeProps, BusCardSkeleton(), DailyToaTrendSkeleton() (+9 more)
 
 ### Community 120 - "App.tsx"
-Cohesion: 0.16
-Nodes (21): App(), LegalModals(), LegalModalsProps, LegalModalType, LoginScreen(), Props, checkSignedInAsync(), ensureValidToken() (+13 more)
+Cohesion: 0.20
+Nodes (15): App(), LegalModals(), LegalModalsProps, LegalModalType, LoginScreen(), Props, checkSignedInAsync(), getGoogleCreds() (+7 more)
 
 ### Community 121 - "utils/analytics.ts"
-Cohesion: 0.13
-Nodes (19): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, KPICard, Props, Props (+11 more)
+Cohesion: 0.12
+Nodes (20): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, KPICard, Props, Props (+12 more)
 
 ### Community 122 - "File yang Harus Dibuat"
 Cohesion: 0.20
@@ -676,10 +676,10 @@ Nodes (6): cacheResult(), DataResult, DataSourceStatus, errorResult(), isStale()
 
 ### Community 124 - "AuditLogPage.tsx"
 Cohesion: 0.29
-Nodes (7): AuditLogPage(), AuditLogPageProps, FIELD_LABEL_MAP, FormattedActionMeta, LogCategory, SkeletonBox(), fetchActivityLogs()
+Nodes (7): AuditLogPage(), AuditLogPageProps, FIELD_LABEL_MAP, FormattedActionMeta, LogCategory, fetchActivityLogs(), ActivityLog
 
-### Community 125 - "googleSheets.ts"
-Cohesion: 0.15
+### Community 125 - "numberUtils.ts"
+Cohesion: 0.14
 Nodes (22): DailyToaTrendCard, DailyToaTrendCardComponent(), parseSelectedDay(), Props, Props, renderStatusBadge(), UnitCard, UnitCardComponent() (+14 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
@@ -879,12 +879,12 @@ Cohesion: 0.25
 Nodes (7): 1. Prioritas Mutlak Tertinggi: BUG-48 (Keamanan — XSS), 2. Urutan Prioritas Setelah Bagian 1, 3. Prinsip Kerja Tambahan Khusus Babak Ini, 4. Batasan Teknis, 5. Kapan Harus Berhenti dan Bertanya ke Manusia, 6. Pelaporan Progres, Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM
 
 ### Community 175 - "alertUtils.ts"
-Cohesion: 0.20
-Nodes (28): BusCard, BusCardComponent(), BusListComponent(), Dashboard(), ProfileMenuSheet(), Props, BulkCopyKmModalOptions, getCurrentTheme() (+20 more)
+Cohesion: 0.21
+Nodes (23): BusCard, BusList, BusListComponent(), Dashboard(), ProfileMenuSheet(), Props, QueueModal(), getCurrentTheme() (+15 more)
 
 ### Community 176 - "core.ts"
-Cohesion: 0.17
-Nodes (26): getAccumulatedBusData(), getMonthlyToaTrend(), inspectSpreadsheetHeader(), monthlyToaTrendCache, withAuthRetry(), detectHeaderRowAndBuildComposite(), findColumnIndex(), getBusData() (+18 more)
+Cohesion: 0.12
+Nodes (34): FormattedNoteText(), getAccumulatedBusData(), getMonthlyToaTrend(), inspectSpreadsheetHeader(), monthlyToaTrendCache, ensureValidToken(), refreshTokenInteractiveOrSilent(), startTokenRefreshTimer() (+26 more)
 
 ### Community 178 - "🛡️ Spesifikasi Desain: Manajemen Role Pengguna & Audit Trail (Superadmin, Admin, Petugas)"
 Cohesion: 0.13
@@ -894,13 +894,13 @@ Nodes (14): 1. Ringkasan & Tujuan, 2. Hirarki & Matriks Hak Akses, 3. Desain Ske
 Cohesion: 0.20
 Nodes (9): 1. Global Constraints & Quality Gates, 2. Rincian Task Implementasi, 📋 Implementation Plan: Manajemen Role Pengguna (Superadmin, Admin, Petugas) & Audit Trail, Task 1: Pembaruan TypeScript Types (`src/types/supabase.ts`), Task 2: Service Layer & Audit Log Functions (`src/services/routeService.ts`), Task 3: Komponen Presentasional `RoleBadge.tsx` & Integrasi `ProfileMenuSheet.tsx`, Task 4: Komponen Sheet `UserManagementSheet.tsx`, Task 5: Komponen Sheet `AuditLogSheet.tsx` (+1 more)
 
-### Community 180 - "busInputModal.ts"
-Cohesion: 0.18
-Nodes (17): FormattedNoteText(), getCrossPeriodAccumulation(), ParsedKeterangan, parseKeterangan(), MAX_SHIFT_DISTANCE_KM, MAX_TOA_VALUE, MAX_TRIP_COUNT, renderSatsetToggle() (+9 more)
+### Community 180 - "BusCard.tsx"
+Cohesion: 0.21
+Nodes (20): BusCardComponent(), BulkCopyKmModalOptions, showQueueConflictDialog(), escapeHtml(), getSatsetMode(), MAX_SHIFT_DISTANCE_KM, MAX_TOA_VALUE, MAX_TRIP_COUNT (+12 more)
 
 ### Community 185 - "BusData"
-Cohesion: 0.15
-Nodes (20): Props, Props, QueueModal(), QueueModalProps, Props, Props, TestHookComponent(), detectCollision() (+12 more)
+Cohesion: 0.17
+Nodes (18): Props, Props, QueueModalProps, Props, Props, TestHookComponent(), detectCollision(), readQueueFromStorage() (+10 more)
 
 ### Community 186 - "historyNavigation.ts"
 Cohesion: 0.30
@@ -911,21 +911,21 @@ Cohesion: 0.70
 Nodes (3): TestComponent(), useUserActivityTracking(), sendUserHeartbeat()
 
 ## Knowledge Gaps
-- **1248 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1243 more)
+- **1245 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1240 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `Dashboard.tsx` to `RouteSelectorCard.tsx`, `BusData`, `plugins`, `historyNavigation.ts`, `alertUtils.ts`, `cacheUtils.ts`, `App.tsx`, `utils/analytics.ts`, `routeService.ts`, `useUserActivityTracking.ts`, `AuditLogPage.tsx`, `googleSheets.ts`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **Why does `react` connect `Dashboard.tsx` to `RouteSelectorCard.tsx`, `BusData`, `plugins`, `historyNavigation.ts`, `alertUtils.ts`, `cacheUtils.ts`, `BusCard.tsx`, `App.tsx`, `utils/analytics.ts`, `routeService.ts`, `useUserActivityTracking.ts`, `AuditLogPage.tsx`, `numberUtils.ts`?**
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+- **Why does `BusData` connect `BusData` to `alertUtils.ts`, `core.ts`, `BusCard.tsx`, `Dashboard.tsx`, `utils/analytics.ts`, `routeService.ts`, `numberUtils.ts`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **Why does `Writing Skills` connect `Writing Skills` to `Skill Discovery Optimization (SDO)`, `Testing Skills With Subagents`, `Bulletproofing Skills Against Rationalization`, `Anti-Patterns`, `Testing All Skill Types`, `RED-GREEN-REFACTOR for Skills`, `File Organization`, `Skill Types`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
-- **Why does `BusData` connect `BusData` to `alertUtils.ts`, `core.ts`, `busInputModal.ts`, `Dashboard.tsx`, `utils/analytics.ts`, `routeService.ts`, `googleSheets.ts`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _1248 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1245 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**

@@ -224,14 +224,14 @@ export async function showQueueConflictDialog(options: {
 }) {
   const result = await pdoSwal.fire({
     title: "Tabrakan Data (Conflict)",
-    text: options.unitName
-      ? `Data unit ${options.unitName} di Google Sheets telah berubah saat Anda offline. Pilih tindakan penyelesaian:`
-      : "Data di Google Sheets telah berubah saat Anda offline. Pilih tindakan penyelesaian:",
+            text: options.unitName
+              ? `Data unit ${options.unitName} di Google Sheets telah berubah saat Anda offline. Data dari server digabung dengan input Anda.`:
+              "Data di Google Sheets telah berubah saat Anda offline. Data dari server digabung dengan input Anda.",
     icon: "warning",
     showCancelButton: true,
     showDenyButton: true,
-    confirmButtonText: "Force Save (Timpa)",
-    denyButtonText: "Gunakan Data Server",
+      confirmButtonText: "Force Save (Timpa)",
+      denyButtonText: "Gunakan & Gabung Data Server",
     cancelButtonText: "Batal",
     customClass: {
       container: "pdo-swal-container",

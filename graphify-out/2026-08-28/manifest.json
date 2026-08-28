@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1787911127.787488,
-    "ast_hash": "afcb348a6b265c78f7bdf9121bfb0f4c",
+    "mtime": 1787897818.8165038,
+    "ast_hash": "6f643f7a8b71ecd4c250cd112bc8f14d",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "src/services/routeService.ts": {
-    "mtime": 1787911032.337111,
-    "ast_hash": "9b37addcd89af201dc4a9fa109f23191",
+    "mtime": 1787639054.6348135,
+    "ast_hash": "66d0e69136cf6b9af05aa9c16ab780c9",
     "semantic_hash": ""
   },
   "src/services/supabase.ts": {
@@ -750,8 +750,8 @@
     "semantic_hash": ""
   },
   "src/components/Skeletons.tsx": {
-    "mtime": 1787911156.0721884,
-    "ast_hash": "074a21485568308152345096277d11ed",
+    "mtime": 1785978766.5573606,
+    "ast_hash": "74b8a993f47963020787653c5f91f256",
     "semantic_hash": ""
   },
   "skills-lock.json": {
@@ -1090,13 +1090,13 @@
     "semantic_hash": ""
   },
   "src/components/AuditLogPage.tsx": {
-    "mtime": 1787911084.1915576,
-    "ast_hash": "06b3b18aa091a55ca5cd66302b79d6ba",
+    "mtime": 1787639054.604205,
+    "ast_hash": "2fa49bc94ca3e9c0c537273253b95f02",
     "semantic_hash": ""
   },
   "src/components/UserManagementPage.tsx": {
-    "mtime": 1787911108.8640597,
-    "ast_hash": "211a55d44490403d673f19eb2f0a3dc3",
+    "mtime": 1787639054.627391,
+    "ast_hash": "83a74d159c94496f1c6fafab5435fc00",
     "semantic_hash": ""
   },
   "src/utils/roleStorage.test.ts": {

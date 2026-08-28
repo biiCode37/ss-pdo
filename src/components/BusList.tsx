@@ -27,7 +27,7 @@ interface Props {
   tabName: string;
   headerMap: HeaderMap;
   syncQueue: SyncItem[];
-  addToQueue: (item: Omit<SyncItem, "id" | "status">) => void;
+  addToQueue: (item: Omit<SyncItem, "id" | "status" | "retryCount">) => void;
   isLoading?: boolean;
   onUpdateBus?: (rowIndex: number, updates: Partial<BusData>) => void;
   accRange?: {
@@ -106,7 +106,6 @@ function BusListComponent({
               tripPulang: isOff ? "" : result.tripPulang,
             },
             headerMap,
-            retryCount: 0,
           });
         });
       }
@@ -203,7 +202,6 @@ function BusListComponent({
               kmAwal2: bus.kmAkhir1,
             },
             headerMap,
-            retryCount: 0,
           });
         });
       }

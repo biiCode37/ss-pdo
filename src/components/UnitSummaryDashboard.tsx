@@ -5,6 +5,7 @@ import { extractUnitList } from "../utils/unitAnalytics";
 import { UnitCard } from "./UnitCard";
 import { UnitDetailModal } from "./UnitDetailModal";
 import { UnitCardSkeleton } from "./Skeletons";
+import { useMobileBackHandler } from "../hooks/useMobileBackHandler";
 
 interface Props {
   busData: BusData[] | null;
@@ -25,6 +26,13 @@ function UnitSummaryDashboardComponent({
 }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
+
+  // Mobile Back Navigation: Close UnitDetailModal on hardware back / swipe back
+  useMobileBackHandler({
+    id: "unit_detail_modal",
+    isOpen: Boolean(selectedUnit),
+    onClose: () => setSelectedUnit(null),
+  });
 
   const unitList = useMemo(() => {
     if (!busData) return [];

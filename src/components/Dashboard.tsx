@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, lazy, Suspense } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
 import {
   getBusData,
@@ -10,11 +10,18 @@ import { extractSpreadsheetId } from "../utils/sheetIdentity";
 import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
-import { UserManagementPage } from "./UserManagementPage";
-import { AuditLogPage } from "./AuditLogPage";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
+import { AuditLogSkeleton, UserManagementSkeleton } from "./Skeletons";
+
+// Dynamic Code Splitting for infrequently visited administration pages
+const UserManagementPage = lazy(() =>
+  import("./UserManagementPage").then((m) => ({ default: m.UserManagementPage }))
+);
+const AuditLogPage = lazy(() =>
+  import("./AuditLogPage").then((m) => ({ default: m.AuditLogPage }))
+);
 import {
   CloudOff,
   RefreshCw,
@@ -22,6 +29,7 @@ import {
 } from "lucide-react";
 import { QueueModal } from "./QueueModal";
 import { useOfflineSync } from "../hooks/useOfflineSync";
+import { useMobileBackHandler } from "../hooks/useMobileBackHandler";
 import { formatUserError } from "../utils/errorFormatter";
 import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
 import { getStoredUserRole } from "../utils/roleStorage";
@@ -102,6 +110,38 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'dashboard' | 'user_management' | 'audit_log'>('dashboard');
+
+  // Mobile Back Navigation Handlers (PWA / Mobile hardware gesture support)
+  useMobileBackHandler({
+    id: "user_management_view",
+    isOpen: currentView === "user_management",
+    onClose: () => setCurrentView("dashboard"),
+  });
+
+  useMobileBackHandler({
+    id: "audit_log_view",
+    isOpen: currentView === "audit_log",
+    onClose: () => setCurrentView("dashboard"),
+  });
+
+  useMobileBackHandler({
+    id: "profile_menu_sheet",
+    isOpen: isProfileMenuOpen,
+    onClose: () => setIsProfileMenuOpen(false),
+  });
+
+  useMobileBackHandler({
+    id: "acc_sheet",
+    isOpen: isAccSheetOpen,
+    onClose: () => setIsAccSheetOpen(false),
+  });
+
+  useMobileBackHandler({
+    id: "queue_modal",
+    isOpen: isQueueModalOpen,
+    onClose: () => setIsQueueModalOpen(false),
+  });
+
   // ponytail: track custom accumulation range for startDay parameter
   const [accRange, setAccRange] = useState<{
     start: number;
@@ -122,9 +162,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     return { activeMonth: month, activeYear: year };
   }, [sheetUrl]);
 
+  // BUG-15: ResizeObserver cleanup properly handled via dependency array
   // BUG-19: Request ID tracking for race condition protection
-  // (AbortController dihapus — signal tidak pernah di-wire ke gapi client,
-  //  proteksi race aktual sudah ditangani requestIdRef di bawah)
+  // BUG-19: Use AbortController for request cancellation
+  const abortControllerRef = useRef<AbortController | null>(null);
   const requestIdRef = useRef<number>(0);
   const headerBlockRef = useRef<HTMLDivElement>(null);
 
@@ -188,7 +229,13 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       if (currentSheetId && currentTabName) {
         handleLoadData(true, currentTabName);
       }
-      processQueue();
+      // BUG-21: Wrap processQueue to catch errors
+      try {
+        await processQueue();
+      } catch (queueError: any) {
+        console.warn('Error processing queue after re-auth:', queueError);
+        // Silently continue, the main process was already handled by handleLoadData
+      }
       showSuccessToast("Sesi berhasil diperbarui!");
     } catch (err: any) {
       const errFormatted = formatUserError(err, "Gagal memperbarui sesi. Silakan coba lagi.");
@@ -254,19 +301,15 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     };
   }, []);
 
-  // ponytail: auto-load data akumulasi saat mount jika sheetUrl sudah ada dari localStorage
-  const autoLoadedRef = useRef(false);
+  const lastAutoLoadedSheetRef = useRef("");
   useEffect(() => {
-    if (autoLoadedRef.current) return;
-    if (sheetUrl && !busData && !isLoading) {
-      autoLoadedRef.current = true;
-      handleLoadData(false);
-    }
-    // Guard ref mencegah double-run; dependensi lain sengaja stabil
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sheetUrl]);
+    if (!sheetUrl || isLoading || busData) return;
+    if (lastAutoLoadedSheetRef.current === sheetUrl) return;
+    lastAutoLoadedSheetRef.current = sheetUrl;
+    handleLoadData(false);
+  }, [sheetUrl, isLoading, busData, handleLoadData]);
 
-  const handleLoadData = async (isRefresh = false, targetTab?: string) => {
+  async function handleLoadData(isRefresh = false, targetTab?: string) {
     const tabToLoad = targetTab || selectedTab;
     if (!sheetUrl) {
       setError("Silakan pilih atau paste link Google Sheet terlebih dahulu");
@@ -281,7 +324,12 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       return;
     }
 
-    // BUG-19: Increment request ID to ignore stale responses
+    // BUG-19: Cancel previous request before starting new one
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+
     requestIdRef.current += 1;
     const currentRequestId = requestIdRef.current;
 
@@ -361,10 +409,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     }
   };
 
-  const handleSelectTab = (newTab: string) => {
+  // BUG-20: Handle async tab selection properly
+  const handleSelectTab = async (newTab: string) => {
     setSelectedTab(newTab);
     if (currentSheetId || sheetUrl) {
-      handleLoadData(false, newTab);
+      await handleLoadData(false, newTab);
     }
   };
 
@@ -399,6 +448,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       // BUG-14: Cek status online sebelum refresh
       if (!isOnline) {
         setError("Tidak bisa refresh saat offline");
+        setIsRefreshing(false);
         setPullDistance(0);
         setTouchStartY(0);
         return;
@@ -407,11 +457,12 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       handleLoadData(true).finally(() => {
         setIsRefreshing(false);
         setPullDistance(0);
+        setTouchStartY(0);
       });
     } else {
       setPullDistance(0);
+      setTouchStartY(0);
     }
-    setTouchStartY(0);
   };
 
   // Generate options for days 1-31
@@ -419,22 +470,26 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   if (currentView === 'user_management') {
     return (
-      <UserManagementPage
-        onBack={() => setCurrentView('dashboard')}
-        currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
-        currentUserRole={getStoredUserRole()}
-        isDarkMode={theme === "dark"}
-      />
+      <Suspense fallback={<UserManagementSkeleton />}>
+        <UserManagementPage
+          onBack={() => setCurrentView('dashboard')}
+          currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
+          currentUserRole={getStoredUserRole()}
+          isDarkMode={theme === "dark"}
+        />
+      </Suspense>
     );
   }
 
   if (currentView === 'audit_log') {
     return (
-      <AuditLogPage
-        onBack={() => setCurrentView('dashboard')}
-        currentUserRole={getStoredUserRole()}
-        isDarkMode={theme === "dark"}
-      />
+      <Suspense fallback={<AuditLogSkeleton />}>
+        <AuditLogPage
+          onBack={() => setCurrentView('dashboard')}
+          currentUserRole={getStoredUserRole()}
+          isDarkMode={theme === "dark"}
+        />
+      </Suspense>
     );
   }
 

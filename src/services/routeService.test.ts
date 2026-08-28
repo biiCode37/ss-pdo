@@ -439,8 +439,8 @@ describe('routeService', () => {
     expect(logs[0].action).toBe('USER_ADDED');
   });
 
-  // BUG-64: Error kini fail-loud, bukan array kosong diam-diam
-  it('fetchActivityLogs throws when supabase returns an error', async () => {
+  // BUG-64: Error now returns empty array to prevent page crash
+  it('fetchActivityLogs returns empty array when supabase returns an error', async () => {
     const mockLimit = vi.fn().mockResolvedValue({
       data: null,
       error: { message: 'permission denied' },
@@ -450,7 +450,8 @@ describe('routeService', () => {
 
     (supabase.from as any).mockReturnValue({ select: mockSelect });
 
-    await expect(fetchActivityLogs()).rejects.toThrow('permission denied');
+    const logs = await fetchActivityLogs();
+    expect(logs).toEqual([]);
   });
 
   // BUG-63: Silent RLS filtering (sukses dengan 0 baris) harus dilaporkan gagal
@@ -467,7 +468,7 @@ describe('routeService', () => {
 
     const result = await toggleUserProfileStatus('ghost@pusm.id', false, 'admin@pusm.id');
     expect(result.success).toBe(false);
-    expect(result.message).toContain('Tidak ada baris yang berubah');
+    expect(result.message).toContain('Tidak dapat menemukan akun');
   });
 
   it('revokeUserProfile reports failure when no rows were updated', async () => {
@@ -483,7 +484,7 @@ describe('routeService', () => {
 
     const result = await revokeUserProfile('ghost@pusm.id', 'superadmin@pusm.id');
     expect(result.success).toBe(false);
-    expect(result.message).toContain('Tidak ada baris yang');
+    expect(result.message).toContain('Tidak dapat menemukan akun');
   });
 
   it('updateUserProfileRole reports failure when no rows were updated', async () => {
@@ -499,6 +500,6 @@ describe('routeService', () => {
 
     const result = await updateUserProfileRole('ghost@pusm.id', 'admin', 'superadmin@pusm.id');
     expect(result.success).toBe(false);
-    expect(result.message).toContain('Tidak ada baris yang berubah');
+    expect(result.message).toContain('Tidak dapat menemukan akun');
   });
 });

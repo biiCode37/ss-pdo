@@ -10,6 +10,57 @@ import {
 } from '../utils/routeValidation';
 
 const CACHE_KEY_ROUTES = 'PDO_CACHE_ROUTES';
+const PENDING_ACTIVITY_LOGS_KEY = 'PDO_PENDING_ACTIVITY_LOGS';
+const PENDING_PROFILE_SYNC_KEY = 'PDO_PROFILE_SYNC_PENDING';
+
+function readPendingActivityLogs(): ActivityLog[] {
+  try {
+    const raw = localStorage.getItem(PENDING_ACTIVITY_LOGS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writePendingActivityLogs(logs: ActivityLog[]): void {
+  try {
+    localStorage.setItem(PENDING_ACTIVITY_LOGS_KEY, JSON.stringify(logs.slice(-100)));
+  } catch (_e) {}
+}
+
+export async function flushPendingLocalSync(): Promise<void> {
+  if (!isSupabaseConfigured) return;
+
+  const pendingProfile = localStorage.getItem(PENDING_PROFILE_SYNC_KEY);
+  if (pendingProfile) {
+      try {
+        const profile = JSON.parse(pendingProfile);
+        await upsertUserProfile(profile);
+        localStorage.removeItem(PENDING_PROFILE_SYNC_KEY);
+      } catch (_e) {}
+    }
+
+  const logs = readPendingActivityLogs();
+  if (logs.length > 0) {
+    const remaining: ActivityLog[] = [];
+    for (const log of logs) {
+      try {
+        const { error } = await supabase.from('activity_logs').insert([log]);
+        if (error) remaining.push(log);
+      } catch (_e) {
+        remaining.push(log);
+      }
+    }
+    writePendingActivityLogs(remaining);
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    flushPendingLocalSync().catch(() => {});
+  });
+}
 
 export async function fetchRoutesWithSheets(): Promise<Route[]> {
   // Jika Supabase belum dikonfigurasi, langsung fallback ke cache lokal
@@ -191,14 +242,34 @@ export async function upsertUserProfile(profile: Partial<UserProfile> & { email:
   }
 }
 
+// In-memory cache for activity logs (TTL 3 minutes)
+interface ActivityLogCacheEntry {
+  data: ActivityLog[];
+  timestamp: number;
+}
+const activityLogCache = new Map<string, ActivityLogCacheEntry>();
+const ACTIVITY_LOG_CACHE_TTL = 3 * 60 * 1000;
+
 export async function logActivity(log: ActivityLog): Promise<void> {
-  if (!isSupabaseConfigured) return;
+  if (!isSupabaseConfigured) {
+    const userEmail = log.user_email || localStorage.getItem('PDO_USER_EMAIL') || 'unknown';
+    const entry = { ...log, user_email: userEmail, timestamp: Date.now() };
+    const pending = readPendingActivityLogs();
+    pending.push(entry);
+    writePendingActivityLogs(pending);
+    return;
+  }
 
   try {
     const userEmail = log.user_email || localStorage.getItem('PDO_USER_EMAIL') || 'unknown';
     await supabase.from('activity_logs').insert([{ ...log, user_email: userEmail }]);
+    // Invalidate activity log cache on new activity
+    activityLogCache.clear();
   } catch (err) {
     console.error('[RouteService] Failed to log activity:', err);
+    const pending = readPendingActivityLogs();
+    pending.push(log);
+    writePendingActivityLogs(pending);
   }
 }
 
@@ -632,7 +703,7 @@ export async function updateUserProfileRole(
     if (!data || data.length === 0) {
       return {
         success: false,
-        message: `Tidak ada baris yang berubah untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun tidak ditemukan.`,
+        message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
       };
     }
 
@@ -678,7 +749,7 @@ export async function toggleUserProfileStatus(
     if (!data || data.length === 0) {
       return {
         success: false,
-        message: `Tidak ada baris yang berubah untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun tidak ditemukan.`,
+        message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
       };
     }
 
@@ -723,7 +794,7 @@ export async function revokeUserProfile(
     if (!data || data.length === 0) {
       return {
         success: false,
-        message: `Tidak ada baris yang diperbarui untuk ${targetEmail}. Kemungkinan policy database memblokir operasi ini atau akun tidak ditemukan.`,
+        message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
       };
     }
 
@@ -750,8 +821,24 @@ export async function fetchActivityLogs(options?: {
   limit?: number;
   userEmail?: string;
   actionPrefix?: string;
+  forceRefresh?: boolean;
 }): Promise<ActivityLog[]> {
   if (!isSupabaseConfigured) return [];
+
+  const cacheKey = JSON.stringify({
+    limit: options?.limit || 100,
+    userEmail: options?.userEmail || '',
+    actionPrefix: options?.actionPrefix || '',
+  });
+
+  const now = Date.now();
+  const cached = activityLogCache.get(cacheKey);
+
+  // Return cached result if valid and not force-refreshing
+  if (!options?.forceRefresh && cached && now - cached.timestamp < ACTIVITY_LOG_CACHE_TTL) {
+    return cached.data;
+  }
+
   let query = supabase
     .from('activity_logs')
     .select('*')
@@ -768,9 +855,12 @@ export async function fetchActivityLogs(options?: {
   const { data, error } = await query;
   if (error) {
     console.error('[RouteService] Error fetching activity logs:', error);
-    throw new Error(error.message || 'Gagal memuat log aktivitas.');
+    return [];
   }
-  return (data as ActivityLog[]) || [];
+
+  const result = (data as ActivityLog[]) || [];
+  activityLogCache.set(cacheKey, { data: result, timestamp: now });
+  return result;
 }
 
 

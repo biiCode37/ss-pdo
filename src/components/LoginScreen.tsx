@@ -22,6 +22,7 @@ import {
 import { formatUserError } from "../utils/errorFormatter";
 import { LegalModals } from "./login/LegalModals";
 import type { LegalModalType } from "./login/LegalModals";
+import { useMobileBackHandler } from "../hooks/useMobileBackHandler";
 
 interface Props {
   onLoginSuccess: () => void;
@@ -33,6 +34,13 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [activeModal, setActiveModal] = useState<LegalModalType>(null);
   const [showSheetsScopeDetails, setShowSheetsScopeDetails] = useState(false);
+
+  // Mobile Back Navigation: Close legal modals on hardware back / swipe back
+  useMobileBackHandler({
+    id: "legal_modal",
+    isOpen: Boolean(activeModal),
+    onClose: () => closeModal(),
+  });
 
   // Dukungan URL Hash langsung untuk verifikasi crawler Google (#privacy, #terms, #developer)
   useEffect(() => {

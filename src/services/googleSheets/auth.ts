@@ -138,7 +138,7 @@ export const signIn = async (): Promise<void> => {
       settled = true;
       cleanup();
       reject(new Error('Login timeout: tidak ada respons dari Google. Silakan coba lagi.'));
-    }, 60000);
+    }, 20000);
 
     window.addEventListener('google-login-success', handleSuccess);
     window.addEventListener('google-login-error', handleError as EventListener);
@@ -297,7 +297,7 @@ export const reauthenticateSession = async (): Promise<void> => {
       settled = true;
       cleanup();
       reject(new Error('Perbaruan sesi timeout: tidak ada respons dari Google. Silakan coba lagi.'));
-    }, 60000);
+    }, 20000);
 
     window.addEventListener('google-login-success', handleSuccess);
     window.addEventListener('google-login-error', handleError as EventListener);

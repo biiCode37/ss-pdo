@@ -19,6 +19,7 @@ import {
 import type { ActivityLog } from '../types/supabase';
 import { fetchActivityLogs } from '../services/routeService';
 import { showErrorAlert } from '../utils/alertUtils';
+import { SkeletonBox } from './Skeletons';
 
 interface AuditLogPageProps {
   onBack: () => void;
@@ -68,10 +69,10 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
     }
   }, [currentUserRole, onBack]);
 
-  const loadLogs = async () => {
+  const loadLogs = async (forceRefresh = false) => {
     setIsLoading(true);
     try {
-      const data = await fetchActivityLogs({ limit: 150 });
+      const data = await fetchActivityLogs({ limit: 150, forceRefresh });
       setLogs(data);
     } catch (err: any) {
       console.error('[AuditLog] Gagal memuat audit logs:', err);
@@ -86,7 +87,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
   };
 
   useEffect(() => {
-    loadLogs();
+    loadLogs(false);
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
@@ -362,7 +363,7 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
 
           <div style={{ flexShrink: 0 }}>
             <button
-              onClick={loadLogs}
+              onClick={() => loadLogs(true)}
               disabled={isLoading}
               className="btn btn-outline"
               style={{
@@ -495,19 +496,34 @@ export const AuditLogPage: React.FC<AuditLogPageProps> = ({
 
         {/* Timeline Log List */}
         {isLoading ? (
-          <div
-            style={{
-              padding: '60px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              color: 'var(--text-secondary, #94a3b8)',
-            }}
-          >
-            <RefreshCw size={28} className="animate-spin text-amber-500" />
-            <span style={{ fontSize: '13.5px' }}>Memuat catatan audit...</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="glass"
+                style={{
+                  borderRadius: '14px',
+                  padding: '14px 16px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '14px',
+                  border: '1px solid var(--card-border, rgba(255,255,255,0.08))',
+                }}
+              >
+                <SkeletonBox width="40px" height="40px" borderRadius="12px" style={{ flexShrink: 0 }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <SkeletonBox width="180px" height="16px" borderRadius="6px" />
+                    <SkeletonBox width="90px" height="12px" borderRadius="4px" />
+                  </div>
+                  <SkeletonBox width="90%" height="13px" borderRadius="4px" />
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <SkeletonBox width="130px" height="12px" borderRadius="4px" />
+                    <SkeletonBox width="60px" height="16px" borderRadius="6px" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredLogs.length === 0 ? (
           <div

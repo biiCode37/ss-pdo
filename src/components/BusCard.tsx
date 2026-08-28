@@ -6,6 +6,7 @@ import { formatUserError } from "../utils/errorFormatter";
 import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
 import { parseIndonesianNumber, safeFormatNumber, normalizeFieldValue } from "../utils/numberUtils";
+import { mergeRemoteBusDataWithLocalUpdates } from "../utils/conflictMerge";
 import {
   showErrorToast,
   showInfoToast,
@@ -102,7 +103,6 @@ function BusCardComponent({
     setIsLoading(true);
     try {
       if (!forceOverwrite) {
-        // Pre-flight check: Hanya cek tabrakan pada kolom yang sedang diupdate oleh user
         const remoteData = await getBusRowData(
           sheetId,
           tabName,
@@ -110,7 +110,11 @@ function BusCardComponent({
           headerMap,
         );
 
-        const fieldsToCheck = Object.keys(updates) as (keyof BusData)[];
+        // BUG-12: Compare complete editable row to prevent silent overwrites
+        const fieldsToCheck: (keyof BusData)[] = [
+          "toaShift1", "toaShift2", "manualShift1", "manualShift2", "totalToa",
+          "kmAwal1", "kmAkhir1", "kmAwal2", "kmAkhir2", "keterangan",
+        ];
 
         let hasCollision = false;
         for (const field of fieldsToCheck) {
@@ -127,10 +131,11 @@ function BusCardComponent({
           showQueueConflictDialog({
             unitName: bus.unit,
             onUseServer: () => {
-              const updatedLocal = { ...formData, ...remoteData };
-              setFormData(updatedLocal);
-              if (onUpdateBus) onUpdateBus(updatedLocal);
-              showInfoToast("Menggunakan data dari server.");
+              const mergedUpdates = mergeRemoteBusDataWithLocalUpdates(
+                remoteData,
+                updates,
+              );
+              handleSaveUpdates(mergedUpdates, true);
             },
             onForceSave: () => {
               handleSaveUpdates(updates, true);
@@ -140,8 +145,19 @@ function BusCardComponent({
         }
       }
 
-      await updateBusData(sheetId, tabName, bus.rowIndex, updates, headerMap);
-      setSaveStatus("success");
+      // BUG-11: Apply success status only after API succeeds
+      try {
+        await updateBusData(sheetId, tabName, bus.rowIndex, updates, headerMap);
+        setSaveStatus("success");
+      } catch (apiErr) {
+        // Mark failure; existing catch below will queue if network
+        setSaveStatus("idle");
+        const formattedErr = formatUserError(apiErr, "Gagal menyimpan data bus ke Google Sheets.");
+        if (formattedErr) {
+          showErrorToast(formattedErr);
+        }
+        throw apiErr;
+      }
     } catch (err: any) {
       if (isNetworkError(err)) {
         const originalSnapshot: Partial<BusData> = {};
