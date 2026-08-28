@@ -26,11 +26,27 @@ Aplikasi SS_PDO memerlukan tata kelola akses pengguna yang aman dan terstruktur 
 
 ### 3. Log Aktivitas & Jejak Audit (Audit Trail)
 - Tabel `activity_logs` mencatat seluruh peristiwa sistem:
-  - `USER_LOGIN` (metode login Google GIS).
-  - `SAVE_BUS_ROW` / `UPDATE_BUS_DATA` dengan ringkasan field terurai (Ritase, Penumpang, Pendapatan, Keterangan).
-  - `USER_ROLE_UPDATED`, `USER_STATUS_TOGGLED`, `USER_CREATED`.
-  - `QUEUE_SYNCED` (sinkronisasi antrean offline).
-- Antarmuka `AuditLogPage.tsx` menyediakan filter kategori bersih (*Semua, Input Operasional, Pengguna, Sistem*) tanpa elemen counter yang mengganggu konsentrasi.
+  - `LOGIN`, `LOGOUT`.
+  - `USER_ADDED`, `USER_ROLE_CHANGED`, `USER_STATUS_CHANGED`, `USER_REVOKED`.
+  - `CREATE_ROUTE`, `DELETE_ROUTE`.
+  - `UPDATE_BUS_DATA`, `UPDATE_BULK_BUS_DATA`.
+  - `SYNC_OFFLINE_QUEUE`.
+  - `FORMAT_WHOLE_SHEET`.
+- **Kontrak Payload Log:** Log baru `UPDATE_BUS_DATA`, `UPDATE_BULK_BUS_DATA`, `SYNC_OFFLINE_QUEUE`, `FORMAT_WHOLE_SHEET` menyimpan:
+  - `route_code` (kolom top-level) — hasil resolver `resolveRouteContext(sheetId, tabName)`.
+  - `details.sheetId`, `details.tabName`, `details.rowIndex`/`unitCount`/`busCount`.
+  - `details.year`, `details.month`, `details.day` (day hanya jika `tabName` numerik).
+  - `details.changedValues: { before, after }` (khusus `UPDATE_BUS_DATA`).
+- **Backfill:** Migrasi `20260828000000_backfill_activity_log_route_context.sql` mengisi `route_code`, `details.year/month/day` untuk log lama yang masih menyimpan `sheetId` di `details`, dengan join ke `route_sheets`+`routes`.
+- **Index Pendukung:** `idx_activity_logs_route_created (route_code, created_at DESC)` agar filter rute + rentang created_at tidak melakukan full table scan.
+- **UI Plain-Language:** Semua role melihat kartu log dengan kalimat awam, nama pelaku yang mudah dibaca (turunan email), objek aktivitas, konteks rute, dan waktu. ID teknis (`sheetId`, `queueItemId`, dll) serta raw JSON tidak ditampilkan di permukaan.
+- **Filter Kategori:** Tab `Semua`, `Data Bus`, `Pengguna`, `Rute`, `Sinkronisasi`, `Login`, dan `Sistem`.
+- **Filter Lanjutan:** Panel "Filter rute dan waktu" (kolapsibel) dengan dua grup:
+  - Periode operasional (rute, tahun, bulan, hari) — via `route_code` eq + JSONB `details->>year/month/day`.
+  - Rentang waktu aksi (dari–sampai) — via `created_at` `gte`/`lte`.
+  - Tombol Terapkan memicu request server-side; tidak ada auto-fetch per keystroke.
+- **Detail Aktivitas:** Tombol `Lihat detail` membuka panel dua kolom tanpa request tambahan. Log baru `UPDATE_BUS_DATA` menyimpan `details.changedValues: { before, after }`; nilainya ditampilkan sebagai `SEBELUM` dan `SESUDAH`. Log lama yang belum memiliki snapshot menampilkan pemberitahuan bahwa nilai historis belum tersedia.
+- **Batas Data:** Halaman mengambil maksimal 150 log per query terfilter, dengan cache key yang menyertakan semua opsi filter.
 
 ### 4. Proteksi & UX Kartu Pengguna
 - **Kartu Superadmin:** Tombol toggle status aktif/nonaktif dan tombol ubah peran disembunyikan secara otomatis pada akun Superadmin untuk mencegah degradasi hak akses atau penguncian sistem.

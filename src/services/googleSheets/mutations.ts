@@ -3,6 +3,7 @@ import { isAuthError } from '../../utils/errorClassifier';
 import { getKeteranganColor, getRowEndCol } from '../../utils/sheetColorUtils';
 import { normalizeKeterangan } from '../../utils/keteranganUtils';
 import { logActivity } from '../routeService';
+import { resolveRouteContext } from '../../utils/auditLogContext';
 import type { BusData, HeaderMap } from './types';
 import { withAuthRetry } from './auth';
 import { getTabGid, numberToColumnName } from './core';
@@ -12,7 +13,8 @@ export const updateBusData = async (
   tabName: string, 
   rowIndex: number, 
   updates: Partial<BusData>, 
-  headerMap: HeaderMap
+  headerMap: HeaderMap,
+  previousValues?: Partial<BusData>,
 ): Promise<void> => {
   return withAuthRetry(async () => {
     // Construct individual updates for each cell to avoid overwriting formulas
@@ -131,10 +133,27 @@ export const updateBusData = async (
       // Telemetry: Log UPDATE_BUS_DATA
       const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
       const updatedFields = Object.keys(updates).filter(k => (updates as any)[k] !== undefined);
+      const before: Record<string, string> = {};
+      const after: Record<string, string> = {};
+      for (const field of updatedFields) {
+        before[field] = String((previousValues as any)?.[field] ?? '');
+        after[field] = String((updates as any)[field] ?? '');
+      }
+      const routeContext = resolveRouteContext(sheetId, tabName);
       logActivity({
         user_email: userEmail,
         action: 'UPDATE_BUS_DATA',
-        details: { sheetId, tabName, rowIndex, updatedFields },
+        route_code: routeContext.routeCode,
+        details: {
+          sheetId,
+          tabName,
+          rowIndex,
+          year: routeContext.year,
+          month: routeContext.month,
+          day: routeContext.day,
+          updatedFields,
+          changedValues: { before, after },
+        },
       }).catch(() => {});
     } catch (error: any) {
       console.error('Error updating data', error);
@@ -270,10 +289,19 @@ export const updateBulkBusData = async (
       }
 
       const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
+      const bulkCtx = resolveRouteContext(sheetId, tabName);
       logActivity({
         user_email: userEmail,
         action: 'UPDATE_BULK_BUS_DATA',
-        details: { sheetId, tabName, unitCount: updatesList.length },
+        route_code: bulkCtx.routeCode,
+        details: {
+          sheetId,
+          tabName,
+          unitCount: updatesList.length,
+          year: bulkCtx.year,
+          month: bulkCtx.month,
+          day: bulkCtx.day,
+        },
       }).catch(() => {});
     } catch (error: any) {
       console.error('Error batch updating bulk bus data', error);
@@ -420,10 +448,19 @@ export const formatWholeSheet = async (
       // Telemetry: Log FORMAT_WHOLE_SHEET
       const userEmail =
         localStorage.getItem("PDO_USER_EMAIL") || "field_operator";
+      const fmtCtx = resolveRouteContext(sheetId, tabName);
       logActivity({
         user_email: userEmail,
         action: "FORMAT_WHOLE_SHEET",
-        details: { sheetId, tabName, busCount: buses.length },
+        route_code: fmtCtx.routeCode,
+        details: {
+          sheetId,
+          tabName,
+          busCount: buses.length,
+          year: fmtCtx.year,
+          month: fmtCtx.month,
+          day: fmtCtx.day,
+        },
       }).catch(() => {});
     } catch (error: any) {
       console.error("Error formatting whole sheet", error);

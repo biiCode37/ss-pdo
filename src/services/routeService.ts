@@ -814,14 +814,22 @@ export async function revokeUserProfile(
 
 /**
  * Mengambil log aktivitas untuk audit.
- * BUG-64: Fail-loud — error sebelumnya ditelan jadi array kosong sehingga
- * halaman audit menampilkan "0 riwayat" tanpa tanda ada masalah.
+ * Dukungan filter kombinasi [rute, periode operasional, rentang waktu aksi].
+ * - routeCode: kolom route_code (top-level)
+ * - periodYear/Month/Day: JSONB details->>year/month/day (hanya log berkonteks)
+ * - dateFrom/dateTo: created_at local time (berlaku global untuk semua log)
  */
 export async function fetchActivityLogs(options?: {
   limit?: number;
   userEmail?: string;
   actionPrefix?: string;
   forceRefresh?: boolean;
+  routeCode?: string;
+  periodYear?: number;
+  periodMonth?: number;
+  periodDay?: number;
+  dateFrom?: string;
+  dateTo?: string;
 }): Promise<ActivityLog[]> {
   if (!isSupabaseConfigured) return [];
 
@@ -829,6 +837,12 @@ export async function fetchActivityLogs(options?: {
     limit: options?.limit || 100,
     userEmail: options?.userEmail || '',
     actionPrefix: options?.actionPrefix || '',
+    routeCode: options?.routeCode || '',
+    periodYear: options?.periodYear ?? '',
+    periodMonth: options?.periodMonth ?? '',
+    periodDay: options?.periodDay ?? '',
+    dateFrom: options?.dateFrom || '',
+    dateTo: options?.dateTo || '',
   });
 
   const now = Date.now();
@@ -850,6 +864,24 @@ export async function fetchActivityLogs(options?: {
   }
   if (options?.actionPrefix) {
     query = query.ilike('action', `${options.actionPrefix}%`);
+  }
+  if (options?.routeCode) {
+    query = query.eq('route_code', options.routeCode);
+  }
+  if (options?.periodYear !== undefined && options?.periodYear !== null) {
+    query = query.filter('details->>year', 'eq', String(options.periodYear));
+  }
+  if (options?.periodMonth !== undefined && options?.periodMonth !== null) {
+    query = query.filter('details->>month', 'eq', String(options.periodMonth));
+  }
+  if (options?.periodDay !== undefined && options?.periodDay !== null) {
+    query = query.filter('details->>day', 'eq', String(options.periodDay));
+  }
+  if (options?.dateFrom) {
+    query = query.gte('created_at', options.dateFrom);
+  }
+  if (options?.dateTo) {
+    query = query.lte('created_at', options.dateTo);
   }
 
   const { data, error } = await query;

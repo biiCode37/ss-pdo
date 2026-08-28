@@ -36,6 +36,7 @@ function readQueueFromStorage(): SyncItem[] {
 }
 
 import { backupSyncQueue, logActivity } from '../services/routeService';
+import { resolveRouteContext } from '../utils/auditLogContext';
 
 /** Tulis antrean ke localStorage dengan try-catch guard (ISS-06 fix) */
 function writeQueueToStorage(queue: SyncItem[]): void {
@@ -169,10 +170,20 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
 
         // Telemetry: Log SYNC_OFFLINE_QUEUE
         const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
+        const syncCtx = resolveRouteContext(item.sheetId, item.tabName);
         logActivity({
           user_email: userEmail,
           action: 'SYNC_OFFLINE_QUEUE',
-          details: { queueItemId: item.id, sheetId: item.sheetId, tabName: item.tabName, rowIndex: item.rowIndex },
+          route_code: syncCtx.routeCode,
+          details: {
+            queueItemId: item.id,
+            sheetId: item.sheetId,
+            tabName: item.tabName,
+            rowIndex: item.rowIndex,
+            year: syncCtx.year,
+            month: syncCtx.month,
+            day: syncCtx.day,
+          },
         }).catch(() => {});
 
         // BUG-01 FIX: Atomic remove — baca ulang localStorage SEKARANG, hapus HANYA item ini

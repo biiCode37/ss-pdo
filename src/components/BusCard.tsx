@@ -147,7 +147,14 @@ function BusCardComponent({
 
       // BUG-11: Apply success status only after API succeeds
       try {
-        await updateBusData(sheetId, tabName, bus.rowIndex, updates, headerMap);
+        await updateBusData(
+          sheetId,
+          tabName,
+          bus.rowIndex,
+          updates,
+          headerMap,
+          bus,
+        );
         setSaveStatus("success");
       } catch (apiErr) {
         // Mark failure; existing catch below will queue if network
