@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { MapPin, Calendar, Plus, X, Loader2, ChevronUp, CheckCircle, AlertCircle } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
 import { inspectSpreadsheetHeader } from '../services/googleSheets';
@@ -95,7 +95,8 @@ function RouteSelectorCardComponent({
 
   const prevLoadingRef = useRef(isLoading);
   const [routes, setRoutes] = useState<Route[]>([]);
-  const flatSheets = flattenRoutes(routes);
+  // BUG-8: flattenRoutes recompute tiap render → useMemo
+  const flatSheets = useMemo(() => flattenRoutes(routes), [routes]);
 
   // Derived cascade options (filter by parent selection) — DECLARED FIRST for proper ordering
   const availableYears = Array.from(new Set(flatSheets.map(f => f.sheet.year))).sort((a, b) => b - a);
@@ -246,6 +247,9 @@ function RouteSelectorCardComponent({
         } else if (flat.length > 0) {
           setSelectedYear(flat[0].sheet.year);
         }
+        // BUG-13: Jangan menampilkan tanggal "terisi" yang menyesatkan pada
+        // dropdown Tanggal yang masih disabled (belum ada rute terpilih).
+        if (!isAccumulation) setSelectedTab('');
         if (!sheetUrl) {
           setSheetUrl('');
         }
@@ -281,38 +285,39 @@ function RouteSelectorCardComponent({
   }, [routes, sheetUrl, currentSheetId, selectedTab]);
 
   // CSS cascade handlers — perubahan pada level atas me-reset level bawah
+  // BUG-12: Jika mode AKUMULASI aktif, JANGAN reset selectedTab (mode rekap
+  // dipertahankan); hanya perbarui sheetUrl ke rute/bulan/tahun baru.
+  const isAccumulation = selectedTab === 'AKUMULASI';
+
   const handleYearChange = (year: string) => {
     const y = year ? Number(year) : null;
     setSelectedYear(y as number | null);
     setSelectedMonth(null);
     setSelectedRouteCode('');
-    setSelectedTab('');
     setSheetUrl('');
+    if (!isAccumulation) setSelectedTab('');
   };
 
   const handleMonthChange = (month: string) => {
     const m = month ? Number(month) : null;
     setSelectedMonth(m);
     setSelectedRouteCode('');
-    setSelectedTab('');
     setSheetUrl('');
+    if (!isAccumulation) setSelectedTab('');
   };
 
   const handleRouteCodeChange = (code: string) => {
     setSelectedRouteCode(code);
-    setSelectedTab('');
-    if (code && selectedYear && selectedMonth) {
-      const match = flatSheets.find(
-        f => f.routeCode === code && f.sheet.month === selectedMonth && f.sheet.year === selectedYear
-      );
-      if (match) {
-        setSheetUrl(match.sheet.sheet_url);
-        // Default tanggal otomatis ke hari ini (jika valid date), atau hari pertama
+
+    const sheetFn = getSheetForSelection(code);
+    if (sheetFn) {
+      setSheetUrl(sheetFn.sheet.sheet_url);
+      // BUG-3/12: Hanya auto-set tanggal hari ini saat mode NORMAL.
+      // Di mode AKUMULASI, selectedTab & Tanggal dropdown dibiarkan (rekap).
+      if (!isAccumulation) {
         const today = String(new Date().getDate());
         const defaultDay = days.includes(today) ? today : days[0] || '';
         setSelectedTab(defaultDay);
-      } else {
-        setSheetUrl('');
       }
     } else {
       setSheetUrl('');
@@ -321,6 +326,14 @@ function RouteSelectorCardComponent({
 
   const handleTabChange = (tab: string) => {
     setSelectedTab(tab);
+  };
+
+  // Helper: cari sheet untuk kombinasi rute+bulan+tahun saat ini
+  const getSheetForSelection = (code: string | null) => {
+    if (!code || !selectedYear || !selectedMonth) return null;
+    return flatSheets.find(
+      f => f.routeCode === code && f.sheet.month === selectedMonth && f.sheet.year === selectedYear
+    );
   };
 
   // Auto morph saat data berhasil selesai di-load (transisi dari loading -> selesai)
@@ -419,6 +432,13 @@ function RouteSelectorCardComponent({
       setSelectedRouteCode(fullRouteCode);
       setSelectedMonth(newMonth);
       setSelectedYear(newYear);
+      // BUG-2: setelah tambah rute sukses, reset dropdown tanggal ke hari ini
+      // (mode normal) agar konsisten dengan rute baru yang disimpan.
+      if (!isAccumulation) {
+        const today = String(new Date().getDate());
+        const defaultDay = days.includes(today) ? today : days[0] || '';
+        setSelectedTab(defaultDay);
+      }
       resetForm();
       setTimeout(() => {
         onLoadData();
@@ -565,18 +585,18 @@ function RouteSelectorCardComponent({
                 </select>
               </div>
 
-              {/* Kolom 4: Tanggal (aktif setelah Rute dipilih) */}
+              {/* Kolom 4: Tanggal (aktif setelah Rute dipilih; dinonaktifkan di mode AKUMULASI) */}
               <div>
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tanggal</label>
                 <select
                   className="input-field"
-                  value={selectedTab === 'AKUMULASI' ? '' : selectedTab}
+                  value={isAccumulation ? '' : selectedTab}
                   onChange={(e) => handleTabChange(e.target.value)}
-                  disabled={!dateEnabled}
-                  title={!dateEnabled ? 'Pilih rute terlebih dahulu' : 'Pilih tanggal'}
-                  style={{ width: '100%', padding: '8px', opacity: !dateEnabled ? 0.55 : 1 }}
+                  disabled={!dateEnabled || isAccumulation || days.length === 0}
+                  title={isAccumulation ? 'Nonaktif saat mode Rekap Akumulasi' : (!dateEnabled ? 'Pilih rute terlebih dahulu' : 'Pilih tanggal')}
+                  style={{ width: '100%', padding: '8px', opacity: (!dateEnabled || isAccumulation) ? 0.55 : 1 }}
                 >
-                  <option value="" disabled>-- Pilih Tanggal --</option>
+                  <option value="">{isAccumulation ? '— Rekap Akumulasi —' : '-- Pilih Tanggal --'}</option>
                   {days.map(day => (
                     <option key={day} value={day}>Tgl {day}</option>
                   ))}

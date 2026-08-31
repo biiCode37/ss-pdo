@@ -778,6 +778,7 @@ body.light-mode .bottom-nav {
   padding: 16px;
   margin-bottom: 16px;
   overflow: hidden;
+  /* BUG-UI: max-height only when morphed; expanded state grows naturally */
   max-height: 480px;
   opacity: 1;
   transition:
@@ -800,6 +801,16 @@ body.light-mode .bottom-nav {
   margin-bottom: 12px;
   cursor: pointer;
   user-select: none;
+}
+
+/* BUG-UI: Expanded state (not morphed) - remove max-height constraint,
+   allow natural height with scroll if content exceeds viewport */
+.morph-selector-card:not(.morphed) {
+  max-height: none;
+  overflow: visible;
+  /* Optional: add internal scroll for very long forms */
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 .morph-selector-card.morphed:hover {
