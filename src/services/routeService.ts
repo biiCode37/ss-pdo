@@ -638,7 +638,7 @@ export async function addUserProfile(params: {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
       return { success: false, message: 'Format email tidak valid.' };
     }
-    const { error } = await supabase.from('user_profiles').insert([
+    const { data, error } = await supabase.from('user_profiles').insert([
       {
         email: cleanEmail,
         full_name: params.full_name.trim(),
@@ -649,12 +649,23 @@ export async function addUserProfile(params: {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       },
-    ]);
+    ]).select('email');
+
     if (error) {
       if (error.code === '23505') {
         return { success: false, message: 'Email tersebut sudah terdaftar di sistem.' };
       }
       return { success: false, message: `Gagal menambahkan pengguna: ${error.message}` };
+    }
+
+    // BUG-65: Deteksi zero-row — RLS bisa memfilter INSERT tanpa error dan
+    // menghasilkan 0 baris; ini menjadikannya kegagalan yang terlihat
+    // konsisten (NOT NULL email membuat data selalu berisi saat berhasil).
+    if (!data || data.length === 0) {
+      return {
+        success: false,
+        message: `Tidak ada baris yang tersimpan untuk ${cleanEmail}. Kemungkinan policy database memblokir operasi ini.`,
+      };
     }
 
     // Catat ke audit trail
