@@ -25,7 +25,7 @@ interface Props {
   isDataLoaded: boolean;
   currentSheetId?: string;
   currentTabName?: string;
-  onLoadData: () => void;
+  onLoadData: (tab?: string) => void;
   accRange?: {
     startDay?: number;
     startMonth?: number;
@@ -114,7 +114,7 @@ function RouteSelectorCardComponent({
             .filter(f => f.sheet.year === selectedYear && f.sheet.month === selectedMonth)
             .map(f => f.routeCode)
         )
-      ).sort()
+      ).sort((a, b) => a.localeCompare(b, 'id', { numeric: true, sensitivity: 'base' }))
     : [];
 
   // Derived cascade enabled flags
@@ -434,15 +434,16 @@ function RouteSelectorCardComponent({
       setSelectedYear(newYear);
       // BUG-2: setelah tambah rute sukses, reset dropdown tanggal ke hari ini
       // (mode normal) agar konsisten dengan rute baru yang disimpan.
+      const today = String(new Date().getDate());
+      const defaultDay = days.includes(today) ? today : days[0] || '';
       if (!isAccumulation) {
-        const today = String(new Date().getDate());
-        const defaultDay = days.includes(today) ? today : days[0] || '';
         setSelectedTab(defaultDay);
       }
       resetForm();
-      setTimeout(() => {
-        onLoadData();
-      }, 100);
+      // BUG-67: teruskan tab eksplisit agar Dashboard load data rute baru;
+      // isRefresh=true memaksa reload walaupun busData sudah ada (auto-load
+      // effect terblokir oleh guard busData).
+      onLoadData(isAccumulation ? undefined : defaultDay);
     } else {
       setFormError(result.message || 'Gagal menyimpan rute.');
     }
@@ -766,7 +767,7 @@ function RouteSelectorCardComponent({
           <button
             type="button"
             className="btn"
-            onClick={onLoadData}
+            onClick={() => onLoadData()}
             disabled={isLoading || isAddingRoute || !sheetUrl}
           >
             {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Unit'}

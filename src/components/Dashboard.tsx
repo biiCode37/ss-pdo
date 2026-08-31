@@ -166,6 +166,18 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const requestIdRef = useRef<number>(0);
   const headerBlockRef = useRef<HTMLDivElement>(null);
 
+  // BUG-67: Ref sinkron untuk sheetUrl/selectedTab — membaca state TERBARU
+  // di dalam async handler (hindari stale closure saat onLoadData dipanggil
+  // dari setTimeout / callback RouteSelectorCard).
+  const sheetUrlRef = useRef(sheetUrl);
+  const selectedTabRef = useRef(selectedTab);
+  useEffect(() => {
+    sheetUrlRef.current = sheetUrl;
+  }, [sheetUrl]);
+  useEffect(() => {
+    selectedTabRef.current = selectedTab;
+  }, [selectedTab]);
+
   useEffect(() => {
     const el = headerBlockRef.current;
     if (!el) return;
@@ -298,22 +310,30 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     };
   }, []);
 
-  const lastAutoLoadedSheetRef = useRef("");
+  // BUG-68: Auto-load HANYA sekali saat cold-start (jika ada sheetUrl
+  // tersimpan dari localStorage). Pemilihan/ubahan dropdown (tahun, bulan,
+  // rute, tanggal) TIDAK memicu load — hanya tombol "Load Data".
+  const didInitialAutoLoadRef = useRef(false);
   useEffect(() => {
-    if (!sheetUrl || isLoading || busData) return;
-    if (lastAutoLoadedSheetRef.current === sheetUrl) return;
-    lastAutoLoadedSheetRef.current = sheetUrl;
+    if (didInitialAutoLoadRef.current) return;
+    if (!sheetUrlRef.current || busData) return;
+    didInitialAutoLoadRef.current = true;
     handleLoadData(false);
-  }, [sheetUrl, isLoading, busData, handleLoadData]);
+    // Mount-only; sheetUrl/busData dibaca via ref agar selalu fresh.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleLoadData(isRefresh = false, targetTab?: string) {
-    const tabToLoad = targetTab || selectedTab;
-    if (!sheetUrl) {
+    // BUG-67: Baca dari ref agar selalu fresh (hindari stale closure saat
+    // dipanggil lewat setTimeout/callback dari RouteSelectorCard)
+    const currentSheetUrl = sheetUrlRef.current;
+    const activeTab = targetTab || selectedTabRef.current;
+    if (!currentSheetUrl) {
       setError("Silakan pilih atau paste link Google Sheet terlebih dahulu");
       return;
     }
 
-    const sheetId = extractSpreadsheetId(sheetUrl);
+    const sheetId = extractSpreadsheetId(currentSheetUrl);
     if (!sheetId) {
       setError(
         "Link tidak valid. Pastikan Anda meng-copy link dari Google Sheets.",
@@ -340,8 +360,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
     try {
       let result: any = null;
-      if (tabToLoad === "AKUMULASI") {
-        const activeRouteCode = getRouteCodeForSheet(sheetId || sheetUrl);
+      if (activeTab === "AKUMULASI") {
+        const activeRouteCode = getRouteCodeForSheet(sheetId || currentSheetUrl);
 
         if (activeRouteCode && accRangeDetails) {
           const cross = await getCrossPeriodAccumulation(
@@ -371,7 +391,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           );
         }
       } else {
-        result = await getBusData(sheetId, tabToLoad);
+        result = await getBusData(sheetId, activeTab);
       }
 
       const {
@@ -386,7 +406,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       setBusData(data);
       setHeaderMap(headerMap);
       setCurrentSheetId(sheetId);
-      setCurrentTabName(tabToLoad);
+      setCurrentTabName(activeTab);
       setMissingColumns(missing);
       setSheetSummary(summary || {});
     } catch (err: any) {
@@ -731,7 +751,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           isDataLoaded={!!busData}
           currentSheetId={currentSheetId}
           currentTabName={currentTabName}
-          onLoadData={() => handleLoadData(false)}
+          onLoadData={(tab) => handleLoadData(true, tab)}
           accRange={accRangeDetails}
         />
       </div>
