@@ -48,7 +48,7 @@ export function ProfileMenuSheet({
   onClose,
   onOpenAccumulation,
   onOpenUserManagement,
-  onOpenAuditLogs,
+  onOpenAuditLogs: _onOpenAuditLogs,
   isDarkMode,
   onToggleTheme,
   offlineQueueCount,
@@ -507,13 +507,12 @@ export function ProfileMenuSheet({
                 <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
               </button>
 
-              {/* Log Aktivitas & Audit */}
+              {/* Log Aktivitas & Audit (Disabled - Coming Soon) */}
+              {/* BUG-66: Halaman belum siap production — dikunci untuk SEMUA
+                  role. Button disabled & nonaktifkan pintu masuk satu-satunya. */}
               <button
                 type="button"
-                onClick={() => {
-                  onClose();
-                  onOpenAuditLogs?.();
-                }}
+                disabled={true}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -522,14 +521,16 @@ export function ProfileMenuSheet({
                   borderRadius: "12px",
                   background: "var(--bg-secondary, rgba(255,255,255,0.03))",
                   border: "1px solid var(--card-border)",
-                  color: "var(--text-primary)",
+                  color: "var(--text-secondary)",
                   fontWeight: 500,
                   fontSize: "13.5px",
-                  cursor: "pointer",
+                  cursor: "not-allowed",
+                  opacity: 0.65,
                 }}
+                title="Fitur sedang dalam penyesuaian (Coming Soon)"
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <History size={18} style={{ color: "#10b981" }} />
+                  <History size={18} style={{ color: "var(--text-secondary)" }} />
                   <div style={{ textAlign: "left" }}>
                     <div>Log Aktivitas & Audit</div>
                     <div
@@ -543,7 +544,22 @@ export function ProfileMenuSheet({
                     </div>
                   </div>
                 </div>
-                <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+                <span
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: 700,
+                    padding: "2px 7px",
+                    borderRadius: "6px",
+                    background: "rgba(245, 158, 11, 0.15)",
+                    color: "var(--warning-color, #f59e0b)",
+                    border: "1px solid rgba(245, 158, 11, 0.3)",
+                    letterSpacing: "0.4px",
+                    textTransform: "uppercase",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Coming Soon
+                </span>
               </button>
             </div>
           </div>

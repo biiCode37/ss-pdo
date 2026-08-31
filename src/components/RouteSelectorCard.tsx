@@ -88,14 +88,38 @@ function RouteSelectorCardComponent({
   const [checkStatus, setCheckStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
   const [checkMessage, setCheckMessage] = useState<string | null>(null);
 
-  // 3-Level Selection State (BUG-41)
+  // 4-Level Sequential Selection State (Cascade: Year → Month → Route → Date)
+  const [selectedYear, setSelectedYear] = useState<number | null>(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [selectedRouteCode, setSelectedRouteCode] = useState<string>('');
-  const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
 
   const prevLoadingRef = useRef(isLoading);
   const [routes, setRoutes] = useState<Route[]>([]);
   const flatSheets = flattenRoutes(routes);
+
+  // Derived cascade options (filter by parent selection) — DECLARED FIRST for proper ordering
+  const availableYears = Array.from(new Set(flatSheets.map(f => f.sheet.year))).sort((a, b) => b - a);
+
+  const availableMonths = selectedYear
+    ? Array.from(
+        new Set(flatSheets.filter(f => f.sheet.year === selectedYear).map(f => f.sheet.month))
+      ).sort((a, b) => a - b)
+    : [];
+
+  const availableRouteCodes = (selectedYear && selectedMonth)
+    ? Array.from(
+        new Set(
+          flatSheets
+            .filter(f => f.sheet.year === selectedYear && f.sheet.month === selectedMonth)
+            .map(f => f.routeCode)
+        )
+      ).sort()
+    : [];
+
+  // Derived cascade enabled flags
+  const monthEnabled = selectedYear !== null && availableYears.length > 0;
+  const routeEnabled = selectedMonth !== null;
+  const dateEnabled = selectedRouteCode !== '';
 
   // Live check inspection saat user mengisi link Google Sheets
   useEffect(() => {
@@ -156,19 +180,6 @@ function RouteSelectorCardComponent({
     return () => clearTimeout(timer);
   }, [newRouteUrl, isAddingRoute]);
 
-  // Dropdown lists
-  const routeCodes = Array.from(new Set(flatSheets.map(f => f.routeCode))).sort();
-  const availableMonths = Array.from(
-    new Set(flatSheets.filter(f => f.routeCode === selectedRouteCode).map(f => f.sheet.month))
-  ).sort((a, b) => a - b);
-  const availableYears = Array.from(
-    new Set(
-      flatSheets
-        .filter(f => f.routeCode === selectedRouteCode && f.sheet.month === selectedMonth)
-        .map(f => f.sheet.year)
-    )
-  ).sort((a, b) => b - a);
-
   // Proactive duplicate detection (real-time)
   const fullNewRouteCode = newRouteCodeSuffix.trim() ? `JAK.${newRouteCodeSuffix.trim()}` : '';
   const newSpreadsheetId = extractSpreadsheetId(newRouteUrl.trim());
@@ -210,27 +221,39 @@ function RouteSelectorCardComponent({
           const saved = localStorage.getItem('PDO_LAST_VISITED');
           if (saved) {
             const parsed = JSON.parse(saved);
-            if (parsed.sheetUrl && flat.some(f => f.sheet.sheet_url === parsed.sheetUrl)) {
-              setSheetUrl(parsed.sheetUrl);
-              if (parsed.routeCode) setSelectedRouteCode(parsed.routeCode);
-              if (parsed.month) setSelectedMonth(parsed.month);
-              if (parsed.year) setSelectedYear(parsed.year);
+            const savedMatch = flat.find(f =>
+              f.sheet.sheet_url === parsed.sheetUrl ||
+              (extractSpreadsheetId(f.sheet.sheet_url) && extractSpreadsheetId(parsed.sheetUrl) &&
+                extractSpreadsheetId(f.sheet.sheet_url) === extractSpreadsheetId(parsed.sheetUrl))
+            );
+            if (savedMatch && parsed.year && parsed.month && parsed.routeCode) {
+              // Restore penuh → semua dropdown disabled cascade menjadi enabled
+              setSelectedYear(parsed.year);
+              setSelectedMonth(parsed.month);
+              setSelectedRouteCode(parsed.routeCode);
+              setSheetUrl(savedMatch.sheet.sheet_url);
+              setSelectedTab(parsed.selectedTab || String(new Date().getDate()));
               return;
             }
           }
         } catch (_e) {}
 
-        if (!sheetUrl) {
-          setSheetUrl(flat[0].sheet.sheet_url);
-          setSelectedRouteCode(flat[0].routeCode);
-          setSelectedMonth(flat[0].sheet.month);
+        // Fallback: hanya Tahun default ke tahun sekarang, sisanya menunggu
+        // input cascade dari user (Bulan/Rute/Tanggal disabled).
+        const currentYear = new Date().getFullYear();
+        if (flat.some(f => f.sheet.year === currentYear)) {
+          setSelectedYear(currentYear);
+        } else if (flat.length > 0) {
           setSelectedYear(flat[0].sheet.year);
+        }
+        if (!sheetUrl) {
+          setSheetUrl('');
         }
       }
     });
   }, []);
 
-  // Sync 3-level dropdowns when active sheet changes
+  // Sync dropdown cascade ketika sheet aktif berubah (data sudah ter-load)
   useEffect(() => {
     if (flatSheets.length === 0) return;
     const targetId = currentSheetId || extractSpreadsheetId(sheetUrl);
@@ -240,9 +263,9 @@ function RouteSelectorCardComponent({
     });
 
     if (active) {
-      setSelectedRouteCode(active.routeCode);
-      setSelectedMonth(active.sheet.month);
       setSelectedYear(active.sheet.year);
+      setSelectedMonth(active.sheet.month);
+      setSelectedRouteCode(active.routeCode);
 
       // Simpan ke localStorage (BUG-42)
       try {
@@ -257,52 +280,47 @@ function RouteSelectorCardComponent({
     }
   }, [routes, sheetUrl, currentSheetId, selectedTab]);
 
+  // CSS cascade handlers — perubahan pada level atas me-reset level bawah
+  const handleYearChange = (year: string) => {
+    const y = year ? Number(year) : null;
+    setSelectedYear(y as number | null);
+    setSelectedMonth(null);
+    setSelectedRouteCode('');
+    setSelectedTab('');
+    setSheetUrl('');
+  };
+
+  const handleMonthChange = (month: string) => {
+    const m = month ? Number(month) : null;
+    setSelectedMonth(m);
+    setSelectedRouteCode('');
+    setSelectedTab('');
+    setSheetUrl('');
+  };
+
   const handleRouteCodeChange = (code: string) => {
     setSelectedRouteCode(code);
-    const months = Array.from(
-      new Set(flatSheets.filter(f => f.routeCode === code).map(f => f.sheet.month))
-    ).sort((a, b) => a - b);
-    const nextMonth = months.includes(selectedMonth) ? selectedMonth : (months[0] || new Date().getMonth() + 1);
-    setSelectedMonth(nextMonth);
-
-    const years = Array.from(
-      new Set(flatSheets.filter(f => f.routeCode === code && f.sheet.month === nextMonth).map(f => f.sheet.year))
-    ).sort((a, b) => b - a);
-    const nextYear = years.includes(selectedYear) ? selectedYear : (years[0] || new Date().getFullYear());
-    setSelectedYear(nextYear);
-
-    const match = flatSheets.find(f => f.routeCode === code && f.sheet.month === nextMonth && f.sheet.year === nextYear);
-    if (match) {
-      setSheetUrl(match.sheet.sheet_url);
+    setSelectedTab('');
+    if (code && selectedYear && selectedMonth) {
+      const match = flatSheets.find(
+        f => f.routeCode === code && f.sheet.month === selectedMonth && f.sheet.year === selectedYear
+      );
+      if (match) {
+        setSheetUrl(match.sheet.sheet_url);
+        // Default tanggal otomatis ke hari ini (jika valid date), atau hari pertama
+        const today = String(new Date().getDate());
+        const defaultDay = days.includes(today) ? today : days[0] || '';
+        setSelectedTab(defaultDay);
+      } else {
+        setSheetUrl('');
+      }
     } else {
       setSheetUrl('');
     }
   };
 
-  const handleMonthChange = (month: number) => {
-    setSelectedMonth(month);
-    const years = Array.from(
-      new Set(flatSheets.filter(f => f.routeCode === selectedRouteCode && f.sheet.month === month).map(f => f.sheet.year))
-    ).sort((a, b) => b - a);
-    const nextYear = years.includes(selectedYear) ? selectedYear : (years[0] || new Date().getFullYear());
-    setSelectedYear(nextYear);
-
-    const match = flatSheets.find(f => f.routeCode === selectedRouteCode && f.sheet.month === month && f.sheet.year === nextYear);
-    if (match) {
-      setSheetUrl(match.sheet.sheet_url);
-    } else {
-      setSheetUrl('');
-    }
-  };
-
-  const handleYearChange = (year: number) => {
-    setSelectedYear(year);
-    const match = flatSheets.find(f => f.routeCode === selectedRouteCode && f.sheet.month === selectedMonth && f.sheet.year === year);
-    if (match) {
-      setSheetUrl(match.sheet.sheet_url);
-    } else {
-      setSheetUrl('');
-    }
+  const handleTabChange = (tab: string) => {
+    setSelectedTab(tab);
   };
 
   // Auto morph saat data berhasil selesai di-load (transisi dari loading -> selesai)
@@ -322,8 +340,8 @@ function RouteSelectorCardComponent({
 
   const displayRouteTitle = activeFlat
     ? `${activeFlat.routeCode} (${MONTH_NAMES_ID[activeFlat.sheet.month]} ${activeFlat.sheet.year})`
-    : selectedRouteCode
-      ? `${selectedRouteCode} (${MONTH_NAMES_ID[selectedMonth]} ${selectedYear})`
+    : selectedRouteCode && selectedMonth
+      ? `${selectedRouteCode} (${MONTH_NAMES_ID[selectedMonth] || ''} ${selectedYear})`
       : 'Pilih Rute & Periode';
 
   const resetForm = () => {
@@ -430,7 +448,7 @@ function RouteSelectorCardComponent({
             {/* BUG-50: Gunakan formatter kanonik agar rentang lintas bulan/
                 tahun tampil lengkap (mis. 01/08/25 - 31/09/25), bukan ambigu */}
             {selectedTab === 'AKUMULASI'
-              ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth, selectedYear, accRange)})`
+              ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth ?? new Date().getMonth() + 1, selectedYear ?? new Date().getFullYear(), accRange)})`
               : `Tgl ${currentTabName || selectedTab}`}
           </span>
         </div>
@@ -491,33 +509,72 @@ function RouteSelectorCardComponent({
               )}
             </div>
 
-            {/* 2-Row Grid Layout: Row 1 (Rute & Tanggal), Row 2 (Bulan & Tahun) */}
+            {/* Sequential Cascade: 4 Kolom (Tahun → Bulan → Rute → Tanggal) */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
-              {/* Row 1, Col 1: Rute */}
+              {/* Kolom 1: Tahun (selalu enabled) */}
+              <div>
+                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tahun</label>
+                <select
+                  className="input-field"
+                  value={selectedYear ?? ''}
+                  onChange={(e) => handleYearChange(e.target.value)}
+                  disabled={availableYears.length === 0}
+                  title={availableYears.length === 0 ? 'Belum ada data rute' : 'Pilih tahun terlebih dahulu'}
+                  style={{ width: '100%', padding: '8px' }}
+                >
+                  <option value="">-- Tahun --</option>
+                  {availableYears.map((y) => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Kolom 2: Bulan (aktif setelah Tahun dipilih) */}
+              <div>
+                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Bulan</label>
+                <select
+                  className="input-field"
+                  value={selectedMonth ?? ''}
+                  onChange={(e) => handleMonthChange(e.target.value)}
+                  disabled={!monthEnabled || availableMonths.length === 0}
+                  title={!monthEnabled ? 'Pilih tahun terlebih dahulu' : 'Pilih bulan'}
+                  style={{ width: '100%', padding: '8px', opacity: !monthEnabled ? 0.55 : 1 }}
+                >
+                  <option value="">-- Bulan --</option>
+                  {availableMonths.map((m) => (
+                    <option key={m} value={m}>{MONTH_NAMES_ID[m]}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Kolom 3: Rute (aktif setelah Bulan dipilih) */}
               <div>
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Rute</label>
                 <select
                   className="input-field"
                   value={selectedRouteCode}
                   onChange={(e) => handleRouteCodeChange(e.target.value)}
-                  disabled={routeCodes.length === 0}
-                  style={{ width: '100%', padding: '8px' }}
+                  disabled={!routeEnabled || availableRouteCodes.length === 0}
+                  title={!routeEnabled ? 'Pilih bulan terlebih dahulu' : 'Pilih rute'}
+                  style={{ width: '100%', padding: '8px', opacity: !routeEnabled ? 0.55 : 1 }}
                 >
-                  <option value="">{routeCodes.length > 0 ? '-- Rute --' : '-- Kosong --'}</option>
-                  {routeCodes.map((code) => (
+                  <option value="">{routeEnabled && availableRouteCodes.length === 0 ? '-- Kosong --' : '-- Rute --'}</option>
+                  {availableRouteCodes.map((code) => (
                     <option key={code} value={code}>{code}</option>
                   ))}
                 </select>
               </div>
 
-              {/* Row 1, Col 2: Tanggal */}
+              {/* Kolom 4: Tanggal (aktif setelah Rute dipilih) */}
               <div>
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tanggal</label>
                 <select
                   className="input-field"
                   value={selectedTab === 'AKUMULASI' ? '' : selectedTab}
-                  onChange={(e) => setSelectedTab(e.target.value)}
-                  style={{ width: '100%', padding: '8px' }}
+                  onChange={(e) => handleTabChange(e.target.value)}
+                  disabled={!dateEnabled}
+                  title={!dateEnabled ? 'Pilih rute terlebih dahulu' : 'Pilih tanggal'}
+                  style={{ width: '100%', padding: '8px', opacity: !dateEnabled ? 0.55 : 1 }}
                 >
                   <option value="" disabled>-- Pilih Tanggal --</option>
                   {days.map(day => (
@@ -525,43 +582,9 @@ function RouteSelectorCardComponent({
                   ))}
                 </select>
               </div>
-
-              {/* Row 2, Col 1: Bulan */}
-              <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Bulan</label>
-                <select
-                  className="input-field"
-                  value={selectedMonth}
-                  onChange={(e) => handleMonthChange(Number(e.target.value))}
-                  disabled={!selectedRouteCode || availableMonths.length === 0}
-                  style={{ width: '100%', padding: '8px' }}
-                >
-                  {availableMonths.length === 0 && <option value={selectedMonth}>{MONTH_NAMES_ID[selectedMonth] || 'Bulan'}</option>}
-                  {availableMonths.map((m) => (
-                    <option key={m} value={m}>{MONTH_NAMES_ID[m]}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Row 2, Col 2: Tahun */}
-              <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tahun</label>
-                <select
-                  className="input-field"
-                  value={selectedYear}
-                  onChange={(e) => handleYearChange(Number(e.target.value))}
-                  disabled={!selectedRouteCode || availableYears.length === 0}
-                  style={{ width: '100%', padding: '8px' }}
-                >
-                  {availableYears.length === 0 && <option value={selectedYear}>{selectedYear}</option>}
-                  {availableYears.map((y) => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-              </div>
             </div>
 
-            {!activeFlat && selectedRouteCode ? (
+            {!activeFlat && selectedRouteCode && selectedMonth && selectedYear ? (
               <div style={{ fontSize: '12px', color: 'var(--warning-color)', marginBottom: '8px' }}>
                 ⚠️ Belum ada sheet untuk rute {selectedRouteCode} periode {MONTH_NAMES_ID[selectedMonth]} {selectedYear}. Klik <b>+ Tambah Rute</b> untuk mendaftarkannya.
               </div>

@@ -13,14 +13,11 @@ import { ProfileMenuSheet } from "./ProfileMenuSheet";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
-import { AuditLogSkeleton, UserManagementSkeleton } from "./Skeletons";
+import { UserManagementSkeleton } from "./Skeletons";
 
 // Dynamic Code Splitting for infrequently visited administration pages
 const UserManagementPage = lazy(() =>
   import("./UserManagementPage").then((m) => ({ default: m.UserManagementPage }))
-);
-const AuditLogPage = lazy(() =>
-  import("./AuditLogPage").then((m) => ({ default: m.AuditLogPage }))
 );
 import {
   CloudOff,
@@ -481,17 +478,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     );
   }
 
-  if (currentView === 'audit_log') {
-    return (
-      <Suspense fallback={<AuditLogSkeleton />}>
-        <AuditLogPage
-          onBack={() => setCurrentView('dashboard')}
-          currentUserRole={getStoredUserRole()}
-          isDarkMode={theme === "dark"}
-        />
-      </Suspense>
-    );
-  }
+  
 
   return (
     <div

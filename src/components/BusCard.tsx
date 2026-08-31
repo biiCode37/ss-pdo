@@ -110,11 +110,9 @@ function BusCardComponent({
           headerMap,
         );
 
-        // BUG-12: Compare complete editable row to prevent silent overwrites
-        const fieldsToCheck: (keyof BusData)[] = [
-          "toaShift1", "toaShift2", "manualShift1", "manualShift2", "totalToa",
-          "kmAwal1", "kmAkhir1", "kmAwal2", "kmAkhir2", "keterangan",
-        ];
+        // BUG-12 (revisied): Compare ONLY the fields the user is actually updating.
+        // Previously checked all 10 columns → false positive collision when other fields changed.
+        const fieldsToCheck = Object.keys(updates) as (keyof BusData)[];
 
         let hasCollision = false;
         for (const field of fieldsToCheck) {

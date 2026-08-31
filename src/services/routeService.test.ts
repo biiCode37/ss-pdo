@@ -334,7 +334,9 @@ describe('routeService', () => {
   });
 
   it('addUserProfile inserts user and logs USER_ADDED activity', async () => {
-    const mockInsert = vi.fn().mockResolvedValue({ error: null });
+    const mockInsert = vi.fn().mockReturnValue({
+      select: vi.fn().mockResolvedValue({ data: [{ email: 'newpetugas@pusm.id' }], error: null }),
+    });
     (supabase.from as any).mockReturnValue({ insert: mockInsert });
 
     const result = await addUserProfile({
