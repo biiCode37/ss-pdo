@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Sun, Moon } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
+import { safeFormatNumber } from "../utils/numberUtils";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -8,10 +9,8 @@ interface Props {
 }
 
 function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
-  const formatInt = (val: number) =>
-    (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString(
-      "id-ID",
-    );
+  // ponytail: reuse centralized safeFormatNumber instead of duplicate inline formatters
+  const formatInt = (val: number) => safeFormatNumber(val);
 
   return (
     <div className="analytics-card glass">

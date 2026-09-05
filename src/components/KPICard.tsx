@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Gauge, Users, UserCheck, Bus } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
+import { safeFormatNumber } from "../utils/numberUtils";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -8,16 +9,10 @@ interface Props {
 }
 
 function KPICardComponent({ summary, dateBadge }: Props) {
-  // Format numbers using Indonesian locale without rounding away decimals
-  const formatInt = (val: number) =>
-    (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString(
-      "id-ID",
-    );
+  // ponytail: reuse centralized safeFormatNumber instead of duplicate inline formatters
+  const formatInt = (val: number) => safeFormatNumber(val);
   const formatRaw = (val: number) =>
-    (isNaN(val) || val === undefined || val === null ? 0 : val).toLocaleString(
-      "id-ID",
-      { maximumFractionDigits: 10 },
-    );
+    safeFormatNumber(val, 0, { maximumFractionDigits: 10 });
 
   return (
     <div className="analytics-card glass">

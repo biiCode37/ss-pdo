@@ -49,11 +49,7 @@ function getValidNumber(ssotVal: number | undefined, calculatedFallback: number)
   return calculatedFallback;
 }
 
-const safeParseNumber = (val: any): number => {
-  const num = parseIndonesianNumber(val);
-  return isNaN(num) ? 0 : num;
-};
-
+// ponytail: parseIndonesianNumber already defaults to 0 and guards isNaN
 export function calculateAnalytics(
   busData: BusData[],
   sheetSummary?: Record<string, number>
@@ -70,10 +66,10 @@ export function calculateAnalytics(
 
   busData.forEach((bus) => {
     // BUG-20: Use parseIndonesianNumber instead of parseFloat/parseInt to correctly parse "1.234" as 1234
-    const kmAwal1 = safeParseNumber(bus.kmAwal1);
-    const kmAkhir1 = safeParseNumber(bus.kmAkhir1);
-    const kmAwal2 = safeParseNumber(bus.kmAwal2);
-    const kmAkhir2 = safeParseNumber(bus.kmAkhir2);
+    const kmAwal1 = parseIndonesianNumber(bus.kmAwal1);
+    const kmAkhir1 = parseIndonesianNumber(bus.kmAkhir1);
+    const kmAwal2 = parseIndonesianNumber(bus.kmAwal2);
+    const kmAkhir2 = parseIndonesianNumber(bus.kmAkhir2);
 
     const kmShift1 = kmAkhir1 > kmAwal1 ? kmAkhir1 - kmAwal1 : 0;
     const kmShift2 = kmAkhir2 > kmAwal2 ? kmAkhir2 - kmAwal2 : 0;
@@ -84,10 +80,10 @@ export function calculateAnalytics(
       activeBusCount += 1;
     }
 
-    const toa1 = safeParseNumber(bus.toaShift1);
-    const man1 = safeParseNumber(bus.manualShift1);
-    const toa2 = safeParseNumber(bus.toaShift2);
-    const man2 = safeParseNumber(bus.manualShift2);
+    const toa1 = parseIndonesianNumber(bus.toaShift1);
+    const man1 = parseIndonesianNumber(bus.manualShift1);
+    const toa2 = parseIndonesianNumber(bus.toaShift2);
+    const man2 = parseIndonesianNumber(bus.manualShift2);
 
     totalToaShift1 += toa1;
     totalManualShift1 += man1;
@@ -200,34 +196,34 @@ export function calculateAccumulatedAnalytics(
       if (!existing) {
         unitMap.set(bus.unit, { ...bus });
       } else {
-        const kmA1 = safeParseNumber(bus.kmAwal1);
-        const kmAkh1 = safeParseNumber(bus.kmAkhir1);
-        const kmA2 = safeParseNumber(bus.kmAwal2);
-        const kmAkh2 = safeParseNumber(bus.kmAkhir2);
+        const kmA1 = parseIndonesianNumber(bus.kmAwal1);
+        const kmAkh1 = parseIndonesianNumber(bus.kmAkhir1);
+        const kmA2 = parseIndonesianNumber(bus.kmAwal2);
+        const kmAkh2 = parseIndonesianNumber(bus.kmAkhir2);
         const kmS1 = kmAkh1 > kmA1 ? kmAkh1 - kmA1 : 0;
         const kmS2 = kmAkh2 > kmA2 ? kmAkh2 - kmA2 : 0;
 
-        const exKmA1 = safeParseNumber(existing.kmAwal1);
-        const exKmAkh1 = safeParseNumber(existing.kmAkhir1);
-        const exKmA2 = safeParseNumber(existing.kmAwal2);
-        const exKmAkh2 = safeParseNumber(existing.kmAkhir2);
+        const exKmA1 = parseIndonesianNumber(existing.kmAwal1);
+        const exKmAkh1 = parseIndonesianNumber(existing.kmAkhir1);
+        const exKmA2 = parseIndonesianNumber(existing.kmAwal2);
+        const exKmAkh2 = parseIndonesianNumber(existing.kmAkhir2);
         const exKmS1 = exKmAkh1 > exKmA1 ? exKmAkh1 - exKmA1 : 0;
         const exKmS2 = exKmAkh2 > exKmA2 ? exKmAkh2 - exKmA2 : 0;
 
         existing.toaShift1 = (
-          safeParseNumber(existing.toaShift1) + safeParseNumber(bus.toaShift1)
+          parseIndonesianNumber(existing.toaShift1) + parseIndonesianNumber(bus.toaShift1)
         ).toString();
         existing.manualShift1 = (
-          safeParseNumber(existing.manualShift1) + safeParseNumber(bus.manualShift1)
+          parseIndonesianNumber(existing.manualShift1) + parseIndonesianNumber(bus.manualShift1)
         ).toString();
         existing.toaShift2 = (
-          safeParseNumber(existing.toaShift2) + safeParseNumber(bus.toaShift2)
+          parseIndonesianNumber(existing.toaShift2) + parseIndonesianNumber(bus.toaShift2)
         ).toString();
         existing.manualShift2 = (
-          safeParseNumber(existing.manualShift2) + safeParseNumber(bus.manualShift2)
+          parseIndonesianNumber(existing.manualShift2) + parseIndonesianNumber(bus.manualShift2)
         ).toString();
         existing.totalToa = (
-          safeParseNumber(existing.totalToa) + safeParseNumber(bus.totalToa)
+          parseIndonesianNumber(existing.totalToa) + parseIndonesianNumber(bus.totalToa)
         ).toString();
 
         const totalBusKmS1 = exKmS1 + kmS1;
