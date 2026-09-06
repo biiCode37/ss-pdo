@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, memo } from "react";
 import { Search, Bus } from "lucide-react";
 import type { BusData } from "../services/googleSheets";
-import { extractUnitList } from "../utils/unitAnalytics";
+import { extractUnitList, detectTargetTrip } from "../utils/unitAnalytics";
 import { UnitCard } from "./UnitCard";
 import { UnitDetailModal } from "./UnitDetailModal";
 import { UnitCardSkeleton } from "./Skeletons";
@@ -33,6 +33,10 @@ function UnitSummaryDashboardComponent({
     isOpen: Boolean(selectedUnit),
     onClose: () => setSelectedUnit(null),
   });
+
+  const targetTrip = useMemo(() => {
+    return detectTargetTrip(busData);
+  }, [busData]);
 
   const unitList = useMemo(() => {
     if (!busData) return [];
@@ -81,6 +85,7 @@ function UnitSummaryDashboardComponent({
             <UnitCard
               key={item.unit}
               item={item}
+              targetTrip={targetTrip}
               onSelectUnit={handleSelectUnit}
             />
           ))}
@@ -103,6 +108,7 @@ function UnitSummaryDashboardComponent({
         <UnitDetailModal
           unit={selectedUnit}
           busData={busData}
+          targetTrip={targetTrip}
           sheetId={sheetId}
           selectedTab={selectedTab}
           activeMonth={activeMonth}

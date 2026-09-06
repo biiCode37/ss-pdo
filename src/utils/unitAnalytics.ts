@@ -8,6 +8,8 @@ export interface UnitSummaryItem {
   totalToa: number;
   totalPassengers: number;
   totalKm: number;
+  tripPergi: string;
+  tripPulang: string;
   isFilled: boolean;
   shiftStatus: UnitShiftStatus;
   notes: string[];
@@ -16,6 +18,8 @@ export interface UnitSummaryItem {
 
 export interface UnitSummaryMetrics {
   unit: string;
+  tripPergi: string;
+  tripPulang: string;
   toaShift1: number;
   manualShift1: number;
   totalShift1Pnp: number;
@@ -72,7 +76,9 @@ export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
       totalToa: metrics.totalToa,
       totalPassengers: metrics.totalPassengers,
       totalKm: metrics.totalKm,
-      isFilled: metrics.totalPassengers > 0 || metrics.totalKm > 0 || metrics.notes.length > 0 || metrics.kmAwal1 !== '-',
+      tripPergi: metrics.tripPergi,
+      tripPulang: metrics.tripPulang,
+      isFilled: metrics.totalPassengers > 0 || metrics.totalKm > 0 || metrics.notes.length > 0 || metrics.kmAwal1 !== '-' || Boolean(metrics.tripPergi || metrics.tripPulang),
       shiftStatus: getUnitShiftStatus(b),
       notes: metrics.notes,
       noteCount: metrics.notes.length,
@@ -82,6 +88,8 @@ export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
 
 export function calculateUnitMetricsFromRow(item: BusData): UnitSummaryMetrics {
   const targetUnit = item.unit || 'Tanpa Nama';
+  const tripPergi = item.tripPergi || '';
+  const tripPulang = item.tripPulang || '';
   const toaShift1 = parseIndonesianNumber(item.toaShift1);
   const manualShift1 = parseIndonesianNumber(item.manualShift1);
   const totalShift1Pnp = toaShift1 + manualShift1;
@@ -109,6 +117,8 @@ export function calculateUnitMetricsFromRow(item: BusData): UnitSummaryMetrics {
 
   return {
     unit: targetUnit,
+    tripPergi,
+    tripPulang,
     toaShift1,
     manualShift1,
     totalShift1Pnp,
@@ -131,6 +141,8 @@ export function calculateUnitMetricsFromRow(item: BusData): UnitSummaryMetrics {
 export function calculateUnitMetrics(data: BusData[], targetUnit: string): UnitSummaryMetrics {
   const defaultResult: UnitSummaryMetrics = {
     unit: targetUnit,
+    tripPergi: '',
+    tripPulang: '',
     toaShift1: 0,
     manualShift1: 0,
     totalShift1Pnp: 0,
@@ -205,6 +217,8 @@ export function extractAccumulatedUnitList(
       totalToa: val.totalToa,
       totalPassengers: totalPnp,
       totalKm: val.totalKm,
+      tripPergi: '',
+      tripPulang: '',
       isFilled: totalPnp > 0 || val.totalKm > 0 || val.notes.length > 0,
       shiftStatus: val.shiftStatus,
       notes: val.notes,
@@ -213,4 +227,49 @@ export function extractAccumulatedUnitList(
   });
 
   return result;
+}
+
+/**
+ * Mendeteksi target ritase rute secara otomatis dari modus/frekuensi tertinggi armada yang beroperasi (non-OFF).
+ * // ponytail: logika auto-deteksi target trip terpusat yang reusable
+ */
+export function detectTargetTrip(data: BusData[] | null | undefined): { pergi: number; pulang: number } | null {
+  if (!data || data.length === 0) return null;
+
+  const tripCounts: Record<string, number> = {};
+  let maxTrip = { pergi: 0, pulang: 0 };
+
+  data.forEach((b) => {
+    const isOff = (b.keterangan || '').trim().toUpperCase() === 'OFF';
+    if (isOff) return;
+    const bp = parseInt(b.tripPergi || '0', 10);
+    const bq = parseInt(b.tripPulang || '0', 10);
+    if (!isNaN(bp) && !isNaN(bq) && bp > 0 && bq > 0) {
+      const key = `${bp}/${bq}`;
+      tripCounts[key] = (tripCounts[key] || 0) + 1;
+      if (bp > maxTrip.pergi || (bp === maxTrip.pergi && bq > maxTrip.pulang)) {
+        maxTrip = { pergi: bp, pulang: bq };
+      }
+    }
+  });
+
+  let dominantKey = '';
+  let dominantCount = 0;
+  Object.entries(tripCounts).forEach(([k, count]) => {
+    if (count > dominantCount) {
+      dominantCount = count;
+      dominantKey = k;
+    }
+  });
+
+  if (dominantKey) {
+    const [domP, domQ] = dominantKey.split('/').map(Number);
+    return { pergi: domP, pulang: domQ };
+  }
+
+  if (maxTrip.pergi > 0 && maxTrip.pulang > 0) {
+    return maxTrip;
+  }
+
+  return null;
 }

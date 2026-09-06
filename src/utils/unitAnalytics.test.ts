@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { extractUnitList, calculateUnitMetrics, calculateUnitMetricsFromRow } from './unitAnalytics';
+import {
+  extractUnitList,
+  calculateUnitMetrics,
+  calculateUnitMetricsFromRow,
+  detectTargetTrip,
+} from './unitAnalytics';
 import type { BusData } from '../services/googleSheets';
 
 const mockBusData: BusData[] = [
@@ -89,5 +94,51 @@ describe('unitAnalytics helper', () => {
     expect(metrics.unit).toBe('SAF-001');
     expect(metrics.totalToa).toBe(120);
     expect(metrics.totalKm).toBe(100);
+  });
+
+  const createMockBus = (partial: Partial<BusData>): BusData => ({
+    rowIndex: 2,
+    unit: 'TEST-01',
+    toaShift1: '0',
+    toaShift2: '0',
+    manualShift1: '0',
+    manualShift2: '0',
+    totalToa: '0',
+    kmAwal1: '0',
+    kmAkhir1: '0',
+    kmAwal2: '0',
+    kmAkhir2: '0',
+    keterangan: '',
+    originalRow: [],
+    ...partial,
+  });
+
+  it('extracts tripPergi and tripPulang in unit summary and metrics', () => {
+    const tripData: BusData[] = [
+      createMockBus({
+        rowIndex: 2,
+        unit: 'SAF-010',
+        tripPergi: '7',
+        tripPulang: '7',
+      }),
+    ];
+    const list = extractUnitList(tripData);
+    expect(list[0].tripPergi).toBe('7');
+    expect(list[0].tripPulang).toBe('7');
+
+    const metrics = calculateUnitMetrics(tripData, 'SAF-010');
+    expect(metrics.tripPergi).toBe('7');
+    expect(metrics.tripPulang).toBe('7');
+  });
+
+  it('detectTargetTrip correctly identifies route target and ignores OFF units', () => {
+    const routeData: BusData[] = [
+      createMockBus({ rowIndex: 2, unit: 'U1', tripPergi: '7', tripPulang: '7' }),
+      createMockBus({ rowIndex: 3, unit: 'U2', tripPergi: '7', tripPulang: '7' }),
+      createMockBus({ rowIndex: 4, unit: 'U3', tripPergi: '5', tripPulang: '5', keterangan: 'Macet' }),
+      createMockBus({ rowIndex: 5, unit: 'U4', tripPergi: '10', tripPulang: '10', keterangan: 'OFF' }),
+    ];
+    const target = detectTargetTrip(routeData);
+    expect(target).toEqual({ pergi: 7, pulang: 7 });
   });
 });

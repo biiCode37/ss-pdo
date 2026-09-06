@@ -19,6 +19,7 @@ import {
 } from "../utils/alertUtils";
 import { getSatsetMode } from "../utils/modals/busInputModal";
 import { BusCardSkeleton } from "./Skeletons";
+import { detectTargetTrip } from "../utils/unitAnalytics";
 
 import type { SyncItem } from "../hooks/useOfflineSync";
 
@@ -143,42 +144,8 @@ function BusListComponent({
       return { pergi: manualP, pulang: manualQ };
     }
 
-    // Hitung modus / nilai trip dominan dari armada aktif (yang bukan OFF)
-    const tripFreq = new Map<string, { p: number; q: number; count: number }>();
-    let maxP = 0;
-    let maxQ = 0;
-
-    data.forEach((b) => {
-      const isOff = b.keterangan && b.keterangan.trim().toUpperCase() === "OFF";
-      if (isOff) return;
-
-      const p = parseIndonesianNumber(b.tripPergi, 0);
-      const q = parseIndonesianNumber(b.tripPulang, 0);
-      if (p > 0 || q > 0) {
-        maxP = Math.max(maxP, p);
-        maxQ = Math.max(maxQ, q);
-        const key = `${p}-${q}`;
-        const existing = tripFreq.get(key) || { p, q, count: 0 };
-        existing.count += 1;
-        tripFreq.set(key, existing);
-      }
-    });
-
-    if (tripFreq.size === 0) return null;
-
-    let dominant = { p: maxP, q: maxQ, count: 0 };
-    for (const item of tripFreq.values()) {
-      if (item.count > dominant.count) {
-        dominant = item;
-      }
-    }
-
-    const resP = dominant.p > 0 ? dominant.p : maxP;
-    const resQ = dominant.q > 0 ? dominant.q : maxQ;
-    if (resP > 0 || resQ > 0) {
-      return { pergi: resP, pulang: resQ };
-    }
-    return null;
+    // ponytail: reuse helper detectTargetTrip terpusat
+    return detectTargetTrip(data);
   }, [bulkPergi, bulkPulang, data]);
 
   // Otomatis sinkronkan bulkPergi & bulkPulang jika masih kosong tapi targetTrip terdeteksi dari data armada

@@ -6,6 +6,7 @@ import {
   Bus,
   Navigation,
   Users,
+  Repeat,
   AlertTriangle,
   CheckCircle2,
   Clock,
@@ -16,6 +17,7 @@ import type { UnitSummaryItem, UnitShiftStatus } from "../utils/unitAnalytics";
 
 interface Props {
   item: UnitSummaryItem;
+  targetTrip?: { pergi: number; pulang: number } | null;
   /** Callback stabil berparameter unit — memo(UnitCard) jadi efektif */
   onSelectUnit: (unit: string) => void;
 }
@@ -126,7 +128,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
   }
 }
 
-function UnitCardComponent({ item, onSelectUnit }: Props) {
+function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
   // BUG-61: Kartu interaktif kini dapat diakses keyboard & screen reader
   const handleClick = () => onSelectUnit(item.unit);
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -135,6 +137,20 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
       onSelectUnit(item.unit);
     }
   };
+
+  const pergiVal = (item.tripPergi || "").trim();
+  const pulangVal = (item.tripPulang || "").trim();
+  const hasTrip = pergiVal !== "" || pulangVal !== "";
+  const pergiNum = parseInt(pergiVal || "0", 10);
+  const pulangNum = parseInt(pulangVal || "0", 10);
+
+  const targetP = targetTrip?.pergi ?? 0;
+  const targetQ = targetTrip?.pulang ?? 0;
+  const hasTarget = Boolean(targetTrip && targetP > 0 && targetQ > 0);
+
+  const isTargetAchieved = hasTarget && hasTrip && pergiNum >= targetP && pulangNum >= targetQ;
+  const isBelowTarget = hasTarget && hasTrip && (pergiNum < targetP || pulangNum < targetQ);
+  const isImbalanced = hasTrip && pergiVal !== pulangVal;
 
   return (
     <div
@@ -185,18 +201,19 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
         </div>
       </div>
 
-      {/* Line 2: Inline Compact Stats Badges (KM & Pnp) */}
+      {/* Line 2: Inline Compact Stats Badges (KM, Pnp, Trip) */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "16px",
+          gap: "12px",
+          flexWrap: "wrap",
           fontSize: "12px",
           color: "var(--text-secondary)",
         }}
       >
         {/* Total KM */}
-        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
           <Navigation size={13} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
           <strong style={{ color: "var(--shift1-color)", fontWeight: 800 }}>
             {safeFormatNumber(item.totalKm)}
@@ -209,13 +226,79 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
         <span style={{ opacity: 0.3 }}>|</span>
 
         {/* Total Pnp */}
-        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
           <Users size={13} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
           <strong style={{ color: "var(--text-primary)", fontWeight: 800 }}>
             {safeFormatNumber(item.totalPassengers)}
           </strong>{" "}
           <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
             Pnp
+          </span>
+        </div>
+
+        <span style={{ opacity: 0.3 }}>|</span>
+
+        {/* Capaian Trip */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+          }}
+          title={
+            isBelowTarget
+              ? `Kurang Ritase: ${pergiVal || "0"}/${pulangVal || "0"} Rit (Target Rute: ${targetP}/${targetQ} Rit)`
+              : isTargetAchieved
+                ? `Target Tercapai: ${pergiVal || "0"}/${pulangVal || "0"} Rit`
+                : isImbalanced
+                  ? `Trip Tidak Seimbang: ${pergiVal || "0"}/${pulangVal || "0"} Rit`
+                  : undefined
+          }
+        >
+          <Repeat
+            size={13}
+            style={{
+              color: isBelowTarget
+                ? "var(--warning-text, #f59e0b)"
+                : isTargetAchieved
+                  ? "#10b981"
+                  : isImbalanced
+                    ? "#f97316"
+                    : hasTrip
+                      ? "var(--accent-color)"
+                      : "var(--text-secondary)",
+              flexShrink: 0,
+            }}
+          />
+          {hasTrip ? (
+            <strong
+              style={{
+                color: isBelowTarget
+                  ? "var(--warning-text, #f59e0b)"
+                  : isTargetAchieved
+                    ? "#10b981"
+                    : isImbalanced
+                      ? "#f97316"
+                      : "var(--text-primary)",
+                fontWeight: 800,
+              }}
+            >
+              {isBelowTarget ? `⚠️ ${pergiVal || "0"}/${pulangVal || "0"}` : `${pergiVal || "0"}/${pulangVal || "0"}`}
+            </strong>
+          ) : (
+            <span style={{ color: "var(--text-secondary)", opacity: 0.7 }}>0/0</span>
+          )}{" "}
+          <span
+            style={{
+              fontSize: "11px",
+              color: isBelowTarget
+                ? "var(--warning-text, #f59e0b)"
+                : isTargetAchieved
+                  ? "#10b981"
+                  : "var(--text-secondary)",
+            }}
+          >
+            Rit
           </span>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle } from 'lucide-react';
+import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle, Repeat } from 'lucide-react';
 import type { BusData } from '../services/googleSheets';
 import { calculateUnitMetrics } from '../utils/unitAnalytics';
 import { safeFormatNumber } from '../utils/numberUtils';
@@ -10,6 +10,7 @@ import { DailyToaTrendCard } from './DailyToaTrendCard';
 interface Props {
   unit: string;
   busData: BusData[] | null;
+  targetTrip?: { pergi: number; pulang: number } | null;
   sheetId: string;
   selectedTab: string;
   activeMonth?: number;
@@ -21,6 +22,7 @@ interface Props {
 export function UnitDetailModal({
   unit,
   busData,
+  targetTrip,
   sheetId,
   selectedTab,
   activeMonth,
@@ -314,6 +316,50 @@ export function UnitDetailModal({
                 {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
               </div>
             </div>
+
+            {Boolean(metrics.tripPergi || metrics.tripPulang) && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
+                  <Repeat size={18} />
+                </div>
+                <div style={{ fontSize: '17px', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                  {metrics.tripPergi || '0'}/{metrics.tripPulang || '0'}{' '}
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>Ritase</span>
+                  {targetTrip && targetTrip.pergi > 0 && (
+                    <span
+                      style={{
+                        marginLeft: '8px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        padding: '2px 8px',
+                        borderRadius: '6px',
+                        backgroundColor:
+                          parseInt(metrics.tripPergi || '0', 10) >= targetTrip.pergi &&
+                          parseInt(metrics.tripPulang || '0', 10) >= targetTrip.pulang
+                            ? 'rgba(16, 185, 129, 0.15)'
+                            : 'rgba(245, 158, 11, 0.15)',
+                        color:
+                          parseInt(metrics.tripPergi || '0', 10) >= targetTrip.pergi &&
+                          parseInt(metrics.tripPulang || '0', 10) >= targetTrip.pulang
+                            ? '#10b981'
+                            : 'var(--warning-text, #f59e0b)',
+                        border: `1px solid ${
+                          parseInt(metrics.tripPergi || '0', 10) >= targetTrip.pergi &&
+                          parseInt(metrics.tripPulang || '0', 10) >= targetTrip.pulang
+                            ? 'rgba(16, 185, 129, 0.3)'
+                            : 'rgba(245, 158, 11, 0.3)'
+                        }`,
+                      }}
+                    >
+                      {parseInt(metrics.tripPergi || '0', 10) >= targetTrip.pergi &&
+                      parseInt(metrics.tripPulang || '0', 10) >= targetTrip.pulang
+                        ? 'Target Tercapai'
+                        : `Kurang Ritase (Target: ${targetTrip.pergi}/${targetTrip.pulang})`}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
 
             {(metrics.manualShift1 + metrics.manualShift2) > 0 && (
               <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
