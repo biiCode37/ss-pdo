@@ -1,5 +1,6 @@
-import { useState, useMemo, useCallback, memo } from "react";
+import { useState, useEffect, useMemo, useCallback, memo } from "react";
 import type { BusData, HeaderMap } from "../services/googleSheets";
+import { parseIndonesianNumber } from "../utils/numberUtils";
 import { updateBulkBusData } from "../services/googleSheets";
 import { BusCard } from "./BusCard";
 import {
@@ -133,6 +134,60 @@ function BusListComponent({
       setIsSubmittingBulk(false);
     }
   };
+
+  // Menentukan target trip operasional rute saat ini
+  const targetTrip = useMemo(() => {
+    const manualP = parseIndonesianNumber(bulkPergi, 0);
+    const manualQ = parseIndonesianNumber(bulkPulang, 0);
+    if (manualP > 0 && manualQ > 0) {
+      return { pergi: manualP, pulang: manualQ };
+    }
+
+    // Hitung modus / nilai trip dominan dari armada aktif (yang bukan OFF)
+    const tripFreq = new Map<string, { p: number; q: number; count: number }>();
+    let maxP = 0;
+    let maxQ = 0;
+
+    data.forEach((b) => {
+      const isOff = b.keterangan && b.keterangan.trim().toUpperCase() === "OFF";
+      if (isOff) return;
+
+      const p = parseIndonesianNumber(b.tripPergi, 0);
+      const q = parseIndonesianNumber(b.tripPulang, 0);
+      if (p > 0 || q > 0) {
+        maxP = Math.max(maxP, p);
+        maxQ = Math.max(maxQ, q);
+        const key = `${p}-${q}`;
+        const existing = tripFreq.get(key) || { p, q, count: 0 };
+        existing.count += 1;
+        tripFreq.set(key, existing);
+      }
+    });
+
+    if (tripFreq.size === 0) return null;
+
+    let dominant = { p: maxP, q: maxQ, count: 0 };
+    for (const item of tripFreq.values()) {
+      if (item.count > dominant.count) {
+        dominant = item;
+      }
+    }
+
+    const resP = dominant.p > 0 ? dominant.p : maxP;
+    const resQ = dominant.q > 0 ? dominant.q : maxQ;
+    if (resP > 0 || resQ > 0) {
+      return { pergi: resP, pulang: resQ };
+    }
+    return null;
+  }, [bulkPergi, bulkPulang, data]);
+
+  // Otomatis sinkronkan bulkPergi & bulkPulang jika masih kosong tapi targetTrip terdeteksi dari data armada
+  useEffect(() => {
+    if (!bulkPergi && !bulkPulang && targetTrip) {
+      setBulkPergi(String(targetTrip.pergi));
+      setBulkPulang(String(targetTrip.pulang));
+    }
+  }, [targetTrip, bulkPergi, bulkPulang]);
 
   const availableKmS1Buses = useMemo(() => {
     return data.filter(
@@ -647,6 +702,7 @@ function BusListComponent({
                 )}
                 addToQueue={addToQueue}
                 activeCategory={activeCategory}
+                targetTrip={targetTrip}
                 onUpdateBus={
                   onUpdateBus
                     ? (updates) => onUpdateBus(bus.rowIndex, updates)

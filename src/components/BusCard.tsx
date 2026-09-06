@@ -33,6 +33,7 @@ interface Props {
   isQueued: boolean;
   addToQueue: (item: any) => void;
   activeCategory: string;
+  targetTrip?: { pergi: number; pulang: number } | null;
   onUpdateBus?: (updates: Partial<BusData>) => void;
   onSaveAndNext?: (savedBus: BusData) => void;
 }
@@ -45,6 +46,7 @@ function BusCardComponent({
   isQueued,
   addToQueue,
   activeCategory,
+  targetTrip,
   onUpdateBus,
   onSaveAndNext,
 }: Props) {
@@ -249,16 +251,34 @@ function BusCardComponent({
     const hasKm = totalKm > 0;
     const hasPnp = totalPnp > 0;
 
+    const pergiVal = formData.tripPergi ?? bus.tripPergi;
+    const pulangVal = formData.tripPulang ?? bus.tripPulang;
+    const hasPergi = Boolean(pergiVal && String(pergiVal).trim() !== "");
+    const hasPulang = Boolean(pulangVal && String(pulangVal).trim() !== "");
+    const hasTrip = hasPergi || hasPulang;
+    const pergiNum = parseIndonesianNumber(pergiVal, 0);
+    const pulangNum = parseIndonesianNumber(pulangVal, 0);
+
+    const targetP = targetTrip ? targetTrip.pergi : 0;
+    const targetQ = targetTrip ? targetTrip.pulang : 0;
+    const hasTarget = targetP > 0 && targetQ > 0;
+
+    // Evaluasi apakah mencapai target atau berada di bawah target ritase rute
+    const isBelowTarget = hasTarget && hasTrip && (pergiNum < targetP || pulangNum < targetQ);
+    const isTargetAchieved = hasTarget && hasTrip && pergiNum >= targetP && pulangNum >= targetQ;
+    const isImbalanced = hasTrip && (pergiVal !== pulangVal || isBelowTarget);
+
+    const tripStatusTitle = isBelowTarget
+      ? `Kurang Ritase: ${pergiVal || 0}/${pulangVal || 0} Rit (Target Rute: ${targetP}/${targetQ} Rit). Klik untuk edit Trip.`
+      : isTargetAchieved
+      ? `Target Ritase Tercapai Penuh: ${pergiVal}/${pulangVal} Rit (Target: ${targetP}/${targetQ} Rit). Klik untuk edit Trip.`
+      : hasTarget
+      ? `Target Rute: ${targetP}/${targetQ} Rit. Klik untuk edit Trip.`
+      : "Trip Operasional (Klik untuk edit Trip per unit)";
+
     // Mode Spesifik Kolom Aktif (selain ALL)
     if (activeCategory !== "ALL") {
       if (activeCategory === "trip") {
-        const pergiVal = formData.tripPergi ?? bus.tripPergi;
-        const pulangVal = formData.tripPulang ?? bus.tripPulang;
-        const hasPergi = Boolean(pergiVal && String(pergiVal).trim() !== "");
-        const hasPulang = Boolean(pulangVal && String(pulangVal).trim() !== "");
-        const hasTrip = hasPergi || hasPulang;
-        const isImbalanced = hasTrip && pergiVal !== pulangVal;
-
         return (
           <div
             style={{
@@ -266,20 +286,20 @@ function BusCardComponent({
               fontWeight: 700,
               padding: "4px 10px",
               borderRadius: "8px",
-              backgroundColor: isImbalanced
+              backgroundColor: isBelowTarget || isImbalanced
                 ? "rgba(245, 158, 11, 0.12)"
-                : hasTrip
+                : isTargetAchieved || (hasTrip && !hasTarget)
                 ? "rgba(16, 185, 129, 0.12)"
                 : "rgba(239, 68, 68, 0.12)",
-              color: isImbalanced
+              color: isBelowTarget || isImbalanced
                 ? "var(--warning-text, #f59e0b)"
-                : hasTrip
+                : isTargetAchieved || (hasTrip && !hasTarget)
                 ? "#10b981"
                 : "var(--danger-color)",
               border: `1px solid ${
-                isImbalanced
+                isBelowTarget || isImbalanced
                   ? "rgba(245, 158, 11, 0.3)"
-                  : hasTrip
+                  : isTargetAchieved || (hasTrip && !hasTarget)
                   ? "rgba(16, 185, 129, 0.25)"
                   : "rgba(239, 68, 68, 0.25)"
               }`,
@@ -290,7 +310,14 @@ function BusCardComponent({
           >
             <ArrowRightLeft size={12} style={{ flexShrink: 0 }} />
             <span>
-              Trip: {hasTrip ? `${pergiVal || 0}/${pulangVal || 0} Rit` : "Kosong"}
+              Trip:{" "}
+              {isBelowTarget
+                ? `⚠️ ${pergiVal || 0}/${pulangVal || 0} Rit (Kurang)`
+                : isTargetAchieved
+                ? `${pergiVal || 0}/${pulangVal || 0} Rit (Tercapai)`
+                : hasTrip
+                ? `${pergiVal || 0}/${pulangVal || 0} Rit`
+                : "Kosong"}
             </span>
           </div>
         );
@@ -338,13 +365,6 @@ function BusCardComponent({
       );
     }
 
-    const pergiVal = formData.tripPergi ?? bus.tripPergi;
-    const pulangVal = formData.tripPulang ?? bus.tripPulang;
-    const hasPergi = Boolean(pergiVal && String(pergiVal).trim() !== "");
-    const hasPulang = Boolean(pulangVal && String(pulangVal).trim() !== "");
-    const hasTrip = hasPergi || hasPulang;
-    const isImbalanced = hasTrip && pergiVal !== pulangVal;
-
     if (!hasKm && !hasPnp && !hasTrip) {
       return (
         <span
@@ -372,26 +392,26 @@ function BusCardComponent({
             handleOpenModal("trip");
           }}
           className="bus-card-badge-trip"
-          title="Trip Operasional (Klik untuk edit Trip per unit)"
+          title={tripStatusTitle}
           style={{
             fontSize: "11px",
             fontWeight: 700,
             padding: "3px 8px",
             borderRadius: "8px",
-            backgroundColor: isImbalanced
+            backgroundColor: isBelowTarget || isImbalanced
               ? "rgba(245, 158, 11, 0.12)"
-              : hasTrip
+              : isTargetAchieved || (hasTrip && !hasTarget)
               ? "rgba(16, 185, 129, 0.10)"
               : "var(--input-bg)",
-            color: isImbalanced
+            color: isBelowTarget || isImbalanced
               ? "var(--warning-text, #f59e0b)"
-              : hasTrip
+              : isTargetAchieved || (hasTrip && !hasTarget)
               ? "#10b981"
               : "var(--text-secondary)",
             border: `1px solid ${
-              isImbalanced
+              isBelowTarget || isImbalanced
                 ? "rgba(245, 158, 11, 0.3)"
-                : hasTrip
+                : isTargetAchieved || (hasTrip && !hasTarget)
                 ? "rgba(16, 185, 129, 0.25)"
                 : "var(--card-border)"
             }`,
@@ -403,7 +423,13 @@ function BusCardComponent({
           }}
         >
           <ArrowRightLeft size={11} style={{ flexShrink: 0 }} />
-          <span>{hasTrip ? `${pergiVal || 0}/${pulangVal || 0} Rit` : `—/— Rit`}</span>
+          <span>
+            {hasTrip
+              ? isBelowTarget
+                ? `⚠️ ${pergiVal || 0}/${pulangVal || 0} Rit`
+                : `${pergiVal || 0}/${pulangVal || 0} Rit`
+              : "—/— Rit"}
+          </span>
         </button>
 
         <div
