@@ -5,6 +5,7 @@ import {
   getAccumulatedBusData,
   reauthenticateSession,
   formatWholeSheet,
+  isUsingServiceAccount,
 } from "../services/googleSheets";
 import { extractSpreadsheetId } from "../utils/sheetIdentity";
 import { BusList } from "./BusList";
@@ -166,11 +167,21 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const requestIdRef = useRef<number>(0);
   const headerBlockRef = useRef<HTMLDivElement>(null);
 
-  // BUG-67: Ref sinkron untuk sheetUrl/selectedTab — membaca state TERBARU
-  // di dalam async handler (hindari stale closure saat onLoadData dipanggil
-  // dari setTimeout / callback RouteSelectorCard).
+  // ROUTE-12-01: Ref sinkron untuk sheetUrl/selectedTab — membaca state TERBARU
+  // seketika tanpa delay 1 siklus render useEffect
   const sheetUrlRef = useRef(sheetUrl);
   const selectedTabRef = useRef(selectedTab);
+
+  const handleSetSheetUrl = (url: string) => {
+    sheetUrlRef.current = url;
+    setSheetUrl(url);
+  };
+
+  const handleSetSelectedTab = (tab: string) => {
+    selectedTabRef.current = tab;
+    setSelectedTab(tab);
+  };
+
   useEffect(() => {
     sheetUrlRef.current = sheetUrl;
   }, [sheetUrl]);
@@ -323,10 +334,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function handleLoadData(isRefresh = false, targetTab?: string) {
-    // BUG-67: Baca dari ref agar selalu fresh (hindari stale closure saat
-    // dipanggil lewat setTimeout/callback dari RouteSelectorCard)
-    const currentSheetUrl = sheetUrlRef.current;
+  async function handleLoadData(isRefresh = false, targetTab?: string, targetSheetUrl?: string) {
+    // ROUTE-12-01: Baca dari targetSheetUrl eksplisit jika tersedia, atau baca dari ref terkini
+    const currentSheetUrl = targetSheetUrl || sheetUrlRef.current;
     const activeTab = targetTab || selectedTabRef.current;
     if (!currentSheetUrl) {
       setError("Silakan pilih atau paste link Google Sheet terlebih dahulu");
@@ -426,10 +436,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     }
   };
 
-  // BUG-20: Handle async tab selection properly
+  // BUG-20: Handle async tab selection properly (untuk tab bar / chart analitik)
   const handleSelectTab = async (newTab: string) => {
-    setSelectedTab(newTab);
-    if (currentSheetId || sheetUrl) {
+    handleSetSelectedTab(newTab);
+    if (currentSheetId || sheetUrlRef.current) {
       await handleLoadData(false, newTab);
     }
   };
@@ -533,7 +543,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         </div>
       )}
 
-      {isAuthExpired && (
+      {!isUsingServiceAccount() && isAuthExpired && (
         <div
           style={{
             background: "var(--danger-color, #ef4444)",
@@ -743,15 +753,15 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
         <RouteSelectorCard
           sheetUrl={sheetUrl}
-          setSheetUrl={setSheetUrl}
+          setSheetUrl={handleSetSheetUrl}
           selectedTab={selectedTab}
-          setSelectedTab={handleSelectTab}
+          setSelectedTab={handleSetSelectedTab}
           days={days}
           isLoading={isLoading}
           isDataLoaded={!!busData}
           currentSheetId={currentSheetId}
           currentTabName={currentTabName}
-          onLoadData={(tab) => handleLoadData(true, tab)}
+          onLoadData={(tab, targetUrl) => handleLoadData(true, tab, targetUrl)}
           accRange={accRangeDetails}
         />
       </div>

@@ -8,7 +8,8 @@ import {
   validateGoogleSheetsUrl,
 } from '../utils/routeValidation';
 import { getFormattedDateBadge } from '../utils/analytics';
-import type { Route, RouteSheet } from '../types/supabase';
+import { flattenRoutes } from '../utils/routeHelpers';
+import type { Route } from '../types/supabase';
 
 const MONTH_NAMES_ID = [
   '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -25,7 +26,7 @@ interface Props {
   isDataLoaded: boolean;
   currentSheetId?: string;
   currentTabName?: string;
-  onLoadData: (tab?: string) => void;
+  onLoadData: (tab?: string, targetSheetUrl?: string) => void;
   accRange?: {
     startDay?: number;
     startMonth?: number;
@@ -36,28 +37,7 @@ interface Props {
   } | null;
 }
 
-/** Flatten supabase routes ke daftar sheet dengan route info */
-interface FlatRouteSheet {
-  routeId: number;
-  routeCode: string;
-  routeName: string;
-  sheet: RouteSheet;
-}
 
-function flattenRoutes(routes: Route[]): FlatRouteSheet[] {
-  const result: FlatRouteSheet[] = [];
-  for (const r of routes) {
-    for (const s of r.route_sheets || []) {
-      result.push({
-        routeId: r.id,
-        routeCode: r.route_code,
-        routeName: r.route_name,
-        sheet: s,
-      });
-    }
-  }
-  return result;
-}
 
 function RouteSelectorCardComponent({
   sheetUrl,
@@ -257,13 +237,18 @@ function RouteSelectorCardComponent({
     });
   }, []);
 
-  // Sync dropdown cascade ketika sheet aktif berubah (data sudah ter-load)
+  // ROUTE-12-01: Sync dropdown cascade HANYA saat data sheet baru selesai dimuat (currentSheetId berganti)
+  // Tidak memantau sheetUrl/selectedTab agar pilihan rute yang baru dipilih user tidak tertimpa balik
+  const prevLoadedSheetIdRef = useRef<string | undefined>(currentSheetId);
   useEffect(() => {
-    if (flatSheets.length === 0) return;
-    const targetId = currentSheetId || extractSpreadsheetId(sheetUrl);
+    if (flatSheets.length === 0 || !currentSheetId) return;
+
+    if (prevLoadedSheetIdRef.current === currentSheetId) return;
+    prevLoadedSheetIdRef.current = currentSheetId;
+
     const active = flatSheets.find(f => {
       const fId = extractSpreadsheetId(f.sheet.sheet_url) || extractSpreadsheetId(f.sheet.spreadsheet_id);
-      return targetId && fId === targetId;
+      return fId === currentSheetId;
     });
 
     if (active) {
@@ -282,7 +267,7 @@ function RouteSelectorCardComponent({
         }));
       } catch (_e) {}
     }
-  }, [routes, sheetUrl, currentSheetId, selectedTab]);
+  }, [flatSheets, currentSheetId, selectedTab]);
 
   // CSS cascade handlers — perubahan pada level atas me-reset level bawah
   // BUG-12: Jika mode AKUMULASI aktif, JANGAN reset selectedTab (mode rekap
@@ -344,15 +329,16 @@ function RouteSelectorCardComponent({
     prevLoadingRef.current = isLoading;
   }, [isLoading, isDataLoaded]);
 
-  // Cari info rute aktif berdasarkan sheetUrl/currentSheetId
-  const targetId = currentSheetId || extractSpreadsheetId(sheetUrl);
-  const activeFlat = flatSheets.find(f => {
-    const fId = extractSpreadsheetId(f.sheet.sheet_url) || extractSpreadsheetId(f.sheet.spreadsheet_id);
-    return targetId && fId === targetId;
-  });
+  // ROUTE-12-01: Cari info rute aktif untuk pill (prioritaskan data ter-load jika ada)
+  const loadedFlat = isDataLoaded && currentSheetId
+    ? flatSheets.find(f => {
+        const fId = extractSpreadsheetId(f.sheet.sheet_url) || extractSpreadsheetId(f.sheet.spreadsheet_id);
+        return fId === currentSheetId;
+      })
+    : null;
 
-  const displayRouteTitle = activeFlat
-    ? `${activeFlat.routeCode} (${MONTH_NAMES_ID[activeFlat.sheet.month]} ${activeFlat.sheet.year})`
+  const displayRouteTitle = loadedFlat
+    ? `${loadedFlat.routeCode} (${MONTH_NAMES_ID[loadedFlat.sheet.month]} ${loadedFlat.sheet.year})`
     : selectedRouteCode && selectedMonth
       ? `${selectedRouteCode} (${MONTH_NAMES_ID[selectedMonth] || ''} ${selectedYear})`
       : 'Pilih Rute & Periode';
@@ -605,7 +591,7 @@ function RouteSelectorCardComponent({
               </div>
             </div>
 
-            {!activeFlat && selectedRouteCode && selectedMonth && selectedYear ? (
+            {!getSheetForSelection(selectedRouteCode) && selectedRouteCode && selectedMonth && selectedYear ? (
               <div style={{ fontSize: '12px', color: 'var(--warning-color)', marginBottom: '8px' }}>
                 ⚠️ Belum ada sheet untuk rute {selectedRouteCode} periode {MONTH_NAMES_ID[selectedMonth]} {selectedYear}. Klik <b>+ Tambah Rute</b> untuk mendaftarkannya.
               </div>
@@ -767,7 +753,7 @@ function RouteSelectorCardComponent({
           <button
             type="button"
             className="btn"
-            onClick={() => onLoadData()}
+            onClick={() => onLoadData(selectedTab, sheetUrl)}
             disabled={isLoading || isAddingRoute || !sheetUrl}
           >
             {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Unit'}
