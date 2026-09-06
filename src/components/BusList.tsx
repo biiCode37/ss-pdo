@@ -229,6 +229,7 @@ function BusListComponent({
 
   const categories = [
     { id: "ALL", label: "Semua Kolom" },
+    { id: "trip", label: "Trip Armada" },
     { id: "toaShift1", label: "TOA S1" },
     { id: "totalToa", label: "Total TOA" },
     { id: "kmAwal1", label: "KM Awal S1" },
@@ -251,6 +252,8 @@ function BusListComponent({
           hasValue(bus.kmAwal2) &&
           hasValue(bus.kmAkhir2)
         );
+      } else if (activeCategory === "trip") {
+        return hasValue(bus.tripPergi) || hasValue(bus.tripPulang);
       } else {
         return hasValue(bus[activeCategory as keyof BusData]);
       }

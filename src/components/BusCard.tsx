@@ -22,6 +22,7 @@ import {
   Users,
   AlertCircle,
   Loader2,
+  ArrowRightLeft,
 } from "lucide-react";
 
 interface Props {
@@ -56,6 +57,8 @@ function BusCardComponent({
     kmAkhir1: bus.kmAkhir1 || "",
     kmAwal2: bus.kmAwal2 || "",
     kmAkhir2: bus.kmAkhir2 || "",
+    tripPergi: bus.tripPergi || "",
+    tripPulang: bus.tripPulang || "",
     keterangan: bus.keterangan || "",
   });
 
@@ -75,6 +78,8 @@ function BusCardComponent({
       kmAkhir1: bus.kmAkhir1 || "",
       kmAwal2: bus.kmAwal2 || "",
       kmAkhir2: bus.kmAkhir2 || "",
+      tripPergi: bus.tripPergi || "",
+      tripPulang: bus.tripPulang || "",
       keterangan: bus.keterangan || "",
     });
   }, [bus]);
@@ -194,7 +199,9 @@ function BusCardComponent({
     }
   };
 
-  const handleOpenModal = async () => {
+  const handleOpenModal = async (
+    initialTab?: "shift1" | "shift2" | "trip" | "notes",
+  ) => {
     if (tabName === "AKUMULASI") {
       showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
       return;
@@ -205,6 +212,7 @@ function BusCardComponent({
       activeCategory,
       tabName,
       headerMap,
+      initialTab,
     });
 
     if (updates) {
@@ -243,6 +251,51 @@ function BusCardComponent({
 
     // Mode Spesifik Kolom Aktif (selain ALL)
     if (activeCategory !== "ALL") {
+      if (activeCategory === "trip") {
+        const pergiVal = formData.tripPergi ?? bus.tripPergi;
+        const pulangVal = formData.tripPulang ?? bus.tripPulang;
+        const hasPergi = Boolean(pergiVal && String(pergiVal).trim() !== "");
+        const hasPulang = Boolean(pulangVal && String(pulangVal).trim() !== "");
+        const hasTrip = hasPergi || hasPulang;
+        const isImbalanced = hasTrip && pergiVal !== pulangVal;
+
+        return (
+          <div
+            style={{
+              fontSize: "11.5px",
+              fontWeight: 700,
+              padding: "4px 10px",
+              borderRadius: "8px",
+              backgroundColor: isImbalanced
+                ? "rgba(245, 158, 11, 0.12)"
+                : hasTrip
+                ? "rgba(16, 185, 129, 0.12)"
+                : "rgba(239, 68, 68, 0.12)",
+              color: isImbalanced
+                ? "var(--warning-text, #f59e0b)"
+                : hasTrip
+                ? "#10b981"
+                : "var(--danger-color)",
+              border: `1px solid ${
+                isImbalanced
+                  ? "rgba(245, 158, 11, 0.3)"
+                  : hasTrip
+                  ? "rgba(16, 185, 129, 0.25)"
+                  : "rgba(239, 68, 68, 0.25)"
+              }`,
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+            }}
+          >
+            <ArrowRightLeft size={12} style={{ flexShrink: 0 }} />
+            <span>
+              Trip: {hasTrip ? `${pergiVal || 0}/${pulangVal || 0} Rit` : "Kosong"}
+            </span>
+          </div>
+        );
+      }
+
       const val = formData[activeCategory as keyof BusData] || bus[activeCategory as keyof BusData];
       const isFilled = val !== undefined && val !== null && String(val).trim() !== "";
       const isAccumulation = tabName.toUpperCase() === "AKUMULASI";
@@ -285,7 +338,14 @@ function BusCardComponent({
       );
     }
 
-    if (!hasKm && !hasPnp) {
+    const pergiVal = formData.tripPergi ?? bus.tripPergi;
+    const pulangVal = formData.tripPulang ?? bus.tripPulang;
+    const hasPergi = Boolean(pergiVal && String(pergiVal).trim() !== "");
+    const hasPulang = Boolean(pulangVal && String(pulangVal).trim() !== "");
+    const hasTrip = hasPergi || hasPulang;
+    const isImbalanced = hasTrip && pergiVal !== pulangVal;
+
+    if (!hasKm && !hasPnp && !hasTrip) {
       return (
         <span
           style={{
@@ -303,7 +363,49 @@ function BusCardComponent({
     }
 
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+        {/* Badge Trip (Interactive Shortcut per unit) */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenModal("trip");
+          }}
+          className="bus-card-badge-trip"
+          title="Trip Operasional (Klik untuk edit Trip per unit)"
+          style={{
+            fontSize: "11px",
+            fontWeight: 700,
+            padding: "3px 8px",
+            borderRadius: "8px",
+            backgroundColor: isImbalanced
+              ? "rgba(245, 158, 11, 0.12)"
+              : hasTrip
+              ? "rgba(16, 185, 129, 0.10)"
+              : "var(--input-bg)",
+            color: isImbalanced
+              ? "var(--warning-text, #f59e0b)"
+              : hasTrip
+              ? "#10b981"
+              : "var(--text-secondary)",
+            border: `1px solid ${
+              isImbalanced
+                ? "rgba(245, 158, 11, 0.3)"
+                : hasTrip
+                ? "rgba(16, 185, 129, 0.25)"
+                : "var(--card-border)"
+            }`,
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            cursor: tabName === "AKUMULASI" ? "default" : "pointer",
+            transition: "all 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
+          }}
+        >
+          <ArrowRightLeft size={11} style={{ flexShrink: 0 }} />
+          <span>{hasTrip ? `${pergiVal || 0}/${pulangVal || 0} Rit` : `—/— Rit`}</span>
+        </button>
+
         <div
           style={{
             fontSize: "11px",
@@ -348,7 +450,7 @@ function BusCardComponent({
       id={`bus-card-${slugifyUnitId(bus.unit)}`}
       data-bus-row={bus.rowIndex}
       className="bus-card glass"
-      onClick={handleOpenModal}
+      onClick={() => handleOpenModal()}
       style={{
         cursor: tabName === "AKUMULASI" ? "default" : "pointer",
         transition: "all 0.18s var(--ease-spring)",

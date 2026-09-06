@@ -8,6 +8,7 @@ export interface BusModalOptions {
   headerMap?: HeaderMap;
   activeCategory?: string; // 'all' | 'ALL' | 'toaShift1' | 'totalToa' | 'kmAwal1' | etc.
   tabName?: string;
+  initialTab?: 'shift1' | 'shift2' | 'trip' | 'notes';
 }
 
 const SATSET_STORAGE_KEY = "pdo_satset_mode";
@@ -527,6 +528,8 @@ export async function showBusInputModal(
   `;
   let formHtml = "";
 
+  const initTab = options.initialTab || "shift1";
+
   if (isAll) {
     // Mode Semua Kolom (ALL): Segmented Quick-Switch Tabs
     formHtml = `
@@ -535,14 +538,14 @@ export async function showBusInputModal(
         
         <!-- Segmented Tab Switcher -->
         <div class="swal-segmented-bar">
-          <button type="button" class="swal-segment-btn active" data-target="shift1">🔵 Shift 1</button>
-          <button type="button" class="swal-segment-btn" data-target="shift2">🟣 Shift 2</button>
-          <button type="button" class="swal-segment-btn" data-target="trip">🚌 Trip</button>
-          <button type="button" class="swal-segment-btn" data-target="notes">📝 Catatan</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'shift1' ? 'active' : ''}" data-target="shift1">🔵 Shift 1</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'shift2' ? 'active' : ''}" data-target="shift2">🟣 Shift 2</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'trip' ? 'active' : ''}" data-target="trip">🚌 Trip</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'notes' ? 'active' : ''}" data-target="notes">📝 Catatan</button>
         </div>
 
-        <!-- Panel 1: Shift 1 (Default Active) -->
-        <div id="swal-panel-shift1" class="swal-panel-section" data-panel="shift1" style="display: block; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
+        <!-- Panel 1: Shift 1 -->
+        <div id="swal-panel-shift1" class="swal-panel-section" data-panel="shift1" style="display: ${initTab === 'shift1' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
           <div style="font-size: 11px; font-weight: 800; color: var(--shift1-color, #38bdf8); margin-bottom: 8px; text-transform: uppercase;">
             Data Shift 1
           </div>
@@ -567,7 +570,7 @@ export async function showBusInputModal(
         </div>
 
         <!-- Panel 2: Shift 2 -->
-        <div id="swal-panel-shift2" class="swal-panel-section" data-panel="shift2" style="display: none; padding: 12px; border-radius: 14px; background: rgba(192, 132, 252, 0.06); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25));">
+        <div id="swal-panel-shift2" class="swal-panel-section" data-panel="shift2" style="display: ${initTab === 'shift2' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(192, 132, 252, 0.06); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25));">
           <div style="font-size: 11px; font-weight: 800; color: var(--shift2-color, #c084fc); margin-bottom: 8px; text-transform: uppercase;">
             Data Shift 2
           </div>
@@ -597,7 +600,7 @@ export async function showBusInputModal(
         </div>
 
         <!-- Panel 3: Trip Operasional -->
-        <div id="swal-panel-trip" class="swal-panel-section" data-panel="trip" style="display: none; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
+        <div id="swal-panel-trip" class="swal-panel-section" data-panel="trip" style="display: ${initTab === 'trip' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
           <div style="font-size: 11px; font-weight: 800; color: var(--accent-color); margin-bottom: 8px; text-transform: uppercase;">
             Trip Operasional
           </div>
@@ -618,7 +621,7 @@ export async function showBusInputModal(
         </div>
 
         <!-- Panel 4: Catatan / Keterangan -->
-        <div id="swal-panel-notes" class="swal-panel-section" data-panel="notes" style="display: none; padding: 12px; border-radius: 14px; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25);">
+        <div id="swal-panel-notes" class="swal-panel-section" data-panel="notes" style="display: ${initTab === 'notes' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25);">
           <div style="font-size: 11px; font-weight: 800; color: var(--warning-text, #f59e0b); margin-bottom: 8px; text-transform: uppercase;">
             Catatan Khusus Unit
           </div>
@@ -714,6 +717,52 @@ export async function showBusInputModal(
         <div class="pdo-swal-chips-container">
           ${!hasManual2 ? `<button type="button" id="swal-chip-manualShift2" class="pdo-swal-chip">+ Manual S2</button>` : ""}
           ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">+ Catatan</button>` : ""}
+        </div>
+      </div>
+    `;
+  } else if (activeCategory === "trip") {
+    // Mode Khusus Trip Armada: Trip Pergi + Trip Pulang + Progressive Chip Catatan
+    formHtml = `
+      <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
+        ${headerHtml}
+        <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 11px; font-weight: 800; color: var(--accent-color); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
+            Trip Operasional Armada
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
+              ${escapeHtml(tripPergiLabel)}
+            </label>
+            <input
+              id="swal-input-tripPergi"
+              type="number"
+              inputmode="numeric"
+              class="input-field"
+              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+              value="${escapeHtml(bus.tripPergi || "")}"
+              placeholder="0"
+            />
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
+              ${escapeHtml(tripPulangLabel)}
+            </label>
+            <input
+              id="swal-input-tripPulang"
+              type="number"
+              inputmode="numeric"
+              class="input-field"
+              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+              value="${escapeHtml(bus.tripPulang || "")}"
+              placeholder="0"
+            />
+          </div>
+        </div>
+
+        ${renderSmartKeteranganSection(bus.keterangan || "", "swal-wrapper-keterangan", hasKeterangan)}
+
+        <div class="pdo-swal-chips-container">
+          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">+ Catatan Kendala</button>` : ""}
         </div>
       </div>
     `;
@@ -846,7 +895,17 @@ export async function showBusInputModal(
       // Auto focus ke input utama sesuai kategori
       let primaryInput: HTMLInputElement | null = null;
       if (isAll) {
-        primaryInput = popup.querySelector("#swal-input-toaShift1");
+        if (initTab === "trip") {
+          primaryInput = popup.querySelector("#swal-input-tripPergi");
+        } else if (initTab === "shift2") {
+          primaryInput = popup.querySelector("#swal-input-totalToa");
+        } else if (initTab === "notes") {
+          primaryInput = popup.querySelector("#swal-custom-keterangan");
+        } else {
+          primaryInput = popup.querySelector("#swal-input-toaShift1");
+        }
+      } else if (activeCategory === "trip") {
+        primaryInput = popup.querySelector("#swal-input-tripPergi");
       } else if (activeCategory === "toaShift1") {
         primaryInput = popup.querySelector("#swal-input-toaShift1");
       } else if (activeCategory === "totalToa") {
@@ -1088,7 +1147,41 @@ export async function showBusInputModal(
       const isNp1Unit = /\bNP1\b/i.test(upperKet);
       const isNp2Unit = /\bNP2\b/i.test(upperKet);
 
-      if (!isAll && singleMeta) {
+      if (!isAll && activeCategory === "trip") {
+        // --- Single Focus Trip Mode PreConfirm ---
+        const tripPergiInput = popup.querySelector<HTMLInputElement>("#swal-input-tripPergi");
+        const tripPulangInput = popup.querySelector<HTMLInputElement>("#swal-input-tripPulang");
+        const tripPergiVal = tripPergiInput ? tripPergiInput.value.trim() : "";
+        const tripPulangVal = tripPulangInput ? tripPulangInput.value.trim() : "";
+
+        const tripPergiErr = validateTripCount(tripPergiVal, "Trip Pergi");
+        if (tripPergiErr) {
+          pdoSwal.showValidationMessage(tripPergiErr);
+          return false;
+        }
+        const tripPulangErr = validateTripCount(tripPulangVal, "Trip Pulang");
+        if (tripPulangErr) {
+          pdoSwal.showValidationMessage(tripPulangErr);
+          return false;
+        }
+
+        if (headerMap?.tripPergi !== undefined && headerMap.tripPergi !== -1) {
+          updates.tripPergi = isOffUnit ? "" : tripPergiVal;
+        }
+        if (headerMap?.tripPulang !== undefined && headerMap.tripPulang !== -1) {
+          updates.tripPulang = isOffUnit ? "" : tripPulangVal;
+        }
+
+        // Simpan catatan jika ada perubahan/terbuka
+        const wrapperKet = popup.querySelector<HTMLElement>("#swal-wrapper-keterangan");
+        if (
+          wrapperKet &&
+          (wrapperKet.style.display !== "none" ||
+            resolvedKeterangan !== (bus.keterangan || ""))
+        ) {
+          updates.keterangan = resolvedKeterangan;
+        }
+      } else if (!isAll && singleMeta) {
         // --- Single Column Mode PreConfirm ---
         let singleInput: HTMLInputElement | null = null;
         if (activeCategory === "toaShift1") {

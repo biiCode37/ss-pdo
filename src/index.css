@@ -205,6 +205,20 @@ body {
   border-color: var(--accent-color);
 }
 
+/* Interactive Bus Card Trip Badge */
+.bus-card-badge-trip {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.bus-card-badge-trip:hover {
+  filter: brightness(1.08);
+  border-color: var(--accent-color) !important;
+}
+.bus-card-badge-trip:active {
+  transform: scale(0.95);
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
