@@ -1,7 +1,7 @@
 # Graph Report - SS_PDO  (2026-09-06)
 
 ## Corpus Check
-- 256 files · ~295,816 words
+- 256 files · ~295,875 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0619259b`
+- Built from commit: `136bd6ca`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

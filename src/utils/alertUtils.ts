@@ -413,6 +413,7 @@ export async function showBulkCopyKmModal(
   options: BulkCopyKmModalOptions,
 ): Promise<"only_empty" | "all" | null> {
   const { totalUnitsWithKmS1, emptyKmAwal2Count, skippedWithNotesCount = 0 } = options;
+  const isOnlyEmptyAvailable = emptyKmAwal2Count > 0;
 
   const formHtml = `
     <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
@@ -431,18 +432,22 @@ export async function showBulkCopyKmModal(
       }
 
       <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
-        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; user-select: none;">
-          <input type="radio" name="swal-bulk-copy-mode" value="only_empty" checked style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
+        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: ${isOnlyEmptyAvailable ? "pointer" : "default"}; user-select: none; opacity: ${isOnlyEmptyAvailable ? "1" : "0.55"};">
+          <input type="radio" name="swal-bulk-copy-mode" value="only_empty" ${isOnlyEmptyAvailable ? "checked" : "disabled"} style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
           <div>
-            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Hanya isi yang masih kosong (${escapeHtml(emptyKmAwal2Count)} unit)</div>
-            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Direkomendasikan agar tidak menimpa data yang sudah diisi manual.</div>
+            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">
+              Hanya isi yang masih kosong (${escapeHtml(emptyKmAwal2Count)} unit)
+            </div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
+              ${isOnlyEmptyAvailable ? "Direkomendasikan agar tidak menimpa data yang sudah diisi manual." : "Seluruh unit yang memenuhi syarat sudah memiliki nilai KM Awal S2."}
+            </div>
           </div>
         </label>
 
         <div style="height: 1px; background: var(--card-border); margin: 4px 0;"></div>
 
         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; user-select: none;">
-          <input type="radio" name="swal-bulk-copy-mode" value="all" style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
+          <input type="radio" name="swal-bulk-copy-mode" value="all" ${!isOnlyEmptyAvailable ? "checked" : ""} style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
           <div>
             <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Salin & perbarui semua (${escapeHtml(totalUnitsWithKmS1)} unit)</div>
             <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Menimpa seluruh nilai KM Awal Shift 2 dengan KM Akhir Shift 1.</div>
@@ -469,7 +474,7 @@ export async function showBulkCopyKmModal(
       const selected = document.querySelector<HTMLInputElement>(
         'input[name="swal-bulk-copy-mode"]:checked',
       );
-      return selected ? (selected.value as "only_empty" | "all") : "only_empty";
+      return selected ? (selected.value as "only_empty" | "all") : (isOnlyEmptyAvailable ? "only_empty" : "all");
     },
   });
 

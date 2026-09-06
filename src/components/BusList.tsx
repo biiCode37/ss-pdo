@@ -612,6 +612,8 @@ function BusListComponent({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "8px",
                 padding: "8px 12px",
                 borderRadius: "12px",
                 background: "rgba(56, 189, 248, 0.08)",
@@ -626,7 +628,9 @@ function BusListComponent({
                   color: "var(--text-secondary)",
                   display: "flex",
                   alignItems: "center",
+                  flexWrap: "wrap",
                   gap: "6px",
+                  flex: "1 1 auto",
                 }}
               >
                 <span
@@ -662,6 +666,7 @@ function BusListComponent({
                   cursor:
                     availableKmS1Buses.length === 0 ? "not-allowed" : "pointer",
                   opacity: availableKmS1Buses.length === 0 ? 0.5 : 1,
+                  flexShrink: 0,
                 }}
               >
                 📋 Salin Semua KM S1
