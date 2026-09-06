@@ -137,4 +137,37 @@ describe('keteranganUtils - filterBusesForKmCopy', () => {
     expect(eligibleBuses[0].unit).toBe('B4');
     expect(skippedWithNotesCount).toBe(0);
   });
+
+  it('correctly matches user field scenario: 23 with kmS1, 10 notes (7 OFF, 3 notes with kmS1), yielding exactly 20 eligible units', () => {
+    const buses = [
+      // 20 unit normal tanpa keterangan
+      ...Array.from({ length: 20 }, (_, i) => ({
+        unit: `BUS-${i + 1}`,
+        kmAkhir1: '150',
+        kmAwal2: '',
+        keterangan: '',
+      })),
+      // 7 unit OFF tanpa kmAkhir1
+      ...Array.from({ length: 7 }, (_, i) => ({
+        unit: `BUS-OFF-${i + 1}`,
+        kmAkhir1: '',
+        kmAwal2: '',
+        keterangan: 'OFF',
+      })),
+      // 3 unit punya kmAkhir1 tapi berketerangan (1 sudah ada kmAwal2, 2 masih kosong)
+      { unit: 'BUS-NOTE-1', kmAkhir1: '120', kmAwal2: '120', keterangan: 'BA.01 Mogok transmisi' },
+      { unit: 'BUS-NOTE-2', kmAkhir1: '130', kmAwal2: '', keterangan: 'BA.02 NP1' },
+      { unit: 'BUS-NOTE-3', kmAkhir1: '140', kmAwal2: '', keterangan: 'Servis AC bengkel' },
+    ];
+
+    const { eligibleBuses, skippedWithNotesCount } = filterBusesForKmCopy(buses);
+    // Tepat 20 unit yang eligible disalin
+    expect(eligibleBuses).toHaveLength(20);
+    // Tepat 3 unit dengan kmS1 yang dilewati karena berketerangan
+    expect(skippedWithNotesCount).toBe(3);
+
+    // Dari 20 unit eligible, semuanya masih kosong KM Awal S2-nya
+    const emptyKmAwal2Count = eligibleBuses.filter((b) => !b.kmAwal2 || String(b.kmAwal2).trim() === '').length;
+    expect(emptyKmAwal2Count).toBe(20);
+  });
 });
