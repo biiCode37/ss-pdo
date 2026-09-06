@@ -2,6 +2,7 @@ import { gapi } from 'gapi-script';
 import { logActivity } from '../routeService';
 import { isAuthError } from '../../utils/errorClassifier';
 import type { AuthResult } from './types';
+import { checkProxyHealth, isUsingServiceAccount } from './transport';
 
 export const getGoogleCreds = () => {
   return {
@@ -71,8 +72,10 @@ export const initGoogleApi = async (): Promise<void> => {
                   detail: { email: resolvedEmail }
                 }));
 
-                // Mulai timer refresh token otomatis
-                startTokenRefreshTimer(tokenResponse.expires_in * 1000);
+                // Mulai timer refresh token otomatis hanya jika dalam mode client OAuth
+                if (!isUsingServiceAccount()) {
+                  startTokenRefreshTimer(tokenResponse.expires_in * 1000);
+                }
 
                 // Telemetry: Catat activity log LOGIN dengan email yang baru terverifikasi
                 const emailToLog = resolvedEmail || localStorage.getItem('PDO_USER_EMAIL') || 'google_user';
@@ -312,6 +315,10 @@ export const reauthenticateSession = async (): Promise<void> => {
 };
 
 export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
+  // Jika Service Account aktif, langsung eksekusi tanpa ketergantungan OAuth token browser
+  if (isUsingServiceAccount()) {
+    return await apiFn();
+  }
   await ensureValidToken();
   try {
     return await apiFn();
@@ -370,13 +377,22 @@ export const fetchGoogleUserProfile = async (): Promise<{ email?: string; name?:
 };
 
 /**
- * Validasi auth secara async — ISS-01 fix.
+ * Validasi auth secara async — ISS-01 fix & Golden Rule #3.
  * Menunggu hasil validasi token sebelum mengembalikan status final.
  * Gunakan ini saat cold start / page load.
  */
 export const checkSignedInAsync = async (): Promise<AuthResult> => {
   const isPersistentSignedIn = localStorage.getItem('PDO_IS_SIGNED_IN') === 'true';
   if (!isPersistentSignedIn) return { authenticated: false, reason: 'no_flag' };
+
+  // Golden Rule #3: Jika Service Account proxy aktif, sesi pengguna bersifat 100% permanen
+  const proxy = await checkProxyHealth();
+  if (proxy.active) {
+    if (!localStorage.getItem('PDO_USER_AVATAR')) {
+      fetchGoogleUserProfile().catch(() => {});
+    }
+    return { authenticated: true };
+  }
 
   const tokenStr = localStorage.getItem('GAPI_ACCESS_TOKEN');
   if (!tokenStr) {

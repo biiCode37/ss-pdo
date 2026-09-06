@@ -72,9 +72,10 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 
 ## 📌 8. Kebijakan Branch & Commit Git (Wajib `devmode`)
 
-- **Aturan Emas Branch `devmode`:**
+- **Aturan Emas Branch `devmode` & Isolasi Branch:**
   - Seluruh pengerjaan kode, debugging, penambahan fitur, dan perbaikan bug **WAJIB dan HARUS dilakukan pada branch `devmode`**.
-  - Dilarang keras melakukan perubahan langsung di branch `main` atau `production`.
+  - **Inisialisasi Otomatis:** Jika branch `devmode` belum ada pada proyek yang sedang dikerjakan, buat branch tersebut terlebih dahulu (`git checkout -b devmode`) sebelum melakukan perubahan kode apa pun.
+  - **Larangan Akses Branch Utama:** Agent **HANYA** boleh menyentuh dan bekerja pada branch `devmode`. Dilarang keras menyentuh, mengakses, checkout, merge, atau melakukan modifikasi apa pun ke branch `main`, `master`, atau `production` kecuali jika pengguna sendiri yang memberikan instruksi eksplisit.
 - **Workflow Deploy & Pengujian (Vercel Preview):**
   - Deployment untuk branch `devmode` berstatus **Preview Deployment** (bukan Production).
   - Push ke remote branch `devmode` hanya dilakukan ketika pengguna memberikan instruksi eksplisit: *"push devmode"*.

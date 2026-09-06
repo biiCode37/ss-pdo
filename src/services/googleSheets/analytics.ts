@@ -1,16 +1,15 @@
-import { gapi } from 'gapi-script';
 import { isAuthError } from '../../utils/errorClassifier';
 import { parseIndonesianNumber } from '../../utils/numberUtils';
 import { formatAccumulatedNotes } from '../../utils/analytics';
 import { extractRouteNameFromHeaders } from '../../utils/routeValidation';
 import type { BusData, HeaderMap, SpreadsheetInspectionResult } from './types';
-import { withAuthRetry } from './auth';
 import {
   HEADER_KEYWORDS,
   findColumnIndex,
   detectHeaderRowAndBuildComposite,
   getBusData,
 } from './core';
+import { fetchSheetValuesBatch, fetchSpreadsheetMeta, fetchSheetValues } from './transport';
 
 export const monthlyToaTrendCache = new Map<string, { day: string; totalToa: number }[]>();
 
@@ -29,23 +28,18 @@ export const getMonthlyToaTrend = async (
     return monthlyToaTrendCache.get(cacheKey)!;
   }
 
-  return withAuthRetry(async () => {
-    const trendData: { day: string; totalToa: number }[] = [];
-    
-    if (!sheetId || maxDay < 1) return trendData;
+  const trendData: { day: string; totalToa: number }[] = [];
+  
+  if (!sheetId || maxDay < 1) return trendData;
 
-    const ranges: string[] = [];
-    for (let day = 1; day <= maxDay; day++) {
-      ranges.push(`${day}!A1:ZZ100`);
-    }
+  const ranges: string[] = [];
+  for (let day = 1; day <= maxDay; day++) {
+    ranges.push(`${day}!A1:ZZ100`);
+  }
 
-    try {
-      const response = await (gapi.client as any).sheets.spreadsheets.values.batchGet({
-        spreadsheetId: sheetId,
-        ranges: ranges,
-      });
-
-      const valueRanges = response?.result?.valueRanges || [];
+  try {
+    const response = await fetchSheetValuesBatch(sheetId, ranges);
+    const valueRanges = response?.result?.valueRanges || response?.valueRanges || [];
       const normalizedUnitFilter = unitFilter ? unitFilter.trim().toLowerCase() : null;
 
       for (let idx = 0; idx < maxDay; idx++) {
@@ -159,16 +153,18 @@ export const getMonthlyToaTrend = async (
           trendData.push({ day: dayStr, totalToa: finalDayTotal });
         }
       }
-    } catch (error) {
-      console.error('Error fetching batch monthly TOA trend:', error);
-      throw error;
-    }
 
-    if (trendData.length > 0) {
-      monthlyToaTrendCache.set(cacheKey, trendData);
+      if (trendData.length > 0) {
+        monthlyToaTrendCache.set(cacheKey, trendData);
+      }
+      return trendData;
+    } catch (error: any) {
+      console.error('Error fetching batch monthly TOA trend:', error);
+      if (isAuthError(error)) {
+        throw error;
+      }
+      return [];
     }
-    return trendData;
-  });
 };
 
 export const getAccumulatedBusData = async (
@@ -176,19 +172,15 @@ export const getAccumulatedBusData = async (
   maxDay: number,
   startDay = 1
 ): Promise<{ data: BusData[]; headerMap: HeaderMap; missingColumns: string[]; sheetSummary: Record<string, number> }> => {
-  return withAuthRetry(async () => {
-    const targetEndDay = Math.max(1, maxDay);
-    const targetStartDay = Math.max(1, Math.min(startDay, targetEndDay));
+  const targetEndDay = Math.max(1, maxDay);
+  const targetStartDay = Math.max(1, Math.min(startDay, targetEndDay));
 
-    const ranges = Array.from({ length: targetEndDay - targetStartDay + 1 }, (_, i) => `${targetStartDay + i}!A1:ZZ`);
+  const ranges = Array.from({ length: targetEndDay - targetStartDay + 1 }, (_, i) => `${targetStartDay + i}!A1:ZZ`);
 
-    let valueRanges: any[] = [];
-    try {
-      const response = await (gapi.client as any).sheets.spreadsheets.values.batchGet({
-        spreadsheetId: sheetId,
-        ranges,
-      });
-      valueRanges = response.result.valueRanges || [];
+  let valueRanges: any[] = [];
+  try {
+    const response = await fetchSheetValuesBatch(sheetId, ranges);
+    valueRanges = response.result?.valueRanges || response.valueRanges || [];
     } catch (_err) {
       console.warn('[GoogleSheets] batchGet failed for range accumulation, attempting per-day fallback:', _err);
       // ISS-03 FIX: Fallback sequential per-day fetch
@@ -384,7 +376,6 @@ export const getAccumulatedBusData = async (
       missingColumns: [],
       sheetSummary: {},
     };
-  });
 };
 
 /**
@@ -393,76 +384,75 @@ export const getAccumulatedBusData = async (
 export const inspectSpreadsheetHeader = async (
   sheetId: string,
 ): Promise<SpreadsheetInspectionResult> => {
-  return withAuthRetry(async () => {
-    try {
-      const metaRes = await (gapi.client as any).sheets.spreadsheets.get({
-        spreadsheetId: sheetId,
-        fields: "sheets(properties(sheetId,title))",
-      });
+  try {
+    const metaRes = await fetchSpreadsheetMeta(
+      sheetId,
+      "sheets(properties(sheetId,title))"
+    );
 
-      const sheets = metaRes.result?.sheets || [];
-      const tabNames = sheets
-        .map((s: any) => s.properties?.title)
-        .filter((t: any): t is string => Boolean(t));
+    const sheets = metaRes.result?.sheets || metaRes.sheets || [];
+    const tabNames = sheets
+      .map((s: any) => s.properties?.title)
+      .filter((t: any): t is string => Boolean(t));
 
-      if (tabNames.length === 0) {
-        return {
-          success: false,
-          tabNames: [],
-          message: 'Spreadsheet tidak memiliki tab lembar kerja.',
-        };
-      }
-
-      const firstTab = tabNames[0];
-      const dataRes = await (gapi.client as any).sheets.spreadsheets.values.get({
-        spreadsheetId: sheetId,
-        range: `${firstTab}!A1:ZZ5`,
-      });
-
-      const rows = dataRes.result?.values || [];
-      let detectedRouteName: string | undefined;
-
-      if (rows.length > 0) {
-        const { headerRowIndex, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
-
-        if (headerRowIndex !== -1 && compositeHeaders.length > 0) {
-          const unitIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
-          let tripPergiLabel: string | undefined;
-          let tripPulangLabel: string | undefined;
-
-          if (unitIdx !== -1) {
-            if (compositeHeaders[unitIdx + 1] && !compositeHeaders[unitIdx + 1].toLowerCase().includes("toa")) {
-              tripPergiLabel = compositeHeaders[unitIdx + 1];
-            }
-            if (compositeHeaders[unitIdx + 2] && !compositeHeaders[unitIdx + 2].toLowerCase().includes("toa")) {
-              tripPulangLabel = compositeHeaders[unitIdx + 2];
-            }
-          }
-
-          const extractedName = extractRouteNameFromHeaders(tripPergiLabel, tripPulangLabel);
-          if (extractedName) {
-            detectedRouteName = extractedName;
-          }
-        }
-      }
-
-      return {
-        success: true,
-        routeName: detectedRouteName,
-        tabNames,
-      };
-    } catch (err: any) {
-      console.warn('[GoogleSheets] Failed to inspect spreadsheet:', err);
-      if (isAuthError(err)) {
-        throw err;
-      }
+    if (tabNames.length === 0) {
       return {
         success: false,
         tabNames: [],
-        message:
-          err?.result?.error?.message ||
-          'Tidak dapat mengakses spreadsheet. Pastikan izin akses link dibuka untuk publik atau akun Anda telah terotorisasi.',
+        message: 'Spreadsheet tidak memiliki tab lembar kerja.',
       };
     }
-  });
+
+    const firstTab = tabNames[0];
+    const dataRes = await fetchSheetValues(
+      sheetId,
+      `${firstTab}!A1:ZZ5`
+    );
+
+    const rows = dataRes.result?.values || dataRes.values || [];
+    let detectedRouteName: string | undefined;
+
+    if (rows.length > 0) {
+      const { headerRowIndex, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
+
+      if (headerRowIndex !== -1 && compositeHeaders.length > 0) {
+        const unitIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
+        let tripPergiLabel: string | undefined;
+        let tripPulangLabel: string | undefined;
+
+        if (unitIdx !== -1) {
+          if (compositeHeaders[unitIdx + 1] && !compositeHeaders[unitIdx + 1].toLowerCase().includes("toa")) {
+            tripPergiLabel = compositeHeaders[unitIdx + 1];
+          }
+          if (compositeHeaders[unitIdx + 2] && !compositeHeaders[unitIdx + 2].toLowerCase().includes("toa")) {
+            tripPulangLabel = compositeHeaders[unitIdx + 2];
+          }
+        }
+
+        const extractedName = extractRouteNameFromHeaders(tripPergiLabel, tripPulangLabel);
+        if (extractedName) {
+          detectedRouteName = extractedName;
+        }
+      }
+    }
+
+    return {
+      success: true,
+      routeName: detectedRouteName,
+      tabNames,
+    };
+  } catch (err: any) {
+    console.warn('[GoogleSheets] Failed to inspect spreadsheet:', err);
+    if (isAuthError(err)) {
+      throw err;
+    }
+    return {
+      success: false,
+      tabNames: [],
+      message:
+        err?.result?.error?.message ||
+        err?.message ||
+        'Tidak dapat mengakses spreadsheet. Pastikan izin akses link dibuka untuk publik atau akun Anda telah terotorisasi.',
+    };
+  }
 };

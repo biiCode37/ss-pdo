@@ -1,12 +1,11 @@
-import { gapi } from 'gapi-script';
 import { isAuthError } from '../../utils/errorClassifier';
 import { getKeteranganColor, getRowEndCol } from '../../utils/sheetColorUtils';
 import { normalizeKeterangan } from '../../utils/keteranganUtils';
 import { logActivity } from '../routeService';
 import { resolveRouteContext } from '../../utils/auditLogContext';
 import type { BusData, HeaderMap } from './types';
-import { withAuthRetry } from './auth';
 import { getTabGid, numberToColumnName } from './core';
+import { updateSheetValuesBatch, batchUpdateSpreadsheet } from './transport';
 
 export const updateBusData = async (
   sheetId: string, 
@@ -16,7 +15,6 @@ export const updateBusData = async (
   headerMap: HeaderMap,
   previousValues?: Partial<BusData>,
 ): Promise<void> => {
-  return withAuthRetry(async () => {
     // Construct individual updates for each cell to avoid overwriting formulas
     const data: any[] = [];
     const formatCells: Array<{ colIndex: number; rowIndex: number }> = [];
@@ -48,12 +46,9 @@ export const updateBusData = async (
     if (data.length === 0) return; // Nothing to update
 
     try {
-      await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
-        spreadsheetId: sheetId,
-        resource: {
-          valueInputOption: 'USER_ENTERED', // So numbers/formulas are parsed properly
-          data: data
-        }
+      await updateSheetValuesBatch(sheetId, {
+        valueInputOption: 'USER_ENTERED', // So numbers/formulas are parsed properly
+        data: data
       });
 
       // Format sel: Normal text (Bold untuk Keterangan), Horizontal Center, Vertical Middle, Wrap Text & Row Color
@@ -120,10 +115,7 @@ export const updateBusData = async (
           }
 
           if (requests.length > 0) {
-            await (gapi.client as any).sheets.spreadsheets.batchUpdate({
-              spreadsheetId: sheetId,
-              resource: { requests },
-            });
+            await batchUpdateSpreadsheet(sheetId, requests);
           }
         }
       } catch (formatErr) {
@@ -160,9 +152,8 @@ export const updateBusData = async (
       if (isAuthError(error)) {
         throw error;
       }
-      throw new Error(error?.result?.error?.message || 'Gagal menyimpan data.');
+      throw new Error(error?.result?.error?.message || error?.message || 'Gagal menyimpan data.');
     }
-  });
 };
 
 export const updateBulkBusData = async (
@@ -171,7 +162,6 @@ export const updateBulkBusData = async (
   updatesList: Array<{ rowIndex: number; updates: Partial<BusData> }>,
   headerMap: HeaderMap
 ): Promise<void> => {
-  return withAuthRetry(async () => {
     const data: any[] = [];
     const formatCells: Array<{ colIndex: number; rowIndex: number }> = [];
 
@@ -205,12 +195,9 @@ export const updateBulkBusData = async (
     if (data.length === 0) return;
 
     try {
-      await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
-        spreadsheetId: sheetId,
-        resource: {
-          valueInputOption: 'USER_ENTERED',
-          data: data
-        }
+      await updateSheetValuesBatch(sheetId, {
+        valueInputOption: 'USER_ENTERED',
+        data: data
       });
 
       // Format sel bulk: Normal text (Bold untuk Keterangan), Horizontal Center, Vertical Middle, Wrap Text & Row Color
@@ -278,10 +265,7 @@ export const updateBulkBusData = async (
           }
 
           if (requests.length > 0) {
-            await (gapi.client as any).sheets.spreadsheets.batchUpdate({
-              spreadsheetId: sheetId,
-              resource: { requests },
-            });
+            await batchUpdateSpreadsheet(sheetId, requests);
           }
         }
       } catch (formatErr) {
@@ -308,9 +292,8 @@ export const updateBulkBusData = async (
       if (isAuthError(error)) {
         throw error;
       }
-      throw new Error(error?.result?.error?.message || 'Gagal menyimpan bulk data ke spreadsheet.');
+      throw new Error(error?.result?.error?.message || error?.message || 'Gagal menyimpan bulk data ke spreadsheet.');
     }
-  });
 };
 
 export const formatWholeSheet = async (
@@ -319,53 +302,49 @@ export const formatWholeSheet = async (
   buses: BusData[],
   headerMap: HeaderMap,
 ): Promise<void> => {
-  return withAuthRetry(async () => {
-    if (!buses || buses.length === 0) return;
+  if (!buses || buses.length === 0) return;
 
-    const tabGid = await getTabGid(sheetId, tabName);
-    if (tabGid === null) {
-      throw new Error("Tidak dapat menemukan ID tab spreadsheet.");
-    }
+  const tabGid = await getTabGid(sheetId, tabName);
+  if (tabGid === null) {
+    throw new Error("Tidak dapat menemukan ID tab spreadsheet.");
+  }
 
-    const startCol =
-      headerMap.unit !== undefined && headerMap.unit !== -1
-        ? headerMap.unit
-        : 0;
-    const endCol = getRowEndCol(headerMap);
+  const startCol =
+    headerMap.unit !== undefined && headerMap.unit !== -1
+      ? headerMap.unit
+      : 0;
+  const endCol = getRowEndCol(headerMap);
 
-    const minRowIndex = Math.min(...buses.map((b) => b.rowIndex));
-    const maxRowIndex = Math.max(...buses.map((b) => b.rowIndex));
+  const minRowIndex = Math.min(...buses.map((b) => b.rowIndex));
+  const maxRowIndex = Math.max(...buses.map((b) => b.rowIndex));
 
-    // 0. Auto-standardisasi nilai teks Keterangan di spreadsheet asli (misal: "ba01" -> "BA.01", "np 1" -> "NP1")
-    if (headerMap.keterangan !== undefined && headerMap.keterangan !== -1) {
-      const ketColName = numberToColumnName(headerMap.keterangan);
-      const valueUpdates: any[] = [];
-      for (const bus of buses) {
-        if (bus.keterangan) {
-          const normalizedKet = normalizeKeterangan(bus.keterangan);
-          if (normalizedKet !== bus.keterangan) {
-            valueUpdates.push({
-              range: `${tabName}!${ketColName}${bus.rowIndex}`,
-              values: [[normalizedKet]],
-            });
-            bus.keterangan = normalizedKet;
-          }
-        }
-      }
-      if (valueUpdates.length > 0) {
-        try {
-          await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
-            spreadsheetId: sheetId,
-            resource: {
-              valueInputOption: "USER_ENTERED",
-              data: valueUpdates,
-            },
+  // 0. Auto-standardisasi nilai teks Keterangan di spreadsheet asli (misal: "ba01" -> "BA.01", "np 1" -> "NP1")
+  if (headerMap.keterangan !== undefined && headerMap.keterangan !== -1) {
+    const ketColName = numberToColumnName(headerMap.keterangan);
+    const valueUpdates: any[] = [];
+    for (const bus of buses) {
+      if (bus.keterangan) {
+        const normalizedKet = normalizeKeterangan(bus.keterangan);
+        if (normalizedKet !== bus.keterangan) {
+          valueUpdates.push({
+            range: `${tabName}!${ketColName}${bus.rowIndex}`,
+            values: [[normalizedKet]],
           });
-        } catch (valErr) {
-          console.warn("[GoogleSheets] Gagal memperbarui standardisasi nilai keterangan di spreadsheet:", valErr);
+          bus.keterangan = normalizedKet;
         }
       }
     }
+    if (valueUpdates.length > 0) {
+      try {
+        await updateSheetValuesBatch(sheetId, {
+          valueInputOption: "USER_ENTERED",
+          data: valueUpdates,
+        });
+      } catch (valErr) {
+        console.warn("[GoogleSheets] Gagal memperbarui standardisasi nilai keterangan di spreadsheet:", valErr);
+      }
+    }
+  }
 
     const requests: any[] = [];
 
@@ -440,10 +419,7 @@ export const formatWholeSheet = async (
     }
 
     try {
-      await (gapi.client as any).sheets.spreadsheets.batchUpdate({
-        spreadsheetId: sheetId,
-        resource: { requests },
-      });
+      await batchUpdateSpreadsheet(sheetId, requests);
 
       // Telemetry: Log FORMAT_WHOLE_SHEET
       const userEmail =
@@ -468,8 +444,7 @@ export const formatWholeSheet = async (
         throw error;
       }
       throw new Error(
-        error?.result?.error?.message || "Gagal menerapkan format spreadsheet.",
+        error?.result?.error?.message || error?.message || "Gagal menerapkan format spreadsheet.",
       );
     }
-  });
 };

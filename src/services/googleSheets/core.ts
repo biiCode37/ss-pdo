@@ -1,4 +1,3 @@
-import { gapi } from 'gapi-script';
 import { isAuthError } from '../../utils/errorClassifier';
 import { parseIndonesianNumber } from '../../utils/numberUtils';
 import { normalizeKeterangan } from '../../utils/keteranganUtils';
@@ -7,7 +6,7 @@ import { getRoutesFromCache, findSheetInRoutes } from '../../utils/cacheUtils';
 import { upsertDailyUnitSummaries } from '../routeService';
 import type { DailyUnitSummary } from '../../types/supabase';
 import type { BusData, HeaderMap } from './types';
-import { withAuthRetry } from './auth';
+import { fetchSpreadsheetMeta, fetchSheetValues } from './transport';
 
 // Function to normalize header strings for fuzzy matching
 export const normalizeString = (str: string) => {
@@ -134,11 +133,11 @@ export const getTabGid = async (
   }
 
   try {
-    const res = await (gapi.client as any).sheets.spreadsheets.get({
-      spreadsheetId: sheetId,
-      fields: "sheets(properties(sheetId,title))",
-    });
-    const sheets = res.result?.sheets || [];
+    const res = await fetchSpreadsheetMeta(
+      sheetId,
+      "sheets(properties(sheetId,title))"
+    );
+    const sheets = res.result?.sheets || res.sheets || [];
     for (const s of sheets) {
       if (
         s.properties?.title === tabName &&
@@ -164,17 +163,12 @@ export const extractSheetId = (urlOrId: string): string => {
 };
 
 export const getBusData = async (sheetId: string, tabName: string): Promise<{ data: BusData[], headerMap: HeaderMap, missingColumns: string[], sheetSummary: Record<string, number> }> => {
-  return withAuthRetry(async () => {
-    try {
-      const response = await (gapi.client as any).sheets.spreadsheets.values.get({
-        spreadsheetId: sheetId,
-        range: `${tabName}!A1:ZZ`, 
-      });
-
-      const rows = response.result.values;
-      if (!rows || rows.length === 0) {
-        throw new Error('Tidak ada data di sheet ini.');
-      }
+  try {
+    const response = await fetchSheetValues(sheetId, `${tabName}!A1:ZZ`);
+    const rows = response.result?.values || response.values;
+    if (!rows || rows.length === 0) {
+      throw new Error('Tidak ada data di sheet ini.');
+    }
 
       // BUG-26: Use unified header detection with BUG-10 text validation
       const { headerRowIndex, isSubHeader, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
@@ -413,9 +407,8 @@ export const getBusData = async (sheetId: string, tabName: string): Promise<{ da
       if (isAuthError(error)) {
         throw error;
       }
-      throw new Error(error?.result?.error?.message || 'Gagal mengambil data dari Google Sheets. Pastikan link benar dan Anda memiliki akses.');
+      throw new Error(error?.result?.error?.message || error?.message || 'Gagal mengambil data dari Google Sheets. Pastikan link benar dan Anda memiliki akses.');
     }
-  });
 };
 
 export const getBusRowData = async (
@@ -424,41 +417,39 @@ export const getBusRowData = async (
   rowIndex: number, 
   headerMap: HeaderMap
 ): Promise<Partial<BusData>> => {
-  return withAuthRetry(async () => {
-    try {
-      const response = await (gapi.client as any).sheets.spreadsheets.values.get({
-        spreadsheetId: sheetId,
-        range: `${tabName}!A${rowIndex}:ZZ${rowIndex}`, 
-      });
+  try {
+    const response = await fetchSheetValues(
+      sheetId,
+      `${tabName}!A${rowIndex}:ZZ${rowIndex}`
+    );
 
-      const rows = response.result.values;
-      if (!rows || rows.length === 0) {
-        return {}; // Row is empty
-      }
-
-      const row = rows[0];
-      
-      const getValue = (idx: number) => {
-        if (idx === -1) return '';
-        const val = row[idx];
-        return val !== undefined && val !== null ? String(val) : '';
-      };
-
-      return {
-        tripPergi: getValue(headerMap.tripPergi),
-        tripPulang: getValue(headerMap.tripPulang),
-        toaShift1: getValue(headerMap.toaShift1),
-        manualShift1: getValue(headerMap.manualShift1),
-        manualShift2: getValue(headerMap.manualShift2),
-        totalToa: getValue(headerMap.totalToa),
-        kmAwal1: getValue(headerMap.kmAwal1),
-        kmAkhir1: getValue(headerMap.kmAkhir1),
-        kmAwal2: getValue(headerMap.kmAwal2),
-        kmAkhir2: getValue(headerMap.kmAkhir2),
-        keterangan: normalizeKeterangan(getValue(headerMap.keterangan)),
-      };
-    } catch (error: any) {
-      throw new Error(error?.result?.error?.message || 'Gagal melakukan pengecekan data.');
+    const rows = response.result?.values || response.values;
+    if (!rows || rows.length === 0) {
+      return {}; // Row is empty
     }
-  });
+
+    const row = rows[0];
+    
+    const getValue = (idx: number) => {
+      if (idx === -1) return '';
+      const val = row[idx];
+      return val !== undefined && val !== null ? String(val) : '';
+    };
+
+    return {
+      tripPergi: getValue(headerMap.tripPergi),
+      tripPulang: getValue(headerMap.tripPulang),
+      toaShift1: getValue(headerMap.toaShift1),
+      manualShift1: getValue(headerMap.manualShift1),
+      manualShift2: getValue(headerMap.manualShift2),
+      totalToa: getValue(headerMap.totalToa),
+      kmAwal1: getValue(headerMap.kmAwal1),
+      kmAkhir1: getValue(headerMap.kmAkhir1),
+      kmAwal2: getValue(headerMap.kmAwal2),
+      kmAkhir2: getValue(headerMap.kmAkhir2),
+      keterangan: normalizeKeterangan(getValue(headerMap.keterangan)),
+    };
+  } catch (error: any) {
+    throw new Error(error?.result?.error?.message || error?.message || 'Gagal melakukan pengecekan data.');
+  }
 };

@@ -22,5 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+ss-pdo-ce9a8a2f7815.json
 .worktrees/
 .env

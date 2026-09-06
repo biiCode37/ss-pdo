@@ -3,6 +3,7 @@ export * from './auth';
 export * from './core';
 export * from './mutations';
 export * from './analytics';
+export * from './transport';
 
 // Canonical utility re-exports for complete backward compatibility
 export { isAuthError } from '../../utils/errorClassifier';

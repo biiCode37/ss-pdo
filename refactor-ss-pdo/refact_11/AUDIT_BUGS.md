@@ -1,0 +1,15 @@
+# AUDIT AUTENTIKASI, LIFECYCLE SESI, & GOOGLE SHEETS ACCESS - REFACTOR 11
+
+Siklus audit dan refactor ini berfokus pada evaluasi mendalam terhadap alur login, lifecycle autentikasi, serta kendala kedaluwarsa sesi Google Sheets setiap 1 jam sesuai instruksi pengguna dan **Aturan Emas #3 (Sesi Login Permanen Tanpa Timeout)** serta **Standar Keamanan Proyek SS_PDO**.
+
+---
+
+## Ringkasan Temuan Audit
+
+| ID Temuan | Lokasi Kode | Kategori | Keparahan | Deskripsi & Dampak Lapangan | Mitigasi |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **AUTH-11-01** | `src/services/googleSheets/auth.ts` | Architecture | High | **Batasan 1 Jam Google OAuth2 Client-Side:** Aplikasi mengandalkan Google Identity Services (`initTokenClient`) di browser. Menurut spesifikasi Google OAuth2 RFC 6749, access token client-side tanpa server memiliki masa berlaku mati 3.600 detik (1 jam) tanpa refresh token di browser. Petugas terhenti setiap jam. | Migrasi ke Opsi A: Google Service Account Proxy via Supabase Edge Function (`sheets-proxy`). Token server-to-server otomatis di-refresh tanpa batas waktu. |
+| **AUTH-11-02** | `src/services/googleSheets/auth.ts`<br>`startTokenRefreshTimer` | Security / Privacy | High | **Kegagalan Silent Refresh & Popup Blocker:** Upaya refresh otomatis di background (`prompt: ''`) diblokir oleh peramban modern (Chrome 3rd-party cookie phaseout, Safari ITP, PWA sandbox). Jika fallback popup terpicu via timer `setTimeout`, browser memblokir popup tersebut karena ketiadaan *user gesture*. | Hilangkan ketergantungan token browser untuk akses Sheets; alihkan pembacaan/penulisan data ke Edge Function backend. |
+| **AUTH-11-03** | `src/components/Dashboard.tsx`<br>`isAuthExpired` | UX / Mobile-First | High | **Interupsi Banner Merah Kedaluwarsa:** Saat token Google expired (1 jam), event `google-auth-expired` memunculkan kotak merah besar di dashboard yang mengintimidasi petugas, memakan layar mobile, dan memaksa login ulang manual. | Sesi pengguna dibuat 100% permanen. Banner merah diisolasi dan dihilangkan saat mode Service Account aktif. |
+| **AUTH-11-04** | `src/services/googleSheets/core.ts`<br>`mutations.ts`<br>`analytics.ts` | Coupling / Architecture | Medium | **Keterikatan Langsung `gapi.client` (Tight Coupling):** Pemanggilan API Google Sheets tersebar di berbagai file dengan pemanggilan langsung `(gapi.client as any).sheets...`, menyulitkan pergantian transport atau pengalihan proxy. | Buat modul adapter terpadu `src/services/googleSheets/transport.ts` yang mendukung Service Account proxy dengan fallback aman (Dual-Mode Pattern). |
+| **AUTH-11-05** | `src/App.tsx`<br>`src/services/googleSheets/auth.ts` | Golden Rule #3 | High | **Ketidaksinkronan Dua Lapisan Autentikasi:** Sesi Supabase (`user_profiles`) dan localStorage sebenarnya permanen, namun tertahan oleh `needs_reauth` dari Google Sheets token yang habis, melanggar Aturan Emas #3. | Samakan lifecycle: login pengguna murni untuk identitas dan allowlist status petugas di Supabase, sementara akses Google Sheets didelegasikan ke Service Account backend. |
