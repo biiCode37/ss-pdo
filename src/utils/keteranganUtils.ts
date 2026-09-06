@@ -111,3 +111,41 @@ export function parseKeterangan(raw?: string | null): ParsedKeterangan {
     normalized,
   };
 }
+
+/**
+ * Memfilter unit armada yang berhak disalin nilai KM Akhir Shift 1 ke KM Awal Shift 2.
+ * Ketentuan:
+ * 1. Unit wajib memiliki data KM Akhir Shift 1 (tidak kosong/undefined).
+ * 2. Unit yang memiliki keterangan/catatan kendala (keterangan terisi) WAJIB DILEWATI (skip).
+ */
+export function filterBusesForKmCopy<T extends { kmAkhir1?: string; keterangan?: string }>(
+  buses: T[]
+): {
+  eligibleBuses: T[];
+  skippedWithNotesCount: number;
+} {
+  const eligibleBuses: T[] = [];
+  let skippedWithNotesCount = 0;
+
+  for (const b of buses) {
+    const hasKmS1 =
+      b.kmAkhir1 !== undefined &&
+      b.kmAkhir1 !== null &&
+      String(b.kmAkhir1).trim() !== "";
+
+    if (!hasKmS1) continue;
+
+    const hasNotes =
+      b.keterangan !== undefined &&
+      b.keterangan !== null &&
+      String(b.keterangan).trim() !== "";
+
+    if (hasNotes) {
+      skippedWithNotesCount += 1;
+    } else {
+      eligibleBuses.push(b);
+    }
+  }
+
+  return { eligibleBuses, skippedWithNotesCount };
+}

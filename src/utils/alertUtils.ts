@@ -403,6 +403,7 @@ export async function showBulkTripModal(
 export interface BulkCopyKmModalOptions {
   totalUnitsWithKmS1: number;
   emptyKmAwal2Count: number;
+  skippedWithNotesCount?: number;
 }
 
 /**
@@ -411,13 +412,23 @@ export interface BulkCopyKmModalOptions {
 export async function showBulkCopyKmModal(
   options: BulkCopyKmModalOptions,
 ): Promise<"only_empty" | "all" | null> {
-  const { totalUnitsWithKmS1, emptyKmAwal2Count } = options;
+  const { totalUnitsWithKmS1, emptyKmAwal2Count, skippedWithNotesCount = 0 } = options;
 
   const formHtml = `
     <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
       <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
-        Ditemukan <strong>${escapeHtml(totalUnitsWithKmS1)} unit bus</strong> yang memiliki data <strong>KM Akhir Shift 1</strong>.
+        Ditemukan <strong>${escapeHtml(totalUnitsWithKmS1)} unit bus</strong> yang memenuhi syarat (memiliki <strong>KM Akhir Shift 1</strong> & tanpa keterangan).
       </div>
+
+      ${
+        skippedWithNotesCount > 0
+          ? `
+        <div style="font-size: 11.5px; color: var(--warning-text, #d97706); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); padding: 8px 12px; border-radius: 10px; line-height: 1.4;">
+          ⚠️ <strong>${escapeHtml(skippedWithNotesCount)} unit bus</strong> dilewati secara otomatis karena memiliki nilai pada kolom keterangan.
+        </div>
+      `
+          : ""
+      }
 
       <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; user-select: none;">

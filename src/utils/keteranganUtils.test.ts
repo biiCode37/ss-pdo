@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeKeterangan, parseKeterangan } from './keteranganUtils';
+import { normalizeKeterangan, parseKeterangan, filterBusesForKmCopy } from './keteranganUtils';
 
 describe('keteranganUtils - normalizeKeterangan', () => {
   it('normalizes various formats of BA.01 without details', () => {
@@ -97,5 +97,44 @@ describe('keteranganUtils - parseKeterangan', () => {
     expect(res.fixedValue).toBe('TO EVDAL');
     expect(res.prefix).toBe(null);
     expect(res.normalized).toBe('TO EVDAL');
+  });
+});
+
+describe('keteranganUtils - filterBusesForKmCopy', () => {
+  it('includes units with kmAkhir1 and empty keterangan', () => {
+    const buses = [
+      { unit: 'B1', kmAkhir1: '120.5', keterangan: '' },
+      { unit: 'B2', kmAkhir1: '130', keterangan: '   ' },
+    ];
+    const { eligibleBuses, skippedWithNotesCount } = filterBusesForKmCopy(buses);
+    expect(eligibleBuses).toHaveLength(2);
+    expect(eligibleBuses.map((b) => b.unit)).toEqual(['B1', 'B2']);
+    expect(skippedWithNotesCount).toBe(0);
+  });
+
+  it('skips units that have keterangan populated (e.g. OFF, BA.01, Mogok)', () => {
+    const buses = [
+      { unit: 'B1', kmAkhir1: '120', keterangan: '' },
+      { unit: 'B2', kmAkhir1: '130', keterangan: 'OFF' },
+      { unit: 'B3', kmAkhir1: '140', keterangan: 'BA.02 NP1' },
+      { unit: 'B4', kmAkhir1: '150', keterangan: 'Mogok radiator' },
+    ];
+    const { eligibleBuses, skippedWithNotesCount } = filterBusesForKmCopy(buses);
+    expect(eligibleBuses).toHaveLength(1);
+    expect(eligibleBuses[0].unit).toBe('B1');
+    expect(skippedWithNotesCount).toBe(3);
+  });
+
+  it('ignores units without kmAkhir1 even if keterangan is empty or populated', () => {
+    const buses = [
+      { unit: 'B1', kmAkhir1: '', keterangan: '' },
+      { unit: 'B2', kmAkhir1: '  ', keterangan: 'OFF' },
+      { unit: 'B3', kmAkhir1: undefined, keterangan: '' },
+      { unit: 'B4', kmAkhir1: '100', keterangan: '' },
+    ];
+    const { eligibleBuses, skippedWithNotesCount } = filterBusesForKmCopy(buses);
+    expect(eligibleBuses).toHaveLength(1);
+    expect(eligibleBuses[0].unit).toBe('B4');
+    expect(skippedWithNotesCount).toBe(0);
   });
 });

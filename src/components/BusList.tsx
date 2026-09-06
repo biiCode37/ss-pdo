@@ -20,6 +20,7 @@ import {
 import { getSatsetMode } from "../utils/modals/busInputModal";
 import { BusCardSkeleton } from "./Skeletons";
 import { detectTargetTrip } from "../utils/unitAnalytics";
+import { filterBusesForKmCopy } from "../utils/keteranganUtils";
 
 import type { SyncItem } from "../hooks/useOfflineSync";
 
@@ -156,13 +157,13 @@ function BusListComponent({
     }
   }, [targetTrip, bulkPergi, bulkPulang]);
 
-  const availableKmS1Buses = useMemo(() => {
-    return data.filter(
-      (b) =>
-        b.kmAkhir1 !== undefined &&
-        b.kmAkhir1 !== null &&
-        String(b.kmAkhir1).trim() !== "",
-    );
+  // ponytail: filter unit yang eligible untuk salin KM S1 (lewati yang berketerangan)
+  const { availableKmS1Buses, skippedWithNotesCount } = useMemo(() => {
+    const { eligibleBuses, skippedWithNotesCount } = filterBusesForKmCopy(data || []);
+    return {
+      availableKmS1Buses: eligibleBuses,
+      skippedWithNotesCount,
+    };
   }, [data]);
 
   const emptyKmAwal2Count = useMemo(() => {
@@ -178,15 +179,22 @@ function BusListComponent({
     }
 
     if (availableKmS1Buses.length === 0) {
-      showWarningToast(
-        "Tidak ada unit bus yang memiliki data KM Akhir Shift 1.",
-      );
+      if (skippedWithNotesCount > 0) {
+        showWarningToast(
+          `Seluruh unit yang memiliki KM Akhir S1 (${skippedWithNotesCount} unit) memiliki catatan keterangan, sehingga proses salin dilewati.`,
+        );
+      } else {
+        showWarningToast(
+          "Tidak ada unit bus yang memiliki data KM Akhir Shift 1.",
+        );
+      }
       return;
     }
 
     const mode = await showBulkCopyKmModal({
       totalUnitsWithKmS1: availableKmS1Buses.length,
       emptyKmAwal2Count,
+      skippedWithNotesCount,
     });
 
     if (!mode) return;
@@ -236,8 +244,12 @@ function BusListComponent({
         });
       }
 
+      const noteSuffix =
+        skippedWithNotesCount > 0
+          ? ` (${skippedWithNotesCount} unit berketerangan dilewati)`
+          : "";
       showSuccessToast(
-        `KM Akhir S1 berhasil disalin ke KM Awal S2 untuk ${targetBuses.length} unit bus!`,
+        `KM Akhir S1 berhasil disalin ke KM Awal S2 untuk ${targetBuses.length} unit bus${noteSuffix}!`,
       );
     } catch (err: any) {
       showErrorAlert(
@@ -625,7 +637,17 @@ function BusListComponent({
                 >
                   {availableKmS1Buses.length} unit
                 </span>
-                <span>punya KM Akhir S1</span>
+                <span>siap disalin</span>
+                {skippedWithNotesCount > 0 && (
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      color: "var(--warning-text, #f59e0b)",
+                    }}
+                  >
+                    ({skippedWithNotesCount} berketerangan dilewati)
+                  </span>
+                )}
               </div>
               <button
                 type="button"
