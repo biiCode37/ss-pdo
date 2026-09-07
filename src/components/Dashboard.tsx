@@ -180,6 +180,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const handleSetSelectedTab = (tab: string) => {
     selectedTabRef.current = tab;
     setSelectedTab(tab);
+    if (tab !== "AKUMULASI") {
+      setAccRange(null);
+      setAccRangeDetails(null);
+    }
   };
 
   useEffect(() => {
@@ -441,6 +445,18 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     handleSetSelectedTab(newTab);
     if (currentSheetId || sheetUrlRef.current) {
       await handleLoadData(false, newTab);
+    }
+  };
+
+  // ACC-17-01: Handler untuk keluar dari mode akumulasi kembali ke mode tanggal harian
+  const handleExitAccumulation = async (targetDay?: string) => {
+    const today = String(new Date().getDate());
+    const dayToSelect = targetDay || (days.includes(today) ? today : (days[0] || "1"));
+    setAccRange(null);
+    setAccRangeDetails(null);
+    handleSetSelectedTab(dayToSelect);
+    if (currentSheetId || sheetUrlRef.current) {
+      await handleLoadData(false, dayToSelect);
     }
   };
 
@@ -763,6 +779,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           currentTabName={currentTabName}
           onLoadData={(tab, targetUrl) => handleLoadData(true, tab, targetUrl)}
           accRange={accRangeDetails}
+          onExitAccumulation={handleExitAccumulation}
         />
       </div>
 
@@ -889,6 +906,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               isLoading={isLoading}
               onUpdateBus={handleUpdateBus}
               accRange={accRangeDetails}
+              onExitAccumulation={() => handleExitAccumulation()}
             />
           </div>
 
@@ -965,6 +983,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onClose={() => setIsAccSheetOpen(false)}
         currentMonth={activeMonth}
         currentYear={activeYear}
+        isAccumulationActive={selectedTab === "AKUMULASI"}
+        onResetAccumulation={() => handleExitAccumulation()}
         onApply={async (sDay, sMonth, sYear, eDay, eMonth, eYear) => {
           setAccRangeDetails({
             startDay: sDay,

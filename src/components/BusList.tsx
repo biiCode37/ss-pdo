@@ -41,6 +41,7 @@ interface Props {
     endMonth?: number;
     endYear?: number;
   } | null;
+  onExitAccumulation?: () => void;
 }
 
 function BusListComponent({
@@ -53,6 +54,7 @@ function BusListComponent({
   isLoading = false,
   onUpdateBus,
   accRange,
+  onExitAccumulation,
 }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
@@ -381,28 +383,51 @@ function BusListComponent({
               marginBottom: "12px",
               display: "flex",
               alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
               gap: "8px",
               boxShadow: "0 2px 8px rgba(234, 179, 8, 0.15)",
             }}
           >
-            <span style={{ fontSize: "16px" }}>⚠️</span>
-            <span>
-              Rekap Akumulasi (Tgl{" "}
-              {(() => {
-                const sDay = accRange?.startDay ?? 1;
-                const eDay = accRange?.endDay ?? new Date().getDate();
-                if (
-                  accRange?.startMonth &&
-                  accRange?.endMonth &&
-                  (accRange.startMonth !== accRange.endMonth ||
-                    accRange.startYear !== accRange.endYear)
-                ) {
-                  return `${sDay}/${accRange.startMonth} - ${eDay}/${accRange.endMonth}`;
-                }
-                return `${sDay} - ${eDay}`;
-              })()}
-              ) aktif. Pilih tanggal harian spesifik untuk menginput data.
-            </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: "240px" }}>
+              <span style={{ fontSize: "16px" }}>⚠️</span>
+              <span>
+                Rekap Akumulasi (Tgl{" "}
+                {(() => {
+                  const sDay = accRange?.startDay ?? 1;
+                  const eDay = accRange?.endDay ?? new Date().getDate();
+                  if (
+                    accRange?.startMonth &&
+                    accRange?.endMonth &&
+                    (accRange.startMonth !== accRange.endMonth ||
+                      accRange.startYear !== accRange.endYear)
+                  ) {
+                    return `${sDay}/${accRange.startMonth} - ${eDay}/${accRange.endMonth}`;
+                  }
+                  return `${sDay} - ${eDay}`;
+                })()}
+                ) aktif. Penginputan dikunci pada mode akumulasi.
+              </span>
+            </div>
+            {onExitAccumulation && (
+              <button
+                type="button"
+                onClick={onExitAccumulation}
+                style={{
+                  background: "rgba(234, 179, 8, 0.2)",
+                  border: "1px solid rgba(234, 179, 8, 0.45)",
+                  color: "var(--warning-color, #eab308)",
+                  borderRadius: "8px",
+                  padding: "5px 12px",
+                  fontSize: "11.5px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Kembali ke Harian ➔
+              </button>
+            )}
           </div>
         )}
 

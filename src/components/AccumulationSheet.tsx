@@ -33,6 +33,8 @@ interface Props {
   ) => void;
   currentMonth?: number;
   currentYear?: number;
+  isAccumulationActive?: boolean;
+  onResetAccumulation?: () => void;
 }
 
 export function AccumulationSheet({
@@ -41,6 +43,8 @@ export function AccumulationSheet({
   onApply,
   currentMonth,
   currentYear,
+  isAccumulationActive,
+  onResetAccumulation,
 }: Props) {
   const today = new Date();
   const defaultMonth = currentMonth || today.getMonth() + 1;
@@ -641,6 +645,31 @@ export function AccumulationSheet({
         >
           Terapkan Akumulasi Lintas Periode
         </button>
+
+        {/* Tombol Reset Mode Akumulasi (ACC-17-01) */}
+        {isAccumulationActive && onResetAccumulation && (
+          <button
+            type="button"
+            onClick={() => {
+              onResetAccumulation();
+              handleDismiss();
+            }}
+            style={{
+              width: "100%",
+              padding: "11px",
+              fontWeight: 600,
+              fontSize: "13px",
+              marginTop: "8px",
+              background: "transparent",
+              border: "1px solid var(--card-border)",
+              borderRadius: "10px",
+              color: "var(--text-secondary)",
+              cursor: "pointer",
+            }}
+          >
+            Kembali ke Mode Harian (Matikan Akumulasi)
+          </button>
+        )}
       </div>
     </div>,
     document.body,

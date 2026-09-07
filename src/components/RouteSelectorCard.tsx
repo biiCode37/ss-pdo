@@ -35,9 +35,8 @@ interface Props {
     endMonth?: number;
     endYear?: number;
   } | null;
+  onExitAccumulation?: (targetDay?: string) => void;
 }
-
-
 
 function RouteSelectorCardComponent({
   sheetUrl,
@@ -51,6 +50,7 @@ function RouteSelectorCardComponent({
   currentTabName,
   onLoadData,
   accRange,
+  onExitAccumulation,
 }: Props) {
   const [isMorphed, setIsMorphed] = useState(false);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
@@ -243,7 +243,7 @@ function RouteSelectorCardComponent({
   useEffect(() => {
     if (flatSheets.length === 0 || !currentSheetId) return;
 
-    if (prevLoadedSheetIdRef.current === currentSheetId) return;
+    if (prevLoadedSheetIdRef.current === currentSheetId && selectedRouteCode) return;
     prevLoadedSheetIdRef.current = currentSheetId;
 
     const active = flatSheets.find(f => {
@@ -311,6 +311,13 @@ function RouteSelectorCardComponent({
 
   const handleTabChange = (tab: string) => {
     setSelectedTab(tab);
+    if (tab && tab !== 'AKUMULASI') {
+      if (onExitAccumulation) {
+        onExitAccumulation(tab);
+      } else {
+        onLoadData(tab, sheetUrl);
+      }
+    }
   };
 
   // Helper: cari sheet untuk kombinasi rute+bulan+tahun saat ini
@@ -516,6 +523,56 @@ function RouteSelectorCardComponent({
               )}
             </div>
 
+            {/* Banner Mode Akumulasi Aktif + Tombol Keluar (ACC-17-01) */}
+            {isAccumulation && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  background: 'rgba(234, 179, 8, 0.12)',
+                  border: '1px solid rgba(234, 179, 8, 0.35)',
+                  color: 'var(--warning-color, #eab308)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  marginBottom: '10px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>⚡</span>
+                  <span>Mode Rekap Akumulasi Aktif</span>
+                </div>
+                <button
+                  type="button"
+                  data-testid="exit-accumulation-btn"
+                  onClick={() => {
+                    if (onExitAccumulation) {
+                      onExitAccumulation();
+                    } else {
+                      const today = String(new Date().getDate());
+                      const defaultDay = days.includes(today) ? today : (days[0] || '1');
+                      setSelectedTab(defaultDay);
+                      onLoadData(defaultDay, sheetUrl);
+                    }
+                  }}
+                  style={{
+                    background: 'rgba(234, 179, 8, 0.2)',
+                    border: '1px solid rgba(234, 179, 8, 0.4)',
+                    borderRadius: '6px',
+                    color: 'var(--warning-color, #eab308)',
+                    padding: '4px 8px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Kembali ke Harian ✕
+                </button>
+              </div>
+            )}
+
             {/* Sequential Cascade: 4 Kolom (Tahun → Bulan → Rute → Tanggal) */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
               {/* Kolom 1: Tahun (selalu enabled) */}
@@ -572,18 +629,21 @@ function RouteSelectorCardComponent({
                 </select>
               </div>
 
-              {/* Kolom 4: Tanggal (aktif setelah Rute dipilih; dinonaktifkan di mode AKUMULASI) */}
+              {/* Kolom 4: Tanggal (aktif setelah Rute dipilih; bisa memilih tanggal untuk keluar dari mode AKUMULASI) */}
               <div>
                 <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tanggal</label>
                 <select
                   className="input-field"
-                  value={isAccumulation ? '' : selectedTab}
+                  value={selectedTab}
                   onChange={(e) => handleTabChange(e.target.value)}
-                  disabled={!dateEnabled || isAccumulation || days.length === 0}
-                  title={isAccumulation ? 'Nonaktif saat mode Rekap Akumulasi' : (!dateEnabled ? 'Pilih rute terlebih dahulu' : 'Pilih tanggal')}
-                  style={{ width: '100%', padding: '8px', opacity: (!dateEnabled || isAccumulation) ? 0.55 : 1 }}
+                  disabled={!dateEnabled || days.length === 0}
+                  title={!dateEnabled ? 'Pilih rute terlebih dahulu' : 'Pilih tanggal'}
+                  style={{ width: '100%', padding: '8px', opacity: !dateEnabled ? 0.55 : 1 }}
                 >
-                  <option value="">{isAccumulation ? '— Rekap Akumulasi —' : '-- Pilih Tanggal --'}</option>
+                  {isAccumulation && (
+                    <option value="AKUMULASI">⚡ Rekap Akumulasi</option>
+                  )}
+                  <option value="" disabled={isAccumulation}>-- Pilih Tanggal --</option>
                   {days.map(day => (
                     <option key={day} value={day}>Tgl {day}</option>
                   ))}
