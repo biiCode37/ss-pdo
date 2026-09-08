@@ -2,8 +2,15 @@ import { supabase } from './supabase';
 import { fetchRouteMasterList } from './dailyRouteReportService';
 import type { Route, DailyRouteReport, DailyUnitSummary } from '../types/supabase';
 
+export const SUPERVISORS = [
+  'Ranto Lumban Toruan',
+  'Abdul Manan',
+  'Moamar Z.A. Mahu'
+] as const;
+
 export interface RegionalRouteItem {
   id: number;
+  reportId?: number;
   routeCode: string;
   routeName: string;
   operatorName: string;
@@ -190,6 +197,7 @@ export async function fetchRegionalMonitoringData(
 
     return {
       id: r.id,
+      reportId: todayReport?.id,
       routeCode: r.route_code,
       routeName: r.route_name,
       operatorName: r.operator_name || 'Mikrotrans',

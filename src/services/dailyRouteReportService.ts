@@ -103,21 +103,32 @@ export async function upsertDailyRouteReport(
  * Konfirmasi / verifikasi laporan rute oleh pimpinan / Korlap.
  */
 export async function verifyDailyRouteReport(
-  reportId: number,
-  verifiedBy: string
+  idOrRouteId: number,
+  dateOrVerifiedBy?: string,
+  maybeVerifiedBy?: string
 ): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const isByRouteAndDate = typeof dateOrVerifiedBy === 'string' && dateOrVerifiedBy.includes('-');
+    const verifiedBy = isByRouteAndDate ? maybeVerifiedBy : dateOrVerifiedBy;
+
+    let query = supabase
       .from('daily_route_reports')
       .update({
         status: 'verified',
         verified_by: verifiedBy,
         updated_at: new Date().toISOString()
-      })
-      .eq('id', reportId);
+      });
+
+    if (isByRouteAndDate) {
+      query = query.eq('route_id', idOrRouteId).eq('date', dateOrVerifiedBy);
+    } else {
+      query = query.eq('id', idOrRouteId);
+    }
+
+    const { error } = await query;
 
     if (error) {
-      console.warn(`[dailyRouteReportService] Gagal verifikasi laporan ID ${reportId}:`, error);
+      console.warn(`[dailyRouteReportService] Gagal verifikasi laporan:`, error);
       return false;
     }
 
