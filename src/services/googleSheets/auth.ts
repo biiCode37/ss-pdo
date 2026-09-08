@@ -27,10 +27,36 @@ export const initGoogleApi = async (): Promise<void> => {
   if (!hasGoogleCreds()) throw new Error('API Credentials missing');
 
   return new Promise((resolve, reject) => {
+    let settled = false;
+
+    // Timeout pengaman 15 detik agar startup tidak stuck selamanya jika Google API unreachable
+    const timer = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        reject(new Error('Koneksi ke Google API timeout. Silakan periksa koneksi internet Anda.'));
+      }
+    }, 15000);
+
+    const onDone = () => {
+      if (!settled) {
+        settled = true;
+        clearTimeout(timer);
+        resolve();
+      }
+    };
+
+    const onError = (err: any) => {
+      if (!settled) {
+        settled = true;
+        clearTimeout(timer);
+        reject(err);
+      }
+    };
+
     const setupGapi = () => {
       const gapiObj = getGapi();
       if (!gapiObj?.load) {
-        reject(new Error('Objek gapi tidak tersedia'));
+        onError(new Error('Objek gapi tidak tersedia'));
         return;
       }
 
@@ -42,71 +68,92 @@ export const initGoogleApi = async (): Promise<void> => {
           });
           
           // 2. Load Google Identity Services script for modern Auth
-          const script = document.createElement('script');
-          script.src = 'https://accounts.google.com/gsi/client';
-          script.onload = () => {
-            tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
-              client_id: creds.clientId,
-              scope: 'https://www.googleapis.com/auth/spreadsheets email profile',
-              callback: async (tokenResponse: any) => {
-                if (tokenResponse && tokenResponse.access_token) {
-                  gapiObj.client.setToken({ access_token: tokenResponse.access_token });
-                localStorage.setItem('PDO_IS_SIGNED_IN', 'true');
-                localStorage.setItem('GAPI_ACCESS_TOKEN', JSON.stringify({
-                  token: tokenResponse.access_token,
-                  expiresAt: Date.now() + tokenResponse.expires_in * 1000
-                }));
+          const initTokenClient = () => {
+            try {
+              tokenClient = (window as any).google?.accounts?.oauth2?.initTokenClient({
+                client_id: creds.clientId,
+                scope: 'https://www.googleapis.com/auth/spreadsheets email profile',
+                callback: async (tokenResponse: any) => {
+                  if (tokenResponse && tokenResponse.access_token) {
+                    gapiObj.client.setToken({ access_token: tokenResponse.access_token });
+                    localStorage.setItem('PDO_IS_SIGNED_IN', 'true');
+                    localStorage.setItem('GAPI_ACCESS_TOKEN', JSON.stringify({
+                      token: tokenResponse.access_token,
+                      expiresAt: Date.now() + tokenResponse.expires_in * 1000
+                    }));
 
-                // Fetch Google profile userinfo SEBELUM dispatch success
-                // agar PDO_USER_EMAIL tersedia saat LoginScreen melanjutkan
-                let resolvedEmail = '';
-                try {
-                  const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-                  });
-                  if (res.ok) {
-                    const info = await res.json();
-                    if (info && info.email) {
-                      resolvedEmail = info.email;
-                      localStorage.setItem('PDO_USER_EMAIL', info.email);
-                      localStorage.setItem('PDO_USER_NAME', info.name || info.email);
-                      localStorage.setItem('PDO_USER_AVATAR', info.picture || '');
+                    // Fetch Google profile userinfo SEBELUM dispatch success
+                    // agar PDO_USER_EMAIL tersedia saat LoginScreen melanjutkan
+                    let resolvedEmail = '';
+                    try {
+                      const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                        headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                      });
+                      if (res.ok) {
+                        const info = await res.json();
+                        if (info && info.email) {
+                          resolvedEmail = info.email;
+                          localStorage.setItem('PDO_USER_EMAIL', info.email);
+                          localStorage.setItem('PDO_USER_NAME', info.name || info.email);
+                          localStorage.setItem('PDO_USER_AVATAR', info.picture || '');
+                        }
+                      }
+                    } catch (_e) {
+                      // Fallback: network error saat fetch userinfo
                     }
+
+                    // Dispatch SETELAH userinfo tersimpan ke localStorage
+                    window.dispatchEvent(new CustomEvent('google-login-success', {
+                      detail: { email: resolvedEmail }
+                    }));
+
+                    // Mulai timer refresh token otomatis hanya jika dalam mode client OAuth
+                    if (!isUsingServiceAccount()) {
+                      startTokenRefreshTimer(tokenResponse.expires_in * 1000);
+                    }
+
+                    // Telemetry: Catat activity log LOGIN dengan email yang baru terverifikasi
+                    const emailToLog = resolvedEmail || localStorage.getItem('PDO_USER_EMAIL') || 'google_user';
+                    logActivity({
+                      user_email: emailToLog,
+                      action: 'LOGIN',
+                      details: { loginMethod: 'google_gis' },
+                    }).catch(() => {});
+                  } else if (tokenResponse && tokenResponse.error) {
+                    window.dispatchEvent(new CustomEvent('google-login-error', { detail: tokenResponse }));
                   }
-                } catch (_e) {
-                  // Fallback: network error saat fetch userinfo
-                }
+                },
+                // BUG-04: Tangkap semua kegagalan popup (ditutup user, akses ditolak, dll.)
+                error_callback: (err: any) => {
+                  window.dispatchEvent(new CustomEvent('google-login-error', { detail: err }));
+                },
+              });
+              onDone();
+            } catch (err) {
+              onError(err);
+            }
+          };
 
-                // Dispatch SETELAH userinfo tersimpan ke localStorage
-                window.dispatchEvent(new CustomEvent('google-login-success', {
-                  detail: { email: resolvedEmail }
-                }));
-
-                // Mulai timer refresh token otomatis hanya jika dalam mode client OAuth
-                if (!isUsingServiceAccount()) {
-                  startTokenRefreshTimer(tokenResponse.expires_in * 1000);
-                }
-
-                // Telemetry: Catat activity log LOGIN dengan email yang baru terverifikasi
-                const emailToLog = resolvedEmail || localStorage.getItem('PDO_USER_EMAIL') || 'google_user';
-                logActivity({
-                  user_email: emailToLog,
-                  action: 'LOGIN',
-                  details: { loginMethod: 'google_gis' },
-                }).catch(() => {});
-              } else if (tokenResponse && tokenResponse.error) {
-                window.dispatchEvent(new CustomEvent('google-login-error', { detail: tokenResponse }));
-              }
-            },
-            // BUG-04: Tangkap semua kegagalan popup (ditutup user, akses ditolak, dll.)
-            error_callback: (err: any) => {
-              window.dispatchEvent(new CustomEvent('google-login-error', { detail: err }));
-            },
-          });
-          resolve();
-        };
+          if ((window as any).google?.accounts?.oauth2) {
+            initTokenClient();
+          } else if (typeof document !== 'undefined') {
+            const existingGsi = document.querySelector('script[src*="accounts.google.com/gsi/client"]') as HTMLScriptElement;
+            if (existingGsi) {
+              existingGsi.addEventListener('load', initTokenClient);
+              existingGsi.addEventListener('error', () => onError(new Error('Gagal memuat Google Identity Services')));
+            } else {
+              const script = document.createElement('script');
+              script.src = 'https://accounts.google.com/gsi/client';
+              script.async = true;
+              script.onload = initTokenClient;
+              script.onerror = () => onError(new Error('Gagal memuat Google Identity Services'));
+              document.body.appendChild(script);
+            }
+          } else {
+            onDone();
+          }
         } catch (error) {
-          reject(error);
+          onError(error);
         }
       });
     };
@@ -114,13 +161,20 @@ export const initGoogleApi = async (): Promise<void> => {
     if (getGapi()?.load) {
       setupGapi();
     } else if (typeof document !== 'undefined') {
-      const gapiScript = document.createElement('script');
-      gapiScript.src = 'https://apis.google.com/js/api.js';
-      gapiScript.onload = setupGapi;
-      gapiScript.onerror = () => reject(new Error('Gagal memuat Google API client script'));
-      document.body.appendChild(gapiScript);
+      const existingGapi = document.querySelector('script[src*="apis.google.com/js/api.js"]') as HTMLScriptElement;
+      if (existingGapi) {
+        existingGapi.addEventListener('load', setupGapi);
+        existingGapi.addEventListener('error', () => onError(new Error('Gagal memuat Google API client script')));
+      } else {
+        const gapiScript = document.createElement('script');
+        gapiScript.src = 'https://apis.google.com/js/api.js';
+        gapiScript.async = true;
+        gapiScript.onload = setupGapi;
+        gapiScript.onerror = () => onError(new Error('Gagal memuat Google API client script'));
+        document.body.appendChild(gapiScript);
+      }
     } else {
-      resolve();
+      onDone();
     }
   });
 };

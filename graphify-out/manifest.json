@@ -940,8 +940,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/auth.ts": {
-    "mtime": 1788857481.9919398,
-    "ast_hash": "32f83ad095decd0595b70c87b0324b41",
+    "mtime": 1788859061.436407,
+    "ast_hash": "decbedf464d4966d49ec10ad77c8e8fa",
     "semantic_hash": ""
   },
   "src/services/googleSheets/core.ts": {
@@ -1497,6 +1497,11 @@
   "refactor-ss-pdo/refact_19/REPAIR_REPORT.md": {
     "mtime": 1788858079.3717015,
     "ast_hash": "60da9f672b53bb31aa50478e6836c3dd",
+    "semantic_hash": ""
+  },
+  "src/services/googleSheets/auth.test.ts": {
+    "mtime": 1788859137.363265,
+    "ast_hash": "28c45a98fdb2ef85dd6c1a6e529b2653",
     "semantic_hash": ""
   }
 }

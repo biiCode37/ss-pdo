@@ -70,8 +70,8 @@
     "semantic_hash": "029f4905006c1fffd96bc863e2d98d3e"
   },
   "package.json": {
-    "mtime": 1788577603.8312657,
-    "ast_hash": "efb5edcf855494e3538b53fdc273f7c9",
+    "mtime": 1788857577.7363598,
+    "ast_hash": "f16190028cd5612d177729f752e6080b",
     "semantic_hash": ""
   },
   "src/App.tsx": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1788850835.9156115,
-    "ast_hash": "b588588cbaba0c8221e4ccb417ddbf8a",
+    "mtime": 1788858009.7366831,
+    "ast_hash": "c06a68e6af58449d9e2d6483840d2253",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
-    "mtime": 1788856311.2707596,
-    "ast_hash": "b54d5d3d212fe50a67d30f3e6aedbf7b",
+    "mtime": 1788857925.332975,
+    "ast_hash": "a50831b1b516d2f2aa90ff37ea98fb14",
     "semantic_hash": ""
   },
   "src/components/ShiftComparisonCard.tsx": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "src/utils/analytics.ts": {
-    "mtime": 1788577603.8475988,
-    "ast_hash": "ebe7f564fb4de6ef88e1b0de5d69c29f",
+    "mtime": 1788857807.966785,
+    "ast_hash": "3e0fd852120d3ee94358d6bd11bc46c1",
     "semantic_hash": ""
   },
   "src/utils/errorFormatter.test.ts": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "src/services/routeService.test.ts": {
-    "mtime": 1788176846.8021016,
-    "ast_hash": "33fa8647e87c3d5c89678b324e981b48",
+    "mtime": 1788857353.1038442,
+    "ast_hash": "8f08b2bdc972eb16d6715837359ab553",
     "semantic_hash": ""
   },
   "src/components/SwipeableContainer.tsx": {
@@ -760,13 +760,13 @@
     "semantic_hash": ""
   },
   "src/components/AccumulationSheet.tsx": {
-    "mtime": 1788755086.0070522,
-    "ast_hash": "8bd27885bc31c86964526eb147f0f009",
+    "mtime": 1788857785.484496,
+    "ast_hash": "31e8ebbb69f543dff2b538d7ca1963dc",
     "semantic_hash": ""
   },
   "src/components/ProfileMenuSheet.tsx": {
-    "mtime": 1788850609.1699712,
-    "ast_hash": "8b3fc21841e9349a688689f096d250a9",
+    "mtime": 1788857303.9342172,
+    "ast_hash": "327d2163da787f31af1576b5e9d12790",
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {
@@ -795,7 +795,7 @@
     "semantic_hash": ""
   },
   "src/utils/sheetIdentity.ts": {
-    "mtime": 1786116940.0133238,
+    "mtime": 1788857931.9037795,
     "ast_hash": "e35ef9903dbbc4898db253193aa99f57",
     "semantic_hash": ""
   },
@@ -905,13 +905,13 @@
     "semantic_hash": ""
   },
   "src/utils/cacheUtils.test.ts": {
-    "mtime": 1787322418.5687,
-    "ast_hash": "5eb1f802eae0adb4842c301d5dc820d7",
+    "mtime": 1788857969.822643,
+    "ast_hash": "249513868c90fbdec46881ef8abda95c",
     "semantic_hash": ""
   },
   "src/utils/cacheUtils.ts": {
-    "mtime": 1787322418.5720296,
-    "ast_hash": "7d5cf1b3a02ee75ff6a7550af96cbbb4",
+    "mtime": 1788858019.0932379,
+    "ast_hash": "d7c5da3b31e5fbf778363597848cd5b8",
     "semantic_hash": ""
   },
   "src/components/QueueModal.tsx": {
@@ -940,8 +940,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/auth.ts": {
-    "mtime": 1788676457.0231524,
-    "ast_hash": "377c1600af63feb67cc9cc264972ab3a",
+    "mtime": 1788857481.9919398,
+    "ast_hash": "32f83ad095decd0595b70c87b0324b41",
     "semantic_hash": ""
   },
   "src/services/googleSheets/core.ts": {
@@ -955,8 +955,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/mutations.ts": {
-    "mtime": 1788676457.0258873,
-    "ast_hash": "82a0a76fdc297e84c5fbfaa11d59d025",
+    "mtime": 1788857657.5235405,
+    "ast_hash": "a2f729a452663378b7c3ac24fa097dd6",
     "semantic_hash": ""
   },
   "src/services/googleSheets/types.ts": {
@@ -1054,11 +1054,6 @@
     "ast_hash": "a5ed4da0e3957aac0bcb25f04024ef77",
     "semantic_hash": ""
   },
-  "src/components/AuditLogPage.tsx": {
-    "mtime": 1787938556.7446764,
-    "ast_hash": "955368f34e0f7215acefd5429e125318",
-    "semantic_hash": ""
-  },
   "src/components/UserManagementPage.tsx": {
     "mtime": 1787938556.7579465,
     "ast_hash": "211a55d44490403d673f19eb2f0a3dc3",
@@ -1110,8 +1105,8 @@
     "semantic_hash": ""
   },
   "src/services/routes/audit.ts": {
-    "mtime": 1788577603.8417575,
-    "ast_hash": "8ce4324391882e72e43ffb7c2f920432",
+    "mtime": 1788857334.3784013,
+    "ast_hash": "4111ee9c95834ad03679678b58990436",
     "semantic_hash": ""
   },
   "src/services/routes/index.ts": {
@@ -1150,13 +1145,13 @@
     "semantic_hash": ""
   },
   "src/utils/conflictMerge.test.ts": {
-    "mtime": 1787938556.7712939,
-    "ast_hash": "b4b115075a4da9d627b7248a5562fbf2",
+    "mtime": 1788857371.24564,
+    "ast_hash": "bb61b0122e2288da1b9e152ca6623662",
     "semantic_hash": ""
   },
   "src/utils/conflictMerge.ts": {
-    "mtime": 1787938556.7723541,
-    "ast_hash": "fad988212d782e1d550787e4e267e10b",
+    "mtime": 1788857364.1376927,
+    "ast_hash": "8fd3256f68bc2494b6d0cdf83b2ad48a",
     "semantic_hash": ""
   },
   "supabase/migrations/20260827000000_fix_user_profiles_insert.sql": {
@@ -1220,13 +1215,13 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/transport.test.ts": {
-    "mtime": 1788676457.0269516,
-    "ast_hash": "4a87b121c803df191dedcf44da31f869",
+    "mtime": 1788857594.4955144,
+    "ast_hash": "5f806ce6845fab12782da1682ca11888",
     "semantic_hash": ""
   },
   "src/services/googleSheets/transport.ts": {
-    "mtime": 1788676457.027487,
-    "ast_hash": "e690362e31e68b001d478b7e6f5eaab6",
+    "mtime": 1788857539.1315458,
+    "ast_hash": "cd8055fc5aec83511fa8b6fb7863f257",
     "semantic_hash": ""
   },
   "supabase/functions/sheets-proxy/deno.json": {
@@ -1257,16 +1252,6 @@
   "supabase/functions/deno.json": {
     "mtime": 1788676457.0356617,
     "ast_hash": "aec82e3c8b909d4978c9c5781abc79c7",
-    "semantic_hash": ""
-  },
-  "src/utils/routeHelpers.test.ts": {
-    "mtime": 1788676457.0301383,
-    "ast_hash": "e7a8e4e597d60fecd56374c123ef03fc",
-    "semantic_hash": ""
-  },
-  "src/utils/routeHelpers.ts": {
-    "mtime": 1788676457.0307195,
-    "ast_hash": "bc69427fb64f996c9cee0b518e11b75f",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_12/AUDIT_BUGS.md": {
@@ -1320,8 +1305,8 @@
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.test.tsx": {
-    "mtime": 1788755086.0105681,
-    "ast_hash": "8c1d6b1c5a4b1d7f0d0a6da5990a1574",
+    "mtime": 1788857562.6211257,
+    "ast_hash": "666b6a227a6173562908af307b701a24",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_17/AUDIT_BUGS.md": {
@@ -1450,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_common.ts": {
-    "mtime": 1788849424.270719,
-    "ast_hash": "581d5541efe21c71f797b498a1f0b91d",
+    "mtime": 1788857762.4011974,
+    "ast_hash": "a2ebaf1c3d285bac549e67afd6504a51",
     "semantic_hash": ""
   },
   "src/constants/texts/text_dashboard.ts": {
@@ -1502,6 +1487,16 @@
   "refactor-ss-pdo/refact_18/REPAIR_REPORT.md": {
     "mtime": 1788856531.634968,
     "ast_hash": "a9f578396a3c84bd790c8d2bb7b7d077",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_19/AUDIT_BUGS.md": {
+    "mtime": 1788858070.6736772,
+    "ast_hash": "fdcc33df214c8903d958aec9651fa9d3",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_19/REPAIR_REPORT.md": {
+    "mtime": 1788858079.3717015,
+    "ast_hash": "60da9f672b53bb31aa50478e6836c3dd",
     "semantic_hash": ""
   }
 }
