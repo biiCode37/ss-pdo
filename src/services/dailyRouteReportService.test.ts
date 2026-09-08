@@ -55,19 +55,6 @@ describe('dailyRouteReportService', () => {
       status: 'submitted'
     };
 
-    const mockSelect = vi.fn().mockReturnThis();
-    const mockEq1 = vi.fn().mockReturnThis();
-    const mockEq2 = vi.fn().mockReturnThis();
-    const mockMaybeSingle = vi.fn().mockResolvedValue({ data: mockReport, error: null });
-
-    (supabase.from as any).mockReturnValue({
-      select: mockSelect,
-      eq: vi.fn().mockImplementation((col: string, val: any) => {
-        if (col === 'route_id') return { eq: mockEq2 };
-        return { maybeSingle: mockMaybeSingle };
-      }),
-    });
-    // simpler chain mock
     const chain: any = {};
     chain.select = vi.fn().mockReturnValue(chain);
     chain.eq = vi.fn().mockReturnValue(chain);
@@ -78,6 +65,31 @@ describe('dailyRouteReportService', () => {
     expect(result).not.toBeNull();
     expect(result?.route_code).toBe('JAK.15');
     expect(result?.realops_shift1).toBe(58);
+  });
+
+  it('fetchDailyRouteReportsByDate returns array of reports', async () => {
+    const mockReports = [
+      { id: 10, route_code: 'JAK.15', date: '2026-09-02' },
+      { id: 11, route_code: 'JAK.01', date: '2026-09-02' }
+    ];
+
+    const chain: any = {};
+    chain.select = vi.fn().mockReturnValue(chain);
+    chain.eq = vi.fn().mockResolvedValue({ data: mockReports, error: null });
+    (supabase.from as any).mockReturnValue(chain);
+
+    const results = await fetchDailyRouteReportsByDate('2026-09-02');
+    expect(results).toHaveLength(2);
+  });
+
+  it('verifyDailyRouteReport updates report status to verified', async () => {
+    const chain: any = {};
+    chain.update = vi.fn().mockReturnValue(chain);
+    chain.eq = vi.fn().mockResolvedValue({ error: null });
+    (supabase.from as any).mockReturnValue(chain);
+
+    const ok = await verifyDailyRouteReport(10, 'korlap@transjakarta.co.id');
+    expect(ok).toBe(true);
   });
 
   it('upsertDailyRouteReport saves report and returns updated record', async () => {

@@ -12,6 +12,7 @@ import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
 import { RouteSelectorCard } from "./RouteSelectorCard";
+import { RouteOperationalReportCard } from "./RouteOperationalReportCard";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
 import { UserManagementSkeleton } from "./Skeletons";
@@ -511,6 +512,24 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   // Generate options for days 1-31
   const days = Array.from({ length: 31 }, (_, i) => String(i + 1));
 
+  const currentRouteCode = useMemo(() => {
+    return getRouteCodeForSheet(currentSheetId || sheetUrl) || "";
+  }, [currentSheetId, sheetUrl]);
+
+  const matchedRoute = useMemo(() => {
+    if (!currentRouteCode) return null;
+    const cached = getRoutesFromCache();
+    return cached.find((r) => r.route_code === currentRouteCode) || null;
+  }, [currentRouteCode]);
+
+  const operationalReportDate = useMemo(() => {
+    const dayNum = parseInt(selectedTab, 10);
+    if (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) {
+      return `${activeYear}-${String(activeMonth).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
+    }
+    return new Date().toISOString().split("T")[0];
+  }, [selectedTab, activeYear, activeMonth]);
+
   if (currentView === 'user_management') {
     return (
       <Suspense fallback={<UserManagementSkeleton />}>
@@ -894,6 +913,17 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                   ))}
                 </ul>
               </div>
+            )}
+
+            {matchedRoute && selectedTab !== "AKUMULASI" && (
+              <RouteOperationalReportCard
+                routeId={matchedRoute.id}
+                routeCode={matchedRoute.route_code}
+                selectedDate={operationalReportDate}
+                defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
+                defaultRenops={matchedRoute.default_renops || 0}
+                userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
+              />
             )}
 
             <BusList
