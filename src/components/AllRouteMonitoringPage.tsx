@@ -21,6 +21,12 @@ import {
 import { verifyDailyRouteReport } from '../services/dailyRouteReportService';
 import { WaReportModal } from './WaReportModal';
 import { showSuccessToast, showErrorAlert } from '../utils/alertUtils';
+import {
+  TEXT_MONITORING,
+  TEXT_COMMON,
+  TEXT_ERRORS,
+  TEXT_ALERTS,
+} from '../constants/texts';
 
 interface Props {
   onBackToRouteView?: () => void;
@@ -31,7 +37,7 @@ interface Props {
 }
 
 export const SUPERVISOR_TABS = [
-  { id: 'ALL', label: 'Semua Rute', keyword: '' },
+  { id: 'ALL', label: TEXT_MONITORING.TABS.ALL_LABEL, keyword: '' },
   { id: 'RANTO', label: 'Ranto Lumban Toruan', keyword: 'RANTO' },
   { id: 'ABDUL', label: 'Abdul Manan', keyword: 'ABDUL' },
   { id: 'MOAMAR', label: 'Moamar Z.A. Mahu', keyword: 'MOAMAR' },
@@ -112,9 +118,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       setData(res);
     } catch (err: unknown) {
       console.warn('[AllRouteMonitoringPage] Gagal memuat data:', err);
-      setErrorMessage(
-        'Gagal memuat data monitoring wilayah. Silakan periksa koneksi internet Anda dan coba lagi.'
-      );
+      setErrorMessage(TEXT_ERRORS.LOAD_REGIONAL_FAILED);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -152,7 +156,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     if (currentStatus === 'verified') return;
     try {
       await verifyDailyRouteReport(routeId, selectedDate, currentUserEmail);
-      showSuccessToast('Laporan rute berhasil diverifikasi!');
+      showSuccessToast(TEXT_ALERTS.TOAST.SUCCESS_VERIFIED);
       // Refresh data locally
       setData(prev => {
         if (!prev) return prev;
@@ -171,7 +175,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       });
     } catch (err: unknown) {
       console.warn('[AllRouteMonitoringPage] Gagal verifikasi laporan:', err);
-      showErrorAlert('Gagal', 'Terjadi kesalahan saat memverifikasi laporan.');
+      showErrorAlert('Gagal', TEXT_ERRORS.VERIFY_FAILED);
     }
   };
 
@@ -242,10 +246,10 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                 }}
-                title="Kembali ke Operasi Rute Tunggal"
+                title={TEXT_MONITORING.HEADER.BTN_BACK_TITLE}
               >
                 <ArrowLeft size={16} />
-                <span>Operasi Rute</span>
+                <span>{TEXT_MONITORING.HEADER.BTN_BACK}</span>
               </button>
             )}
 
@@ -263,7 +267,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 }}
               >
                 <Bus size={20} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
-                <span>Monitoring Wilayah Utara</span>
+                <span>{TEXT_MONITORING.HEADER.TITLE}</span>
               </h1>
               <span
                 style={{
@@ -274,7 +278,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                   marginTop: '1px',
                 }}
               >
-                Dashboard All Route & Rekapitulasi Harian Transjakarta
+                {TEXT_MONITORING.HEADER.SUBTITLE}
               </span>
             </div>
           </div>
@@ -305,7 +309,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                   display: 'flex',
                   alignItems: 'center',
                 }}
-                title="Hari Sebelumnya"
+                title={TEXT_COMMON.NAV.PREV_DAY}
               >
                 <ChevronLeft size={16} />
               </button>
@@ -354,7 +358,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                   display: 'flex',
                   alignItems: 'center',
                 }}
-                title="Hari Berikutnya"
+                title={TEXT_COMMON.NAV.NEXT_DAY}
               >
                 <ChevronRight size={16} />
               </button>
@@ -379,7 +383,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 opacity: refreshing || loading ? 0.6 : 1,
                 transition: 'all 0.2s ease',
               }}
-              title="Perbarui Data"
+              title={TEXT_MONITORING.HEADER.REFRESH_TITLE}
             >
               <RefreshCw
                 size={16}
@@ -412,7 +416,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
               }}
             >
               <FileSpreadsheet size={16} />
-              <span>Buat Laporan WA</span>
+              <span>{TEXT_MONITORING.HEADER.BTN_WA_REPORT}</span>
             </button>
           </div>
         </div>
@@ -498,7 +502,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
           >
             <AlertCircle size={36} style={{ color: 'var(--danger-color, #ef4444)' }} />
             <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--danger-color, #ef4444)' }}>
-              Gagal Memuat Data
+              {TEXT_MONITORING.ERROR_STATE.TITLE}
             </h2>
             <p style={{ fontSize: '13px', color: 'var(--text-secondary, #8b8b8b)', margin: 0, maxWidth: '400px' }}>
               {errorMessage}
@@ -518,7 +522,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 cursor: 'pointer',
               }}
             >
-              Coba Lagi
+              {TEXT_MONITORING.ERROR_STATE.RETRY_BTN}
             </button>
           </div>
         )}
@@ -541,11 +545,14 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
                 <span style={{ color: 'var(--text-secondary, #8b8b8b)', fontWeight: 500 }}>
-                  Status Kelengkapan Laporan PDO Wilayah:
+                  {TEXT_MONITORING.READINESS.LABEL}
                 </span>
                 <span style={{ fontWeight: 800, color: 'var(--text-primary, #ededed)' }}>
-                  {data.submittedCount} / {data.totalRoutesCount} Rute Siap (
-                  {Math.round((data.submittedCount / (data.totalRoutesCount || 1)) * 100)}%)
+                  {TEXT_MONITORING.READINESS.SUMMARY(
+                    data.submittedCount,
+                    data.totalRoutesCount,
+                    Math.round((data.submittedCount / (data.totalRoutesCount || 1)) * 100)
+                  )}
                 </span>
               </div>
 
@@ -584,19 +591,23 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
               >
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
-                  Terverifikasi: <strong style={{ color: 'var(--text-primary)' }}>{data.verifiedCount}</strong>
+                  {TEXT_MONITORING.READINESS.LEGEND_VERIFIED}{' '}
+                  <strong style={{ color: 'var(--text-primary)' }}>{data.verifiedCount}</strong>
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6' }} />
-                  Submitted: <strong style={{ color: 'var(--text-primary)' }}>{data.submittedCount - data.verifiedCount}</strong>
+                  {TEXT_MONITORING.READINESS.LEGEND_SUBMITTED}{' '}
+                  <strong style={{ color: 'var(--text-primary)' }}>{data.submittedCount - data.verifiedCount}</strong>
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }} />
-                  Draft: <strong style={{ color: 'var(--text-primary)' }}>{data.draftCount}</strong>
+                  {TEXT_MONITORING.READINESS.LEGEND_DRAFT}{' '}
+                  <strong style={{ color: 'var(--text-primary)' }}>{data.draftCount}</strong>
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#64748b' }} />
-                  Belum Diisi: <strong style={{ color: 'var(--text-primary)' }}>{data.emptyCount}</strong>
+                  {TEXT_MONITORING.READINESS.LEGEND_EMPTY}{' '}
+                  <strong style={{ color: 'var(--text-primary)' }}>{data.emptyCount}</strong>
                 </span>
               </div>
             </section>
@@ -631,20 +642,20 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                     letterSpacing: '0.4px',
                   }}
                 >
-                  Armada Wilayah
+                  {TEXT_MONITORING.KPI.FLEET_LABEL}
                 </span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary, #ededed)' }}>
                   {data.totalRealops} / {data.totalRenops}
                   <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
-                    bus
+                    {TEXT_MONITORING.KPI.FLEET_UNIT}
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px' }}>
                   <span style={{ color: 'var(--accent-color, #3ECF8E)', fontWeight: 700 }}>
-                    {formatDecimal(overallArmadaPct, 1)}% Armada
+                    {TEXT_MONITORING.KPI.FLEET_PCT(formatDecimal(overallArmadaPct, 1))}
                   </span>
                   <span style={{ color: 'var(--text-secondary)' }}>
-                    S1: {data.totalRealops} | S2: {data.totalRealops}
+                    {TEXT_MONITORING.KPI.FLEET_BREAKDOWN(data.totalRealops, data.totalRealops)}
                   </span>
                 </div>
               </div>
@@ -671,12 +682,12 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                     letterSpacing: '0.4px',
                   }}
                 >
-                  Total Pelanggan
+                  {TEXT_MONITORING.KPI.PASSENGER_LABEL}
                 </span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)' }}>
                   {formatNumber(data.totalTodayPassengers)}
                   <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
-                    org
+                    {TEXT_MONITORING.KPI.PASSENGER_UNIT}
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px', color: 'var(--text-secondary)' }}>
@@ -707,16 +718,16 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                     letterSpacing: '0.4px',
                   }}
                 >
-                  Total Jarak Tempuh
+                  {TEXT_MONITORING.KPI.KM_LABEL}
                 </span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8' }}>
                   {formatDecimal(data.totalKm, 1)}
                   <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
-                    km
+                    {TEXT_MONITORING.KPI.KM_UNIT}
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px', color: 'var(--text-secondary)' }}>
-                  <span>Rerata / Bus:</span>
+                  <span>{TEXT_MONITORING.KPI.KM_AVG_LABEL}</span>
                   <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                     {formatDecimal(data.averageKmPerBus, 1)} km
                   </span>
@@ -745,16 +756,16 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                     letterSpacing: '0.4px',
                   }}
                 >
-                  Distribusi Shift
+                  {TEXT_MONITORING.KPI.SHIFT_DISTRIBUTION}
                 </span>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', fontWeight: 600 }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Shift 1:</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>{TEXT_MONITORING.KPI.SHIFT_1_ROW}</span>
                   <span style={{ color: '#38bdf8' }}>
                     {formatNumber(data.totalShift1)} ({formatDecimal((data.totalShift1 / (data.totalTodayPassengers || 1)) * 100, 0)}%)
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', fontWeight: 600 }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Shift 2:</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>{TEXT_MONITORING.KPI.SHIFT_2_ROW}</span>
                   <span style={{ color: '#c084fc' }}>
                     {formatNumber(data.totalShift2)} ({formatDecimal((data.totalShift2 / (data.totalTodayPassengers || 1)) * 100, 0)}%)
                   </span>
@@ -885,7 +896,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
                 border: '1px solid rgba(62, 207, 142, 0.25)',
                 cursor: 'pointer',
               }}
-              title="Buka rute ini"
+              title={TEXT_MONITORING.ROUTE_CARD.OPEN_ROUTE_TITLE}
             >
               {route.routeCode}
             </span>
@@ -922,7 +933,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
               }}
             >
               <CheckCircle2 size={13} />
-              Verified
+              {TEXT_MONITORING.ROUTE_CARD.BADGE_VERIFIED}
             </span>
           )}
           {isSubmitted && (
@@ -941,7 +952,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
               }}
             >
               <Send size={13} />
-              Submitted
+              {TEXT_MONITORING.ROUTE_CARD.BADGE_SUBMITTED}
             </span>
           )}
           {isDraft && (
@@ -960,7 +971,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
               }}
             >
               <Clock size={13} />
-              Draft
+              {TEXT_MONITORING.ROUTE_CARD.BADGE_DRAFT}
             </span>
           )}
           {isEmpty && (
@@ -979,7 +990,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
               }}
             >
               <AlertTriangle size={13} />
-              Belum Diisi
+              {TEXT_MONITORING.ROUTE_CARD.BADGE_EMPTY}
             </span>
           )}
         </div>
@@ -1004,7 +1015,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
 
         {/* Korlap Info */}
         <div style={{ fontSize: '11px', color: 'var(--text-secondary, #8b8b8b)' }}>
-          Korlap:{' '}
+          {TEXT_MONITORING.ROUTE_CARD.KORLAP_PREFIX}{' '}
           <strong style={{ color: 'var(--text-primary, #ededed)', fontWeight: 600 }}>
             {route.supervisorName}
           </strong>
@@ -1027,7 +1038,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
         {/* Armada */}
         <div>
           <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
-            Armada
+            {TEXT_MONITORING.ROUTE_CARD.METRIC_ARMADA}
           </span>
           <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary, #ededed)', marginTop: '2px' }}>
             {route.totalRealops} / {route.totalRenops}
@@ -1040,7 +1051,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
         {/* Pelanggan */}
         <div>
           <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
-            Pelanggan
+            {TEXT_MONITORING.ROUTE_CARD.METRIC_PASSENGERS}
           </span>
           <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)', marginTop: '2px' }}>
             {formatNumber(route.todayPassengers)}
@@ -1053,13 +1064,13 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
         {/* Total KM */}
         <div>
           <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
-            KM Tempuh
+            {TEXT_MONITORING.ROUTE_CARD.METRIC_KM}
           </span>
           <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8', marginTop: '2px' }}>
             {formatDecimal(route.totalKm, 1)}
           </div>
           <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
-            KM/B: {formatDecimal(route.achievementKm, 1)}
+            {TEXT_MONITORING.ROUTE_CARD.KM_PER_BUS_PREFIX} {formatDecimal(route.achievementKm, 1)}
           </span>
         </div>
       </div>
@@ -1080,7 +1091,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
                 whiteSpace: 'nowrap',
               }}
             >
-              <strong>Macet:</strong> {route.trafficJamSpots.join(', ')}
+              <strong>{TEXT_MONITORING.ROUTE_CARD.JAM_PREFIX}</strong> {route.trafficJamSpots.join(', ')}
             </div>
           )}
           {route.operationalIssues && (
@@ -1096,7 +1107,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
                 whiteSpace: 'nowrap',
               }}
             >
-              <strong>Kendala:</strong> {route.operationalIssues}
+              <strong>{TEXT_MONITORING.ROUTE_CARD.ISSUE_PREFIX}</strong> {route.operationalIssues}
             </div>
           )}
         </div>
@@ -1114,7 +1125,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
         }}
       >
         <span style={{ color: 'var(--text-secondary, #8b8b8b)' }}>
-          Headway: <strong>{route.headwayFastest} - {route.headwaySlowest} mnt</strong>
+          {TEXT_MONITORING.ROUTE_CARD.HEADWAY_LABEL(route.headwayFastest, route.headwaySlowest)}
         </span>
 
         {isSubmitted && !isVerified && (
@@ -1136,7 +1147,7 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
             }}
           >
             <CheckCircle2 size={13} />
-            <span>Verifikasi</span>
+            <span>{TEXT_MONITORING.ROUTE_CARD.BTN_VERIFY}</span>
           </button>
         )}
       </div>

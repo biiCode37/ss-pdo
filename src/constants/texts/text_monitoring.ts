@@ -6,7 +6,13 @@ export const TEXT_MONITORING = {
     TITLE: 'Monitoring Wilayah Utara',
     SUBTITLE: 'Dashboard All Route & Rekapitulasi Harian Transjakarta',
     BTN_BACK: 'Operasi Rute',
+    BTN_BACK_TITLE: 'Kembali ke Operasi Rute Tunggal',
     BTN_WA_REPORT: 'Buat Laporan WA',
+    REFRESH_TITLE: 'Perbarui Data',
+  },
+  ERROR_STATE: {
+    TITLE: 'Gagal Memuat Data',
+    RETRY_BTN: 'Coba Lagi',
   },
   READINESS: {
     LABEL: 'Status Kelengkapan Laporan PDO Wilayah:',
@@ -28,6 +34,7 @@ export const TEXT_MONITORING = {
     KM_LABEL: 'Total Jarak Tempuh',
     KM_UNIT: 'km',
     KM_AVG: (avg: string) => `Rerata / Bus: ${avg} km`,
+    KM_AVG_LABEL: 'Rerata / Bus:',
     KM_ACHIEVE: (pct: string) => `Cap: ${pct}%`,
     SHIFT_DISTRIBUTION: 'Distribusi Shift',
     SHIFT_1_ROW: 'Shift 1:',
@@ -35,10 +42,16 @@ export const TEXT_MONITORING = {
   },
   TABS: {
     ALL_ROUTES: (count: number) => `Semua Rute (${count})`,
+    ALL_LABEL: 'Semua Rute',
   },
   ROUTE_CARD: {
+    OPEN_ROUTE_TITLE: 'Buka rute ini',
     HEADWAY_LABEL: (min: number, max: number) => `Headway: ${min} - ${max} mnt`,
     KORLAP_PREFIX: 'Korlap:',
+    METRIC_ARMADA: 'Armada',
+    METRIC_PASSENGERS: 'Pelanggan',
+    METRIC_KM: 'KM Tempuh',
+    KM_PER_BUS_PREFIX: 'KM/B:',
     JAM_PREFIX: 'Macet:',
     ISSUE_PREFIX: 'Kendala:',
     BTN_VERIFY: 'Verifikasi',

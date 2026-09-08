@@ -16,6 +16,7 @@ import {
 } from '../utils/waReportGenerator';
 import type { RegionalMonitoringResult } from '../services/allRouteMonitoringService';
 import { showSuccessToast } from '../utils/alertUtils';
+import { TEXT_WA_REPORT } from '../constants/texts';
 
 interface Props {
   isOpen: boolean;
@@ -147,7 +148,7 @@ function WaReportModalComponent({
     try {
       await navigator.clipboard.writeText(messageText);
       setCopied(true);
-      showSuccessToast('Teks laporan berhasil disalin ke clipboard');
+      showSuccessToast(TEXT_WA_REPORT.COPIED_TOAST);
       setTimeout(() => setCopied(false), 2500);
     } catch (err) {
       console.warn('Gagal salin teks:', err);
@@ -216,10 +217,10 @@ function WaReportModalComponent({
             </div>
             <div>
               <h2 style={{ margin: 0, fontSize: '17px', fontWeight: 700 }}>
-                Generator Laporan WhatsApp
+                {TEXT_WA_REPORT.MODAL_TITLE}
               </h2>
               <span style={{ fontSize: '12px', color: 'var(--text-secondary, #64748b)' }}>
-                Siap salin & kirim ke grup pimpinan
+                {TEXT_WA_REPORT.MODAL_SUBTITLE}
               </span>
             </div>
           </div>
@@ -256,7 +257,7 @@ function WaReportModalComponent({
           >
             <AlertTriangle size={18} style={{ flexShrink: 0 }} />
             <span>
-              Perhatian: <strong>{unsubmittedCount} dari {filteredRoutes.length} rute</strong> belum mengirim laporan operasional harian. Laporan tetap dapat di-generate dengan data yang tersedia.
+              {TEXT_WA_REPORT.WARNING_UNSUBMITTED(unsubmittedCount, filteredRoutes.length)}
             </span>
           </div>
         )}
@@ -292,7 +293,7 @@ function WaReportModalComponent({
             }}
           >
             <FileText size={15} />
-            Format 1 (Komprehensif)
+            {TEXT_WA_REPORT.FORMAT_1_BTN}
           </button>
           <button
             type="button"
@@ -315,17 +316,17 @@ function WaReportModalComponent({
             }}
           >
             <FileText size={15} />
-            Format 2 (Rincian Shift)
+            {TEXT_WA_REPORT.FORMAT_2_BTN}
           </button>
         </div>
 
         {/* Filter Lingkup Korlap */}
         <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '8px', marginBottom: '10px' }}>
           {[
-            { id: 'ALL', label: 'Semua Rute (18)' },
-            { id: 'RANTO', label: 'Ranto L.T. (6)' },
-            { id: 'ABDUL', label: 'Abdul Manan (6)' },
-            { id: 'MOAMAR', label: 'Moamar Z.A. (6)' }
+            { id: 'ALL', label: TEXT_WA_REPORT.SUPERVISOR_TABS.ALL(18) },
+            { id: 'RANTO', label: TEXT_WA_REPORT.SUPERVISOR_TABS.RANTO(6) },
+            { id: 'ABDUL', label: TEXT_WA_REPORT.SUPERVISOR_TABS.ABDUL(6) },
+            { id: 'MOAMAR', label: TEXT_WA_REPORT.SUPERVISOR_TABS.MOAMAR(6) }
           ].map((item) => {
             const active = supervisorFilter === item.id;
             return (
@@ -369,7 +370,7 @@ function WaReportModalComponent({
             border: '1px solid rgba(255, 255, 255, 0.1)'
           }}
         >
-          {messageText || 'Memuat preview laporan...'}
+          {messageText || TEXT_WA_REPORT.LOADING_PREVIEW}
         </div>
 
         {/* Action Buttons */}
@@ -395,7 +396,7 @@ function WaReportModalComponent({
             }}
           >
             {copied ? <Check size={16} /> : <Copy size={16} />}
-            {copied ? 'Tersalin!' : 'Salin Teks'}
+            {copied ? TEXT_WA_REPORT.COPIED_BTN : TEXT_WA_REPORT.COPY_BTN}
           </button>
 
           <button
@@ -419,7 +420,7 @@ function WaReportModalComponent({
             }}
           >
             <Share2 size={16} />
-            Buka WhatsApp
+            {TEXT_WA_REPORT.OPEN_WA_BTN}
           </button>
         </div>
       </div>

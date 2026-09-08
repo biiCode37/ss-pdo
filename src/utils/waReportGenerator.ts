@@ -1,3 +1,5 @@
+import { TEXT_WA_REPORT } from '../constants/texts';
+
 export interface RouteWaData {
   no: number;
   routeCode: string;
@@ -99,8 +101,8 @@ export function generateWaReportFormat1(dateStr: string, routes: RouteWaData[]):
   const fullDate = formatIndonesianFullDate(dateStr);
 
   const lines: string[] = [
-    'SELAMAT MALAM\t\t\t',
-    '```Laporan JUMLAH PELANGGAN & PENCAPAIAN Rata2 Kilometer / Bus  HARIAN Mikrotrans Jak Lingko Wilayah Utara```\t\t\t',
+    `${TEXT_WA_REPORT.TEMPLATE.GREETING}\t\t\t`,
+    `\`\`\`${TEXT_WA_REPORT.TEMPLATE.FORMAT_1_TITLE}\`\`\`\t\t\t`,
     '```\t\t\t',
     `Hari   \t:\t${dayName}\t`,
     `Tanggal\t:\t${fullDate}\t`,
@@ -150,7 +152,7 @@ export function generateWaReportFormat1(dateStr: string, routes: RouteWaData[]):
     lines.push('\t\t\t');
   });
 
-  lines.push('*_DEMIKIAN LAPORAN DIBUAT UNTUK DI KETAHUI PIMPINAN TERIMA KASIH_*');
+  lines.push(TEXT_WA_REPORT.TEMPLATE.CLOSING_FORMAT_1);
   return lines.join('\n');
 }
 
@@ -167,14 +169,14 @@ export function generateWaReportFormat2(
   const fullDate = formatIndonesianFullDate(dateStr);
 
   const lines: string[] = [
-    '*MIKROTRANS WILAYAH UTARA*\t\t\t\t\t\t',
+    `*${TEXT_WA_REPORT.TEMPLATE.REGION_NAME}*\t\t\t\t\t\t`,
     '```\t\t\t\t\t\t',
-    'SELAMAT MALAM\t\t\t\t\t\t',
+    `${TEXT_WA_REPORT.TEMPLATE.GREETING}\t\t\t\t\t\t`,
     `HARI     \t:\t${dayName}\t\t\t\t`,
     `TANGGAL  \t:\t${fullDate}\t\t\t\t`,
-    'PERIHAL  \t:\tLAPORAN PELANGGAN\t\t\t\t',
+    `${TEXT_WA_REPORT.TEMPLATE.FORMAT_2_SUBJECT}\t\t\t\t`,
     'SHIFT    \t:\t1 & 2\t\t\t\t',
-    'FORMAT   \t:\t[TOA]+[MANUAL]=JUMLAH PELANGGAN\t\t\t\t',
+    `${TEXT_WA_REPORT.TEMPLATE.FORMAT_2_SUBTITLE}\t\t\t\t`,
     '```\t\t\t\t\t\t',
     '=============================\t\t\t\t\t\t',
     '\t\t\t\t\t\t'
@@ -199,7 +201,7 @@ export function generateWaReportFormat2(
 
   lines.push('=========================\t\t\t\t\t\t');
   lines.push('\t\t\t\t\t\t');
-  lines.push('*•Total Shift 1*\t\t\t\t\t\t');
+  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.SHIFT_1_TOTAL}*\t\t\t\t\t\t`);
   lines.push('```\t\t\t\t\t\t');
   lines.push(`TOM    \t:\t${formatWaNumber(totals.tomShift1)}\t\t\t\t`);
   lines.push(`MANUAL \t:\t${formatWaNumber(totals.manualShift1)}\t\t\t\t`);
@@ -207,7 +209,7 @@ export function generateWaReportFormat2(
   lines.push(`KEMARIN\t:\t${formatWaNumber(totals.yesterdayShift1)}\t\t\t\t`);
   lines.push(`MINGGU LALU\t:\t${formatWaNumber(totals.lastWeekShift1)}\t\t\t\t`);
   lines.push('```\t\t\t\t\t\t');
-  lines.push('*•Total Shift 2*\t\t\t\t\t\t');
+  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.SHIFT_2_TOTAL}*\t\t\t\t\t\t`);
   lines.push('```\t\t\t\t\t\t');
   lines.push(`TOM    \t:\t${formatWaNumber(totals.tomShift2)}\t\t\t\t`);
   lines.push(`MANUAL \t:\t${formatWaNumber(totals.manualShift2)}\t\t\t\t`);
@@ -221,7 +223,7 @@ export function generateWaReportFormat2(
   lines.push(`MINGGU LALU\t:\t${formatWaNumber(totals.totalLastWeek)}\t\t\t\t`);
   lines.push('```\t\t\t\t\t\t');
   lines.push('\t\t\t\t\t\t');
-  lines.push('```Demikian dilaporkan untuk diketahui Pimpinan.```');
+  lines.push(TEXT_WA_REPORT.TEMPLATE.CLOSING_FORMAT_2);
 
   return lines.join('\n');
 }
