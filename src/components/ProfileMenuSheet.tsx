@@ -12,6 +12,7 @@ import {
   Sparkles,
   Users,
   History,
+  Globe,
 } from "lucide-react";
 import { verifyUserProfile, upsertUserProfile } from "../services/routeService";
 import { fetchGoogleUserProfile } from "../services/googleSheets/auth";
@@ -31,6 +32,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onOpenAccumulation?: () => void;
+  onOpenRegionalMonitoring?: () => void;
   onOpenUserManagement?: () => void;
   onOpenAuditLogs?: () => void;
   isDarkMode: boolean;
@@ -47,6 +49,7 @@ export function ProfileMenuSheet({
   isOpen,
   onClose,
   onOpenAccumulation,
+  onOpenRegionalMonitoring,
   onOpenUserManagement,
   onOpenAuditLogs: _onOpenAuditLogs,
   isDarkMode,
@@ -582,6 +585,47 @@ export function ProfileMenuSheet({
             FITUR & UTILITAS
           </span>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            {/* Monitoring Wilayah & Laporan WA */}
+            <button
+              type="button"
+              onClick={() => {
+                handleDismiss();
+                onOpenRegionalMonitoring?.();
+              }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "12px 14px",
+                borderRadius: "12px",
+                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+                border: "1px solid var(--card-border)",
+                color: "var(--text-primary)",
+                fontWeight: 500,
+                fontSize: "13.5px",
+                cursor: "pointer",
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              >
+                <Globe size={18} style={{ color: "var(--accent-color)" }} />
+                <div style={{ textAlign: "left" }}>
+                  <div>Monitoring Wilayah & Laporan WA</div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "var(--text-secondary)",
+                      marginTop: "1px",
+                    }}
+                  >
+                    Rekap 18 rute & generator pesan WA
+                  </div>
+                </div>
+              </div>
+              <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+            </button>
+
             {/* Rekap Akumulasi Lintas Periode */}
             {/* BUG-59: Fitur sebelumnya hard-coded disabled "Coming Soon"
                 padahal AccumulationSheet sudah lengkap & handler tersambung

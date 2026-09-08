@@ -21,10 +21,12 @@ import { UserManagementSkeleton } from "./Skeletons";
 const UserManagementPage = lazy(() =>
   import("./UserManagementPage").then((m) => ({ default: m.UserManagementPage }))
 );
+import { AllRouteMonitoringPage } from "./AllRouteMonitoringPage";
 import {
   CloudOff,
   RefreshCw,
   AlertTriangle,
+  Globe,
 } from "lucide-react";
 import { QueueModal } from "./QueueModal";
 import { useOfflineSync } from "../hooks/useOfflineSync";
@@ -108,9 +110,15 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const [isReauthenticating, setIsReauthenticating] = useState(false);
   const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'user_management' | 'audit_log'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'user_management' | 'audit_log' | 'regional_monitoring'>('dashboard');
 
   // Mobile Back Navigation Handlers (PWA / Mobile hardware gesture support)
+  useMobileBackHandler({
+    id: "regional_monitoring_view",
+    isOpen: currentView === "regional_monitoring",
+    onClose: () => setCurrentView("dashboard"),
+  });
+
   useMobileBackHandler({
     id: "user_management_view",
     isOpen: currentView === "user_management",
@@ -543,6 +551,30 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     );
   }
 
+  if (currentView === 'regional_monitoring') {
+    return (
+      <AllRouteMonitoringPage
+        onBackToRouteView={() => setCurrentView('dashboard')}
+        currentDate={operationalReportDate}
+        currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
+        onSelectRoute={(routeCode) => {
+          const cachedRoutes = getRoutesFromCache();
+          const matched = cachedRoutes.find((r: any) =>
+            r.route_code?.toLowerCase() === routeCode.toLowerCase() ||
+            r.name?.toLowerCase().includes(routeCode.toLowerCase())
+          );
+          if (matched && matched.route_sheets && matched.route_sheets.length > 0) {
+            const latestSheet = matched.route_sheets[matched.route_sheets.length - 1];
+            if (latestSheet && latestSheet.sheet_url) {
+              handleSetSheetUrl(latestSheet.sheet_url);
+            }
+          }
+          setCurrentView('dashboard');
+        }}
+      />
+    );
+  }
+
   
 
   return (
@@ -696,7 +728,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             </span>
           </div>
 
-          {/* POJOK KANAN: Active Page Name Badge + Status Antrean Offline */}
+          {/* POJOK KANAN: Active Page Name Badge + Switcher + Status Antrean Offline */}
           <div
             style={{
               display: "flex",
@@ -705,6 +737,30 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               flexShrink: 0,
             }}
           >
+            {/* Tombol Switcher ke Monitoring Wilayah */}
+            <button
+              type="button"
+              onClick={() => setCurrentView('regional_monitoring')}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                padding: "4px 10px",
+                borderRadius: "20px",
+                background: "rgba(59, 130, 246, 0.1)",
+                border: "1px solid rgba(59, 130, 246, 0.25)",
+                color: "#3b82f6",
+                fontSize: "12px",
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+              }}
+              title="Buka Dashboard Monitoring Wilayah & Laporan WA"
+            >
+              <Globe size={13} />
+              <span>Wilayah</span>
+            </button>
+
             {/* Nama Halaman Aktif */}
             <div
               style={{
@@ -1109,6 +1165,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         isOpen={isProfileMenuOpen}
         onClose={() => setIsProfileMenuOpen(false)}
         onOpenAccumulation={() => setIsAccSheetOpen(true)}
+        onOpenRegionalMonitoring={() => {
+          setIsProfileMenuOpen(false);
+          setCurrentView('regional_monitoring');
+        }}
         onOpenUserManagement={() => {
           setIsProfileMenuOpen(false);
           setCurrentView('user_management');
