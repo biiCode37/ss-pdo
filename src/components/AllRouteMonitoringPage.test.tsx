@@ -99,31 +99,65 @@ const mockData: RegionalMonitoringResult = {
       totalShift2: 1200,
       totalKm: 142.0,
       achievementKm: 14.2
+    },
+    {
+      id: 3,
+      routeCode: 'JAK 01',
+      routeName: 'Tanjung Priok - Plumpang',
+      operatorName: 'KOLAMAS',
+      supervisorName: 'MOAMAR. Z.A. MAHU',
+      isLooping: false,
+      kmBaku: 14.4,
+      targetHk: 2000,
+      bestRecord: 3000,
+      defaultRenops: 20,
+      renopsShift1: 20,
+      realopsShift1: 20,
+      renopsShift2: 20,
+      realopsShift2: 20,
+      totalRenops: 20,
+      totalRealops: 20,
+      headwayFastest: 4,
+      headwaySlowest: 10,
+      trafficJamSpots: [],
+      operationalIssues: '',
+      status: 'submitted',
+      todayPassengers: 2000,
+      yesterdayPassengers: 1900,
+      lastWeekPassengers: 1800,
+      toaShift1: 1000,
+      manualShift1: 100,
+      totalShift1: 1100,
+      toaShift2: 800,
+      manualShift2: 100,
+      totalShift2: 900,
+      totalKm: 150.0,
+      achievementKm: 15.0
     }
   ],
-  totalRenops: 22,
-  totalRealops: 22,
-  totalTodayPassengers: 5750,
-  totalTargetPassengers: 5500,
-  totalYesterdayPassengers: 5600,
-  totalLastWeekPassengers: 5300,
-  totalKm: 357.4,
-  averageKmPerBus: 16.25,
-  tomShift1: 2950,
-  manualShift1: 150,
-  totalShift1: 3100,
-  yesterdayShift1: 3000,
-  lastWeekShift1: 2850,
-  tomShift2: 2550,
-  manualShift2: 100,
-  totalShift2: 2650,
-  yesterdayShift2: 2600,
-  lastWeekShift2: 2450,
-  submittedCount: 2,
+  totalRenops: 42,
+  totalRealops: 42,
+  totalTodayPassengers: 7750,
+  totalTargetPassengers: 7500,
+  totalYesterdayPassengers: 7500,
+  totalLastWeekPassengers: 7100,
+  totalKm: 507.4,
+  averageKmPerBus: 15.5,
+  tomShift1: 3950,
+  manualShift1: 250,
+  totalShift1: 4200,
+  yesterdayShift1: 4000,
+  lastWeekShift1: 3800,
+  tomShift2: 3350,
+  manualShift2: 200,
+  totalShift2: 3550,
+  yesterdayShift2: 3500,
+  lastWeekShift2: 3300,
+  submittedCount: 3,
   verifiedCount: 1,
   draftCount: 0,
   emptyCount: 0,
-  totalRoutesCount: 2
+  totalRoutesCount: 3
 };
 
 describe('AllRouteMonitoringPage Component', () => {
@@ -154,16 +188,17 @@ describe('AllRouteMonitoringPage Component', () => {
 
     // Verify title and readiness banner
     expect(container.textContent).toContain('Monitoring Wilayah Utara');
-    expect(container.textContent).toContain('2 / 2 Rute Siap');
+    expect(container.textContent).toContain('3 / 3 Rute Siap');
 
     // Verify KPI numbers
-    expect(container.textContent).toContain('5.750'); // Total Pelanggan
-    expect(container.textContent).toContain('357,4'); // Total KM
-    expect(container.textContent).toContain('22 / 22'); // Armada Realops/Renops
+    expect(container.textContent).toContain('7.750'); // Total Pelanggan
+    expect(container.textContent).toContain('507,4'); // Total KM
+    expect(container.textContent).toContain('42 / 42'); // Armada Realops/Renops
 
     // Verify route cards
     expect(container.textContent).toContain('JAK 60');
     expect(container.textContent).toContain('JAK 05');
+    expect(container.textContent).toContain('JAK 01');
   });
 
   it('filters routes when supervisor filter tab is clicked', async () => {
@@ -173,6 +208,7 @@ describe('AllRouteMonitoringPage Component', () => {
 
     expect(container.textContent).toContain('JAK 60');
     expect(container.textContent).toContain('JAK 05');
+    expect(container.textContent).toContain('JAK 01');
 
     // Find Abdul Manan filter tab
     const abdulTab = Array.from(container.querySelectorAll('button')).find(
@@ -186,6 +222,21 @@ describe('AllRouteMonitoringPage Component', () => {
 
     // Only JAK 05 should be visible in the filtered list
     expect(container.textContent).toContain('JAK 05');
+    expect(container.textContent).not.toContain('JAK 60');
+    expect(container.textContent).not.toContain('JAK 01');
+
+    // Now find and click Moamar Z.A. Mahu filter tab (testing MOAMAR. Z.A. MAHU with dots)
+    const moamarTab = Array.from(container.querySelectorAll('button')).find(
+      b => b.textContent?.includes('Moamar Z.A. Mahu')
+    );
+    expect(moamarTab).toBeDefined();
+
+    await act(async () => {
+      moamarTab?.click();
+    });
+
+    expect(container.textContent).toContain('JAK 01');
+    expect(container.textContent).not.toContain('JAK 05');
     expect(container.textContent).not.toContain('JAK 60');
   });
 

@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import {
   fetchRegionalMonitoringData,
-  SUPERVISORS,
   type RegionalMonitoringResult,
   type RegionalRouteItem
 } from '../services/allRouteMonitoringService';
@@ -29,6 +28,22 @@ interface Props {
   currentDate?: string;
   onDateChange?: (newDate: string) => void;
   currentUserEmail?: string;
+}
+
+export const SUPERVISOR_TABS = [
+  { id: 'ALL', label: 'Semua Rute', keyword: '' },
+  { id: 'RANTO', label: 'Ranto Lumban Toruan', keyword: 'RANTO' },
+  { id: 'ABDUL', label: 'Abdul Manan', keyword: 'ABDUL' },
+  { id: 'MOAMAR', label: 'Moamar Z.A. Mahu', keyword: 'MOAMAR' },
+] as const;
+
+export function matchesSupervisorTab(supervisorName: string, tabId: string): boolean {
+  if (tabId === 'ALL') return true;
+  const upper = (supervisorName || '').toUpperCase();
+  if (tabId === 'RANTO') return upper.includes('RANTO');
+  if (tabId === 'ABDUL') return upper.includes('ABDUL');
+  if (tabId === 'MOAMAR') return upper.includes('MOAMAR');
+  return true;
 }
 
 function formatIndonesianDateLabel(dateStr: string): string {
@@ -81,7 +96,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Filter state
-  const [selectedSupervisor, setSelectedSupervisor] = useState<string>('ALL');
+  const [selectedSupervisorTab, setSelectedSupervisorTab] = useState<string>('ALL');
 
   // Modal state
   const [isWaModalOpen, setIsWaModalOpen] = useState<boolean>(false);
@@ -163,9 +178,9 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   // Filtered routes
   const filteredRoutes = useMemo(() => {
     if (!data) return [];
-    if (selectedSupervisor === 'ALL') return data.routes;
-    return data.routes.filter(r => r.supervisorName === selectedSupervisor);
-  }, [data, selectedSupervisor]);
+    if (selectedSupervisorTab === 'ALL') return data.routes;
+    return data.routes.filter(r => matchesSupervisorTab(r.supervisorName, selectedSupervisorTab));
+  }, [data, selectedSupervisorTab]);
 
   const overallArmadaPct = useMemo(() => {
     if (!data || data.totalRenops === 0) return 0;
@@ -173,102 +188,294 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   }, [data]);
 
   return (
-    <div className="min-h-screen pb-24 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200">
-      {/* Top App Bar */}
-      <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3 shadow-xs">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-          {/* Back & Title */}
-          <div className="flex items-center gap-2">
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'var(--bg-color, #0c0c0c)',
+        color: 'var(--text-primary, #ededed)',
+        paddingBottom: '96px',
+        transition: 'background-color 0.2s ease, color 0.2s ease',
+      }}
+    >
+      {/* Sticky Top Header Block */}
+      <header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 40,
+          background: 'var(--card-bg, rgba(23, 23, 23, 0.95))',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderBottom: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+          padding: '12px 16px',
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+          }}
+        >
+          {/* Pojok Kiri: Tombol Kembali & Judul */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {onBackToRouteView && (
               <button
+                type="button"
                 onClick={onBackToRouteView}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 12px',
+                  borderRadius: '10px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
+                  border: '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
+                  color: 'var(--text-primary, #ededed)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
                 title="Kembali ke Operasi Rute Tunggal"
               >
-                <ArrowLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Operasi Rute</span>
+                <ArrowLeft size={16} />
+                <span>Operasi Rute</span>
               </button>
             )}
+
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Bus className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                Monitoring Wilayah Utara
+              <h1
+                style={{
+                  fontSize: '17px',
+                  fontWeight: 800,
+                  margin: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: 'var(--text-primary, #ededed)',
+                  letterSpacing: '-0.3px',
+                }}
+              >
+                <Bus size={20} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
+                <span>Monitoring Wilayah Utara</span>
               </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: 'var(--text-secondary, #8b8b8b)',
+                  fontWeight: 500,
+                  display: 'block',
+                  marginTop: '1px',
+                }}
+              >
                 Dashboard All Route & Rekapitulasi Harian Transjakarta
-              </p>
+              </span>
             </div>
           </div>
 
-          {/* Date Selector & Action Buttons */}
-          <div className="flex items-center gap-2">
-            {/* Date Navigator */}
-            <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-0.5 border border-slate-200 dark:border-slate-700">
+          {/* Pojok Kanan: Date Navigator, Refresh, & Tombol WA */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            {/* Date Navigator Box */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
+                border: '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
+                borderRadius: '12px',
+                padding: '2px',
+              }}
+            >
               <button
+                type="button"
                 onClick={() => handleStepDate(-1)}
-                className="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-primary, #ededed)',
+                  padding: '6px 8px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
                 title="Hari Sebelumnya"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft size={16} />
               </button>
 
-              <label className="relative flex items-center gap-1.5 px-2.5 py-1 cursor-pointer text-xs font-semibold text-slate-700 dark:text-slate-200">
-                <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <label
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '4px 8px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  color: 'var(--text-primary, #ededed)',
+                  userSelect: 'none',
+                }}
+              >
+                <Calendar size={14} style={{ color: 'var(--accent-color, #3ECF8E)' }} />
                 <span>{formatIndonesianDateLabel(selectedDate)}</span>
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={handleDateInputChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    opacity: 0,
+                    cursor: 'pointer',
+                    width: '100%',
+                    height: '100%',
+                  }}
                 />
               </label>
 
               <button
+                type="button"
                 onClick={() => handleStepDate(1)}
-                className="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 transition-colors"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-primary, #ededed)',
+                  padding: '6px 8px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
                 title="Hari Berikutnya"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight size={16} />
               </button>
             </div>
 
             {/* Refresh Button */}
             <button
+              type="button"
               onClick={() => loadData(true)}
               disabled={refreshing || loading}
-              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700 disabled:opacity-50"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '36px',
+                height: '36px',
+                borderRadius: '12px',
+                background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
+                border: '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
+                color: 'var(--text-primary, #ededed)',
+                cursor: refreshing || loading ? 'wait' : 'pointer',
+                opacity: refreshing || loading ? 0.6 : 1,
+                transition: 'all 0.2s ease',
+              }}
               title="Perbarui Data"
             >
-              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                size={16}
+                style={{
+                  animation: refreshing ? 'spin 1s linear infinite' : 'none',
+                }}
+              />
             </button>
 
             {/* Buat Laporan WA Button */}
             <button
+              type="button"
               onClick={() => setIsWaModalOpen(true)}
               disabled={!data || loading}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs shadow-emerald-500/20 active:scale-95 transition-all disabled:opacity-50"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 14px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: '12.5px',
+                fontWeight: 700,
+                cursor: !data || loading ? 'not-allowed' : 'pointer',
+                opacity: !data || loading ? 0.5 : 1,
+                boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)',
+                transition: 'all 0.2s ease',
+              }}
             >
-              <FileSpreadsheet className="w-4 h-4" />
+              <FileSpreadsheet size={16} />
               <span>Buat Laporan WA</span>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-4 space-y-4">
+      {/* Main Content Area */}
+      <main
+        style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+        }}
+      >
         {/* Loading State */}
         {loading && (
-          <div className="space-y-4 animate-pulse">
-            <div className="h-16 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div
+              style={{
+                height: '70px',
+                borderRadius: '16px',
+                background: 'var(--card-bg, rgba(255, 255, 255, 0.04))',
+                animation: 'pulse 1.5s ease-in-out infinite',
+              }}
+            />
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                gap: '12px',
+              }}
+            >
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="h-24 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+                <div
+                  key={i}
+                  style={{
+                    height: '90px',
+                    borderRadius: '14px',
+                    background: 'var(--card-bg, rgba(255, 255, 255, 0.04))',
+                    animation: 'pulse 1.5s ease-in-out infinite',
+                  }}
+                />
               ))}
             </div>
-            <div className="h-12 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '12px',
+              }}
+            >
               {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="h-44 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+                <div
+                  key={i}
+                  style={{
+                    height: '160px',
+                    borderRadius: '16px',
+                    background: 'var(--card-bg, rgba(255, 255, 255, 0.04))',
+                    animation: 'pulse 1.5s ease-in-out infinite',
+                  }}
+                />
               ))}
             </div>
           </div>
@@ -276,17 +483,40 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
 
         {/* Error State */}
         {!loading && errorMessage && (
-          <div className="p-6 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-center space-y-3">
-            <AlertCircle className="w-10 h-10 text-rose-500 mx-auto" />
-            <h2 className="text-base font-semibold text-rose-900 dark:text-rose-200">
+          <div
+            style={{
+              padding: '24px',
+              borderRadius: '16px',
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.25)',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            <AlertCircle size={36} style={{ color: 'var(--danger-color, #ef4444)' }} />
+            <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--danger-color, #ef4444)' }}>
               Gagal Memuat Data
             </h2>
-            <p className="text-xs text-rose-700 dark:text-rose-300 max-w-md mx-auto">
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary, #8b8b8b)', margin: 0, maxWidth: '400px' }}>
               {errorMessage}
             </p>
             <button
+              type="button"
               onClick={() => loadData(false)}
-              className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+              style={{
+                marginTop: '6px',
+                padding: '8px 18px',
+                borderRadius: '10px',
+                background: 'var(--danger-color, #ef4444)',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 600,
+                fontSize: '13px',
+                cursor: 'pointer',
+              }}
             >
               Coba Lagi
             </button>
@@ -296,153 +526,293 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         {/* Loaded Content */}
         {!loading && !errorMessage && data && (
           <>
-            {/* Readiness Progress Banner */}
-            <section className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
-              <div className="flex items-center justify-between text-xs font-medium">
-                <span className="text-slate-600 dark:text-slate-400">
+            {/* 1. Readiness Progress Banner */}
+            <section
+              style={{
+                background: 'var(--card-bg, rgba(23, 23, 23, 0.85))',
+                border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                borderRadius: '16px',
+                padding: '14px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
+                <span style={{ color: 'var(--text-secondary, #8b8b8b)', fontWeight: 500 }}>
                   Status Kelengkapan Laporan PDO Wilayah:
                 </span>
-                <span className="font-bold text-slate-800 dark:text-slate-100">
+                <span style={{ fontWeight: 800, color: 'var(--text-primary, #ededed)' }}>
                   {data.submittedCount} / {data.totalRoutesCount} Rute Siap (
                   {Math.round((data.submittedCount / (data.totalRoutesCount || 1)) * 100)}%)
                 </span>
               </div>
-              <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+
+              {/* Progress Track */}
+              <div
+                style={{
+                  width: '100%',
+                  height: '8px',
+                  borderRadius: '9999px',
+                  background: 'var(--input-bg, rgba(255, 255, 255, 0.06))',
+                  overflow: 'hidden',
+                }}
+              >
                 <div
-                  className="bg-emerald-500 h-full rounded-full transition-all duration-500"
                   style={{
-                    width: `${Math.round(
-                      (data.submittedCount / (data.totalRoutesCount || 1)) * 100
-                    )}%`
+                    height: '100%',
+                    width: `${Math.round((data.submittedCount / (data.totalRoutesCount || 1)) * 100)}%`,
+                    background: 'linear-gradient(90deg, #3ECF8E 0%, #00C573 100%)',
+                    borderRadius: '9999px',
+                    transition: 'width 0.4s ease',
                   }}
                 />
               </div>
-              <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 pt-1">
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  Terverifikasi: <strong>{data.verifiedCount}</strong>
+
+              {/* Status Breakdown Legend */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  gap: '14px',
+                  fontSize: '11.5px',
+                  color: 'var(--text-secondary, #8b8b8b)',
+                  paddingTop: '2px',
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
+                  Terverifikasi: <strong style={{ color: 'var(--text-primary)' }}>{data.verifiedCount}</strong>
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-blue-500" />
-                  Submitted: <strong>{data.submittedCount - data.verifiedCount}</strong>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6' }} />
+                  Submitted: <strong style={{ color: 'var(--text-primary)' }}>{data.submittedCount - data.verifiedCount}</strong>
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-amber-500" />
-                  Draft: <strong>{data.draftCount}</strong>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }} />
+                  Draft: <strong style={{ color: 'var(--text-primary)' }}>{data.draftCount}</strong>
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-slate-400" />
-                  Belum Diisi: <strong>{data.emptyCount}</strong>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#64748b' }} />
+                  Belum Diisi: <strong style={{ color: 'var(--text-primary)' }}>{data.emptyCount}</strong>
                 </span>
               </div>
             </section>
 
-            {/* Regional KPI Cards Grid */}
-            <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {/* Card 1: Armada Beroperasi */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            {/* 2. Regional KPI Cards Grid */}
+            <section
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                gap: '12px',
+              }}
+            >
+              {/* Card 1: Armada Wilayah */}
+              <div
+                style={{
+                  background: 'var(--card-bg, rgba(23, 23, 23, 0.85))',
+                  border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                  borderRadius: '16px',
+                  padding: '14px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-secondary, #8b8b8b)',
+                    letterSpacing: '0.4px',
+                  }}
+                >
                   Armada Wilayah
                 </span>
-                <div className="text-xl font-bold text-slate-900 dark:text-white">
+                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary, #ededed)' }}>
                   {data.totalRealops} / {data.totalRenops}
-                  <span className="text-xs font-normal text-slate-500 ml-1">bus</span>
+                  <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
+                    bus
+                  </span>
                 </div>
-                <div className="flex items-center justify-between text-xs pt-1">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px' }}>
+                  <span style={{ color: 'var(--accent-color, #3ECF8E)', fontWeight: 700 }}>
                     {formatDecimal(overallArmadaPct, 1)}% Armada
                   </span>
-                  <span className="text-[11px] text-slate-400">
+                  <span style={{ color: 'var(--text-secondary)' }}>
                     S1: {data.totalRealops} | S2: {data.totalRealops}
                   </span>
                 </div>
               </div>
 
               {/* Card 2: Total Pelanggan */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <div
+                style={{
+                  background: 'var(--card-bg, rgba(23, 23, 23, 0.85))',
+                  border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                  borderRadius: '16px',
+                  padding: '14px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-secondary, #8b8b8b)',
+                    letterSpacing: '0.4px',
+                  }}
+                >
                   Total Pelanggan
                 </span>
-                <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
+                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)' }}>
                   {formatNumber(data.totalTodayPassengers)}
-                  <span className="text-xs font-normal text-slate-500 ml-1">org</span>
+                  <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
+                    org
+                  </span>
                 </div>
-                <div className="flex items-center justify-between text-xs pt-1 text-slate-500 dark:text-slate-400">
-                  <span>S1: {formatNumber(data.totalShift1)}</span>
-                  <span>S2: {formatNumber(data.totalShift2)}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px', color: 'var(--text-secondary)' }}>
+                  <span>S1: <strong style={{ color: 'var(--text-primary)' }}>{formatNumber(data.totalShift1)}</strong></span>
+                  <span>S2: <strong style={{ color: 'var(--text-primary)' }}>{formatNumber(data.totalShift2)}</strong></span>
                 </div>
               </div>
 
               {/* Card 3: Total KM Tempuh */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <div
+                style={{
+                  background: 'var(--card-bg, rgba(23, 23, 23, 0.85))',
+                  border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                  borderRadius: '16px',
+                  padding: '14px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-secondary, #8b8b8b)',
+                    letterSpacing: '0.4px',
+                  }}
+                >
                   Total Jarak Tempuh
                 </span>
-                <div className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8' }}>
                   {formatDecimal(data.totalKm, 1)}
-                  <span className="text-xs font-normal text-slate-500 ml-1">km</span>
+                  <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
+                    km
+                  </span>
                 </div>
-                <div className="flex items-center justify-between text-xs pt-1 text-slate-500 dark:text-slate-400">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px', color: 'var(--text-secondary)' }}>
                   <span>Rerata / Bus:</span>
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                     {formatDecimal(data.averageKmPerBus, 1)} km
                   </span>
                 </div>
               </div>
 
               {/* Card 4: Distribusi Shift */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <div
+                style={{
+                  background: 'var(--card-bg, rgba(23, 23, 23, 0.85))',
+                  border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                  borderRadius: '16px',
+                  padding: '14px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-secondary, #8b8b8b)',
+                    letterSpacing: '0.4px',
+                  }}
+                >
                   Distribusi Shift
                 </span>
-                <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-between">
-                  <span>Shift 1:</span>
-                  <span className="text-emerald-600 dark:text-emerald-400">
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', fontWeight: 600 }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Shift 1:</span>
+                  <span style={{ color: '#38bdf8' }}>
                     {formatNumber(data.totalShift1)} ({formatDecimal((data.totalShift1 / (data.totalTodayPassengers || 1)) * 100, 0)}%)
                   </span>
                 </div>
-                <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-between pt-0.5">
-                  <span>Shift 2:</span>
-                  <span className="text-blue-600 dark:text-blue-400">
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', fontWeight: 600 }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Shift 2:</span>
+                  <span style={{ color: '#c084fc' }}>
                     {formatNumber(data.totalShift2)} ({formatDecimal((data.totalShift2 / (data.totalTodayPassengers || 1)) * 100, 0)}%)
                   </span>
                 </div>
               </div>
             </section>
 
-            {/* Korlap Filter Tabs */}
-            <section className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-              <button
-                onClick={() => setSelectedSupervisor('ALL')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                  selectedSupervisor === 'ALL'
-                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
-                }`}
-              >
-                Semua Rute ({data.routes.length})
-              </button>
-
-              {SUPERVISORS.map((spv: string) => {
-                const count = data.routes.filter(r => r.supervisorName === spv).length;
+            {/* 3. Korlap Filter Tabs */}
+            <section
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                overflowX: 'auto',
+                paddingBottom: '4px',
+              }}
+              className="no-scrollbar"
+            >
+              {SUPERVISOR_TABS.map(tab => {
+                const isSelected = selectedSupervisorTab === tab.id;
+                const count = data.routes.filter(r => matchesSupervisorTab(r.supervisorName, tab.id)).length;
                 return (
                   <button
-                    key={spv}
-                    onClick={() => setSelectedSupervisor(spv)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                      selectedSupervisor === spv
-                        ? 'bg-emerald-600 text-white shadow-xs shadow-emerald-500/20'
-                        : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
-                    }`}
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setSelectedSupervisorTab(tab.id)}
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                      border: isSelected
+                        ? '1px solid var(--accent-color, #3ECF8E)'
+                        : '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                      background: isSelected
+                        ? 'var(--accent-color, #3ECF8E)'
+                        : 'var(--card-bg, rgba(23, 23, 23, 0.85))',
+                      color: isSelected ? '#ffffff' : 'var(--text-secondary, #8b8b8b)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
+                      boxShadow: isSelected ? '0 4px 12px rgba(62, 207, 142, 0.25)' : 'none',
+                    }}
                   >
-                    {spv} ({count})
+                    {tab.label} ({count})
                   </button>
                 );
               })}
             </section>
 
-            {/* Route Cards Grid */}
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {/* 4. Route Cards Grid */}
+            <section
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                gap: '12px',
+              }}
+            >
               {filteredRoutes.map(route => (
                 <RouteCardItem
                   key={route.id}
@@ -483,44 +853,132 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
   const isEmpty = route.status === 'empty';
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col justify-between gap-3">
-      {/* Top Header: Code, Name, Operator & Status Badge */}
-      <div className="space-y-2">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2">
+    <div
+      style={{
+        background: 'var(--card-bg, rgba(23, 23, 23, 0.85))',
+        border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+        borderRadius: '16px',
+        padding: '14px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        gap: '12px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.15s ease, border-color 0.15s ease',
+      }}
+    >
+      {/* Top Section: Code Badge, Name, Operator & Status Badge */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Route Code Badge */}
             <span
               onClick={() => onSelectRoute?.(route.routeCode)}
-              className="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs font-bold tracking-wide cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
+              style={{
+                padding: '4px 10px',
+                borderRadius: '8px',
+                fontSize: '12px',
+                fontWeight: 800,
+                letterSpacing: '0.4px',
+                background: 'rgba(62, 207, 142, 0.12)',
+                color: 'var(--accent-color, #3ECF8E)',
+                border: '1px solid rgba(62, 207, 142, 0.25)',
+                cursor: 'pointer',
+              }}
+              title="Buka rute ini"
             >
               {route.routeCode}
             </span>
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate max-w-[150px]">
+
+            <span
+              style={{
+                fontSize: '12px',
+                color: 'var(--text-secondary, #8b8b8b)',
+                fontWeight: 600,
+                maxWidth: '140px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {route.operatorName || '-'}
             </span>
           </div>
 
           {/* Status Badge */}
           {isVerified && (
-            <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-md text-[11px] font-semibold">
-              <CheckCircle2 className="w-3 h-3" />
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: 700,
+                background: 'rgba(16, 185, 129, 0.12)',
+                color: '#10b981',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
+              }}
+            >
+              <CheckCircle2 size={13} />
               Verified
             </span>
           )}
           {isSubmitted && (
-            <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-md text-[11px] font-semibold">
-              <Send className="w-3 h-3" />
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: 700,
+                background: 'rgba(59, 130, 246, 0.12)',
+                color: '#3b82f6',
+                border: '1px solid rgba(59, 130, 246, 0.25)',
+              }}
+            >
+              <Send size={13} />
               Submitted
             </span>
           )}
           {isDraft && (
-            <span className="flex items-center gap-1 px-2 py-0.5 bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800 rounded-md text-[11px] font-semibold">
-              <Clock className="w-3 h-3" />
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: 700,
+                background: 'rgba(245, 158, 11, 0.12)',
+                color: '#f59e0b',
+                border: '1px solid rgba(245, 158, 11, 0.25)',
+              }}
+            >
+              <Clock size={13} />
               Draft
             </span>
           )}
           {isEmpty && (
-            <span className="flex items-center gap-1 px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-md text-[11px] font-medium">
-              <AlertTriangle className="w-3 h-3 text-slate-400" />
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                fontWeight: 600,
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: 'var(--text-secondary, #8b8b8b)',
+                border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+              }}
+            >
+              <AlertTriangle size={13} />
               Belum Diisi
             </span>
           )}
@@ -529,64 +987,115 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
         {/* Route Name */}
         <h3
           onClick={() => onSelectRoute?.(route.routeCode)}
-          className="text-sm font-semibold text-slate-800 dark:text-slate-100 line-clamp-1 cursor-pointer hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+          style={{
+            fontSize: '13.5px',
+            fontWeight: 700,
+            color: 'var(--text-primary, #ededed)',
+            margin: 0,
+            cursor: 'pointer',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
           title={route.routeName}
         >
           {route.routeName}
         </h3>
 
-        {/* Korlap name */}
-        <div className="text-[11px] text-slate-400 dark:text-slate-500">
-          Korlap: <span className="font-medium text-slate-600 dark:text-slate-300">{route.supervisorName}</span>
+        {/* Korlap Info */}
+        <div style={{ fontSize: '11px', color: 'var(--text-secondary, #8b8b8b)' }}>
+          Korlap:{' '}
+          <strong style={{ color: 'var(--text-primary, #ededed)', fontWeight: 600 }}>
+            {route.supervisorName}
+          </strong>
         </div>
       </div>
 
-      {/* Metrics Section */}
-      <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
-        {/* Realops / Renops */}
+      {/* Metrics Section: 3-column Box */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 1fr',
+          gap: '8px',
+          padding: '10px',
+          borderRadius: '12px',
+          background: 'var(--input-bg, rgba(255, 255, 255, 0.03))',
+          border: '1px solid var(--card-border, rgba(255, 255, 255, 0.06))',
+          textAlign: 'center',
+        }}
+      >
+        {/* Armada */}
         <div>
-          <span className="text-[10px] text-slate-400 uppercase font-medium">Armada</span>
-          <div className="text-xs font-bold text-slate-800 dark:text-slate-100">
+          <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
+            Armada
+          </span>
+          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary, #ededed)', marginTop: '2px' }}>
             {route.totalRealops} / {route.totalRenops}
           </div>
-          <span className="text-[10px] text-slate-500">
+          <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
             S1:{route.realopsShift1} | S2:{route.realopsShift2}
           </span>
         </div>
 
         {/* Pelanggan */}
         <div>
-          <span className="text-[10px] text-slate-400 uppercase font-medium">Pelanggan</span>
-          <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+          <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
+            Pelanggan
+          </span>
+          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)', marginTop: '2px' }}>
             {formatNumber(route.todayPassengers)}
           </div>
-          <span className="text-[10px] text-slate-500">
-            S1:{route.totalShift1} S2:{route.totalShift2}
+          <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
+            S1:{formatNumber(route.totalShift1)} S2:{formatNumber(route.totalShift2)}
           </span>
         </div>
 
         {/* Total KM */}
         <div>
-          <span className="text-[10px] text-slate-400 uppercase font-medium">KM Tempuh</span>
-          <div className="text-xs font-bold text-blue-600 dark:text-blue-400">
+          <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
+            KM Tempuh
+          </span>
+          <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8', marginTop: '2px' }}>
             {formatDecimal(route.totalKm, 1)}
           </div>
-          <span className="text-[10px] text-slate-500">
+          <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
             KM/B: {formatDecimal(route.achievementKm, 1)}
           </span>
         </div>
       </div>
 
-      {/* Traffic Jam & Issues Highlights */}
+      {/* Macet & Kendala tags (jika ada) */}
       {(route.trafficJamSpots.length > 0 || route.operationalIssues) && (
-        <div className="space-y-1 text-[11px]">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '11px' }}>
           {route.trafficJamSpots.length > 0 && (
-            <div className="text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 px-2 py-1 rounded-md line-clamp-1">
+            <div
+              style={{
+                padding: '4px 8px',
+                borderRadius: '6px',
+                background: 'rgba(245, 158, 11, 0.1)',
+                border: '1px solid rgba(245, 158, 11, 0.2)',
+                color: '#f59e0b',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               <strong>Macet:</strong> {route.trafficJamSpots.join(', ')}
             </div>
           )}
           {route.operationalIssues && (
-            <div className="text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md line-clamp-1">
+            <div
+              style={{
+                padding: '4px 8px',
+                borderRadius: '6px',
+                background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
+                border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+                color: 'var(--text-secondary, #8b8b8b)',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               <strong>Kendala:</strong> {route.operationalIssues}
             </div>
           )}
@@ -594,17 +1103,39 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
       )}
 
       {/* Action Footer */}
-      <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-xs">
-        <span className="text-[11px] text-slate-400">
-          Headway: {route.headwayFastest} - {route.headwaySlowest} mnt
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingTop: '6px',
+          borderTop: '1px solid var(--card-border, rgba(255, 255, 255, 0.06))',
+          fontSize: '11px',
+        }}
+      >
+        <span style={{ color: 'var(--text-secondary, #8b8b8b)' }}>
+          Headway: <strong>{route.headwayFastest} - {route.headwaySlowest} mnt</strong>
         </span>
 
         {isSubmitted && !isVerified && (
           <button
+            type="button"
             onClick={onVerify}
-            className="flex items-center gap-1 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition-colors shadow-2xs"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '4px 10px',
+              borderRadius: '8px',
+              background: 'var(--accent-color, #3ECF8E)',
+              color: '#ffffff',
+              border: 'none',
+              fontSize: '11.5px',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
           >
-            <CheckCircle2 className="w-3.5 h-3.5" />
+            <CheckCircle2 size={13} />
             <span>Verifikasi</span>
           </button>
         )}
