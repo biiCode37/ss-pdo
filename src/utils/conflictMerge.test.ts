@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  getEditableBusFields,
+  EDITABLE_BUS_FIELDS,
   mergeRemoteBusDataWithLocalUpdates,
 } from './conflictMerge';
 
@@ -69,8 +69,7 @@ describe('mergeRemoteBusDataWithLocalUpdates', () => {
   });
 
   it('exposes editable fields including all operational columns', () => {
-    const fields = getEditableBusFields();
-    expect(fields).toEqual(
+    expect(EDITABLE_BUS_FIELDS).toEqual(
       expect.arrayContaining([
         'toaShift1',
         'manualShift1',

@@ -150,11 +150,10 @@ export function calculateAnalytics(
 }
 
 import type { Route } from '../types/supabase';
+import { TEXT_COMMON } from '../constants/texts';
 
-const MONTH_NAMES_ID = [
-  '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-];
+// ponytail: centralized month names dictionary from TEXT_COMMON
+const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
 
 import { getRoutesFromCache, findSheetInRoutes } from './cacheUtils';
 

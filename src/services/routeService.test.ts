@@ -11,7 +11,6 @@ import {
   updateUserProfileRole,
   toggleUserProfileStatus,
   revokeUserProfile,
-  fetchActivityLogs,
 } from './routeService';
 import { supabase } from './supabase';
 
@@ -423,71 +422,6 @@ describe('routeService', () => {
         is_active: false,
       })
     );
-  });
-
-  it('fetchActivityLogs queries activity_logs with limit and optional filters', async () => {
-    const mockLogs = [
-      { id: 1, action: 'USER_ADDED', user_email: 'admin@pusm.id' },
-    ];
-    const mockLimit = vi.fn().mockResolvedValue({ data: mockLogs, error: null });
-    const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
-    const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
-
-    (supabase.from as any).mockReturnValue({ select: mockSelect });
-
-    const logs = await fetchActivityLogs({ limit: 50 });
-    expect(supabase.from).toHaveBeenCalledWith('activity_logs');
-    expect(logs).toHaveLength(1);
-    expect(logs[0].action).toBe('USER_ADDED');
-  });
-
-  it('fetchActivityLogs applies route and JSONB period filters', async () => {
-    const query: Record<string, any> = {};
-    const thenable: any = Promise.resolve({ data: [], error: null });
-    query.order = vi.fn().mockReturnValue(query);
-    query.limit = vi.fn().mockReturnValue(query);
-    query.eq = vi.fn().mockReturnValue(query);
-    query.ilike = vi.fn().mockReturnValue(query);
-    query.filter = vi.fn().mockReturnValue(query);
-    query.gte = vi.fn().mockReturnValue(query);
-    query.lte = vi.fn().mockReturnValue(query);
-    query.then = thenable.then.bind(thenable);
-    query.catch = thenable.catch.bind(thenable);
-    query.finally = thenable.finally.bind(thenable);
-    const mockSelect = vi.fn().mockReturnValue(query);
-
-    (supabase.from as any).mockReturnValue({ select: mockSelect });
-
-    await fetchActivityLogs({
-      routeCode: 'M-01',
-      periodYear: 2026,
-      periodMonth: 8,
-      periodDay: 12,
-      dateFrom: '2026-08-12T00:00:00',
-      dateTo: '2026-08-12T23:59:59.999',
-    });
-
-    expect(query.eq).toHaveBeenCalledWith('route_code', 'M-01');
-    expect(query.filter).toHaveBeenCalledWith('details->>year', 'eq', '2026');
-    expect(query.filter).toHaveBeenCalledWith('details->>month', 'eq', '8');
-    expect(query.filter).toHaveBeenCalledWith('details->>day', 'eq', '12');
-    expect(query.gte).toHaveBeenCalledWith('created_at', '2026-08-12T00:00:00');
-    expect(query.lte).toHaveBeenCalledWith('created_at', '2026-08-12T23:59:59.999');
-  });
-
-  // BUG-64: Error now returns empty array to prevent page crash
-  it('fetchActivityLogs returns empty array when supabase returns an error', async () => {
-    const mockLimit = vi.fn().mockResolvedValue({
-      data: null,
-      error: { message: 'permission denied' },
-    });
-    const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
-    const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
-
-    (supabase.from as any).mockReturnValue({ select: mockSelect });
-
-    const logs = await fetchActivityLogs();
-    expect(logs).toEqual([]);
   });
 
   // BUG-63: Silent RLS filtering (sukses dengan 0 baris) harus dilaporkan gagal

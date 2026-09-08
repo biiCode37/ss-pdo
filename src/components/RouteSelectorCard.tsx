@@ -8,14 +8,11 @@ import {
   validateGoogleSheetsUrl,
 } from '../utils/routeValidation';
 import { getFormattedDateBadge } from '../utils/analytics';
-import { flattenRoutes } from '../utils/routeHelpers';
 import type { Route } from '../types/supabase';
-import { TEXT_DASHBOARD } from '../constants/texts';
+import { TEXT_DASHBOARD, TEXT_COMMON } from '../constants/texts';
 
-const MONTH_NAMES_ID = [
-  '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-];
+// ponytail: centralized month names dictionary from TEXT_COMMON
+const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
 
 interface Props {
   sheetUrl: string;
@@ -76,8 +73,19 @@ function RouteSelectorCardComponent({
 
   const prevLoadingRef = useRef(isLoading);
   const [routes, setRoutes] = useState<Route[]>([]);
-  // BUG-8: flattenRoutes recompute tiap render → useMemo
-  const flatSheets = useMemo(() => flattenRoutes(routes), [routes]);
+  // ponytail: native flatMap replaces custom flattenRoutes utility file
+  const flatSheets = useMemo(
+    () =>
+      routes.flatMap((r) =>
+        (r.route_sheets || []).map((s) => ({
+          routeId: r.id,
+          routeCode: r.route_code,
+          routeName: r.route_name,
+          sheet: s,
+        }))
+      ),
+    [routes]
+  );
 
   // Derived cascade options (filter by parent selection) — DECLARED FIRST for proper ordering
   const availableYears = Array.from(new Set(flatSheets.map(f => f.sheet.year))).sort((a, b) => b - a);
@@ -196,7 +204,14 @@ function RouteSelectorCardComponent({
 
   useEffect(() => {
     loadRoutes().then((data) => {
-      const flat = flattenRoutes(data);
+      const flat = data.flatMap((r) =>
+        (r.route_sheets || []).map((s) => ({
+          routeId: r.id,
+          routeCode: r.route_code,
+          routeName: r.route_name,
+          sheet: s,
+        }))
+      );
       if (flat.length > 0) {
         // Cek riwayat dari localStorage (BUG-42)
         try {

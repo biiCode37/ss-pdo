@@ -111,7 +111,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const [isReauthenticating, setIsReauthenticating] = useState(false);
   const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'user_management' | 'audit_log' | 'regional_monitoring'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'user_management' | 'regional_monitoring'>('dashboard');
 
   // Mobile Back Navigation Handlers (PWA / Mobile hardware gesture support)
   useMobileBackHandler({
@@ -126,11 +126,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     onClose: () => setCurrentView("dashboard"),
   });
 
-  useMobileBackHandler({
-    id: "audit_log_view",
-    isOpen: currentView === "audit_log",
-    onClose: () => setCurrentView("dashboard"),
-  });
 
   useMobileBackHandler({
     id: "profile_menu_sheet",
@@ -1173,10 +1168,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onOpenUserManagement={() => {
           setIsProfileMenuOpen(false);
           setCurrentView('user_management');
-        }}
-        onOpenAuditLogs={() => {
-          setIsProfileMenuOpen(false);
-          setCurrentView('audit_log');
         }}
         isDarkMode={theme === "dark"}
         onToggleTheme={toggleTheme}

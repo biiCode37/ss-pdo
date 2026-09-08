@@ -30,4 +30,8 @@ export const TEXT_COMMON = {
     NEXT_DAY: 'Hari Berikutnya',
     CHOOSE_DATE: 'Pilih Tanggal',
   },
+  MONTHS: [
+    '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ],
 } as const;

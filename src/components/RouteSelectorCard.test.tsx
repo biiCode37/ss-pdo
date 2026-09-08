@@ -3,20 +3,18 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
-vi.mock('gapi-script', () => ({
-  gapi: {
-    load: vi.fn(),
-    client: {
-      init: vi.fn(),
-      sheets: {
-        spreadsheets: {
-          get: vi.fn(),
-          values: { get: vi.fn(), update: vi.fn() },
-        },
+(window as any).gapi = {
+  load: vi.fn(),
+  client: {
+    init: vi.fn(),
+    sheets: {
+      spreadsheets: {
+        get: vi.fn(),
+        values: { get: vi.fn(), update: vi.fn() },
       },
     },
   },
-}));
+};
 
 // Mock routeService
 vi.mock('../services/routeService', () => ({

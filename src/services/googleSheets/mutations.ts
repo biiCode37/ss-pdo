@@ -7,155 +7,6 @@ import type { BusData, HeaderMap } from './types';
 import { getTabGid, numberToColumnName } from './core';
 import { updateSheetValuesBatch, batchUpdateSpreadsheet } from './transport';
 
-export const updateBusData = async (
-  sheetId: string, 
-  tabName: string, 
-  rowIndex: number, 
-  updates: Partial<BusData>, 
-  headerMap: HeaderMap,
-  previousValues?: Partial<BusData>,
-): Promise<void> => {
-    // Construct individual updates for each cell to avoid overwriting formulas
-    const data: any[] = [];
-    const formatCells: Array<{ colIndex: number; rowIndex: number }> = [];
-    
-    const addUpdate = (key: keyof HeaderMap, value: any) => {
-      const colIndex = headerMap[key];
-      if (colIndex !== undefined && colIndex !== -1 && value !== undefined) {
-        const colName = numberToColumnName(colIndex);
-        data.push({
-          range: `${tabName}!${colName}${rowIndex}`,
-          values: [[value]]
-        });
-        formatCells.push({ colIndex, rowIndex });
-      }
-    };
-
-    if (updates.tripPergi !== undefined) addUpdate('tripPergi', updates.tripPergi);
-    if (updates.tripPulang !== undefined) addUpdate('tripPulang', updates.tripPulang);
-    if (updates.toaShift1 !== undefined) addUpdate('toaShift1', updates.toaShift1);
-    if (updates.manualShift1 !== undefined) addUpdate('manualShift1', updates.manualShift1);
-    if (updates.manualShift2 !== undefined) addUpdate('manualShift2', updates.manualShift2);
-    if (updates.totalToa !== undefined) addUpdate('totalToa', updates.totalToa);
-    if (updates.kmAwal1 !== undefined) addUpdate('kmAwal1', updates.kmAwal1);
-    if (updates.kmAkhir1 !== undefined) addUpdate('kmAkhir1', updates.kmAkhir1);
-    if (updates.kmAwal2 !== undefined) addUpdate('kmAwal2', updates.kmAwal2);
-    if (updates.kmAkhir2 !== undefined) addUpdate('kmAkhir2', updates.kmAkhir2);
-    if (updates.keterangan !== undefined) addUpdate('keterangan', normalizeKeterangan(updates.keterangan));
-
-    if (data.length === 0) return; // Nothing to update
-
-    try {
-      await updateSheetValuesBatch(sheetId, {
-        valueInputOption: 'USER_ENTERED', // So numbers/formulas are parsed properly
-        data: data
-      });
-
-      // Format sel: Normal text (Bold untuk Keterangan), Horizontal Center, Vertical Middle, Wrap Text & Row Color
-      try {
-        const tabGid = await getTabGid(sheetId, tabName);
-        if (tabGid !== null) {
-          const requests: any[] = [];
-
-          if (formatCells.length > 0) {
-            for (const cell of formatCells) {
-              const isKet =
-                headerMap.keterangan !== undefined &&
-                cell.colIndex === headerMap.keterangan;
-              requests.push({
-                repeatCell: {
-                  range: {
-                    sheetId: tabGid,
-                    startRowIndex: cell.rowIndex - 1,
-                    endRowIndex: cell.rowIndex,
-                    startColumnIndex: cell.colIndex,
-                    endColumnIndex: cell.colIndex + 1,
-                  },
-                  cell: {
-                    userEnteredFormat: {
-                      textFormat: { bold: isKet },
-                      horizontalAlignment: "CENTER",
-                      verticalAlignment: "MIDDLE",
-                      wrapStrategy: "WRAP",
-                    },
-                  },
-                  fields: "userEnteredFormat(textFormat.bold,horizontalAlignment,verticalAlignment,wrapStrategy)",
-                },
-              });
-            }
-          }
-
-          // Pewarnaan baris (dari No Body sampai kolom Total KM Shift 2) jika kolom Keterangan diperbarui
-          if (updates.keterangan !== undefined) {
-            const startCol =
-              headerMap.unit !== undefined && headerMap.unit !== -1
-                ? headerMap.unit
-                : 0;
-            const endCol = getRowEndCol(headerMap);
-
-            const rowColor = getKeteranganColor(updates.keterangan);
-
-            requests.push({
-              repeatCell: {
-                range: {
-                  sheetId: tabGid,
-                  startRowIndex: rowIndex - 1,
-                  endRowIndex: rowIndex,
-                  startColumnIndex: startCol,
-                  endColumnIndex: endCol,
-                },
-                cell: {
-                  userEnteredFormat: {
-                    backgroundColor: rowColor || { red: 1, green: 1, blue: 1 },
-                  },
-                },
-                fields: "userEnteredFormat.backgroundColor",
-              },
-            });
-          }
-
-          if (requests.length > 0) {
-            await batchUpdateSpreadsheet(sheetId, requests);
-          }
-        }
-      } catch (formatErr) {
-        console.warn("[GoogleSheets] Cell formatting notice (values saved):", formatErr);
-      }
-
-      // Telemetry: Log UPDATE_BUS_DATA
-      const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
-      const updatedFields = Object.keys(updates).filter(k => (updates as any)[k] !== undefined);
-      const before: Record<string, string> = {};
-      const after: Record<string, string> = {};
-      for (const field of updatedFields) {
-        before[field] = String((previousValues as any)?.[field] ?? '');
-        after[field] = String((updates as any)[field] ?? '');
-      }
-      const routeContext = resolveRouteContext(sheetId, tabName);
-      logActivity({
-        user_email: userEmail,
-        action: 'UPDATE_BUS_DATA',
-        route_code: routeContext.routeCode,
-        details: {
-          sheetId,
-          tabName,
-          rowIndex,
-          year: routeContext.year,
-          month: routeContext.month,
-          day: routeContext.day,
-          updatedFields,
-          changedValues: { before, after },
-        },
-      }).catch(() => {});
-    } catch (error: any) {
-      console.error('Error updating data', error);
-      if (isAuthError(error)) {
-        throw error;
-      }
-      throw new Error(error?.result?.error?.message || error?.message || 'Gagal menyimpan data.');
-    }
-};
-
 export const updateBulkBusData = async (
   sheetId: string,
   tabName: string,
@@ -294,6 +145,48 @@ export const updateBulkBusData = async (
       }
       throw new Error(error?.result?.error?.message || error?.message || 'Gagal menyimpan bulk data ke spreadsheet.');
     }
+};
+
+/**
+ * Memperbarui data satu armada bus.
+ * // ponytail: delegate to updateBulkBusData, eliminating 120 lines of duplicate cell formatting and color logic
+ */
+export const updateBusData = async (
+  sheetId: string, 
+  tabName: string, 
+  rowIndex: number, 
+  updates: Partial<BusData>, 
+  headerMap: HeaderMap,
+  previousValues?: Partial<BusData>,
+): Promise<void> => {
+  await updateBulkBusData(sheetId, tabName, [{ rowIndex, updates }], headerMap);
+
+  if (previousValues) {
+    const userEmail = localStorage.getItem('PDO_USER_EMAIL') || 'field_operator';
+    const updatedFields = Object.keys(updates).filter(k => (updates as any)[k] !== undefined);
+    const before: Record<string, string> = {};
+    const after: Record<string, string> = {};
+    for (const field of updatedFields) {
+      before[field] = String((previousValues as any)?.[field] ?? '');
+      after[field] = String((updates as any)[field] ?? '');
+    }
+    const routeContext = resolveRouteContext(sheetId, tabName);
+    logActivity({
+      user_email: userEmail,
+      action: 'UPDATE_BUS_DATA',
+      route_code: routeContext.routeCode,
+      details: {
+        sheetId,
+        tabName,
+        rowIndex,
+        year: routeContext.year,
+        month: routeContext.month,
+        day: routeContext.day,
+        updatedFields,
+        changedValues: { before, after },
+      },
+    }).catch(() => {});
+  }
 };
 
 export const formatWholeSheet = async (

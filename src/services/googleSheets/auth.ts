@@ -1,8 +1,12 @@
-import { gapi } from 'gapi-script';
 import { logActivity } from '../routeService';
 import { isAuthError } from '../../utils/errorClassifier';
 import type { AuthResult } from './types';
 import { checkProxyHealth, isUsingServiceAccount } from './transport';
+
+// ponytail: native dynamic script loading replaces gapi-script and eliminates eval warning
+export const getGapi = (): any => {
+  return typeof window !== 'undefined' ? (window as any).gapi : undefined;
+};
 
 export const getGoogleCreds = () => {
   return {
@@ -23,24 +27,30 @@ export const initGoogleApi = async (): Promise<void> => {
   if (!hasGoogleCreds()) throw new Error('API Credentials missing');
 
   return new Promise((resolve, reject) => {
-    // 1. Load the GAPI client for API calls (without auth2)
-    gapi.load('client', async () => {
-      try {
-        await gapi.client.init({
-          apiKey: creds.apiKey,
-          discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-        });
-        
-        // 2. Load Google Identity Services script for modern Auth
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.onload = () => {
-          tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
-            client_id: creds.clientId,
-            scope: 'https://www.googleapis.com/auth/spreadsheets email profile',
-            callback: async (tokenResponse: any) => {
-              if (tokenResponse && tokenResponse.access_token) {
-                gapi.client.setToken({ access_token: tokenResponse.access_token });
+    const setupGapi = () => {
+      const gapiObj = getGapi();
+      if (!gapiObj?.load) {
+        reject(new Error('Objek gapi tidak tersedia'));
+        return;
+      }
+
+      gapiObj.load('client', async () => {
+        try {
+          await gapiObj.client.init({
+            apiKey: creds.apiKey,
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+          });
+          
+          // 2. Load Google Identity Services script for modern Auth
+          const script = document.createElement('script');
+          script.src = 'https://accounts.google.com/gsi/client';
+          script.onload = () => {
+            tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
+              client_id: creds.clientId,
+              scope: 'https://www.googleapis.com/auth/spreadsheets email profile',
+              callback: async (tokenResponse: any) => {
+                if (tokenResponse && tokenResponse.access_token) {
+                  gapiObj.client.setToken({ access_token: tokenResponse.access_token });
                 localStorage.setItem('PDO_IS_SIGNED_IN', 'true');
                 localStorage.setItem('GAPI_ACCESS_TOKEN', JSON.stringify({
                   token: tokenResponse.access_token,
@@ -95,13 +105,23 @@ export const initGoogleApi = async (): Promise<void> => {
           });
           resolve();
         };
-        script.onerror = () => reject(new Error('Gagal memuat Google Identity Services'));
-        document.body.appendChild(script);
-        
-      } catch (error) {
-        reject(error);
-      }
-    });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    };
+
+    if (getGapi()?.load) {
+      setupGapi();
+    } else if (typeof document !== 'undefined') {
+      const gapiScript = document.createElement('script');
+      gapiScript.src = 'https://apis.google.com/js/api.js';
+      gapiScript.onload = setupGapi;
+      gapiScript.onerror = () => reject(new Error('Gagal memuat Google API client script'));
+      document.body.appendChild(gapiScript);
+    } else {
+      resolve();
+    }
   });
 };
 
@@ -178,8 +198,9 @@ export const signOut = async () => {
   localStorage.removeItem('PDO_USER_EMAIL');
   localStorage.removeItem('PDO_USER_NAME');
   localStorage.removeItem('PDO_USER_AVATAR');
-  if (gapi.client) {
-    gapi.client.setToken(null);
+  const gapiObj = getGapi();
+  if (gapiObj?.client) {
+    gapiObj.client.setToken(null);
   }
 };
 
@@ -193,8 +214,9 @@ export const ensureValidToken = async (): Promise<void> => {
       const tokenObj = JSON.parse(tokenStr);
       // Jika token masih berlaku lebih dari 2 menit, pasang ke gapi client
       if (tokenObj.token && tokenObj.expiresAt && tokenObj.expiresAt - Date.now() > 2 * 60 * 1000) {
-        if (gapi.client) {
-          gapi.client.setToken({ access_token: tokenObj.token });
+        const gapiObj = getGapi();
+        if (gapiObj?.client) {
+          gapiObj.client.setToken({ access_token: tokenObj.token });
         }
         return;
       }
@@ -336,8 +358,9 @@ export async function withAuthRetry<T>(apiFn: () => Promise<T>): Promise<T> {
  */
 export const fetchGoogleUserProfile = async (): Promise<{ email?: string; name?: string; picture?: string } | null> => {
   let token = '';
-  if (typeof gapi !== 'undefined' && gapi.client) {
-    const gapiToken = gapi.client.getToken();
+  const gapiObj = getGapi();
+  if (gapiObj?.client) {
+    const gapiToken = gapiObj.client.getToken();
     if (gapiToken && gapiToken.access_token) {
       token = gapiToken.access_token;
     }
@@ -421,8 +444,9 @@ export const checkSignedInAsync = async (): Promise<AuthResult> => {
       return { authenticated: true, reason: 'needs_reauth' };
     }
 
-    if (gapi.client) {
-      gapi.client.setToken({ access_token: tokenObj.token });
+    const gapiObj = getGapi();
+    if (gapiObj?.client) {
+      gapiObj.client.setToken({ access_token: tokenObj.token });
     }
 
     if (!localStorage.getItem('PDO_USER_AVATAR')) {
@@ -445,8 +469,9 @@ export const checkSignedInAsync = async (): Promise<AuthResult> => {
       if (refreshedStr) {
         const fresh = JSON.parse(refreshedStr);
         if (fresh.token && fresh.expiresAt && fresh.expiresAt > Date.now()) {
-          if (gapi.client) {
-            gapi.client.setToken({ access_token: fresh.token });
+          const freshGapiObj = getGapi();
+          if (freshGapiObj?.client) {
+            freshGapiObj.client.setToken({ access_token: fresh.token });
           }
           startTokenRefreshTimer(fresh.expiresAt - Date.now());
           return { authenticated: true };

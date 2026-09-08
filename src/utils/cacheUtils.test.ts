@@ -76,8 +76,8 @@ describe('cacheUtils', () => {
           route_id: 2,
           month: 7,
           year: 2026,
-          sheet_url: 'https://docs.google.com/spreadsheets/d/2ABC123xyz/edit',
-          spreadsheet_id: '2ABC123xyz',
+          sheet_url: 'https://docs.google.com/spreadsheets/d/2ABC123xyz456789012345/edit',
+          spreadsheet_id: '2ABC123xyz456789012345',
           tab_name: 'PDO',
           created_at: '2026-07-01T00:00:00Z',
           updated_at: '2026-07-01T00:00:00Z',
@@ -133,7 +133,7 @@ describe('cacheUtils', () => {
     });
 
     it('finds route and sheet by spreadsheet ID', () => {
-      const result = findSheetInRoutes(mockRoutes, '2ABC123xyz');
+      const result = findSheetInRoutes(mockRoutes, '2ABC123xyz456789012345');
       expect(result).not.toBeNull();
       expect(result?.route.route_code).toBe('R02');
       expect(result?.sheet.month).toBe(7);
@@ -152,7 +152,7 @@ describe('cacheUtils', () => {
 
     it('returns correct route_code from cache', () => {
       expect(getRouteCodeForSheet('1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms')).toBe('R01');
-      expect(getRouteCodeForSheet('2ABC123xyz')).toBe('R02');
+      expect(getRouteCodeForSheet('2ABC123xyz456789012345')).toBe('R02');
       expect(getRouteCodeForSheet('unknown')).toBe('');
     });
 
@@ -161,7 +161,7 @@ describe('cacheUtils', () => {
         month: 8,
         year: 2026,
       });
-      expect(getMonthYearForSheet('2ABC123xyz')).toEqual({
+      expect(getMonthYearForSheet('2ABC123xyz456789012345')).toEqual({
         month: 7,
         year: 2026,
       });

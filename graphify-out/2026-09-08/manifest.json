@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1788850925.744888,
-    "ast_hash": "4f8c18f0a48dedac390a89ff5310d28c",
+    "mtime": 1788856360.264655,
+    "ast_hash": "fa9e6dfedb9e5c13c1750f1414681f76",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1492,6 +1492,16 @@
   "docs/superpowers/specs/2026-09-08-centralized-ui-text-dictionary-design.md": {
     "mtime": 1788849331.7518847,
     "ast_hash": "49c95e4a398e4a19a9362aa13b8fa596",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
+    "mtime": 1788856526.171687,
+    "ast_hash": "8fb90e4a7865c6e463a57e9e977fb941",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_18/REPAIR_REPORT.md": {
+    "mtime": 1788856531.634968,
+    "ast_hash": "a9f578396a3c84bd790c8d2bb7b7d077",
     "semantic_hash": ""
   }
 }

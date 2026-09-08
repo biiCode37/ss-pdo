@@ -3,22 +3,10 @@ import { createPortal } from "react-dom";
 import { X, Layers } from "lucide-react";
 import { fetchRoutesWithSheets } from "../services/routeService";
 import { getRoutesFromCache } from "../utils/cacheUtils";
+import { TEXT_COMMON } from "../constants/texts";
 
-const MONTH_NAMES_ID = [
-  "",
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-];
+// ponytail: centralized month names dictionary from TEXT_COMMON
+const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
 
 interface Props {
   isOpen: boolean;

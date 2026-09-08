@@ -35,7 +35,6 @@ interface Props {
   onOpenAccumulation?: () => void;
   onOpenRegionalMonitoring?: () => void;
   onOpenUserManagement?: () => void;
-  onOpenAuditLogs?: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
   offlineQueueCount: number;
@@ -52,7 +51,6 @@ export function ProfileMenuSheet({
   onOpenAccumulation,
   onOpenRegionalMonitoring,
   onOpenUserManagement,
-  onOpenAuditLogs: _onOpenAuditLogs,
   isDarkMode,
   onToggleTheme,
   offlineQueueCount,
