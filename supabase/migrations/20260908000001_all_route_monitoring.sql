@@ -1,25 +1,3 @@
-# Task 1: Skema Database & Migrasi Supabase (Tabel Routes & Daily Route Reports)
-
-**Files:**
-- Create: `supabase/migrations/20260908000001_all_route_monitoring.sql`
-- Create: `src/services/dailyRouteReportService.ts`
-- Create: `src/services/dailyRouteReportService.test.ts`
-- Modify: `src/types/supabase.ts`
-
-**Interfaces:**
-- Consumes: Supabase client from `src/services/supabase.ts`
-- Produces: 
-  - `RouteMasterConfig` (tipe data rute lengkap)
-  - `DailyRouteReport` (tipe data laporan operasional harian rute)
-  - `upsertDailyRouteReport(report: Partial<DailyRouteReport>): Promise<DailyRouteReport>`
-  - `fetchDailyRouteReportsByDate(date: string): Promise<DailyRouteReport[]>`
-  - `fetchRouteMasterConfigs(): Promise<RouteMasterConfig[]>`
-
-- [ ] **Step 1: Tulis file migrasi SQL Supabase**
-
-Buat file `supabase/migrations/20260908000001_all_route_monitoring.sql` yang menambahkan kolom ke `public.routes`, membuat tabel `public.daily_route_reports`, dan melakukan seed data 18 rute:
-
-```sql
 -- 1. Tambah kolom spesifikasi ke public.routes
 ALTER TABLE public.routes 
 ADD COLUMN IF NOT EXISTS operator_name text,
@@ -55,7 +33,9 @@ CREATE TABLE IF NOT EXISTS public.daily_route_reports (
 
 -- RLS
 ALTER TABLE public.daily_route_reports ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow read daily_route_reports" ON public.daily_route_reports;
 CREATE POLICY "Allow read daily_route_reports" ON public.daily_route_reports FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Allow insert/update daily_route_reports" ON public.daily_route_reports;
 CREATE POLICY "Allow insert/update daily_route_reports" ON public.daily_route_reports FOR ALL USING (true);
 
 -- 3. Seed data spesifikasi 18 rute Wilayah Utara
@@ -77,28 +57,3 @@ UPDATE public.routes SET operator_name = 'KWK', is_looping = true, km_baku = 28.
 UPDATE public.routes SET operator_name = 'KWK', is_looping = false, km_baku = 26.155, target_hk = 9877, best_record = 8273, default_renops = 33, supervisor_name = 'ABDUL MANAN', default_traffic_jam_spots = ARRAY['Jl Yos sudarso (Polres Jakut)', 'Jl Yos sudarso (Plumpang)', 'Jl Raya Cilincing (Persimpangan jaya)'] WHERE route_code = 'JAK.117';
 UPDATE public.routes SET operator_name = 'KWK', is_looping = true, km_baku = 26.038, target_hk = 9201, best_record = 8390, default_renops = 30, supervisor_name = 'RANTO LUMBAN TORUAN', default_traffic_jam_spots = ARRAY['JALAN KALI MATI PADEMANGAN', 'LAMPU MERAH BEOS/KOTA TUA', 'PASAR ASEMKA'] WHERE route_code = 'JAK.118';
 UPDATE public.routes SET operator_name = 'KWK AC', is_looping = true, km_baku = 43.465, target_hk = 2717, best_record = 2639, default_renops = 15, supervisor_name = 'RANTO LUMBAN TORUAN', default_traffic_jam_spots = ARRAY['Sunter TL blok A arah muara angke', 'jl industri pertamina arah muara angke', 'jl pangeran jaya karta arah muara angke', 'jl kota tua arah muara angke'] WHERE route_code = 'JAK.120';
-```
-
-- [ ] **Step 2: Jalankan migrasi ke Supabase via MCP Supabase**
-Eksekusi query SQL migrasi di atas ke Supabase menggunakan tool `execute_sql`.
-
-- [ ] **Step 3: Tulis unit test untuk `dailyRouteReportService`**
-
-Tulis file `src/services/dailyRouteReportService.test.ts` untuk menguji:
-- Pengambilan rute master beserta konfigurasinya.
-- Simpan dan ambil data `daily_route_reports`.
-- Perhitungan total renops & realops harian dari shift 1 dan shift 2.
-
-- [ ] **Step 4: Implementasi `src/services/dailyRouteReportService.ts`**
-
-Implementasikan fungsi client Supabase untuk interaksi dengan `daily_route_reports` dan `routes`.
-
-- [ ] **Step 5: Jalankan test dan verifikasi**
-Run: `pnpm vitest run src/services/dailyRouteReportService.test.ts`
-Expected: PASS 100%.
-
-- [ ] **Step 6: Commit**
-```bash
-git add supabase/migrations/ src/services/dailyRouteReportService* src/types/
-git commit -m "feat: add daily route reports schema & service"
-```

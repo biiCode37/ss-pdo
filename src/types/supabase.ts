@@ -4,9 +4,37 @@ export interface Route {
   route_code: string;
   route_name: string;
   is_active: boolean;
+  operator_name?: string;
+  is_looping?: boolean;
+  km_baku?: number;
+  target_hk?: number;
+  best_record?: number;
+  default_renops?: number;
+  supervisor_name?: string;
+  default_traffic_jam_spots?: string[];
   created_at: string;
   updated_at: string;
   route_sheets?: RouteSheet[];
+}
+
+export interface DailyRouteReport {
+  id?: number;
+  route_id: number;
+  route_code: string;
+  date: string; // YYYY-MM-DD
+  renops_shift1: number;
+  realops_shift1: number;
+  renops_shift2: number;
+  realops_shift2: number;
+  headway_fastest: number;
+  headway_slowest: number;
+  traffic_jam_spots: string[];
+  operational_issues?: string;
+  status: 'draft' | 'submitted' | 'verified';
+  submitted_by?: string;
+  verified_by?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface RouteSheet {
