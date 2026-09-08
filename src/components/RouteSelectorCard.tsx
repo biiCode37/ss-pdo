@@ -10,7 +10,7 @@ import {
 import { getFormattedDateBadge } from '../utils/analytics';
 import { flattenRoutes } from '../utils/routeHelpers';
 import type { Route } from '../types/supabase';
-import { TEXT_DASHBOARD, TEXT_COMMON } from '../constants/texts';
+import { TEXT_DASHBOARD } from '../constants/texts';
 
 const MONTH_NAMES_ID = [
   '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
