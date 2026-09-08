@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { ClipboardList, BarChart3, Bus, MoreHorizontal } from "lucide-react";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface BottomNavProps {
   activeTab: "input" | "analytics" | "units";
@@ -28,7 +29,7 @@ function BottomNavComponent({
 
   return (
     <div className="bottom-nav-wrapper">
-      <nav className="bottom-nav" aria-label="Navigasi Utama">
+      <nav className="bottom-nav" aria-label={TEXT_DASHBOARD.NAV_MAIN}>
         {/* Apple iOS Style Sliding Active Indicator Pill */}
         <div
           className={`bottom-nav-indicator ${getIndicatorPosClass()}`}
@@ -39,8 +40,8 @@ function BottomNavComponent({
           type="button"
           onClick={() => handleTabClick("input")}
           className={`bottom-nav-item ${activeTab === "input" ? "active" : ""}`}
-          title="Input SS"
-          aria-label="Input SS"
+          title={TEXT_DASHBOARD.TABS.INPUT_SS}
+          aria-label={TEXT_DASHBOARD.TABS.INPUT_SS}
         >
           <div className="bottom-nav-icon-wrapper">
             <ClipboardList size={20} />
@@ -54,8 +55,8 @@ function BottomNavComponent({
           type="button"
           onClick={() => handleTabClick("analytics")}
           className={`bottom-nav-item ${activeTab === "analytics" ? "active" : ""}`}
-          title="Dashboard"
-          aria-label="Dashboard"
+          title={TEXT_DASHBOARD.TABS.DASHBOARD}
+          aria-label={TEXT_DASHBOARD.TABS.DASHBOARD}
         >
           <div className="bottom-nav-icon-wrapper">
             <BarChart3 size={20} />
@@ -66,8 +67,8 @@ function BottomNavComponent({
           type="button"
           onClick={() => handleTabClick("units")}
           className={`bottom-nav-item ${activeTab === "units" ? "active" : ""}`}
-          title="Daftar Unit"
-          aria-label="Daftar Unit"
+          title={TEXT_DASHBOARD.TABS.UNIT_LIST}
+          aria-label={TEXT_DASHBOARD.TABS.UNIT_LIST}
         >
           <div className="bottom-nav-icon-wrapper">
             <Bus size={20} />
@@ -78,8 +79,8 @@ function BottomNavComponent({
           type="button"
           onClick={onOpenMore}
           className="bottom-nav-item"
-          title="Lainnya"
-          aria-label="Lainnya"
+          title={TEXT_DASHBOARD.TABS.MORE}
+          aria-label={TEXT_DASHBOARD.TABS.MORE}
         >
           <div className="bottom-nav-icon-wrapper">
             <MoreHorizontal size={20} />
@@ -91,3 +92,4 @@ function BottomNavComponent({
 }
 
 export const BottomNav = memo(BottomNavComponent);
+

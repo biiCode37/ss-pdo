@@ -23,6 +23,7 @@ import { formatUserError } from "../utils/errorFormatter";
 import { LegalModals } from "./login/LegalModals";
 import type { LegalModalType } from "./login/LegalModals";
 import { useMobileBackHandler } from "../hooks/useMobileBackHandler";
+import { TEXT_AUTH, TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   onLoginSuccess: () => void;
@@ -98,8 +99,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
         if (!verify.isAllowed) {
           await signOut();
           setError(
-            verify.message ||
-              "Akun Anda belum terdaftar. Silakan hubungi admin atau pengawas untuk pendaftaran akses.",
+            verify.message || TEXT_AUTH.NOT_ALLOWED,
           );
           return;
         }
@@ -137,9 +137,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
       } else {
         // BUG-38: Jika email tidak tersedia setelah OAuth, tolak akses
         await signOut();
-        setError(
-          "Tidak dapat memverifikasi identitas akun Google Anda. Silakan coba masuk kembali.",
-        );
+        setError(TEXT_AUTH.UNVERIFIED_IDENTITY);
         return;
       }
     } catch (err: any) {
@@ -213,9 +211,9 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             WebkitTextFillColor: "transparent",
             lineHeight: 1.2,
           }}
-          aria-label="PUSM - PDO Utara Spreadsheet Mobile"
+          aria-label={`${TEXT_DASHBOARD.APP_TITLE} - ${TEXT_DASHBOARD.APP_SUBTITLE}`}
         >
-          PUSM
+          {TEXT_DASHBOARD.APP_TITLE}
           <span
             style={{
               display: "block",
@@ -227,7 +225,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
               WebkitTextFillColor: "initial",
             }}
           >
-            PDO Utara Spreadsheet Mobile
+            {TEXT_DASHBOARD.APP_SUBTITLE}
           </span>
         </h1>
 
@@ -245,7 +243,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             letterSpacing: "0.3px",
           }}
         >
-          Operasional Mikrotrans Transjakarta
+          {TEXT_AUTH.BADGE}
         </div>
 
         <p
@@ -259,9 +257,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             marginRight: "auto",
           }}
         >
-          Aplikasi pencatatan dan pemantauan tugas operasional harian armada
-          Transjakarta Mikrotrans Wilayah Utara yang terhubung langsung ke
-          Google Spreadsheet internal.
+          {TEXT_AUTH.HERO_DESC}
         </p>
 
         {error && (
@@ -305,7 +301,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
           ) : (
             <LogIn size={20} />
           )}
-          Masuk dengan Akun Google
+          {TEXT_AUTH.SIGN_IN_BTN}
         </button>
 
         <p
@@ -315,7 +311,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             marginTop: "12px",
           }}
         >
-          Gunakan akun Google yang sudah didaftarkan oleh admin atau pengawas.
+          {TEXT_AUTH.ACCOUNT_HINT}
         </p>
       </div>
 
@@ -347,7 +343,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             <Info size={20} />
           </div>
           <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>
-            Tentang PUSM
+            {TEXT_AUTH.ABOUT_TITLE}
           </h2>
         </div>
 
@@ -482,7 +478,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
           </div>
           <div>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>
-              Spreadsheet vs PUSM
+              {TEXT_AUTH.VS_TITLE}
             </h2>
             <p
               style={{
@@ -750,7 +746,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
           </div>
           <div>
             <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>
-              PUSM Perlu Izin Akun Google
+              {TEXT_AUTH.PERMISSIONS_TITLE}
             </h2>
             <p
               style={{
@@ -912,7 +908,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             <Layers size={20} />
           </div>
           <h2 style={{ fontSize: "18px", fontWeight: 700, margin: 0 }}>
-            Fitur Utama Aplikasi
+            {TEXT_AUTH.FEATURES_TITLE}
           </h2>
         </div>
 
@@ -1067,7 +1063,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
               textDecoration: "none",
             }}
           >
-            <ShieldCheck size={14} /> Kebijakan Privasi
+            <ShieldCheck size={14} /> {TEXT_AUTH.LEGAL.PRIVACY}
           </a>
 
           <a
@@ -1090,7 +1086,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
               textDecoration: "none",
             }}
           >
-            <FileText size={14} /> Syarat & Ketentuan
+            <FileText size={14} /> {TEXT_AUTH.LEGAL.TERMS}
           </a>
 
           <a
@@ -1113,7 +1109,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
               textDecoration: "none",
             }}
           >
-            <Mail size={14} /> Kontak Pengembang
+            <Mail size={14} /> {TEXT_AUTH.LEGAL.DEVELOPER}
           </a>
         </div>
 
@@ -1124,7 +1120,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: Props) {
             margin: 0,
           }}
         >
-          © 2026 PUSM — PDO Utara Spreadsheet Mobile. Hak cipta dilindungi.
+          {TEXT_AUTH.LEGAL.COPYRIGHT}
         </p>
       </div>
 

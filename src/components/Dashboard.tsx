@@ -56,6 +56,7 @@ import {
   DailyToaTrendSkeleton,
   UnitCardSkeleton,
 } from "./Skeletons";
+import { TEXT_DASHBOARD, TEXT_AUTH, TEXT_COMMON } from "../constants/texts";
 
 interface Props {
   onLogout: () => void;
@@ -236,7 +237,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       // BUG-06: Update busData saat sinkronisasi antrean berhasil
       // Ini mencegah false positive "Tabrakan Data" pada edit berikutnya
       handleUpdateBus(rowIndex, updates);
-      showSuccessToast("Data antrean berhasil disinkronkan ke Google Sheets!");
+      showSuccessToast(TEXT_DASHBOARD.QUEUE_SYNC_SUCCESS);
     },
     onAuthError: () => {
       // BUG-23: Handle auth error when offline sync queue encounters 401 session expiry
@@ -249,7 +250,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     const confirmed = await showDeleteQueueConfirm();
     if (confirmed) {
       removeItem(itemId);
-      showSuccessToast("Item berhasil dihapus dari antrean.");
+      showSuccessToast(TEXT_DASHBOARD.QUEUE_ITEM_DELETED);
     }
   };
 
@@ -269,9 +270,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         console.warn('Error processing queue after re-auth:', queueError);
         // Silently continue, the main process was already handled by handleLoadData
       }
-      showSuccessToast("Sesi berhasil diperbarui!");
+      showSuccessToast(TEXT_DASHBOARD.SESSION_REFRESH_SUCCESS);
     } catch (err: any) {
-      const errFormatted = formatUserError(err, "Gagal memperbarui sesi. Silakan coba lagi.");
+      const errFormatted = formatUserError(err, TEXT_DASHBOARD.SESSION_REFRESH_FAIL);
       setError(errFormatted);
       if (errFormatted) {
         showErrorToast(errFormatted);
@@ -352,14 +353,14 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     const currentSheetUrl = targetSheetUrl || sheetUrlRef.current;
     const activeTab = targetTab || selectedTabRef.current;
     if (!currentSheetUrl) {
-      setError("Silakan pilih atau paste link Google Sheet terlebih dahulu");
+      setError(TEXT_DASHBOARD.SELECT_ROUTE_FIRST);
       return;
     }
 
     const sheetId = extractSpreadsheetId(currentSheetUrl);
     if (!sheetId) {
       setError(
-        "Link tidak valid. Pastikan Anda meng-copy link dari Google Sheets.",
+        TEXT_DASHBOARD.INVALID_SHEET_LINK,
       );
       return;
     }
@@ -439,7 +440,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       setError(
         formatUserError(
           err,
-          "Gagal memuat data. Periksa kembali link dan tab Anda.",
+          TEXT_DASHBOARD.LOAD_DATA_FAIL,
         ),
       );
     } finally {
@@ -499,7 +500,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     if (pullDistance > 60) {
       // BUG-14: Cek status online sebelum refresh
       if (!isOnline) {
-        setError("Tidak bisa refresh saat offline");
+        setError(TEXT_DASHBOARD.REFRESH_OFFLINE_ERR);
         setIsRefreshing(false);
         setPullDistance(0);
         setTouchStartY(0);
@@ -606,7 +607,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
       {!isOnline && (
         <div className="offline-banner">
-          ⚠️ Koneksi Terputus - Mode Offline Aktif
+          {TEXT_COMMON.STATUS.OFFLINE_BANNER}
         </div>
       )}
 
@@ -636,7 +637,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           >
             <AlertTriangle size={20} />
             <span>
-              Sesi Google Sheets kedaluwarsa. Ketuk tombol untuk perbarui sesi.
+              {TEXT_AUTH.SESSION_EXPIRED_BANNER}
             </span>
           </div>
           <button
@@ -664,7 +665,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             ) : (
               <RefreshCw size={14} />
             )}
-            {isReauthenticating ? "Memproses..." : "Login Ulang"}
+            {isReauthenticating ? TEXT_COMMON.STATUS.PROCESSING : TEXT_AUTH.REAUTH_BTN}
           </button>
         </div>
       )}
@@ -711,7 +712,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                 color: "var(--text-primary)",
               }}
             >
-              PUSM
+              {TEXT_DASHBOARD.APP_TITLE}
             </h1>
             <span
               style={{
@@ -724,7 +725,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                 marginTop: "1px",
               }}
             >
-              PDO Utara Spreadsheet Mobile
+              {TEXT_DASHBOARD.APP_SUBTITLE}
             </span>
           </div>
 
@@ -755,10 +756,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                 cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
               }}
-              title="Buka Dashboard Monitoring Wilayah & Laporan WA"
+              title={TEXT_DASHBOARD.SWITCHER.TITLE}
             >
               <Globe size={13} />
-              <span>Wilayah</span>
+              <span>{TEXT_DASHBOARD.SWITCHER.REGIONAL_MONITORING}</span>
             </button>
 
             {/* Nama Halaman Aktif */}
@@ -790,10 +791,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               />
               <span>
                 {mainTab === "input"
-                  ? "Input SS"
+                  ? TEXT_DASHBOARD.TABS.INPUT_SS
                   : mainTab === "analytics"
-                    ? "Dashboard"
-                    : "Daftar Unit"}
+                    ? TEXT_DASHBOARD.TABS.DASHBOARD
+                    : TEXT_DASHBOARD.TABS.UNIT_LIST}
               </span>
             </div>
 
@@ -827,7 +828,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                       ? "rgba(247, 85, 85, 0.25)"
                       : "rgba(245, 158, 11, 0.25)"),
                 }}
-                title="Buka antrean sinkronisasi"
+                title={TEXT_DASHBOARD.SYNC_QUEUE_TITLE}
               >
                 {queue.some(
                   (q) => q.status === "failed" || q.status === "conflict",
@@ -901,7 +902,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--danger-color, #ef4444)" }}>
             <AlertTriangle size={18} style={{ flexShrink: 0 }} />
-            <span>Sesi Google perlu diperbarui untuk sinkronisasi data.</span>
+            <span>{TEXT_AUTH.SESSION_NEED_REAUTH}</span>
           </div>
           <button
             onClick={() => reauthenticateSession().catch(() => {})}
@@ -917,7 +918,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               whiteSpace: "nowrap",
             }}
           >
-            Perbarui Sesi
+            {TEXT_AUTH.REFRESH_SESSION_BTN}
           </button>
         </div>
       )}
@@ -955,7 +956,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                   }}
                 >
                   <AlertTriangle size={18} />
-                  <span>Beberapa kolom tidak ditemukan di Sheet:</span>
+                  <span>{TEXT_DASHBOARD.MISSING_COLS_TITLE}</span>
                 </div>
                 <ul
                   style={{
@@ -1050,16 +1051,16 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         queue={queue}
         onRetry={(id) => {
           retryItem(id);
-          showInfoToast("Mencoba menyinkronkan kembali...");
+          showInfoToast(TEXT_DASHBOARD.QUEUE_RETRYING);
         }}
         onDelete={handleDeleteQueueItem}
         onResolveConflict={(id) => {
           resolveConflict(id);
-          showInfoToast("Menggunakan data dari server.");
+          showInfoToast(TEXT_DASHBOARD.QUEUE_USE_SERVER);
         }}
         onForceConflict={(id) => {
           forceConflictItem(id);
-          showWarningToast("Menimpa data server dengan data lokal...");
+          showWarningToast(TEXT_DASHBOARD.QUEUE_OVERWRITE_SERVER);
         }}
         onProcessQueue={processQueue}
       />
@@ -1142,7 +1143,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             }
           } catch (err: any) {
             setError(
-              formatUserError(err, "Gagal memuat data akumulasi."),
+              formatUserError(err, TEXT_DASHBOARD.ACCUMULATION_LOAD_FAIL),
             );
           } finally {
             setIsLoading(false);
@@ -1188,7 +1189,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onLogout={onLogout}
         onFormatWholeSheet={async () => {
           if (!currentSheetId || !currentTabName || !busData || !headerMap) {
-            throw new Error("Data spreadsheet belum dimuat.");
+            throw new Error(TEXT_DASHBOARD.SHEET_NOT_LOADED);
           }
           await formatWholeSheet(currentSheetId, currentTabName, busData, headerMap);
         }}

@@ -10,6 +10,7 @@ import {
 import { getFormattedDateBadge } from '../utils/analytics';
 import { flattenRoutes } from '../utils/routeHelpers';
 import type { Route } from '../types/supabase';
+import { TEXT_DASHBOARD, TEXT_COMMON } from '../constants/texts';
 
 const MONTH_NAMES_ID = [
   '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -126,7 +127,7 @@ function RouteSelectorCardComponent({
       const checkedId = validation.spreadsheetId!;
       setIsCheckingLink(true);
       setCheckStatus('checking');
-      setCheckMessage('Memeriksa akses Google Sheets...');
+      setCheckMessage(TEXT_DASHBOARD.ROUTE_SELECTOR.CHECKING_ACCESS);
 
       try {
         const result = await inspectSpreadsheetHeader(checkedId);
@@ -140,12 +141,12 @@ function RouteSelectorCardComponent({
           setCheckMessage(
             result.routeName
               ? `Terhubung: ${result.routeName}`
-              : 'Spreadsheet terhubung & siap digunakan',
+              : TEXT_DASHBOARD.ROUTE_SELECTOR.CONNECTED_READY,
           );
         } else {
           setCheckStatus('invalid');
           setCheckMessage(
-            result.message || 'Tidak dapat mengakses spreadsheet.',
+            result.message || TEXT_DASHBOARD.ROUTE_SELECTOR.CANNOT_ACCESS,
           );
           setDetectedRouteName(null);
         }
@@ -153,7 +154,7 @@ function RouteSelectorCardComponent({
         if (newRouteUrl !== checkedUrl) return;
         setIsCheckingLink(false);
         setCheckStatus('invalid');
-        setCheckMessage('Tidak dapat mengakses spreadsheet.');
+        setCheckMessage(TEXT_DASHBOARD.ROUTE_SELECTOR.CANNOT_ACCESS);
         setDetectedRouteName(null);
       }
     }, 600);
@@ -181,9 +182,9 @@ function RouteSelectorCardComponent({
     : null;
 
   const duplicateWarningMessage = duplicateRouteSheet
-    ? `Rute ${fullNewRouteCode} untuk periode ${MONTH_NAMES_ID[newMonth]} ${newYear} sudah terdaftar.`
+    ? TEXT_DASHBOARD.ROUTE_SELECTOR.DUPLICATE_ROUTE_WARNING(fullNewRouteCode, MONTH_NAMES_ID[newMonth], newYear)
     : duplicateSpreadsheetSheet && duplicateSpreadsheetSheet.routeCode !== fullNewRouteCode
-      ? `Spreadsheet ini sudah terdaftar untuk rute ${duplicateSpreadsheetSheet.routeCode} pada periode ${MONTH_NAMES_ID[newMonth]} ${newYear}.`
+      ? TEXT_DASHBOARD.ROUTE_SELECTOR.DUPLICATE_SHEET_WARNING(duplicateSpreadsheetSheet.routeCode, MONTH_NAMES_ID[newMonth], newYear)
       : null;
 
   // Load routes dari Supabase / cache lokal
@@ -348,7 +349,7 @@ function RouteSelectorCardComponent({
     ? `${loadedFlat.routeCode} (${MONTH_NAMES_ID[loadedFlat.sheet.month]} ${loadedFlat.sheet.year})`
     : selectedRouteCode && selectedMonth
       ? `${selectedRouteCode} (${MONTH_NAMES_ID[selectedMonth] || ''} ${selectedYear})`
-      : 'Pilih Rute & Periode';
+      : TEXT_DASHBOARD.ROUTE_SELECTOR.DEFAULT_SELECT_PERIOD;
 
   const resetForm = () => {
     setNewRouteCodeSuffix('');
@@ -381,7 +382,7 @@ function RouteSelectorCardComponent({
     }
 
     if (!newRouteCodeSuffix.trim()) {
-      setFormError('Nomor / kode rute wajib diisi (misal: 115, 76, 78A).');
+      setFormError(TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_CODE_REQUIRED);
       return;
     }
 
@@ -401,7 +402,7 @@ function RouteSelectorCardComponent({
     // BUG-49: Validasi tahun — input number bisa kosong (Number('') = 0)
     // atau di luar rentang wajar; min/max HTML hanya membatasi spinner.
     if (!Number.isInteger(newYear) || newYear < 2020 || newYear > 2099) {
-      setFormError('Tahun tidak valid. Isi tahun antara 2020 - 2099.');
+      setFormError(TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_INVALID);
       return;
     }
 
@@ -438,7 +439,7 @@ function RouteSelectorCardComponent({
       // effect terblokir oleh guard busData).
       onLoadData(isAccumulation ? undefined : defaultDay);
     } else {
-      setFormError(result.message || 'Gagal menyimpan rute.');
+      setFormError(result.message || TEXT_DASHBOARD.ROUTE_SELECTOR.SAVE_ROUTE_FAILED);
     }
   };
 
@@ -446,7 +447,7 @@ function RouteSelectorCardComponent({
     <div
       className={`morph-selector-card ${isMorphed ? 'morphed' : ''}`}
       onClick={isMorphed ? () => setIsMorphed(false) : undefined}
-      title={isMorphed ? 'Klik untuk membuka Form Pemilihan' : undefined}
+      title={isMorphed ? TEXT_DASHBOARD.ROUTE_SELECTOR.CLICK_TO_EXPAND : undefined}
     >
       {/* Morphed Compact Pill View Layer */}
       <div className={`morph-pill-content ${isMorphed ? 'visible' : 'hidden'}`}>
@@ -487,11 +488,11 @@ function RouteSelectorCardComponent({
             cursor: isDataLoaded ? 'pointer' : 'default',
             userSelect: 'none'
           }}
-          title={isDataLoaded ? 'Klik header ini untuk menciutkan form' : undefined}
+          title={isDataLoaded ? TEXT_DASHBOARD.ROUTE_SELECTOR.CLICK_TO_COLLAPSE : undefined}
         >
           <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <MapPin size={18} style={{ color: 'var(--accent-color)' }} />
-            Pilih Rute & Tanggal
+            {TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE}
           </span>
           {isDataLoaded && (
             <ChevronUp size={16} style={{ color: 'var(--text-secondary)', opacity: 0.8 }} />
@@ -501,7 +502,7 @@ function RouteSelectorCardComponent({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div className="input-group" style={{ marginBottom: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-              <label style={{ margin: 0 }}>Pilih Rute & Periode</label>
+              <label style={{ margin: 0 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_PERIOD_LABEL}</label>
               {!isAddingRoute && (
                 <button
                   type="button"
@@ -518,7 +519,7 @@ function RouteSelectorCardComponent({
                     gap: '4px'
                   }}
                 >
-                  <Plus size={14} /> Tambah Rute
+                  <Plus size={14} /> {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_BTN}
                 </button>
               )}
             </div>
@@ -542,7 +543,7 @@ function RouteSelectorCardComponent({
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span>⚡</span>
-                  <span>Mode Rekap Akumulasi Aktif</span>
+                  <span>{TEXT_DASHBOARD.ROUTE_SELECTOR.ACCUMULATION_ACTIVE_BANNER}</span>
                 </div>
                 <button
                   type="button"
@@ -568,7 +569,7 @@ function RouteSelectorCardComponent({
                     cursor: 'pointer',
                   }}
                 >
-                  Kembali ke Harian ✕
+                  {TEXT_DASHBOARD.ROUTE_SELECTOR.EXIT_ACCUMULATION_BTN}
                 </button>
               </div>
             )}
@@ -577,7 +578,7 @@ function RouteSelectorCardComponent({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
               {/* Kolom 1: Tahun (selalu enabled) */}
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tahun</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_LABEL}</label>
                 <select
                   className="input-field"
                   value={selectedYear ?? ''}
@@ -586,7 +587,7 @@ function RouteSelectorCardComponent({
                   title={availableYears.length === 0 ? 'Belum ada data rute' : 'Pilih tahun terlebih dahulu'}
                   style={{ width: '100%', padding: '8px' }}
                 >
-                  <option value="">-- Tahun --</option>
+                  <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_PLACEHOLDER}</option>
                   {availableYears.map((y) => (
                     <option key={y} value={y}>{y}</option>
                   ))}
@@ -595,7 +596,7 @@ function RouteSelectorCardComponent({
 
               {/* Kolom 2: Bulan (aktif setelah Tahun dipilih) */}
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Bulan</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_LABEL}</label>
                 <select
                   className="input-field"
                   value={selectedMonth ?? ''}
@@ -604,7 +605,7 @@ function RouteSelectorCardComponent({
                   title={!monthEnabled ? 'Pilih tahun terlebih dahulu' : 'Pilih bulan'}
                   style={{ width: '100%', padding: '8px', opacity: !monthEnabled ? 0.55 : 1 }}
                 >
-                  <option value="">-- Bulan --</option>
+                  <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_PLACEHOLDER}</option>
                   {availableMonths.map((m) => (
                     <option key={m} value={m}>{MONTH_NAMES_ID[m]}</option>
                   ))}
@@ -613,7 +614,7 @@ function RouteSelectorCardComponent({
 
               {/* Kolom 3: Rute (aktif setelah Bulan dipilih) */}
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Rute</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_LABEL}</label>
                 <select
                   className="input-field"
                   value={selectedRouteCode}
@@ -622,7 +623,7 @@ function RouteSelectorCardComponent({
                   title={!routeEnabled ? 'Pilih bulan terlebih dahulu' : 'Pilih rute'}
                   style={{ width: '100%', padding: '8px', opacity: !routeEnabled ? 0.55 : 1 }}
                 >
-                  <option value="">{routeEnabled && availableRouteCodes.length === 0 ? '-- Kosong --' : '-- Rute --'}</option>
+                  <option value="">{routeEnabled && availableRouteCodes.length === 0 ? TEXT_DASHBOARD.ROUTE_SELECTOR.EMPTY_ROUTE : TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_PLACEHOLDER}</option>
                   {availableRouteCodes.map((code) => (
                     <option key={code} value={code}>{code}</option>
                   ))}
@@ -631,7 +632,7 @@ function RouteSelectorCardComponent({
 
               {/* Kolom 4: Tanggal (aktif setelah Rute dipilih; bisa memilih tanggal untuk keluar dari mode AKUMULASI) */}
               <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Tanggal</label>
+                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_LABEL}</label>
                 <select
                   className="input-field"
                   value={selectedTab}
@@ -641,9 +642,9 @@ function RouteSelectorCardComponent({
                   style={{ width: '100%', padding: '8px', opacity: !dateEnabled ? 0.55 : 1 }}
                 >
                   {isAccumulation && (
-                    <option value="AKUMULASI">⚡ Rekap Akumulasi</option>
+                    <option value="AKUMULASI">{TEXT_DASHBOARD.ROUTE_SELECTOR.ACCUMULATION_OPTION}</option>
                   )}
-                  <option value="" disabled={isAccumulation}>-- Pilih Tanggal --</option>
+                  <option value="" disabled={isAccumulation}>{TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_PLACEHOLDER}</option>
                   {days.map(day => (
                     <option key={day} value={day}>Tgl {day}</option>
                   ))}
@@ -653,7 +654,7 @@ function RouteSelectorCardComponent({
 
             {!getSheetForSelection(selectedRouteCode) && selectedRouteCode && selectedMonth && selectedYear ? (
               <div style={{ fontSize: '12px', color: 'var(--warning-color)', marginBottom: '8px' }}>
-                ⚠️ Belum ada sheet untuk rute {selectedRouteCode} periode {MONTH_NAMES_ID[selectedMonth]} {selectedYear}. Klik <b>+ Tambah Rute</b> untuk mendaftarkannya.
+                {TEXT_DASHBOARD.ROUTE_SELECTOR.NO_ROUTE_SHEET_WARNING(selectedRouteCode, MONTH_NAMES_ID[selectedMonth], selectedYear)}
               </div>
             ) : null}
 
@@ -661,7 +662,7 @@ function RouteSelectorCardComponent({
             {isAddingRoute && (
               <div style={{ background: 'var(--input-bg)', padding: '12px', borderRadius: '12px', border: '1px solid var(--card-border)', marginTop: '8px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 700 }}>Tambah Rute Baru</span>
+                  <span style={{ fontSize: '12px', fontWeight: 700 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_NEW_ROUTE}</span>
                   <button type="button" onClick={resetForm} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
                     <X size={16} />
                   </button>
@@ -697,7 +698,7 @@ function RouteSelectorCardComponent({
                     <input
                       type="text"
                       className="input-field"
-                      placeholder="Kode rute (misal: 115, 76, 78A)"
+                      placeholder={TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_INPUT_PLACEHOLDER}
                       value={newRouteCodeSuffix}
                       onChange={(e) => handleRouteCodeSuffixInput(e.target.value)}
                       style={{
@@ -728,7 +729,7 @@ function RouteSelectorCardComponent({
                   <input
                     type="number"
                     className="input-field"
-                    placeholder="Tahun"
+                    placeholder={TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_INPUT_PLACEHOLDER}
                     value={newYear}
                     onChange={(e) => {
                       const parsed = parseInt(e.target.value, 10);
@@ -743,7 +744,7 @@ function RouteSelectorCardComponent({
                 <input
                   type="text"
                   className="input-field"
-                  placeholder="Link Google Sheets..."
+                  placeholder={TEXT_DASHBOARD.ROUTE_SELECTOR.SHEET_URL_PLACEHOLDER}
                   value={newRouteUrl}
                   onChange={(e) => setNewRouteUrl(e.target.value)}
                   style={{ marginBottom: checkStatus !== 'idle' ? '4px' : '8px' }}
@@ -775,7 +776,7 @@ function RouteSelectorCardComponent({
                 {checkStatus === 'checking' && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-color)', marginBottom: '8px' }}>
                     <Loader2 className="spinner" size={13} />
-                    <span>{checkMessage || 'Memeriksa akses Google Sheets...'}</span>
+                    <span>{checkMessage || TEXT_DASHBOARD.ROUTE_SELECTOR.CHECKING_ACCESS}</span>
                   </div>
                 )}
                 {checkStatus === 'valid' && (
@@ -804,7 +805,7 @@ function RouteSelectorCardComponent({
                   disabled={isSaving || isCheckingLink || Boolean(duplicateWarningMessage)}
                 >
                   {isSaving ? <Loader2 className="spinner" size={18} /> : null}
-                  {isSaving ? 'Menyimpan...' : 'Simpan Rute'}
+                  {isSaving ? TEXT_DASHBOARD.ROUTE_SELECTOR.SAVING_ROUTE : TEXT_DASHBOARD.ROUTE_SELECTOR.SAVE_ROUTE_BTN}
                 </button>
               </div>
             )}
@@ -816,7 +817,7 @@ function RouteSelectorCardComponent({
             onClick={() => onLoadData(selectedTab, sheetUrl)}
             disabled={isLoading || isAddingRoute || !sheetUrl}
           >
-            {isLoading ? <Loader2 className="spinner" size={20} /> : 'Load Data Unit'}
+            {isLoading ? <Loader2 className="spinner" size={20} /> : TEXT_DASHBOARD.ROUTE_SELECTOR.LOAD_DATA_BTN}
           </button>
         </div>
       </div>

@@ -27,6 +27,7 @@ import {
 import { formatUserError } from "../utils/errorFormatter";
 import { getStoredUserRole } from "../utils/roleStorage";
 import { RoleBadge } from "./RoleBadge";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   isOpen: boolean;
@@ -72,8 +73,8 @@ export function ProfileMenuSheet({
     avatar_url?: string;
     role?: 'superadmin' | 'admin' | 'petugas';
   }>({
-    full_name: localStorage.getItem("PDO_USER_NAME") || "Petugas Operasional",
-    email: localStorage.getItem("PDO_USER_EMAIL") || "pdo.utara@transjakarta.co.id",
+    full_name: localStorage.getItem("PDO_USER_NAME") || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
+    email: localStorage.getItem("PDO_USER_EMAIL") || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
     avatar_url: localStorage.getItem("PDO_USER_AVATAR") || undefined,
     role: getStoredUserRole(),
   });
@@ -102,8 +103,8 @@ export function ProfileMenuSheet({
 
     if (cachedEmail || cachedName) {
       setUserProfile({
-        full_name: cachedName || "Petugas Operasional",
-        email: cachedEmail || "pdo.utara@transjakarta.co.id",
+        full_name: cachedName || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
+        email: cachedEmail || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
         avatar_url: cachedAvatar || undefined,
         role: getStoredUserRole(),
       });
@@ -250,7 +251,7 @@ export function ProfileMenuSheet({
   const handleFormatSpreadsheetClick = async () => {
     if (!onFormatWholeSheet) return;
     if (!hasActiveData) {
-      showWarningToast("Pilih rute dan tanggal terlebih dahulu.");
+      showWarningToast(TEXT_DASHBOARD.PROFILE_MENU.SELECT_ROUTE_DATE_FIRST);
       return;
     }
 
@@ -261,16 +262,16 @@ export function ProfileMenuSheet({
     try {
       setIsFormatting(true);
       showToast({
-        title: "Sedang merapikan spreadsheet...",
+        title: TEXT_DASHBOARD.PROFILE_MENU.FORMATTING_PROGRESS,
         icon: "info",
         timer: 2500,
       });
       await onFormatWholeSheet();
-      showSuccessToast("Spreadsheet berhasil dirapikan & diformat!");
+      showSuccessToast(TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SUCCESS);
     } catch (err: any) {
       showErrorAlert(
-        formatUserError(err, "Gagal menerapkan format spreadsheet.") ||
-          "Gagal menerapkan format spreadsheet.",
+        formatUserError(err, TEXT_DASHBOARD.PROFILE_MENU.FORMAT_FAILED) ||
+          TEXT_DASHBOARD.PROFILE_MENU.FORMAT_FAILED,
       );
     } finally {
       setIsFormatting(false);
@@ -447,7 +448,7 @@ export function ProfileMenuSheet({
               color: "var(--text-secondary)",
               padding: "6px",
             }}
-            title="Tutup Menu"
+            title={TEXT_DASHBOARD.PROFILE_MENU.TITLE}
           >
             <X size={20} />
           </button>
@@ -468,7 +469,7 @@ export function ProfileMenuSheet({
                 paddingLeft: "4px",
               }}
             >
-              ADMINISTRASI SISTEM
+              {TEXT_DASHBOARD.PROFILE_MENU.ADMIN_SECTION}
             </span>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {/* Kelola Pengguna */}
@@ -495,7 +496,7 @@ export function ProfileMenuSheet({
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <Users size={18} style={{ color: "#3b82f6" }} />
                   <div style={{ textAlign: "left" }}>
-                    <div>Kelola Pengguna</div>
+                    <div>{TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT}</div>
                     <div
                       style={{
                         fontSize: "11px",
@@ -503,7 +504,7 @@ export function ProfileMenuSheet({
                         marginTop: "1px",
                       }}
                     >
-                      Atur akun, peran (role), & status aktif
+                      {TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT_DESC}
                     </div>
                   </div>
                 </div>
@@ -530,12 +531,12 @@ export function ProfileMenuSheet({
                   cursor: "not-allowed",
                   opacity: 0.65,
                 }}
-                title="Fitur sedang dalam penyesuaian (Coming Soon)"
+                title={TEXT_DASHBOARD.PROFILE_MENU.COMING_SOON_TITLE}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <History size={18} style={{ color: "var(--text-secondary)" }} />
                   <div style={{ textAlign: "left" }}>
-                    <div>Log Aktivitas & Audit</div>
+                    <div>{TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG}</div>
                     <div
                       style={{
                         fontSize: "11px",
@@ -543,7 +544,7 @@ export function ProfileMenuSheet({
                         marginTop: "1px",
                       }}
                     >
-                      Riwayat tindakan dan input operasional
+                      {TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG_DESC}
                     </div>
                   </div>
                 </div>
@@ -561,7 +562,7 @@ export function ProfileMenuSheet({
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Coming Soon
+                  {TEXT_DASHBOARD.PROFILE_MENU.COMING_SOON}
                 </span>
               </button>
             </div>
@@ -582,7 +583,7 @@ export function ProfileMenuSheet({
               paddingLeft: "4px",
             }}
           >
-            FITUR & UTILITAS
+            {TEXT_DASHBOARD.PROFILE_MENU.FEATURES_SECTION}
           </span>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             {/* Monitoring Wilayah & Laporan WA */}
@@ -611,7 +612,7 @@ export function ProfileMenuSheet({
               >
                 <Globe size={18} style={{ color: "var(--accent-color)" }} />
                 <div style={{ textAlign: "left" }}>
-                  <div>Monitoring Wilayah & Laporan WA</div>
+                  <div>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</div>
                   <div
                     style={{
                       fontSize: "11px",
@@ -619,7 +620,7 @@ export function ProfileMenuSheet({
                       marginTop: "1px",
                     }}
                   >
-                    Rekap 18 rute & generator pesan WA
+                    {TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING_DESC}
                   </div>
                 </div>
               </div>
@@ -654,7 +655,7 @@ export function ProfileMenuSheet({
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
                 <Layers size={18} style={{ color: "var(--accent-color)" }} />
-                <span>Rekap Akumulasi Lintas Periode</span>
+                <span>{TEXT_DASHBOARD.PROFILE_MENU.CROSS_PERIOD}</span>
               </div>
               <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
             </button>
@@ -684,7 +685,7 @@ export function ProfileMenuSheet({
               >
                 <Sparkles size={18} style={{ color: "var(--accent-color)" }} />
                 <div style={{ textAlign: "left" }}>
-                  <div>Rapikan & Format Spreadsheet</div>
+                  <div>{TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET}</div>
                   <div
                     style={{
                       fontSize: "11px",
@@ -692,7 +693,7 @@ export function ProfileMenuSheet({
                       marginTop: "1px",
                     }}
                   >
-                    Terapkan perataan & warna baris ke Google Sheets
+                    {TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET_DESC}
                   </div>
                 </div>
               </div>
@@ -725,7 +726,7 @@ export function ProfileMenuSheet({
                 ) : (
                   <Moon size={18} style={{ color: "var(--accent-color)" }} />
                 )}
-                <span>Mode Tampilan</span>
+                <span>{TEXT_DASHBOARD.PROFILE_MENU.THEME_MODE}</span>
               </div>
               <span
                 style={{
@@ -738,7 +739,7 @@ export function ProfileMenuSheet({
                   border: "1px solid var(--card-border)",
                 }}
               >
-                {isDarkMode ? "Dark Mode" : "Light Mode"}
+                {isDarkMode ? TEXT_DASHBOARD.PROFILE_MENU.DARK_MODE : TEXT_DASHBOARD.PROFILE_MENU.LIGHT_MODE}
               </span>
             </button>
 
@@ -762,7 +763,7 @@ export function ProfileMenuSheet({
                   style={{ display: "flex", alignItems: "center", gap: "10px" }}
                 >
                   <CloudOff size={18} />
-                  <span>{!isOnline ? "Mode Offline" : "Antrean Sync"}</span>
+                  <span>{!isOnline ? TEXT_DASHBOARD.PROFILE_MENU.OFFLINE_MODE : TEXT_DASHBOARD.PROFILE_MENU.SYNC_QUEUE}</span>
                 </div>
                 {offlineQueueCount > 0 && (
                   <span
@@ -775,7 +776,7 @@ export function ProfileMenuSheet({
                       fontWeight: 700,
                     }}
                   >
-                    {offlineQueueCount} terpending
+                    {offlineQueueCount} {TEXT_DASHBOARD.PROFILE_MENU.PENDING_SUFFIX}
                   </span>
                 )}
               </div>
@@ -786,7 +787,7 @@ export function ProfileMenuSheet({
         {/* Catatan Transparansi Aktivitas */}
         <div style={{ textAlign: "center", padding: "0 8px 2px 8px" }}>
           <p style={{ fontSize: "11px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.4, opacity: 0.8 }}>
-            ⏱️ Waktu aktif sesi tercatat otomatis untuk pemantauan operasional.
+            {TEXT_DASHBOARD.PROFILE_MENU.SESSION_NOTE}
           </p>
         </div>
 
@@ -819,7 +820,7 @@ export function ProfileMenuSheet({
             }}
           >
             <LogOut size={18} />
-            <span>Keluar Akun (Logout)</span>
+            <span>{TEXT_DASHBOARD.PROFILE_MENU.LOGOUT_BTN}</span>
           </button>
         </div>
       </div>
