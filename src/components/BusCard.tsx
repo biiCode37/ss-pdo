@@ -471,11 +471,47 @@ function BusCardComponent({
     );
   };
 
+  // Visual Hierarchy: Left-border status accent stripe (Fase 1 UI Refactor)
+  const ketLower = (formData.keterangan || bus.keterangan || "").toLowerCase();
+  const hasKendala =
+    ketLower.includes("laka") ||
+    ketLower.includes("mogok") ||
+    ketLower.includes("rusak") ||
+    ketLower.includes("batal");
+
+  const cardPergiVal = formData.tripPergi ?? bus.tripPergi;
+  const cardPulangVal = formData.tripPulang ?? bus.tripPulang;
+  const cardPergiNum = parseIndonesianNumber(cardPergiVal, 0);
+  const cardPulangNum = parseIndonesianNumber(cardPulangVal, 0);
+  const cardTargetP = targetTrip ? targetTrip.pergi : 0;
+  const cardTargetQ = targetTrip ? targetTrip.pulang : 0;
+  const cardHasTarget = cardTargetP > 0 && cardTargetQ > 0;
+  const cardHasTrip = Boolean(cardPergiVal || cardPulangVal);
+
+  const cardIsBelowTarget =
+    cardHasTarget && cardHasTrip && (cardPergiNum < cardTargetP || cardPulangNum < cardTargetQ);
+  const cardIsTargetAchieved =
+    cardHasTarget && cardHasTrip && cardPergiNum >= cardTargetP && cardPulangNum >= cardTargetQ;
+
+  const hasWarning =
+    !hasKendala &&
+    (ketLower.includes("cadangan") ||
+      ketLower.includes("bko") ||
+      cardIsBelowTarget);
+
+  const statusClass = hasKendala
+    ? "status-kendala"
+    : hasWarning
+    ? "status-warning"
+    : cardIsTargetAchieved
+    ? "status-achieved"
+    : "";
+
   return (
     <div
       id={`bus-card-${slugifyUnitId(bus.unit)}`}
       data-bus-row={bus.rowIndex}
-      className="bus-card glass"
+      className={`bus-card glass ${statusClass}`.trim()}
       onClick={() => handleOpenModal()}
       style={{
         cursor: tabName === "AKUMULASI" ? "default" : "pointer",

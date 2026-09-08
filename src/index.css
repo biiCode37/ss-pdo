@@ -114,6 +114,22 @@ body {
   overscroll-behavior-y: none;
 }
 
+/* Numeric Tabular Numbers Utility (Eliminates Digit Jitter across all Metric Readouts) */
+.tabular-nums,
+.analytics-stat-value,
+.bus-card-cell,
+.bus-card-badge-trip,
+.bus-card-unit,
+.unit-kpi-val,
+.shift-stat-val,
+.kpi-number,
+input[type="number"] {
+  font-variant-numeric: tabular-nums;
+  -moz-font-feature-settings: "tnum";
+  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: "tnum";
+}
+
 /* Card Surface Utilities */
 .glass {
   background: var(--card-bg);
@@ -205,11 +221,26 @@ body {
   border-color: var(--accent-color);
 }
 
-/* Interactive Bus Card Trip Badge */
+/* Interactive Bus Card Trip Badge (Ergonomic Touch Target >= 44px) */
 .bus-card-badge-trip {
+  position: relative;
   outline: none;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  font-variant-numeric: tabular-nums;
+  -moz-font-feature-settings: "tnum";
+  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: "tnum";
+}
+.bus-card-badge-trip::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  left: -8px;
+  right: -8px;
+  min-height: 44px;
+  z-index: 1;
 }
 .bus-card-badge-trip:hover {
   filter: brightness(1.08);
@@ -325,11 +356,21 @@ select.input-field {
 }
 .bus-card {
   overflow: hidden;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  border-left: 3.5px solid transparent;
+  transition: transform 0.18s var(--ease-spring), box-shadow 0.18s var(--ease-spring), border-color 0.18s var(--ease-spring);
 }
 .bus-card:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.bus-card.status-kendala {
+  border-left-color: var(--danger-color, #ef4444) !important;
+}
+.bus-card.status-warning {
+  border-left-color: var(--warning-color, #f59e0b) !important;
+}
+.bus-card.status-achieved {
+  border-left-color: var(--success-color, #3ECF8E) !important;
 }
 .bus-card-header {
   padding: 16px 20px;
@@ -465,7 +506,7 @@ select.input-field {
   box-shadow: 0 4px 10px rgba(62, 207, 142, 0.3);
 }
 
-/* Bottom Navigation Bar (Solid Non-Transparent Floating Dock) */
+/* Bottom Navigation Bar (Expanding Pill Solid Floating Dock) */
 .bottom-nav-wrapper {
   position: fixed;
   bottom: 14px;
@@ -483,13 +524,12 @@ select.input-field {
   position: relative;
   pointer-events: auto;
   touch-action: manipulation;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-around;
-  gap: 2px;
-  width: 100%;
-  max-width: 270px;
-  padding: 4px;
+  justify-content: center;
+  gap: 4px;
+  max-width: fit-content;
+  padding: 4px 6px;
 
   /* Supabase Surface-100 Dark Background */
   background: #171717;
@@ -502,7 +542,7 @@ select.input-field {
     0 4px 12px -2px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
-  transition: transform 0.12s ease;
+  transition: all 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 /* Solid Light Mode Background Override */
@@ -516,57 +556,22 @@ body.light-mode .bottom-nav {
     inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
 }
 
-/* Apple iOS Style Sliding Active Indicator Pill (4 Tabs Icon-Only) */
-.bottom-nav-indicator {
-  position: absolute;
-  top: 4px;
-  bottom: 4px;
-  width: calc(25% - 2px);
-  border-radius: 9999px;
-  background: linear-gradient(135deg, #3ECF8E 0%, #00C573 100%);
-  box-shadow:
-    0 4px 14px rgba(62, 207, 142, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.bottom-nav-indicator.pos-input {
-  transform: translateX(0);
-  left: 4px;
-}
-
-.bottom-nav-indicator.pos-analytics {
-  transform: translateX(calc(100% - 1px));
-  left: 4px;
-}
-
-.bottom-nav-indicator.pos-units {
-  transform: translateX(calc(200% - 2px));
-  left: 4px;
-}
-
-.bottom-nav-indicator.pos-more {
-  transform: translateX(calc(300% - 3px));
-  left: 4px;
-}
-
+/* Tab Items (Ergonomic Minimum Tap Target 44px) */
 .bottom-nav-item {
   position: relative;
-  z-index: 2;
-  flex: 1;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 0;
+  min-height: 42px;
+  min-width: 44px;
+  padding: 8px 12px;
   border-radius: 9999px;
   background: transparent;
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
   touch-action: manipulation;
-  transition: color 0.1s ease, transform 0.1s ease;
+  transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -576,12 +581,25 @@ body.light-mode .bottom-nav {
 }
 
 .bottom-nav-item:active {
-  transform: scale(0.92);
+  transform: scale(0.94);
 }
 
-/* High-Contrast Active Tab Icon */
+/* Expanding Pill Active Tab */
 .bottom-nav-item.active {
+  background: linear-gradient(135deg, #3ECF8E 0%, #00C573 100%);
   color: #061a10 !important;
+  padding: 8px 16px;
+  box-shadow:
+    0 4px 14px rgba(62, 207, 142, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="light"] .bottom-nav-item.active {
+  background: linear-gradient(135deg, #24B47E 0%, #10b981 100%);
+  color: #ffffff !important;
+  box-shadow:
+    0 4px 12px rgba(36, 180, 126, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .bottom-nav-icon-wrapper {
@@ -589,11 +607,38 @@ body.light-mode .bottom-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.12s ease;
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .bottom-nav-item.active .bottom-nav-icon-wrapper {
-  transform: scale(1.08);
+  transform: scale(1.05);
+}
+
+/* Expanding Label Text */
+.bottom-nav-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transform: translateX(-4px);
+  pointer-events: none;
+  transition: max-width 0.25s cubic-bezier(0.32, 0.72, 0, 1),
+              opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1),
+              transform 0.25s cubic-bezier(0.32, 0.72, 0, 1),
+              margin 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bottom-nav-item.active .bottom-nav-label {
+  max-width: 90px;
+  opacity: 1;
+  transform: translateX(0);
+  margin-left: 6px;
+  pointer-events: auto;
 }
 
 .bottom-nav-badge {
@@ -612,6 +657,7 @@ body.light-mode .bottom-nav {
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 6px rgba(245, 158, 11, 0.5);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Analytics Dashboard Layout */

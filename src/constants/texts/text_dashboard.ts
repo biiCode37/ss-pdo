@@ -7,10 +7,14 @@ export const TEXT_DASHBOARD = {
   NAV_MAIN: 'Navigasi Utama',
   TABS: {
     INPUT_SS: 'Input SS',
+    INPUT_SHORT: 'Input',
     DASHBOARD: 'Dashboard',
+    DASHBOARD_SHORT: 'Ringkasan',
     UNIT_LIST: 'Daftar Unit',
+    UNIT_SHORT: 'Armada',
     ACCUMULATION: 'Akumulasi',
     MORE: 'Lainnya',
+    MORE_SHORT: 'Menu',
   },
   SWITCHER: {
     REGIONAL_MONITORING: 'Wilayah',

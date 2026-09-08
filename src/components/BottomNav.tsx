@@ -21,34 +21,26 @@ function BottomNavComponent({
     }
   };
 
-  const getIndicatorPosClass = () => {
-    if (activeTab === "input") return "pos-input";
-    if (activeTab === "analytics") return "pos-analytics";
-    return "pos-units";
-  };
-
   return (
     <div className="bottom-nav-wrapper">
       <nav className="bottom-nav" aria-label={TEXT_DASHBOARD.NAV_MAIN}>
-        {/* Apple iOS Style Sliding Active Indicator Pill */}
-        <div
-          className={`bottom-nav-indicator ${getIndicatorPosClass()}`}
-          aria-hidden="true"
-        />
-
         <button
           type="button"
           onClick={() => handleTabClick("input")}
           className={`bottom-nav-item ${activeTab === "input" ? "active" : ""}`}
           title={TEXT_DASHBOARD.TABS.INPUT_SS}
           aria-label={TEXT_DASHBOARD.TABS.INPUT_SS}
+          data-testid="bottom-nav-input"
         >
           <div className="bottom-nav-icon-wrapper">
-            <ClipboardList size={20} />
+            <ClipboardList size={19} />
             {pendingQueueCount > 0 && (
               <span className="bottom-nav-badge">{pendingQueueCount}</span>
             )}
           </div>
+          <span className="bottom-nav-label">
+            {TEXT_DASHBOARD.TABS.INPUT_SHORT}
+          </span>
         </button>
 
         <button
@@ -57,10 +49,14 @@ function BottomNavComponent({
           className={`bottom-nav-item ${activeTab === "analytics" ? "active" : ""}`}
           title={TEXT_DASHBOARD.TABS.DASHBOARD}
           aria-label={TEXT_DASHBOARD.TABS.DASHBOARD}
+          data-testid="bottom-nav-analytics"
         >
           <div className="bottom-nav-icon-wrapper">
-            <BarChart3 size={20} />
+            <BarChart3 size={19} />
           </div>
+          <span className="bottom-nav-label">
+            {TEXT_DASHBOARD.TABS.DASHBOARD_SHORT}
+          </span>
         </button>
 
         <button
@@ -69,10 +65,14 @@ function BottomNavComponent({
           className={`bottom-nav-item ${activeTab === "units" ? "active" : ""}`}
           title={TEXT_DASHBOARD.TABS.UNIT_LIST}
           aria-label={TEXT_DASHBOARD.TABS.UNIT_LIST}
+          data-testid="bottom-nav-units"
         >
           <div className="bottom-nav-icon-wrapper">
-            <Bus size={20} />
+            <Bus size={19} />
           </div>
+          <span className="bottom-nav-label">
+            {TEXT_DASHBOARD.TABS.UNIT_SHORT}
+          </span>
         </button>
 
         <button
@@ -81,10 +81,14 @@ function BottomNavComponent({
           className="bottom-nav-item"
           title={TEXT_DASHBOARD.TABS.MORE}
           aria-label={TEXT_DASHBOARD.TABS.MORE}
+          data-testid="bottom-nav-more"
         >
           <div className="bottom-nav-icon-wrapper">
-            <MoreHorizontal size={20} />
+            <MoreHorizontal size={19} />
           </div>
+          <span className="bottom-nav-label">
+            {TEXT_DASHBOARD.TABS.MORE_SHORT}
+          </span>
         </button>
       </nav>
     </div>
@@ -92,4 +96,3 @@ function BottomNavComponent({
 }
 
 export const BottomNav = memo(BottomNavComponent);
-
