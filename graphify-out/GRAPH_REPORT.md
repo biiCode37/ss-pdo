@@ -1,23 +1,23 @@
 # Graph Report - SS_PDO  (2026-09-08)
 
 ## Corpus Check
-- 291 files · ~319,211 words
+- 293 files · ~320,541 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2524 nodes · 3484 edges · 214 communities (188 shown, 26 thin omitted)
+- 2544 nodes · 3502 edges · 216 communities (190 shown, 26 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 20 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `70c43ef4`
+- Built from commit: `38dff65a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - server.cjs
 - design_system.py
-- routes.ts
+- RouteSelectorCard.tsx
 - Test-Driven Development (TDD)
 - plugins
 - compilerOptions
@@ -133,12 +133,12 @@
 - Design Document — User Activity & Audit Telemetry System
 - Keputusan Arsitektur & Teknikal
 - compilerOptions
-- BusCard.tsx
 - react
+- App.tsx
 - task-1-brief.md
 - REPAIR REPORT: VISIBILITAS & AKSES CEPAT EDIT TRIP PER UNIT (REFACTOR 13)
+- AuditLogPage.tsx
 - AllRouteMonitoringPage.tsx
-- WaReportModal.tsx
 - Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)
 - Global Constraints
 - Appendix B - Canonical Sources (read these before reinventing)
@@ -225,8 +225,10 @@
 - task-3-brief.md
 - task-4-brief.md
 - task-5-brief.md
-- ProfileMenuSheet.tsx
+- UserManagementPage.tsx
 - 7. DIAL DEFINITIONS (Technical Reference)
+- 2. Before vs After
+- RINCIAN TEMUAN
 
 ## God Nodes (most connected - your core abstractions)
 1. `react` - 39 edges
@@ -243,19 +245,19 @@
 ## Surprising Connections (you probably didn't know these)
 - `UseOfflineSyncOptions` --references--> `BusData`  [EXTRACTED]
   src/hooks/useOfflineSync.ts → src/services/googleSheets/types.ts
-- `App()` --calls--> `checkSignedInAsync()`  [EXTRACTED]
-  src/App.tsx → src/services/googleSheets/auth.ts
-- `App()` --calls--> `hasGoogleCreds()`  [EXTRACTED]
-  src/App.tsx → src/services/googleSheets/auth.ts
-- `App()` --calls--> `initGoogleApi()`  [EXTRACTED]
-  src/App.tsx → src/services/googleSheets/auth.ts
-- `App()` --calls--> `verifyUserProfile()`  [EXTRACTED]
-  src/App.tsx → src/services/routes/users.ts
+- `BulkTripModalOptions` --references--> `HeaderMap`  [EXTRACTED]
+  src/utils/alertUtils.ts → src/services/googleSheets/types.ts
+- `App()` --calls--> `showErrorAlert()`  [EXTRACTED]
+  src/App.tsx → src/utils/alertUtils.ts
+- `App()` --calls--> `checkAndMigrateCache()`  [EXTRACTED]
+  src/App.tsx → src/utils/cacheUtils.ts
+- `App()` --calls--> `initHistoryNavigation()`  [EXTRACTED]
+  src/App.tsx → src/utils/historyNavigation.ts
 
 ## Import Cycles
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 
-## Communities (214 total, 26 thin omitted)
+## Communities (216 total, 26 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -265,9 +267,9 @@ Nodes (55): bootstrapPage(), brandMarkup(), broadcast(), browserLauncherForPlatf
 Cohesion: 0.05
 Nodes (42): BM25, detect_domain(), _load_csv(), Lowercase, split, remove punctuation, filter short words, Build BM25 index from documents, Score all documents against query, Load CSV and return list of dicts, Core search function using BM25 (+34 more)
 
-### Community 2 - "routes.ts"
-Cohesion: 0.05
-Nodes (76): AccumulationSheet(), MONTH_NAMES_ID, Props, ActivityDetail, actorName(), actorNameWithEmail(), AuditLogPage(), AuditLogPageProps (+68 more)
+### Community 2 - "RouteSelectorCard.tsx"
+Cohesion: 0.12
+Nodes (31): AccumulationSheet(), MONTH_NAMES_ID, Props, Dashboard(), MONTH_NAMES_ID, Props, RouteSelectorCard, RouteSelectorCardComponent() (+23 more)
 
 ### Community 3 - "Test-Driven Development (TDD)"
 Cohesion: 0.05
@@ -282,8 +284,8 @@ Cohesion: 0.08
 Nodes (24): DOM, src, vite/client, compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, erasableSyntaxOnly, jsx (+16 more)
 
 ### Community 6 - "texts/index.ts"
-Cohesion: 0.12
-Nodes (12): BottomNav, BottomNavProps, Props, RouteOperationalReportCard, RouteOperationalReportCardComponent(), TEXT_ALERTS, TEXT_AUTH, TEXT_COMMON (+4 more)
+Cohesion: 0.10
+Nodes (15): BottomNav, BottomNavProps, Props, RouteOperationalReportCard, RouteOperationalReportCardComponent(), TEXT_ALERTS, TEXT_AUTH, TEXT_COMMON (+7 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.10
@@ -307,7 +309,7 @@ Nodes (4): command_has_server_id(), is_brainstorm_server(), mark_stopped(), stop
 
 ### Community 13 - "Dashboard.tsx"
 Cohesion: 0.16
-Nodes (12): Props, UserManagementPage, BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBox(), SkeletonBoxProps, UnitCardSkeleton(), UserManagementSkeleton() (+4 more)
+Nodes (13): AnalyticsDashboard, Props, UserManagementPage, QueueModal(), BusCardSkeleton(), DailyToaTrendSkeleton(), SkeletonBox(), SkeletonBoxProps (+5 more)
 
 ### Community 21 - "Subagent-Driven Development"
 Cohesion: 0.07
@@ -662,8 +664,8 @@ Cohesion: 0.10
 Nodes (20): 1. Race Condition & Manajemen State, 2. Logika & Penanganan Error, 3. Keamanan & Integritas Data, 4. Kesesuaian Tipe Data (TypeScript), 5. Kebocoran Memori & Siklus Hidup Komponen, BUG-04: Timeout GIS Pop-up Dipercepat Menjadi 20 Detik, BUG-05: Efisiensi Effect Pemasangan Opsi Antrean, BUG-09 & BUG-10: Pembersihan Atribut Tidak Sah pada `addToQueue` (+12 more)
 
 ### Community 116 - "core.ts"
-Cohesion: 0.08
-Nodes (56): TestHookComponent(), detectCollision(), readQueueFromStorage(), useOfflineSync(), UseOfflineSyncOptions, writeQueueToStorage(), getAccumulatedBusData(), getMonthlyToaTrend() (+48 more)
+Cohesion: 0.10
+Nodes (48): TestHookComponent(), detectCollision(), readQueueFromStorage(), useOfflineSync(), UseOfflineSyncOptions, writeQueueToStorage(), getAccumulatedBusData(), getMonthlyToaTrend() (+40 more)
 
 ### Community 117 - "Design Document — User Activity & Audit Telemetry System"
 Cohesion: 0.17
@@ -677,25 +679,25 @@ Nodes (10): 1. Multi-Role RBAC & Row-Level Security (RLS), 2. Kebijakan Soft-Del
 Cohesion: 0.29
 Nodes (6): compilerOptions, allowJs, lib, imports, @supabase/functions-js/edge-runtime.d.ts, deno.window
 
-### Community 120 - "BusCard.tsx"
-Cohesion: 0.06
-Nodes (72): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, BusCardComponent(), CompletionStatusCard, Props, DailyToaTrendCard, DailyToaTrendCardComponent() (+64 more)
+### Community 120 - "react"
+Cohesion: 0.05
+Nodes (83): react, AnalyticsDashboardComponent(), Props, BusCard, BusCardComponent(), Props, BusList, BusListComponent() (+75 more)
 
-### Community 121 - "react"
-Cohesion: 0.20
-Nodes (14): react, App(), LegalModals(), LegalModalsProps, LegalModalType, LoginScreen(), Props, TestComponent() (+6 more)
+### Community 121 - "App.tsx"
+Cohesion: 0.13
+Nodes (25): App(), LegalModals(), LegalModalsProps, LegalModalType, LoginScreen(), Props, TestComponent(), useUserActivityTracking() (+17 more)
 
 ### Community 123 - "REPAIR REPORT: VISIBILITAS & AKSES CEPAT EDIT TRIP PER UNIT (REFACTOR 13)"
 Cohesion: 0.13
 Nodes (14): 1. Ringkasan Implementasi Perbaikan, 1. `src/components/BusCard.tsx`, 2. Before vs After, 2. `src/utils/modals/busInputModal.ts`, 3. Case: Skenario Lapangan, 4. Status Quality Gates, A. Alur Kerja Petugas Lapangan saat Ada Unit Bermasalah (Mogok / Laka / Pangkas Rute), After: (+6 more)
 
-### Community 124 - "AllRouteMonitoringPage.tsx"
-Cohesion: 0.21
-Nodes (9): AllRouteMonitoringPage, formatDecimal(), formatNumber(), Props, RouteCardItem(), RouteCardItemProps, SUPERVISOR_TABS, mockData (+1 more)
+### Community 124 - "AuditLogPage.tsx"
+Cohesion: 0.22
+Nodes (13): ActivityDetail, actorName(), actorNameWithEmail(), AuditLogPage(), AuditLogPageProps, extractChangedValues(), FIELD_LABEL_MAP, formatRoleName() (+5 more)
 
-### Community 125 - "WaReportModal.tsx"
-Cohesion: 0.23
-Nodes (16): Props, WaReportModal, WaReportModalComponent(), TEXT_WA_REPORT, RegionalMonitoringResult, formatIndonesianFullDate(), formatWaDecimal(), formatWaNumber() (+8 more)
+### Community 125 - "AllRouteMonitoringPage.tsx"
+Cohesion: 0.10
+Nodes (34): AllRouteMonitoringPage, formatDecimal(), formatNumber(), Props, RouteCardItem(), RouteCardItemProps, SUPERVISOR_TABS, mockData (+26 more)
 
 ### Community 126 - "Design Specification: Halaman Ringkasan Per Unit (Read-Only Unit Dashboard)"
 Cohesion: 0.20
@@ -890,8 +892,8 @@ Cohesion: 0.25
 Nodes (7): 1. Prioritas Mutlak Tertinggi: BUG-48 (Keamanan — XSS), 2. Urutan Prioritas Setelah Bagian 1, 3. Prinsip Kerja Tambahan Khusus Babak Ini, 4. Batasan Teknis, 5. Kapan Harus Berhenti dan Bertanya ke Manusia, 6. Pelaporan Progres, Aturan & Ketentuan Kerja untuk AI Coding Agent v5 — Proyek SS_PDO / SPUM
 
 ### Community 175 - "alertUtils.ts"
-Cohesion: 0.16
-Nodes (27): BusCard, Props, BusList, BusListComponent(), Props, Dashboard(), QueueModal(), QueueModalProps (+19 more)
+Cohesion: 0.19
+Nodes (21): ProfileMenuSheet(), Props, BulkCopyKmModalOptions, BulkTripModalOptions, getCurrentTheme(), pdoSwal, pdoToast, showAuthExpiredAlert() (+13 more)
 
 ### Community 176 - "REPAIR REPORT: DIFERENSIASI VISUAL UNIT CAPAI TARGET RITASE VS KURANG RITASE (REFACTOR 14)"
 Cohesion: 0.25
@@ -993,33 +995,41 @@ Nodes (4): Build evaluations first, Develop Skills iteratively with the agent, E
 Cohesion: 0.50
 Nodes (3): Objective, Requirements, Task 6 Brief: AllRouteMonitoringPage Component
 
-### Community 212 - "ProfileMenuSheet.tsx"
-Cohesion: 0.18
-Nodes (11): ProfileMenuSheet(), Props, RoleBadge(), RoleBadgeProps, tryOfflineProfileFallback(), verifyUserProfile(), showFormatSheetConfirm(), formatUserError() (+3 more)
+### Community 212 - "UserManagementPage.tsx"
+Cohesion: 0.15
+Nodes (22): RoleBadge(), RoleBadgeProps, FilterTab, UserManagementPage(), UserManagementPageProps, activityLogCache, ActivityLogCacheEntry, logActivity() (+14 more)
 
 ### Community 213 - "7. DIAL DEFINITIONS (Technical Reference)"
 Cohesion: 0.50
 Nodes (4): 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10), VISUAL_DENSITY (Level 1-10)
 
+### Community 214 - "2. Before vs After"
+Cohesion: 0.15
+Nodes (12): 1. Implementasi & Detail Solusi, 2. Before vs After, 3. Case: Skenario Lapangan, A. Arsitektur Kamus Teks Terpusat (`src/constants/texts/`), A. Form Operasional PDO (`RouteOperationalReportCard.tsx`), B. Generator Pesan Broadcast WhatsApp (`waReportGenerator.ts`), B. Migrasi Komponen & Eliminasi String Literal Mentah, C. Penanganan Error Ramah Pengguna (`errorFormatter.ts`) (+4 more)
+
+### Community 215 - "RINCIAN TEMUAN"
+Cohesion: 0.29
+Nodes (6): AUDIT BUGS: SENTRALISASI KAMUS TEKS UI APLIKASI (REFACTOR 18), DAFTAR TEMUAN AUDIT, RINCIAN TEMUAN, 🟡 TEXT-18-01: String Literal UI Tersebar (Scattered Hardcoded Copy) Tanpa Tata Kelola Terpusat, 🟡 TEXT-18-02: Inkonsistensi Istilah Operasional & Format Laporan WhatsApp Antara Form dan Broadcast, 🟡 TEXT-18-03: Ketiadaan Kontrak Tipe Aman untuk Pesan Notifikasi, Alert Modal, dan Error Catalog
+
 ## Knowledge Gaps
-- **1430 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1425 more)
+- **1442 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+1437 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `routes.ts`, `plugins`, `historyNavigation.ts`, `texts/index.ts`, `Dashboard.tsx`, `alertUtils.ts`, `ProfileMenuSheet.tsx`, `core.ts`, `BusCard.tsx`, `AllRouteMonitoringPage.tsx`, `WaReportModal.tsx`?**
+- **Why does `react` connect `react` to `RouteSelectorCard.tsx`, `plugins`, `historyNavigation.ts`, `texts/index.ts`, `Dashboard.tsx`, `alertUtils.ts`, `UserManagementPage.tsx`, `core.ts`, `App.tsx`, `AuditLogPage.tsx`, `AllRouteMonitoringPage.tsx`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **Why does `Writing Skills` connect `Writing Skills` to `Skill Discovery Optimization (SDO)`, `Testing Skills With Subagents`, `Bulletproofing Skills Against Rationalization`, `Anti-Patterns`, `Testing All Skill Types`, `RED-GREEN-REFACTOR for Skills`, `File Organization`, `Skill Types`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `7. DIAL DEFINITIONS (Technical Reference)`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _1430 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1442 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**
   _Cohesion score 0.05451127819548872 - nodes in this community are weakly interconnected._
-- **Should `routes.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.051970302684180465 - nodes in this community are weakly interconnected._
+- **Should `RouteSelectorCard.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.1184939091915836 - nodes in this community are weakly interconnected._
