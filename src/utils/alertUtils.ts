@@ -8,6 +8,7 @@ import {
   setSatsetMode,
   type BusModalOptions,
 } from "./modals/busInputModal";
+import { TEXT_ALERTS } from "../constants/texts";
 
 export { showBusInputModal, escapeHtml, getSatsetMode, setSatsetMode };
 export type { BusModalOptions };
@@ -126,8 +127,8 @@ export async function showConfirmDialog(options: {
     text: options.text,
     icon: options.icon ?? (options.isDanger ? "warning" : "question"),
     showCancelButton: true,
-    confirmButtonText: options.confirmButtonText || "Lanjutkan",
-    cancelButtonText: options.cancelButtonText || "Batal",
+    confirmButtonText: options.confirmButtonText || TEXT_ALERTS.MODAL_COMMON.CONTINUE,
+    cancelButtonText: options.cancelButtonText || TEXT_ALERTS.MODAL_COMMON.CANCEL,
     reverseButtons: true,
     customClass: {
       container: "pdo-swal-container",
@@ -147,10 +148,10 @@ export async function showConfirmDialog(options: {
  */
 export async function showLogoutConfirm(): Promise<boolean> {
   return showConfirmDialog({
-    title: "Yakin Ingin Logout?",
+    title: TEXT_ALERTS.LOGOUT.TITLE,
     icon: "warning",
-    confirmButtonText: "Ya, Keluar",
-    cancelButtonText: "Batal",
+    confirmButtonText: TEXT_ALERTS.LOGOUT.CONFIRM_BTN,
+    cancelButtonText: TEXT_ALERTS.LOGOUT.CANCEL_BTN,
     isDanger: true,
   });
 }
@@ -160,11 +161,11 @@ export async function showLogoutConfirm(): Promise<boolean> {
  */
 export async function showDeleteQueueConfirm(): Promise<boolean> {
   return showConfirmDialog({
-    title: "Hapus Antrean",
-    text: "Apakah Anda yakin ingin menghapus perubahan ini dari antrean offline?",
+    title: TEXT_ALERTS.DELETE_QUEUE.TITLE,
+    text: TEXT_ALERTS.DELETE_QUEUE.TEXT,
     icon: "warning",
-    confirmButtonText: "Hapus",
-    cancelButtonText: "Batal",
+    confirmButtonText: TEXT_ALERTS.DELETE_QUEUE.CONFIRM_BTN,
+    cancelButtonText: TEXT_ALERTS.DELETE_QUEUE.CANCEL_BTN,
     isDanger: true,
   });
 }
@@ -178,7 +179,7 @@ export async function showErrorAlert(title: string, message?: string | null) {
     title,
     text: message,
     icon: "error",
-    confirmButtonText: "Mengerti",
+    confirmButtonText: TEXT_ALERTS.MODAL_COMMON.UNDERSTAND,
     customClass: {
       container: "pdo-swal-container",
       popup: "pdo-swal-popup",
@@ -194,12 +195,12 @@ export async function showAuthExpiredAlert(
   onReauth: () => Promise<void> | void,
 ) {
   const result = await pdoSwal.fire({
-    title: "Sesi Telah Berakhir",
-    text: "Sesi akses Google Sheets Anda telah kedaluwarsa. Silakan perbarui sesi untuk melanjutkan sinkronisasi.",
+    title: TEXT_ALERTS.AUTH_EXPIRED.TITLE,
+    text: TEXT_ALERTS.AUTH_EXPIRED.TEXT,
     icon: "warning",
     showCancelButton: true,
-    confirmButtonText: "Perbarui Sesi",
-    cancelButtonText: "Nanti",
+    confirmButtonText: TEXT_ALERTS.AUTH_EXPIRED.CONFIRM_BTN,
+    cancelButtonText: TEXT_ALERTS.AUTH_EXPIRED.CANCEL_BTN,
     reverseButtons: true,
     customClass: {
       container: "pdo-swal-container",
@@ -223,16 +224,16 @@ export async function showQueueConflictDialog(options: {
   onForceSave: () => void;
 }) {
   const result = await pdoSwal.fire({
-    title: "Tabrakan Data (Conflict)",
-            text: options.unitName
-              ? `Data unit ${options.unitName} di Google Sheets telah berubah saat Anda offline. Data dari server digabung dengan input Anda.`:
-              "Data di Google Sheets telah berubah saat Anda offline. Data dari server digabung dengan input Anda.",
+    title: TEXT_ALERTS.CONFLICT.TITLE,
+    text: options.unitName
+      ? TEXT_ALERTS.CONFLICT.UNIT_TEXT(options.unitName)
+      : TEXT_ALERTS.CONFLICT.GENERAL_TEXT,
     icon: "warning",
     showCancelButton: true,
     showDenyButton: true,
-      confirmButtonText: "Force Save (Timpa)",
-      denyButtonText: "Gunakan & Gabung Data Server",
-    cancelButtonText: "Batal",
+    confirmButtonText: TEXT_ALERTS.CONFLICT.CONFIRM_BTN,
+    denyButtonText: TEXT_ALERTS.CONFLICT.DENY_BTN,
+    cancelButtonText: TEXT_ALERTS.CONFLICT.CANCEL_BTN,
     customClass: {
       container: "pdo-swal-container",
       popup: "pdo-swal-popup",
@@ -312,11 +313,11 @@ export async function showBulkTripModal(
   `;
 
   const result = await pdoSwal.fire({
-    title: "Set Jumlah Trip Armada",
+    title: TEXT_ALERTS.BULK_TRIP.TITLE,
     html: formHtml,
     showCancelButton: true,
-    confirmButtonText: "Terapkan",
-    cancelButtonText: "Batal",
+    confirmButtonText: TEXT_ALERTS.BULK_TRIP.APPLY_BTN,
+    cancelButtonText: TEXT_ALERTS.BULK_TRIP.CANCEL_BTN,
     focusConfirm: false,
     customClass: {
       container: "pdo-swal-container",
@@ -458,11 +459,11 @@ export async function showBulkCopyKmModal(
   `;
 
   const result = await pdoSwal.fire({
-    title: "Salin Massal KM S1 ➔ KM S2",
+    title: TEXT_ALERTS.BULK_COPY_KM.TITLE,
     html: formHtml,
     showCancelButton: true,
-    confirmButtonText: "Terapkan Salin KM",
-    cancelButtonText: "Batal",
+    confirmButtonText: TEXT_ALERTS.BULK_COPY_KM.APPLY_BTN,
+    cancelButtonText: TEXT_ALERTS.BULK_COPY_KM.CANCEL_BTN,
     focusConfirm: false,
     customClass: {
       container: "pdo-swal-container",
@@ -491,7 +492,7 @@ export async function showFormatSheetConfirm(
   tabName: string,
 ): Promise<boolean> {
   const result = await pdoSwal.fire({
-    title: "Rapikan & Format Spreadsheet?",
+    title: TEXT_ALERTS.FORMAT_SHEET.TITLE,
     html: `
       <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; text-align: left;">
         Sistem akan merapikan seluruh baris data pada tanggal <strong>${tabName}</strong> di Google Sheets asli:
@@ -510,8 +511,8 @@ export async function showFormatSheetConfirm(
     `,
     icon: "question",
     showCancelButton: true,
-    confirmButtonText: "Ya, Rapikan Sheet",
-    cancelButtonText: "Batal",
+    confirmButtonText: TEXT_ALERTS.FORMAT_SHEET.CONFIRM_BTN,
+    cancelButtonText: TEXT_ALERTS.FORMAT_SHEET.CANCEL_BTN,
     customClass: {
       popup: "pdo-swal-popup",
       confirmButton: "pdo-swal-confirm-btn",

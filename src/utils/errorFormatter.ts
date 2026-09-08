@@ -1,3 +1,5 @@
+import { TEXT_ERRORS } from "../constants/texts";
+
 /**
  * Sanitizes technical error messages into clear, human-friendly Bahasa Indonesia for end-users.
  * Logs full technical details to console.error for developer debugging.
@@ -38,7 +40,7 @@ export function formatUserError(
     lowerMsg.includes("caller does not have permission") ||
     lowerMsg.includes("does not have permission")
   ) {
-    return "Gagal mengakses Google Sheets (Hak Akses Ditolak). Akun Google Anda tidak memiliki akses ke dokumen ini. Pastikan dokumen telah dibagikan (share) ke akun Anda.";
+    return TEXT_ERRORS.PERMISSION_DENIED_FILE;
   }
 
   // 3. OAuth Session Expired / Invalid Token (HTTP 401 / Invalid Credentials / Insufficient Scope)
@@ -50,7 +52,7 @@ export function formatUserError(
     lowerMsg.includes("401") ||
     lowerMsg.includes("unauthorized")
   ) {
-    return 'Sesi anda telah berakhir. Ketuk tombol "Perbarui Sesi" untuk melanjutkan.';
+    return TEXT_ERRORS.SESSION_EXPIRED;
   }
 
   // 3. Technical Credentials / .env missing
@@ -61,7 +63,7 @@ export function formatUserError(
     lowerMsg.includes("client id missing") ||
     lowerMsg.includes("environment variables")
   ) {
-    return "Layanan belum siap dikonfigurasi. Silakan hubungi admin operasional.";
+    return TEXT_ERRORS.CONFIG_MISSING;
   }
 
   // 3. Timeout / Auth client not ready
@@ -70,7 +72,7 @@ export function formatUserError(
     lowerMsg.includes("token client belum siap") ||
     lowerMsg.includes("gagal memuat google identity")
   ) {
-    return "Koneksi ke layanan autentikasi terganggu atau membutuhkan waktu lebih lama. Silakan coba lagi.";
+    return TEXT_ERRORS.AUTH_TIMEOUT;
   }
 
   // 4. Network / Offline errors
@@ -79,7 +81,7 @@ export function formatUserError(
     lowerMsg.includes("networkerror") ||
     lowerMsg.includes("network error")
   ) {
-    return "Koneksi internet Anda terputus. Silakan periksa jaringan dan coba beberapa saat lagi.";
+    return TEXT_ERRORS.NETWORK_FAILURE;
   }
 
   // 5. Google Sheets Column Header Mismatch (BUG-31 fix: avoid matching generic substring 'unit')
@@ -88,12 +90,12 @@ export function formatUserError(
     lowerMsg.includes("no body") ||
     lowerMsg.includes("pastikan header")
   ) {
-    return "Format kolom pada tabel Google Sheets tidak sesuai. Mohon periksa kembali dokumen Anda.";
+    return TEXT_ERRORS.COLUMN_MISMATCH;
   }
 
   // 6. Empty Sheet
   if (lowerMsg.includes("tidak ada data di sheet ini")) {
-    return "Tidak ditemukan data pada lembar kerja ini.";
+    return TEXT_ERRORS.EMPTY_SHEET;
   }
 
   // 7. Access / Permission Denied
@@ -102,12 +104,12 @@ export function formatUserError(
     lowerMsg.includes("permissions_denied") ||
     lowerMsg.includes("hak akses")
   ) {
-    return "Gagal mengakses Google Sheets. Pastikan akun Anda memiliki hak akses ke dokumen tersebut.";
+    return TEXT_ERRORS.PERMISSION_DENIED_GENERAL;
   }
 
   // Fallback to custom message or default friendly Indonesian message
   return (
     fallbackMessage ||
-    "Terjadi kendala sistem. Silakan coba beberapa saat lagi atau hubungi admin."
+    TEXT_ERRORS.GENERIC_ISSUE
   );
 }

@@ -8,7 +8,7 @@ Branch: `devmode`
 - [x] Task 1: Scaffolding Fondasi Kamus Teks (`src/constants/texts/`)
 - [x] Task 2: Migrasi Modul Monitoring Wilayah & Generator WA
 - [x] Task 3: Migrasi Form Operasional PDO
-- [ ] Task 4: Migrasi Alerts, Notifikasi, & Error Catalog
+- [x] Task 4: Migrasi Alerts, Notifikasi, & Error Catalog
 - [ ] Task 5: Migrasi Dashboard Utama, Navigasi, & Auth
 - [ ] Task 6: Quality Gates & Final Verification
 
@@ -17,3 +17,4 @@ Branch: `devmode`
 - 2026-09-08: Task 1 complete (8 text_* modules + index.ts + tests pass 8/8)
 - 2026-09-08: Task 2 complete (AllRouteMonitoringPage, WaReportModal, waReportGenerator migrated, tests pass 12/12)
 - 2026-09-08: Task 3 complete (RouteOperationalReportCard migrated to TEXT_PDO_FORM, tests pass 3/3)
+- 2026-09-08: Task 4 complete (alertUtils, errorFormatter, QueueModal migrated, tests pass 64/64)

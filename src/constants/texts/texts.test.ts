@@ -63,14 +63,14 @@ describe('Centralized UI Text Dictionary', () => {
   });
 
   it('exports TEXT_ALERTS with confirmation and toast messages', () => {
-    expect(TEXT_ALERTS.LOGOUT.TITLE).toContain('Keluar');
+    expect(TEXT_ALERTS.LOGOUT.TITLE).toContain('Logout');
     expect(TEXT_ALERTS.TOAST.SUCCESS_REPORT_SAVED).toContain('berhasil disimpan');
     expect(TEXT_ALERTS.TOAST.SUCCESS_VERIFIED).toContain('berhasil diverifikasi');
   });
 
   it('exports TEXT_ERRORS with friendly error messages', () => {
     expect(TEXT_ERRORS.DEFAULT_FALLBACK).toBeDefined();
-    expect(TEXT_ERRORS.NETWORK_FAILURE).toContain('koneksi internet');
+    expect(TEXT_ERRORS.NETWORK_FAILURE.toLowerCase()).toContain('koneksi internet');
     expect(TEXT_ERRORS.SESSION_EXPIRED).toBeDefined();
   });
 });

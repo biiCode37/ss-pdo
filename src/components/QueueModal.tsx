@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { RotateCw, Trash2 } from "lucide-react";
 import type { SyncItem } from "../hooks/useOfflineSync";
 import { showInfoToast, showWarningToast } from "../utils/alertUtils";
+import { TEXT_ALERTS } from "../constants/texts";
 
 interface QueueModalProps {
   isOpen: boolean;
@@ -48,7 +49,7 @@ export function QueueModal({
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Antrean Sinkronisasi"
+      aria-label={TEXT_ALERTS.QUEUE_MODAL.TITLE}
       style={{
         position: "fixed",
         inset: 0,
@@ -77,10 +78,10 @@ export function QueueModal({
         }}
       >
         <h2 style={{ fontSize: "1.1rem", marginTop: 0, marginBottom: "16px" }}>
-          Antrean Sinkronisasi
+          {TEXT_ALERTS.QUEUE_MODAL.TITLE}
         </h2>
         {queue.length === 0 ? (
-          <p style={{ color: "var(--text-secondary)" }}>Tidak ada antrean.</p>
+          <p style={{ color: "var(--text-secondary)" }}>{TEXT_ALERTS.QUEUE_MODAL.EMPTY}</p>
         ) : (
           queue.map((item) => (
             <div
@@ -91,7 +92,7 @@ export function QueueModal({
               }}
             >
               <p style={{ margin: "0 0 4px 0", fontSize: "14px" }}>
-                <strong>Tab {item.tabName}</strong> - Baris {item.rowIndex}
+                <strong>{TEXT_ALERTS.QUEUE_MODAL.TAB_LABEL(item.tabName, item.rowIndex)}</strong>
               </p>
               <p
                 style={{
@@ -106,11 +107,11 @@ export function QueueModal({
                 }}
               >
                 {item.status === "pending" &&
-                  `⏳ Menunggu (percobaan ke-${(item.retryCount || 0) + 1})`}
+                  TEXT_ALERTS.QUEUE_MODAL.STATUS_PENDING((item.retryCount || 0) + 1)}
                 {item.status === "failed" &&
-                  `❌ Gagal setelah ${item.retryCount} percobaan`}
+                  TEXT_ALERTS.QUEUE_MODAL.STATUS_FAILED(item.retryCount)}
                 {item.status === "conflict" &&
-                  "⚠️ Tabrakan data: Data server telah berubah"}
+                  TEXT_ALERTS.QUEUE_MODAL.STATUS_CONFLICT}
               </p>
               <div style={{ display: "flex", gap: "8px" }}>
                 {item.status === "failed" && (
@@ -126,10 +127,10 @@ export function QueueModal({
                       }}
                       onClick={() => {
                         onRetry(item.id);
-                        showInfoToast("Mencoba menyinkronkan kembali...");
+                        showInfoToast(TEXT_ALERTS.QUEUE_MODAL.TOAST_RETRY);
                       }}
                     >
-                      <RotateCw size={14} /> Coba Lagi
+                      <RotateCw size={14} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_RETRY}
                     </button>
                     <button
                       className="btn btn-outline"
@@ -143,7 +144,7 @@ export function QueueModal({
                       }}
                       onClick={() => onDelete(item.id)}
                     >
-                      <Trash2 size={14} /> Hapus
+                      <Trash2 size={14} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_DELETE}
                     </button>
                   </>
                 )}
@@ -160,10 +161,10 @@ export function QueueModal({
                       }}
                       onClick={() => {
                         onResolveConflict(item.id);
-                        showInfoToast("Menggunakan data dari server.");
+                        showInfoToast(TEXT_ALERTS.QUEUE_MODAL.TOAST_USE_SERVER);
                       }}
                     >
-                      Gunakan Data Server
+                      {TEXT_ALERTS.QUEUE_MODAL.BTN_USE_SERVER}
                     </button>
                     <button
                       className="btn"
@@ -177,12 +178,10 @@ export function QueueModal({
                       }}
                       onClick={() => {
                         onForceConflict(item.id);
-                        showWarningToast(
-                          "Menimpa data server dengan data lokal...",
-                        );
+                        showWarningToast(TEXT_ALERTS.QUEUE_MODAL.TOAST_FORCE_SAVE);
                       }}
                     >
-                      Force Save
+                      {TEXT_ALERTS.QUEUE_MODAL.BTN_FORCE_SAVE}
                     </button>
                   </>
                 )}
@@ -198,10 +197,10 @@ export function QueueModal({
               onClick={() => {
                 onProcessQueue();
                 onClose();
-                showInfoToast("Memulai proses sinkronisasi antrean...");
+                showInfoToast(TEXT_ALERTS.QUEUE_MODAL.TOAST_START_SYNC);
               }}
             >
-              Sinkronkan Sekarang
+              {TEXT_ALERTS.QUEUE_MODAL.BTN_SYNC_NOW}
             </button>
           )}
           <button
@@ -209,7 +208,7 @@ export function QueueModal({
             style={{ flex: 1 }}
             onClick={onClose}
           >
-            Tutup
+            {TEXT_ALERTS.QUEUE_MODAL.BTN_CLOSE}
           </button>
         </div>
       </div>
