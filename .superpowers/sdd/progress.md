@@ -1,24 +1,16 @@
 # Subagent-Driven Development Progress Ledger
 
-Plan: `docs/superpowers/plans/2026-09-08-all-route-monitoring-and-wa-report.md`
-Base commit: `16bd03444e656c143ae7b07fc51a2e7d8436cd0d`
+Plan: `docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md`
+Base commit: `5d939db`
 Branch: `devmode`
 
 ## Tasks
-- [x] Task 1: Skema Database & Migrasi Supabase (Tabel Routes & Daily Route Reports)
-- [x] Task 2: Generator Format Pesan WhatsApp (Format 1 & Format 2)
-- [x] Task 3: Form Input Lapangan Petugas PDO di Halaman Rute
-- [x] Task 4: Service Agregasi & Komparasi Riwayat Wilayah (H, H-1, H-7)
-- [x] Task 5: Modal Generator Laporan WhatsApp (WaReportModal.tsx)
-- [x] Task 6: Halaman Mandiri Dashboard Monitoring All Route (AllRouteMonitoringPage.tsx)
-- [x] Task 7: Integrasi Navigasi, Switcher Header, & Quality Gates
+- [ ] Task 1: Scaffolding Fondasi Kamus Teks (`src/constants/texts/`)
+- [ ] Task 2: Migrasi Modul Monitoring Wilayah & Generator WA
+- [ ] Task 3: Migrasi Form Operasional PDO
+- [ ] Task 4: Migrasi Alerts, Notifikasi, & Error Catalog
+- [ ] Task 5: Migrasi Dashboard Utama, Navigasi, & Auth
+- [ ] Task 6: Quality Gates & Final Verification
 
 ## Progress Log
-- 2026-09-08: Execution started on branch devmode at commit 16bd034
-- 2026-09-08: Task 1 complete (commit a1d1be4, schema & service tests pass 3/3)
-- 2026-09-08: Task 2 complete (commit cd61456, WA generator tests pass 5/5)
-- 2026-09-08: Task 3 complete (commit 33c617e, PDO form component tests pass 3/3, build clean)
-- 2026-09-08: Task 4 complete (commit 4cc98aa, regional aggregation service tests pass 2/2)
-- 2026-09-08: Task 5 complete (WaReportModal component & tests pass 3/3, build clean)
-- 2026-09-08: Task 6 complete (AllRouteMonitoringPage & tests pass 4/4, build clean)
-- 2026-09-08: Task 7 complete (Navigation integrated, 31/31 test files pass 237/237, build clean, graphify updated)
+- 2026-09-08: Execution started on branch devmode for Centralized UI Text Dictionary
