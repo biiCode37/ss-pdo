@@ -9,6 +9,7 @@ import {
 import { fetchDailyRouteReport, upsertDailyRouteReport } from '../services/dailyRouteReportService';
 import type { DailyRouteReport } from '../types/supabase';
 import { showSuccessToast, showErrorAlert } from '../utils/alertUtils';
+import { TEXT_PDO_FORM, TEXT_ERRORS } from '../constants/texts';
 
 interface Props {
   routeId: number;
@@ -131,10 +132,10 @@ function RouteOperationalReportCardComponent({
 
       await upsertDailyRouteReport(payload);
       setStatus('submitted');
-      showSuccessToast('Laporan operasional rute berhasil dikirim');
+      showSuccessToast(TEXT_PDO_FORM.TOAST_SUCCESS);
       if (onSaved) onSaved();
     } catch (err: any) {
-      showErrorAlert('Gagal Menyimpan', err?.message || 'Terjadi kesalahan sistem');
+      showErrorAlert('Gagal Menyimpan', err?.message || TEXT_ERRORS.DEFAULT_FALLBACK);
     } finally {
       setSaving(false);
     }
@@ -184,10 +185,10 @@ function RouteOperationalReportCardComponent({
           </div>
           <div>
             <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600 }}>
-              Laporan Kondisi & Armada Rute
+              {TEXT_PDO_FORM.CARD_TITLE}
             </h3>
             <span style={{ fontSize: '12px', color: 'var(--text-secondary, #64748b)' }}>
-              Input fisik lapangan PDO {routeCode}
+              {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
             </span>
           </div>
         </div>
@@ -204,7 +205,7 @@ function RouteOperationalReportCardComponent({
                 borderRadius: '8px'
               }}
             >
-              Terverifikasi
+              {TEXT_PDO_FORM.BADGES.VERIFIED}
             </span>
           )}
           {status === 'submitted' && (
@@ -218,7 +219,7 @@ function RouteOperationalReportCardComponent({
                 borderRadius: '8px'
               }}
             >
-              Lengkap (Submitted)
+              {TEXT_PDO_FORM.BADGES.SUBMITTED}
             </span>
           )}
           {status === 'draft' && (
@@ -232,7 +233,7 @@ function RouteOperationalReportCardComponent({
                 borderRadius: '8px'
               }}
             >
-              Draft
+              {TEXT_PDO_FORM.BADGES.DRAFT}
             </span>
           )}
           {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -255,7 +256,7 @@ function RouteOperationalReportCardComponent({
                 marginBottom: '8px'
               }}
             >
-              Armada Operasi (Renops / Realops Per Shift)
+              {TEXT_PDO_FORM.ARMADA_SECTION}
             </label>
             <div
               style={{
@@ -282,7 +283,7 @@ function RouteOperationalReportCardComponent({
                     marginBottom: '6px'
                   }}
                 >
-                  Shift 1
+                  {TEXT_PDO_FORM.SHIFT_1.TITLE}
                 </span>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ flex: 1 }}>
@@ -290,7 +291,7 @@ function RouteOperationalReportCardComponent({
                       htmlFor="renops-s1"
                       style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
                     >
-                      Renops Shift 1
+                      {TEXT_PDO_FORM.SHIFT_1.RENOPS_LABEL}
                     </label>
                     <input
                       id="renops-s1"
@@ -313,7 +314,7 @@ function RouteOperationalReportCardComponent({
                       htmlFor="realops-s1"
                       style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
                     >
-                      Realops Shift 1
+                      {TEXT_PDO_FORM.SHIFT_1.REALOPS_LABEL}
                     </label>
                     <input
                       id="realops-s1"
@@ -352,7 +353,7 @@ function RouteOperationalReportCardComponent({
                     marginBottom: '6px'
                   }}
                 >
-                  Shift 2
+                  {TEXT_PDO_FORM.SHIFT_2.TITLE}
                 </span>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ flex: 1 }}>
@@ -360,7 +361,7 @@ function RouteOperationalReportCardComponent({
                       htmlFor="renops-s2"
                       style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
                     >
-                      Renops Shift 2
+                      {TEXT_PDO_FORM.SHIFT_2.RENOPS_LABEL}
                     </label>
                     <input
                       id="renops-s2"
@@ -383,7 +384,7 @@ function RouteOperationalReportCardComponent({
                       htmlFor="realops-s2"
                       style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
                     >
-                      Realops Shift 2
+                      {TEXT_PDO_FORM.SHIFT_2.REALOPS_LABEL}
                     </label>
                     <input
                       id="realops-s2"
@@ -419,7 +420,7 @@ function RouteOperationalReportCardComponent({
                 marginBottom: '8px'
               }}
             >
-              Waktu Antara (Headway)
+              {TEXT_PDO_FORM.HEADWAY.SECTION_TITLE}
             </label>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
@@ -427,7 +428,7 @@ function RouteOperationalReportCardComponent({
                   htmlFor="headway-fastest"
                   style={{ fontSize: '11px', color: '#64748b', display: 'block' }}
                 >
-                  Headway Tercepat (Menit)
+                  {TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL}
                 </label>
                 <input
                   id="headway-fastest"
@@ -449,7 +450,7 @@ function RouteOperationalReportCardComponent({
                   htmlFor="headway-slowest"
                   style={{ fontSize: '11px', color: '#64748b', display: 'block' }}
                 >
-                  Headway Terlama (Menit)
+                  {TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL}
                 </label>
                 <input
                   id="headway-slowest"
@@ -482,7 +483,7 @@ function RouteOperationalReportCardComponent({
                 marginBottom: '8px'
               }}
             >
-              Titik Kemacetan Hari Ini (Tap untuk memilih)
+              {TEXT_PDO_FORM.TRAFFIC_JAMS.SECTION_TITLE}
             </label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
               {allAvailableSpots.map((spot) => {
@@ -514,7 +515,7 @@ function RouteOperationalReportCardComponent({
             <div style={{ display: 'flex', gap: '8px' }}>
               <input
                 type="text"
-                placeholder="Tambah ruas jalan macet baru..."
+                placeholder={TEXT_PDO_FORM.TRAFFIC_JAMS.ADD_SPOT_PLACEHOLDER}
                 value={newSpotText}
                 onChange={(e) => setNewSpotText(e.target.value)}
                 onKeyDown={(e) => {
@@ -546,7 +547,7 @@ function RouteOperationalReportCardComponent({
                   gap: '4px'
                 }}
               >
-                <Plus size={14} /> Tambah
+                <Plus size={14} /> {TEXT_PDO_FORM.TRAFFIC_JAMS.ADD_BTN}
               </button>
             </div>
           </div>
@@ -565,12 +566,12 @@ function RouteOperationalReportCardComponent({
                 marginBottom: '6px'
               }}
             >
-              Catatan Kendala Operasional (Opsional)
+              {TEXT_PDO_FORM.ISSUES.SECTION_TITLE}
             </label>
             <textarea
               id="kendala-text"
               rows={2}
-              placeholder="Contoh: Realisasi berkurang karena perbaikan unit di pul..."
+              placeholder={TEXT_PDO_FORM.ISSUES.PLACEHOLDER}
               value={operationalIssues}
               onChange={(e) => setOperationalIssues(e.target.value)}
               style={{
@@ -609,7 +610,7 @@ function RouteOperationalReportCardComponent({
             }}
           >
             <Send size={16} />
-            {saving ? 'Menyimpan...' : 'Kirim Laporan Operasional'}
+            {saving ? TEXT_PDO_FORM.BUTTONS.SUBMITTING : TEXT_PDO_FORM.BUTTONS.SUBMIT}
           </button>
         </form>
       )}

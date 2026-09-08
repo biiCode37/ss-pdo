@@ -37,12 +37,12 @@ describe('Centralized UI Text Dictionary', () => {
   });
 
   it('exports TEXT_PDO_FORM with shift inputs and badges', () => {
-    expect(TEXT_PDO_FORM.CARD_TITLE).toBe('Laporan Operasi Rute (PDO)');
+    expect(TEXT_PDO_FORM.CARD_TITLE).toBe('Laporan Kondisi & Armada Rute');
     expect(TEXT_PDO_FORM.SHIFT_1.TITLE).toBe('Shift 1');
     expect(TEXT_PDO_FORM.SHIFT_2.TITLE).toBe('Shift 2');
-    expect(TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL).toBe('Headway Tercepat (menit)');
-    expect(TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL).toBe('Headway Terlama (menit)');
-    expect(TEXT_PDO_FORM.BUTTONS.SUBMIT).toContain('Simpan & Kirim Laporan');
+    expect(TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL).toBe('Headway Tercepat (Menit)');
+    expect(TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL).toBe('Headway Terlama (Menit)');
+    expect(TEXT_PDO_FORM.BUTTONS.SUBMIT).toContain('Kirim Laporan Operasional');
   });
 
   it('exports TEXT_MONITORING with interpolation functions and KPI titles', () => {
