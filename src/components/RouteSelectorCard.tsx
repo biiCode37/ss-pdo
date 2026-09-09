@@ -39,6 +39,7 @@ interface Props {
   reportRoute?: { id: number; route_code: string } | null;
   reportStatus?: 'draft' | 'submitted' | 'verified';
   onOpenReportModal?: () => void;
+  onOpenFleetModal?: () => void;
 }
 
 function RouteSelectorCardComponent({
@@ -57,6 +58,7 @@ function RouteSelectorCardComponent({
   reportRoute,
   reportStatus,
   onOpenReportModal,
+  onOpenFleetModal,
 }: Props) {
   const [isSheetOpen, setIsSheetOpen] = useState(!isDataLoaded);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
@@ -602,55 +604,85 @@ function RouteSelectorCardComponent({
             <span>✕</span>
             <span>Keluar Akumulasi</span>
           </button>
-        ) : reportRoute && onOpenReportModal ? (
-          <button
-            type="button"
-            onClick={onOpenReportModal}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background:
-                reportStatus === 'verified'
-                  ? 'rgba(16, 185, 129, 0.12)'
-                  : reportStatus === 'submitted'
-                  ? 'rgba(14, 165, 233, 0.12)'
-                  : 'rgba(245, 158, 11, 0.12)',
-              border: `1px solid ${
-                reportStatus === 'verified'
-                  ? 'rgba(16, 185, 129, 0.35)'
-                  : reportStatus === 'submitted'
-                  ? 'rgba(14, 165, 233, 0.35)'
-                  : 'rgba(245, 158, 11, 0.35)'
-              }`,
-              borderRadius: '10px',
-              color:
-                reportStatus === 'verified'
-                  ? 'var(--success-color, #10b981)'
-                  : reportStatus === 'submitted'
-                  ? 'var(--info-color, #38bdf8)'
-                  : 'var(--warning-color, #f59e0b)',
-              padding: '8px 12px',
-              fontSize: '12px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              flexShrink: 0,
-              whiteSpace: 'nowrap',
-              transition: 'all 0.2s ease',
-            }}
-            title="Buka laporan kondisi dan armada rute"
-          >
-            <Bus size={14} />
-            <span>
-              {reportStatus === 'verified'
-                ? 'Terverifikasi'
-                : reportStatus === 'submitted'
-                ? 'Terkirim'
-                : 'Laporan'}
-            </span>
-            <ChevronDown size={13} style={{ opacity: 0.7 }} />
-          </button>
-        ) : null}
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {onOpenFleetModal && (
+              <button
+                type="button"
+                onClick={onOpenFleetModal}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  background: 'rgba(62, 207, 142, 0.12)',
+                  border: '1px solid rgba(62, 207, 142, 0.35)',
+                  borderRadius: '10px',
+                  color: 'var(--accent-color, #3ECF8E)',
+                  padding: '8px 10px',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.2s ease',
+                }}
+                title="Status armada (SGO / TO / OFF / BA)"
+              >
+                <Bus size={14} />
+                <span>Armada</span>
+              </button>
+            )}
+
+            {reportRoute && onOpenReportModal && (
+              <button
+                type="button"
+                onClick={onOpenReportModal}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background:
+                    reportStatus === 'verified'
+                      ? 'rgba(16, 185, 129, 0.12)'
+                      : reportStatus === 'submitted'
+                      ? 'rgba(14, 165, 233, 0.12)'
+                      : 'rgba(245, 158, 11, 0.12)',
+                  border: `1px solid ${
+                    reportStatus === 'verified'
+                      ? 'rgba(16, 185, 129, 0.35)'
+                      : reportStatus === 'submitted'
+                      ? 'rgba(14, 165, 233, 0.35)'
+                      : 'rgba(245, 158, 11, 0.35)'
+                  }`,
+                  borderRadius: '10px',
+                  color:
+                    reportStatus === 'verified'
+                      ? 'var(--success-color, #10b981)'
+                      : reportStatus === 'submitted'
+                      ? 'var(--info-color, #38bdf8)'
+                      : 'var(--warning-color, #f59e0b)',
+                  padding: '8px 10px',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.2s ease',
+                }}
+                title="Buka laporan kondisi dan armada rute"
+              >
+                <span>
+                  {reportStatus === 'verified'
+                    ? 'Terverifikasi'
+                    : reportStatus === 'submitted'
+                    ? 'Terkirim'
+                    : 'Laporan'}
+                </span>
+                <ChevronDown size={13} style={{ opacity: 0.7 }} />
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Contextual Bottom Sheet Drawer */}

@@ -14,6 +14,7 @@ import {
   showBusInputModal,
   showQueueConflictDialog,
   escapeHtml,
+  pdoSwal,
 } from "../utils/alertUtils";
 import { getSatsetMode } from "../utils/modals/busInputModal";
 import {
@@ -209,8 +210,41 @@ function BusCardComponent({
       return;
     }
 
+    const currentKet = (formData.keterangan || bus.keterangan || "").trim();
+    const upperKet = currentKet.toUpperCase();
+    const isNonSgo = upperKet.includes("OFF") || upperKet.includes("TO");
+
+    let activeFormData = { ...formData };
+
+    // Opsi B: Konfirmasi ramah non-blocking jika unit berstatus OFF atau TO
+    if (isNonSgo) {
+      const confirmResult = await pdoSwal.fire({
+        icon: "question",
+        title: "Konfirmasi Operasional Bus",
+        html: `Unit <strong>${escapeHtml(bus.unit)}</strong> saat ini berstatus <strong>${escapeHtml(currentKet)}</strong>.<br><br>Apakah unit ini dioperasikan (SGO)?`,
+        showCancelButton: true,
+        confirmButtonText: "Jadikan SGO & Buka Form",
+        cancelButtonText: "Tetap Lanjut Input",
+        showDenyButton: true,
+        denyButtonText: "Batal",
+        confirmButtonColor: "#3ECF8E",
+        cancelButtonColor: "#38bdf8",
+        denyButtonColor: "#71717a",
+      });
+
+      if (confirmResult.isDenied || confirmResult.isDismissed) {
+        return; // Batal
+      }
+
+      if (confirmResult.isConfirmed) {
+        // Jadikan SGO & simpan update keterangan kosong
+        activeFormData = { ...activeFormData, keterangan: "" };
+        await handleSaveUpdates({ keterangan: "" });
+      }
+    }
+
     const updates = await showBusInputModal({
-      bus: { ...bus, ...formData },
+      bus: { ...bus, ...activeFormData },
       activeCategory,
       tabName,
       headerMap,

@@ -8,26 +8,43 @@ import type { BusData } from '../../services/googleSheets';
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
+const createMockBus = (partial: Partial<BusData> & { rowIndex: number; unit: string }): BusData => ({
+  tripPergi: '',
+  tripPulang: '',
+  toaShift1: '',
+  toaShift2: '',
+  manualShift1: '',
+  manualShift2: '',
+  totalToa: '',
+  kmAwal1: '',
+  kmAkhir1: '',
+  kmAwal2: '',
+  kmAkhir2: '',
+  keterangan: '',
+  originalRow: [],
+  ...partial,
+});
+
 describe('FleetStatusModal Component', () => {
   let container: HTMLDivElement;
   let root: Root;
 
   const mockBuses: BusData[] = [
-    {
+    createMockBus({
       rowIndex: 6,
       unit: 'JAK.15-01',
       keterangan: '',
-    },
-    {
+    }),
+    createMockBus({
       rowIndex: 7,
       unit: 'JAK.15-02',
       keterangan: 'OFF',
-    },
-    {
+    }),
+    createMockBus({
       rowIndex: 8,
       unit: 'JAK.15-03',
       keterangan: 'TO EVDAL',
-    },
+    }),
   ];
 
   beforeEach(() => {

@@ -176,4 +176,36 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
 
     expect(handleExitAccumulation).toHaveBeenCalled();
   });
+
+  it('renders Armada quick action button and invokes onOpenFleetModal when clicked', async () => {
+    const handleOpenFleetModal = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab="5"
+          setSelectedTab={vi.fn()}
+          days={['1', '2', '3', '4', '5']}
+          isLoading={false}
+          isDataLoaded={true}
+          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
+          currentTabName="5"
+          onLoadData={vi.fn()}
+          onOpenFleetModal={handleOpenFleetModal}
+        />
+      );
+    });
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const armadaBtn = buttons.find((btn) => btn.textContent?.includes('Armada'));
+    expect(armadaBtn).toBeTruthy();
+
+    await act(async () => {
+      armadaBtn?.click();
+    });
+
+    expect(handleOpenFleetModal).toHaveBeenCalled();
+  });
 });

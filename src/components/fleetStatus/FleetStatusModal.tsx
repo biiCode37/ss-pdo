@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Bus, Check, Loader2, Sparkles, AlertCircle } from 'lucide-react';
+import { X, Bus, Check, Loader2, Sparkles } from 'lucide-react';
 import type { BusData } from '../../services/googleSheets';
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler';
 import { splitShiftKeterangan, cleanShiftNote } from '../../utils/keteranganUtils';

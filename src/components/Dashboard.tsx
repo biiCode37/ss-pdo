@@ -6,6 +6,7 @@ import {
   reauthenticateSession,
   formatWholeSheet,
   isUsingServiceAccount,
+  updateBulkBusData,
 } from "../services/googleSheets";
 import { extractSpreadsheetId } from "../utils/sheetIdentity";
 import { BusList } from "./BusList";
@@ -13,7 +14,11 @@ import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { RouteOperationalReportCard } from "./RouteOperationalReportCard";
-import { fetchDailyRouteReport } from "../services/dailyRouteReportService";
+import { ShiftConfirmationAlertBar } from "./fleetStatus/ShiftConfirmationAlertBar";
+import { FleetStatusModal } from "./fleetStatus/FleetStatusModal";
+import { getRenopsForDate } from "../utils/holidayUtils";
+import { combineShiftKeterangan, cleanShiftNote } from "../utils/keteranganUtils";
+import { fetchDailyRouteReport, upsertDailyRouteReport } from "../services/dailyRouteReportService";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
 import { UserManagementSkeleton } from "./Skeletons";
@@ -538,6 +543,17 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [operationalReportStatus, setOperationalReportStatus] = useState<'draft' | 'submitted' | 'verified'>('draft');
 
+  const dynamicRenops = useMemo(() => {
+    return getRenopsForDate(matchedRoute, operationalReportDate);
+  }, [matchedRoute, operationalReportDate]);
+
+  const activeShift: 1 | 2 = new Date().getHours() >= 14 ? 2 : 1;
+  const [isFleetModalOpen, setIsFleetModalOpen] = useState(false);
+  const [confirmedShifts, setConfirmedShifts] = useState<{ 1: boolean; 2: boolean }>({
+    1: false,
+    2: false,
+  });
+
   useEffect(() => {
     let isMounted = true;
     if (matchedRoute?.id && operationalReportDate) {
@@ -545,18 +561,86 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         .then((report) => {
           if (isMounted) {
             setOperationalReportStatus(report?.status || 'draft');
+            setConfirmedShifts({
+              1: Boolean(report && (report.realops_shift1 > 0 || report.status === 'submitted' || report.status === 'verified')),
+              2: Boolean(report && (report.realops_shift2 > 0 || report.status === 'submitted' || report.status === 'verified')),
+            });
           }
         })
         .catch(() => {
-          if (isMounted) setOperationalReportStatus('draft');
+          if (isMounted) {
+            setOperationalReportStatus('draft');
+            setConfirmedShifts({ 1: false, 2: false });
+          }
         });
     } else {
       setOperationalReportStatus('draft');
+      setConfirmedShifts({ 1: false, 2: false });
     }
     return () => {
       isMounted = false;
     };
   }, [matchedRoute?.id, operationalReportDate]);
+
+  const handleConfirmFleetStatus = async (
+    shift: 1 | 2,
+    statusMap: Map<number, { s1: string; s2: string }>
+  ) => {
+    if (!currentSheetId || !currentTabName || !headerMap) return;
+
+    let realopsS1 = 0;
+    let realopsS2 = 0;
+    const updatesList: { rowIndex: number; updates: Partial<BusData> }[] = [];
+
+    for (const [rowIndex, val] of statusMap.entries()) {
+      const cleanS1 = cleanShiftNote(val.s1);
+      const cleanS2 = cleanShiftNote(val.s2);
+      if (!cleanS1) realopsS1++;
+      if (!cleanS2) realopsS2++;
+
+      const combinedKeterangan = combineShiftKeterangan(val.s1, val.s2);
+      updatesList.push({
+        rowIndex,
+        updates: { keterangan: combinedKeterangan },
+      });
+    }
+
+    try {
+      await updateBulkBusData(currentSheetId, currentTabName, updatesList, headerMap);
+
+      setBusData((prev) =>
+        prev
+          ? prev.map((bus) => {
+              const match = updatesList.find((u) => u.rowIndex === bus.rowIndex);
+              return match ? { ...bus, ...match.updates } : bus;
+            })
+          : null
+      );
+
+      if (matchedRoute?.id && operationalReportDate) {
+        await upsertDailyRouteReport({
+          route_id: matchedRoute.id,
+          route_code: matchedRoute.route_code,
+          date: operationalReportDate,
+          renops_shift1: dynamicRenops.renops,
+          realops_shift1: realopsS1,
+          renops_shift2: dynamicRenops.renops,
+          realops_shift2: realopsS2,
+          headway_fastest: 3,
+          headway_slowest: 10,
+          traffic_jam_spots: matchedRoute.default_traffic_jam_spots || [],
+          status: 'draft',
+        });
+      }
+
+      setConfirmedShifts((prev) => ({ ...prev, [shift]: true }));
+      showSuccessToast(`Status armada Shift ${shift} berhasil diterapkan!`);
+    } catch (err: any) {
+      console.warn('[Dashboard] Gagal menerapkan status armada:', err);
+      showErrorToast(err?.message || 'Gagal menerapkan status armada');
+      throw err;
+    }
+  };
 
   if (currentView === 'user_management') {
     return (
@@ -842,8 +926,21 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           reportRoute={matchedRoute}
           reportStatus={operationalReportStatus}
           onOpenReportModal={() => setIsReportModalOpen(true)}
+          onOpenFleetModal={() => setIsFleetModalOpen(true)}
         />
       </div>
+
+      <ShiftConfirmationAlertBar
+        isOpen={
+          !confirmedShifts[activeShift] &&
+          Boolean(matchedRoute) &&
+          selectedTab !== "AKUMULASI" &&
+          Boolean(busData && busData.length > 0)
+        }
+        shift={activeShift}
+        routeCode={matchedRoute?.route_code || ""}
+        onOpenModal={() => setIsFleetModalOpen(true)}
+      />
 
       {error && !isAuthExpired && (
         <div className="error-text" style={{ marginBottom: 16 }}>
@@ -1027,9 +1124,23 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           routeCode={matchedRoute.route_code}
           selectedDate={operationalReportDate}
           defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
-          defaultRenops={matchedRoute.default_renops || 0}
+          defaultRenops={dynamicRenops.renops}
           userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
           onStatusChange={setOperationalReportStatus}
+        />
+      )}
+
+      {matchedRoute && selectedTab !== "AKUMULASI" && busData && (
+        <FleetStatusModal
+          isOpen={isFleetModalOpen}
+          onClose={() => setIsFleetModalOpen(false)}
+          routeCode={matchedRoute.route_code}
+          selectedDate={operationalReportDate}
+          renopsTarget={dynamicRenops.renops}
+          dayLabel={dynamicRenops.label}
+          buses={busData}
+          initialShift={activeShift}
+          onConfirmStatus={handleConfirmFleetStatus}
         />
       )}
 
