@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, memo } from 'react';
-import { MapPin, Calendar, ChevronDown, Bus } from 'lucide-react';
+import { MapPin, ChevronDown } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
 import { inspectSpreadsheetHeader } from '../services/googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
@@ -39,7 +39,6 @@ interface Props {
   reportRoute?: { id: number; route_code: string } | null;
   reportStatus?: 'draft' | 'submitted' | 'verified';
   onOpenReportModal?: () => void;
-  onOpenFleetModal?: () => void;
 }
 
 function RouteSelectorCardComponent({
@@ -58,7 +57,6 @@ function RouteSelectorCardComponent({
   reportRoute,
   reportStatus,
   onOpenReportModal,
-  onOpenFleetModal,
 }: Props) {
   const [isSheetOpen, setIsSheetOpen] = useState(!isDataLoaded);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
@@ -370,11 +368,13 @@ function RouteSelectorCardComponent({
       })
     : null;
 
-  const displayRouteTitle = loadedFlat
-    ? `${loadedFlat.routeCode} (${MONTH_NAMES_ID[loadedFlat.sheet.month]} ${loadedFlat.sheet.year})`
-    : selectedRouteCode && selectedMonth
-      ? `${selectedRouteCode} (${MONTH_NAMES_ID[selectedMonth] || ''} ${selectedYear})`
-      : TEXT_DASHBOARD.ROUTE_SELECTOR.DEFAULT_SELECT_PERIOD;
+  const displayRouteCode = loadedFlat
+    ? loadedFlat.routeCode
+    : selectedRouteCode || TEXT_DASHBOARD.ROUTE_SELECTOR.DEFAULT_SELECT_PERIOD;
+
+  const displayDateLabel = selectedTab === 'AKUMULASI'
+    ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth ?? new Date().getMonth() + 1, selectedYear ?? new Date().getFullYear(), accRange)})`
+    : `Tgl ${currentTabName || selectedTab || '?'}`;
 
   const resetForm = () => {
     setNewRouteCodeSuffix('');
@@ -492,7 +492,7 @@ function RouteSelectorCardComponent({
           WebkitBackdropFilter: 'blur(12px)',
         }}
       >
-        {/* Left Segment: Route & Date Pill */}
+        {/* Left Segment: Clean Unified Route & Date Trigger */}
         <div
           role="button"
           tabIndex={0}
@@ -505,70 +505,58 @@ function RouteSelectorCardComponent({
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            gap: '8px',
             flex: 1,
             minWidth: 0,
-            background: 'var(--bg-hover, rgba(255, 255, 255, 0.05))',
-            border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
+            padding: '6px 8px',
             borderRadius: '10px',
-            padding: '8px 12px',
             cursor: 'pointer',
-            transition: 'all 0.2s ease',
+            background: 'transparent',
+            transition: 'background 0.2s ease',
             userSelect: 'none',
           }}
           title="Klik untuk memilih rute atau tanggal"
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
-            <MapPin size={16} style={{ color: 'var(--accent-color)', flexShrink: 0 }} />
-            <span
-              style={{
-                fontWeight: 700,
-                fontSize: '13px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                color: 'var(--text-primary)',
-              }}
-            >
-              {displayRouteTitle}
-            </span>
-          </div>
-
+          <MapPin size={16} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              flexShrink: 0,
-              marginLeft: '8px',
+              minWidth: 0,
+              flex: 1,
+              overflow: 'hidden',
             }}
           >
-            <div
-              className="morph-pill-badge"
+            <span
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                fontSize: '12px',
-                fontWeight: 600,
+                fontWeight: 700,
+                fontSize: '13.5px',
+                whiteSpace: 'nowrap',
                 color: 'var(--text-primary)',
-                background: 'var(--bg-secondary, rgba(255, 255, 255, 0.08))',
-                padding: '2px 8px',
-                borderRadius: '6px',
+                letterSpacing: '-0.2px',
               }}
             >
-              <Calendar size={13} style={{ flexShrink: 0 }} />
-              <span>
-                {selectedTab === 'AKUMULASI'
-                  ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth ?? new Date().getMonth() + 1, selectedYear ?? new Date().getFullYear(), accRange)})`
-                  : `Tgl ${currentTabName || selectedTab || '?'}`}
-              </span>
-            </div>
-            <ChevronDown size={14} style={{ color: 'var(--text-secondary)', opacity: 0.8 }} />
+              {displayRouteCode}
+            </span>
+            <span style={{ color: 'var(--text-secondary)', opacity: 0.45, fontSize: '12px' }}>•</span>
+            <span
+              style={{
+                fontWeight: 500,
+                fontSize: '12.5px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              {displayDateLabel}
+            </span>
           </div>
+          <ChevronDown size={14} style={{ color: 'var(--text-secondary)', opacity: 0.7, flexShrink: 0 }} />
         </div>
 
-        {/* Right Segment: Exit Accumulation OR Operational Report Pill */}
+        {/* Right Segment: Exit Accumulation OR Unified Operational Report Pill */}
         {isAccumulation ? (
           <button
             type="button"
@@ -587,11 +575,11 @@ function RouteSelectorCardComponent({
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'rgba(234, 179, 8, 0.15)',
-              border: '1px solid rgba(234, 179, 8, 0.4)',
-              borderRadius: '10px',
+              background: 'rgba(234, 179, 8, 0.12)',
+              border: '1px solid rgba(234, 179, 8, 0.35)',
+              borderRadius: '9px',
               color: 'var(--warning-color, #eab308)',
-              padding: '8px 12px',
+              padding: '6px 10px',
               fontSize: '12px',
               fontWeight: 700,
               cursor: 'pointer',
@@ -604,85 +592,69 @@ function RouteSelectorCardComponent({
             <span>✕</span>
             <span>Keluar Akumulasi</span>
           </button>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {onOpenFleetModal && (
-              <button
-                type="button"
-                onClick={onOpenFleetModal}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px',
-                  background: 'rgba(62, 207, 142, 0.12)',
-                  border: '1px solid rgba(62, 207, 142, 0.35)',
-                  borderRadius: '10px',
-                  color: 'var(--accent-color, #3ECF8E)',
-                  padding: '8px 10px',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.2s ease',
-                }}
-                title="Status armada (SGO / TO / OFF / BA)"
-              >
-                <Bus size={14} />
-                <span>Armada</span>
-              </button>
-            )}
-
-            {reportRoute && onOpenReportModal && (
-              <button
-                type="button"
-                onClick={onOpenReportModal}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  background:
-                    reportStatus === 'verified'
-                      ? 'rgba(16, 185, 129, 0.12)'
-                      : reportStatus === 'submitted'
-                      ? 'rgba(14, 165, 233, 0.12)'
-                      : 'rgba(245, 158, 11, 0.12)',
-                  border: `1px solid ${
-                    reportStatus === 'verified'
-                      ? 'rgba(16, 185, 129, 0.35)'
-                      : reportStatus === 'submitted'
-                      ? 'rgba(14, 165, 233, 0.35)'
-                      : 'rgba(245, 158, 11, 0.35)'
-                  }`,
-                  borderRadius: '10px',
-                  color:
-                    reportStatus === 'verified'
-                      ? 'var(--success-color, #10b981)'
-                      : reportStatus === 'submitted'
-                      ? 'var(--info-color, #38bdf8)'
-                      : 'var(--warning-color, #f59e0b)',
-                  padding: '8px 10px',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.2s ease',
-                }}
-                title="Buka laporan kondisi dan armada rute"
-              >
-                <span>
-                  {reportStatus === 'verified'
-                    ? 'Terverifikasi'
+        ) : reportRoute && onOpenReportModal ? (
+          <button
+            type="button"
+            data-testid="open-operational-report-btn"
+            onClick={onOpenReportModal}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background:
+                reportStatus === 'verified'
+                  ? 'rgba(16, 185, 129, 0.1)'
+                  : reportStatus === 'submitted'
+                  ? 'rgba(14, 165, 233, 0.1)'
+                  : 'rgba(245, 158, 11, 0.1)',
+              border: `1px solid ${
+                reportStatus === 'verified'
+                  ? 'rgba(16, 185, 129, 0.25)'
+                  : reportStatus === 'submitted'
+                  ? 'rgba(14, 165, 233, 0.25)'
+                  : 'rgba(245, 158, 11, 0.25)'
+              }`,
+              borderRadius: '9px',
+              color:
+                reportStatus === 'verified'
+                  ? 'var(--success-color, #10b981)'
+                  : reportStatus === 'submitted'
+                  ? 'var(--info-color, #38bdf8)'
+                  : 'var(--warning-color, #f59e0b)',
+              padding: '6px 10px',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s ease',
+            }}
+            title="Buka laporan kondisi dan armada rute"
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background:
+                  reportStatus === 'verified'
+                    ? 'var(--success-color, #10b981)'
                     : reportStatus === 'submitted'
-                    ? 'Terkirim'
-                    : 'Laporan'}
-                </span>
-                <ChevronDown size={13} style={{ opacity: 0.7 }} />
-              </button>
-            )}
-          </div>
-        )}
+                    ? 'var(--info-color, #38bdf8)'
+                    : 'var(--warning-color, #f59e0b)',
+                flexShrink: 0,
+              }}
+            />
+            <span>
+              {reportStatus === 'verified'
+                ? 'Terverifikasi'
+                : reportStatus === 'submitted'
+                ? 'Terkirim'
+                : 'Laporan'}
+            </span>
+            <ChevronDown size={13} style={{ opacity: 0.7 }} />
+          </button>
+        ) : null}
       </div>
 
       {/* Contextual Bottom Sheet Drawer */}

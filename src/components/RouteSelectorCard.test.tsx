@@ -177,8 +177,8 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
     expect(handleExitAccumulation).toHaveBeenCalled();
   });
 
-  it('renders Armada quick action button and invokes onOpenFleetModal when clicked', async () => {
-    const handleOpenFleetModal = vi.fn();
+  it('renders clean unified route code and date label with operational report button', async () => {
+    const handleOpenReportModal = vi.fn();
 
     await act(async () => {
       root.render(
@@ -193,19 +193,26 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
           currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
           currentTabName="5"
           onLoadData={vi.fn()}
-          onOpenFleetModal={handleOpenFleetModal}
+          reportRoute={{ id: 1, route_code: 'JAK.115' }}
+          reportStatus="draft"
+          onOpenReportModal={handleOpenReportModal}
         />
       );
     });
 
-    const buttons = Array.from(container.querySelectorAll('button'));
-    const armadaBtn = buttons.find((btn) => btn.textContent?.includes('Armada'));
-    expect(armadaBtn).toBeTruthy();
+    // Verify unified left segment displays route code and date label cleanly
+    expect(container.textContent).toContain('JAK.115');
+    expect(container.textContent).toContain('Tgl 5');
+
+    // Verify operational report button is present and clickable
+    const reportBtn = container.querySelector('[data-testid="open-operational-report-btn"]') as HTMLButtonElement;
+    expect(reportBtn).toBeTruthy();
+    expect(reportBtn.textContent).toContain('Laporan');
 
     await act(async () => {
-      armadaBtn?.click();
+      reportBtn.click();
     });
 
-    expect(handleOpenFleetModal).toHaveBeenCalled();
+    expect(handleOpenReportModal).toHaveBeenCalled();
   });
 });

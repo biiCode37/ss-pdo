@@ -848,20 +848,20 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "5px",
-                padding: "4px 10px",
-                borderRadius: "20px",
-                background: "rgba(59, 130, 246, 0.1)",
-                border: "1px solid rgba(59, 130, 246, 0.25)",
-                color: "#3b82f6",
+                gap: "6px",
+                padding: "5px 10px",
+                borderRadius: "9px",
+                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                border: "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
+                color: "var(--text-secondary, #94a3b8)",
                 fontSize: "12px",
-                fontWeight: 700,
+                fontWeight: 600,
                 cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
               }}
               title={TEXT_DASHBOARD.SWITCHER.TITLE}
             >
-              <Globe size={13} />
+              <Globe size={13} style={{ color: "var(--accent-color, #3ECF8E)" }} />
               <span>{TEXT_DASHBOARD.SWITCHER.REGIONAL_MONITORING}</span>
             </button>
 
@@ -926,7 +926,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           reportRoute={matchedRoute}
           reportStatus={operationalReportStatus}
           onOpenReportModal={() => setIsReportModalOpen(true)}
-          onOpenFleetModal={() => setIsFleetModalOpen(true)}
         />
       </div>
 
@@ -1127,6 +1126,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           defaultRenops={dynamicRenops.renops}
           userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
           onStatusChange={setOperationalReportStatus}
+          onOpenFleetStatus={() => {
+            setIsReportModalOpen(false);
+            setIsFleetModalOpen(true);
+          }}
         />
       )}
 

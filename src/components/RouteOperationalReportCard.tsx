@@ -33,6 +33,7 @@ interface Props {
   asModal?: boolean;
   isOpen?: boolean;
   onClose?: () => void;
+  onOpenFleetStatus?: () => void;
 }
 
 function RouteOperationalReportCardComponent({
@@ -47,6 +48,7 @@ function RouteOperationalReportCardComponent({
   asModal = false,
   isOpen = true,
   onClose,
+  onOpenFleetStatus,
 }: Props) {
   useMobileBackHandler({
     id: 'route_operational_report_sheet',
@@ -237,19 +239,52 @@ function RouteOperationalReportCardComponent({
     <form onSubmit={handleSubmit} style={{ marginTop: '16px' }}>
           {/* Section 1: Armada Per Shift */}
           <div style={{ marginBottom: '16px' }}>
-            <label
+            <div
               style={{
-                fontSize: '11.5px',
-                fontWeight: 700,
-                color: 'var(--text-secondary)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.6px',
-                display: 'block',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 marginBottom: '8px',
               }}
             >
-              {TEXT_PDO_FORM.ARMADA_SECTION}
-            </label>
+              <label
+                style={{
+                  fontSize: '11.5px',
+                  fontWeight: 700,
+                  color: 'var(--text-secondary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.6px',
+                  margin: 0,
+                }}
+              >
+                {TEXT_PDO_FORM.ARMADA_SECTION}
+              </label>
+
+              {onOpenFleetStatus && (
+                <button
+                  type="button"
+                  onClick={onOpenFleetStatus}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    padding: '3px 8px',
+                    borderRadius: '7px',
+                    background: 'rgba(62, 207, 142, 0.12)',
+                    border: '1px solid rgba(62, 207, 142, 0.3)',
+                    color: 'var(--accent-color, #3ECF8E)',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  title="Atur status armada per unit (SGO, TO, OFF, BA)"
+                >
+                  <Bus size={12} />
+                  <span>Atur Unit Armada →</span>
+                </button>
+              )}
+            </div>
             <div
               style={{
                 display: 'grid',
@@ -861,6 +896,67 @@ function RouteOperationalReportCardComponent({
               </button>
             </div>
           </div>
+
+          {/* Segmented Control: Status Armada vs Laporan Operasional */}
+          {onOpenFleetStatus && (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '6px',
+                padding: '4px',
+                borderRadius: '12px',
+                background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
+                border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
+                marginBottom: '16px',
+              }}
+            >
+              <button
+                type="button"
+                onClick={onOpenFleetStatus}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '7px 12px',
+                  borderRadius: '9px',
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'var(--text-secondary)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+                title="Buka pengaturan unit armada"
+              >
+                <Bus size={14} />
+                <span>Status Armada</span>
+              </button>
+              <button
+                type="button"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '7px 12px',
+                  borderRadius: '9px',
+                  border: '1px solid var(--border-color, rgba(255, 255, 255, 0.12))',
+                  background: 'var(--bg-secondary, rgba(255, 255, 255, 0.1))',
+                  color: 'var(--text-primary)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  cursor: 'default',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                }}
+              >
+                <Send size={13} style={{ transform: 'rotate(-20deg)' }} />
+                <span>Laporan Operasional</span>
+              </button>
+            </div>
+          )}
 
           {renderFormBody()}
         </div>
