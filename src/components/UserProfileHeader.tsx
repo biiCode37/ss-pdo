@@ -14,10 +14,10 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
     avatarUrl?: string;
   }>({
     fullName:
-      localStorage.getItem("PDO_USER_NAME") ||
+      localStorage.getItem("PDO_USER_NAME")?.trim() ||
       TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
     email:
-      localStorage.getItem("PDO_USER_EMAIL") ||
+      localStorage.getItem("PDO_USER_EMAIL")?.trim() ||
       TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
     avatarUrl: localStorage.getItem("PDO_USER_AVATAR") || undefined,
   });
@@ -30,10 +30,10 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
       }
       return {
         fullName:
-          localStorage.getItem("PDO_USER_NAME") ||
+          localStorage.getItem("PDO_USER_NAME")?.trim() ||
           TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
         email:
-          localStorage.getItem("PDO_USER_EMAIL") ||
+          localStorage.getItem("PDO_USER_EMAIL")?.trim() ||
           TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
         avatarUrl: freshAvatar,
       };
@@ -71,6 +71,7 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
         transition:
           "background 0.2s cubic-bezier(0.32, 0.72, 0, 1), transform 0.15s ease",
         userSelect: "none",
+        textAlign: "left",
       }}
       title="Buka Menu Profil & Pengaturan Akun"
       aria-label="Profil Akun Pengguna"
@@ -120,6 +121,8 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
           minWidth: 0,
           overflow: "hidden",
           justifyContent: "center",
+          alignItems: "flex-start",
+          textAlign: "left",
         }}
       >
         <span
@@ -132,6 +135,9 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
             overflow: "hidden",
             textOverflow: "ellipsis",
             letterSpacing: "-0.2px",
+            textAlign: "left",
+            display: "block",
+            width: "100%",
           }}
         >
           {profile.fullName}
@@ -146,6 +152,9 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
             textOverflow: "ellipsis",
             lineHeight: 1.25,
             marginTop: "1.5px",
+            textAlign: "left",
+            display: "block",
+            width: "100%",
           }}
         >
           {profile.email}

@@ -149,7 +149,7 @@ input[type="number"] {
 
 /* App Header */
 .app-header {
-  text-align: center;
+  text-align: left;
   padding: 20px 0 16px 0;
 }
 .app-header h1 {

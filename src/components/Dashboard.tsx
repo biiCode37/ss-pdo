@@ -818,6 +818,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             marginBottom: "10px",
             padding: 0,
             gap: "12px",
+            textAlign: "left",
           }}
         >
           {/* POJOK KIRI: Profil Akun Pengguna (Avatar, Nama, Role, Email) */}
