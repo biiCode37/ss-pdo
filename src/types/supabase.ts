@@ -10,6 +10,10 @@ export interface Route {
   target_hk?: number;
   best_record?: number;
   default_renops?: number;
+  renops_weekday?: number;
+  renops_saturday?: number;
+  renops_sunday?: number;
+  renops_holiday?: number;
   supervisor_name?: string;
   default_traffic_jam_spots?: string[];
   created_at: string;
