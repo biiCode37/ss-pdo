@@ -64,7 +64,7 @@ import {
   DailyToaTrendSkeleton,
   UnitCardSkeleton,
 } from "./Skeletons";
-import { TEXT_DASHBOARD, TEXT_AUTH, TEXT_COMMON } from "../constants/texts";
+import { TEXT_DASHBOARD, TEXT_AUTH, TEXT_COMMON, TEXT_FLEET_STATUS } from "../constants/texts";
 
 interface Props {
   onLogout: () => void;
@@ -547,7 +547,12 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   }, [currentRouteCode]);
 
   const activeRouteCode = useMemo(() => {
-    return matchedRoute?.route_code || currentRouteCode || selectedRouteCode || "Pilih Rute";
+    return (
+      matchedRoute?.route_code ||
+      currentRouteCode ||
+      selectedRouteCode ||
+      TEXT_DASHBOARD.HEADER.DEFAULT_PICK_ROUTE
+    );
   }, [matchedRoute, currentRouteCode, selectedRouteCode]);
 
   const operationalReportDate = useMemo(() => {
@@ -652,10 +657,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       }
 
       setConfirmedShifts((prev) => ({ ...prev, [shift]: true }));
-      showSuccessToast(`Status armada Shift ${shift} berhasil diterapkan!`);
+      showSuccessToast(TEXT_FLEET_STATUS.TOAST.APPLY_SUCCESS(shift));
     } catch (err: any) {
       console.warn('[Dashboard] Gagal menerapkan status armada:', err);
-      showErrorToast(err?.message || 'Gagal menerapkan status armada');
+      showErrorToast(err?.message || TEXT_FLEET_STATUS.TOAST.APPLY_ERROR);
       throw err;
     }
   };

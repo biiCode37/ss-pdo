@@ -275,7 +275,7 @@ export async function showBulkTripModal(
   const formHtml = `
     <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
       <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.45;">
-        Nilai di bawah akan langsung diterapkan ke seluruh <strong>${escapeHtml(unitCount)} unit bus</strong> pada rute ini dan disimpan ke spreadsheet.
+        ${TEXT_ALERTS.BULK_TRIP.DESCRIPTION(escapeHtml(unitCount))}
       </div>
 
       <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
@@ -368,7 +368,7 @@ export async function showBulkTripModal(
 
       if (pVal.trim() === "" || qVal.trim() === "") {
         pdoSwal.showValidationMessage(
-          "Harap isi nilai Trip Pergi dan Trip Pulang!",
+          TEXT_ALERTS.BULK_TRIP.REQUIRED,
         );
         return false;
       }
@@ -377,13 +377,13 @@ export async function showBulkTripModal(
       const qNum = Number(qVal);
 
       if (isNaN(pNum) || isNaN(qNum) || pNum < 0 || qNum < 0) {
-        pdoSwal.showValidationMessage("Nilai trip harus berupa angka positif!");
+        pdoSwal.showValidationMessage(TEXT_ALERTS.BULK_TRIP.VALIDATION_POSITIVE);
         return false;
       }
 
       if (pNum > 20 || qNum > 20) {
         pdoSwal.showValidationMessage(
-          "Jumlah trip tidak boleh lebih dari 20!",
+          TEXT_ALERTS.BULK_TRIP.VALIDATION_MAX(20),
         );
         return false;
       }
@@ -419,14 +419,14 @@ export async function showBulkCopyKmModal(
   const formHtml = `
     <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
       <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5;">
-        Ditemukan <strong>${escapeHtml(totalUnitsWithKmS1)} unit bus</strong> yang memenuhi syarat (memiliki <strong>KM Akhir Shift 1</strong> & tanpa keterangan).
+        ${TEXT_ALERTS.BULK_COPY_KM.ELIGIBLE_UNITS(escapeHtml(totalUnitsWithKmS1))}
       </div>
 
       ${
         skippedWithNotesCount > 0
           ? `
         <div style="font-size: 11.5px; color: var(--warning-text, #d97706); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); padding: 8px 12px; border-radius: 10px; line-height: 1.4;">
-          ⚠️ <strong>${escapeHtml(skippedWithNotesCount)} unit bus</strong> dilewati secara otomatis karena memiliki nilai pada kolom keterangan.
+          ${TEXT_ALERTS.BULK_COPY_KM.SKIPPED_WITH_NOTES(escapeHtml(skippedWithNotesCount))}
         </div>
       `
           : ""
@@ -437,10 +437,10 @@ export async function showBulkCopyKmModal(
           <input type="radio" name="swal-bulk-copy-mode" value="only_empty" ${isOnlyEmptyAvailable ? "checked" : "disabled"} style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
           <div>
             <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">
-              Hanya isi yang masih kosong (${escapeHtml(emptyKmAwal2Count)} unit)
+              ${TEXT_ALERTS.BULK_COPY_KM.MODE_ONLY_EMPTY(escapeHtml(emptyKmAwal2Count))}
             </div>
             <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
-              ${isOnlyEmptyAvailable ? "Direkomendasikan agar tidak menimpa data yang sudah diisi manual." : "Seluruh unit yang memenuhi syarat sudah memiliki nilai KM Awal S2."}
+              ${isOnlyEmptyAvailable ? TEXT_ALERTS.BULK_COPY_KM.MODE_ONLY_EMPTY_DESC_REC : TEXT_ALERTS.BULK_COPY_KM.MODE_ONLY_EMPTY_DESC_DONE}
             </div>
           </div>
         </label>
@@ -450,8 +450,8 @@ export async function showBulkCopyKmModal(
         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; user-select: none;">
           <input type="radio" name="swal-bulk-copy-mode" value="all" ${!isOnlyEmptyAvailable ? "checked" : ""} style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
           <div>
-            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Salin & perbarui semua (${escapeHtml(totalUnitsWithKmS1)} unit)</div>
-            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Menimpa seluruh nilai KM Awal Shift 2 dengan KM Akhir Shift 1.</div>
+            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">${TEXT_ALERTS.BULK_COPY_KM.MODE_ALL(escapeHtml(totalUnitsWithKmS1))}</div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${TEXT_ALERTS.BULK_COPY_KM.MODE_ALL_DESC}</div>
           </div>
         </label>
       </div>
@@ -493,22 +493,7 @@ export async function showFormatSheetConfirm(
 ): Promise<boolean> {
   const result = await pdoSwal.fire({
     title: TEXT_ALERTS.FORMAT_SHEET.TITLE,
-    html: `
-      <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; text-align: left;">
-        Sistem akan merapikan seluruh baris data pada tanggal <strong>${tabName}</strong> di Google Sheets asli:
-        <div style="margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(62, 207, 142, 0.08); border: 1px solid rgba(62, 207, 142, 0.2);">
-          <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Standar Format yang Diterapkan:</div>
-          <div style="font-size: 12px; color: var(--text-secondary);">
-            • <strong>Teks & Perataan:</strong> Normal (tidak bold), Rata Tengah Horizontal & Vertikal, Wrap Text.<br/>
-            • <strong>Warna Baris (No Body s/d Total KM S2):</strong><br/>
-            &nbsp;&nbsp;🔵 Skyblue untuk <code>BA.01-04</code>, <code>NP1</code>, <code>NP2</code><br/>
-            &nbsp;&nbsp;🟡 Kuning untuk <code>OFF</code><br/>
-            &nbsp;&nbsp;🔴 Merah untuk <code>TO EVDAL</code><br/>
-            &nbsp;&nbsp;🟢 Hijau Muda untuk Catatan Lainnya / Bebas
-          </div>
-        </div>
-      </div>
-    `,
+    html: TEXT_ALERTS.FORMAT_SHEET.HTML_EXPLANATION(escapeHtml(tabName)),
     icon: "question",
     showCancelButton: true,
     confirmButtonText: TEXT_ALERTS.FORMAT_SHEET.CONFIRM_BTN,

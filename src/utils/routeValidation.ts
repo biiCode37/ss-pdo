@@ -1,4 +1,5 @@
 import { extractSpreadsheetId } from './sheetIdentity';
+import { TEXT_ERRORS } from '../constants/texts';
 
 /**
  * Format string kode rute menjadi format baku JAK.<KODE> (UPPERCASE, alfanumerik saja setelah titik)
@@ -28,7 +29,7 @@ export function formatRouteCode(rawInput: string): string {
  */
 export function validateRouteCode(code: string): { isValid: boolean; error?: string } {
   if (!code || !code.trim()) {
-    return { isValid: false, error: 'Kode Rute wajib diisi (misal: JAK.76).' };
+    return { isValid: false, error: TEXT_ERRORS.ROUTE_VALIDATION.CODE_REQUIRED };
   }
 
   const trimmed = code.trim().toUpperCase();
@@ -37,7 +38,7 @@ export function validateRouteCode(code: string): { isValid: boolean; error?: str
   if (!regex.test(trimmed)) {
     return {
       isValid: false,
-      error: 'Format Kode Rute tidak valid. Wajib diawali "JAK." diikuti angka/huruf (contoh: JAK.115, JAK.76, JAK.78A).',
+      error: TEXT_ERRORS.ROUTE_VALIDATION.CODE_FORMAT,
     };
   }
 
@@ -49,14 +50,14 @@ export function validateRouteCode(code: string): { isValid: boolean; error?: str
  */
 export function validateGoogleSheetsUrl(urlOrId: string): { isValid: boolean; spreadsheetId?: string; error?: string } {
   if (!urlOrId || !urlOrId.trim()) {
-    return { isValid: false, error: 'Link Google Sheets wajib diisi.' };
+    return { isValid: false, error: TEXT_ERRORS.ROUTE_VALIDATION.URL_REQUIRED };
   }
 
   const spreadsheetId = extractSpreadsheetId(urlOrId.trim());
   if (!spreadsheetId) {
     return {
       isValid: false,
-      error: 'Link Google Sheets tidak valid. Pastikan Anda menyalin link spreadsheet Google Sheets yang benar.',
+      error: TEXT_ERRORS.ROUTE_VALIDATION.URL_INVALID,
     };
   }
 

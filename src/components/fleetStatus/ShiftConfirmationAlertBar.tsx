@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { AlertCircle, ArrowRight } from 'lucide-react';
+import { TEXT_FLEET_STATUS } from '../../constants/texts';
 
 export interface ShiftConfirmationAlertBarProps {
   isOpen: boolean;
@@ -19,8 +20,8 @@ function ShiftConfirmationAlertBarComponent({
 
   const message =
     shift === 1
-      ? 'Status Armada Shift 1 belum dikonfirmasi'
-      : 'Pergantian Shift 2: Konfirmasi status armada';
+      ? TEXT_FLEET_STATUS.ALERT_BAR.SHIFT_1_UNCONFIRMED
+      : TEXT_FLEET_STATUS.ALERT_BAR.SHIFT_2_UNCONFIRMED;
 
   return (
     <div
@@ -115,7 +116,7 @@ function ShiftConfirmationAlertBarComponent({
             transition: 'all 0.18s ease',
           }}
         >
-          <span>Tentukan Status</span>
+          <span>{TEXT_FLEET_STATUS.ALERT_BAR.ACTION_BTN}</span>
           <ArrowRight size={13} />
         </button>
       </div>

@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { X, Layers } from "lucide-react";
 import { fetchRoutesWithSheets } from "../services/routeService";
 import { getRoutesFromCache } from "../utils/cacheUtils";
-import { TEXT_COMMON } from "../constants/texts";
+import { TEXT_COMMON, TEXT_DASHBOARD } from "../constants/texts";
 
 // ponytail: centralized month names dictionary from TEXT_COMMON
 const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
@@ -236,7 +236,7 @@ export function AccumulationSheet({
     const startNum = startYear * 10000 + startMonth * 100 + Math.min(startDay, getDaysInMonth(startMonth, startYear));
     const endNum = endYear * 10000 + endMonth * 100 + Math.min(endDay, getDaysInMonth(endMonth, endYear));
     if (startNum > endNum) {
-      setRangeError("Periode 'Dari' harus lebih awal atau sama dengan periode 'Sampai'.");
+      setRangeError(TEXT_DASHBOARD.ACCUMULATION_SHEET.ERROR_DATE_RANGE);
       return;
     }
 
@@ -371,7 +371,7 @@ export function AccumulationSheet({
                 color: "var(--text-primary)",
               }}
             >
-              Rekap Akumulasi Lintas Periode
+              {TEXT_DASHBOARD.ACCUMULATION_SHEET.TITLE}
             </span>
           </div>
           <button
@@ -398,8 +398,7 @@ export function AccumulationSheet({
             lineHeight: 1.4,
           }}
         >
-          Pilih tanggal, bulan, dan tahun awal s/d tanggal, bulan, dan tahun
-          akhir dari data yang tersedia.
+          {TEXT_DASHBOARD.ACCUMULATION_SHEET.DESC}
         </p>
 
         {/* Section 1: Dari Periode */}
@@ -413,7 +412,7 @@ export function AccumulationSheet({
               marginBottom: "6px",
             }}
           >
-            DARI PERIODE
+            {TEXT_DASHBOARD.ACCUMULATION_SHEET.FROM_LABEL}
           </span>
           <div
             style={{
@@ -431,7 +430,7 @@ export function AccumulationSheet({
                   marginBottom: "2px",
                 }}
               >
-                Tanggal
+                {TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_LABEL}
               </label>
               <select
                 className="input-field"
@@ -441,7 +440,7 @@ export function AccumulationSheet({
               >
                 {days.map((d) => (
                   <option key={d} value={d}>
-                    Tgl {d}
+                    {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{d}
                   </option>
                 ))}
               </select>
@@ -455,7 +454,7 @@ export function AccumulationSheet({
                   marginBottom: "2px",
                 }}
               >
-                Bulan
+                {TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_LABEL}
               </label>
               <select
                 className="input-field"
@@ -475,7 +474,7 @@ export function AccumulationSheet({
                   marginBottom: "2px",
                 }}
               >
-                Tahun
+                {TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_LABEL}
               </label>
               <select
                 className="input-field"
@@ -500,7 +499,7 @@ export function AccumulationSheet({
               marginBottom: "6px",
             }}
           >
-            SAMPAI PERIODE
+            {TEXT_DASHBOARD.ACCUMULATION_SHEET.TO_LABEL}
           </span>
           <div
             style={{
@@ -518,7 +517,7 @@ export function AccumulationSheet({
                   marginBottom: "2px",
                 }}
               >
-                Tanggal
+                {TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_LABEL}
               </label>
               <select
                 className="input-field"
@@ -528,7 +527,7 @@ export function AccumulationSheet({
               >
                 {endDays.map((d) => (
                   <option key={d} value={d}>
-                    Tgl {d}
+                    {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{d}
                   </option>
                 ))}
               </select>
@@ -542,7 +541,7 @@ export function AccumulationSheet({
                   marginBottom: "2px",
                 }}
               >
-                Bulan
+                {TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_LABEL}
               </label>
               <select
                 className="input-field"
@@ -562,7 +561,7 @@ export function AccumulationSheet({
                   marginBottom: "2px",
                 }}
               >
-                Tahun
+                {TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_LABEL}
               </label>
               <select
                 className="input-field"
@@ -631,7 +630,7 @@ export function AccumulationSheet({
             fontSize: "14px",
           }}
         >
-          Terapkan Akumulasi Lintas Periode
+          {TEXT_DASHBOARD.ACCUMULATION_SHEET.APPLY_BTN}
         </button>
 
         {/* Tombol Reset Mode Akumulasi (ACC-17-01) */}
@@ -655,7 +654,7 @@ export function AccumulationSheet({
               cursor: "pointer",
             }}
           >
-            Kembali ke Mode Harian (Matikan Akumulasi)
+            {TEXT_DASHBOARD.ACCUMULATION_SHEET.RESET_BTN}
           </button>
         )}
       </div>

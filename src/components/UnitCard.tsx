@@ -2,6 +2,7 @@ import { memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
+import { TEXT_DASHBOARD } from "../constants/texts";
 import {
   Bus,
   Navigation,
@@ -41,7 +42,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
           }}
         >
           <CheckCircle2 size={14} style={{ flexShrink: 0 }} />
-          <span>S1 & S2 Lengkap</span>
+          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE}</span>
         </span>
       );
     case "SHIFT_1_ONLY":
@@ -61,7 +62,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
           }}
         >
           <AlertCircle size={14} style={{ flexShrink: 0 }} />
-          <span>Negatif Data S2</span>
+          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY}</span>
         </span>
       );
     case "SHIFT_2_ONLY":
@@ -81,7 +82,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
           }}
         >
           <AlertCircle size={14} style={{ flexShrink: 0 }} />
-          <span>Negatif Data S1</span>
+          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY}</span>
         </span>
       );
     case "INCOMPLETE":
@@ -101,7 +102,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
           }}
         >
           <Clock size={14} style={{ flexShrink: 0 }} />
-          <span>Parsial</span>
+          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE}</span>
         </span>
       );
     case "EMPTY":
@@ -122,7 +123,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
           }}
         >
           <XCircle size={14} style={{ flexShrink: 0 }} />
-          <span>Negatif Data S1 & S2</span>
+          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY}</span>
         </span>
       );
   }
@@ -159,7 +160,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
-      aria-label={`Lihat detail unit ${item.unit}`}
+      aria-label={TEXT_DASHBOARD.UNIT_CARD.ARIA_VIEW_DETAIL(item.unit)}
       className="bus-card glass"
       style={{
         padding: "12px 14px",
@@ -219,7 +220,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
             {safeFormatNumber(item.totalKm)}
           </strong>{" "}
           <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
-            KM
+            {TEXT_DASHBOARD.UNIT_CARD.KM_UNIT}
           </span>
         </div>
 
@@ -232,7 +233,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
             {safeFormatNumber(item.totalPassengers)}
           </strong>{" "}
           <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
-            Pnp
+            {TEXT_DASHBOARD.UNIT_CARD.PNP_UNIT}
           </span>
         </div>
 
@@ -247,11 +248,11 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
           }}
           title={
             isBelowTarget
-              ? `Kurang Ritase: ${pergiVal || "0"}/${pulangVal || "0"} Rit (Target Rute: ${targetP}/${targetQ} Rit)`
+              ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_DEFICIT_CARD(pergiVal || "0", pulangVal || "0", targetP, targetQ)
               : isTargetAchieved
-                ? `Target Tercapai: ${pergiVal || "0"}/${pulangVal || "0"} Rit`
+                ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_TARGET_CARD(pergiVal || "0", pulangVal || "0")
                 : isImbalanced
-                  ? `Trip Tidak Seimbang: ${pergiVal || "0"}/${pulangVal || "0"} Rit`
+                  ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_IMBALANCED_CARD(pergiVal || "0", pulangVal || "0")
                   : undefined
           }
         >
@@ -298,7 +299,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
                   : "var(--text-secondary)",
             }}
           >
-            Rit
+            {TEXT_DASHBOARD.UNIT_CARD.RIT_UNIT}
           </span>
         </div>
       </div>

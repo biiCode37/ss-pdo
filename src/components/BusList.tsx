@@ -21,6 +21,7 @@ import { getSatsetMode } from "../utils/modals/busInputModal";
 import { BusCardSkeleton } from "./Skeletons";
 import { detectTargetTrip } from "../utils/unitAnalytics";
 import { filterBusesForKmCopy } from "../utils/keteranganUtils";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 import type { SyncItem } from "../hooks/useOfflineSync";
 
@@ -66,7 +67,7 @@ function BusListComponent({
   const handleOpenBulkTripModal = async () => {
     if (!data || data.length === 0) return;
     if (tabName === "AKUMULASI") {
-      showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
+      showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
       return;
     }
 
@@ -127,12 +128,12 @@ function BusListComponent({
       }
 
       showSuccessToast(
-        `Trip Operasional (${result.tripPergi}/${result.tripPulang}) berhasil disimpan ke Spreadsheet untuk ${data.length} unit!`,
+        TEXT_DASHBOARD.BUS_LIST.SET_TRIP_SUCCESS(result.tripPergi, result.tripPulang, data.length),
       );
     } catch (err: any) {
       showErrorAlert(
-        "Gagal Menyimpan Set Jumlah Trip",
-        err.message || "Terjadi kesalahan saat menyimpan data ke spreadsheet.",
+        TEXT_DASHBOARD.BUS_LIST.SET_TRIP_FAILED,
+        err.message || TEXT_DASHBOARD.BUS_LIST.SAVE_ERROR_GENERIC,
       );
     } finally {
       setIsSubmittingBulk(false);
@@ -176,18 +177,18 @@ function BusListComponent({
 
   const handleBulkCopyKmS1 = async () => {
     if (tabName === "AKUMULASI") {
-      showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
+      showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
       return;
     }
 
     if (availableKmS1Buses.length === 0) {
       if (skippedWithNotesCount > 0) {
         showWarningToast(
-          `Seluruh unit yang memiliki KM Akhir S1 (${skippedWithNotesCount} unit) memiliki catatan keterangan, sehingga proses salin dilewati.`,
+          TEXT_DASHBOARD.BUS_LIST.COPY_KM_SKIPPED_ALL(skippedWithNotesCount),
         );
       } else {
         showWarningToast(
-          "Tidak ada unit bus yang memiliki data KM Akhir Shift 1.",
+          TEXT_DASHBOARD.BUS_LIST.COPY_KM_NO_DATA,
         );
       }
       return;
@@ -209,7 +210,7 @@ function BusListComponent({
         : availableKmS1Buses;
 
     if (targetBuses.length === 0) {
-      showWarningToast("Semua unit bus sudah memiliki nilai KM Awal Shift 2.");
+      showWarningToast(TEXT_DASHBOARD.BUS_LIST.COPY_KM_ALL_FILLED);
       return;
     }
 
@@ -248,15 +249,15 @@ function BusListComponent({
 
       const noteSuffix =
         skippedWithNotesCount > 0
-          ? ` (${skippedWithNotesCount} unit berketerangan dilewati)`
+          ? ` ${TEXT_DASHBOARD.BUS_LIST.COPY_KM_SKIPPED_TEXT(skippedWithNotesCount)}`
           : "";
       showSuccessToast(
-        `KM Akhir S1 berhasil disalin ke KM Awal S2 untuk ${targetBuses.length} unit bus${noteSuffix}!`,
+        TEXT_DASHBOARD.BUS_LIST.COPY_KM_SUCCESS(targetBuses.length, noteSuffix),
       );
     } catch (err: any) {
       showErrorAlert(
-        "Gagal Menyalin KM Massal",
-        err.message || "Terjadi kesalahan saat menyimpan data ke spreadsheet.",
+        TEXT_DASHBOARD.BUS_LIST.COPY_KM_FAILED,
+        err.message || TEXT_DASHBOARD.BUS_LIST.SAVE_ERROR_GENERIC,
       );
     } finally {
       setIsSubmittingBulk(false);
@@ -264,14 +265,14 @@ function BusListComponent({
   };
 
   const categories = [
-    { id: "ALL", label: "Semua Kolom" },
-    { id: "trip", label: "Trip Armada" },
-    { id: "toaShift1", label: "TOA S1" },
-    { id: "totalToa", label: "Total TOA" },
-    { id: "kmAwal1", label: "KM Awal S1" },
-    { id: "kmAkhir1", label: "KM Akhir S1" },
-    { id: "kmAwal2", label: "KM Awal S2" },
-    { id: "kmAkhir2", label: "KM Akhir S2" },
+    { id: "ALL", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.ALL },
+    { id: "trip", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TRIP },
+    { id: "toaShift1", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TOA_S1 },
+    { id: "totalToa", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TOTAL_TOA },
+    { id: "kmAwal1", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_1 },
+    { id: "kmAkhir1", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AKHIR_1 },
+    { id: "kmAwal2", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_2 },
+    { id: "kmAkhir2", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AKHIR_2 },
   ];
 
   // Logic selesai bergantung pada kategori yang aktif
@@ -360,7 +361,7 @@ function BusListComponent({
             nextCardEl.click();
           }
         } else {
-          showSuccessToast("🎉 Semua unit pada filter ini telah selesai diisi!");
+          showSuccessToast(TEXT_DASHBOARD.BUS_LIST.ALL_UNITS_FILLED);
         }
       }, 120);
     },
@@ -521,8 +522,8 @@ function BusListComponent({
               }}
               title={
                 bulkPergi && bulkPulang
-                  ? `Set Jumlah Trip: Pergi ${bulkPergi} · Pulang ${bulkPulang}`
-                  : "Set Jumlah Trip Armada"
+                  ? TEXT_DASHBOARD.BUS_LIST.SET_TRIP_WITH_COUNT(bulkPergi, bulkPulang)
+                  : TEXT_DASHBOARD.BUS_LIST.SET_TRIP_TITLE
               }
             >
               {isSubmittingBulk && (
@@ -533,7 +534,7 @@ function BusListComponent({
                 />
               )}
               <span style={{ color: "var(--text-primary)" }}>
-                Set Jumlah Trip
+                {TEXT_DASHBOARD.BUS_LIST.SET_TRIP_BTN}
                 {bulkPergi && bulkPulang
                   ? ` (${bulkPergi}/${bulkPulang})`
                   : ""}
@@ -599,7 +600,7 @@ function BusListComponent({
               <input
                 type="text"
                 className="input-field search-input"
-                placeholder="Cari No. Body Unit..."
+                placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{ height: "40px", fontSize: "13.5px" }}
@@ -626,7 +627,7 @@ function BusListComponent({
               ) : (
                 <Filter size={16} />
               )}
-              {showOnlyUnfinished ? "Sisa Unit" : "Filter"}
+              {showOnlyUnfinished ? TEXT_DASHBOARD.BUS_LIST.FILTER_UNFINISHED : TEXT_DASHBOARD.BUS_LIST.FILTER_BTN}
             </button>
           </div>
 
@@ -664,9 +665,9 @@ function BusListComponent({
                     color: "var(--shift1-color, #38bdf8)",
                   }}
                 >
-                  {availableKmS1Buses.length} unit
+                  {TEXT_DASHBOARD.BUS_LIST.COPY_KM_READY_COUNT(availableKmS1Buses.length)}
                 </span>
-                <span>siap disalin</span>
+                <span>{TEXT_DASHBOARD.BUS_LIST.COPY_KM_READY_TEXT}</span>
                 {skippedWithNotesCount > 0 && (
                   <span
                     style={{
@@ -674,7 +675,7 @@ function BusListComponent({
                       color: "var(--warning-text, #f59e0b)",
                     }}
                   >
-                    ({skippedWithNotesCount} berketerangan dilewati)
+                    {TEXT_DASHBOARD.BUS_LIST.COPY_KM_SKIPPED_TEXT(skippedWithNotesCount)}
                   </span>
                 )}
               </div>
@@ -694,7 +695,7 @@ function BusListComponent({
                   flexShrink: 0,
                 }}
               >
-                📋 Salin Semua KM S1
+                {TEXT_DASHBOARD.BUS_LIST.COPY_KM_BTN}
               </button>
             </div>
           )}
@@ -732,7 +733,7 @@ function BusListComponent({
             ))
           ) : (
             <div className="empty-state">
-              <p>Tidak ada unit yang ditemukan dengan nomor "{searchQuery}"</p>
+              <p>{TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)}</p>
             </div>
           )}
         </div>

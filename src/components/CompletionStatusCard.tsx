@@ -2,6 +2,7 @@ import { memo } from "react";
 import { FileText } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -29,7 +30,7 @@ function CompletionStatusCardComponent({
       >
         <div className="analytics-card-title" style={{ marginTop: "2px" }}>
           <FileText size={18} />
-          <span>Unit Dengan Keterangan Tertentu</span>
+          <span>{TEXT_DASHBOARD.COMPLETION_STATUS.TITLE}</span>
         </div>
         <div
           style={{
@@ -65,7 +66,7 @@ function CompletionStatusCardComponent({
               color: hasNotes ? "var(--accent-color)" : "var(--text-secondary)",
             }}
           >
-            {hasNotes ? `${summary.busesWithNotes.length} Unit` : "0 Unit"}
+            {TEXT_DASHBOARD.COMPLETION_STATUS.UNIT_COUNT(hasNotes ? summary.busesWithNotes.length : 0)}
           </span>
         </div>
       </div>
@@ -98,7 +99,7 @@ function CompletionStatusCardComponent({
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
                 gap: "10px",
               }}
-              title="Klik untuk lompat ke unit ini"
+              title={TEXT_DASHBOARD.COMPLETION_STATUS.JUMP_TO_UNIT_TITLE}
             >
               <span
                 style={{
@@ -148,7 +149,7 @@ function CompletionStatusCardComponent({
             margin: "8px 0 0 0",
           }}
         >
-          Tidak ada keterangan unit untuk tanggal ini.
+          {TEXT_DASHBOARD.COMPLETION_STATUS.NO_NOTES}
         </p>
       )}
     </div>

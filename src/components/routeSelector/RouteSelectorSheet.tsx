@@ -169,7 +169,7 @@ export function RouteSelectorSheet({
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            title="Tutup"
+            title={TEXT_COMMON.CLOSE}
           >
             <X size={18} />
           </button>
@@ -264,7 +264,7 @@ export function RouteSelectorSheet({
               value={selectedYear ?? ''}
               onChange={(e) => onYearChange(e.target.value)}
               disabled={availableYears.length === 0}
-              title={availableYears.length === 0 ? 'Belum ada data rute' : 'Pilih tahun terlebih dahulu'}
+              title={availableYears.length === 0 ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_NO_ROUTE_DATA : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_YEAR_FIRST}
               style={{ width: '100%', padding: '9px 10px', fontSize: '13px' }}
             >
               <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_PLACEHOLDER}</option>
@@ -284,7 +284,7 @@ export function RouteSelectorSheet({
               value={selectedMonth ?? ''}
               onChange={(e) => onMonthChange(e.target.value)}
               disabled={!monthEnabled || availableMonths.length === 0}
-              title={!monthEnabled ? 'Pilih tahun terlebih dahulu' : 'Pilih bulan'}
+              title={!monthEnabled ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_YEAR_FIRST : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_MONTH}
               style={{ width: '100%', padding: '9px 10px', fontSize: '13px', opacity: !monthEnabled ? 0.55 : 1 }}
             >
               <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_PLACEHOLDER}</option>
@@ -304,7 +304,7 @@ export function RouteSelectorSheet({
               value={selectedRouteCode}
               onChange={(e) => onRouteCodeChange(e.target.value)}
               disabled={!routeEnabled || availableRouteCodes.length === 0}
-              title={!routeEnabled ? 'Pilih bulan terlebih dahulu' : 'Pilih rute'}
+              title={!routeEnabled ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_MONTH_FIRST : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_ROUTE}
               style={{ width: '100%', padding: '9px 10px', fontSize: '13px', opacity: !routeEnabled ? 0.55 : 1 }}
             >
               <option value="">
@@ -328,7 +328,7 @@ export function RouteSelectorSheet({
               value={selectedTab}
               onChange={(e) => onTabChange(e.target.value)}
               disabled={!dateEnabled || days.length === 0}
-              title={!dateEnabled ? 'Pilih rute terlebih dahulu' : 'Pilih tanggal'}
+              title={!dateEnabled ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_ROUTE_FIRST : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_DATE}
               style={{ width: '100%', padding: '9px 10px', fontSize: '13px', opacity: !dateEnabled ? 0.55 : 1 }}
             >
               {isAccumulation && (
@@ -336,7 +336,7 @@ export function RouteSelectorSheet({
               )}
               <option value="" disabled={isAccumulation}>{TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_PLACEHOLDER}</option>
               {days.map((day) => (
-                <option key={day} value={day}>Tgl {day}</option>
+                <option key={day} value={day}>{TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{day}</option>
               ))}
             </select>
           </div>

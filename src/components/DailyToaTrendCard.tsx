@@ -4,6 +4,7 @@ import { BarChart2, Calendar, Award, Zap, TrendingDown, AlertCircle } from "luci
 import { getMonthlyToaTrend } from "../services/googleSheets";
 import { DailyToaTrendSkeleton } from "./Skeletons";
 import { extractMonthYearLabel } from "../utils/analytics";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   sheetId: string;
@@ -257,7 +258,7 @@ function DailyToaTrendCardComponent({
           }}
         >
           <AlertCircle size={16} style={{ flexShrink: 0 }} />
-          <span>Data grafik tren tidak dapat dimuat saat ini. Silakan periksa koneksi internet Anda.</span>
+          <span>{TEXT_DASHBOARD.TOA_TREND.ERROR_MESSAGE}</span>
         </div>
       </div>
     );
@@ -298,7 +299,7 @@ function DailyToaTrendCardComponent({
         <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
           <div className="analytics-card-title">
             <BarChart2 size={18} />
-            <span>Grafik Pelanggan Harian</span>
+            <span>{TEXT_DASHBOARD.TOA_TREND.TITLE}</span>
           </div>
           {unitFilter && (
             <div
@@ -360,7 +361,7 @@ function DailyToaTrendCardComponent({
             }}
           >
             <Award size={11} style={{ color: "var(--total-color)" }} />
-            Tertinggi
+            {TEXT_DASHBOARD.TOA_TREND.PEAK_LABEL}
           </span>
           <span
             style={{
@@ -373,7 +374,7 @@ function DailyToaTrendCardComponent({
             {peakItem ? safeFormatNumber(peakItem.totalToa) : "0"}
           </span>
           <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
-            Tgl {peakItem ? peakItem.day : "-"}
+            {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{peakItem ? peakItem.day : "-"}
           </span>
         </div>
 
@@ -400,7 +401,7 @@ function DailyToaTrendCardComponent({
             }}
           >
             <TrendingDown size={11} style={{ color: "var(--danger-text)" }} />
-            Terendah
+            {TEXT_DASHBOARD.TOA_TREND.LOWEST_LABEL}
           </span>
           <span
             style={{
@@ -413,7 +414,7 @@ function DailyToaTrendCardComponent({
             {lowestItem ? safeFormatNumber(lowestItem.totalToa) : "0"}
           </span>
           <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
-            Tgl {lowestItem ? lowestItem.day : "-"}
+            {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{lowestItem ? lowestItem.day : "-"}
           </span>
         </div>
 
@@ -440,7 +441,7 @@ function DailyToaTrendCardComponent({
             }}
           >
             <Zap size={11} style={{ color: "var(--info-text)" }} />
-            Rata-rata
+            {TEXT_DASHBOARD.TOA_TREND.AVG_LABEL}
           </span>
           <span
             style={{
@@ -453,7 +454,7 @@ function DailyToaTrendCardComponent({
             {safeFormatNumber(avgToa)}
           </span>
           <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
-            Pnp/Hari
+            {TEXT_DASHBOARD.TOA_TREND.AVG_UNIT}
           </span>
         </div>
       </div>
@@ -479,7 +480,7 @@ function DailyToaTrendCardComponent({
               background: "linear-gradient(180deg, #4ade80 0%, #059669 100%)",
             }}
           ></span>
-          Naik
+          {TEXT_DASHBOARD.TOA_TREND.LEGEND_UP}
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
           <span
@@ -490,7 +491,7 @@ function DailyToaTrendCardComponent({
               background: "linear-gradient(180deg, #fb923c 0%, #ea580c 100%)",
             }}
           ></span>
-          Turun Sedikit
+          {TEXT_DASHBOARD.TOA_TREND.LEGEND_SLIGHT_DOWN}
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
           <span
@@ -501,7 +502,7 @@ function DailyToaTrendCardComponent({
               background: "linear-gradient(180deg, #f43f5e 0%, #991b1b 100%)",
             }}
           ></span>
-          Turun Drastis (≥20%)
+          {TEXT_DASHBOARD.TOA_TREND.LEGEND_DRASTIC_DOWN}
         </span>
       </div>
 

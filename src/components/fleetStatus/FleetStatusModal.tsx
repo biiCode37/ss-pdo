@@ -4,6 +4,7 @@ import { X, Loader2 } from 'lucide-react';
 import type { BusData } from '../../services/googleSheets';
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler';
 import { splitShiftKeterangan, cleanShiftNote } from '../../utils/keteranganUtils';
+import { TEXT_FLEET_STATUS } from '../../constants/texts';
 
 const isTestEnv =
   import.meta.env?.MODE === 'test' ||
@@ -275,7 +276,7 @@ function FleetStatusModalComponent({
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            title="Tutup"
+            title={TEXT_FLEET_STATUS.MODAL.CLOSE_TITLE}
           >
             <X size={20} />
           </button>
@@ -319,7 +320,7 @@ function FleetStatusModalComponent({
                   boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                 }}
               >
-                <span>Status Armada</span>
+                <span>{TEXT_FLEET_STATUS.MODAL.SEGMENT_FLEET}</span>
               </button>
               <button
                 type="button"
@@ -339,9 +340,9 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                 }}
-                title="Buka laporan operasional"
+                title={TEXT_FLEET_STATUS.MODAL.REPORT_TITLE}
               >
-                <span>Laporan Operasional</span>
+                <span>{TEXT_FLEET_STATUS.MODAL.SEGMENT_REPORT}</span>
               </button>
             </div>
           </div>
@@ -385,7 +386,7 @@ function FleetStatusModalComponent({
                 transition: 'all 0.18s ease',
               }}
             >
-              Shift 1 (Pagi)
+              {TEXT_FLEET_STATUS.MODAL.SHIFT_1_TAB}
             </button>
             <button
               type="button"
@@ -402,7 +403,7 @@ function FleetStatusModalComponent({
                 transition: 'all 0.18s ease',
               }}
             >
-              Shift 2 (Siang)
+              {TEXT_FLEET_STATUS.MODAL.SHIFT_2_TAB}
             </button>
           </div>
 
@@ -435,7 +436,7 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                SGO
+                {TEXT_FLEET_STATUS.STATUS_CODES.SGO}
               </button>
 
               {/* Status OFF */}
@@ -456,7 +457,7 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                OFF
+                {TEXT_FLEET_STATUS.STATUS_CODES.OFF}
               </button>
 
               {/* Status TO */}
@@ -477,7 +478,7 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                T.O
+                {TEXT_FLEET_STATUS.STATUS_CODES.TO}
               </button>
 
               {/* Status BA */}
@@ -498,7 +499,7 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                BA / Kendala
+                {TEXT_FLEET_STATUS.STATUS_CODES.BA}
               </button>
             </div>
 
@@ -521,7 +522,7 @@ function FleetStatusModalComponent({
                 whiteSpace: 'nowrap',
               }}
             >
-              <span>SGO Semua Unit</span>
+              <span>{TEXT_FLEET_STATUS.MODAL.SGO_ALL_BTN}</span>
             </button>
           </div>
         </div>
@@ -596,7 +597,7 @@ function FleetStatusModalComponent({
                     minHeight: '72px',
                     transition: 'all 0.15s ease',
                   }}
-                  title={`Klik untuk menerapkan status ${activeBrush}`}
+                  title={TEXT_FLEET_STATUS.MODAL.APPLY_STATUS_TITLE(activeBrush)}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span
@@ -635,7 +636,7 @@ function FleetStatusModalComponent({
                         display: 'block',
                       }}
                     >
-                      {isSgo ? 'Siap Guna Operasi' : note}
+                      {isSgo ? TEXT_FLEET_STATUS.MODAL.SGO_FULL_LABEL : note}
                     </span>
                   </div>
                 </div>
@@ -697,13 +698,13 @@ function FleetStatusModalComponent({
             {isSaving ? (
               <>
                 <Loader2 className="spinner" size={18} />
-                <span>Menyimpan Status Armada...</span>
+                <span>{TEXT_FLEET_STATUS.MODAL.SAVING}</span>
               </>
             ) : (
               <span>
                 {onNavigateToReport
-                  ? 'Konfirmasi & Lanjut ke Laporan →'
-                  : `Konfirmasi & Terapkan Status Shift ${currentShift}`}
+                  ? TEXT_FLEET_STATUS.MODAL.CONFIRM_CONTINUE_REPORT
+                  : TEXT_FLEET_STATUS.MODAL.CONFIRM_APPLY_SHIFT(currentShift)}
               </span>
             )}
           </button>

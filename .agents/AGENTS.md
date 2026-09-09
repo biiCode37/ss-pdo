@@ -110,5 +110,22 @@ Aturan di bawah ini dirumuskan berdasarkan evaluasi menyeluruh dari siklus **Ref
      2. `pnpm run build` ➔ TypeScript Strict Mode (`tsc -b`) dan Vite build lulus 0 error.
      3. `graphify update .` ➔ Graf pengetahuan kode terbarukan.
 
+---
 
+## 📖 10. Standar Kamus Teks Sentral (`src/constants/texts/`)
 
+- **Aturan Emas Anti Hardcoded UI String:** Dilarang keras menuliskan teks antarmuka (*hardcoded UI strings*) secara langsung pada kode komponen (`.tsx`), modal (`.ts`), notifikasi, atau utilitas.
+- **Kamus Sesuai Domain/Modul:** Seluruh teks antarmuka pengguna (judul, label, placeholder, tooltip, badge, status, pesan error ramah pengguna, konfirmasi SweetAlert2, toast notifikasi) **WAJIB** didefinisikan di modul kamus domain terkait dalam `src/constants/texts/`:
+  - `text_common.ts`: Tombol umum (Simpan, Batal, Tutup, Coba Lagi), status offline, dan label global.
+  - `text_auth.ts`: Layanan autentikasi, halaman login, sesi, legal/privasi.
+  - `text_dashboard.ts`: Header, tab utama, KPI, grafik tren TOA, perbandingan shift, daftar unit, kartu bus, rekap akumulasi.
+  - `text_fleet_status.ts`: Modal status armada (SGO/AP/dll), segmented tabs, bar konfirmasi shift, toast.
+  - `text_unit_detail.ts`: Header ringkasan armada, shift 1/2, total ritase, KM, pelanggan, catatan operasional.
+  - `text_user_management.ts`: Manajemen user RBAC, modal tambah user, ubah peran, toggle status akun, card metadata, filter tabs.
+  - `text_alerts.ts`: Pesan SweetAlert2, form input bus modal, bulk trip, bulk copy KM, dialog logout, antrean offline.
+  - `text_errors.ts`: Pesan error ramah pengguna (non-teknis), validasi kode rute & URL sheet.
+  - `text_pdo_form.ts`: Form laporan operasional pengawas/petugas.
+  - `text_monitoring.ts`: Monitoring wilayah 18 rute & rekap laporan.
+  - `text_wa_report.ts`: Generator laporan format WhatsApp.
+- **Interpolasi Dinamis:** Gunakan fungsi template murni jika teks membutuhkan parameter dinamis (contoh: `(count: number) => `...``).
+- **Verifikasi Unit Test:** Setiap penambahan teks kamus baru wajib disertakan uji pada `src/constants/texts/texts.test.ts`.

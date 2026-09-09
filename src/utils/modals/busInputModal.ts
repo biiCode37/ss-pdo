@@ -2,6 +2,7 @@ import { pdoSwal } from "../alertUtils";
 import type { BusData, HeaderMap } from "../../services/googleSheets";
 import { parseIndonesianNumber } from "../numberUtils";
 import { normalizeKeterangan, parseKeterangan } from "../keteranganUtils";
+import { TEXT_ALERTS } from "../../constants/texts";
 
 export interface BusModalOptions {
   bus: BusData;
@@ -44,8 +45,8 @@ export function renderSatsetToggle(isSatset: boolean): string {
       type="button"
       id="swal-toggle-satset"
       class="pdo-satset-toggle ${isSatset ? "active" : ""}"
-      title="${isSatset ? "Mode Beruntun Aktif (Auto-Next Bus)" : "Aktifkan Mode Beruntun (Auto-Next Bus)"}"
-      aria-label="Mode Beruntun"
+      title="${isSatset ? TEXT_ALERTS.BUS_INPUT_MODAL.SATSET_ACTIVE_TITLE : TEXT_ALERTS.BUS_INPUT_MODAL.SATSET_INACTIVE_TITLE}"
+      aria-label="${TEXT_ALERTS.BUS_INPUT_MODAL.SATSET_LABEL}"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="satset-icon">
         <path d="m17 2 4 4-4 4"></path>
@@ -81,12 +82,12 @@ export function validateKmPair(
   if (isNaN(numAwal) || isNaN(numAkhir)) return null;
 
   if (numAkhir > 0 && numAkhir < numAwal) {
-    return `KM Akhir ${shiftLabel} (${kmAkhirRaw}) tidak boleh lebih kecil dari KM Awal (${kmAwalRaw})!`;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.KM_AKHIR_LESS_THAN_AWAL(shiftLabel, kmAkhirRaw, kmAwalRaw);
   }
 
   const diff = numAkhir - numAwal;
   if (diff > MAX_SHIFT_DISTANCE_KM) {
-    return `Jarak tempuh ${shiftLabel} (+${diff} KM) melebihi batas maksimal wajar (${MAX_SHIFT_DISTANCE_KM} KM). Periksa kembali angka yang dimasukkan!`;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.KM_DIFF_EXCEEDS_MAX(shiftLabel, diff, MAX_SHIFT_DISTANCE_KM);
   }
 
   return null;
@@ -103,10 +104,10 @@ export function validateToaValue(
   if (!valRaw || valRaw.trim() === "") return null;
   const num = parseIndonesianNumber(valRaw, NaN);
   if (isNaN(num) || num < 0) {
-    return `Nilai ${fieldLabel} harus berupa angka positif!`;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.TOA_MUST_BE_POSITIVE(fieldLabel);
   }
   if (num > MAX_TOA_VALUE) {
-    return `Nilai ${fieldLabel} tidak boleh lebih dari 3 digit (maksimal ${MAX_TOA_VALUE})!`;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.TOA_MAX_DIGITS(fieldLabel, MAX_TOA_VALUE);
   }
   return null;
 }
@@ -125,7 +126,7 @@ export function validateToaPair(
   if (isNaN(numToaS1) || isNaN(numTotToa)) return null;
 
   if (numTotToa > 0 && numTotToa < numToaS1) {
-    return `Total TOA (${totalToaRaw}) tidak boleh lebih kecil dari TOA Shift 1 (${toaShift1Raw})!`;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TOA_LESS_THAN_S1(totalToaRaw, toaShift1Raw);
   }
 
   return null;
@@ -142,10 +143,10 @@ export function validateTripCount(
   if (!tripRaw || tripRaw.trim() === "") return null;
   const numTrip = parseIndonesianNumber(tripRaw, NaN);
   if (isNaN(numTrip) || numTrip < 0) {
-    return `Nilai ${fieldLabel} harus berupa angka positif!`;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.TOA_MUST_BE_POSITIVE(fieldLabel);
   }
   if (numTrip > MAX_TRIP_COUNT) {
-    return `Jumlah ${fieldLabel} tidak boleh lebih dari ${MAX_TRIP_COUNT}!`;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.TRIP_MAX_COUNT(fieldLabel, MAX_TRIP_COUNT);
   }
   return null;
 }
@@ -155,33 +156,33 @@ const SINGLE_COLUMN_META: Record<
   { label: string; placeholder: string; key: keyof BusData }
 > = {
   toaShift1: {
-    label: "TOA Shift 1",
-    placeholder: "Contoh: 120",
+    label: TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S1,
+    placeholder: TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.TOA_S1,
     key: "toaShift1",
   },
   totalToa: {
-    label: "Total TOA",
-    placeholder: "Contoh: 250",
+    label: TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA,
+    placeholder: TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.TOTAL_TOA,
     key: "totalToa",
   },
   kmAwal1: {
-    label: "KM Awal Shift 1",
-    placeholder: "Contoh: 12450",
+    label: TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S1,
+    placeholder: TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_1,
     key: "kmAwal1",
   },
   kmAkhir1: {
-    label: "KM Akhir Shift 1",
-    placeholder: "Contoh: 12580",
+    label: TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S1,
+    placeholder: TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_1,
     key: "kmAkhir1",
   },
   kmAwal2: {
-    label: "KM Awal Shift 2",
-    placeholder: "Contoh: 12580",
+    label: TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S2,
+    placeholder: TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_2,
     key: "kmAwal2",
   },
   kmAkhir2: {
-    label: "KM Akhir Shift 2",
-    placeholder: "Contoh: 12710",
+    label: TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S2,
+    placeholder: TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2,
     key: "kmAkhir2",
   },
 };
@@ -231,9 +232,9 @@ function renderSmartKeteranganSection(
     <div id="${escapeHtml(wrapperId)}" class="swal-revealed-field" style="display: ${isRevealed ? "block" : "none"}; margin-top: 4px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
         <label style="display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
-          Catatan / Keterangan
+          ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_NOTES}
         </label>
-        <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600;">Opsional</span>
+        <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600;">${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_OPTIONAL}</span>
       </div>
 
       <!-- Quick Preset & Prefix Chips -->
@@ -246,14 +247,14 @@ function renderSmartKeteranganSection(
         <button type="button" class="swal-note-chip ${initialPrefix === "BA.03" ? "active" : ""}" data-type="ba" data-val="BA.03">BA.03</button>
         <button type="button" class="swal-note-chip ${initialPrefix === "BA.04" ? "active" : ""}" data-type="ba" data-val="BA.04">BA.04</button>
 
-        <button type="button" class="swal-note-chip-clear" id="swal-btn-clear-note">✕ Hapus</button>
+        <button type="button" class="swal-note-chip-clear" id="swal-btn-clear-note">${TEXT_ALERTS.BUS_INPUT_MODAL.CLEAR_NOTE}</button>
       </div>
 
       <!-- Input Group with Static Locked Prefix & Conditional BA.02 Dropdown -->
       <div id="swal-note-input-group" style="display: flex; align-items: center; width: 100%; border: 1.5px solid var(--card-border); border-radius: 10px; background: var(--input-bg, var(--card-bg)); overflow: hidden; min-height: 40px; transition: border-color 0.2s;">
         <div id="swal-note-prefix-badge" style="display: ${initialPrefix ? "flex" : "none"}; padding: 0 8px; height: 40px; align-items: center; justify-content: center; background: rgba(239, 68, 68, 0.15); color: #f87171; font-weight: 800; font-size: 11.5px; border-right: 1px solid rgba(239, 68, 68, 0.3); white-space: nowrap; user-select: none; gap: 4px;">
           <span id="swal-note-prefix-text">${escapeHtml(initialPrefix)}</span>
-          <button type="button" id="swal-btn-remove-prefix" title="Lepas prefix" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; font-weight: 800; font-size: 11px; opacity: 0.7;">✕</button>
+          <button type="button" id="swal-btn-remove-prefix" title="${TEXT_ALERTS.BUS_INPUT_MODAL.REMOVE_PREFIX_TITLE}" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; font-weight: 800; font-size: 11px; opacity: 0.7;">✕</button>
         </div>
 
         <!-- Container Dropdown khusus BA.02 dengan Custom Chevron Icon -->
@@ -266,10 +267,10 @@ function renderSmartKeteranganSection(
             class="input-field pdo-swal-select"
             style="width: 100%; height: 100%; border: none; background: transparent; padding: 0 28px 0 10px; font-size: 13px; font-weight: 700; border-radius: 0; outline: none; box-shadow: none; cursor: pointer; appearance: none; -webkit-appearance: none; color: ${ba02SelectedOption === "" ? "var(--text-secondary)" : "var(--text-primary)"};"
           >
-            <option value="" ${ba02SelectedOption === "" ? "selected" : ""} style="color: var(--text-secondary);">-- Pilih Keterangan BA.02 --</option>
+            <option value="" ${ba02SelectedOption === "" ? "selected" : ""} style="color: var(--text-secondary);">${TEXT_ALERTS.BUS_INPUT_MODAL.BA02_SELECT_DEFAULT}</option>
             <option value="NP1" ${ba02SelectedOption === "NP1" ? "selected" : ""}>NP1</option>
             <option value="NP2" ${ba02SelectedOption === "NP2" ? "selected" : ""}>NP2</option>
-            <option value="__CUSTOM__" ${ba02SelectedOption === "__CUSTOM__" ? "selected" : ""}>Lainnya... (ketik manual)</option>
+            <option value="__CUSTOM__" ${ba02SelectedOption === "__CUSTOM__" ? "selected" : ""}>${TEXT_ALERTS.BUS_INPUT_MODAL.BA02_CUSTOM_OPTION}</option>
           </select>
           <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-secondary); display: flex; align-items: center;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -283,7 +284,7 @@ function renderSmartKeteranganSection(
           id="swal-input-keterangan"
           type="text"
           class="input-field"
-          placeholder="${isFixedVal ? "Nilai tetap terkunci" : isBa02 ? "Ketik alasan/kendala..." : initialPrefix ? "Ketik detail kendala/alasan..." : "Catatan unit..."}"
+          placeholder="${isFixedVal ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_FIXED : isBa02 ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_BA02 : initialPrefix ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_PREFIX : TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_DEFAULT}"
           value="${escapeHtml(isFixedVal ? cleanVal.toUpperCase() : isBa02 && !isCustomBa02 ? "" : initialDetail)}"
           ${isFixedVal ? "readonly" : ""}
           style="display: ${isBa02 && !isCustomBa02 ? "none" : "block"}; flex: 1; border: none; background: transparent; padding: 0 10px; font-size: 13px; height: 40px; border-radius: 0; outline: none; box-shadow: none; ${isFixedVal ? "cursor: default; font-weight: 700;" : ""}"
@@ -293,7 +294,7 @@ function renderSmartKeteranganSection(
         <button
           type="button"
           id="swal-btn-switch-dropdown"
-          title="Kembali ke pilihan dropdown"
+          title="${TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_DROPDOWN_TITLE}"
           style="display: ${isCustomBa02 ? "flex" : "none"}; align-items: center; justify-content: center; width: 34px; height: 40px; background: transparent; color: var(--text-secondary); border: none; outline: none; box-shadow: none; cursor: pointer; padding: 0 10px 0 4px; flex-shrink: 0; transition: color 0.2s;"
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
@@ -343,7 +344,7 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
       noteInput.readOnly = false;
       noteInput.style.cursor = "text";
       noteInput.style.fontWeight = "normal";
-      noteInput.placeholder = "Ketik alasan/kendala...";
+      noteInput.placeholder = TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_BA02;
       if (switchDropdownBtn) switchDropdownBtn.style.display = "flex";
       noteInput.focus();
     } else if (val === "NP1" || val === "NP2") {
@@ -419,7 +420,7 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
             noteInput.readOnly = false;
             noteInput.style.cursor = "text";
             noteInput.style.fontWeight = "normal";
-            noteInput.placeholder = "Ketik detail kendala/alasan...";
+            noteInput.placeholder = TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_PREFIX;
             if (
               ["OFF", "TO EVDAL", "NP1", "NP2"].includes(
                 noteInput.value.trim().toUpperCase(),
@@ -447,7 +448,7 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
           noteInput.readOnly = true;
           noteInput.style.cursor = "default";
           noteInput.style.fontWeight = "700";
-          noteInput.placeholder = "Nilai tetap terkunci";
+          noteInput.placeholder = TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_FIXED;
         }
       }
     });
@@ -465,7 +466,7 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
         noteInput.readOnly = false;
         noteInput.style.cursor = "text";
         noteInput.style.fontWeight = "normal";
-        noteInput.placeholder = "Catatan unit...";
+        noteInput.placeholder = TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_DEFAULT;
         noteInput.focus();
       }
     });
@@ -487,7 +488,7 @@ function setupSmartKeteranganLogic(popup: HTMLElement) {
         noteInput.readOnly = false;
         noteInput.style.cursor = "text";
         noteInput.style.fontWeight = "normal";
-        noteInput.placeholder = "Catatan unit...";
+        noteInput.placeholder = TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_DEFAULT;
         noteInput.focus();
       }
     });
@@ -538,16 +539,16 @@ export async function showBusInputModal(
         
         <!-- Segmented Tab Switcher -->
         <div class="swal-segmented-bar">
-          <button type="button" class="swal-segment-btn ${initTab === 'shift1' ? 'active' : ''}" data-target="shift1">🔵 Shift 1</button>
-          <button type="button" class="swal-segment-btn ${initTab === 'shift2' ? 'active' : ''}" data-target="shift2">🟣 Shift 2</button>
-          <button type="button" class="swal-segment-btn ${initTab === 'trip' ? 'active' : ''}" data-target="trip">🚌 Trip</button>
-          <button type="button" class="swal-segment-btn ${initTab === 'notes' ? 'active' : ''}" data-target="notes">📝 Catatan</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'shift1' ? 'active' : ''}" data-target="shift1">${TEXT_ALERTS.BUS_INPUT_MODAL.TAB_SHIFT1}</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'shift2' ? 'active' : ''}" data-target="shift2">${TEXT_ALERTS.BUS_INPUT_MODAL.TAB_SHIFT2}</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'trip' ? 'active' : ''}" data-target="trip">${TEXT_ALERTS.BUS_INPUT_MODAL.TAB_TRIP}</button>
+          <button type="button" class="swal-segment-btn ${initTab === 'notes' ? 'active' : ''}" data-target="notes">${TEXT_ALERTS.BUS_INPUT_MODAL.TAB_NOTES}</button>
         </div>
 
         <!-- Panel 1: Shift 1 -->
         <div id="swal-panel-shift1" class="swal-panel-section" data-panel="shift1" style="display: ${initTab === 'shift1' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
           <div style="font-size: 11px; font-weight: 800; color: var(--shift1-color, #38bdf8); margin-bottom: 8px; text-transform: uppercase;">
-            Data Shift 1
+            ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_SHIFT1}
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <div>
@@ -572,7 +573,7 @@ export async function showBusInputModal(
         <!-- Panel 2: Shift 2 -->
         <div id="swal-panel-shift2" class="swal-panel-section" data-panel="shift2" style="display: ${initTab === 'shift2' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(192, 132, 252, 0.06); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25));">
           <div style="font-size: 11px; font-weight: 800; color: var(--shift2-color, #c084fc); margin-bottom: 8px; text-transform: uppercase;">
-            Data Shift 2
+            ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_SHIFT2}
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             <div>
@@ -586,8 +587,8 @@ export async function showBusInputModal(
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
                 <label style="font-size: 10.5px; font-weight: 700; color: var(--text-secondary);">KM Awal S2</label>
-                <button type="button" id="swal-btn-copy-km-all" class="swal-copy-km-chip" title="Salin nilai KM Akhir Shift 1">
-                  📋 Salin KM S1
+                <button type="button" id="swal-btn-copy-km-all" class="swal-copy-km-chip" title="${TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_TITLE}">
+                  ${TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_S1_BTN}
                 </button>
               </div>
               <input id="swal-input-kmAwal2" type="number" inputmode="numeric" class="input-field" style="padding: 8px; font-size: 14px; font-weight: 700; height: 38px; text-align: center;" value="${escapeHtml(bus.kmAwal2 || "")}" placeholder="0" />
@@ -602,7 +603,7 @@ export async function showBusInputModal(
         <!-- Panel 3: Trip Operasional -->
         <div id="swal-panel-trip" class="swal-panel-section" data-panel="trip" style="display: ${initTab === 'trip' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
           <div style="font-size: 11px; font-weight: 800; color: var(--accent-color); margin-bottom: 8px; text-transform: uppercase;">
-            Trip Operasional
+            ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_TRIP}
           </div>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <div>
@@ -623,7 +624,7 @@ export async function showBusInputModal(
         <!-- Panel 4: Catatan / Keterangan -->
         <div id="swal-panel-notes" class="swal-panel-section" data-panel="notes" style="display: ${initTab === 'notes' ? 'block' : 'none'}; padding: 12px; border-radius: 14px; background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25);">
           <div style="font-size: 11px; font-weight: 800; color: var(--warning-text, #f59e0b); margin-bottom: 8px; text-transform: uppercase;">
-            Catatan Khusus Unit
+            ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_NOTES}
           </div>
           ${renderSmartKeteranganSection(bus.keterangan || "", "swal-wrapper-keterangan-notes", true)}
         </div>
@@ -670,8 +671,8 @@ export async function showBusInputModal(
         ${renderSmartKeteranganSection(bus.keterangan || "", "swal-wrapper-keterangan", hasKeterangan)}
 
         <div class="pdo-swal-chips-container">
-          ${!hasManual1 ? `<button type="button" id="swal-chip-manualShift1" class="pdo-swal-chip">+ Manual S1</button>` : ""}
-          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">+ Catatan</button>` : ""}
+          ${!hasManual1 ? `<button type="button" id="swal-chip-manualShift1" class="pdo-swal-chip">${TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_MANUAL_S1}</button>` : ""}
+          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">${TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN}</button>` : ""}
         </div>
       </div>
     `;
@@ -682,7 +683,7 @@ export async function showBusInputModal(
         ${headerHtml}
         <div>
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-            Total TOA
+            ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA}
           </label>
           <input
             id="swal-input-totalToa"
@@ -698,7 +699,7 @@ export async function showBusInputModal(
 
         <div id="swal-wrapper-manualShift2" class="swal-revealed-field" style="display: ${hasManual2 ? "block" : "none"};">
           <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift2-color, #c084fc); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-            Manual Shift 2
+            ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2}
           </label>
           <input
             id="swal-input-manualShift2"
@@ -715,8 +716,8 @@ export async function showBusInputModal(
         ${renderSmartKeteranganSection(bus.keterangan || "", "swal-wrapper-keterangan", hasKeterangan)}
 
         <div class="pdo-swal-chips-container">
-          ${!hasManual2 ? `<button type="button" id="swal-chip-manualShift2" class="pdo-swal-chip">+ Manual S2</button>` : ""}
-          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">+ Catatan</button>` : ""}
+          ${!hasManual2 ? `<button type="button" id="swal-chip-manualShift2" class="pdo-swal-chip">${TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_MANUAL_S2}</button>` : ""}
+          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">${TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN}</button>` : ""}
         </div>
       </div>
     `;
@@ -727,7 +728,7 @@ export async function showBusInputModal(
         ${headerHtml}
         <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
           <div style="font-size: 11px; font-weight: 800; color: var(--accent-color); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
-            Trip Operasional Armada
+            ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_TRIP_CARD}
           </div>
           <div>
             <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
@@ -762,7 +763,7 @@ export async function showBusInputModal(
         ${renderSmartKeteranganSection(bus.keterangan || "", "swal-wrapper-keterangan", hasKeterangan)}
 
         <div class="pdo-swal-chips-container">
-          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">+ Catatan Kendala</button>` : ""}
+          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">${TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN_KENDALA}</button>` : ""}
         </div>
       </div>
     `;
@@ -780,8 +781,8 @@ export async function showBusInputModal(
             ${
               activeCategory === "kmAwal2" && bus.kmAkhir1
                 ? `
-              <button type="button" id="swal-btn-copy-km-single" class="swal-copy-km-chip" title="Salin nilai KM Akhir Shift 1">
-                📋 Salin KM S1 (${escapeHtml(bus.kmAkhir1)})
+              <button type="button" id="swal-btn-copy-km-single" class="swal-copy-km-chip" title="${TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_TITLE}">
+                ${TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_S1_WITH_VAL(escapeHtml(bus.kmAkhir1))}
               </button>
             `
                 : ""
@@ -794,10 +795,10 @@ export async function showBusInputModal(
             <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-radius: 10px; background: rgba(56, 189, 248, 0.08); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); margin-bottom: 8px; font-size: 12px;">
               <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--shift1-color, #38bdf8);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                KM Awal S1 (Acuan):
+                ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S1}
               </span>
               <span id="swal-km-ref-val" style="font-weight: 800; color: var(--shift1-color, #38bdf8); font-size: 13px; letter-spacing: 0.3px;">
-                ${bus.kmAwal1 ? `${escapeHtml(bus.kmAwal1)}` : '<span style="color: var(--text-secondary); font-weight: 600;">(Belum Diisi)</span>'}
+                ${bus.kmAwal1 ? `${escapeHtml(bus.kmAwal1)}` : `<span style="color: var(--text-secondary); font-weight: 600;">${TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}</span>`}
               </span>
             </div>
           `
@@ -806,10 +807,10 @@ export async function showBusInputModal(
             <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-radius: 10px; background: rgba(192, 132, 252, 0.08); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25)); margin-bottom: 8px; font-size: 12px;">
               <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--shift2-color, #c084fc);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                KM Awal S2 (Acuan):
+                ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S2}
               </span>
               <span id="swal-km-ref-val" style="font-weight: 800; color: var(--shift2-color, #c084fc); font-size: 13px; letter-spacing: 0.3px;">
-                ${bus.kmAwal2 ? `${escapeHtml(bus.kmAwal2)}` : '<span style="color: var(--text-secondary); font-weight: 600;">(Belum Diisi)</span>'}
+                ${bus.kmAwal2 ? `${escapeHtml(bus.kmAwal2)}` : `<span style="color: var(--text-secondary); font-weight: 600;">${TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}</span>`}
               </span>
             </div>
           `
@@ -830,7 +831,7 @@ export async function showBusInputModal(
         ${renderSmartKeteranganSection(bus.keterangan || "", "swal-wrapper-keterangan", hasKeterangan)}
 
         <div class="pdo-swal-chips-container">
-          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">+ Catatan</button>` : ""}
+          ${!hasKeterangan ? `<button type="button" id="swal-chip-keterangan" class="pdo-swal-chip pdo-swal-chip-right">${TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN}</button>` : ""}
         </div>
       </div>
     `;
@@ -840,8 +841,8 @@ export async function showBusInputModal(
   const result = await pdoSwal.fire({
     html: formHtml,
     showCancelButton: true,
-    confirmButtonText: "Simpan",
-    cancelButtonText: "Batal",
+    confirmButtonText: TEXT_ALERTS.BUS_INPUT_MODAL.SAVE_BTN,
+    cancelButtonText: TEXT_ALERTS.BUS_INPUT_MODAL.CANCEL_BTN,
     reverseButtons: true,
     focusConfirm: false,
     customClass: {
@@ -999,11 +1000,11 @@ export async function showBusInputModal(
           }
           const diff = inputNum - kmAwalNum;
           if (diff < 0) {
-            refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 700;">(⚠️ Lebih kecil)</span>`;
+            refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 700;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_SMALLER}</span>`;
           } else if (diff > MAX_SHIFT_DISTANCE_KM) {
-            refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 800;">(⚠️ +${diff} KM - Melebihi ${MAX_SHIFT_DISTANCE_KM} KM)</span>`;
+            refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 800;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_EXCEEDS(diff, MAX_SHIFT_DISTANCE_KM)}</span>`;
           } else {
-            refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--success-color, #22c55e); font-weight: 700;">(+${diff} KM)</span>`;
+            refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--success-color, #22c55e); font-weight: 700;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_VALID(diff)}</span>`;
           }
         };
 
@@ -1079,10 +1080,10 @@ export async function showBusInputModal(
           setSatsetMode(nextState);
           if (nextState) {
             toggleSatsetBtn.classList.add("active");
-            toggleSatsetBtn.title = "Mode Beruntun Aktif (Auto-Next Bus)";
+            toggleSatsetBtn.title = TEXT_ALERTS.BUS_INPUT_MODAL.SATSET_ACTIVE_TITLE;
           } else {
             toggleSatsetBtn.classList.remove("active");
-            toggleSatsetBtn.title = "Aktifkan Mode Beruntun (Auto-Next Bus)";
+            toggleSatsetBtn.title = TEXT_ALERTS.BUS_INPUT_MODAL.SATSET_INACTIVE_TITLE;
           }
         });
       }
@@ -1209,7 +1210,7 @@ export async function showBusInputModal(
         if (val !== "") {
           const numVal = parseIndonesianNumber(val, NaN);
           if (isNaN(numVal) || numVal < 0) {
-            pdoSwal.showValidationMessage("Nilai harus berupa angka positif!");
+            pdoSwal.showValidationMessage(TEXT_ALERTS.BUS_INPUT_MODAL.POSITIVE_NUMBER);
             return false;
           }
         }

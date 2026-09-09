@@ -9,3 +9,6 @@ export * from './text_monitoring';
 export * from './text_wa_report';
 export * from './text_alerts';
 export * from './text_errors';
+export * from './text_fleet_status';
+export * from './text_user_management';
+export * from './text_unit_detail';

@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Sun, Moon } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { safeFormatNumber } from "../utils/numberUtils";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -25,7 +26,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
       >
         <div className="analytics-card-title">
           <Sun size={18} />
-          <span>Komparasi Pelanggan</span>
+          <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TITLE}</span>
         </div>
         {dateBadge && (
           <span
@@ -55,14 +56,14 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             style={{ color: "var(--orange-color)" }}
           >
             <Sun size={16} />
-            <span>SHIFT 1</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_1}</span>
           </div>
           <div className="shift-row">
-            <span>TOA:</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TOA_LABEL}</span>
             <b>{formatInt(summary.totalToaShift1)}</b>
           </div>
           <div className="shift-row">
-            <span>Manual:</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.MANUAL_LABEL}</span>
             <b
               style={{
                 color:
@@ -75,7 +76,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             </b>
           </div>
           <div className="shift-total">
-            <span>Total:</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TOTAL_LABEL}</span>
             <span>{formatInt(summary.totalShift1)}</span>
           </div>
         </div>
@@ -84,14 +85,14 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
         <div className="shift-box">
           <div className="shift-header" style={{ color: "#a78bfa" }}>
             <Moon size={16} />
-            <span>SHIFT 2</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_2}</span>
           </div>
           <div className="shift-row">
-            <span>TOA:</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TOA_LABEL}</span>
             <b>{formatInt(summary.totalToaShift2)}</b>
           </div>
           <div className="shift-row">
-            <span>Manual:</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.MANUAL_LABEL}</span>
             <b
               style={{
                 color:
@@ -104,7 +105,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             </b>
           </div>
           <div className="shift-total">
-            <span>Total:</span>
+            <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TOTAL_LABEL}</span>
             <span>{formatInt(summary.totalShift2)}</span>
           </div>
         </div>

@@ -21,6 +21,8 @@ export const TEXT_AUTH = {
   SESSION_NEED_REAUTH: 'Sesi Google perlu diperbarui untuk sinkronisasi data.',
   REAUTH_BTN: 'Login Ulang',
   REFRESH_SESSION_BTN: 'Perbarui Sesi',
+  INIT_ERROR_TITLE: 'Gagal Inisialisasi Layanan',
+  INIT_ERROR_FALLBACK: 'Gagal menginisialisasi layanan Google API.',
   ABOUT_TITLE: 'Tentang PUSM',
   VS_TITLE: 'Spreadsheet vs PUSM',
   PERMISSIONS_TITLE: 'PUSM Perlu Izin Akun Google',
@@ -30,6 +32,14 @@ export const TEXT_AUTH = {
     TERMS: 'Syarat & Ketentuan',
     DEVELOPER: 'Kontak Pengembang',
     COPYRIGHT: '© 2026 PUSM — PDO Utara Spreadsheet Mobile. Hak cipta dilindungi.',
+  },
+  FEATURE_CARDS: {
+    CARD_1_TITLE: 'Dashboard Capaian Rute',
+    CARD_1_DESC: 'Rekap capaian ritase, kilometer, dan pelanggan per armada secara real-time.',
+    CARD_2_TITLE: 'Pencarian Unit & Catatan',
+    CARD_2_DESC: 'Cari nomor bodi unit cepat, catat kondisi siap jalan atau kendala lapangan.',
+    CARD_3_TITLE: 'Form Cepat & Presisi',
+    CARD_3_DESC: 'Input data terarah yang langsung tersimpan rapi ke spreadsheet resmi pengawas.',
   },
 } as const;
 

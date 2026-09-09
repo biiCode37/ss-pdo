@@ -19,6 +19,7 @@ import { fetchGoogleUserProfile } from '../services/googleSheets/auth';
 import { RoleBadge } from './RoleBadge';
 import { escapeHtml, showSuccessToast, showErrorAlert, pdoSwal } from '../utils/alertUtils';
 import { SkeletonBox } from './Skeletons';
+import { TEXT_USER_MANAGEMENT } from '../constants/texts';
 
 interface UserManagementPageProps {
   onBack: () => void;
@@ -110,7 +111,10 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       setUsers(enrichedData);
     } catch (err) {
       console.error('[UserManagement] Gagal memuat user:', err);
-      showErrorAlert('Gagal Memuat Data', 'Tidak dapat memuat daftar pengguna dari server.');
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.LOAD_FAILED_TITLE,
+        TEXT_USER_MANAGEMENT.ALERTS.LOAD_FAILED_TEXT,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -157,28 +161,41 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
         const isPetugas = u.role === 'petugas';
         if (!isSelf && !isPetugas) return false;
       }
-
-      // Search filter
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchName = u.full_name?.toLowerCase().includes(q);
-        const matchEmail = u.email?.toLowerCase().includes(q);
-        const matchNotes = u.notes?.toLowerCase().includes(q);
-        return matchName || matchEmail || matchNotes;
+      // Role Tab Filter
+      if (activeTab === 'all') {
+        // Tampilkan semua
+      } else if (activeTab === 'inactive') {
+        if (u.is_active !== false) return false;
+      } else if (activeTab === 'superadmin' && u.role !== 'superadmin') {
+        return false;
+      } else if (activeTab === 'admin' && u.role !== 'admin') {
+        return false;
+      } else if (activeTab === 'petugas' && u.role !== 'petugas') {
+        return false;
       }
 
-      return true;
-    });
-  }, [users, activeTab, searchQuery, currentUserRole, currentUserEmail]);
-
-  // Tab count metrics
-  const counts = useMemo(() => {
-    let base = users;
-    if (currentUserRole === 'admin') {
-      base = users.filter(
-        (u) => u.email.toLowerCase() === currentUserEmail.toLowerCase() || u.role === 'petugas'
+      // Search Query Filter
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase().trim();
+      return (
+        u.email.toLowerCase().includes(q) ||
+        (u.full_name && u.full_name.toLowerCase().includes(q)) ||
+        (u.notes && u.notes.toLowerCase().includes(q))
       );
-    }
+    });
+  }, [users, activeTab, searchQuery]);
+
+  // Counts per Category Tab
+  const counts = useMemo(() => {
+    const isPetugas = currentUserRole === 'petugas';
+    const base = isPetugas
+      ? users.filter(
+          (u) =>
+            u.email.toLowerCase() === currentUserEmail.toLowerCase() ||
+            u.role === 'petugas'
+        )
+      : users;
+
     return {
       all: base.length,
       superadmin: base.filter((u) => u.role === 'superadmin').length,
@@ -194,48 +211,51 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     // BUG-55: Guard RBAC internal — sebelumnya hanya mengandalkan gating di
     // parent; role localStorage rusak/stale bisa membuka UI tambah user.
     if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
-      showErrorAlert('Akses Terbatas', 'Hanya Admin atau Superadmin yang berwenang menambahkan pengguna.');
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
+        TEXT_USER_MANAGEMENT.ALERTS.ADD_USER_FORBIDDEN,
+      );
       return;
     }
 
     const isSuper = currentUserRole === 'superadmin';
     const roleOptionsHtml = isSuper
       ? `
-        <option value="petugas">Petugas Operasional (Input Data Saja)</option>
-        <option value="admin">Admin (Kelola Petugas & Rute)</option>
-        <option value="superadmin">Superadmin (Kuasa Penuh)</option>
+        <option value="petugas">${TEXT_USER_MANAGEMENT.ROLES.PETUGAS_OPTION}</option>
+        <option value="admin">${TEXT_USER_MANAGEMENT.ROLES.ADMIN_OPTION}</option>
+        <option value="superadmin">${TEXT_USER_MANAGEMENT.ROLES.SUPERADMIN_OPTION}</option>
       `
       : `
-        <option value="petugas">Petugas Operasional (Input Data Saja)</option>
+        <option value="petugas">${TEXT_USER_MANAGEMENT.ROLES.PETUGAS_OPTION}</option>
       `;
 
     const { value: formValues } = await pdoSwal.fire({
-      title: 'Tambah Pengguna Baru',
+      title: TEXT_USER_MANAGEMENT.MODAL_ADD.TITLE,
       html: `
         <div style="text-align:left;font-size:13px;display:flex;flex-direction:column;gap:14px;margin-top:6px;">
           <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Email Akun Google <span style="color:#ef4444">*</span></label>
-            <input id="swal-email" type="email" placeholder="contoh@gmail.com" class="pdo-swal-input" />
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_LABEL} <span style="color:#ef4444">*</span></label>
+            <input id="swal-email" type="email" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_PLACEHOLDER}" class="pdo-swal-input" />
           </div>
           <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Nama Lengkap</label>
-            <input id="swal-name" type="text" placeholder="Nama Petugas / Pengawas" class="pdo-swal-input" />
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NAME_LABEL}</label>
+            <input id="swal-name" type="text" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.NAME_PLACEHOLDER}" class="pdo-swal-input" />
           </div>
           <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Peran / Hak Akses</label>
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.ROLE_LABEL}</label>
             <select id="swal-role" class="pdo-swal-select">
               ${roleOptionsHtml}
             </select>
           </div>
           <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">Catatan Tugas (Opsional)</label>
-            <input id="swal-notes" type="text" placeholder="Misal: Koridor 1 Shift Pagi" class="pdo-swal-input" />
+            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NOTES_LABEL}</label>
+            <input id="swal-notes" type="text" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.NOTES_PLACEHOLDER}" class="pdo-swal-input" />
           </div>
         </div>
       `,
       showCancelButton: true,
-      confirmButtonText: 'Simpan & Beri Akses',
-      cancelButtonText: 'Batal',
+      confirmButtonText: TEXT_USER_MANAGEMENT.MODAL_ADD.CONFIRM_BTN,
+      cancelButtonText: TEXT_USER_MANAGEMENT.MODAL_ADD.CANCEL_BTN,
       customClass: {
         container: 'pdo-swal-container',
         popup: 'pdo-swal-popup',
@@ -269,10 +289,13 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       });
 
       if (res.success) {
-        showSuccessToast(`Pengguna ${escapeHtml(formValues.email)} berhasil ditambahkan!`);
+        showSuccessToast(TEXT_USER_MANAGEMENT.TOAST.ADD_SUCCESS(escapeHtml(formValues.email)));
         loadUsers();
       } else {
-        showErrorAlert('Gagal Menambah Pengguna', res.message || 'Terjadi kesalahan sistem.');
+        showErrorAlert(
+          TEXT_USER_MANAGEMENT.ALERTS.ADD_FAILED_TITLE,
+          res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
+        );
       }
     }
   };
@@ -280,25 +303,28 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   // Handle Edit Role Modal
   const handleEditRole = async (user: UserProfile) => {
     if (currentUserRole !== 'superadmin') {
-      showErrorAlert('Akses Terbatas', 'Hanya Superadmin yang berwenang mengubah peran akun.');
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
+        TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FORBIDDEN,
+      );
       return;
     }
 
     const { value: newRole } = await pdoSwal.fire({
-      title: 'Ubah Peran Pengguna',
+      title: TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.TITLE,
       html: `
         <div style="text-align:left;font-size:13px;margin-top:6px;">
-          <p style="margin:0 0 10px;color:var(--text-secondary);font-size:12.5px;">Pilih peran baru untuk <strong style="color:var(--text-primary)">${escapeHtml(user.email)}</strong>:</p>
+          <p style="margin:0 0 10px;color:var(--text-secondary);font-size:12.5px;">${TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.PROMPT(escapeHtml(user.email))}</p>
           <select id="swal-new-role" class="pdo-swal-select">
-            <option value="petugas" ${user.role === 'petugas' ? 'selected' : ''}>Petugas Operasional (Input Data Saja)</option>
-            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin (Kelola Petugas & Rute)</option>
-            <option value="superadmin" ${user.role === 'superadmin' ? 'selected' : ''}>Superadmin (Kuasa Penuh)</option>
+            <option value="petugas" ${user.role === 'petugas' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.PETUGAS_OPTION}</option>
+            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.ADMIN_OPTION}</option>
+            <option value="superadmin" ${user.role === 'superadmin' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.SUPERADMIN_OPTION}</option>
           </select>
         </div>
       `,
       showCancelButton: true,
-      confirmButtonText: 'Simpan Perubahan',
-      cancelButtonText: 'Batal',
+      confirmButtonText: TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.CONFIRM_BTN,
+      cancelButtonText: TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.CANCEL_BTN,
       customClass: {
         container: 'pdo-swal-container',
         popup: 'pdo-swal-popup',
@@ -314,12 +340,20 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     if (newRole && newRole !== user.role) {
       const res = await updateUserProfileRole(user.email, newRole as any, currentUserEmail);
       if (res.success) {
-        showSuccessToast(`Peran ${escapeHtml(user.email)} diubah menjadi ${escapeHtml(newRole)}.`);
+        showSuccessToast(
+          TEXT_USER_MANAGEMENT.TOAST.EDIT_ROLE_SUCCESS(
+            escapeHtml(user.email),
+            escapeHtml(newRole),
+          ),
+        );
         setUsers((prev) =>
           prev.map((u) => (u.email === user.email ? { ...u, role: newRole as any } : u))
         );
       } else {
-        showErrorAlert('Gagal Mengubah Peran', res.message || 'Gagal memperbarui peran.');
+        showErrorAlert(
+          TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FAILED_TITLE,
+          res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
+        );
       }
     }
   };
@@ -328,31 +362,44 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   const handleToggleStatus = async (user: UserProfile) => {
     // BUG-55: Guard RBAC internal untuk toggle status
     if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
-      showErrorAlert('Akses Terbatas', 'Hanya Admin atau Superadmin yang berwenang mengubah status akun.');
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
+        TEXT_USER_MANAGEMENT.ALERTS.TOGGLE_STATUS_FORBIDDEN,
+      );
       return;
     }
 
     const isSelf = user.email.toLowerCase() === currentUserEmail.toLowerCase();
     if (isSelf) {
-      showErrorAlert('Aksi Ditolak', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.ACTION_DENIED,
+        TEXT_USER_MANAGEMENT.ALERTS.CANNOT_DEACTIVATE_SELF,
+      );
       return;
     }
 
     if (currentUserRole === 'admin' && (user.role === 'admin' || user.role === 'superadmin')) {
-      showErrorAlert('Akses Terbatas', 'Admin tidak dapat mengubah status akun Admin atau Superadmin.');
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
+        TEXT_USER_MANAGEMENT.ALERTS.ADMIN_EDIT_ADMIN_FORBIDDEN,
+      );
       return;
     }
 
     const nextStatus = user.is_active === false ? true : false;
-    const actionText = nextStatus ? 'mengaktifkan' : 'menonaktifkan';
+    const actionText = nextStatus
+      ? TEXT_USER_MANAGEMENT.MODAL_STATUS.ACTION_ACTIVATE
+      : TEXT_USER_MANAGEMENT.MODAL_STATUS.ACTION_DEACTIVATE;
 
     const { isConfirmed } = await pdoSwal.fire({
-      title: 'Konfirmasi Status Akun',
-      html: `<p style="margin:0;font-size:13.5px;color:var(--text-secondary);line-height:1.5;">Apakah Anda yakin ingin <strong>${actionText}</strong> akses login untuk <strong style="color:var(--text-primary)">${escapeHtml(user.email)}</strong>?</p>`,
+      title: TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE,
+      html: TEXT_USER_MANAGEMENT.MODAL_STATUS.PROMPT(actionText, escapeHtml(user.email)),
       icon: nextStatus ? 'question' : 'warning',
       showCancelButton: true,
-      confirmButtonText: nextStatus ? 'Ya, Aktifkan' : 'Ya, Nonaktifkan',
-      cancelButtonText: 'Batal',
+      confirmButtonText: nextStatus
+        ? TEXT_USER_MANAGEMENT.MODAL_STATUS.CONFIRM_ACTIVATE
+        : TEXT_USER_MANAGEMENT.MODAL_STATUS.CONFIRM_DEACTIVATE,
+      cancelButtonText: TEXT_USER_MANAGEMENT.MODAL_STATUS.CANCEL_BTN,
       customClass: {
         container: 'pdo-swal-container',
         popup: 'pdo-swal-popup',
@@ -367,12 +414,17 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     if (isConfirmed) {
       const res = await toggleUserProfileStatus(user.email, nextStatus, currentUserEmail);
       if (res.success) {
-        showSuccessToast(`Akun ${escapeHtml(user.email)} berhasil di${nextStatus ? 'aktifkan' : 'nonaktifkan'}.`);
+        showSuccessToast(
+          TEXT_USER_MANAGEMENT.TOAST.STATUS_SUCCESS(escapeHtml(user.email), actionText),
+        );
         setUsers((prev) =>
           prev.map((u) => (u.email === user.email ? { ...u, is_active: nextStatus } : u))
         );
       } else {
-        showErrorAlert('Gagal', res.message || 'Gagal mengubah status akun.');
+        showErrorAlert(
+          TEXT_USER_MANAGEMENT.ALERTS.GENERIC_FAILED_TITLE,
+          res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
+        );
       }
     }
   };
@@ -430,10 +482,10 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                 flexShrink: 0,
                 transition: 'all 0.15s ease',
               }}
-              title="Kembali ke Dashboard"
+              title={TEXT_USER_MANAGEMENT.HEADER.BACK_TITLE}
             >
               <ArrowLeft size={16} />
-              <span className="hidden sm:inline">Kembali</span>
+              <span className="hidden sm:inline">{TEXT_USER_MANAGEMENT.HEADER.BACK_BTN}</span>
             </button>
 
             <div style={{ minWidth: 0 }}>
@@ -452,7 +504,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
               }}
             >
                 <Users size={18} className="text-blue-500" style={{ flexShrink: 0 }} />
-                <span>Manajemen Pengguna</span>
+                <span>{TEXT_USER_MANAGEMENT.HEADER.TITLE}</span>
               </h1>
               <p
                 style={{
@@ -464,7 +516,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                   textOverflow: 'ellipsis',
                 }}
               >
-                {counts.active} aktif dari total {counts.all} terdaftar
+                {TEXT_USER_MANAGEMENT.HEADER.SUBTITLE(counts.active, counts.all)}
               </p>
             </div>
           </div>
@@ -486,7 +538,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
-              title="Muat Ulang Daftar User"
+              title={TEXT_USER_MANAGEMENT.HEADER.REFRESH_TITLE}
             >
               <RefreshCw size={15} className={isLoading ? 'animate-spin' : ''} />
             </button>
@@ -511,7 +563,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
               }}
             >
               <UserPlus size={15} />
-              <span>Tambah</span>
+              <span>{TEXT_USER_MANAGEMENT.HEADER.ADD_BTN}</span>
             </button>
           </div>
         </div>
@@ -560,7 +612,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari berdasarkan nama, email, atau catatan..."
+              placeholder={TEXT_USER_MANAGEMENT.SEARCH_PLACEHOLDER}
               style={{
                 width: '100%',
                 padding: '10px 14px 10px 40px',
@@ -586,15 +638,15 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
             }}
           >
             {[
-              { key: 'all', label: 'Semua', count: counts.all },
+              { key: 'all', label: TEXT_USER_MANAGEMENT.TABS.ALL, count: counts.all },
               ...(currentUserRole === 'superadmin'
                 ? [
-                    { key: 'superadmin', label: 'Superadmin', count: counts.superadmin },
-                    { key: 'admin', label: 'Admin', count: counts.admin },
+                    { key: 'superadmin', label: TEXT_USER_MANAGEMENT.TABS.SUPERADMIN, count: counts.superadmin },
+                    { key: 'admin', label: TEXT_USER_MANAGEMENT.TABS.ADMIN, count: counts.admin },
                   ]
                 : []),
-              { key: 'petugas', label: 'Petugas', count: counts.petugas },
-              { key: 'inactive', label: 'Nonaktif', count: counts.inactive },
+              { key: 'petugas', label: TEXT_USER_MANAGEMENT.TABS.PETUGAS, count: counts.petugas },
+              { key: 'inactive', label: TEXT_USER_MANAGEMENT.TABS.INACTIVE, count: counts.inactive },
             ].map((tab) => {
               const isActive = activeTab === tab.key;
               return (
@@ -695,12 +747,12 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
           >
             <Users size={36} style={{ color: 'var(--text-secondary, #64748b)', opacity: 0.5 }} />
             <h3 style={{ margin: 0, fontSize: '15px', color: 'var(--text-primary, #f8fafc)' }}>
-              Tidak ada pengguna ditemukan
+              {TEXT_USER_MANAGEMENT.EMPTY_STATE.TITLE}
             </h3>
             <p style={{ margin: 0, fontSize: '12.5px', color: 'var(--text-secondary, #94a3b8)', maxWidth: '300px' }}>
               {searchQuery
-                ? 'Tidak ada akun yang cocok dengan kata kunci pencarian.'
-                : 'Belum ada pengguna pada kategori ini.'}
+                ? TEXT_USER_MANAGEMENT.EMPTY_STATE.SEARCH_NO_MATCH
+                : TEXT_USER_MANAGEMENT.EMPTY_STATE.CATEGORY_EMPTY}
             </p>
           </div>
         ) : (
@@ -751,7 +803,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                               textOverflow: 'ellipsis',
                             }}
                           >
-                            {user.full_name || 'Tanpa Nama'}
+                            {user.full_name || TEXT_USER_MANAGEMENT.CARD.NO_NAME}
                           </span>
                           {isSelf && (
                             <span
@@ -764,7 +816,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                                 color: '#60a5fa',
                               }}
                             >
-                              Anda
+                              {TEXT_USER_MANAGEMENT.CARD.YOU_BADGE}
                             </span>
                           )}
                         </div>
@@ -830,13 +882,13 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                               hour: '2-digit',
                               minute: '2-digit',
                             })
-                          : 'Belum pernah login'}
+                          : TEXT_USER_MANAGEMENT.CARD.NEVER_LOGGED_IN}
                       </span>
                     </div>
 
                     {user.created_by && (
-                      <span title={`Didaftarkan oleh: ${user.created_by}`}>
-                        Oleh: {user.created_by.split('@')[0]}
+                      <span title={TEXT_USER_MANAGEMENT.CARD.CREATED_BY_TITLE(user.created_by)}>
+                        {TEXT_USER_MANAGEMENT.CARD.CREATED_BY(user.created_by.split('@')[0])}
                       </span>
                     )}
                   </div>
@@ -873,10 +925,10 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                         }}
                         title={
                           isSelf
-                            ? 'Tidak bisa menonaktifkan akun sendiri'
+                            ? TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE_SELF
                             : isActive
-                            ? 'Klik untuk menonaktifkan status akun'
-                            : 'Klik untuk mengaktifkan status akun'
+                            ? TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE_DEACTIVATE
+                            : TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE_ACTIVATE
                         }
                       >
                         <div
@@ -916,7 +968,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                             userSelect: 'none',
                           }}
                         >
-                          {isActive ? 'Aktif' : 'Nonaktif'}
+                          {isActive ? TEXT_USER_MANAGEMENT.MODAL_STATUS.LABEL_ACTIVE : TEXT_USER_MANAGEMENT.MODAL_STATUS.LABEL_INACTIVE}
                         </span>
                       </button>
 
@@ -936,9 +988,9 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                               cursor: 'pointer',
                               transition: 'all 0.15s ease',
                             }}
-                            title="Ubah Peran / Role"
+                            title={TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.BTN_TITLE}
                           >
-                            Ubah Peran
+                            {TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.BTN_EDIT}
                           </button>
                         )}
                       </div>

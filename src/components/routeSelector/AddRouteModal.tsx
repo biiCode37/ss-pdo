@@ -139,7 +139,7 @@ export function AddRouteModal({
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            aria-label="Tutup"
+            aria-label={TEXT_COMMON.CLOSE}
           >
             <X size={18} />
           </button>
@@ -156,7 +156,7 @@ export function AddRouteModal({
               marginBottom: '4px',
             }}
           >
-            Kode Trayek Rute
+            {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_LABEL_CODE}
           </label>
           <div
             style={{
@@ -202,7 +202,7 @@ export function AddRouteModal({
             />
           </div>
           <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px', marginLeft: '2px' }}>
-            Ketik nomor trayek (contoh: <strong>115</strong>, <strong>76</strong>, <strong>78A</strong>)
+            {TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_INPUT_HINT}
           </div>
         </div>
 
@@ -218,7 +218,7 @@ export function AddRouteModal({
                 marginBottom: '4px',
               }}
             >
-              Bulan Sheet
+              {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_LABEL_MONTH}
             </label>
             <select
               className="input-field"
@@ -241,7 +241,7 @@ export function AddRouteModal({
                 marginBottom: '4px',
               }}
             >
-              Tahun
+              {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_LABEL_YEAR}
             </label>
             <input
               type="number"
@@ -270,7 +270,7 @@ export function AddRouteModal({
               marginBottom: '4px',
             }}
           >
-            URL / Link Google Spreadsheet
+            {TEXT_DASHBOARD.ROUTE_SELECTOR.SHEET_URL_LABEL}
           </label>
           <input
             type="text"

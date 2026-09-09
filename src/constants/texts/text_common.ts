@@ -2,6 +2,7 @@
  * Kamus teks antarmuka: Tombol aksi umum, status koneksi, dan navigasi global.
  */
 export const TEXT_COMMON = {
+  CLOSE: 'Tutup',
   BUTTONS: {
     SAVE: 'Simpan',
     CANCEL: 'Batal',

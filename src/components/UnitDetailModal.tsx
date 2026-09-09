@@ -6,6 +6,7 @@ import { calculateUnitMetrics } from '../utils/unitAnalytics';
 import { safeFormatNumber } from '../utils/numberUtils';
 import { getFormattedDateBadge } from '../utils/analytics';
 import { DailyToaTrendCard } from './DailyToaTrendCard';
+import { TEXT_UNIT_DETAIL } from '../constants/texts';
 
 interface Props {
   unit: string;
@@ -199,7 +200,7 @@ export function UnitDetailModal({
             </div>
             <div>
               <h3 className="gradient-title-text" style={{ margin: 0, fontSize: '18px' }}>{unit}</h3>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Ringkasan Rekapitulasi Armada</span>
+              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.TITLE}</span>
             </div>
           </div>
           <button
@@ -216,7 +217,7 @@ export function UnitDetailModal({
           {/* Card 1: Shift 1 */}
           <div className="card glass" style={{ padding: '12px', borderRadius: '16px', background: 'var(--shift1-bg)', border: '1px solid var(--shift1-border)' }}>
             <div style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--shift1-color)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span>Shift 1</span>
+              <span>{TEXT_UNIT_DETAIL.SHIFT_1_TITLE}</span>
               {dateBadge && (
                 <span style={{ fontSize: '9.5px', padding: '2px 5px', borderRadius: '6px', background: 'var(--shift1-bg)', color: 'var(--shift1-color)', border: '1px solid var(--shift1-border)' }}>
                   {dateBadge}
@@ -229,7 +230,7 @@ export function UnitDetailModal({
                   <Navigation size={16} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift1-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+                  {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_UNIT}</span>
                 </div>
               </div>
 
@@ -238,13 +239,13 @@ export function UnitDetailModal({
                   <Users size={16} />
                 </div>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalShift1Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                  {safeFormatNumber(metrics.totalShift1Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_UNIT}</span>
                 </div>
               </div>
 
               {metrics.manualShift1 > 0 && (
                 <div style={{ fontSize: '10.5px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '3px 6px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
-                  TOA: <strong>{safeFormatNumber(metrics.toaShift1)}</strong> | Man: <strong>{safeFormatNumber(metrics.manualShift1)}</strong>
+                  {TEXT_UNIT_DETAIL.TOA_LABEL} <strong>{safeFormatNumber(metrics.toaShift1)}</strong> | {TEXT_UNIT_DETAIL.MANUAL_LABEL} <strong>{safeFormatNumber(metrics.manualShift1)}</strong>
                 </div>
               )}
             </div>
@@ -253,7 +254,7 @@ export function UnitDetailModal({
           {/* Card 2: Shift 2 */}
           <div className="card glass" style={{ padding: '12px', borderRadius: '16px', background: 'var(--shift2-bg)', border: '1px solid var(--shift2-border)' }}>
             <div style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--shift2-color)', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span>Shift 2</span>
+              <span>{TEXT_UNIT_DETAIL.SHIFT_2_TITLE}</span>
               {dateBadge && (
                 <span style={{ fontSize: '9.5px', padding: '2px 5px', borderRadius: '6px', background: 'var(--shift2-bg)', color: 'var(--shift2-color)', border: '1px solid var(--shift2-border)' }}>
                   {dateBadge}
@@ -266,7 +267,7 @@ export function UnitDetailModal({
                   <Navigation size={16} />
                 </div>
                 <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift2-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM</span>
+                  {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_UNIT}</span>
                 </div>
               </div>
 
@@ -275,13 +276,13 @@ export function UnitDetailModal({
                   <Users size={16} />
                 </div>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalShift2Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp</span>
+                  {safeFormatNumber(metrics.totalShift2Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_UNIT}</span>
                 </div>
               </div>
 
               {metrics.manualShift2 > 0 && (
                 <div style={{ fontSize: '10.5px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '3px 6px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
-                  TOA: <strong>{safeFormatNumber(metrics.toaShift2)}</strong> | Man: <strong>{safeFormatNumber(metrics.manualShift2)}</strong>
+                  {TEXT_UNIT_DETAIL.TOA_LABEL} <strong>{safeFormatNumber(metrics.toaShift2)}</strong> | {TEXT_UNIT_DETAIL.MANUAL_LABEL} <strong>{safeFormatNumber(metrics.manualShift2)}</strong>
                 </div>
               )}
             </div>
@@ -291,7 +292,7 @@ export function UnitDetailModal({
         {/* Executive Summary: Row 2 (Akumulasi Total Full Width) */}
         <div className="card glass" style={{ padding: '14px', borderRadius: '16px', background: 'var(--total-bg)', border: '1px solid var(--total-border)', marginBottom: '20px' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--total-color)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span>Akumulasi Total</span>
+            <span>{TEXT_UNIT_DETAIL.TOTAL_TITLE}</span>
             {dateBadge && (
               <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'var(--total-bg)', color: 'var(--total-color)', border: '1px solid var(--total-border)' }}>
                 {dateBadge}
@@ -304,7 +305,7 @@ export function UnitDetailModal({
                 <Navigation size={18} />
               </div>
               <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
-                {safeFormatNumber(metrics.totalKm)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>KM Total</span>
+                {safeFormatNumber(metrics.totalKm)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_TOTAL_UNIT}</span>
               </div>
             </div>
 
@@ -313,7 +314,7 @@ export function UnitDetailModal({
                 <Users size={18} />
               </div>
               <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
-                {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>Pnp Total</span>
+                {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_TOTAL_UNIT}</span>
               </div>
             </div>
 
@@ -324,7 +325,7 @@ export function UnitDetailModal({
                 </div>
                 <div style={{ fontSize: '17px', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.1 }}>
                   {metrics.tripPergi || '0'}/{metrics.tripPulang || '0'}{' '}
-                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>Ritase</span>
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.RITASE_UNIT}</span>
                   {targetTrip && targetTrip.pergi > 0 && (
                     <span
                       style={{
@@ -353,8 +354,8 @@ export function UnitDetailModal({
                     >
                       {parseInt(metrics.tripPergi || '0', 10) >= targetTrip.pergi &&
                       parseInt(metrics.tripPulang || '0', 10) >= targetTrip.pulang
-                        ? 'Target Tercapai'
-                        : `Kurang Ritase (Target: ${targetTrip.pergi}/${targetTrip.pulang})`}
+                        ? TEXT_UNIT_DETAIL.TARGET_ACHIEVED
+                        : TEXT_UNIT_DETAIL.TARGET_DEFICIT(targetTrip.pergi, targetTrip.pulang)}
                     </span>
                   )}
                 </div>
@@ -363,7 +364,7 @@ export function UnitDetailModal({
 
             {(metrics.manualShift1 + metrics.manualShift2) > 0 && (
               <div style={{ fontSize: '11px', color: 'var(--text-secondary)', background: 'var(--input-bg)', padding: '4px 8px', borderRadius: '6px', marginTop: '2px', border: '1px solid var(--card-border)' }}>
-                Total TOA: <strong>{safeFormatNumber(metrics.totalToa)}</strong> | Manual: <strong>{safeFormatNumber(metrics.manualShift1 + metrics.manualShift2)}</strong>
+                {TEXT_UNIT_DETAIL.TOTAL_TOA_LABEL} <strong>{safeFormatNumber(metrics.totalToa)}</strong> | {TEXT_UNIT_DETAIL.TOTAL_MANUAL_LABEL} <strong>{safeFormatNumber(metrics.manualShift1 + metrics.manualShift2)}</strong>
               </div>
             )}
           </div>
@@ -382,7 +383,7 @@ export function UnitDetailModal({
         <div className="card glass" style={{ padding: '16px', marginBottom: '16px', borderRadius: '16px' }}>
           <div className="analytics-card-title" style={{ fontSize: '14px', marginBottom: '12px' }}>
             <MessageSquare size={18} />
-            <span>Catatan & Keterangan Operasional</span>
+            <span>{TEXT_UNIT_DETAIL.NOTES_SECTION_TITLE}</span>
           </div>
           {metrics.notes.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -395,7 +396,7 @@ export function UnitDetailModal({
             </div>
           ) : (
             <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
-              Tidak ada catatan khusus yang dilaporkan untuk unit ini.
+              {TEXT_UNIT_DETAIL.NO_NOTES}
             </p>
           )}
         </div>

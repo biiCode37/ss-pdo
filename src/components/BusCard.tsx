@@ -17,6 +17,7 @@ import {
   pdoSwal,
 } from "../utils/alertUtils";
 import { getSatsetMode } from "../utils/modals/busInputModal";
+import { TEXT_DASHBOARD } from "../constants/texts";
 import {
   AlertTriangle,
   Navigation,
@@ -165,7 +166,7 @@ function BusCardComponent({
       } catch (apiErr) {
         // Mark failure; existing catch below will queue if network
         setSaveStatus("idle");
-        const formattedErr = formatUserError(apiErr, "Gagal menyimpan data bus ke Google Sheets.");
+        const formattedErr = formatUserError(apiErr, TEXT_DASHBOARD.BUS_CARD_ACTIONS.SAVE_FAILED);
         if (formattedErr) {
           showErrorToast(formattedErr);
         }
@@ -186,12 +187,12 @@ function BusCardComponent({
           originalSnapshot,
         });
         setSaveStatus("queued");
-        showInfoToast(`Unit ${escapeHtml(bus.unit)} disimpan ke antrean offline`);
+        showInfoToast(TEXT_DASHBOARD.BUS_CARD_ACTIONS.SAVED_TO_OFFLINE_QUEUE(escapeHtml(bus.unit)));
       } else {
         setSaveStatus("idle");
         const formattedErr = formatUserError(
           err,
-          "Gagal menyimpan data bus ke Google Sheets.",
+          TEXT_DASHBOARD.BUS_CARD_ACTIONS.SAVE_FAILED,
         );
         if (formattedErr) {
           showErrorToast(formattedErr);
@@ -206,7 +207,7 @@ function BusCardComponent({
     initialTab?: "shift1" | "shift2" | "trip" | "notes",
   ) => {
     if (tabName === "AKUMULASI") {
-      showWarningToast("Penginputan dikunci pada mode Rekap Akumulasi.");
+      showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
       return;
     }
 
@@ -220,13 +221,13 @@ function BusCardComponent({
     if (isNonSgo) {
       const confirmResult = await pdoSwal.fire({
         icon: "question",
-        title: "Konfirmasi Operasional Bus",
-        html: `Unit <strong>${escapeHtml(bus.unit)}</strong> saat ini berstatus <strong>${escapeHtml(currentKet)}</strong>.<br><br>Apakah unit ini dioperasikan (SGO)?`,
+        title: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CONFIRM_TITLE,
+        html: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CONFIRM_HTML(escapeHtml(bus.unit), escapeHtml(currentKet)),
         showCancelButton: true,
-        confirmButtonText: "Jadikan SGO & Buka Form",
-        cancelButtonText: "Tetap Lanjut Input",
+        confirmButtonText: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CONFIRM_BTN,
+        cancelButtonText: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CANCEL_INPUT_BTN,
         showDenyButton: true,
-        denyButtonText: "Batal",
+        denyButtonText: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_DENY_BTN,
         confirmButtonColor: "#3ECF8E",
         cancelButtonColor: "#38bdf8",
         denyButtonColor: "#71717a",
@@ -303,12 +304,12 @@ function BusCardComponent({
     const isImbalanced = hasTrip && (pergiVal !== pulangVal || isBelowTarget);
 
     const tripStatusTitle = isBelowTarget
-      ? `Kurang Ritase: ${pergiVal || 0}/${pulangVal || 0} Rit (Target Rute: ${targetP}/${targetQ} Rit). Klik untuk edit Trip.`
+      ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_DEFICIT_TOOLTIP(pergiVal || 0, pulangVal || 0, targetP, targetQ)
       : isTargetAchieved
-      ? `Target Ritase Tercapai Penuh: ${pergiVal}/${pulangVal} Rit (Target: ${targetP}/${targetQ} Rit). Klik untuk edit Trip.`
+      ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.FULL_TARGET_TOOLTIP(pergiVal || 0, pulangVal || 0, targetP, targetQ)
       : hasTarget
-      ? `Target Rute: ${targetP}/${targetQ} Rit. Klik untuk edit Trip.`
-      : "Trip Operasional (Klik untuk edit Trip per unit)";
+      ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_TARGET_TOOLTIP(targetP, targetQ)
+      : TEXT_DASHBOARD.BUS_CARD_ACTIONS.DEFAULT_TRIP_TITLE;
 
     // Mode Spesifik Kolom Aktif (selain ALL)
     if (activeCategory !== "ALL") {
@@ -346,12 +347,12 @@ function BusCardComponent({
             <span>
               Trip:{" "}
               {isBelowTarget
-                ? `⚠️ ${pergiVal || 0}/${pulangVal || 0} Rit (Kurang)`
+                ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.TRIP_BADGE_DEFICIT(pergiVal || 0, pulangVal || 0)
                 : isTargetAchieved
-                ? `${pergiVal || 0}/${pulangVal || 0} Rit (Tercapai)`
+                ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.TRIP_BADGE_ACHIEVED(pergiVal || 0, pulangVal || 0)
                 : hasTrip
-                ? `${pergiVal || 0}/${pulangVal || 0} Rit`
-                : "Kosong"}
+                ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.TRIP_BADGE_NORMAL(pergiVal || 0, pulangVal || 0)
+                : TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}
             </span>
           </div>
         );
@@ -361,14 +362,14 @@ function BusCardComponent({
       const isFilled = val !== undefined && val !== null && String(val).trim() !== "";
       const isAccumulation = tabName.toUpperCase() === "AKUMULASI";
       const categoryLabels: Record<string, string> = {
-        toaShift1: "TOA S1",
-        totalToa: "Total TOA",
+        toaShift1: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TOA_S1,
+        totalToa: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TOTAL_TOA,
         manualShift1: "Manual S1",
         manualShift2: "Manual S2",
-        kmAwal1: isAccumulation ? "KM Awal S1 (Akumulasi)" : "KM Awal S1",
-        kmAkhir1: "KM Akhir S1",
-        kmAwal2: isAccumulation ? "KM Awal S2 (Akumulasi)" : "KM Awal S2",
-        kmAkhir2: "KM Akhir S2",
+        kmAwal1: isAccumulation ? `${TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_1} (Akumulasi)` : TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_1,
+        kmAkhir1: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AKHIR_1,
+        kmAwal2: isAccumulation ? `${TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_2} (Akumulasi)` : TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_2,
+        kmAkhir2: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AKHIR_2,
       };
       const label = categoryLabels[activeCategory] || activeCategory;
 
@@ -393,7 +394,7 @@ function BusCardComponent({
             <AlertCircle size={12} style={{ flexShrink: 0 }} />
           )}
           <span>
-            {label}: {isFilled ? String(val) : "Kosong"}
+            {label}: {isFilled ? String(val) : TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}
           </span>
         </div>
       );
@@ -411,7 +412,7 @@ function BusCardComponent({
             color: "var(--danger-color)",
           }}
         >
-          Kosong
+          {TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}
         </span>
       );
     }
@@ -449,20 +450,18 @@ function BusCardComponent({
                 ? "rgba(16, 185, 129, 0.25)"
                 : "var(--card-border)"
             }`,
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
             gap: "4px",
             cursor: tabName === "AKUMULASI" ? "default" : "pointer",
-            transition: "all 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
+            transition: "all 0.15s ease",
           }}
         >
           <ArrowRightLeft size={11} style={{ flexShrink: 0 }} />
           <span>
-            {hasTrip
-              ? isBelowTarget
-                ? `⚠️ ${pergiVal || 0}/${pulangVal || 0} Rit`
-                : `${pergiVal || 0}/${pulangVal || 0} Rit`
-              : "—/— Rit"}
+            {isBelowTarget
+              ? `⚠️ ${pergiVal || 0}/${pulangVal || 0}`
+              : `${pergiVal || 0}/${pulangVal || 0}`}
           </span>
         </button>
 
@@ -481,7 +480,7 @@ function BusCardComponent({
           }}
         >
           <Navigation size={12} style={{ flexShrink: 0 }} />
-          <span>{totalKm > 0 ? `${safeFormatNumber(totalKm)} KM` : `0 KM`}</span>
+          <span>{totalKm > 0 ? `${safeFormatNumber(totalKm)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}` : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}`}</span>
         </div>
 
         <div
@@ -499,7 +498,7 @@ function BusCardComponent({
           }}
         >
           <Users size={12} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
-          <span>{totalPnp > 0 ? `${safeFormatNumber(totalPnp)} Pnp` : `0 Pnp`}</span>
+          <span>{totalPnp > 0 ? `${safeFormatNumber(totalPnp)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}` : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}`}</span>
         </div>
       </div>
     );
@@ -565,7 +564,7 @@ function BusCardComponent({
             <span style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
-                Menunggu Sinyal
+                {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}
               </span>
             )}
           </div>

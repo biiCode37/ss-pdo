@@ -5,18 +5,18 @@ export function LoginFeatureCards() {
   const features = [
     {
       icon: Activity,
-      title: "Dashboard Capaian Rute",
-      desc: "Rekap capaian ritase, kilometer, dan pelanggan per armada secara real-time.",
+      title: TEXT_AUTH.FEATURE_CARDS.CARD_1_TITLE,
+      desc: TEXT_AUTH.FEATURE_CARDS.CARD_1_DESC,
     },
     {
       icon: Bus,
-      title: "Pencarian Unit & Catatan",
-      desc: "Cari nomor bodi unit cepat, catat kondisi siap jalan atau kendala lapangan.",
+      title: TEXT_AUTH.FEATURE_CARDS.CARD_2_TITLE,
+      desc: TEXT_AUTH.FEATURE_CARDS.CARD_2_DESC,
     },
     {
       icon: Lock,
-      title: "Form Cepat & Presisi",
-      desc: "Input data terarah yang langsung tersimpan rapi ke spreadsheet resmi pengawas.",
+      title: TEXT_AUTH.FEATURE_CARDS.CARD_3_TITLE,
+      desc: TEXT_AUTH.FEATURE_CARDS.CARD_3_DESC,
     },
   ];
 
