@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeKeterangan, parseKeterangan, filterBusesForKmCopy } from './keteranganUtils';
+import {
+  normalizeKeterangan,
+  parseKeterangan,
+  filterBusesForKmCopy,
+  combineShiftKeterangan,
+  splitShiftKeterangan,
+} from './keteranganUtils';
 
 describe('keteranganUtils - normalizeKeterangan', () => {
   it('normalizes various formats of BA.01 without details', () => {
@@ -171,3 +177,52 @@ describe('keteranganUtils - filterBusesForKmCopy', () => {
     expect(emptyKmAwal2Count).toBe(20);
   });
 });
+
+describe('keteranganUtils - multi-shift combine and split', () => {
+  describe('combineShiftKeterangan', () => {
+    it('returns empty string if both shifts are empty or SGO', () => {
+      expect(combineShiftKeterangan('', '')).toBe('');
+      expect(combineShiftKeterangan(null, undefined)).toBe('');
+      expect(combineShiftKeterangan('SGO', 'SGO')).toBe('');
+      expect(combineShiftKeterangan('sgo', '')).toBe('');
+    });
+
+    it('returns single note if both shifts have identical notes', () => {
+      expect(combineShiftKeterangan('OFF', 'OFF')).toBe('OFF');
+      expect(combineShiftKeterangan('ba 02 np 1', 'BA.02 NP1')).toBe('BA.02 NP1');
+    });
+
+    it('returns single note if only one shift has a note', () => {
+      expect(combineShiftKeterangan('', 'BA.02 NP1')).toBe('BA.02 NP1');
+      expect(combineShiftKeterangan('SGO', 'OFF')).toBe('OFF');
+      expect(combineShiftKeterangan('BA.01 Radiator', '')).toBe('BA.01 Radiator');
+      expect(combineShiftKeterangan('TO EVDAL', 'SGO')).toBe('TO EVDAL');
+    });
+
+    it('combines differing notes using pipe separator with normalization', () => {
+      expect(combineShiftKeterangan('ba01 bocor', 'to evdal')).toBe('BA.01 bocor | TO EVDAL');
+      expect(combineShiftKeterangan('OFF', 'ba 02 np 1')).toBe('OFF | BA.02 NP1');
+    });
+  });
+
+  describe('splitShiftKeterangan', () => {
+    it('splits combined string by pipe separator', () => {
+      const res = splitShiftKeterangan('BA.01 bocor | TO EVDAL');
+      expect(res.s1).toBe('BA.01 bocor');
+      expect(res.s2).toBe('TO EVDAL');
+    });
+
+    it('returns identical value for both shifts if no pipe separator', () => {
+      const res = splitShiftKeterangan('OFF');
+      expect(res.s1).toBe('OFF');
+      expect(res.s2).toBe('OFF');
+    });
+
+    it('returns empty for both shifts if string is empty', () => {
+      const res = splitShiftKeterangan('');
+      expect(res.s1).toBe('');
+      expect(res.s2).toBe('');
+    });
+  });
+});
+

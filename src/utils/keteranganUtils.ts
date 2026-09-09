@@ -28,6 +28,15 @@ export function normalizeKeterangan(raw?: string | null): string {
   const trimmed = raw.trim();
   if (!trimmed) return '';
 
+  // Dukungan keterangan berbeda per shift (" | ")
+  if (trimmed.includes(' | ')) {
+    return trimmed
+      .split(' | ')
+      .map(part => normalizeKeterangan(part))
+      .filter(Boolean)
+      .join(' | ');
+  }
+
   // 1. Cek variasi BA.01 s/d BA.04
   const baMatch = trimmed.match(BA_PATTERN);
   if (baMatch) {
@@ -149,3 +158,64 @@ export function filterBusesForKmCopy<T extends { kmAkhir1?: string; keterangan?:
 
   return { eligibleBuses, skippedWithNotesCount };
 }
+
+/**
+ * Helper untuk membersihkan nilai keterangan per shift.
+ * Teks 'SGO' atau string kosong dianggap berstatus SGO (kosong di SSOT).
+ */
+export function cleanShiftNote(val?: string | null): string {
+  if (!val || typeof val !== 'string') return '';
+  const trimmed = val.trim();
+  if (!trimmed || trimmed.toUpperCase() === 'SGO') return '';
+  return normalizeKeterangan(trimmed);
+}
+
+/**
+ * Menggabungkan keterangan Shift 1 dan Shift 2 dengan pemisah " | ".
+ * - Jika kedua shift SGO (kosong): kembalikan ""
+ * - Jika kedua shift memiliki keterangan identik: kembalikan 1 keterangan saja (misal "OFF")
+ * - Jika hanya satu shift yang berketerangan: kembalikan keterangan tersebut
+ * - Jika kedua shift memiliki keterangan berbeda: gabungkan dengan " | " (misal "BA.01 Radiator | TO EVDAL")
+ */
+export function combineShiftKeterangan(
+  s1?: string | null,
+  s2?: string | null
+): string {
+  const note1 = cleanShiftNote(s1);
+  const note2 = cleanShiftNote(s2);
+
+  if (!note1 && !note2) return '';
+  if (note1 && !note2) return note1;
+  if (!note1 && note2) return note2;
+  if (note1 === note2) return note1;
+
+  return `${note1} | ${note2}`;
+}
+
+/**
+ * Memecah string keterangan yang tersimpan menjadi keterangan per shift (Shift 1 & Shift 2).
+ */
+export function splitShiftKeterangan(combined?: string | null): {
+  s1: string;
+  s2: string;
+} {
+  if (!combined || typeof combined !== 'string') {
+    return { s1: '', s2: '' };
+  }
+
+  const trimmed = combined.trim();
+  if (!trimmed) {
+    return { s1: '', s2: '' };
+  }
+
+  if (trimmed.includes(' | ')) {
+    const parts = trimmed.split(' | ');
+    const s1 = cleanShiftNote(parts[0]);
+    const s2 = cleanShiftNote(parts[1]);
+    return { s1, s2 };
+  }
+
+  const single = cleanShiftNote(trimmed);
+  return { s1: single, s2: single };
+}
+
