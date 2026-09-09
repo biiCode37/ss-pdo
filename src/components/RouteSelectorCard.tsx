@@ -539,43 +539,34 @@ function RouteSelectorCardComponent({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '6px',
             flex: 1,
             minWidth: 0,
-            padding: '6px 8px',
-            borderRadius: '10px',
+            padding: '5px 8px',
+            borderRadius: '9px',
             cursor: 'pointer',
             background: 'transparent',
             transition: 'background 0.2s ease',
             userSelect: 'none',
           }}
           title="Klik untuk memilih rute atau tanggal"
+          className="hover:bg-white/5 active:scale-[0.99]"
         >
-          <Calendar size={15} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
-          <div
+          <Calendar size={14} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
+          <span
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              minWidth: 0,
-              flex: 1,
+              fontWeight: 600,
+              fontSize: '13px',
+              whiteSpace: 'nowrap',
               overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              color: 'var(--text-primary)',
+              letterSpacing: '-0.1px',
             }}
           >
-            <span
-              style={{
-                fontWeight: 600,
-                fontSize: '13px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                color: 'var(--text-primary)',
-                letterSpacing: '-0.1px',
-              }}
-            >
-              {displayDateLabel}
-            </span>
-          </div>
-          <ChevronDown size={14} style={{ color: 'var(--text-secondary)', opacity: 0.7, flexShrink: 0 }} />
+            {displayDateLabel}
+          </span>
+          <ChevronDown size={13} style={{ color: 'var(--text-secondary)', opacity: 0.65, flexShrink: 0 }} />
         </div>
 
         {/* Right Segment: Exit Accumulation OR Unified Operational Report Pill */}

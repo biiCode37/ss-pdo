@@ -36,8 +36,6 @@ describe('UserProfileHeader', () => {
 
     // Default name
     expect(container.textContent).toContain('Petugas');
-    // Default role badge
-    expect(container.textContent).toContain('Petugas');
 
     const button = container.querySelector('[data-testid="user-profile-header-btn"]') as HTMLElement;
     expect(button).toBeTruthy();
@@ -49,10 +47,9 @@ describe('UserProfileHeader', () => {
     expect(handleOpenProfile).toHaveBeenCalledTimes(1);
   });
 
-  it('renders custom user name, email, avatar, and superadmin role badge', async () => {
+  it('renders custom user name, email, avatar without role badge', async () => {
     localStorage.setItem('PDO_USER_NAME', 'Budi Operasional');
     localStorage.setItem('PDO_USER_EMAIL', 'budi@pusm.id');
-    localStorage.setItem('PDO_USER_ROLE', 'superadmin');
     localStorage.setItem('PDO_USER_AVATAR', 'https://example.com/avatar.jpg');
 
     const handleOpenProfile = vi.fn();
@@ -63,7 +60,8 @@ describe('UserProfileHeader', () => {
 
     expect(container.textContent).toContain('Budi Operasional');
     expect(container.textContent).toContain('budi@pusm.id');
-    expect(container.textContent).toContain('Superadmin');
+    // Ensure role badge is NOT rendered
+    expect(container.querySelector('.role-badge')).toBeNull();
 
     const img = container.querySelector('img');
     expect(img).toBeTruthy();

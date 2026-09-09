@@ -34,6 +34,7 @@ import {
   RefreshCw,
   AlertTriangle,
   MapPin,
+  ChevronDown,
 } from "lucide-react";
 import { QueueModal } from "./QueueModal";
 import { useOfflineSync } from "../hooks/useOfflineSync";
@@ -838,8 +839,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "6px",
-                padding: "5px 11px",
+                gap: "5px",
+                padding: "6px 10px",
                 borderRadius: "10px",
                 background: "var(--accent-bg, rgba(62, 207, 142, 0.12))",
                 border: "1px solid var(--accent-border, rgba(62, 207, 142, 0.32))",
@@ -856,6 +857,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             >
               <MapPin size={13} style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }} />
               <span>{activeRouteCode}</span>
+              <ChevronDown size={12} style={{ opacity: 0.65, flexShrink: 0 }} />
             </button>
 
             {queue.length > 0 && (

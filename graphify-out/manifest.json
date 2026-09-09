@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1788964547.7360938,
-    "ast_hash": "5f247b004c396420360a606908b32eb7",
+    "mtime": 1788965555.2757657,
+    "ast_hash": "9dba6a8d8a270b51f80d925c256e5822",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
-    "mtime": 1788964485.38062,
-    "ast_hash": "7b227a8c7b188f51d1fc756a63d56dba",
+    "mtime": 1788965564.067068,
+    "ast_hash": "20586fabd48dbcbfab7cefba7c1129c4",
     "semantic_hash": ""
   },
   "src/components/ShiftComparisonCard.tsx": {
@@ -1680,13 +1680,13 @@
     "semantic_hash": ""
   },
   "src/components/UserProfileHeader.test.tsx": {
-    "mtime": 1788964585.48761,
-    "ast_hash": "a5307e18500e63b6dd0a2c4e1d4466a2",
+    "mtime": 1788965570.9134052,
+    "ast_hash": "26a42218be81c00051774988797451a6",
     "semantic_hash": ""
   },
   "src/components/UserProfileHeader.tsx": {
-    "mtime": 1788964661.4666402,
-    "ast_hash": "4b0f7cd426112e481463a54d28a69ce2",
+    "mtime": 1788965539.832973,
+    "ast_hash": "bd447a7591a8b1e5d6a9f500cd11ecde",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_28/AUDIT_BUGS.md": {

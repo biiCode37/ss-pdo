@@ -11,7 +11,8 @@ Laporan ini merangkum perbaikan dan peningkatan kualitas antarmuka serta pengala
 - **Unit Test Baru:** `src/components/UserProfileHeader.test.tsx`
 - **Rincian Implementasi:**
   - Menampilkan foto profil avatar Google pengguna (`PDO_USER_AVATAR`) dengan pelindung gagal muat (*fallback to gradient circle with User icon* jika jaringan lambat atau URL avatar bermasalah).
-  - Menampilkan nama pengguna (`PDO_USER_NAME`) secara tegas dan kontras tinggi di samping badge peran `RoleBadge` berukuran ekstra ringkas (`xs`).
+  - Menampilkan nama pengguna (`PDO_USER_NAME`) secara tegas, proporsional, dan kontras tinggi.
+  - **Eliminasi Role Badge (Sesuai Permintaan User):** Menghilangkan `RoleBadge` dari baris profil header agar tidak menimbulkan visual clutter/tabrakan warna di smartphone layar sempit.
   - Menampilkan alamat email akun (`PDO_USER_EMAIL`) dengan tipografi ramping dan elipsis otomatis saat layar menyempit.
   - Memasang interaksi klik / keyboard navigation (Enter/Space) yang langsung membuka `ProfileMenuSheet`.
   - Mengintegrasikan event listener `storage` dan `focus` agar nama/avatar langsung terbarui seketika jika pengguna mengubah akun atau data tersinkronisasi.
@@ -19,7 +20,8 @@ Laporan ini merangkum perbaikan dan peningkatan kualitas antarmuka serta pengala
 ### 🔹 1.2 Penempatan Badge Kode Rute Aktif di Pojok Kanan Atas (UX-28-02)
 - **Lokasi File:** `src/components/Dashboard.tsx`
 - **Rincian Implementasi:**
-  - Menggantikan tombol lama `[ 🌐 Wilayah ]` dengan badge `[ 📍 JAK.115 ]`.
+  - Menggantikan tombol lama `[ 🌐 Wilayah ]` dengan badge `[ 📍 JAK.115 ▾ ]`.
+  - Menambahkan indikator interaktif `ChevronDown` (`▾`) agar konsisten dengan elemen interaktif lainnya di dashboard.
   - Menghubungkan resolusi kode rute dari 3 tingkat fallback:
     1. `matchedRoute?.route_code` (rute terverifikasi di cache Supabase)
     2. `currentRouteCode` (dari URL/ID sheet Google Sheets)
@@ -34,6 +36,7 @@ Laporan ini merangkum perbaikan dan peningkatan kualitas antarmuka serta pengala
 - **Rincian Implementasi:**
   - Mengganti ikon `MapPin` pada smart pill dengan ikon `Calendar`.
   - Mengeliminasi kode rute ganda (`JAK.115 •`) dari segmen kiri smart pill karena kode rute sudah tampil elegan di header atas.
+  - **Perapihan Layout & Eliminasi Gap Kosong:** Merapatkan jarak ikon kalender, label tanggal, dan panah `ChevronDown` dengan `gap: 6px` terpadu, menghilangkan ruang kosong aneh (*floating arrow gap*) yang sebelumnya memisahkan teks tanggal dengan panah chevron.
   - Memformat label tanggal menjadi format bahasa Indonesia lengkap: `"hari, tanggal Bulan tahun"` (contoh: `"Rabu, 09 Sep 2026"`).
   - Menggunakan kamus hari resmi: `['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']` dan singkatan bulan standar: `['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']`.
   - Tetap mendukung mode akumulasi secara presisi: `Akumulasi (01 - 09/09/26)`.
@@ -47,13 +50,13 @@ Laporan ini merangkum perbaikan dan peningkatan kualitas antarmuka serta pengala
 | :--- | :--- | :--- |
 | **Komponen** | Judul teks statis "PUSM" | Komponen interaktif `UserProfileHeader` |
 | **Subtitle** | Teks deskriptif "PDO Utara Spreadsheet Mobile" | Email pengguna aktif (contoh: `budi@transjakarta.co.id`) |
-| **Identitas** | Tidak menampilkan identitas maupun peran pengguna | Menampilkan avatar Google, nama akun, dan `RoleBadge` |
+| **Identitas** | Tidak menampilkan identitas maupun peran pengguna | Menampilkan avatar Google dan nama akun bersih tanpa role badge yang padat |
 | **Aksi Tap** | Statis, tidak dapat diklik | Membuka `ProfileMenuSheet` secara langsung |
 
 ### 📊 Header Pojok Kanan Atas
 | Aspek | Sebelum (Before) | Sesudah (After) |
 | :--- | :--- | :--- |
-| **Fungsi** | Tombol navigasi `[ 🌐 Wilayah ]` | Badge status `[ 📍 JAK.115 ]` |
+| **Fungsi** | Tombol navigasi `[ 🌐 Wilayah ]` | Badge status & picker `[ 📍 JAK.115 ▾ ]` |
 | **Konteks** | Mengarahkan ke halaman monitoring regional yang jarang dikunjungi | Menegaskan konteks rute aktif yang sedang dikelola petugas |
 | **Interaksi** | Pindah rute halaman | Membuka bottom sheet seleksi rute cepat |
 
@@ -61,8 +64,9 @@ Laporan ini merangkum perbaikan dan peningkatan kualitas antarmuka serta pengala
 | Aspek | Sebelum (Before) | Sesudah (After) |
 | :--- | :--- | :--- |
 | **Ikon** | `MapPin` (duplikat konteks lokasi) | `Calendar` (konteks waktu dan jadwal) |
-| **Teks Label** | `JAK.115 • Tgl 9` (redundan dengan header) | `Rabu, 09 Sep 2026` (format lengkap Indonesia) |
+| **Teks Label** | `JAK.115 • Tgl 9` (redundan dengan header) | `Rabu, 23 Sep 2026` (format lengkap Indonesia) |
 | **Kejelasan Kalender** | Hanya angka tanggal tanpa nama hari | Memberikan nama hari lengkap (Rabu, Kamis, dst.) |
+| **Penyelarasan Panah** | Chevron terdorong jauh ke ujung kanan dengan celah kosong lebar | Ikon kalender, teks tanggal, dan chevron menyatu rapi berdampingan |
 
 ---
 

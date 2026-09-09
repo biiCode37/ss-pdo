@@ -1,7 +1,5 @@
 import { useState, useEffect, memo } from "react";
 import { User } from "lucide-react";
-import { RoleBadge } from "./RoleBadge";
-import { getStoredUserRole } from "../utils/roleStorage";
 import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface UserProfileHeaderProps {
@@ -14,7 +12,6 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
     fullName: string;
     email: string;
     avatarUrl?: string;
-    role: "superadmin" | "admin" | "petugas";
   }>({
     fullName:
       localStorage.getItem("PDO_USER_NAME") ||
@@ -23,7 +20,6 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
       localStorage.getItem("PDO_USER_EMAIL") ||
       TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
     avatarUrl: localStorage.getItem("PDO_USER_AVATAR") || undefined,
-    role: getStoredUserRole(),
   });
 
   const syncProfile = () => {
@@ -40,7 +36,6 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
           localStorage.getItem("PDO_USER_EMAIL") ||
           TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
         avatarUrl: freshAvatar,
-        role: getStoredUserRole(),
       };
     });
   };
@@ -124,32 +119,23 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
           flexDirection: "column",
           minWidth: 0,
           overflow: "hidden",
+          justifyContent: "center",
         }}
       >
-        <div
+        <span
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            minWidth: 0,
+            fontSize: "14px",
+            fontWeight: 700,
+            color: "var(--text-primary)",
+            lineHeight: 1.25,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            letterSpacing: "-0.2px",
           }}
         >
-          <span
-            style={{
-              fontSize: "13.5px",
-              fontWeight: 700,
-              color: "var(--text-primary)",
-              lineHeight: 1.2,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              letterSpacing: "-0.2px",
-            }}
-          >
-            {profile.fullName}
-          </span>
-          <RoleBadge role={profile.role} size="xs" />
-        </div>
+          {profile.fullName}
+        </span>
         <span
           style={{
             fontSize: "11px",
@@ -158,8 +144,8 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            lineHeight: 1.3,
-            marginTop: "1px",
+            lineHeight: 1.25,
+            marginTop: "1.5px",
           }}
         >
           {profile.email}
