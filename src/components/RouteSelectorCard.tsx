@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, memo } from 'react';
-import { MapPin, ChevronDown } from 'lucide-react';
+import { Calendar, ChevronDown } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
 import { inspectSpreadsheetHeader } from '../services/googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
@@ -15,6 +15,9 @@ import { RouteSelectorSheet } from './routeSelector/RouteSelectorSheet';
 
 // ponytail: centralized month names dictionary from TEXT_COMMON
 const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
+
+const INDO_DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const INDO_MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
 interface Props {
   sheetUrl: string;
@@ -39,6 +42,8 @@ interface Props {
   reportRoute?: { id: number; route_code: string } | null;
   reportStatus?: 'draft' | 'submitted' | 'verified';
   onOpenReportModal?: () => void;
+  onRouteCodeChange?: (routeCode: string) => void;
+  externalOpenTrigger?: number;
 }
 
 function RouteSelectorCardComponent({
@@ -57,6 +62,8 @@ function RouteSelectorCardComponent({
   reportRoute,
   reportStatus,
   onOpenReportModal,
+  onRouteCodeChange,
+  externalOpenTrigger,
 }: Props) {
   const [isSheetOpen, setIsSheetOpen] = useState(!isDataLoaded);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
@@ -368,13 +375,40 @@ function RouteSelectorCardComponent({
       })
     : null;
 
-  const displayRouteCode = loadedFlat
-    ? loadedFlat.routeCode
-    : selectedRouteCode || TEXT_DASHBOARD.ROUTE_SELECTOR.DEFAULT_SELECT_PERIOD;
+  useEffect(() => {
+    const activeCode = loadedFlat?.routeCode || selectedRouteCode;
+    if (activeCode && onRouteCodeChange) {
+      onRouteCodeChange(activeCode);
+    }
+  }, [loadedFlat?.routeCode, selectedRouteCode, onRouteCodeChange]);
 
-  const displayDateLabel = selectedTab === 'AKUMULASI'
-    ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth ?? new Date().getMonth() + 1, selectedYear ?? new Date().getFullYear(), accRange)})`
-    : `Tgl ${currentTabName || selectedTab || '?'}`;
+  useEffect(() => {
+    if (externalOpenTrigger && externalOpenTrigger > 0) {
+      setIsSheetOpen(true);
+    }
+  }, [externalOpenTrigger]);
+
+  const displayDateLabel = useMemo(() => {
+    const targetYear = selectedYear ?? new Date().getFullYear();
+    const targetMonth = selectedMonth ?? (new Date().getMonth() + 1);
+
+    if (selectedTab === 'AKUMULASI') {
+      return `Akumulasi (${getFormattedDateBadge('AKUMULASI', targetMonth, targetYear, accRange)})`;
+    }
+
+    const rawDay = currentTabName || selectedTab;
+    const parsedDay = parseInt(rawDay, 10);
+    const validDay = !isNaN(parsedDay) && parsedDay >= 1 && parsedDay <= 31
+      ? parsedDay
+      : new Date().getDate();
+
+    const dateObj = new Date(targetYear, targetMonth - 1, validDay);
+    const dayName = INDO_DAYS[dateObj.getDay()];
+    const padDay = String(validDay).padStart(2, '0');
+    const monthName = INDO_MONTHS_SHORT[targetMonth - 1] || 'Jan';
+
+    return `${dayName}, ${padDay} ${monthName} ${targetYear}`;
+  }, [selectedTab, currentTabName, selectedYear, selectedMonth, accRange]);
 
   const resetForm = () => {
     setNewRouteCodeSuffix('');
@@ -517,12 +551,11 @@ function RouteSelectorCardComponent({
           }}
           title="Klik untuk memilih rute atau tanggal"
         >
-          <MapPin size={16} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
+          <Calendar size={15} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
               minWidth: 0,
               flex: 1,
               overflow: 'hidden',
@@ -530,24 +563,13 @@ function RouteSelectorCardComponent({
           >
             <span
               style={{
-                fontWeight: 700,
-                fontSize: '13.5px',
-                whiteSpace: 'nowrap',
-                color: 'var(--text-primary)',
-                letterSpacing: '-0.2px',
-              }}
-            >
-              {displayRouteCode}
-            </span>
-            <span style={{ color: 'var(--text-secondary)', opacity: 0.45, fontSize: '12px' }}>•</span>
-            <span
-              style={{
-                fontWeight: 500,
-                fontSize: '12.5px',
+                fontWeight: 600,
+                fontSize: '13px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                color: 'var(--text-secondary)',
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.1px',
               }}
             >
               {displayDateLabel}

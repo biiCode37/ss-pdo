@@ -12,6 +12,7 @@ import { extractSpreadsheetId } from "../utils/sheetIdentity";
 import { BusList } from "./BusList";
 import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
+import { UserProfileHeader } from "./UserProfileHeader";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { RouteOperationalReportCard } from "./RouteOperationalReportCard";
 import { ShiftConfirmationAlertBar } from "./fleetStatus/ShiftConfirmationAlertBar";
@@ -32,7 +33,7 @@ import {
   CloudOff,
   RefreshCw,
   AlertTriangle,
-  Globe,
+  MapPin,
 } from "lucide-react";
 import { QueueModal } from "./QueueModal";
 import { useOfflineSync } from "../hooks/useOfflineSync";
@@ -80,6 +81,18 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     } catch (_e) {}
     return "";
   });
+
+  const [selectedRouteCode, setSelectedRouteCode] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem("PDO_LAST_VISITED");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.routeCode || "";
+      }
+    } catch (_e) {}
+    return "";
+  });
+  const [routeSelectorOpenTrigger, setRouteSelectorOpenTrigger] = useState(0);
 
   const [selectedTab, setSelectedTab] = useState(() =>
     String(new Date().getDate()),
@@ -532,6 +545,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     return cached.find((r) => r.route_code === currentRouteCode) || null;
   }, [currentRouteCode]);
 
+  const activeRouteCode = useMemo(() => {
+    return matchedRoute?.route_code || currentRouteCode || selectedRouteCode || "Pilih Rute";
+  }, [matchedRoute, currentRouteCode, selectedRouteCode]);
+
   const operationalReportDate = useMemo(() => {
     const dayNum = parseInt(selectedTab, 10);
     if (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) {
@@ -802,37 +819,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             gap: "12px",
           }}
         >
-          {/* POJOK KIRI: Title PUSM & Helper Subtitle */}
-          <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-            <h1
-              style={{
-                margin: 0,
-                textAlign: "left",
-                fontSize: "20px",
-                fontWeight: 800,
-                letterSpacing: "-0.5px",
-                lineHeight: 1.15,
-                color: "var(--text-primary)",
-              }}
-            >
-              {TEXT_DASHBOARD.APP_TITLE}
-            </h1>
-            <span
-              style={{
-                fontSize: "10.5px",
-                color: "var(--text-secondary)",
-                fontWeight: 500,
-                letterSpacing: "0.2px",
-                whiteSpace: "nowrap",
-                lineHeight: 1.3,
-                marginTop: "1px",
-              }}
-            >
-              {TEXT_DASHBOARD.APP_SUBTITLE}
-            </span>
-          </div>
+          {/* POJOK KIRI: Profil Akun Pengguna (Avatar, Nama, Role, Email) */}
+          <UserProfileHeader onOpenProfile={() => setIsProfileMenuOpen(true)} />
 
-          {/* POJOK KANAN: Active Page Name Badge + Switcher + Status Antrean Offline */}
+          {/* POJOK KANAN: Badge Kode Rute Aktif + Status Antrean Offline */}
           <div
             style={{
               display: "flex",
@@ -841,28 +831,31 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               flexShrink: 0,
             }}
           >
-            {/* Tombol Switcher ke Monitoring Wilayah */}
+            {/* Badge Kode Rute Aktif */}
             <button
               type="button"
-              onClick={() => setCurrentView('regional_monitoring')}
+              onClick={() => setRouteSelectorOpenTrigger((prev) => prev + 1)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "5px 10px",
-                borderRadius: "9px",
-                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                border: "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
-                color: "var(--text-secondary, #94a3b8)",
-                fontSize: "12px",
-                fontWeight: 600,
+                padding: "5px 11px",
+                borderRadius: "10px",
+                background: "var(--accent-bg, rgba(62, 207, 142, 0.12))",
+                border: "1px solid var(--accent-border, rgba(62, 207, 142, 0.32))",
+                color: "var(--accent-color, #3ECF8E)",
+                fontSize: "12.5px",
+                fontWeight: 700,
+                letterSpacing: "0.2px",
                 cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
               }}
-              title={TEXT_DASHBOARD.SWITCHER.TITLE}
+              title={`Kode Rute Aktif: ${activeRouteCode}. Klik untuk memilih rute.`}
+              aria-label={`Rute aktif: ${activeRouteCode}`}
+              data-testid="active-route-badge-btn"
             >
-              <Globe size={13} style={{ color: "var(--accent-color, #3ECF8E)" }} />
-              <span>{TEXT_DASHBOARD.SWITCHER.REGIONAL_MONITORING}</span>
+              <MapPin size={13} style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }} />
+              <span>{activeRouteCode}</span>
             </button>
 
             {queue.length > 0 && (
@@ -926,6 +919,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           reportRoute={matchedRoute}
           reportStatus={operationalReportStatus}
           onOpenReportModal={() => setIsReportModalOpen(true)}
+          onRouteCodeChange={(code) => setSelectedRouteCode(code)}
+          externalOpenTrigger={routeSelectorOpenTrigger}
         />
       </div>
 

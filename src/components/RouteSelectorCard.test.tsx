@@ -177,8 +177,9 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
     expect(handleExitAccumulation).toHaveBeenCalled();
   });
 
-  it('renders clean unified route code and date label with operational report button', async () => {
+  it('renders clean full date label with operational report button and triggers route code change', async () => {
     const handleOpenReportModal = vi.fn();
+    const handleRouteCodeChange = vi.fn();
 
     await act(async () => {
       root.render(
@@ -196,13 +197,17 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
           reportRoute={{ id: 1, route_code: 'JAK.115' }}
           reportStatus="draft"
           onOpenReportModal={handleOpenReportModal}
+          onRouteCodeChange={handleRouteCodeChange}
         />
       );
     });
 
-    // Verify unified left segment displays route code and date label cleanly
-    expect(container.textContent).toContain('JAK.115');
-    expect(container.textContent).toContain('Tgl 5');
+    // Verify unified left segment displays formatted full Indonesian date label (e.g. 05 Sep 2026)
+    expect(container.textContent).toMatch(/\d{2}\s+(Jan|Feb|Mar|Apr|Mei|Jun|Jul|Agu|Sep|Okt|Nov|Des)\s+\d{4}/);
+    expect(container.textContent).toContain('05');
+
+    // Verify route code callback is invoked with active route code
+    expect(handleRouteCodeChange).toHaveBeenCalledWith('JAK.115');
 
     // Verify operational report button is present and clickable
     const reportBtn = container.querySelector('[data-testid="open-operational-report-btn"]') as HTMLButtonElement;
