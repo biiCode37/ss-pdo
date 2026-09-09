@@ -958,21 +958,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               </div>
             )}
 
-            {matchedRoute && selectedTab !== "AKUMULASI" && (
-              <RouteOperationalReportCard
-                asModal={true}
-                isOpen={isReportModalOpen}
-                onClose={() => setIsReportModalOpen(false)}
-                routeId={matchedRoute.id}
-                routeCode={matchedRoute.route_code}
-                selectedDate={operationalReportDate}
-                defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
-                defaultRenops={matchedRoute.default_renops || 0}
-                userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
-                onStatusChange={setOperationalReportStatus}
-              />
-            )}
-
             <BusList
               data={busData}
               sheetId={currentSheetId}
@@ -1033,7 +1018,20 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         </SwipeableContainer>
       )}
 
-
+      {matchedRoute && selectedTab !== "AKUMULASI" && (
+        <RouteOperationalReportCard
+          asModal={true}
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          routeId={matchedRoute.id}
+          routeCode={matchedRoute.route_code}
+          selectedDate={operationalReportDate}
+          defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
+          defaultRenops={matchedRoute.default_renops || 0}
+          userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
+          onStatusChange={setOperationalReportStatus}
+        />
+      )}
 
       <QueueModal
         isOpen={isQueueModalOpen}

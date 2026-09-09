@@ -518,6 +518,15 @@ select.input-field {
   align-items: center;
   padding: 0 12px;
   pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1), transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Sembunyikan floating BottomNav secara otomatis saat body scroll terkunci (mis. bottom sheet aktif) */
+body[style*="overflow: hidden"] .bottom-nav-wrapper {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px) !important;
+  transition: opacity 0.18s cubic-bezier(0.32, 0.72, 0, 1), transform 0.18s cubic-bezier(0.32, 0.72, 0, 1) !important;
 }
 
 .bottom-nav {

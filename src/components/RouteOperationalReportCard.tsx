@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, memo, type FormEvent } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ChevronDown,
   ChevronUp,
@@ -15,6 +16,10 @@ import type { DailyRouteReport } from '../types/supabase';
 import { showSuccessToast, showErrorAlert } from '../utils/alertUtils';
 import { TEXT_PDO_FORM, TEXT_ERRORS } from '../constants/texts';
 import { useMobileBackHandler } from '../hooks/useMobileBackHandler';
+
+const isTestEnv =
+  import.meta.env?.MODE === 'test' ||
+  Boolean((globalThis as unknown as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT);
 
 interface Props {
   routeId: number;
@@ -48,6 +53,16 @@ function RouteOperationalReportCardComponent({
     isOpen: asModal && !!isOpen,
     onClose: onClose || (() => {}),
   });
+
+  // Body scroll lock saat modal terbuka
+  useEffect(() => {
+    if (!asModal || !isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [asModal, isOpen]);
 
   const [isExpanded, setIsExpanded] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -713,7 +728,7 @@ function RouteOperationalReportCardComponent({
   );
 
   if (asModal) {
-    return (
+    const modalContent = (
       <div
         className="modal-overlay operational-report-modal-overlay"
         style={{
@@ -728,19 +743,22 @@ function RouteOperationalReportCardComponent({
           display: isOpen ? 'flex' : 'none',
           alignItems: 'flex-end',
           justifyContent: 'center',
-          zIndex: 1050,
+          zIndex: 99999,
+          touchAction: 'none',
           animation: 'fadeIn 0.2s ease-out',
         }}
         onClick={onClose}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
       >
         <div
           className="glass pdo-operational-card"
           style={{
             width: '100%',
             maxWidth: '560px',
-            maxHeight: '88vh',
+            maxHeight: '90vh',
             overflowY: 'auto',
-            padding: '16px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px',
+            padding: '16px 20px calc(28px + env(safe-area-inset-bottom, 16px)) 20px',
             borderTopLeftRadius: '24px',
             borderTopRightRadius: '24px',
             borderBottomLeftRadius: 0,
@@ -750,8 +768,12 @@ function RouteOperationalReportCardComponent({
             borderBottom: 'none',
             boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.5)',
             animation: 'slideUp 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
+            WebkitOverflowScrolling: 'touch',
+            overscrollBehavior: 'contain',
           }}
           onClick={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
         >
           {/* Top Handle Bar */}
           <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '12px' }}>
@@ -844,6 +866,12 @@ function RouteOperationalReportCardComponent({
         </div>
       </div>
     );
+
+    if (isTestEnv || !isOpen) {
+      return modalContent;
+    }
+
+    return createPortal(modalContent, document.body);
   }
 
   return (

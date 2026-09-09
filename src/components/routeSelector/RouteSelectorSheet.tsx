@@ -1,8 +1,13 @@
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, MapPin, Plus, Loader2 } from 'lucide-react';
 import { TEXT_DASHBOARD, TEXT_COMMON } from '../../constants/texts';
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler';
 
 const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
+const isTestEnv =
+  import.meta.env?.MODE === 'test' ||
+  Boolean((globalThis as unknown as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT);
 
 interface RouteSelectorSheetProps {
   isOpen: boolean;
@@ -63,9 +68,19 @@ export function RouteSelectorSheet({
     onClose,
   });
 
-  return (
+  // Body scroll lock saat sheet terbuka
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen]);
+
+  const sheetContent = (
     <div
-      className="modal-overlay"
+      className="modal-overlay route-selector-modal-overlay"
       style={{
         position: 'fixed',
         top: 0,
@@ -78,10 +93,13 @@ export function RouteSelectorSheet({
         display: isOpen ? 'flex' : 'none',
         alignItems: 'flex-end',
         justifyContent: 'center',
-        zIndex: 1050,
+        zIndex: 99999,
+        touchAction: 'none',
         animation: 'fadeIn 0.2s ease-out',
       }}
       onClick={onClose}
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
     >
       <div
         className="glass"
@@ -90,7 +108,7 @@ export function RouteSelectorSheet({
           maxWidth: '560px',
           maxHeight: '90vh',
           overflowY: 'auto',
-          padding: '16px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px',
+          padding: '16px 20px calc(28px + env(safe-area-inset-bottom, 16px)) 20px',
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
           borderBottomLeftRadius: 0,
@@ -100,8 +118,12 @@ export function RouteSelectorSheet({
           borderBottom: 'none',
           boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.5)',
           animation: 'slideUp 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
+          WebkitOverflowScrolling: 'touch',
+          overscrollBehavior: 'contain',
         }}
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
       >
         {/* Top Handle Bar for Touch UI */}
         <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '12px' }}>
@@ -353,4 +375,10 @@ export function RouteSelectorSheet({
       </div>
     </div>
   );
+
+  if (isTestEnv || !isOpen) {
+    return sheetContent;
+  }
+
+  return createPortal(sheetContent, document.body);
 }

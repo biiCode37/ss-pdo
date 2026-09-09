@@ -136,4 +136,32 @@ describe('RouteOperationalReportCard Component', () => {
     );
     expect(onSavedMock).toHaveBeenCalled();
   });
+
+  it('handles asModal mode, locking body scroll and calling onClose', async () => {
+    const onCloseMock = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <RouteOperationalReportCard
+          asModal={true}
+          isOpen={true}
+          onClose={onCloseMock}
+          routeId={2}
+          routeCode="JAK.15"
+          selectedDate="2026-09-02"
+        />
+      );
+    });
+
+    expect(document.body.style.overflow).toBe('hidden');
+
+    const closeBtn = container.querySelector('button[title="Tutup"]') as HTMLButtonElement;
+    expect(closeBtn).toBeDefined();
+
+    await act(async () => {
+      closeBtn?.click();
+    });
+
+    expect(onCloseMock).toHaveBeenCalled();
+  });
 });
