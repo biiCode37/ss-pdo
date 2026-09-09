@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Bus, Check, Loader2, Sparkles, ClipboardList } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import type { BusData } from '../../services/googleSheets';
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler';
 import { splitShiftKeterangan, cleanShiftNote } from '../../utils/keteranganUtils';
@@ -223,35 +223,19 @@ function FleetStatusModalComponent({
             gap: '12px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '12px',
-                background: 'rgba(62, 207, 142, 0.12)',
-                color: 'var(--accent-color, #3ECF8E)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
-            >
-              <Bus size={20} />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h3
-                  style={{
-                    margin: 0,
-                    fontSize: '16px',
-                    fontWeight: 800,
-                    color: 'var(--text-primary)',
-                    letterSpacing: '-0.2px',
-                  }}
-                >
-                  Status Armada: {routeCode}
-                </h3>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: '16px',
+                  fontWeight: 800,
+                  color: 'var(--text-primary)',
+                  letterSpacing: '-0.2px',
+                }}
+              >
+                Status Armada: {routeCode}
+              </h3>
                 <span
                   style={{
                     fontSize: '11px',
@@ -276,7 +260,6 @@ function FleetStatusModalComponent({
                 {selectedDate} {dayLabel ? `• ${dayLabel}` : ''}
               </span>
             </div>
-          </div>
 
           <button
             type="button"
@@ -336,7 +319,6 @@ function FleetStatusModalComponent({
                   boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                 }}
               >
-                <Bus size={14} />
                 <span>Status Armada</span>
               </button>
               <button
@@ -359,7 +341,6 @@ function FleetStatusModalComponent({
                 }}
                 title="Buka laporan operasional"
               >
-                <ClipboardList size={14} />
                 <span>Laporan Operasional</span>
               </button>
             </div>
@@ -404,7 +385,7 @@ function FleetStatusModalComponent({
                 transition: 'all 0.18s ease',
               }}
             >
-              🌅 Shift 1 (Pagi)
+              Shift 1 (Pagi)
             </button>
             <button
               type="button"
@@ -421,11 +402,11 @@ function FleetStatusModalComponent({
                 transition: 'all 0.18s ease',
               }}
             >
-              🌇 Shift 2 (Siang)
+              Shift 2 (Siang)
             </button>
           </div>
 
-          {/* Mode Kuas / Brush Chips */}
+          {/* Mode Pemilih Status */}
           <div
             style={{
               display: 'flex',
@@ -436,20 +417,7 @@ function FleetStatusModalComponent({
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-              <span
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  color: 'var(--text-secondary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  marginRight: '2px',
-                }}
-              >
-                Kuas:
-              </span>
-
-              {/* Brush SGO */}
+              {/* Status SGO */}
               <button
                 type="button"
                 onClick={() => setActiveBrush('SGO')}
@@ -467,10 +435,10 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                🟢 SGO
+                SGO
               </button>
 
-              {/* Brush OFF */}
+              {/* Status OFF */}
               <button
                 type="button"
                 onClick={() => setActiveBrush('OFF')}
@@ -488,10 +456,10 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                🟡 OFF
+                OFF
               </button>
 
-              {/* Brush TO */}
+              {/* Status TO */}
               <button
                 type="button"
                 onClick={() => setActiveBrush('TO')}
@@ -509,10 +477,10 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                🔴 T.O
+                T.O
               </button>
 
-              {/* Brush BA */}
+              {/* Status BA */}
               <button
                 type="button"
                 onClick={() => setActiveBrush('BA')}
@@ -530,7 +498,7 @@ function FleetStatusModalComponent({
                   cursor: 'pointer',
                 }}
               >
-                🔵 BA / Kendala
+                BA / Kendala
               </button>
             </div>
 
@@ -553,7 +521,6 @@ function FleetStatusModalComponent({
                 whiteSpace: 'nowrap',
               }}
             >
-              <Sparkles size={13} />
               <span>SGO Semua Unit</span>
             </button>
           </div>
@@ -699,10 +666,10 @@ function FleetStatusModalComponent({
               fontWeight: 700,
             }}
           >
-            <span style={{ color: '#10b981' }}>🟢 SGO: {summaryCounts.sgo}</span>
-            <span style={{ color: '#f59e0b' }}>🟡 OFF: {summaryCounts.off}</span>
-            <span style={{ color: '#ef4444' }}>🔴 T.O: {summaryCounts.to}</span>
-            <span style={{ color: '#38bdf8' }}>🔵 BA: {summaryCounts.ba}</span>
+            <span style={{ color: '#10b981' }}>SGO: {summaryCounts.sgo}</span>
+            <span style={{ color: '#f59e0b' }}>OFF: {summaryCounts.off}</span>
+            <span style={{ color: '#ef4444' }}>T.O: {summaryCounts.to}</span>
+            <span style={{ color: '#38bdf8' }}>BA: {summaryCounts.ba}</span>
           </div>
 
           <button
@@ -733,14 +700,11 @@ function FleetStatusModalComponent({
                 <span>Menyimpan Status Armada...</span>
               </>
             ) : (
-              <>
-                <Check size={18} />
-                <span>
-                  {onNavigateToReport
-                    ? 'Konfirmasi & Lanjut ke Laporan →'
-                    : `Konfirmasi & Terapkan Status Shift ${currentShift}`}
-                </span>
-              </>
+              <span>
+                {onNavigateToReport
+                  ? 'Konfirmasi & Lanjut ke Laporan →'
+                  : `Konfirmasi & Terapkan Status Shift ${currentShift}`}
+              </span>
             )}
           </button>
         </div>

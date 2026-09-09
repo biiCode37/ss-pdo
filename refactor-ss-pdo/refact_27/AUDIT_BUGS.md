@@ -12,6 +12,7 @@ Dokumen ini mendokumentasikan temuan audit UI/UX terkait navigasi satu arah yang
 | **UI-27-02** | `src/components/RouteOperationalReportCard.tsx` | 🟡 **MEDIUM** (Redundansi Elemen UI: Tombol `[ Atur Unit Armada → ]` ganda dengan tab segmented baris atas) | Terselesaikan |
 | **UI-27-03** | `src/components/RouteOperationalReportCard.tsx` | 🟢 **LOW** (Typo Label Teks: Duplikasi kata satuan `Headway (Menit) (Menit)`) | Terselesaikan |
 | **UI-27-04** | `src/components/fleetStatus/FleetStatusModal.tsx`<br>`src/components/RouteOperationalReportCard.tsx` | 🟡 **MEDIUM** (Inkonsistensi Visual: Lonjakan lebar modal 560px vs 720px & ikon chat paper plane) | Terselesaikan |
+| **UI-27-05** | `src/components/fleetStatus/FleetStatusModal.tsx` | 🟡 **MEDIUM** (Visual Noise: Polusi emoji, ikon dekoratif, dan label jargon "KUAS:") | Terselesaikan |
 
 ---
 
@@ -93,3 +94,20 @@ Dokumen ini mendokumentasikan temuan audit UI/UX terkait navigasi satu arah yang
 - **Mitigasi:**
   - Menyeragamkan lebar kontainer kedua modal menjadi `maxWidth: '580px'` yang proporsional dan nyaman di semua viewport.
   - Mengganti ikon tab Laporan Operasional menjadi `ClipboardList` dari `lucide-react` yang merefleksikan lembar laporan/inspeksi operasional.
+
+---
+
+### 🟡 UI-27-05: Visual Noise: Polusi Emoji, Ikon Dekoratif, dan Label Jargon "KUAS:"
+
+- **ID Temuan:** `UI-27-05`
+- **Lokasi Kode:** `src/components/fleetStatus/FleetStatusModal.tsx`
+- **Keparahan:** **MEDIUM** (Kepadatan Visual & Bahasa Antarmuka Non-Standar)
+- **Deskripsi Masalah:**
+  1. Sheet Status Armada dipenuhi emoji berwarna-warni (`🌅`, `🌇`, `🟢`, `🟡`, `🔴`, `🔵`, `✨`, `✓`) dan kotak ikon bus besar yang membuat antarmuka terasa ramai (*cluttered*), kekanak-kanakan, dan tidak profesional.
+  2. Adanya label bertuliskan `"KUAS:"` terasa janggal dan merupakan jargon non-standar yang membingungkan petugas operasional transportasi publik.
+- **Dampak ke Pengguna Lapangan (User Impact):**
+  Mengurangi estetika modern, profesional, dan ketenangan antarmuka lapangan (melanggar prinsip *Anti-Slop* dan *Apple/Linear Design*).
+- **Mitigasi:**
+  - Menghapus label teks `"KUAS:"` sepenuhnya, membiarkan tombol filter status (`[SGO]`, `[OFF]`, `[T.O]`, `[BA / Kendala]`) berbicara sendiri melalui tipografi dan warna aksen yang bersih.
+  - Menghapus seluruh ikon dekoratif dan emoji (`Bus` header, emoji `🌅`/`🌇` shift, emoji bulat `🟢🟡🔴🔵` pada chip dan ringkasan, `Sparkles` ✨, dan `Check` ✓).
+  - Tetap mempertahankan ikon fungsional `✕` (Tutup) di pojok kanan atas untuk aksesibilitas dan kemudahan penutupan modal.

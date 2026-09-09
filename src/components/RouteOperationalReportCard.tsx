@@ -5,7 +5,6 @@ import {
   ChevronUp,
   Bus,
   Plus,
-  ClipboardList,
   Send,
   Loader2,
   Clock,
@@ -907,7 +906,6 @@ function RouteOperationalReportCardComponent({
                 }}
                 title="Buka pengaturan unit armada"
               >
-                <Bus size={14} />
                 <span>Status Armada</span>
               </button>
               <button
@@ -928,7 +926,6 @@ function RouteOperationalReportCardComponent({
                   boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                 }}
               >
-                <ClipboardList size={14} />
                 <span>Laporan Operasional</span>
               </button>
             </div>

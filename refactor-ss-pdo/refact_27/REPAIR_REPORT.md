@@ -34,7 +34,20 @@ Dokumen ini mencatat implementasi pembaruan UI/UX arsitektur navigasi dua arah (
 - **File Diubah:** `src/components/RouteOperationalReportCard.tsx` & `src/components/fleetStatus/FleetStatusModal.tsx`
 - **Tindakan:**
   - Menyeragamkan `maxWidth` kontainer dialog kedua sheet menjadi `580px` (sebelumnya melompat antara 560px dan 720px), mengeliminasi lonjakan layout saat beralih view.
-  - Mengganti ikon tab Laporan Operasional dari ikon `Send` (pesawat kertas rotasi -20deg) menjadi `ClipboardList` yang profesional dan sesuai konteks laporan angkutan umum.
+  - Mengganti ikon tab Laporan Operasional dari ikon `Send` (pesawat kertas rotasi -20deg) menjadi teks rapi tanpa polusi ikon.
+
+### 1.5 Eliminasi Polusi Ikon Dekoratif & Penghapusan Label "KUAS:"
+- **File Diubah:** `src/components/fleetStatus/FleetStatusModal.tsx` & `src/components/RouteOperationalReportCard.tsx`
+- **Tindakan:**
+  - Menghapus label teks `"KUAS:"` sehingga baris status murni berisi tombol filter `[SGO]`, `[OFF]`, `[T.O]`, `[BA / Kendala]`.
+  - Menghapus seluruh ikon dekoratif dan emoji:
+    - Menghapus kotak ikon bus besar (38x38px) di header.
+    - Menghapus ikon bus dan clipboard di segmented control tab.
+    - Menghapus emoji matahari `🌅` dan `🌇` di tombol shift.
+    - Menghapus emoji lingkaran `🟢`, `🟡`, `🔴`, `🔵` di chip status dan baris ringkasan bawah.
+    - Menghapus ikon `<Sparkles>` ✨ pada tombol `SGO Semua Unit`.
+    - Menghapus ikon `<Check>` ✓ pada tombol konfirmasi.
+  - Mempertahankan ikon fungsional `✕` (Tutup) di pojok kanan atas untuk navigasi keluar modal yang ergonomis.
 
 ---
 
@@ -42,10 +55,10 @@ Dokumen ini mencatat implementasi pembaruan UI/UX arsitektur navigasi dua arah (
 
 | Aspek | Sebelum Refactor 27 | Sesudah Refactor 27 |
 | :--- | :--- | :--- |
-| **Navigasi Antar Sheet** | Alur satu arah terputus: Dari Laporan bisa ke Armada, tapi dari Armada tidak ada tombol kembali ke Laporan. Klik simpan/tutup melempar user ke dashboard. | Navigasi dua arah (*true bidirectional tab switching*): Tab `[ 🚌 Status Armada ]` dan `[ 📋 Laporan Operasional ]` tersedia di kedua modal. |
+| **Navigasi Antar Sheet** | Alur satu arah terputus: Dari Laporan bisa ke Armada, tapi dari Armada tidak ada tombol kembali ke Laporan. Klik simpan/tutup melempar user ke dashboard. | Navigasi dua arah (*true bidirectional tab switching*): Tab `[ Status Armada ]` dan `[ Laporan Operasional ]` tersedia di kedua modal. |
 | **Tombol Aksi Armada di Laporan** | Redundan ganda: Ada tab Segmented Control di atas, dan ada tombol `[ Atur Unit Armada → ]` lagi tepat di bawahnya. | Bersih dan fokus: Tab Segmented Control menjadi pemicu tunggal, header Seksi 1 murni menampilkan judul seksi. |
 | **Label Satuan Headway** | `Headway Tercepat (Menit) (Menit)` dan `Headway Terlama (Menit) (Menit)` (kata satuan dobel). | `Headway Tercepat (Menit)` dan `Headway Terlama (Menit)` (bersih dan baku). |
-| **Ikon Tab Laporan** | Ikon `Send` rotasi -20deg (menyerupai pesawat kertas chat messenger). | Ikon `ClipboardList` (standar laporan/inspeksi operasional transportasi). |
+| **Ikon & Emoji di Sheet Armada** | Penuh polusi visual: Kotak bus hijau, emoji matahari `🌅`/`🌇`, emoji bulat `🟢🟡🔴🔵`, sparkle ✨, checkmark ✓, dan label jargon "KUAS:". | Ultra-clean & profesional: Tipografi tajam, warna aksen semantik murni, label "KUAS:" hilang, bebas polusi emoji. |
 | **Dimensi Kontainer Modal** | Lebar melompat antara 560px (Laporan) dan 720px (Armada) pada layar desktop/tablet. | Seragam `580px` pada kedua modal, transisi terasa sangat mulus seperti satu kesatuan aplikasi iOS/Linear. |
 
 ---
