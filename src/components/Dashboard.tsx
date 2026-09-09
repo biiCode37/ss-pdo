@@ -1143,6 +1143,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           dayLabel={dynamicRenops.label}
           buses={busData}
           initialShift={activeShift}
+          onNavigateToReport={() => {
+            setIsFleetModalOpen(false);
+            setIsReportModalOpen(true);
+          }}
           onConfirmStatus={handleConfirmFleetStatus}
         />
       )}

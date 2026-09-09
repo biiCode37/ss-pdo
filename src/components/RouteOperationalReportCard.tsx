@@ -5,6 +5,7 @@ import {
   ChevronUp,
   Bus,
   Plus,
+  ClipboardList,
   Send,
   Loader2,
   Clock,
@@ -86,7 +87,7 @@ function RouteOperationalReportCardComponent({
   useEffect(() => {
     let isMounted = true;
     async function loadReport() {
-      if (!routeId || !selectedDate) return;
+      if (!routeId || !selectedDate || (asModal && !isOpen)) return;
       setLoading(true);
       try {
         const report = await fetchDailyRouteReport(routeId, selectedDate);
@@ -125,7 +126,7 @@ function RouteOperationalReportCardComponent({
     return () => {
       isMounted = false;
     };
-  }, [routeId, selectedDate, defaultRenops, onStatusChange]);
+  }, [routeId, selectedDate, defaultRenops, onStatusChange, asModal, isOpen]);
 
   // Toggle Traffic Jam Chip
   const toggleSpot = useCallback((spot: string) => {
@@ -259,31 +260,6 @@ function RouteOperationalReportCardComponent({
               >
                 {TEXT_PDO_FORM.ARMADA_SECTION}
               </label>
-
-              {onOpenFleetStatus && (
-                <button
-                  type="button"
-                  onClick={onOpenFleetStatus}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '5px',
-                    padding: '3px 8px',
-                    borderRadius: '7px',
-                    background: 'rgba(62, 207, 142, 0.12)',
-                    border: '1px solid rgba(62, 207, 142, 0.3)',
-                    color: 'var(--accent-color, #3ECF8E)',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                  title="Atur status armada per unit (SGO, TO, OFF, BA)"
-                >
-                  <Bus size={12} />
-                  <span>Atur Unit Armada →</span>
-                </button>
-              )}
             </div>
             <div
               style={{
@@ -524,7 +500,7 @@ function RouteOperationalReportCardComponent({
                     fontWeight: 600,
                   }}
                 >
-                  {TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL} (Menit)
+                  {TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL}
                 </label>
                 <input
                   id="headway-fastest"
@@ -553,7 +529,7 @@ function RouteOperationalReportCardComponent({
                     fontWeight: 600,
                   }}
                 >
-                  {TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL} (Menit)
+                  {TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL}
                 </label>
                 <input
                   id="headway-slowest"
@@ -790,7 +766,7 @@ function RouteOperationalReportCardComponent({
           className="glass pdo-operational-card"
           style={{
             width: '100%',
-            maxWidth: '560px',
+            maxWidth: '580px',
             maxHeight: '90vh',
             overflowY: 'auto',
             padding: '16px 20px calc(28px + env(safe-area-inset-bottom, 16px)) 20px',
@@ -952,7 +928,7 @@ function RouteOperationalReportCardComponent({
                   boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                 }}
               >
-                <Send size={13} style={{ transform: 'rotate(-20deg)' }} />
+                <ClipboardList size={14} />
                 <span>Laporan Operasional</span>
               </button>
             </div>

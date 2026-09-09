@@ -165,4 +165,49 @@ describe('FleetStatusModal Component', () => {
     expect(onConfirmMock).toHaveBeenCalledTimes(1);
     expect(onConfirmMock).toHaveBeenCalledWith(1, expect.any(Map));
   });
+
+  it('renders segmented control and navigates to report when onNavigateToReport is provided', async () => {
+    const onNavigateToReportMock = vi.fn();
+    const onConfirmMock = vi.fn().mockResolvedValue(undefined);
+
+    await act(async () => {
+      root.render(
+        <FleetStatusModal
+          isOpen={true}
+          onClose={vi.fn()}
+          routeCode="JAK.15"
+          selectedDate="2026-09-09"
+          renopsTarget={60}
+          buses={mockBuses}
+          initialShift={1}
+          onNavigateToReport={onNavigateToReportMock}
+          onConfirmStatus={onConfirmMock}
+        />
+      );
+    });
+
+    // Check segmented control buttons
+    const reportTabBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.textContent?.includes('Laporan Operasional')
+    );
+    expect(reportTabBtn).toBeDefined();
+
+    await act(async () => {
+      reportTabBtn?.click();
+    });
+    expect(onNavigateToReportMock).toHaveBeenCalledTimes(1);
+
+    // Check confirm button label and navigation after confirm
+    const confirmBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.textContent?.includes('Konfirmasi & Lanjut ke Laporan')
+    );
+    expect(confirmBtn).toBeDefined();
+
+    await act(async () => {
+      confirmBtn?.click();
+    });
+
+    expect(onConfirmMock).toHaveBeenCalled();
+    expect(onNavigateToReportMock).toHaveBeenCalledTimes(2);
+  });
 });

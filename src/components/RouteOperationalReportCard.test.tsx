@@ -164,4 +164,41 @@ describe('RouteOperationalReportCard Component', () => {
 
     expect(onCloseMock).toHaveBeenCalled();
   });
+
+  it('renders clean headway labels without duplicate (Menit) and supports segmented navigation', async () => {
+    const onOpenFleetStatusMock = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <RouteOperationalReportCard
+          asModal={true}
+          isOpen={true}
+          routeId={2}
+          routeCode="JAK.15"
+          selectedDate="2026-09-02"
+          onOpenFleetStatus={onOpenFleetStatusMock}
+        />
+      );
+    });
+
+    // Verify headway label text does not duplicate (Menit)
+    expect(container.textContent).toContain('Headway Tercepat (Menit)');
+    expect(container.textContent).toContain('Headway Terlama (Menit)');
+    expect(container.textContent).not.toContain('(Menit) (Menit)');
+
+    // Verify Section 1 does not contain redundant button
+    expect(container.textContent).not.toContain('Atur Unit Armada →');
+
+    // Verify Segmented Control button triggers onOpenFleetStatus
+    const fleetTabBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.textContent?.includes('Status Armada')
+    );
+    expect(fleetTabBtn).toBeDefined();
+
+    await act(async () => {
+      fleetTabBtn?.click();
+    });
+
+    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
+  });
 });

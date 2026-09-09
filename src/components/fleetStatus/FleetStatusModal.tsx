@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Bus, Check, Loader2, Sparkles } from 'lucide-react';
+import { X, Bus, Check, Loader2, Sparkles, ClipboardList } from 'lucide-react';
 import type { BusData } from '../../services/googleSheets';
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler';
 import { splitShiftKeterangan, cleanShiftNote } from '../../utils/keteranganUtils';
@@ -20,6 +20,7 @@ export interface FleetStatusModalProps {
   dayLabel?: string;
   buses: BusData[];
   initialShift?: 1 | 2;
+  onNavigateToReport?: () => void;
   onConfirmStatus: (
     shift: 1 | 2,
     statusMap: Map<number, { s1: string; s2: string }>
@@ -35,6 +36,7 @@ function FleetStatusModalComponent({
   dayLabel,
   buses,
   initialShift = 1,
+  onNavigateToReport,
   onConfirmStatus,
 }: FleetStatusModalProps) {
   useMobileBackHandler({
@@ -138,7 +140,11 @@ function FleetStatusModalComponent({
     try {
       setIsSaving(true);
       await onConfirmStatus(currentShift, unitMap);
-      onClose();
+      if (onNavigateToReport) {
+        onNavigateToReport();
+      } else {
+        onClose();
+      }
     } catch (err) {
       console.warn('[FleetStatusModal] Gagal menyimpan status armada:', err);
     } finally {
@@ -173,7 +179,7 @@ function FleetStatusModalComponent({
         className="glass fleet-status-card"
         style={{
           width: '100%',
-          maxWidth: '720px',
+          maxWidth: '580px',
           height: '92vh',
           maxHeight: '92vh',
           display: 'flex',
@@ -291,6 +297,74 @@ function FleetStatusModalComponent({
             <X size={20} />
           </button>
         </div>
+
+        {/* Segmented Control: Status Armada vs Laporan Operasional */}
+        {onNavigateToReport && (
+          <div
+            style={{
+              padding: '10px 20px',
+              borderBottom: '1px solid var(--border-color, rgba(255, 255, 255, 0.06))',
+              background: 'rgba(255, 255, 255, 0.01)',
+            }}
+          >
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '6px',
+                padding: '4px',
+                borderRadius: '12px',
+                background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
+                border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
+              }}
+            >
+              <button
+                type="button"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '7px 12px',
+                  borderRadius: '9px',
+                  border: '1px solid var(--border-color, rgba(255, 255, 255, 0.12))',
+                  background: 'var(--bg-secondary, rgba(255, 255, 255, 0.1))',
+                  color: 'var(--text-primary)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  cursor: 'default',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                }}
+              >
+                <Bus size={14} />
+                <span>Status Armada</span>
+              </button>
+              <button
+                type="button"
+                onClick={onNavigateToReport}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '7px 12px',
+                  borderRadius: '9px',
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'var(--text-secondary)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+                title="Buka laporan operasional"
+              >
+                <ClipboardList size={14} />
+                <span>Laporan Operasional</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Shift Switcher & Brush Toolbar */}
         <div
@@ -661,7 +735,11 @@ function FleetStatusModalComponent({
             ) : (
               <>
                 <Check size={18} />
-                <span>Konfirmasi & Terapkan Status Shift {currentShift}</span>
+                <span>
+                  {onNavigateToReport
+                    ? 'Konfirmasi & Lanjut ke Laporan →'
+                    : `Konfirmasi & Terapkan Status Shift ${currentShift}`}
+                </span>
               </>
             )}
           </button>
