@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, memo } from 'react';
-import { MapPin, Calendar, Plus, Loader2, ChevronUp, ChevronDown } from 'lucide-react';
+import { MapPin, Calendar, ChevronDown, Bus } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
 import { inspectSpreadsheetHeader } from '../services/googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
@@ -11,6 +11,7 @@ import { getFormattedDateBadge } from '../utils/analytics';
 import type { Route } from '../types/supabase';
 import { TEXT_DASHBOARD, TEXT_COMMON } from '../constants/texts';
 import { AddRouteModal } from './routeSelector/AddRouteModal';
+import { RouteSelectorSheet } from './routeSelector/RouteSelectorSheet';
 
 // ponytail: centralized month names dictionary from TEXT_COMMON
 const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
@@ -35,6 +36,9 @@ interface Props {
     endYear?: number;
   } | null;
   onExitAccumulation?: (targetDay?: string) => void;
+  reportRoute?: { id: number; route_code: string } | null;
+  reportStatus?: 'draft' | 'submitted' | 'verified';
+  onOpenReportModal?: () => void;
 }
 
 function RouteSelectorCardComponent({
@@ -50,8 +54,11 @@ function RouteSelectorCardComponent({
   onLoadData,
   accRange,
   onExitAccumulation,
+  reportRoute,
+  reportStatus,
+  onOpenReportModal,
 }: Props) {
-  const [isMorphed, setIsMorphed] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(!isDataLoaded);
   const [isAddingRoute, setIsAddingRoute] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -345,10 +352,10 @@ function RouteSelectorCardComponent({
     );
   };
 
-  // Auto morph saat data berhasil selesai di-load (transisi dari loading -> selesai)
+  // Auto tutup sheet saat data berhasil selesai di-load (transisi dari loading -> selesai)
   useEffect(() => {
     if (prevLoadingRef.current && !isLoading && isDataLoaded) {
-      setIsMorphed(true);
+      setIsSheetOpen(false);
     }
     prevLoadingRef.current = isLoading;
   }, [isLoading, isDataLoaded]);
@@ -459,257 +466,245 @@ function RouteSelectorCardComponent({
     }
   };
 
-  return (
-    <div
-      className={`morph-selector-card ${isMorphed ? 'morphed' : ''}`}
-      onClick={isMorphed ? () => setIsMorphed(false) : undefined}
-      title={isMorphed ? TEXT_DASHBOARD.ROUTE_SELECTOR.CLICK_TO_EXPAND : undefined}
-    >
-      {/* Morphed Compact Pill View Layer */}
-      <div className={`morph-pill-content ${isMorphed ? 'visible' : 'hidden'}`}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
-          <MapPin size={16} style={{ color: 'var(--accent-color)', flexShrink: 0 }} />
-          <span style={{ fontWeight: 700, fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {displayRouteTitle}
-          </span>
-        </div>
-        <div className="morph-pill-badge" style={{ flexShrink: 0, marginLeft: '8px' }}>
-          <Calendar size={13} style={{ flexShrink: 0 }} />
-          <span>
-            {/* BUG-50: Gunakan formatter kanonik agar rentang lintas bulan/
-                tahun tampil lengkap (mis. 01/08/25 - 31/09/25), bukan ambigu */}
-            {selectedTab === 'AKUMULASI'
-              ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth ?? new Date().getMonth() + 1, selectedYear ?? new Date().getFullYear(), accRange)})`
-              : `Tgl ${currentTabName || selectedTab}`}
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '6px', color: 'var(--text-secondary)', opacity: 0.7 }}>
-          <ChevronDown size={14} />
-        </div>
-      </div>
+  const warningMessage =
+    !getSheetForSelection(selectedRouteCode) && selectedRouteCode && selectedMonth && selectedYear
+      ? TEXT_DASHBOARD.ROUTE_SELECTOR.NO_ROUTE_SHEET_WARNING(selectedRouteCode, MONTH_NAMES_ID[selectedMonth], selectedYear)
+      : null;
 
-      {/* Expanded Form View Layer */}
-      <div className={`morph-form-content ${isMorphed ? 'hidden' : 'visible'}`}>
+  return (
+    <>
+      {/* Unified Route Control Bar (Single Smart Pill) */}
+      <div
+        className="glass unified-route-control-bar"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '8px',
+          padding: '6px 8px',
+          borderRadius: '14px',
+          marginBottom: '14px',
+          border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+          background: 'var(--card-bg, rgba(23, 23, 23, 0.75))',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+        }}
+      >
+        {/* Left Segment: Route & Date Pill */}
         <div
-          onClick={(e) => {
-            if (isDataLoaded) {
-              e.stopPropagation();
-              setIsMorphed(true);
+          role="button"
+          tabIndex={0}
+          onClick={() => setIsSheetOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setIsSheetOpen(true);
             }
           }}
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
-            paddingBottom: '8px',
-            marginBottom: '4px',
-            borderBottom: '1px solid var(--card-border)',
-            cursor: isDataLoaded ? 'pointer' : 'default',
-            userSelect: 'none'
+            justifyContent: 'space-between',
+            flex: 1,
+            minWidth: 0,
+            background: 'var(--bg-hover, rgba(255, 255, 255, 0.05))',
+            border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
+            borderRadius: '10px',
+            padding: '8px 12px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            userSelect: 'none',
           }}
-          title={isDataLoaded ? TEXT_DASHBOARD.ROUTE_SELECTOR.CLICK_TO_COLLAPSE : undefined}
+          title="Klik untuk memilih rute atau tanggal"
         >
-          <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <MapPin size={18} style={{ color: 'var(--accent-color)' }} />
-            {TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE}
-          </span>
-          {isDataLoaded && (
-            <ChevronUp size={16} style={{ color: 'var(--text-secondary)', opacity: 0.8 }} />
-          )}
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div className="input-group" style={{ marginBottom: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-              <label style={{ margin: 0 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_PERIOD_LABEL}</label>
-              {!isAddingRoute && (
-                <button
-                  type="button"
-                  onClick={() => setIsAddingRoute(true)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--accent-color)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}
-                >
-                  <Plus size={14} /> {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_BTN}
-                </button>
-              )}
-            </div>
-
-            {/* Banner Mode Akumulasi Aktif + Tombol Keluar (ACC-17-01) */}
-            {isAccumulation && (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '8px 12px',
-                  borderRadius: '10px',
-                  background: 'rgba(234, 179, 8, 0.12)',
-                  border: '1px solid rgba(234, 179, 8, 0.35)',
-                  color: 'var(--warning-color, #eab308)',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  marginBottom: '10px',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>⚡</span>
-                  <span>{TEXT_DASHBOARD.ROUTE_SELECTOR.ACCUMULATION_ACTIVE_BANNER}</span>
-                </div>
-                <button
-                  type="button"
-                  data-testid="exit-accumulation-btn"
-                  onClick={() => {
-                    if (onExitAccumulation) {
-                      onExitAccumulation();
-                    } else {
-                      const today = String(new Date().getDate());
-                      const defaultDay = days.includes(today) ? today : (days[0] || '1');
-                      setSelectedTab(defaultDay);
-                      onLoadData(defaultDay, sheetUrl);
-                    }
-                  }}
-                  style={{
-                    background: 'rgba(234, 179, 8, 0.2)',
-                    border: '1px solid rgba(234, 179, 8, 0.4)',
-                    borderRadius: '6px',
-                    color: 'var(--warning-color, #eab308)',
-                    padding: '4px 8px',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                  }}
-                >
-                  {TEXT_DASHBOARD.ROUTE_SELECTOR.EXIT_ACCUMULATION_BTN}
-                </button>
-              </div>
-            )}
-
-            {/* Sequential Cascade: 4 Kolom (Tahun → Bulan → Rute → Tanggal) */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '8px' }}>
-              {/* Kolom 1: Tahun (selalu enabled) */}
-              <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_LABEL}</label>
-                <select
-                  className="input-field"
-                  value={selectedYear ?? ''}
-                  onChange={(e) => handleYearChange(e.target.value)}
-                  disabled={availableYears.length === 0}
-                  title={availableYears.length === 0 ? 'Belum ada data rute' : 'Pilih tahun terlebih dahulu'}
-                  style={{ width: '100%', padding: '8px' }}
-                >
-                  <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_PLACEHOLDER}</option>
-                  {availableYears.map((y) => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Kolom 2: Bulan (aktif setelah Tahun dipilih) */}
-              <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_LABEL}</label>
-                <select
-                  className="input-field"
-                  value={selectedMonth ?? ''}
-                  onChange={(e) => handleMonthChange(e.target.value)}
-                  disabled={!monthEnabled || availableMonths.length === 0}
-                  title={!monthEnabled ? 'Pilih tahun terlebih dahulu' : 'Pilih bulan'}
-                  style={{ width: '100%', padding: '8px', opacity: !monthEnabled ? 0.55 : 1 }}
-                >
-                  <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_PLACEHOLDER}</option>
-                  {availableMonths.map((m) => (
-                    <option key={m} value={m}>{MONTH_NAMES_ID[m]}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Kolom 3: Rute (aktif setelah Bulan dipilih) */}
-              <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_LABEL}</label>
-                <select
-                  className="input-field"
-                  value={selectedRouteCode}
-                  onChange={(e) => handleRouteCodeChange(e.target.value)}
-                  disabled={!routeEnabled || availableRouteCodes.length === 0}
-                  title={!routeEnabled ? 'Pilih bulan terlebih dahulu' : 'Pilih rute'}
-                  style={{ width: '100%', padding: '8px', opacity: !routeEnabled ? 0.55 : 1 }}
-                >
-                  <option value="">{routeEnabled && availableRouteCodes.length === 0 ? TEXT_DASHBOARD.ROUTE_SELECTOR.EMPTY_ROUTE : TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_PLACEHOLDER}</option>
-                  {availableRouteCodes.map((code) => (
-                    <option key={code} value={code}>{code}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Kolom 4: Tanggal (aktif setelah Rute dipilih; bisa memilih tanggal untuk keluar dari mode AKUMULASI) */}
-              <div>
-                <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_LABEL}</label>
-                <select
-                  className="input-field"
-                  value={selectedTab}
-                  onChange={(e) => handleTabChange(e.target.value)}
-                  disabled={!dateEnabled || days.length === 0}
-                  title={!dateEnabled ? 'Pilih rute terlebih dahulu' : 'Pilih tanggal'}
-                  style={{ width: '100%', padding: '8px', opacity: !dateEnabled ? 0.55 : 1 }}
-                >
-                  {isAccumulation && (
-                    <option value="AKUMULASI">{TEXT_DASHBOARD.ROUTE_SELECTOR.ACCUMULATION_OPTION}</option>
-                  )}
-                  <option value="" disabled={isAccumulation}>{TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_PLACEHOLDER}</option>
-                  {days.map(day => (
-                    <option key={day} value={day}>Tgl {day}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {!getSheetForSelection(selectedRouteCode) && selectedRouteCode && selectedMonth && selectedYear ? (
-              <div style={{ fontSize: '12px', color: 'var(--warning-color)', marginBottom: '8px' }}>
-                {TEXT_DASHBOARD.ROUTE_SELECTOR.NO_ROUTE_SHEET_WARNING(selectedRouteCode, MONTH_NAMES_ID[selectedMonth], selectedYear)}
-              </div>
-            ) : null}
-
-            {/* Modal Tambah Rute Baru — dipindahkan ke modal sheet tersendiri */}
-            <AddRouteModal
-              isOpen={isAddingRoute}
-              onClose={resetForm}
-              newRouteCodeSuffix={newRouteCodeSuffix}
-              onRouteCodeSuffixChange={handleRouteCodeSuffixInput}
-              newMonth={newMonth}
-              onMonthChange={setNewMonth}
-              newYear={newYear}
-              onYearChange={setNewYear}
-              newRouteUrl={newRouteUrl}
-              onRouteUrlChange={setNewRouteUrl}
-              checkStatus={checkStatus}
-              checkMessage={checkMessage}
-              duplicateWarningMessage={duplicateWarningMessage}
-              formError={formError}
-              isSaving={isSaving}
-              isCheckingLink={isCheckingLink}
-              onSaveRoute={handleSaveRoute}
-            />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
+            <MapPin size={16} style={{ color: 'var(--accent-color)', flexShrink: 0 }} />
+            <span
+              style={{
+                fontWeight: 700,
+                fontSize: '13px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                color: 'var(--text-primary)',
+              }}
+            >
+              {displayRouteTitle}
+            </span>
           </div>
 
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              flexShrink: 0,
+              marginLeft: '8px',
+            }}
+          >
+            <div
+              className="morph-pill-badge"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'var(--text-primary)',
+                background: 'var(--bg-secondary, rgba(255, 255, 255, 0.08))',
+                padding: '2px 8px',
+                borderRadius: '6px',
+              }}
+            >
+              <Calendar size={13} style={{ flexShrink: 0 }} />
+              <span>
+                {selectedTab === 'AKUMULASI'
+                  ? `Akumulasi (${getFormattedDateBadge('AKUMULASI', selectedMonth ?? new Date().getMonth() + 1, selectedYear ?? new Date().getFullYear(), accRange)})`
+                  : `Tgl ${currentTabName || selectedTab || '?'}`}
+              </span>
+            </div>
+            <ChevronDown size={14} style={{ color: 'var(--text-secondary)', opacity: 0.8 }} />
+          </div>
+        </div>
+
+        {/* Right Segment: Exit Accumulation OR Operational Report Pill */}
+        {isAccumulation ? (
           <button
             type="button"
-            className="btn"
-            onClick={() => onLoadData(selectedTab, sheetUrl)}
-            disabled={isLoading || !sheetUrl}
+            data-testid="exit-accumulation-btn"
+            onClick={() => {
+              if (onExitAccumulation) {
+                onExitAccumulation();
+              } else {
+                const today = String(new Date().getDate());
+                const defaultDay = days.includes(today) ? today : (days[0] || '1');
+                setSelectedTab(defaultDay);
+                onLoadData(defaultDay, sheetUrl);
+              }
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(234, 179, 8, 0.15)',
+              border: '1px solid rgba(234, 179, 8, 0.4)',
+              borderRadius: '10px',
+              color: 'var(--warning-color, #eab308)',
+              padding: '8px 12px',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s ease',
+            }}
+            title="Keluar dari mode akumulasi kembali ke harian"
           >
-            {isLoading ? <Loader2 className="spinner" size={20} /> : TEXT_DASHBOARD.ROUTE_SELECTOR.LOAD_DATA_BTN}
+            <span>✕</span>
+            <span>Keluar Akumulasi</span>
           </button>
-        </div>
+        ) : reportRoute && onOpenReportModal ? (
+          <button
+            type="button"
+            onClick={onOpenReportModal}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background:
+                reportStatus === 'verified'
+                  ? 'rgba(16, 185, 129, 0.12)'
+                  : reportStatus === 'submitted'
+                  ? 'rgba(14, 165, 233, 0.12)'
+                  : 'rgba(245, 158, 11, 0.12)',
+              border: `1px solid ${
+                reportStatus === 'verified'
+                  ? 'rgba(16, 185, 129, 0.35)'
+                  : reportStatus === 'submitted'
+                  ? 'rgba(14, 165, 233, 0.35)'
+                  : 'rgba(245, 158, 11, 0.35)'
+              }`,
+              borderRadius: '10px',
+              color:
+                reportStatus === 'verified'
+                  ? 'var(--success-color, #10b981)'
+                  : reportStatus === 'submitted'
+                  ? 'var(--info-color, #38bdf8)'
+                  : 'var(--warning-color, #f59e0b)',
+              padding: '8px 12px',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s ease',
+            }}
+            title="Buka laporan kondisi dan armada rute"
+          >
+            <Bus size={14} />
+            <span>
+              {reportStatus === 'verified'
+                ? 'Terverifikasi'
+                : reportStatus === 'submitted'
+                ? 'Terkirim'
+                : 'Laporan'}
+            </span>
+            <ChevronDown size={13} style={{ opacity: 0.7 }} />
+          </button>
+        ) : null}
       </div>
-    </div>
+
+      {/* Contextual Bottom Sheet Drawer */}
+      <RouteSelectorSheet
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+        selectedYear={selectedYear}
+        onYearChange={handleYearChange}
+        availableYears={availableYears}
+        selectedMonth={selectedMonth}
+        onMonthChange={handleMonthChange}
+        availableMonths={availableMonths}
+        monthEnabled={monthEnabled}
+        selectedRouteCode={selectedRouteCode}
+        onRouteCodeChange={handleRouteCodeChange}
+        availableRouteCodes={availableRouteCodes}
+        routeEnabled={routeEnabled}
+        selectedTab={selectedTab}
+        onTabChange={handleTabChange}
+        days={days}
+        dateEnabled={dateEnabled}
+        isAccumulation={isAccumulation}
+        isLoading={isLoading}
+        sheetUrl={sheetUrl}
+        onLoadData={(tab, targetUrl) => {
+          onLoadData(tab, targetUrl);
+          setIsSheetOpen(false);
+        }}
+        onOpenAddRoute={() => setIsAddingRoute(true)}
+        warningMessage={warningMessage}
+        onExitAccumulation={onExitAccumulation}
+      />
+
+      {/* Modal Tambah Rute Baru */}
+      <AddRouteModal
+        isOpen={isAddingRoute}
+        onClose={resetForm}
+        newRouteCodeSuffix={newRouteCodeSuffix}
+        onRouteCodeSuffixChange={handleRouteCodeSuffixInput}
+        newMonth={newMonth}
+        onMonthChange={setNewMonth}
+        newYear={newYear}
+        onYearChange={setNewYear}
+        newRouteUrl={newRouteUrl}
+        onRouteUrlChange={setNewRouteUrl}
+        checkStatus={checkStatus}
+        checkMessage={checkMessage}
+        duplicateWarningMessage={duplicateWarningMessage}
+        formError={formError}
+        isSaving={isSaving}
+        isCheckingLink={isCheckingLink}
+        onSaveRoute={handleSaveRoute}
+      />
+    </>
   );
 }
 

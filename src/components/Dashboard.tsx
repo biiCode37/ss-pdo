@@ -13,6 +13,7 @@ import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import { ProfileMenuSheet } from "./ProfileMenuSheet";
 import { RouteSelectorCard } from "./RouteSelectorCard";
 import { RouteOperationalReportCard } from "./RouteOperationalReportCard";
+import { fetchDailyRouteReport } from "../services/dailyRouteReportService";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
 import { UserManagementSkeleton } from "./Skeletons";
@@ -534,6 +535,29 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     return new Date().toISOString().split("T")[0];
   }, [selectedTab, activeYear, activeMonth]);
 
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [operationalReportStatus, setOperationalReportStatus] = useState<'draft' | 'submitted' | 'verified'>('draft');
+
+  useEffect(() => {
+    let isMounted = true;
+    if (matchedRoute?.id && operationalReportDate) {
+      fetchDailyRouteReport(matchedRoute.id, operationalReportDate)
+        .then((report) => {
+          if (isMounted) {
+            setOperationalReportStatus(report?.status || 'draft');
+          }
+        })
+        .catch(() => {
+          if (isMounted) setOperationalReportStatus('draft');
+        });
+    } else {
+      setOperationalReportStatus('draft');
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [matchedRoute?.id, operationalReportDate]);
+
   if (currentView === 'user_management') {
     return (
       <Suspense fallback={<UserManagementSkeleton />}>
@@ -815,6 +839,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           onLoadData={(tab, targetUrl) => handleLoadData(true, tab, targetUrl)}
           accRange={accRangeDetails}
           onExitAccumulation={handleExitAccumulation}
+          reportRoute={matchedRoute}
+          reportStatus={operationalReportStatus}
+          onOpenReportModal={() => setIsReportModalOpen(true)}
         />
       </div>
 
@@ -933,12 +960,16 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
             {matchedRoute && selectedTab !== "AKUMULASI" && (
               <RouteOperationalReportCard
+                asModal={true}
+                isOpen={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
                 routeId={matchedRoute.id}
                 routeCode={matchedRoute.route_code}
                 selectedDate={operationalReportDate}
                 defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
                 defaultRenops={matchedRoute.default_renops || 0}
                 userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
+                onStatusChange={setOperationalReportStatus}
               />
             )}
 

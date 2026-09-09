@@ -8,11 +8,13 @@ import {
   Loader2,
   Clock,
   AlertTriangle,
+  X,
 } from 'lucide-react';
 import { fetchDailyRouteReport, upsertDailyRouteReport } from '../services/dailyRouteReportService';
 import type { DailyRouteReport } from '../types/supabase';
 import { showSuccessToast, showErrorAlert } from '../utils/alertUtils';
 import { TEXT_PDO_FORM, TEXT_ERRORS } from '../constants/texts';
+import { useMobileBackHandler } from '../hooks/useMobileBackHandler';
 
 interface Props {
   routeId: number;
@@ -22,6 +24,10 @@ interface Props {
   defaultRenops?: number;
   userEmail?: string;
   onSaved?: () => void;
+  onStatusChange?: (status: 'draft' | 'submitted' | 'verified') => void;
+  asModal?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 function RouteOperationalReportCardComponent({
@@ -32,7 +38,17 @@ function RouteOperationalReportCardComponent({
   defaultRenops = 0,
   userEmail,
   onSaved,
+  onStatusChange,
+  asModal = false,
+  isOpen = true,
+  onClose,
 }: Props) {
+  useMobileBackHandler({
+    id: 'route_operational_report_sheet',
+    isOpen: asModal && !!isOpen,
+    onClose: onClose || (() => {}),
+  });
+
   const [isExpanded, setIsExpanded] = useState(true);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -67,7 +83,9 @@ function RouteOperationalReportCardComponent({
           setHeadwaySlowest(report.headway_slowest || 10);
           setSelectedSpots(report.traffic_jam_spots || []);
           setOperationalIssues(report.operational_issues || '');
-          setStatus(report.status || 'draft');
+          const nextStatus = report.status || 'draft';
+          setStatus(nextStatus);
+          onStatusChange?.(nextStatus);
         } else {
           setRenopsS1(defaultRenops);
           setRealopsS1(defaultRenops);
@@ -78,6 +96,7 @@ function RouteOperationalReportCardComponent({
           setSelectedSpots([]);
           setOperationalIssues('');
           setStatus('draft');
+          onStatusChange?.('draft');
         }
       } catch (err) {
         console.warn('[RouteOperationalReportCard] Gagal memuat data:', err);
@@ -89,7 +108,7 @@ function RouteOperationalReportCardComponent({
     return () => {
       isMounted = false;
     };
-  }, [routeId, selectedDate, defaultRenops]);
+  }, [routeId, selectedDate, defaultRenops, onStatusChange]);
 
   // Toggle Traffic Jam Chip
   const toggleSpot = useCallback((spot: string) => {
@@ -135,6 +154,7 @@ function RouteOperationalReportCardComponent({
 
       await upsertDailyRouteReport(payload);
       setStatus('submitted');
+      onStatusChange?.('submitted');
       showSuccessToast(TEXT_PDO_FORM.TOAST_SUCCESS);
       if (onSaved) onSaved();
     } catch (err: any) {
@@ -148,140 +168,58 @@ function RouteOperationalReportCardComponent({
     new Set([...defaultTrafficJamSpots, ...selectedSpots])
   );
 
-  return (
-    <div
-      className="glass pdo-operational-card"
-      style={{
-        borderRadius: '16px',
-        padding: '16px 18px',
-        marginBottom: '16px',
-        border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
-        transition: 'all 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Header Bar Accordion */}
-      <div
-        onClick={() => setIsExpanded(!isExpanded)}
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          cursor: 'pointer',
-          userSelect: 'none',
-          paddingBottom: isExpanded ? '12px' : '0',
-          borderBottom: isExpanded ? '1px solid var(--border-color, rgba(255, 255, 255, 0.08))' : 'none',
-          transition: 'padding 0.2s ease',
-        }}
-        title={isExpanded ? 'Klik untuk menciutkan form' : 'Klik untuk membuka form'}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              background: 'rgba(62, 207, 142, 0.12)',
-              color: 'var(--accent-color, #3ECF8E)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <Bus size={18} />
-          </div>
-          <div>
-            <h3
-              style={{
-                margin: 0,
-                fontSize: '15px',
-                fontWeight: 700,
-                color: 'var(--text-primary)',
-                letterSpacing: '-0.2px',
-              }}
-            >
-              {TEXT_PDO_FORM.CARD_TITLE}
-            </h3>
-            <span
-              style={{
-                fontSize: '12px',
-                color: 'var(--text-secondary)',
-                fontWeight: 500,
-              }}
-            >
-              {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
-            </span>
-          </div>
-        </div>
+  const renderStatusBadge = () => (
+    <>
+      {status === 'verified' && (
+        <span
+          style={{
+            fontSize: '11px',
+            fontWeight: 700,
+            background: 'rgba(16, 185, 129, 0.14)',
+            color: 'var(--success-color, #10b981)',
+            padding: '3px 9px',
+            borderRadius: '8px',
+            border: '1px solid rgba(16, 185, 129, 0.3)',
+          }}
+        >
+          {TEXT_PDO_FORM.BADGES.VERIFIED}
+        </span>
+      )}
+      {status === 'submitted' && (
+        <span
+          style={{
+            fontSize: '11px',
+            fontWeight: 700,
+            background: 'rgba(14, 165, 233, 0.14)',
+            color: 'var(--info-color, #38bdf8)',
+            padding: '3px 9px',
+            borderRadius: '8px',
+            border: '1px solid rgba(14, 165, 233, 0.3)',
+          }}
+        >
+          {TEXT_PDO_FORM.BADGES.SUBMITTED}
+        </span>
+      )}
+      {status === 'draft' && (
+        <span
+          style={{
+            fontSize: '11px',
+            fontWeight: 700,
+            background: 'rgba(245, 158, 11, 0.14)',
+            color: 'var(--warning-color, #f59e0b)',
+            padding: '3px 9px',
+            borderRadius: '8px',
+            border: '1px solid rgba(245, 158, 11, 0.3)',
+          }}
+        >
+          {TEXT_PDO_FORM.BADGES.DRAFT}
+        </span>
+      )}
+    </>
+  );
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {status === 'verified' && (
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                background: 'rgba(16, 185, 129, 0.14)',
-                color: 'var(--success-color, #10b981)',
-                padding: '3px 9px',
-                borderRadius: '8px',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
-              }}
-            >
-              {TEXT_PDO_FORM.BADGES.VERIFIED}
-            </span>
-          )}
-          {status === 'submitted' && (
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                background: 'rgba(14, 165, 233, 0.14)',
-                color: 'var(--info-color, #38bdf8)',
-                padding: '3px 9px',
-                borderRadius: '8px',
-                border: '1px solid rgba(14, 165, 233, 0.3)',
-              }}
-            >
-              {TEXT_PDO_FORM.BADGES.SUBMITTED}
-            </span>
-          )}
-          {status === 'draft' && (
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                background: 'rgba(245, 158, 11, 0.14)',
-                color: 'var(--warning-color, #f59e0b)',
-                padding: '3px 9px',
-                borderRadius: '8px',
-                border: '1px solid rgba(245, 158, 11, 0.3)',
-              }}
-            >
-              {TEXT_PDO_FORM.BADGES.DRAFT}
-            </span>
-          )}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '28px',
-              height: '28px',
-              borderRadius: '8px',
-              background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </div>
-        </div>
-      </div>
-
-      {/* Expandable Form Body */}
-      {isExpanded && (
-        <form onSubmit={handleSubmit} style={{ marginTop: '16px' }}>
+  const renderFormBody = () => (
+    <form onSubmit={handleSubmit} style={{ marginTop: '16px' }}>
           {/* Section 1: Armada Per Shift */}
           <div style={{ marginBottom: '16px' }}>
             <label
@@ -772,7 +710,231 @@ function RouteOperationalReportCardComponent({
             )}
           </button>
         </form>
-      )}
+  );
+
+  if (asModal) {
+    return (
+      <div
+        className="modal-overlay operational-report-modal-overlay"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.65)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          display: isOpen ? 'flex' : 'none',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          zIndex: 1050,
+          animation: 'fadeIn 0.2s ease-out',
+        }}
+        onClick={onClose}
+      >
+        <div
+          className="glass pdo-operational-card"
+          style={{
+            width: '100%',
+            maxWidth: '560px',
+            maxHeight: '88vh',
+            overflowY: 'auto',
+            padding: '16px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px',
+            borderTopLeftRadius: '24px',
+            borderTopRightRadius: '24px',
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            backgroundColor: 'var(--bg-card, #171717)',
+            border: '1px solid var(--border-color)',
+            borderBottom: 'none',
+            boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.5)',
+            animation: 'slideUp 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Top Handle Bar */}
+          <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '12px' }}>
+            <div
+              style={{
+                width: '36px',
+                height: '4px',
+                borderRadius: '2px',
+                backgroundColor: 'var(--text-secondary)',
+                opacity: 0.35,
+              }}
+            />
+          </div>
+
+          {/* Modal Header */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingBottom: '12px',
+              marginBottom: '16px',
+              borderBottom: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  background: 'rgba(62, 207, 142, 0.12)',
+                  color: 'var(--accent-color, #3ECF8E)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <Bus size={18} />
+              </div>
+              <div>
+                <h3
+                  style={{
+                    margin: 0,
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    letterSpacing: '-0.2px',
+                  }}
+                >
+                  {TEXT_PDO_FORM.CARD_TITLE}
+                </h3>
+                <span
+                  style={{
+                    fontSize: '12px',
+                    color: 'var(--text-secondary)',
+                    fontWeight: 500,
+                  }}
+                >
+                  {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
+                </span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {renderStatusBadge()}
+              <button
+                type="button"
+                onClick={onClose}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-secondary)',
+                  padding: '4px',
+                  cursor: 'pointer',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                title="Tutup"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+
+          {renderFormBody()}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="glass pdo-operational-card"
+      style={{
+        borderRadius: '16px',
+        padding: '16px 18px',
+        marginBottom: '16px',
+        border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
+        transition: 'all 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Header Bar Accordion */}
+      <div
+        onClick={() => setIsExpanded(!isExpanded)}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          cursor: 'pointer',
+          userSelect: 'none',
+          paddingBottom: isExpanded ? '12px' : '0',
+          borderBottom: isExpanded ? '1px solid var(--border-color, rgba(255, 255, 255, 0.08))' : 'none',
+          transition: 'padding 0.2s ease',
+        }}
+        title={isExpanded ? 'Klik untuk menciutkan form' : 'Klik untuk membuka form'}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '10px',
+              background: 'rgba(62, 207, 142, 0.12)',
+              color: 'var(--accent-color, #3ECF8E)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <Bus size={18} />
+          </div>
+          <div>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: '15px',
+                fontWeight: 700,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.2px',
+              }}
+            >
+              {TEXT_PDO_FORM.CARD_TITLE}
+            </h3>
+            <span
+              style={{
+                fontSize: '12px',
+                color: 'var(--text-secondary)',
+                fontWeight: 500,
+              }}
+            >
+              {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {renderStatusBadge()}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '28px',
+              height: '28px',
+              borderRadius: '8px',
+              background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </div>
+        </div>
+      </div>
+
+      {/* Expandable Form Body */}
+      {isExpanded && renderFormBody()}
     </div>
   );
 }
