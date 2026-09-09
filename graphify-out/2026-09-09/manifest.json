@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "src/components/LoginScreen.tsx": {
-    "mtime": 1788850558.338892,
-    "ast_hash": "a616e0b640bf92182eed21b6029d4856",
+    "mtime": 1788911930.9673502,
+    "ast_hash": "d5e908d4ebdc645f53bdca1f95a5a8f9",
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
@@ -1517,6 +1517,41 @@
   "refactor-ss-pdo/refact_20/REPAIR_REPORT.md": {
     "mtime": 1788911046.5687206,
     "ast_hash": "d234b151d5cd04f583475559e6b6bdaa",
+    "semantic_hash": ""
+  },
+  "src/components/LoginScreen.test.tsx": {
+    "mtime": 1788911955.3343048,
+    "ast_hash": "ffd3cba6bcb62a87ca04ccefcf3e62fb",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginFeatureCards.tsx": {
+    "mtime": 1788911910.037174,
+    "ast_hash": "4bfdee6d9c46cf2f0740441542c7c249",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginFooter.tsx": {
+    "mtime": 1788911925.5177152,
+    "ast_hash": "b15c404916eab470659f8fa4abedb1c9",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginHeroCard.tsx": {
+    "mtime": 1788911906.5903792,
+    "ast_hash": "150cd427360ce8f917fcb6283649358e",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginInfoModal.tsx": {
+    "mtime": 1788911921.1347747,
+    "ast_hash": "d1f265655b0abbbded4518ac0b5a7ec3",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_21/AUDIT_BUGS.md": {
+    "mtime": 1788911993.3931005,
+    "ast_hash": "ee9375d2153600df2e433ede653200c1",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_21/REPAIR_REPORT.md": {
+    "mtime": 1788911999.2659185,
+    "ast_hash": "f5955cce8ad0399f26a7b36d7b822d2f",
     "semantic_hash": ""
   }
 }

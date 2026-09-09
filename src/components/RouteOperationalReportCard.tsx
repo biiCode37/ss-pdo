@@ -5,6 +5,9 @@ import {
   Bus,
   Plus,
   Send,
+  Loader2,
+  Clock,
+  AlertTriangle,
 } from 'lucide-react';
 import { fetchDailyRouteReport, upsertDailyRouteReport } from '../services/dailyRouteReportService';
 import type { DailyRouteReport } from '../types/supabase';
@@ -28,7 +31,7 @@ function RouteOperationalReportCardComponent({
   defaultTrafficJamSpots = [],
   defaultRenops = 0,
   userEmail,
-  onSaved
+  onSaved,
 }: Props) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -127,7 +130,7 @@ function RouteOperationalReportCardComponent({
         traffic_jam_spots: selectedSpots,
         operational_issues: operationalIssues.trim(),
         status: 'submitted',
-        submitted_by: userEmail || 'Petugas PDO'
+        submitted_by: userEmail || 'Petugas PDO',
       };
 
       await upsertDailyRouteReport(payload);
@@ -147,17 +150,18 @@ function RouteOperationalReportCardComponent({
 
   return (
     <div
+      className="glass pdo-operational-card"
       style={{
-        background: 'var(--card-bg, #ffffff)',
         borderRadius: '16px',
-        padding: '16px',
+        padding: '16px 18px',
         marginBottom: '16px',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.06)',
-        border: '1px solid var(--border-color, rgba(0,0,0,0.08))',
-        transition: 'all 0.3s cubic-bezier(0.32, 0.72, 0, 1)'
+        border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
+        transition: 'all 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      {/* Header Bar */}
+      {/* Header Bar Accordion */}
       <div
         onClick={() => setIsExpanded(!isExpanded)}
         style={{
@@ -165,29 +169,48 @@ function RouteOperationalReportCardComponent({
           justifyContent: 'space-between',
           alignItems: 'center',
           cursor: 'pointer',
-          userSelect: 'none'
+          userSelect: 'none',
+          paddingBottom: isExpanded ? '12px' : '0',
+          borderBottom: isExpanded ? '1px solid var(--border-color, rgba(255, 255, 255, 0.08))' : 'none',
+          transition: 'padding 0.2s ease',
         }}
+        title={isExpanded ? 'Klik untuk menciutkan form' : 'Klik untuk membuka form'}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div
             style={{
-              width: '32px',
-              height: '32px',
+              width: '36px',
+              height: '36px',
               borderRadius: '10px',
-              background: 'rgba(59, 130, 246, 0.1)',
-              color: '#3b82f6',
+              background: 'rgba(62, 207, 142, 0.12)',
+              color: 'var(--accent-color, #3ECF8E)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              flexShrink: 0,
             }}
           >
             <Bus size={18} />
           </div>
           <div>
-            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600 }}>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: '15px',
+                fontWeight: 700,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.2px',
+              }}
+            >
               {TEXT_PDO_FORM.CARD_TITLE}
             </h3>
-            <span style={{ fontSize: '12px', color: 'var(--text-secondary, #64748b)' }}>
+            <span
+              style={{
+                fontSize: '12px',
+                color: 'var(--text-secondary)',
+                fontWeight: 500,
+              }}
+            >
               {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
             </span>
           </div>
@@ -198,11 +221,12 @@ function RouteOperationalReportCardComponent({
             <span
               style={{
                 fontSize: '11px',
-                fontWeight: 600,
-                background: 'rgba(34, 197, 94, 0.12)',
-                color: '#16a34a',
-                padding: '3px 8px',
-                borderRadius: '8px'
+                fontWeight: 700,
+                background: 'rgba(16, 185, 129, 0.14)',
+                color: 'var(--success-color, #10b981)',
+                padding: '3px 9px',
+                borderRadius: '8px',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
               }}
             >
               {TEXT_PDO_FORM.BADGES.VERIFIED}
@@ -212,11 +236,12 @@ function RouteOperationalReportCardComponent({
             <span
               style={{
                 fontSize: '11px',
-                fontWeight: 600,
-                background: 'rgba(59, 130, 246, 0.12)',
-                color: '#2563eb',
-                padding: '3px 8px',
-                borderRadius: '8px'
+                fontWeight: 700,
+                background: 'rgba(14, 165, 233, 0.14)',
+                color: 'var(--info-color, #38bdf8)',
+                padding: '3px 9px',
+                borderRadius: '8px',
+                border: '1px solid rgba(14, 165, 233, 0.3)',
               }}
             >
               {TEXT_PDO_FORM.BADGES.SUBMITTED}
@@ -226,17 +251,31 @@ function RouteOperationalReportCardComponent({
             <span
               style={{
                 fontSize: '11px',
-                fontWeight: 600,
-                background: 'rgba(234, 179, 8, 0.12)',
-                color: '#ca8a04',
-                padding: '3px 8px',
-                borderRadius: '8px'
+                fontWeight: 700,
+                background: 'rgba(245, 158, 11, 0.14)',
+                color: 'var(--warning-color, #f59e0b)',
+                padding: '3px 9px',
+                borderRadius: '8px',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
               }}
             >
               {TEXT_PDO_FORM.BADGES.DRAFT}
             </span>
           )}
-          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '28px',
+              height: '28px',
+              borderRadius: '8px',
+              background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </div>
         </div>
       </div>
 
@@ -244,16 +283,16 @@ function RouteOperationalReportCardComponent({
       {isExpanded && (
         <form onSubmit={handleSubmit} style={{ marginTop: '16px' }}>
           {/* Section 1: Armada Per Shift */}
-          <div style={{ marginBottom: '14px' }}>
+          <div style={{ marginBottom: '16px' }}>
             <label
               style={{
-                fontSize: '12px',
-                fontWeight: 600,
-                color: 'var(--text-secondary, #64748b)',
+                fontSize: '11.5px',
+                fontWeight: 700,
+                color: 'var(--text-secondary)',
                 textTransform: 'uppercase',
-                letterSpacing: '0.5px',
+                letterSpacing: '0.6px',
                 display: 'block',
-                marginBottom: '8px'
+                marginBottom: '8px',
               }}
             >
               {TEXT_PDO_FORM.ARMADA_SECTION}
@@ -262,34 +301,55 @@ function RouteOperationalReportCardComponent({
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
-                gap: '10px'
+                gap: '10px',
               }}
             >
               {/* Shift 1 */}
               <div
                 style={{
-                  background: 'var(--bg-secondary, rgba(0,0,0,0.02))',
-                  padding: '10px',
+                  background: 'var(--input-bg, rgba(255, 255, 255, 0.03))',
+                  padding: '12px',
                   borderRadius: '12px',
-                  border: '1px solid var(--border-color, rgba(0,0,0,0.06))'
+                  border: '1px solid var(--border-color, rgba(255, 255, 255, 0.06))',
                 }}
               >
-                <span
+                <div
                   style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#3b82f6',
-                    display: 'block',
-                    marginBottom: '6px'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    marginBottom: '8px',
                   }}
                 >
-                  {TEXT_PDO_FORM.SHIFT_1.TITLE}
-                </span>
+                  <span
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: '#38bdf8',
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    {TEXT_PDO_FORM.SHIFT_1.TITLE}
+                  </span>
+                </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ flex: 1 }}>
                     <label
                       htmlFor="renops-s1"
-                      style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
+                      style={{
+                        fontSize: '11px',
+                        color: 'var(--text-secondary)',
+                        display: 'block',
+                        marginBottom: '4px',
+                        fontWeight: 600,
+                      }}
                     >
                       {TEXT_PDO_FORM.SHIFT_1.RENOPS_LABEL}
                     </label>
@@ -297,22 +357,28 @@ function RouteOperationalReportCardComponent({
                       id="renops-s1"
                       type="number"
                       min={0}
+                      className="input-field tabular-nums"
                       value={renopsS1}
                       onChange={(e) => setRenopsS1(Number(e.target.value))}
                       style={{
                         width: '100%',
-                        padding: '6px 8px',
+                        padding: '8px 10px',
                         borderRadius: '8px',
-                        border: '1px solid #cbd5e1',
                         fontSize: '13px',
-                        fontWeight: 600
+                        fontWeight: 700,
                       }}
                     />
                   </div>
                   <div style={{ flex: 1 }}>
                     <label
                       htmlFor="realops-s1"
-                      style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
+                      style={{
+                        fontSize: '11px',
+                        color: 'var(--text-secondary)',
+                        display: 'block',
+                        marginBottom: '4px',
+                        fontWeight: 600,
+                      }}
                     >
                       {TEXT_PDO_FORM.SHIFT_1.REALOPS_LABEL}
                     </label>
@@ -320,15 +386,15 @@ function RouteOperationalReportCardComponent({
                       id="realops-s1"
                       type="number"
                       min={0}
+                      className="input-field tabular-nums"
                       value={realopsS1}
                       onChange={(e) => setRealopsS1(Number(e.target.value))}
                       style={{
                         width: '100%',
-                        padding: '6px 8px',
+                        padding: '8px 10px',
                         borderRadius: '8px',
-                        border: '1px solid #cbd5e1',
                         fontSize: '13px',
-                        fontWeight: 600
+                        fontWeight: 700,
                       }}
                     />
                   </div>
@@ -338,28 +404,49 @@ function RouteOperationalReportCardComponent({
               {/* Shift 2 */}
               <div
                 style={{
-                  background: 'var(--bg-secondary, rgba(0,0,0,0.02))',
-                  padding: '10px',
+                  background: 'var(--input-bg, rgba(255, 255, 255, 0.03))',
+                  padding: '12px',
                   borderRadius: '12px',
-                  border: '1px solid var(--border-color, rgba(0,0,0,0.06))'
+                  border: '1px solid var(--border-color, rgba(255, 255, 255, 0.06))',
                 }}
               >
-                <span
+                <div
                   style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#8b5cf6',
-                    display: 'block',
-                    marginBottom: '6px'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    marginBottom: '8px',
                   }}
                 >
-                  {TEXT_PDO_FORM.SHIFT_2.TITLE}
-                </span>
+                  <span
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: '#a855f7',
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    {TEXT_PDO_FORM.SHIFT_2.TITLE}
+                  </span>
+                </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ flex: 1 }}>
                     <label
                       htmlFor="renops-s2"
-                      style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
+                      style={{
+                        fontSize: '11px',
+                        color: 'var(--text-secondary)',
+                        display: 'block',
+                        marginBottom: '4px',
+                        fontWeight: 600,
+                      }}
                     >
                       {TEXT_PDO_FORM.SHIFT_2.RENOPS_LABEL}
                     </label>
@@ -367,22 +454,28 @@ function RouteOperationalReportCardComponent({
                       id="renops-s2"
                       type="number"
                       min={0}
+                      className="input-field tabular-nums"
                       value={renopsS2}
                       onChange={(e) => setRenopsS2(Number(e.target.value))}
                       style={{
                         width: '100%',
-                        padding: '6px 8px',
+                        padding: '8px 10px',
                         borderRadius: '8px',
-                        border: '1px solid #cbd5e1',
                         fontSize: '13px',
-                        fontWeight: 600
+                        fontWeight: 700,
                       }}
                     />
                   </div>
                   <div style={{ flex: 1 }}>
                     <label
                       htmlFor="realops-s2"
-                      style={{ fontSize: '10px', color: '#64748b', display: 'block' }}
+                      style={{
+                        fontSize: '11px',
+                        color: 'var(--text-secondary)',
+                        display: 'block',
+                        marginBottom: '4px',
+                        fontWeight: 600,
+                      }}
                     >
                       {TEXT_PDO_FORM.SHIFT_2.REALOPS_LABEL}
                     </label>
@@ -390,15 +483,15 @@ function RouteOperationalReportCardComponent({
                       id="realops-s2"
                       type="number"
                       min={0}
+                      className="input-field tabular-nums"
                       value={realopsS2}
                       onChange={(e) => setRealopsS2(Number(e.target.value))}
                       style={{
                         width: '100%',
-                        padding: '6px 8px',
+                        padding: '8px 10px',
                         borderRadius: '8px',
-                        border: '1px solid #cbd5e1',
                         fontSize: '13px',
-                        fontWeight: 600
+                        fontWeight: 700,
                       }}
                     />
                   </div>
@@ -408,62 +501,85 @@ function RouteOperationalReportCardComponent({
           </div>
 
           {/* Section 2: Headway */}
-          <div style={{ marginBottom: '14px' }}>
-            <label
+          <div style={{ marginBottom: '16px' }}>
+            <div
               style={{
-                fontSize: '12px',
-                fontWeight: 600,
-                color: 'var(--text-secondary, #64748b)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-                display: 'block',
-                marginBottom: '8px'
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginBottom: '8px',
               }}
             >
-              {TEXT_PDO_FORM.HEADWAY.SECTION_TITLE}
-            </label>
+              <Clock size={14} color="var(--accent-color, #3ECF8E)" />
+              <label
+                style={{
+                  fontSize: '11.5px',
+                  fontWeight: 700,
+                  color: 'var(--text-secondary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.6px',
+                  margin: 0,
+                }}
+              >
+                {TEXT_PDO_FORM.HEADWAY.SECTION_TITLE}
+              </label>
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
                 <label
                   htmlFor="headway-fastest"
-                  style={{ fontSize: '11px', color: '#64748b', display: 'block' }}
+                  style={{
+                    fontSize: '11px',
+                    color: 'var(--text-secondary)',
+                    display: 'block',
+                    marginBottom: '4px',
+                    fontWeight: 600,
+                  }}
                 >
-                  {TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL}
+                  {TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL} (Menit)
                 </label>
                 <input
                   id="headway-fastest"
                   type="number"
                   min={1}
+                  className="input-field tabular-nums"
                   value={headwayFastest}
                   onChange={(e) => setHeadwayFastest(Number(e.target.value))}
                   style={{
                     width: '100%',
-                    padding: '8px',
+                    padding: '8px 10px',
                     borderRadius: '8px',
-                    border: '1px solid #cbd5e1',
-                    fontSize: '13px'
+                    fontSize: '13px',
+                    fontWeight: 700,
                   }}
                 />
               </div>
               <div>
                 <label
                   htmlFor="headway-slowest"
-                  style={{ fontSize: '11px', color: '#64748b', display: 'block' }}
+                  style={{
+                    fontSize: '11px',
+                    color: 'var(--text-secondary)',
+                    display: 'block',
+                    marginBottom: '4px',
+                    fontWeight: 600,
+                  }}
                 >
-                  {TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL}
+                  {TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL} (Menit)
                 </label>
                 <input
                   id="headway-slowest"
                   type="number"
                   min={1}
+                  className="input-field tabular-nums"
                   value={headwaySlowest}
                   onChange={(e) => setHeadwaySlowest(Number(e.target.value))}
                   style={{
                     width: '100%',
-                    padding: '8px',
+                    padding: '8px 10px',
                     borderRadius: '8px',
-                    border: '1px solid #cbd5e1',
-                    fontSize: '13px'
+                    fontSize: '13px',
+                    fontWeight: 700,
                   }}
                 />
               </div>
@@ -471,21 +587,37 @@ function RouteOperationalReportCardComponent({
           </div>
 
           {/* Section 3: Titik Kemacetan Chips */}
-          <div style={{ marginBottom: '14px' }}>
-            <label
+          <div style={{ marginBottom: '16px' }}>
+            <div
               style={{
-                fontSize: '12px',
-                fontWeight: 600,
-                color: 'var(--text-secondary, #64748b)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-                display: 'block',
-                marginBottom: '8px'
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginBottom: '8px',
               }}
             >
-              {TEXT_PDO_FORM.TRAFFIC_JAMS.SECTION_TITLE}
-            </label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
+              <AlertTriangle size={14} color="var(--warning-color, #f59e0b)" />
+              <label
+                style={{
+                  fontSize: '11.5px',
+                  fontWeight: 700,
+                  color: 'var(--text-secondary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.6px',
+                  margin: 0,
+                }}
+              >
+                {TEXT_PDO_FORM.TRAFFIC_JAMS.SECTION_TITLE}
+              </label>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '6px',
+                marginBottom: '10px',
+              }}
+            >
               {allAvailableSpots.map((spot) => {
                 const isSelected = selectedSpots.includes(spot);
                 return (
@@ -497,15 +629,32 @@ function RouteOperationalReportCardComponent({
                       padding: '6px 12px',
                       borderRadius: '20px',
                       fontSize: '12px',
-                      fontWeight: isSelected ? 600 : 400,
-                      background: isSelected ? '#ef4444' : 'var(--bg-secondary, #f1f5f9)',
-                      color: isSelected ? '#ffffff' : 'var(--text-primary, #334155)',
-                      border: isSelected ? '1px solid #dc2626' : '1px solid #e2e8f0',
+                      fontWeight: isSelected ? 700 : 500,
+                      background: isSelected
+                        ? 'rgba(245, 158, 11, 0.18)'
+                        : 'var(--input-bg, rgba(255, 255, 255, 0.04))',
+                      color: isSelected ? 'var(--warning-color, #f59e0b)' : 'var(--text-secondary)',
+                      border: isSelected
+                        ? '1px solid rgba(245, 158, 11, 0.45)'
+                        : '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease'
+                      transition: 'all 0.18s cubic-bezier(0.32, 0.72, 0, 1)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
                     }}
                   >
-                    {spot}
+                    {isSelected && (
+                      <span
+                        style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          background: 'var(--warning-color, #f59e0b)',
+                        }}
+                      />
+                    )}
+                    <span>{spot}</span>
                   </button>
                 );
               })}
@@ -515,6 +664,7 @@ function RouteOperationalReportCardComponent({
             <div style={{ display: 'flex', gap: '8px' }}>
               <input
                 type="text"
+                className="input-field"
                 placeholder={TEXT_PDO_FORM.TRAFFIC_JAMS.ADD_SPOT_PLACEHOLDER}
                 value={newSpotText}
                 onChange={(e) => setNewSpotText(e.target.value)}
@@ -526,44 +676,46 @@ function RouteOperationalReportCardComponent({
                 }}
                 style={{
                   flex: 1,
-                  padding: '6px 10px',
-                  borderRadius: '8px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '12px'
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  fontSize: '12.5px',
                 }}
               />
               <button
                 type="button"
                 onClick={handleAddCustomSpot}
                 style={{
-                  padding: '6px 12px',
-                  borderRadius: '8px',
-                  background: '#f1f5f9',
-                  border: '1px solid #cbd5e1',
+                  padding: '8px 14px',
+                  borderRadius: '10px',
+                  background: 'var(--input-bg, rgba(255, 255, 255, 0.06))',
+                  border: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))',
+                  color: 'var(--text-primary)',
                   fontSize: '12px',
+                  fontWeight: 600,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '4px'
+                  gap: '4px',
+                  transition: 'background 0.15s ease',
                 }}
               >
-                <Plus size={14} /> {TEXT_PDO_FORM.TRAFFIC_JAMS.ADD_BTN}
+                <Plus size={14} /> <span>{TEXT_PDO_FORM.TRAFFIC_JAMS.ADD_BTN}</span>
               </button>
             </div>
           </div>
 
           {/* Section 4: Catatan Kendala */}
-          <div style={{ marginBottom: '16px' }}>
+          <div style={{ marginBottom: '18px' }}>
             <label
               htmlFor="kendala-text"
               style={{
-                fontSize: '12px',
-                fontWeight: 600,
-                color: 'var(--text-secondary, #64748b)',
+                fontSize: '11.5px',
+                fontWeight: 700,
+                color: 'var(--text-secondary)',
                 textTransform: 'uppercase',
-                letterSpacing: '0.5px',
+                letterSpacing: '0.6px',
                 display: 'block',
-                marginBottom: '6px'
+                marginBottom: '6px',
               }}
             >
               {TEXT_PDO_FORM.ISSUES.SECTION_TITLE}
@@ -571,17 +723,18 @@ function RouteOperationalReportCardComponent({
             <textarea
               id="kendala-text"
               rows={2}
+              className="input-field"
               placeholder={TEXT_PDO_FORM.ISSUES.PLACEHOLDER}
               value={operationalIssues}
               onChange={(e) => setOperationalIssues(e.target.value)}
               style={{
                 width: '100%',
-                padding: '8px',
-                borderRadius: '8px',
-                border: '1px solid #cbd5e1',
-                fontSize: '12px',
+                padding: '10px 12px',
+                borderRadius: '10px',
+                fontSize: '12.5px',
                 fontFamily: 'inherit',
-                resize: 'vertical'
+                resize: 'vertical',
+                lineHeight: 1.5,
               }}
             />
           </div>
@@ -590,27 +743,33 @@ function RouteOperationalReportCardComponent({
           <button
             type="submit"
             disabled={saving || loading}
+            className="btn"
             style={{
               width: '100%',
               padding: '12px',
               borderRadius: '12px',
-              background: '#2563eb',
-              color: '#ffffff',
-              border: 'none',
               fontSize: '14px',
-              fontWeight: 600,
+              fontWeight: 700,
               cursor: saving ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)',
-              opacity: saving ? 0.7 : 1,
-              transition: 'all 0.2s ease'
+              opacity: saving ? 0.75 : 1,
+              transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
             }}
           >
-            <Send size={16} />
-            {saving ? TEXT_PDO_FORM.BUTTONS.SUBMITTING : TEXT_PDO_FORM.BUTTONS.SUBMIT}
+            {saving ? (
+              <>
+                <Loader2 className="spinner" size={16} />
+                <span>{TEXT_PDO_FORM.BUTTONS.SUBMITTING}</span>
+              </>
+            ) : (
+              <>
+                <Send size={16} />
+                <span>{TEXT_PDO_FORM.BUTTONS.SUBMIT}</span>
+              </>
+            )}
           </button>
         </form>
       )}

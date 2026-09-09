@@ -684,15 +684,15 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 >
                   {TEXT_MONITORING.KPI.PASSENGER_LABEL}
                 </span>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)' }}>
+                <div className="tabular-nums" style={{ fontSize: '20px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)' }}>
                   {formatNumber(data.totalTodayPassengers)}
                   <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
                     {TEXT_MONITORING.KPI.PASSENGER_UNIT}
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px', color: 'var(--text-secondary)' }}>
-                  <span>S1: <strong style={{ color: 'var(--text-primary)' }}>{formatNumber(data.totalShift1)}</strong></span>
-                  <span>S2: <strong style={{ color: 'var(--text-primary)' }}>{formatNumber(data.totalShift2)}</strong></span>
+                  <span>S1: <strong className="tabular-nums" style={{ color: 'var(--text-primary)' }}>{formatNumber(data.totalShift1)}</strong></span>
+                  <span>S2: <strong className="tabular-nums" style={{ color: 'var(--text-primary)' }}>{formatNumber(data.totalShift2)}</strong></span>
                 </div>
               </div>
 
@@ -720,7 +720,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 >
                   {TEXT_MONITORING.KPI.KM_LABEL}
                 </span>
-                <div style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8' }}>
+                <div className="tabular-nums" style={{ fontSize: '20px', fontWeight: 800, color: '#38bdf8' }}>
                   {formatDecimal(data.totalKm, 1)}
                   <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)', marginLeft: '4px' }}>
                     {TEXT_MONITORING.KPI.KM_UNIT}
@@ -728,7 +728,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11.5px', paddingTop: '4px', color: 'var(--text-secondary)' }}>
                   <span>{TEXT_MONITORING.KPI.KM_AVG_LABEL}</span>
-                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+                  <span className="tabular-nums" style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                     {formatDecimal(data.averageKmPerBus, 1)} km
                   </span>
                 </div>
@@ -1040,10 +1040,10 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
           <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
             {TEXT_MONITORING.ROUTE_CARD.METRIC_ARMADA}
           </span>
-          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary, #ededed)', marginTop: '2px' }}>
+          <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary, #ededed)', marginTop: '2px' }}>
             {route.totalRealops} / {route.totalRenops}
           </div>
-          <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
+          <span className="tabular-nums" style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
             S1:{route.realopsShift1} | S2:{route.realopsShift2}
           </span>
         </div>
@@ -1053,10 +1053,10 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
           <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
             {TEXT_MONITORING.ROUTE_CARD.METRIC_PASSENGERS}
           </span>
-          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)', marginTop: '2px' }}>
+          <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 800, color: 'var(--accent-color, #3ECF8E)', marginTop: '2px' }}>
             {formatNumber(route.todayPassengers)}
           </div>
-          <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
+          <span className="tabular-nums" style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
             S1:{formatNumber(route.totalShift1)} S2:{formatNumber(route.totalShift2)}
           </span>
         </div>
@@ -1066,10 +1066,10 @@ function RouteCardItem({ route, onVerify, onSelectRoute }: RouteCardItemProps) {
           <span style={{ fontSize: '10px', color: 'var(--text-secondary, #8b8b8b)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
             {TEXT_MONITORING.ROUTE_CARD.METRIC_KM}
           </span>
-          <div style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8', marginTop: '2px' }}>
+          <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 800, color: '#38bdf8', marginTop: '2px' }}>
             {formatDecimal(route.totalKm, 1)}
           </div>
-          <span style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
+          <span className="tabular-nums" style={{ fontSize: '10px', color: 'var(--text-secondary)', display: 'block', marginTop: '1px' }}>
             {TEXT_MONITORING.ROUTE_CARD.KM_PER_BUS_PREFIX} {formatDecimal(route.achievementKm, 1)}
           </span>
         </div>

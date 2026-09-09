@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo, memo } from 'react';
-import { MapPin, Calendar, Plus, X, Loader2, ChevronUp, CheckCircle, AlertCircle } from 'lucide-react';
+import { MapPin, Calendar, Plus, Loader2, ChevronUp, ChevronDown } from 'lucide-react';
 import { fetchRoutesWithSheets, createRouteWithSheet } from '../services/routeService';
 import { inspectSpreadsheetHeader } from '../services/googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
@@ -10,6 +10,7 @@ import {
 import { getFormattedDateBadge } from '../utils/analytics';
 import type { Route } from '../types/supabase';
 import { TEXT_DASHBOARD, TEXT_COMMON } from '../constants/texts';
+import { AddRouteModal } from './routeSelector/AddRouteModal';
 
 // ponytail: centralized month names dictionary from TEXT_COMMON
 const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
@@ -482,6 +483,9 @@ function RouteSelectorCardComponent({
               : `Tgl ${currentTabName || selectedTab}`}
           </span>
         </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '6px', color: 'var(--text-secondary)', opacity: 0.7 }}>
+          <ChevronDown size={14} />
+        </div>
       </div>
 
       {/* Expanded Form View Layer */}
@@ -673,164 +677,33 @@ function RouteSelectorCardComponent({
               </div>
             ) : null}
 
-            {/* Form Tambah Rute Baru — simpan ke Supabase */}
-            {isAddingRoute && (
-              <div style={{ background: 'var(--input-bg)', padding: '12px', borderRadius: '12px', border: '1px solid var(--card-border)', marginTop: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 700 }}>{TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_NEW_ROUTE}</span>
-                  <button type="button" onClick={resetForm} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
-                    <X size={16} />
-                  </button>
-                </div>
-
-                <div style={{ marginBottom: '8px' }}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'stretch',
-                      borderRadius: '8px',
-                      overflow: 'hidden',
-                      border: '1px solid var(--input-border, rgba(255, 255, 255, 0.15))',
-                      background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '0 12px',
-                        background: 'rgba(62, 207, 142, 0.15)',
-                        color: 'var(--accent-color, #3ECF8E)',
-                        fontWeight: 800,
-                        fontSize: '13px',
-                        letterSpacing: '0.5px',
-                        borderRight: '1px solid var(--input-border, rgba(255, 255, 255, 0.15))',
-                        userSelect: 'none',
-                      }}
-                    >
-                      JAK.
-                    </div>
-                    <input
-                      type="text"
-                      className="input-field"
-                      placeholder={TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_INPUT_PLACEHOLDER}
-                      value={newRouteCodeSuffix}
-                      onChange={(e) => handleRouteCodeSuffixInput(e.target.value)}
-                      style={{
-                        flex: 1,
-                        border: 'none',
-                        borderRadius: 0,
-                        background: 'transparent',
-                        padding: '8px 12px',
-                      }}
-                    />
-                  </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '3px', marginLeft: '2px' }}>
-                    Ketik nomor / kode trayek (contoh: <strong>115</strong>, <strong>76</strong>, <strong>78A</strong>)
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                  <select
-                    className="input-field"
-                    value={newMonth}
-                    onChange={(e) => setNewMonth(Number(e.target.value))}
-                    style={{ flex: 1 }}
-                  >
-                    {MONTH_NAMES_ID.slice(1).map((name, idx) => (
-                      <option key={idx + 1} value={idx + 1}>{name}</option>
-                    ))}
-                  </select>
-                  <input
-                    type="number"
-                    className="input-field"
-                    placeholder={TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_INPUT_PLACEHOLDER}
-                    value={newYear}
-                    onChange={(e) => {
-                      const parsed = parseInt(e.target.value, 10);
-                      setNewYear(isNaN(parsed) ? new Date().getFullYear() : parsed);
-                    }}
-                    style={{ width: '90px' }}
-                    min={2020}
-                    max={2099}
-                  />
-                </div>
-
-                <input
-                  type="text"
-                  className="input-field"
-                  placeholder={TEXT_DASHBOARD.ROUTE_SELECTOR.SHEET_URL_PLACEHOLDER}
-                  value={newRouteUrl}
-                  onChange={(e) => setNewRouteUrl(e.target.value)}
-                  style={{ marginBottom: checkStatus !== 'idle' ? '4px' : '8px' }}
-                />
-
-                {/* Proactive Duplicate Warning Banner */}
-                {duplicateWarningMessage && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontSize: '11px',
-                      color: '#f59e0b',
-                      background: 'rgba(245, 158, 11, 0.12)',
-                      border: '1px solid rgba(245, 158, 11, 0.35)',
-                      borderRadius: '8px',
-                      padding: '8px 10px',
-                      marginBottom: '8px',
-                      lineHeight: '1.4',
-                    }}
-                  >
-                    <AlertCircle size={15} style={{ flexShrink: 0 }} />
-                    <span>{duplicateWarningMessage}</span>
-                  </div>
-                )}
-
-                {/* Live Status Inspection Badge */}
-                {checkStatus === 'checking' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-color)', marginBottom: '8px' }}>
-                    <Loader2 className="spinner" size={13} />
-                    <span>{checkMessage || TEXT_DASHBOARD.ROUTE_SELECTOR.CHECKING_ACCESS}</span>
-                  </div>
-                )}
-                {checkStatus === 'valid' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#10b981', marginBottom: '8px', fontWeight: 600 }}>
-                    <CheckCircle size={14} />
-                    <span>{checkMessage}</span>
-                  </div>
-                )}
-                {checkStatus === 'invalid' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--danger-color)', marginBottom: '8px' }}>
-                    <AlertCircle size={14} />
-                    <span>{checkMessage}</span>
-                  </div>
-                )}
-
-                {formError && (
-                  <div className="error-text" style={{ marginBottom: '8px', fontSize: '12px' }}>
-                    {formError}
-                  </div>
-                )}
-
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={handleSaveRoute}
-                  disabled={isSaving || isCheckingLink || Boolean(duplicateWarningMessage)}
-                >
-                  {isSaving ? <Loader2 className="spinner" size={18} /> : null}
-                  {isSaving ? TEXT_DASHBOARD.ROUTE_SELECTOR.SAVING_ROUTE : TEXT_DASHBOARD.ROUTE_SELECTOR.SAVE_ROUTE_BTN}
-                </button>
-              </div>
-            )}
+            {/* Modal Tambah Rute Baru — dipindahkan ke modal sheet tersendiri */}
+            <AddRouteModal
+              isOpen={isAddingRoute}
+              onClose={resetForm}
+              newRouteCodeSuffix={newRouteCodeSuffix}
+              onRouteCodeSuffixChange={handleRouteCodeSuffixInput}
+              newMonth={newMonth}
+              onMonthChange={setNewMonth}
+              newYear={newYear}
+              onYearChange={setNewYear}
+              newRouteUrl={newRouteUrl}
+              onRouteUrlChange={setNewRouteUrl}
+              checkStatus={checkStatus}
+              checkMessage={checkMessage}
+              duplicateWarningMessage={duplicateWarningMessage}
+              formError={formError}
+              isSaving={isSaving}
+              isCheckingLink={isCheckingLink}
+              onSaveRoute={handleSaveRoute}
+            />
           </div>
 
           <button
             type="button"
             className="btn"
             onClick={() => onLoadData(selectedTab, sheetUrl)}
-            disabled={isLoading || isAddingRoute || !sheetUrl}
+            disabled={isLoading || !sheetUrl}
           >
             {isLoading ? <Loader2 className="spinner" size={20} /> : TEXT_DASHBOARD.ROUTE_SELECTOR.LOAD_DATA_BTN}
           </button>
