@@ -757,42 +757,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               <span>{TEXT_DASHBOARD.SWITCHER.REGIONAL_MONITORING}</span>
             </button>
 
-            {/* Nama Halaman Aktif */}
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "4px 10px",
-                borderRadius: "20px",
-                background: "rgba(62, 207, 142, 0.1)",
-                border: "1px solid rgba(62, 207, 142, 0.22)",
-                color: "var(--accent-color)",
-                fontSize: "12px",
-                fontWeight: 700,
-                letterSpacing: "0.2px",
-                whiteSpace: "nowrap",
-                userSelect: "none",
-              }}
-            >
-              <span
-                style={{
-                  width: "6px",
-                  height: "6px",
-                  borderRadius: "50%",
-                  background: "var(--accent-color)",
-                  boxShadow: "0 0 6px var(--accent-color)",
-                }}
-              />
-              <span>
-                {mainTab === "input"
-                  ? TEXT_DASHBOARD.TABS.INPUT_SS
-                  : mainTab === "analytics"
-                    ? TEXT_DASHBOARD.TABS.DASHBOARD
-                    : TEXT_DASHBOARD.TABS.UNIT_LIST}
-              </span>
-            </div>
-
             {queue.length > 0 && (
               <div
                 onClick={() => setIsQueueModalOpen(true)}
