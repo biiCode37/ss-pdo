@@ -1902,3 +1902,33 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border-color: rgba(16, 185, 129, 0.35) !important;
   color: #047857 !important;
 }
+
+/* Modern Login Screen & Information Bottom Sheet Polish */
+.login-page-container {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+[data-theme="light"] .login-hero-card {
+  background: #ffffff !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .login-info-sheet {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.login-hero-card .btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.login-hero-card .btn:active {
+  transform: scale(0.97);
+}
+
