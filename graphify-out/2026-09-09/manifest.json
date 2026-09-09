@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1788914192.7115386,
-    "ast_hash": "b6f648b26820c09e609a6ec843869199",
+    "mtime": 1788915644.0155387,
+    "ast_hash": "13136b79ab9d53c7a7aa43fae3b39648",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -1325,13 +1325,13 @@
     "semantic_hash": ""
   },
   "src/components/RouteOperationalReportCard.test.tsx": {
-    "mtime": 1788842245.111702,
-    "ast_hash": "9858e9eeb499628c4958740fcd47b9cb",
+    "mtime": 1788915627.8087296,
+    "ast_hash": "eb19e18863e4beb094133a399ae092e9",
     "semantic_hash": ""
   },
   "src/components/RouteOperationalReportCard.tsx": {
-    "mtime": 1788914089.2851954,
-    "ast_hash": "65ea1fc2fb2cc43b07e96bd4283ed1e3",
+    "mtime": 1788915678.0832005,
+    "ast_hash": "a173012cd3271e2973523419ab2db8a1",
     "semantic_hash": ""
   },
   "src/components/WaReportModal.test.tsx": {
@@ -1570,8 +1570,8 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/RouteSelectorSheet.tsx": {
-    "mtime": 1788914011.542943,
-    "ast_hash": "f260fcf25cc7f121fc3446b66d503431",
+    "mtime": 1788915675.4911535,
+    "ast_hash": "e0a64b9fd5aa2f892fb09cf111ca13e4",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-09-smart-pill-bottom-sheets-design.md": {
@@ -1587,6 +1587,16 @@
   "refactor-ss-pdo/refact_23/REPAIR_REPORT.md": {
     "mtime": 1788914267.1646965,
     "ast_hash": "28fea1ee0be643fbf713040a0e89a79e",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_24/AUDIT_BUGS.md": {
+    "mtime": 1788915720.0476978,
+    "ast_hash": "fc8d8326138d44825c18f4f47b14254b",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_24/REPAIR_REPORT.md": {
+    "mtime": 1788915728.0876286,
+    "ast_hash": "2519b020829c86318cb586d6e459b7ee",
     "semantic_hash": ""
   }
 }
