@@ -7,10 +7,13 @@ import {
 
 describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
   it('maps operator codes to official full names correctly', () => {
-    expect(getOperatorFullName('KLM')).toBe('KOLAMAS (KLM)');
+    expect(getOperatorFullName('KLM')).toBe('KOLAMAS JAYA (KLM)');
     expect(getOperatorFullName('KWK')).toBe('KOPERASI WAHANA KALPIKA (KWK)');
-    expect(getOperatorFullName('KBL')).toBe('KENCANA BUMI LESTARI (KBL)');
-    expect(getOperatorFullName('KOMIDA')).toBe('KOMIDA');
+    expect(getOperatorFullName('KWK AC')).toBe('KOPERASI WAHANA KALPIKA (KWK) AC');
+    expect(getOperatorFullName('KMJ')).toBe('KOMILET JAYA (KMJ)');
+    expect(getOperatorFullName('LSG')).toBe('LESTARI SURYA GEMA PERSADA (LSG)');
+    expect(getOperatorFullName('KJG')).toBe('KOJANG (KJG)');
+    expect(getOperatorFullName('KMJ/KLM')).toBe('KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)');
     expect(getOperatorFullName('OTHER')).toBe('OTHER');
   });
 
@@ -56,7 +59,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
 
     // Route Detail assertions
     expect(report).toContain('*01. JAK.01 | TANJUNG PRIOK - PLUMPANG*');
-    expect(report).toContain('- KOLAMAS (KLM)');
+    expect(report).toContain('- KOLAMAS JAYA (KLM)');
     expect(report).toContain('Status        : LENGKAP ✅');
 
     expect(report).toContain('*02. JAK.15 | TANJUNG PRIOK - BULAK TURI*');
@@ -72,15 +75,15 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     const mockRoutes: RouteFleetReportItem[] = [
       {
         no: 1,
-        routeCode: 'JAK.115',
+        routeCode: 'JAK.87',
         routeName: 'TANJUNG PRIOK - IGI',
-        operatorName: 'KBL',
+        operatorName: 'LSG',
         renops: 15,
         realops: 13,
         nonSgoUnits: [
-          { unit: 'KBL-115-004', note: 'NP', isOff: false },
-          { unit: 'KBL-115-009', note: 'TO.EVDAL', isOff: false },
-          { unit: 'KBL-115-015', note: 'OFF', isOff: true }
+          { unit: 'LSG-087-004', note: 'NP', isOff: false },
+          { unit: 'LSG-087-009', note: 'TO.EVDAL', isOff: false },
+          { unit: 'LSG-087-015', note: 'OFF', isOff: true }
         ]
       }
     ];
@@ -88,8 +91,8 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     const report = generateWaReportFormat3('2026-09-10', 2, mockRoutes);
 
     expect(report).toContain('*SHIFT :* 2 (Siang)');
-    expect(report).toContain('*01. JAK.115 | TANJUNG PRIOK - IGI*');
-    expect(report).toContain('- KENCANA BUMI LESTARI (KBL)');
+    expect(report).toContain('*01. JAK.87 | TANJUNG PRIOK - IGI*');
+    expect(report).toContain('- LESTARI SURYA GEMA PERSADA (LSG)');
     expect(report).toContain('Target SGO    : 15 Unit');
     expect(report).toContain('Realisasi Ops : 13 Unit');
     expect(report).toContain('Tidak Ops     : 2 Unit');
@@ -97,12 +100,12 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
 
     // Rincian tidak ops
     expect(report).toContain('*Rincian Tidak Ops:*');
-    expect(report).toContain('- KBL-115-004 : NP');
-    expect(report).toContain('- KBL-115-009 : TO.EVDAL');
+    expect(report).toContain('- LSG-087-004 : NP');
+    expect(report).toContain('- LSG-087-009 : TO.EVDAL');
 
     // Unit Libur
     expect(report).toContain('*Unit Libur (OFF):*');
-    expect(report).toContain('- KBL-115-015 : OFF');
+    expect(report).toContain('- LSG-087-015 : OFF');
 
     // Summary counts
     expect(report).toContain('Status Rute     : 0 Lengkap | 1 Kurang');
@@ -145,6 +148,6 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     const report = generateWaReportFormat3('2026-09-10', 1, mockRoutes);
 
     expect(report).toContain('*01. JAK.01*');
-    expect(report).toContain('- KOLAMAS (KLM)');
+    expect(report).toContain('- KOLAMAS JAYA (KLM)');
   });
 });

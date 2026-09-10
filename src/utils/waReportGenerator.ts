@@ -1,4 +1,5 @@
 import { TEXT_WA_REPORT } from '../constants/texts';
+import { getOperatorOfficialName } from '../constants/operators';
 import type { FleetUnitStatusDetail } from '../types/supabase';
 
 export interface RouteFleetReportItem {
@@ -127,7 +128,7 @@ export function generateWaReportFormat1(dateStr: string, routes: RouteWaData[]):
     const percentage = r.targetHk > 0 ? (r.todayPassengers / r.targetHk) * 100 : 0;
 
     lines.push(`*${r.no}. ${r.routeCode} | ${r.routeName}*${loopingSuffix}\`\`\`\t\t\t`);
-    lines.push(`- ${r.operatorName}\t\t\t`);
+    lines.push(`- ${getOperatorFullName(r.operatorName)}\t\t\t`);
     lines.push('\t\t\t');
     lines.push(`HARI INI\t:\t${formatWaNumber(r.todayPassengers)}\t`);
     lines.push(`KEMAREN\t:\t${formatWaNumber(r.yesterdayPassengers)}\t`);
@@ -240,15 +241,10 @@ export function generateWaReportFormat2(
 }
 
 /**
- * Mengubah kode operator menjadi nama resmi yang lengkap.
+ * Mengubah kode operator menjadi nama resmi yang lengkap (menggunakan Master Operators).
  */
 export function getOperatorFullName(operatorCodeOrName: string): string {
-  const op = (operatorCodeOrName || '').trim().toUpperCase();
-  if (op === 'KLM' || op.includes('KOLAMAS')) return 'KOLAMAS (KLM)';
-  if (op === 'KWK' || op.includes('WAHANA KALPIKA')) return 'KOPERASI WAHANA KALPIKA (KWK)';
-  if (op === 'KBL' || op.includes('BUMI LESTARI')) return 'KENCANA BUMI LESTARI (KBL)';
-  if (op === 'KOMIDA' || op.includes('KOMIDA')) return 'KOMIDA';
-  return operatorCodeOrName;
+  return getOperatorOfficialName(operatorCodeOrName);
 }
 
 /**
