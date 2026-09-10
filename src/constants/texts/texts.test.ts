@@ -73,6 +73,16 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_WA_REPORT.MODAL_TITLE).toBe('Generator Laporan WhatsApp');
     expect(TEXT_WA_REPORT.FORMAT_1_BTN).toContain('Format 1 (Komprehensif)');
     expect(TEXT_WA_REPORT.FORMAT_2_BTN).toContain('Format 2 (Rincian Shift)');
+    expect(TEXT_WA_REPORT.FORMAT_3_BTN).toContain('Format 3 (Status Armada)');
+    expect(TEXT_WA_REPORT.FORMAT_3_DESC).toBeDefined();
+    expect(TEXT_WA_REPORT.SHIFT_SELECTOR.SHIFT_1).toContain('Shift 1');
+    expect(TEXT_WA_REPORT.SHIFT_SELECTOR.SHIFT_2).toContain('Shift 2');
+    expect(TEXT_WA_REPORT.BLOCKING_TITLE(1)).toContain('Shift 1');
+    expect(TEXT_WA_REPORT.BLOCKING_DESC(2, ['JAK.01', 'JAK.15'])).toContain('2 rute');
+    expect(TEXT_WA_REPORT.BLOCKING_DESC(2, ['JAK.01', 'JAK.15'])).toContain('JAK.01, JAK.15');
+    expect(TEXT_WA_REPORT.UNCONFIRMED_ROUTES_BADGE(3)).toContain('3');
+    expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_HEADER('Kamis', '10 September 2026', 1, 'Pagi')).toContain('1 (Pagi)');
+    expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_CLOSING).toContain('diketahui');
     expect(TEXT_WA_REPORT.WARNING_UNSUBMITTED(2, 18)).toContain('2 dari 18 rute');
   });
 

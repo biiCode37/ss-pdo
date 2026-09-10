@@ -6,6 +6,16 @@ export const TEXT_WA_REPORT = {
   MODAL_SUBTITLE: 'Siap salin & kirim ke grup pimpinan',
   FORMAT_1_BTN: 'Format 1 (Komprehensif)',
   FORMAT_2_BTN: 'Format 2 (Rincian Shift)',
+  FORMAT_3_BTN: 'Format 3 (Status Armada)',
+  FORMAT_3_DESC: 'Laporan Status Kesiapan Armada Per Shift',
+  SHIFT_SELECTOR: {
+    SHIFT_1: '☀️ Shift 1 (Pagi)',
+    SHIFT_2: '🌙 Shift 2 (Siang)',
+  },
+  BLOCKING_TITLE: (shift: number) => `⚠️ Laporan Status Armada Shift ${shift} Belum Siap Dibuat`,
+  BLOCKING_DESC: (count: number, routes: string[]) =>
+    `Masih ada ${count} rute yang belum mengonfirmasi status armada: ${routes.join(', ')}. Harap pastikan seluruh rute terkonfirmasi terlebih dahulu.`,
+  UNCONFIRMED_ROUTES_BADGE: (count: number) => `${count} Rute Belum Konfirmasi`,
   FILTER_ALL: 'Semua Korlap',
   WARNING_UNSUBMITTED: (unsubmitted: number, total: number) =>
     `Perhatian: ${unsubmitted} dari ${total} rute belum mengirim laporan operasional harian. Laporan tetap dapat di-generate dengan data yang tersedia.`,
@@ -34,5 +44,11 @@ export const TEXT_WA_REPORT = {
     SHIFT_2_TOTAL: '•Total Shift 2',
     CLOSING_FORMAT_1: '*_DEMIKIAN LAPORAN DIBUAT UNTUK DI KETAHUI PIMPINAN TERIMA KASIH_*',
     CLOSING_FORMAT_2: '```Demikian dilaporkan untuk diketahui Pimpinan.```',
+    FORMAT_3_HEADER: (day: string, date: string, shift: number, shiftName: string) =>
+      `*LAPORAN STATUS KESIAPAN ARMADA*\n*MIKROTRANS WILAYAH UTARA*\n*HARI / TANGGAL :* ${day}, ${date}\n*SHIFT :* ${shift} (${shiftName})`,
+    FORMAT_3_CLOSING: '_Demikian laporan status kesiapan armada dibuat untuk diketahui pimpinan. Terima kasih._',
+    FORMAT_3_SUMMARY_TITLE: 'RINGKASAN STATUS KESIAPAN ARMADA',
+    FORMAT_3_ROUTE_DETAIL_TITLE: 'RINCIAN STATUS ARMADA PER RUTE',
+    FORMAT_3_OFF_SUBHEADER: '*Unit Libur (OFF):*',
   },
 } as const;
