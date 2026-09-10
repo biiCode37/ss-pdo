@@ -304,9 +304,11 @@ export function generateWaReportFormat3(
     const operator = getOperatorFullName(r.operatorName);
     const routeTidakOps = Math.max(0, (r.renops || 0) - (r.realops || 0));
     const isLengkap = routeTidakOps === 0;
+    const routeTitle = `*${paddedNo}. ${r.routeCode}${r.routeName ? ` | ${r.routeName}` : ''}*`;
 
     lines.push('');
-    lines.push(`*${paddedNo}. ${r.routeCode} ${operator}*`);
+    lines.push(routeTitle);
+    lines.push(`- ${operator}`);
     lines.push('```');
     lines.push(`Target SGO    : ${r.renops} Unit`);
     lines.push(`Realisasi Ops : ${r.realops} Unit`);

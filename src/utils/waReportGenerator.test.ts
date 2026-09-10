@@ -55,10 +55,12 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     expect(report).toContain('Status Rute     : 2 Lengkap | 0 Kurang');
 
     // Route Detail assertions
-    expect(report).toContain('*01. JAK.01 KOLAMAS (KLM)*');
+    expect(report).toContain('*01. JAK.01 | TANJUNG PRIOK - PLUMPANG*');
+    expect(report).toContain('- KOLAMAS (KLM)');
     expect(report).toContain('Status        : LENGKAP ✅');
 
-    expect(report).toContain('*02. JAK.15 KOPERASI WAHANA KALPIKA (KWK)*');
+    expect(report).toContain('*02. JAK.15 | TANJUNG PRIOK - BULAK TURI*');
+    expect(report).toContain('- KOPERASI WAHANA KALPIKA (KWK)');
     expect(report).toContain('*Unit Libur (OFF):*');
     expect(report).toContain('- KWK-015-021 : OFF');
 
@@ -66,7 +68,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     expect(report).toContain('_Demikian laporan status kesiapan armada dibuat untuk diketahui pimpinan. Terima kasih._');
   });
 
-  it('generates report with incomplete route and issues detail', () => {
+  it('generates correct report for Shift 2 with non-SGO breakdown and incomplete status', () => {
     const mockRoutes: RouteFleetReportItem[] = [
       {
         no: 1,
@@ -86,7 +88,8 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     const report = generateWaReportFormat3('2026-09-10', 2, mockRoutes);
 
     expect(report).toContain('*SHIFT :* 2 (Siang)');
-    expect(report).toContain('*01. JAK.115 KENCANA BUMI LESTARI (KBL)*');
+    expect(report).toContain('*01. JAK.115 | TANJUNG PRIOK - IGI*');
+    expect(report).toContain('- KENCANA BUMI LESTARI (KBL)');
     expect(report).toContain('Target SGO    : 15 Unit');
     expect(report).toContain('Realisasi Ops : 13 Unit');
     expect(report).toContain('Tidak Ops     : 2 Unit');
@@ -125,5 +128,23 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     expect(report).toContain('*Rincian Tidak Ops:*');
     expect(report).toContain('- TJ-001 : Per Patah');
     expect(report).not.toContain('*Unit Libur (OFF):*');
+  });
+
+  it('handles route without routeName gracefully', () => {
+    const mockRoutes: RouteFleetReportItem[] = [
+      {
+        no: 1,
+        routeCode: 'JAK.01',
+        operatorName: 'KLM',
+        renops: 10,
+        realops: 10,
+        nonSgoUnits: []
+      }
+    ];
+
+    const report = generateWaReportFormat3('2026-09-10', 1, mockRoutes);
+
+    expect(report).toContain('*01. JAK.01*');
+    expect(report).toContain('- KOLAMAS (KLM)');
   });
 });
