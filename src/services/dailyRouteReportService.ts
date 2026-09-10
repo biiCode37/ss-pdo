@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import type { Route, DailyRouteReport } from '../types/supabase';
+import { formatOperatorsDisplay } from '../constants/operators';
 
 /**
  * Mengambil daftar seluruh master rute aktif beserta konfigurasi spesifikasi
@@ -9,7 +10,7 @@ export async function fetchRouteMasterList(): Promise<Route[]> {
   try {
     const { data, error } = await supabase
       .from('routes')
-      .select('*')
+      .select('*, operators(*)')
       .eq('is_active', true)
       .order('route_code', { ascending: true });
 
@@ -18,7 +19,12 @@ export async function fetchRouteMasterList(): Promise<Route[]> {
       return [];
     }
 
-    return (data || []) as Route[];
+    const formattedRoutes = (data || []).map((r: any) => ({
+      ...r,
+      operator_name: formatOperatorsDisplay(r.operators) || r.operator_name || 'Mikrotrans'
+    }));
+
+    return formattedRoutes as Route[];
   } catch (err) {
     console.warn('[dailyRouteReportService] Exception mengambil daftar rute:', err);
     return [];

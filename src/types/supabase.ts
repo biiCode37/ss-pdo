@@ -2,7 +2,6 @@ export interface Operator {
   id: number;
   operator_code: string;
   operator_name: string;
-  full_name: string;
   is_active: boolean;
   created_at?: string;
   updated_at?: string;
@@ -14,9 +13,9 @@ export interface Route {
   route_code: string;
   route_name: string;
   is_active: boolean;
-  operator_id?: number;
-  operator_name?: string;
-  operators?: Operator;
+  operator_name?: string; // Derived / computed display name
+  operators?: Operator[];
+  route_operators?: { operator_id: number; operators: Operator }[];
   is_looping?: boolean;
   km_baku?: number;
   target_hk?: number;

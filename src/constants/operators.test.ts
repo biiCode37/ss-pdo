@@ -2,14 +2,16 @@ import { describe, it, expect } from 'vitest';
 import {
   MASTER_OPERATORS,
   findOperator,
+  formatOperatorFull,
+  formatOperatorsDisplay,
   getOperatorOfficialName,
   getAllActiveOperators,
   isValidOperatorCode
 } from './operators';
 
-describe('Master Operators Constant', () => {
-  it('contains all 8 official operators and variants', () => {
-    expect(MASTER_OPERATORS.length).toBe(8);
+describe('Master Operators Constant (Atomic Normalization)', () => {
+  it('contains 6 atomic official operators without multi-entity rows', () => {
+    expect(MASTER_OPERATORS.length).toBe(6);
     const codes = MASTER_OPERATORS.map((op) => op.code);
     expect(codes).toContain('KLM');
     expect(codes).toContain('KWK');
@@ -17,8 +19,26 @@ describe('Master Operators Constant', () => {
     expect(codes).toContain('KMJ');
     expect(codes).toContain('LSG');
     expect(codes).toContain('KJG');
-    expect(codes).toContain('KMJ/KLM');
-    expect(codes).toContain('KMJ & KJG');
+    // Ensure no combined fake rows
+    expect(codes).not.toContain('KMJ/KLM');
+    expect(codes).not.toContain('KMJ & KJG');
+  });
+
+  describe('formatOperatorFull & formatOperatorsDisplay', () => {
+    it('formats single operator into "{name} ({code})"', () => {
+      expect(formatOperatorFull({ operator_code: 'KLM', operator_name: 'KOLAMAS JAYA' })).toBe('KOLAMAS JAYA (KLM)');
+      expect(formatOperatorFull({ operator_code: 'KWK AC', operator_name: 'KOPERASI WAHANA KALPIKA' })).toBe('KOPERASI WAHANA KALPIKA (KWK) AC');
+    });
+
+    it('formats multiple operators into "{op1} & {op2}" for KSO routes', () => {
+      const ops = [
+        { operator_code: 'KMJ', operator_name: 'KOMILET JAYA' },
+        { operator_code: 'KJG', operator_name: 'KOJANG' }
+      ];
+      expect(formatOperatorsDisplay(ops)).toBe('KOMILET JAYA (KMJ) & KOJANG (KJG)');
+      expect(formatOperatorsDisplay([])).toBe('');
+      expect(formatOperatorsDisplay(null)).toBe('');
+    });
   });
 
   describe('findOperator & getOperatorOfficialName', () => {
@@ -53,14 +73,9 @@ describe('Master Operators Constant', () => {
       expect(getOperatorOfficialName('KOJANG')).toBe('KOJANG (KJG)');
     });
 
-    it('resolves KSO KMJ/KLM correctly without conflicting with single KLM/KMJ', () => {
-      expect(getOperatorOfficialName('KMJ/KLM')).toBe('KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)');
-      expect(getOperatorOfficialName('KMJ / KLM')).toBe('KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)');
-    });
-
-    it('resolves KSO KMJ & KJG correctly for JAK.76', () => {
-      expect(getOperatorOfficialName('KMJ & KJG')).toBe('KOMILET JAYA & KOJANG (KMJ & KJG)');
-      expect(getOperatorOfficialName('KMJ/KJG')).toBe('KOMILET JAYA & KOJANG (KMJ & KJG)');
+    it('dynamically resolves KSO KMJ/KLM and KMJ & KJG without combined database rows', () => {
+      expect(getOperatorOfficialName('KMJ/KLM')).toBe('KOMILET JAYA (KMJ) / KOLAMAS JAYA (KLM)');
+      expect(getOperatorOfficialName('KMJ & KJG')).toBe('KOMILET JAYA (KMJ) & KOJANG (KJG)');
     });
 
     it('returns original string as graceful fallback when not found', () => {
@@ -72,9 +87,9 @@ describe('Master Operators Constant', () => {
   });
 
   describe('getAllActiveOperators', () => {
-    it('returns only active operators', () => {
+    it('returns 6 active atomic operators', () => {
       const active = getAllActiveOperators();
-      expect(active.length).toBe(8);
+      expect(active.length).toBe(6);
       expect(active.every((op) => op.isActive)).toBe(true);
     });
   });
@@ -87,8 +102,6 @@ describe('Master Operators Constant', () => {
       expect(isValidOperatorCode('KMJ')).toBe(true);
       expect(isValidOperatorCode('LSG')).toBe(true);
       expect(isValidOperatorCode('KJG')).toBe(true);
-      expect(isValidOperatorCode('KMJ/KLM')).toBe(true);
-      expect(isValidOperatorCode('KMJ & KJG')).toBe(true);
       expect(isValidOperatorCode('XYZ')).toBe(false);
       expect(isValidOperatorCode('')).toBe(false);
     });

@@ -13,7 +13,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     expect(getOperatorFullName('KMJ')).toBe('KOMILET JAYA (KMJ)');
     expect(getOperatorFullName('LSG')).toBe('LESTARI SURYA GEMA PERSADA (LSG)');
     expect(getOperatorFullName('KJG')).toBe('KOJANG (KJG)');
-    expect(getOperatorFullName('KMJ/KLM')).toBe('KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)');
+    expect(getOperatorFullName('KMJ/KLM')).toBe('KOMILET JAYA (KMJ) / KOLAMAS JAYA (KLM)');
     expect(getOperatorFullName('OTHER')).toBe('OTHER');
   });
 
