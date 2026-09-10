@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle, Repeat } from 'lucide-react';
+import { X, AlertTriangle } from 'lucide-react';
 import type { BusData } from '../services/googleSheets';
 import { calculateUnitMetrics } from '../utils/unitAnalytics';
 import { safeFormatNumber } from '../utils/numberUtils';
@@ -194,14 +194,10 @@ export function UnitDetailModal({
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ padding: '8px', borderRadius: '12px', background: 'rgba(62, 207, 142, 0.15)', color: 'var(--accent-color)' }}>
-              <Bus size={22} />
-            </div>
-            <div>
-              <h3 className="gradient-title-text" style={{ margin: 0, fontSize: '18px' }}>{unit}</h3>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.TITLE}</span>
-            </div>
+          {/* ponytail: clean unit title without decorative Bus icon wrapper */}
+          <div>
+            <h3 className="gradient-title-text" style={{ margin: 0, fontSize: '18px' }}>{unit}</h3>
+            <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.TITLE}</span>
           </div>
           <button
             onClick={handleDismiss}
@@ -225,22 +221,14 @@ export function UnitDetailModal({
               )}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
-                  <Navigation size={16} />
-                </div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift1-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_UNIT}</span>
-                </div>
+              {/* ponytail: clean typography without redundant Navigation icon */}
+              <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift1-color)', lineHeight: 1.1 }}>
+                {safeFormatNumber(metrics.kmShift1)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_UNIT}</span>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift1-color)' }}>
-                  <Users size={16} />
-                </div>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalShift1Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_UNIT}</span>
-                </div>
+              {/* ponytail: clean typography without redundant Users icon */}
+              <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                {safeFormatNumber(metrics.totalShift1Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_UNIT}</span>
               </div>
 
               {metrics.manualShift1 > 0 && (
@@ -262,22 +250,14 @@ export function UnitDetailModal({
               )}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
-                  <Navigation size={16} />
-                </div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift2-color)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_UNIT}</span>
-                </div>
+              {/* ponytail: clean typography without redundant Navigation icon */}
+              <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--shift2-color)', lineHeight: 1.1 }}>
+                {safeFormatNumber(metrics.kmShift2)} <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_UNIT}</span>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--shift2-color)' }}>
-                  <Users size={16} />
-                </div>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-                  {safeFormatNumber(metrics.totalShift2Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_UNIT}</span>
-                </div>
+              {/* ponytail: clean typography without redundant Users icon */}
+              <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+                {safeFormatNumber(metrics.totalShift2Pnp)} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_UNIT}</span>
               </div>
 
               {metrics.manualShift2 > 0 && (
@@ -300,29 +280,23 @@ export function UnitDetailModal({
             )}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
-                <Navigation size={18} />
-              </div>
+            {/* ponytail: clean typography without redundant Navigation icon */}
+            <div>
               <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
                 {safeFormatNumber(metrics.totalKm)} <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.KM_TOTAL_UNIT}</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
-                <Users size={18} />
-              </div>
+            {/* ponytail: clean typography without redundant Users icon */}
+            <div>
               <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--total-color)', lineHeight: 1.1 }}>
                 {safeFormatNumber(metrics.totalPassengers)} <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.PASSENGER_TOTAL_UNIT}</span>
               </div>
             </div>
 
             {Boolean(metrics.tripPergi || metrics.tripPulang) && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--total-color)' }}>
-                  <Repeat size={18} />
-                </div>
+              /* ponytail: clean typography without redundant Repeat icon */
+              <div>
                 <div style={{ fontSize: '17px', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.1 }}>
                   {metrics.tripPergi || '0'}/{metrics.tripPulang || '0'}{' '}
                   <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>{TEXT_UNIT_DETAIL.RITASE_UNIT}</span>
@@ -381,8 +355,8 @@ export function UnitDetailModal({
 
         {/* Riwayat Catatan */}
         <div className="card glass" style={{ padding: '16px', marginBottom: '16px', borderRadius: '16px' }}>
+          {/* ponytail: clean title without decorative MessageSquare icon */}
           <div className="analytics-card-title" style={{ fontSize: '14px', marginBottom: '12px' }}>
-            <MessageSquare size={18} />
             <span>{TEXT_UNIT_DETAIL.NOTES_SECTION_TITLE}</span>
           </div>
           {metrics.notes.length > 0 ? (

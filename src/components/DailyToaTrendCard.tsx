@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useId, memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
-import { BarChart2, Calendar, Award, Zap, TrendingDown, AlertCircle } from "lucide-react";
+import { BarChart2, Calendar, AlertCircle } from "lucide-react";
 import { getMonthlyToaTrend } from "../services/googleSheets";
 import { DailyToaTrendSkeleton } from "./Skeletons";
 import { extractMonthYearLabel } from "../utils/analytics";
@@ -170,11 +170,6 @@ function DailyToaTrendCardComponent({
     const activeBar = activeTooltipDay
       ? bars.find((b) => b.day === activeTooltipDay)
       : null;
-    const peakBar = peakItem ? bars.find((b) => b.day === peakItem.day) : null;
-    const lowestBar = lowestItem
-      ? bars.find((b) => b.day === lowestItem.day)
-      : null;
-
     return {
       N,
       paddingX,
@@ -188,8 +183,6 @@ function DailyToaTrendCardComponent({
       barWidth,
       bars,
       activeBar,
-      peakBar,
-      lowestBar,
     };
   }, [trendData, activeTooltipDay, selectedTab]);
 
@@ -278,8 +271,6 @@ function DailyToaTrendCardComponent({
     barWidth,
     bars,
     activeBar,
-    peakBar,
-    lowestBar,
   } = chartMetrics;
 
   return (
@@ -350,17 +341,14 @@ function DailyToaTrendCardComponent({
             gap: "2px",
           }}
         >
+          {/* ponytail: clean label without decorative Award icon */}
           <span
             style={{
               fontSize: "11px",
               fontWeight: 600,
               color: "var(--text-secondary)",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
             }}
           >
-            <Award size={12} style={{ color: "var(--total-color)" }} />
             {TEXT_DASHBOARD.TOA_TREND.PEAK_LABEL}
           </span>
           <span
@@ -391,17 +379,14 @@ function DailyToaTrendCardComponent({
             gap: "2px",
           }}
         >
+          {/* ponytail: clean label without decorative TrendingDown icon */}
           <span
             style={{
               fontSize: "11px",
               fontWeight: 600,
               color: "var(--text-secondary)",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
             }}
           >
-            <TrendingDown size={12} style={{ color: "var(--danger-text)" }} />
             {TEXT_DASHBOARD.TOA_TREND.LOWEST_LABEL}
           </span>
           <span
@@ -432,17 +417,14 @@ function DailyToaTrendCardComponent({
             gap: "2px",
           }}
         >
+          {/* ponytail: clean label without decorative Zap icon */}
           <span
             style={{
               fontSize: "11px",
               fontWeight: 600,
               color: "var(--text-secondary)",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
             }}
           >
-            <Zap size={12} style={{ color: "var(--info-text)" }} />
             {TEXT_DASHBOARD.TOA_TREND.AVG_LABEL}
           </span>
           <span
@@ -654,52 +636,6 @@ function DailyToaTrendCardComponent({
               </g>
             );
           })}
-
-          {/* Peak Bar Indicator Icon (Award / Green) */}
-          {peakBar && (!activeBar || activeBar.day !== peakBar.day) && (
-            <g
-              transform={`translate(${peakBar.x + barWidth / 2 - 6}, ${Math.max(peakBar.y - 14, 2)})`}
-              style={{ cursor: "pointer" }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveTooltipDay((prev) =>
-                  prev === peakBar.day ? null : peakBar.day,
-                );
-              }}
-            >
-              <Award
-                size={12}
-                style={{
-                  color: "#4ade80",
-                  filter: "drop-shadow(0px 1px 2px rgba(34,197,94,0.5))",
-                }}
-              />
-            </g>
-          )}
-
-          {/* Lowest Bar Indicator Icon (TrendingDown / Rose) */}
-          {lowestBar &&
-            lowestBar.day !== peakBar?.day &&
-            (!activeBar || activeBar.day !== lowestBar.day) && (
-              <g
-                transform={`translate(${lowestBar.x + barWidth / 2 - 6}, ${Math.max(lowestBar.y - 14, 2)})`}
-                style={{ cursor: "pointer" }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveTooltipDay((prev) =>
-                    prev === lowestBar.day ? null : lowestBar.day,
-                  );
-                }}
-              >
-                <TrendingDown
-                  size={12}
-                  style={{
-                    color: "#fb7185",
-                    filter: "drop-shadow(0px 1px 2px rgba(244,63,94,0.5))",
-                  }}
-                />
-              </g>
-            )}
 
           {/* Active Day Floating Metric Tooltip Badge */}
           {activeBar && (() => {

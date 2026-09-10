@@ -5,7 +5,6 @@ import {
   Check,
   Share2,
   AlertTriangle,
-  FileText
 } from 'lucide-react';
 import {
   generateWaReportFormat1,
@@ -289,10 +288,9 @@ function WaReportModalComponent({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px'
             }}
           >
-            <FileText size={15} />
+            {/* ponytail: clean segmented button label without redundant FileText icon */}
             {TEXT_WA_REPORT.FORMAT_1_BTN}
           </button>
           <button
@@ -312,10 +310,9 @@ function WaReportModalComponent({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px'
             }}
           >
-            <FileText size={15} />
+            {/* ponytail: clean segmented button label without redundant FileText icon */}
             {TEXT_WA_REPORT.FORMAT_2_BTN}
           </button>
         </div>

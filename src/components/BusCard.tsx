@@ -20,11 +20,8 @@ import { getSatsetMode } from "../utils/modals/busInputModal";
 import { TEXT_DASHBOARD } from "../constants/texts";
 import {
   AlertTriangle,
-  Navigation,
-  Users,
   AlertCircle,
   Loader2,
-  ArrowRightLeft,
 } from "lucide-react";
 
 interface Props {
@@ -343,7 +340,7 @@ function BusCardComponent({
               gap: "5px",
             }}
           >
-            <ArrowRightLeft size={12} style={{ flexShrink: 0 }} />
+            {/* ponytail: clean trip badge without redundant ArrowRightLeft icon */}
             <span>
               Trip:{" "}
               {isBelowTarget
@@ -388,11 +385,8 @@ function BusCardComponent({
             gap: "5px",
           }}
         >
-          {isFilled ? (
-            <Navigation size={12} style={{ flexShrink: 0 }} />
-          ) : (
-            <AlertCircle size={12} style={{ flexShrink: 0 }} />
-          )}
+          {/* ponytail: clean badge without redundant Navigation icon */}
+          {!isFilled && <AlertCircle size={12} style={{ flexShrink: 0 }} />}
           <span>
             {label}: {isFilled ? String(val) : TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}
           </span>
@@ -458,17 +452,12 @@ function BusCardComponent({
             borderRadius: "6px",
           }}
         >
-          <ArrowRightLeft size={11} style={{ flexShrink: 0, opacity: 0.85 }} />
-          <span>
-            {isBelowTarget
-              ? `⚠️ ${pergiVal || 0}/${pulangVal || 0}`
-              : `${pergiVal || 0}/${pulangVal || 0}`}
-          </span>
+          <span>{`${pergiVal || 0}/${pulangVal || 0}`}</span>
         </button>
 
         <span style={{ opacity: 0.25, color: "var(--text-secondary)" }}>•</span>
 
-        {/* KM Readout */}
+        {/* KM Readout - ponytail: clean typography without redundant Navigation icon */}
         <span
           style={{
             fontWeight: 600,
@@ -476,16 +465,14 @@ function BusCardComponent({
             color: "var(--shift1-color)",
             display: "inline-flex",
             alignItems: "center",
-            gap: "3px",
           }}
         >
-          <Navigation size={11} style={{ opacity: 0.85, flexShrink: 0 }} />
           <span>{totalKm > 0 ? `${safeFormatNumber(totalKm)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}` : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}`}</span>
         </span>
 
         <span style={{ opacity: 0.25, color: "var(--text-secondary)" }}>•</span>
 
-        {/* Pnp Readout */}
+        {/* Pnp Readout - ponytail: clean typography without redundant Users icon */}
         <span
           style={{
             fontWeight: 600,
@@ -493,10 +480,8 @@ function BusCardComponent({
             color: "var(--text-primary)",
             display: "inline-flex",
             alignItems: "center",
-            gap: "3px",
           }}
         >
-          <Users size={11} style={{ color: "var(--text-secondary)", opacity: 0.85, flexShrink: 0 }} />
           <span>{totalPnp > 0 ? `${safeFormatNumber(totalPnp)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}` : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}`}</span>
         </span>
       </div>
