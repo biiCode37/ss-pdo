@@ -92,7 +92,8 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(alertUtils.showBusInputModal).toHaveBeenCalled();
   });
 
-  it('shows confirmation when tapping unit with OFF status', async () => {
+  it('blocks operational input and prompts to open fleet status when tapping unit with OFF status', async () => {
+    const onOpenFleetStatusMock = vi.fn();
     (alertUtils.pdoSwal.fire as any).mockResolvedValue({ isConfirmed: true });
 
     await act(async () => {
@@ -103,6 +104,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
             ...defaultProps.bus,
             keterangan: 'OFF',
           }}
+          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
@@ -114,15 +116,17 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
 
     expect(alertUtils.pdoSwal.fire).toHaveBeenCalledWith(
       expect.objectContaining({
-        title: expect.stringContaining('Konfirmasi'),
+        icon: 'warning',
         html: expect.stringContaining('OFF'),
       })
     );
-    expect(alertUtils.showBusInputModal).toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
+    expect(alertUtils.showBusInputModal).not.toHaveBeenCalled();
   });
 
-  it('cancels opening modal if confirmation is denied', async () => {
-    (alertUtils.pdoSwal.fire as any).mockResolvedValue({ isDenied: true });
+  it('cancels action if non-SGO confirmation alert is canceled', async () => {
+    const onOpenFleetStatusMock = vi.fn();
+    (alertUtils.pdoSwal.fire as any).mockResolvedValue({ isConfirmed: false });
 
     await act(async () => {
       root.render(
@@ -132,6 +136,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
             ...defaultProps.bus,
             keterangan: 'TO EVDAL',
           }}
+          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
@@ -142,6 +147,30 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     });
 
     expect(alertUtils.pdoSwal.fire).toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
+    expect(alertUtils.showBusInputModal).not.toHaveBeenCalled();
+  });
+
+  it('blocks editing and triggers onOpenFleetStatus when isShiftConfirmed is false', async () => {
+    const onOpenFleetStatusMock = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <BusCard
+          {...defaultProps}
+          isShiftConfirmed={false}
+          onOpenFleetStatus={onOpenFleetStatusMock}
+        />
+      );
+    });
+
+    const card = container.querySelector('.bus-card') as HTMLDivElement;
+    await act(async () => {
+      card?.click();
+    });
+
+    expect(alertUtils.showWarningToast).toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
     expect(alertUtils.showBusInputModal).not.toHaveBeenCalled();
   });
 });

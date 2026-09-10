@@ -1916,10 +1916,59 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   color: #0369a1 !important;
 }
 
+[data-theme="light"] .role-badge-korwil {
+  background: rgba(99, 102, 241, 0.12) !important;
+  border-color: rgba(99, 102, 241, 0.35) !important;
+  color: #4338ca !important;
+}
+
+[data-theme="light"] .role-badge-korlap {
+  background: rgba(249, 115, 22, 0.12) !important;
+  border-color: rgba(249, 115, 22, 0.35) !important;
+  color: #c2410c !important;
+}
+
+[data-theme="light"] .role-badge-pdo,
 [data-theme="light"] .role-badge-petugas {
   background: rgba(16, 185, 129, 0.12) !important;
   border-color: rgba(16, 185, 129, 0.35) !important;
   color: #047857 !important;
+}
+
+/* Header Profile Role Subtitle Colors (No Badge) */
+.header-role-superadmin {
+  color: #f87171 !important;
+}
+[data-theme="light"] .header-role-superadmin {
+  color: #dc2626 !important;
+}
+
+.header-role-admin {
+  color: #c084fc !important;
+}
+[data-theme="light"] .header-role-admin {
+  color: #9333ea !important;
+}
+
+.header-role-korwil {
+  color: #fbbf24 !important;
+}
+[data-theme="light"] .header-role-korwil {
+  color: #d97706 !important;
+}
+
+.header-role-korlap {
+  color: #60a5fa !important;
+}
+[data-theme="light"] .header-role-korlap {
+  color: #2563eb !important;
+}
+
+.header-role-pdo {
+  color: #34d399 !important;
+}
+[data-theme="light"] .header-role-pdo {
+  color: #059669 !important;
 }
 
 /* Modern Login Screen & Information Bottom Sheet Polish */
@@ -1949,5 +1998,67 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 
 .login-hero-card .btn:active {
   transform: scale(0.97);
+}
+
+/* Bus Card Locked & Non-SGO Statuses */
+.bus-card.bus-card-locked {
+  opacity: 0.72;
+  border-left-color: var(--warning-color, #f59e0b) !important;
+}
+
+.bus-card.bus-card-non-sgo {
+  opacity: 0.82;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="light"] .bus-card.bus-card-non-sgo {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.unit-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.2px;
+}
+
+.unit-status-badge-off {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger-color, #ef4444);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="light"] .unit-status-badge-off {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.unit-status-badge-to {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning-text, #f59e0b);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+[data-theme="light"] .unit-status-badge-to {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.unit-status-badge-ba {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+[data-theme="light"] .unit-status-badge-ba {
+  background: rgba(2, 132, 199, 0.1);
+  color: #0284c7;
+  border-color: rgba(2, 132, 199, 0.3);
 }
 

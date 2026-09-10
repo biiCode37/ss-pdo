@@ -47,4 +47,28 @@ describe('RoleBadge Component', () => {
     expect(container.textContent).toContain('Petugas');
     expect(container.innerHTML).toContain('text-emerald-700');
   });
+
+  it('renders Korwil badge correctly', () => {
+    act(() => {
+      root.render(<RoleBadge role="korwil" />);
+    });
+    expect(container.textContent).toContain('Korwil');
+    expect(container.innerHTML).toContain('text-indigo-700');
+  });
+
+  it('renders Korlap badge correctly', () => {
+    act(() => {
+      root.render(<RoleBadge role="korlap" />);
+    });
+    expect(container.textContent).toContain('Korlap');
+    expect(container.innerHTML).toContain('text-orange-700');
+  });
+
+  it('renders PDO badge correctly as default', () => {
+    act(() => {
+      root.render(<RoleBadge role="pdo" />);
+    });
+    expect(container.textContent).toContain('PDO');
+    expect(container.innerHTML).toContain('text-emerald-700');
+  });
 });

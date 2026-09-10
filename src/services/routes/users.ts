@@ -1,6 +1,23 @@
 import { supabase, isSupabaseConfigured } from '../supabase';
-import type { UserProfile } from '../../types/supabase';
+import type { UserProfile, UserRole, Role } from '../../types/supabase';
 import { logActivity } from './audit';
+
+export const ROLE_CODE_TO_ID: Record<string, number> = {
+  superadmin: 1,
+  admin: 2,
+  korwil: 3,
+  korlap: 4,
+  pdo: 5,
+  petugas: 5, // backward-compat alias
+};
+
+export const ROLE_ID_TO_CODE: Record<number, UserRole> = {
+  1: 'superadmin',
+  2: 'admin',
+  3: 'korwil',
+  4: 'korlap',
+  5: 'pdo',
+};
 
 const PENDING_PROFILE_SYNC_KEY = 'PDO_PROFILE_SYNC_PENDING';
 
@@ -40,7 +57,7 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
   try {
     const { data, error } = await supabase
       .from('user_profiles')
-      .select('*')
+      .select('*, roles(id, uuid, code, name, description)')
       .eq('email', email)
       .single();
 
@@ -75,10 +92,16 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       };
     }
 
+    const roleCode = ((data.roles as any)?.code || ROLE_ID_TO_CODE[data.role_id] || 'pdo') as UserRole;
+    const profile: UserProfile = {
+      ...data,
+      role: roleCode,
+    };
+
     // Simpan cache profil yang berhasil diverifikasi untuk offline fallback
     try {
       localStorage.setItem(cacheKey, JSON.stringify({
-        profile: data,
+        profile,
         verifiedAt: new Date().toISOString(),
       }));
     } catch (_e) {}
@@ -95,7 +118,7 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
 
     return {
       isAllowed: true,
-      profile: data as UserProfile,
+      profile,
     };
   } catch (err) {
     console.warn('[RouteService] Error verifying user profile, checking offline cache fallback:', err);
@@ -181,22 +204,46 @@ export async function sendUserHeartbeat(userEmail: string, secondsInterval: numb
 }
 
 /**
- * Mengambil seluruh profil pengguna dari Supabase
+ * Mengambil seluruh profil pengguna dari Supabase beserta data relasi roles
  */
 export async function fetchAllUserProfiles(): Promise<UserProfile[]> {
   if (!isSupabaseConfigured) return [];
   try {
     const { data, error } = await supabase
       .from('user_profiles')
-      .select('*')
+      .select('*, roles(id, uuid, code, name, description)')
       .order('created_at', { ascending: false });
     if (error) {
       console.error('[RouteService] Error fetching user profiles:', error);
       return [];
     }
-    return (data as UserProfile[]) || [];
+    return (data || []).map((u: any) => ({
+      ...u,
+      role: (u.roles?.code || ROLE_ID_TO_CODE[u.role_id] || 'pdo') as UserRole,
+    }));
   } catch (err) {
     console.error('[RouteService] Failed to fetch user profiles:', err);
+    return [];
+  }
+}
+
+/**
+ * Mengambil master data peran (roles) dari database
+ */
+export async function fetchMasterRoles(): Promise<Role[]> {
+  if (!isSupabaseConfigured) return [];
+  try {
+    const { data, error } = await supabase
+      .from('roles')
+      .select('*')
+      .order('id', { ascending: true });
+    if (error) {
+      console.error('[RouteService] Error fetching master roles:', error);
+      return [];
+    }
+    return (data as Role[]) || [];
+  } catch (err) {
+    console.error('[RouteService] Failed to fetch master roles:', err);
     return [];
   }
 }
@@ -207,7 +254,8 @@ export async function fetchAllUserProfiles(): Promise<UserProfile[]> {
 export async function addUserProfile(params: {
   email: string;
   full_name: string;
-  role: 'superadmin' | 'admin' | 'petugas';
+  role?: UserRole | 'petugas';
+  role_id?: number;
   notes?: string;
   created_by?: string;
 }): Promise<{ success: boolean; message?: string }> {
@@ -220,11 +268,15 @@ export async function addUserProfile(params: {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
       return { success: false, message: 'Format email tidak valid.' };
     }
+
+    const assignedRoleId =
+      params.role_id || (params.role ? ROLE_CODE_TO_ID[params.role] : 5) || 5;
+
     const { data, error } = await supabase.from('user_profiles').insert([
       {
         email: cleanEmail,
         full_name: params.full_name.trim(),
-        role: params.role,
+        role_id: assignedRoleId,
         notes: params.notes?.trim() || null,
         created_by: params.created_by || null,
         is_active: true,
@@ -250,6 +302,8 @@ export async function addUserProfile(params: {
       };
     }
 
+    const assignedRoleCode = ROLE_ID_TO_CODE[assignedRoleId] || params.role || 'pdo';
+
     // Catat ke audit trail
     await logActivity({
       user_email: params.created_by || 'system',
@@ -257,7 +311,8 @@ export async function addUserProfile(params: {
       details: {
         target_email: cleanEmail,
         target_name: params.full_name,
-        assigned_role: params.role,
+        assigned_role: assignedRoleCode,
+        assigned_role_id: assignedRoleId,
         notes: params.notes,
       },
     });
@@ -273,15 +328,17 @@ export async function addUserProfile(params: {
  */
 export async function updateUserProfileRole(
   targetEmail: string,
-  newRole: 'superadmin' | 'admin' | 'petugas',
+  newRole: UserRole | 'petugas' | number,
   updatedBy: string,
 ): Promise<{ success: boolean; message?: string }> {
   if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
   try {
+    const roleId = typeof newRole === 'number' ? newRole : (ROLE_CODE_TO_ID[newRole] || 5);
+
     const { data, error } = await supabase
       .from('user_profiles')
       .update({
-        role: newRole,
+        role_id: roleId,
         updated_at: new Date().toISOString(),
       })
       .eq('email', targetEmail)
@@ -300,12 +357,15 @@ export async function updateUserProfileRole(
       };
     }
 
+    const assignedRoleCode = ROLE_ID_TO_CODE[roleId] || 'pdo';
+
     await logActivity({
       user_email: updatedBy,
       action: 'USER_ROLE_CHANGED',
       details: {
         target_email: targetEmail,
-        new_role: newRole,
+        new_role: assignedRoleCode,
+        new_role_id: roleId,
       },
     });
 

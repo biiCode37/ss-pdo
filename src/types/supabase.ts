@@ -54,13 +54,28 @@ export interface RouteSheet {
   updated_at: string;
 }
 
+export type UserRole = 'superadmin' | 'admin' | 'korwil' | 'korlap' | 'pdo';
+
+export interface Role {
+  id: number;
+  uuid: string;
+  code: UserRole;
+  name: string;
+  description?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface UserProfile {
   id?: number;
   uuid?: string;
   email: string;
   full_name: string;
   avatar_url?: string;
-  role: 'superadmin' | 'admin' | 'petugas';
+  role_id: number;
+  roles?: Role;
+  role?: UserRole;
   is_active?: boolean;
   created_by?: string;
   notes?: string;

@@ -526,16 +526,9 @@ function RouteSelectorCardComponent({
           WebkitBackdropFilter: 'blur(12px)',
         }}
       >
-        {/* Left Segment: Clean Unified Route & Date Trigger */}
+        {/* Left Segment: Static Date Display Badge (Informative Only, Not Clickable) */}
         <div
-          role="button"
-          tabIndex={0}
-          onClick={() => setIsSheetOpen(true)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setIsSheetOpen(true);
-            }
-          }}
+          data-testid="date-display-badge"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -544,13 +537,11 @@ function RouteSelectorCardComponent({
             minWidth: 0,
             padding: '5px 8px',
             borderRadius: '9px',
-            cursor: 'pointer',
             background: 'transparent',
-            transition: 'background 0.2s ease',
             userSelect: 'none',
+            cursor: 'default',
           }}
-          title="Klik untuk memilih rute atau tanggal"
-          className="hover:bg-white/5 active:scale-[0.99]"
+          title={TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_DISPLAY_TITLE(displayDateLabel)}
         >
           <Calendar size={14} style={{ color: 'var(--accent-color, #3ECF8E)', flexShrink: 0 }} />
           <span
@@ -566,7 +557,6 @@ function RouteSelectorCardComponent({
           >
             {displayDateLabel}
           </span>
-          <ChevronDown size={13} style={{ color: 'var(--text-secondary)', opacity: 0.65, flexShrink: 0 }} />
         </div>
 
         {/* Right Segment: Exit Accumulation OR Unified Operational Report Pill */}

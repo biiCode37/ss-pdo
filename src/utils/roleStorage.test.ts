@@ -14,19 +14,30 @@ describe('getStoredUserRole', () => {
     localStorage.setItem('PDO_USER_ROLE', 'admin');
     expect(getStoredUserRole()).toBe('admin');
 
-    localStorage.setItem('PDO_USER_ROLE', 'petugas');
-    expect(getStoredUserRole()).toBe('petugas');
+    localStorage.setItem('PDO_USER_ROLE', 'korwil');
+    expect(getStoredUserRole()).toBe('korwil');
+
+    localStorage.setItem('PDO_USER_ROLE', 'korlap');
+    expect(getStoredUserRole()).toBe('korlap');
+
+    localStorage.setItem('PDO_USER_ROLE', 'pdo');
+    expect(getStoredUserRole()).toBe('pdo');
   });
 
-  it('falls back to petugas for arbitrary/garbage stored values', () => {
+  it('migrates legacy petugas role to pdo', () => {
+    localStorage.setItem('PDO_USER_ROLE', 'petugas');
+    expect(getStoredUserRole()).toBe('pdo');
+  });
+
+  it('falls back to pdo for arbitrary/garbage stored values', () => {
     localStorage.setItem('PDO_USER_ROLE', 'hax0r');
-    expect(getStoredUserRole()).toBe('petugas');
+    expect(getStoredUserRole()).toBe('pdo');
 
     localStorage.setItem('PDO_USER_ROLE', '');
-    expect(getStoredUserRole()).toBe('petugas');
+    expect(getStoredUserRole()).toBe('pdo');
   });
 
-  it('falls back to petugas when key missing', () => {
-    expect(getStoredUserRole()).toBe('petugas');
+  it('falls back to pdo when key missing', () => {
+    expect(getStoredUserRole()).toBe('pdo');
   });
 });

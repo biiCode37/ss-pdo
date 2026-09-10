@@ -125,7 +125,8 @@ describe('routeService', () => {
       id: 1,
       email: 'petugas@pusm.id',
       full_name: 'Petugas Resmi',
-      role: 'petugas',
+      role_id: 5,
+      roles: { code: 'pdo' },
       is_active: true,
     };
 
@@ -160,7 +161,8 @@ describe('routeService', () => {
       id: 2,
       email: 'inactive@pusm.id',
       full_name: 'Petugas Nonaktif',
-      role: 'petugas',
+      role_id: 5,
+      roles: { code: 'pdo' },
       is_active: false,
     };
 
@@ -318,8 +320,8 @@ describe('routeService', () => {
 
   it('fetchAllUserProfiles fetches all users ordered by created_at desc', async () => {
     const mockUsers = [
-      { id: 1, email: 'super@pusm.id', role: 'superadmin', full_name: 'Super' },
-      { id: 2, email: 'admin@pusm.id', role: 'admin', full_name: 'Admin' },
+      { id: 1, email: 'super@pusm.id', role_id: 1, roles: { code: 'superadmin' }, full_name: 'Super' },
+      { id: 2, email: 'admin@pusm.id', role_id: 2, roles: { code: 'admin' }, full_name: 'Admin' },
     ];
     const mockSelect = vi.fn().mockReturnValue({
       order: vi.fn().mockResolvedValue({ data: mockUsers, error: null }),
@@ -341,7 +343,7 @@ describe('routeService', () => {
     const result = await addUserProfile({
       email: 'newpetugas@pusm.id',
       full_name: 'Petugas Baru',
-      role: 'petugas',
+      role: 'pdo',
       notes: 'Shift Siang',
       created_by: 'admin@pusm.id',
     });
@@ -351,7 +353,7 @@ describe('routeService', () => {
       expect.arrayContaining([
         expect.objectContaining({
           email: 'newpetugas@pusm.id',
-          role: 'petugas',
+          role_id: 5,
           is_active: true,
         }),
       ])
@@ -375,7 +377,7 @@ describe('routeService', () => {
     expect(result.success).toBe(true);
     expect(mockUpdate).toHaveBeenCalledWith(
       expect.objectContaining({
-        role: 'admin',
+        role_id: 2,
       })
     );
   });

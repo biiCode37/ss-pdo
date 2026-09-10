@@ -25,7 +25,7 @@ import {
   showErrorAlert,
 } from "../utils/alertUtils";
 import { formatUserError } from "../utils/errorFormatter";
-import { getStoredUserRole } from "../utils/roleStorage";
+import { getStoredUserRole, type UserRole } from "../utils/roleStorage";
 import { RoleBadge } from "./RoleBadge";
 import { TEXT_DASHBOARD } from "../constants/texts";
 
@@ -69,7 +69,7 @@ export function ProfileMenuSheet({
     full_name: string;
     email: string;
     avatar_url?: string;
-    role?: 'superadmin' | 'admin' | 'petugas';
+    role?: UserRole | 'petugas';
   }>({
     full_name: localStorage.getItem("PDO_USER_NAME") || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
     email: localStorage.getItem("PDO_USER_EMAIL") || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
@@ -130,11 +130,10 @@ export function ProfileMenuSheet({
 
     if (cachedEmail) {
       verifyUserProfile(cachedEmail).then((res) => {
-        if (res.profile) {
+        if (res.isAllowed && res.profile) {
           const profile = res.profile;
           const effectiveAvatar =
             profile.avatar_url ||
-            cachedAvatar ||
             localStorage.getItem("PDO_USER_AVATAR") ||
             undefined;
 
@@ -142,7 +141,7 @@ export function ProfileMenuSheet({
             full_name: profile.full_name || prev.full_name || cachedEmail,
             email: profile.email || prev.email,
             avatar_url: effectiveAvatar || prev.avatar_url,
-            role: profile.role || prev.role || "petugas",
+            role: profile.role || prev.role || "pdo",
           }));
 
           if (profile.full_name)

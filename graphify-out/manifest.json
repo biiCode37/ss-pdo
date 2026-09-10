@@ -90,13 +90,13 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
-    "mtime": 1789006673.956722,
-    "ast_hash": "3b81b5c094448bca21c4460b75883ff4",
+    "mtime": 1789051782.1652007,
+    "ast_hash": "31bcb9d44952004b25630570ebe31e28",
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
-    "mtime": 1789003412.215746,
-    "ast_hash": "237c6c80332b664011a07696e04416b6",
+    "mtime": 1789053240.0097814,
+    "ast_hash": "f72c7d6d133acd56c850e64961f45e71",
     "semantic_hash": ""
   },
   "src/components/CompletionStatusCard.tsx": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1788966999.7847192,
-    "ast_hash": "85dd276e84ba07d5632729555df46aea",
+    "mtime": 1789052722.190311,
+    "ast_hash": "c6a8f76c9008cee4225f05c197d9d457",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.tsx": {
-    "mtime": 1788965564.067068,
-    "ast_hash": "20586fabd48dbcbfab7cefba7c1129c4",
+    "mtime": 1789052692.7502358,
+    "ast_hash": "82562f1d6598bf006a663de1aae908a1",
     "semantic_hash": ""
   },
   "src/components/ShiftComparisonCard.tsx": {
@@ -630,8 +630,8 @@
     "semantic_hash": ""
   },
   "src/types/supabase.ts": {
-    "mtime": 1788937448.6811554,
-    "ast_hash": "6c6198404e6c7379dd0e20ac62177bf7",
+    "mtime": 1789048918.0411255,
+    "ast_hash": "0a29a14d52f4f7aa8545254ef3b6c63d",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-04-supabase-integration.md": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "src/services/routeService.test.ts": {
-    "mtime": 1788857353.1038442,
-    "ast_hash": "8f08b2bdc972eb16d6715837359ab553",
+    "mtime": 1789049486.3937597,
+    "ast_hash": "bea7cfc2bbed1e8e52c1f149fa72b508",
     "semantic_hash": ""
   },
   "src/components/SwipeableContainer.tsx": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "src/components/ProfileMenuSheet.tsx": {
-    "mtime": 1789003477.886611,
-    "ast_hash": "c0591f2e17988fa46b2308210d5e15c8",
+    "mtime": 1789049424.9088707,
+    "ast_hash": "d4325d779ee728aa89842178795e233e",
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {
@@ -1035,13 +1035,13 @@
     "semantic_hash": ""
   },
   "src/components/RoleBadge.test.tsx": {
-    "mtime": 1787639054.619703,
-    "ast_hash": "fe19f781cecf01f8aff45ebc3701c1ca",
+    "mtime": 1789049282.1027775,
+    "ast_hash": "7d3af48ea6ebea601096a6d1b1772eca",
     "semantic_hash": ""
   },
   "src/components/RoleBadge.tsx": {
-    "mtime": 1787639054.619703,
-    "ast_hash": "e6003ad62722de49d13c5c2f8024e57e",
+    "mtime": 1789049229.7638173,
+    "ast_hash": "86524a7f7879f459ccf3d4ad6453504f",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-23-user-role-management-plan.md": {
@@ -1055,18 +1055,18 @@
     "semantic_hash": ""
   },
   "src/components/UserManagementPage.tsx": {
-    "mtime": 1789003541.3796945,
-    "ast_hash": "a886c861c8783683213ee8a02fc29a74",
+    "mtime": 1789049553.7312245,
+    "ast_hash": "3ec586e7092a018c18d94948565d65dc",
     "semantic_hash": ""
   },
   "src/utils/roleStorage.test.ts": {
-    "mtime": 1787639054.6375396,
-    "ast_hash": "a09cd6b2d449ca36975d55f582048c75",
+    "mtime": 1789048953.4157603,
+    "ast_hash": "73f8efdbeb38fd4a603917f85c03e1ff",
     "semantic_hash": ""
   },
   "src/utils/roleStorage.ts": {
-    "mtime": 1787639054.638649,
-    "ast_hash": "01f7d010706cb5f70c9a5219a4a2b901",
+    "mtime": 1789048937.8379524,
+    "ast_hash": "8368423ea7f558c14d30c5241dd30313",
     "semantic_hash": ""
   },
   "supabase/migrations/20260825000000_security_hardening.sql": {
@@ -1130,8 +1130,8 @@
     "semantic_hash": ""
   },
   "src/services/routes/users.ts": {
-    "mtime": 1788577603.8465285,
-    "ast_hash": "812a20ccd5d40fd187c792be4550b2ea",
+    "mtime": 1789049100.42897,
+    "ast_hash": "0e660b7cff56e32906c19d6581984f67",
     "semantic_hash": ""
   },
   "src/utils/auditLogContext.test.ts": {
@@ -1305,8 +1305,8 @@
     "semantic_hash": ""
   },
   "src/components/RouteSelectorCard.test.tsx": {
-    "mtime": 1788964562.89939,
-    "ast_hash": "262bc52c2ce51e79f7cce44f1064e8ed",
+    "mtime": 1789052737.239819,
+    "ast_hash": "fdf085a590e6d274985c88ac296dbb7c",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_17/AUDIT_BUGS.md": {
@@ -1325,13 +1325,13 @@
     "semantic_hash": ""
   },
   "src/components/RouteOperationalReportCard.test.tsx": {
-    "mtime": 1788960893.671184,
-    "ast_hash": "24d4226b86f8927b5c787eae74e739a3",
+    "mtime": 1789051613.7577639,
+    "ast_hash": "f5de6c0772e62318c4351899c3155d9a",
     "semantic_hash": ""
   },
   "src/components/RouteOperationalReportCard.tsx": {
-    "mtime": 1789006673.9686797,
-    "ast_hash": "bdf82316c7d0d57b5be93676df93757b",
+    "mtime": 1789051604.543064,
+    "ast_hash": "fd5c26b8524d80643037ee3223257336",
     "semantic_hash": ""
   },
   "src/components/WaReportModal.test.tsx": {
@@ -1440,8 +1440,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_dashboard.ts": {
-    "mtime": 1788967361.8644576,
-    "ast_hash": "36e6445a02593a67330647d3bdc77826",
+    "mtime": 1789053218.5036576,
+    "ast_hash": "adeacaab11c5bd250dbf69a9d4375c56",
     "semantic_hash": ""
   },
   "src/constants/texts/text_errors.ts": {
@@ -1465,8 +1465,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1788967373.5394156,
-    "ast_hash": "71347ada0f7f6a2cf3ec610dada7b24c",
+    "mtime": 1789053228.4872856,
+    "ast_hash": "d3f5260266cea49c3ec3f7abf204dc2b",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1600,18 +1600,18 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.test.tsx": {
-    "mtime": 1788937940.093886,
-    "ast_hash": "89649ca0b309845dc7aceb8d416e41bb",
+    "mtime": 1789051938.480857,
+    "ast_hash": "905adf9d2acbf6bc091d572c41fa348d",
     "semantic_hash": ""
   },
   "src/components/fleetStatus/FleetStatusModal.test.tsx": {
-    "mtime": 1788960888.258331,
-    "ast_hash": "b701d9c41f87a09d9989e244ae0d3f47",
+    "mtime": 1789051625.140476,
+    "ast_hash": "efd1c1c497f72f3666eed235b8afdcc2",
     "semantic_hash": ""
   },
   "src/components/fleetStatus/FleetStatusModal.tsx": {
-    "mtime": 1789003434.3995945,
-    "ast_hash": "5e1b086c11e28d954a2ea55e74aaa6a7",
+    "mtime": 1789051585.2071853,
+    "ast_hash": "ea3ec29778d7a48611933d7a206cff3f",
     "semantic_hash": ""
   },
   "src/components/fleetStatus/ShiftConfirmationAlertBar.test.tsx": {
@@ -1680,13 +1680,13 @@
     "semantic_hash": ""
   },
   "src/components/UserProfileHeader.test.tsx": {
-    "mtime": 1788965570.9134052,
-    "ast_hash": "26a42218be81c00051774988797451a6",
+    "mtime": 1789049995.496457,
+    "ast_hash": "048d3e190a3c8ab4d1869f54a2002335",
     "semantic_hash": ""
   },
   "src/components/UserProfileHeader.tsx": {
-    "mtime": 1788965878.8630369,
-    "ast_hash": "55622a61073a831a9254471565957d0c",
+    "mtime": 1789049928.6656024,
+    "ast_hash": "605cc59b3995318d19ed3545ef183451",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_28/AUDIT_BUGS.md": {
@@ -1700,8 +1700,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_fleet_status.ts": {
-    "mtime": 1788967366.2893465,
-    "ast_hash": "fecb1a1464dc35195f151e0a66fce430",
+    "mtime": 1789051516.9524467,
+    "ast_hash": "7bae8b1e72375a17e556d4c7ec15f518",
     "semantic_hash": ""
   },
   "src/constants/texts/text_unit_detail.ts": {
@@ -1710,8 +1710,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_user_management.ts": {
-    "mtime": 1788966363.7525423,
-    "ast_hash": "3d219c4c76c8306ec9bbd07fd6d0a52d",
+    "mtime": 1789049111.0077014,
+    "ast_hash": "a1d83d122ab4d0e3e5ab4660ee1d313e",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_29/AUDIT_BUGS.md": {
@@ -1742,6 +1742,31 @@
   "refactor-ss-pdo/refact_31/REPAIR_REPORT.md": {
     "mtime": 1789006683.8000565,
     "ast_hash": "3fa683f391061b13ebe4192880c5c73b",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260910000001_create_roles_master.sql": {
+    "mtime": 1789048500.5240061,
+    "ast_hash": "633eecd285bb5ab01b369faf7a700863",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_32/AUDIT_BUGS.md": {
+    "mtime": 1789006865.4371858,
+    "ast_hash": "8ce1eb356f173f88269ec4f4f01438da",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_32/REPAIR_REPORT.md": {
+    "mtime": 1789006871.0627604,
+    "ast_hash": "54411be51bdf77bc2d5a90faf106861f",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260910000002_drop_legacy_role_column.sql": {
+    "mtime": 1789048850.3238175,
+    "ast_hash": "28d2d9532ae69317f0e4c2d86b8a7dfd",
+    "semantic_hash": ""
+  },
+  "src/components/BusList.test.tsx": {
+    "mtime": 1789053248.604091,
+    "ast_hash": "a5bf45825e7a3161937c64680101fec7",
     "semantic_hash": ""
   }
 }

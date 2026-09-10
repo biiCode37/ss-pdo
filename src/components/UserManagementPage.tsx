@@ -7,7 +7,7 @@ import {
   RefreshCw,
   Clock,
 } from 'lucide-react';
-import type { UserProfile } from '../types/supabase';
+import type { UserProfile, UserRole } from '../types/supabase';
 import {
   fetchAllUserProfiles,
   addUserProfile,
@@ -24,11 +24,11 @@ import { TEXT_USER_MANAGEMENT } from '../constants/texts';
 interface UserManagementPageProps {
   onBack: () => void;
   currentUserEmail: string;
-  currentUserRole: 'superadmin' | 'admin' | 'petugas';
+  currentUserRole: UserRole | 'petugas';
   isDarkMode?: boolean;
 }
 
-type FilterTab = 'all' | 'superadmin' | 'admin' | 'petugas' | 'inactive';
+type FilterTab = 'all' | 'superadmin' | 'admin' | 'korwil' | 'korlap' | 'pdo' | 'petugas' | 'inactive';
 
 const UserCardAvatar: React.FC<{
   user: UserProfile;
@@ -152,26 +152,16 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       // Tab filter
       if (activeTab === 'superadmin' && u.role !== 'superadmin') return false;
       if (activeTab === 'admin' && u.role !== 'admin') return false;
-      if (activeTab === 'petugas' && u.role !== 'petugas') return false;
+      if (activeTab === 'korwil' && u.role !== 'korwil') return false;
+      if (activeTab === 'korlap' && u.role !== 'korlap') return false;
+      if ((activeTab === 'pdo' || activeTab === 'petugas') && u.role !== 'pdo') return false;
       if (activeTab === 'inactive' && u.is_active !== false) return false;
 
-      // Role isolation: Admin hanya bisa melihat petugas dan dirinya sendiri
+      // Role isolation: Admin hanya bisa melihat petugas/lapangan dan dirinya sendiri
       if (currentUserRole === 'admin') {
         const isSelf = u.email.toLowerCase() === currentUserEmail.toLowerCase();
-        const isPetugas = u.role === 'petugas';
-        if (!isSelf && !isPetugas) return false;
-      }
-      // Role Tab Filter
-      if (activeTab === 'all') {
-        // Tampilkan semua
-      } else if (activeTab === 'inactive') {
-        if (u.is_active !== false) return false;
-      } else if (activeTab === 'superadmin' && u.role !== 'superadmin') {
-        return false;
-      } else if (activeTab === 'admin' && u.role !== 'admin') {
-        return false;
-      } else if (activeTab === 'petugas' && u.role !== 'petugas') {
-        return false;
+        const isOperational = u.role === 'pdo' || u.role === 'korlap' || u.role === 'korwil';
+        if (!isSelf && !isOperational) return false;
       }
 
       // Search Query Filter
@@ -183,16 +173,16 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
         (u.notes && u.notes.toLowerCase().includes(q))
       );
     });
-  }, [users, activeTab, searchQuery]);
+  }, [users, activeTab, searchQuery, currentUserRole, currentUserEmail]);
 
   // Counts per Category Tab
   const counts = useMemo(() => {
-    const isPetugas = currentUserRole === 'petugas';
-    const base = isPetugas
+    const isPdoOrPetugas = currentUserRole === 'pdo' || currentUserRole === 'petugas';
+    const base = isPdoOrPetugas
       ? users.filter(
           (u) =>
             u.email.toLowerCase() === currentUserEmail.toLowerCase() ||
-            u.role === 'petugas'
+            u.role === 'pdo'
         )
       : users;
 
@@ -200,7 +190,10 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       all: base.length,
       superadmin: base.filter((u) => u.role === 'superadmin').length,
       admin: base.filter((u) => u.role === 'admin').length,
-      petugas: base.filter((u) => u.role === 'petugas').length,
+      korwil: base.filter((u) => u.role === 'korwil').length,
+      korlap: base.filter((u) => u.role === 'korlap').length,
+      pdo: base.filter((u) => u.role === 'pdo').length,
+      petugas: base.filter((u) => u.role === 'pdo').length,
       inactive: base.filter((u) => u.is_active === false).length,
       active: base.filter((u) => u.is_active !== false).length,
     };
@@ -221,12 +214,16 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
     const isSuper = currentUserRole === 'superadmin';
     const roleOptionsHtml = isSuper
       ? `
-        <option value="petugas">${TEXT_USER_MANAGEMENT.ROLES.PETUGAS_OPTION}</option>
+        <option value="pdo">${TEXT_USER_MANAGEMENT.ROLES.PDO_OPTION}</option>
+        <option value="korlap">${TEXT_USER_MANAGEMENT.ROLES.KORLAP_OPTION}</option>
+        <option value="korwil">${TEXT_USER_MANAGEMENT.ROLES.KORWIL_OPTION}</option>
         <option value="admin">${TEXT_USER_MANAGEMENT.ROLES.ADMIN_OPTION}</option>
         <option value="superadmin">${TEXT_USER_MANAGEMENT.ROLES.SUPERADMIN_OPTION}</option>
       `
       : `
-        <option value="petugas">${TEXT_USER_MANAGEMENT.ROLES.PETUGAS_OPTION}</option>
+        <option value="pdo">${TEXT_USER_MANAGEMENT.ROLES.PDO_OPTION}</option>
+        <option value="korlap">${TEXT_USER_MANAGEMENT.ROLES.KORLAP_OPTION}</option>
+        <option value="korwil">${TEXT_USER_MANAGEMENT.ROLES.KORWIL_OPTION}</option>
       `;
 
     const { value: formValues } = await pdoSwal.fire({
@@ -283,7 +280,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       const res = await addUserProfile({
         email: formValues.email,
         full_name: formValues.full_name || undefined,
-        role: formValues.role || 'petugas',
+        role: formValues.role || 'pdo',
         notes: formValues.notes || undefined,
         created_by: currentUserEmail,
       });
@@ -316,7 +313,9 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
         <div style="text-align:left;font-size:13px;margin-top:6px;">
           <p style="margin:0 0 10px;color:var(--text-secondary);font-size:12.5px;">${TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.PROMPT(escapeHtml(user.email))}</p>
           <select id="swal-new-role" class="pdo-swal-select">
-            <option value="petugas" ${user.role === 'petugas' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.PETUGAS_OPTION}</option>
+            <option value="pdo" ${user.role === 'pdo' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.PDO_OPTION}</option>
+            <option value="korlap" ${user.role === 'korlap' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.KORLAP_OPTION}</option>
+            <option value="korwil" ${user.role === 'korwil' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.KORWIL_OPTION}</option>
             <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.ADMIN_OPTION}</option>
             <option value="superadmin" ${user.role === 'superadmin' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.SUPERADMIN_OPTION}</option>
           </select>
@@ -645,7 +644,9 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
                     { key: 'admin', label: TEXT_USER_MANAGEMENT.TABS.ADMIN, count: counts.admin },
                   ]
                 : []),
-              { key: 'petugas', label: TEXT_USER_MANAGEMENT.TABS.PETUGAS, count: counts.petugas },
+              { key: 'korwil', label: TEXT_USER_MANAGEMENT.TABS.KORWIL, count: counts.korwil },
+              { key: 'korlap', label: TEXT_USER_MANAGEMENT.TABS.KORLAP, count: counts.korlap },
+              { key: 'pdo', label: TEXT_USER_MANAGEMENT.TABS.PDO, count: counts.pdo },
               { key: 'inactive', label: TEXT_USER_MANAGEMENT.TABS.INACTIVE, count: counts.inactive },
             ].map((tab) => {
               const isActive = activeTab === tab.key;
@@ -839,7 +840,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
 
                     {/* Top-Right: Role Badge */}
                     <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                      <RoleBadge role={user.role || 'petugas'} />
+                      <RoleBadge role={user.role || 'pdo'} />
                     </div>
                   </div>
 

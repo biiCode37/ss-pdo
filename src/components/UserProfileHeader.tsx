@@ -1,24 +1,49 @@
 import { useState, useEffect, memo } from "react";
 import { User } from "lucide-react";
-import { TEXT_DASHBOARD } from "../constants/texts";
+import { TEXT_DASHBOARD, TEXT_USER_MANAGEMENT } from "../constants/texts";
+import { getStoredUserRole, type UserRole } from "../utils/roleStorage";
 
 interface UserProfileHeaderProps {
   onOpenProfile: () => void;
 }
 
+const ROLE_DISPLAY_CONFIG: Record<
+  UserRole,
+  { label: string; className: string }
+> = {
+  superadmin: {
+    label: TEXT_USER_MANAGEMENT.TABS.SUPERADMIN,
+    className: "header-role-superadmin",
+  },
+  admin: {
+    label: TEXT_USER_MANAGEMENT.TABS.ADMIN,
+    className: "header-role-admin",
+  },
+  korwil: {
+    label: TEXT_USER_MANAGEMENT.TABS.KORWIL,
+    className: "header-role-korwil",
+  },
+  korlap: {
+    label: TEXT_USER_MANAGEMENT.TABS.KORLAP,
+    className: "header-role-korlap",
+  },
+  pdo: {
+    label: TEXT_USER_MANAGEMENT.TABS.PDO,
+    className: "header-role-pdo",
+  },
+};
+
 function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
   const [avatarFailed, setAvatarFailed] = useState(false);
   const [profile, setProfile] = useState<{
     fullName: string;
-    email: string;
+    role: UserRole;
     avatarUrl?: string;
   }>({
     fullName:
       localStorage.getItem("PDO_USER_NAME")?.trim() ||
       TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
-    email:
-      localStorage.getItem("PDO_USER_EMAIL")?.trim() ||
-      TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
+    role: getStoredUserRole(),
     avatarUrl: localStorage.getItem("PDO_USER_AVATAR") || undefined,
   });
 
@@ -32,9 +57,7 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
         fullName:
           localStorage.getItem("PDO_USER_NAME")?.trim() ||
           TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
-        email:
-          localStorage.getItem("PDO_USER_EMAIL")?.trim() ||
-          TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
+        role: getStoredUserRole(),
         avatarUrl: freshAvatar,
       };
     });
@@ -142,23 +165,30 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
         >
           {profile.fullName}
         </span>
-        <span
-          style={{
-            fontSize: "11px",
-            color: "var(--text-secondary)",
-            fontWeight: 500,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            lineHeight: 1.25,
-            marginTop: "1.5px",
-            textAlign: "left",
-            display: "block",
-            width: "100%",
-          }}
-        >
-          {profile.email}
-        </span>
+        {(() => {
+          const roleConfig =
+            ROLE_DISPLAY_CONFIG[profile.role] || ROLE_DISPLAY_CONFIG.pdo;
+          return (
+            <span
+              className={`header-profile-role ${roleConfig.className}`}
+              style={{
+                fontSize: "11px",
+                fontWeight: 600,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                lineHeight: 1.25,
+                marginTop: "1.5px",
+                textAlign: "left",
+                display: "block",
+                width: "100%",
+                letterSpacing: "0.2px",
+              }}
+            >
+              {roleConfig.label}
+            </span>
+          );
+        })()}
       </div>
     </div>
   );

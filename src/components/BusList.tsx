@@ -9,6 +9,8 @@ import {
   CheckCircle2,
   Loader2,
   ChevronDown,
+  AlertTriangle,
+  ArrowRight,
 } from "lucide-react";
 import {
   showSuccessToast,
@@ -20,8 +22,12 @@ import {
 import { getSatsetMode } from "../utils/modals/busInputModal";
 import { BusCardSkeleton } from "./Skeletons";
 import { detectTargetTrip } from "../utils/unitAnalytics";
-import { filterBusesForKmCopy } from "../utils/keteranganUtils";
-import { TEXT_DASHBOARD } from "../constants/texts";
+import {
+  filterBusesForKmCopy,
+  splitShiftKeterangan,
+  cleanShiftNote,
+} from "../utils/keteranganUtils";
+import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "../constants/texts";
 
 import type { SyncItem } from "../hooks/useOfflineSync";
 
@@ -43,6 +49,9 @@ interface Props {
     endYear?: number;
   } | null;
   onExitAccumulation?: () => void;
+  isShiftConfirmed?: boolean;
+  activeShift?: 1 | 2;
+  onOpenFleetStatus?: () => void;
 }
 
 function BusListComponent({
@@ -56,6 +65,9 @@ function BusListComponent({
   onUpdateBus,
   accRange,
   onExitAccumulation,
+  isShiftConfirmed,
+  activeShift = 1,
+  onOpenFleetStatus,
 }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
@@ -68,6 +80,11 @@ function BusListComponent({
     if (!data || data.length === 0) return;
     if (tabName === "AKUMULASI") {
       showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
+      return;
+    }
+    if (isShiftConfirmed === false) {
+      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
+      if (onOpenFleetStatus) onOpenFleetStatus();
       return;
     }
 
@@ -180,6 +197,11 @@ function BusListComponent({
       showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
       return;
     }
+    if (isShiftConfirmed === false) {
+      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
+      if (onOpenFleetStatus) onOpenFleetStatus();
+      return;
+    }
 
     if (availableKmS1Buses.length === 0) {
       if (skippedWithNotesCount > 0) {
@@ -275,20 +297,69 @@ function BusListComponent({
     { id: "kmAkhir2", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AKHIR_2 },
   ];
 
-  // Logic selesai bergantung pada kategori yang aktif
+  // Menentukan apakah unit diperbolehkan untuk diinput datanya berdasarkan status armada (SGO)
+  const isUnitAllowedForInput = useCallback(
+    (bus: BusData) => {
+      const { s1, s2 } = splitShiftKeterangan(bus.keterangan);
+      const isSgoS1 = !cleanShiftNote(s1);
+      const isSgoS2 = !cleanShiftNote(s2);
+
+      // Kategori khusus Shift 1: hanya unit yang berstatus SGO di Shift 1
+      if (
+        activeCategory === "toaShift1" ||
+        activeCategory === "kmAwal1" ||
+        activeCategory === "kmAkhir1"
+      ) {
+        return isSgoS1;
+      }
+
+      // Kategori khusus Shift 2: hanya unit yang berstatus SGO di Shift 2
+      if (
+        activeCategory === "toaShift2" ||
+        activeCategory === "kmAwal2" ||
+        activeCategory === "kmAkhir2"
+      ) {
+        return isSgoS2;
+      }
+
+      // Kategori Trip: unit yang beroperasi minimal di salah satu shift (S1 atau S2)
+      if (activeCategory === "trip") {
+        return isSgoS1 || isSgoS2;
+      }
+
+      // Kategori ALL (Progres Harian): unit yang beroperasi minimal di salah satu shift
+      return isSgoS1 || isSgoS2;
+    },
+    [activeCategory],
+  );
+
+  // Logic selesai bergantung pada kategori yang aktif dan status operasional unit
   const isBusFilled = useCallback(
     (bus: BusData) => {
       const hasValue = (val: any) =>
         val !== undefined && val !== null && String(val).trim() !== "";
+
+      const { s1, s2 } = splitShiftKeterangan(bus.keterangan);
+      const isSgoS1 = !cleanShiftNote(s1);
+      const isSgoS2 = !cleanShiftNote(s2);
+
       if (activeCategory === "ALL") {
-        return !!(
-          hasValue(bus.toaShift1) &&
-          hasValue(bus.totalToa) &&
-          hasValue(bus.kmAwal1) &&
-          hasValue(bus.kmAkhir1) &&
-          hasValue(bus.kmAwal2) &&
-          hasValue(bus.kmAkhir2)
-        );
+        // Jika unit non-operasional di kedua shift, unit tidak perlu diisi
+        if (!isSgoS1 && !isSgoS2) return true;
+
+        const s1Filled =
+          !isSgoS1 ||
+          (hasValue(bus.toaShift1) &&
+            hasValue(bus.kmAwal1) &&
+            hasValue(bus.kmAkhir1));
+
+        const s2Filled =
+          !isSgoS2 ||
+          (hasValue(bus.totalToa) &&
+            hasValue(bus.kmAwal2) &&
+            hasValue(bus.kmAkhir2));
+
+        return s1Filled && s2Filled;
       } else if (activeCategory === "trip") {
         return hasValue(bus.tripPergi) || hasValue(bus.tripPulang);
       } else {
@@ -299,21 +370,30 @@ function BusListComponent({
   );
 
   const { filledCount, totalCount, progressPercent } = useMemo(() => {
-    const filled = data.filter(isBusFilled).length;
-    const total = data.length;
+    // Progres bar hanya menghitung unit yang diperbolehkan untuk diinput datanya (unit SGO / operasional)
+    const allowedBuses = data.filter(isUnitAllowedForInput);
+    const filled = allowedBuses.filter(isBusFilled).length;
+    const total = allowedBuses.length;
     const percent = total === 0 ? 0 : Math.round((filled / total) * 100);
     return { filledCount: filled, totalCount: total, progressPercent: percent };
-  }, [data, isBusFilled]);
+  }, [data, isUnitAllowedForInput, isBusFilled]);
 
   const filteredData = useMemo(() => {
     let result = data;
 
     if (showOnlyUnfinished) {
-      result = result.filter((bus) => !isBusFilled(bus));
+      result = result.filter(
+        (bus) => isUnitAllowedForInput(bus) && !isBusFilled(bus),
+      );
     }
 
-    // Sort: Unfinished at the top
+    // Sort: Unfinished (unit operasional aktif belum lengkap) di atas, lalu yang selesai, lalu yang non-SGO
     result = [...result].sort((a, b) => {
+      const aAllowed = isUnitAllowedForInput(a);
+      const bAllowed = isUnitAllowedForInput(b);
+      if (aAllowed !== bAllowed) {
+        return aAllowed ? -1 : 1;
+      }
       const aFilled = isBusFilled(a);
       const bFilled = isBusFilled(b);
       if (aFilled === bFilled) return 0;
@@ -328,7 +408,7 @@ function BusListComponent({
     }
 
     return result;
-  }, [data, searchQuery, showOnlyUnfinished, isBusFilled]);
+  }, [data, searchQuery, showOnlyUnfinished, isUnitAllowedForInput, isBusFilled]);
 
   // Handler Auto-Next Bus ketika Mode Satset aktif
   const handleSaveAndNext = useCallback(
@@ -433,50 +513,110 @@ function BusListComponent({
         )}
 
         {/* Hairline Progress Indicator (Ultra-clean, saves vertical space) */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "2px 4px 6px 4px",
-            fontSize: "12px",
-            color: "var(--text-secondary)",
-          }}
-        >
-          <span style={{ fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.1px" }}>
-            {activeCategory === "ALL"
-              ? "Progres Harian"
-              : `Kolom: ${categories.find((c) => c.id === activeCategory)?.label || activeCategory}`}
-          </span>
-          <span className="tabular-nums" style={{ fontSize: "11.5px" }}>
-            <strong style={{ color: filledCount === totalCount ? "var(--success-color)" : "var(--text-primary)" }}>
-              {filledCount}
-            </strong>
-            /{totalCount} Unit ({progressPercent}%)
-          </span>
-        </div>
+        {(isShiftConfirmed || tabName === "AKUMULASI") && (
+          <div data-testid="daily-progress-container">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "2px 4px 6px 4px",
+                fontSize: "12px",
+                color: "var(--text-secondary)",
+              }}
+            >
+              <span style={{ fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.1px" }}>
+                {activeCategory === "ALL"
+                  ? TEXT_DASHBOARD.BUS_LIST.DAILY_PROGRESS
+                  : TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX(categories.find((c) => c.id === activeCategory)?.label || activeCategory)}
+              </span>
+              <span className="tabular-nums" style={{ fontSize: "11.5px" }}>
+                <strong style={{ color: filledCount === totalCount ? "var(--success-color)" : "var(--text-primary)" }}>
+                  {filledCount}
+                </strong>
+                /{totalCount} Unit ({progressPercent}%)
+              </span>
+            </div>
 
-        {/* 3px Hairline Progress Bar */}
-        <div
-          style={{
-            height: "3px",
-            background: "rgba(255, 255, 255, 0.08)",
-            borderRadius: "2px",
-            overflow: "hidden",
-            marginBottom: "10px",
-          }}
-        >
+            {/* 3px Hairline Progress Bar */}
+            <div
+              style={{
+                height: "3px",
+                background: "rgba(255, 255, 255, 0.08)",
+                borderRadius: "2px",
+                overflow: "hidden",
+                marginBottom: "10px",
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  background: filledCount === totalCount ? "var(--success-color)" : "var(--accent-color)",
+                  width: `${progressPercent}%`,
+                  transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Banner Peringatan Status Armada Belum Dikonfirmasi */}
+        {!isShiftConfirmed && tabName !== "AKUMULASI" && (
           <div
+            className="shift-lock-banner"
             style={{
-              height: "100%",
-              background: filledCount === totalCount ? "var(--success-color)" : "var(--accent-color)",
-              width: `${progressPercent}%`,
-              transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "8px",
+              padding: "10px 14px",
+              borderRadius: "12px",
+              background: "rgba(245, 158, 11, 0.12)",
+              border: "1px solid rgba(245, 158, 11, 0.35)",
+              color: "var(--warning-text, #f59e0b)",
+              marginBottom: "10px",
             }}
-          />
-        </div>
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                flex: "1 1 auto",
+              }}
+            >
+              <AlertTriangle size={16} style={{ flexShrink: 0 }} />
+              <span style={{ fontSize: "12px", fontWeight: 600, lineHeight: 1.35 }}>
+                {TEXT_FLEET_STATUS.MODAL.LOCK_BANNER_MESSAGE(activeShift || 1)}
+              </span>
+            </div>
+            {onOpenFleetStatus && (
+              <button
+                type="button"
+                onClick={onOpenFleetStatus}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "5px 12px",
+                  borderRadius: "8px",
+                  background: "rgba(245, 158, 11, 0.22)",
+                  border: "1px solid rgba(245, 158, 11, 0.45)",
+                  color: "inherit",
+                  fontSize: "11.5px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <span>{TEXT_FLEET_STATUS.ALERT_BAR.ACTION_BTN}</span>
+                <ArrowRight size={13} />
+              </button>
+            )}
+          </div>
+        )}
 
-        {/* Controls Container: Row 1 (Fokus Kolom + Set Jumlah Trip) & Row 2 (Search + Filter) */}
         {/* Controls Container: Row 1 (Fokus Kolom + Set Jumlah Trip) & Row 2 (Search + Filter) */}
         <div style={{ display: "flex", flexDirection: "column", gap: "clamp(6px, 1.5vw, 8px)" }}>
           {/* Row 1: Set Jumlah Trip (Kiri) & Fokus Kolom (Kanan) */}
@@ -721,6 +861,9 @@ function BusListComponent({
                     : undefined
                 }
                 onSaveAndNext={handleSaveAndNext}
+                isShiftConfirmed={isShiftConfirmed}
+                activeShift={activeShift}
+                onOpenFleetStatus={onOpenFleetStatus}
               />
             ))
           ) : (

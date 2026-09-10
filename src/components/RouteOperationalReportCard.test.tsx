@@ -165,9 +165,7 @@ describe('RouteOperationalReportCard Component', () => {
     expect(onCloseMock).toHaveBeenCalled();
   });
 
-  it('renders clean headway labels without duplicate (Menit) and supports segmented navigation', async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
+  it('renders clean headway labels without duplicate (Menit) and acts as independent modal', async () => {
     await act(async () => {
       root.render(
         <RouteOperationalReportCard
@@ -176,7 +174,6 @@ describe('RouteOperationalReportCard Component', () => {
           routeId={2}
           routeCode="JAK.15"
           selectedDate="2026-09-02"
-          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
@@ -186,19 +183,10 @@ describe('RouteOperationalReportCard Component', () => {
     expect(container.textContent).toContain('Headway Terlama (Menit)');
     expect(container.textContent).not.toContain('(Menit) (Menit)');
 
-    // Verify Section 1 does not contain redundant button
-    expect(container.textContent).not.toContain('Atur Unit Armada →');
-
-    // Verify Segmented Control button triggers onOpenFleetStatus
+    // Verify modal is independent: does not contain mixed segmented control
     const fleetTabBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Status Armada')
+      b => b.textContent?.trim() === 'Status Armada'
     );
-    expect(fleetTabBtn).toBeDefined();
-
-    await act(async () => {
-      fleetTabBtn?.click();
-    });
-
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
+    expect(fleetTabBtn).toBeUndefined();
   });
 });

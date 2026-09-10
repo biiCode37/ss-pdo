@@ -14,6 +14,9 @@ export const TEXT_USER_MANAGEMENT = {
     ALL: 'Semua',
     SUPERADMIN: 'Superadmin',
     ADMIN: 'Admin',
+    KORWIL: 'Korwil',
+    KORLAP: 'Korlap',
+    PDO: 'PDO',
     PETUGAS: 'Petugas',
     INACTIVE: 'Nonaktif',
   },
@@ -32,8 +35,11 @@ export const TEXT_USER_MANAGEMENT = {
   },
   ROLES: {
     SUPERADMIN_OPTION: 'Superadmin (Kuasa Penuh)',
-    ADMIN_OPTION: 'Admin (Kelola Petugas & Rute)',
-    PETUGAS_OPTION: 'Petugas Operasional (Input Data Saja)',
+    ADMIN_OPTION: 'Admin (Kelola Operasional & Rute)',
+    KORWIL_OPTION: 'Koordinator Wilayah (Monitoring Wilayah)',
+    KORLAP_OPTION: 'Koordinator Lapangan (Pengawas Lapangan)',
+    PDO_OPTION: 'Petugas Data Operasional (Input Data Harian)',
+    PETUGAS_OPTION: 'Petugas Data Operasional (Input Data Harian)',
   },
   MODAL_ADD: {
     TITLE: 'Tambah Pengguna Baru',

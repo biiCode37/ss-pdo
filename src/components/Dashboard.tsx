@@ -605,6 +605,32 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     };
   }, [matchedRoute?.id, operationalReportDate]);
 
+  const isPastDate = useMemo(() => {
+    const todayStr = new Date().toISOString().split("T")[0];
+    return operationalReportDate < todayStr;
+  }, [operationalReportDate]);
+
+  const isShiftConfirmed = useMemo(() => {
+    if (selectedTab === "AKUMULASI") return true;
+    if (confirmedShifts[activeShift]) return true;
+
+    // Jika tanggal lampau dan data bus di sheet sudah ada isinya (keterangan/TOA/KM),
+    // anggap status armada sudah ditentukan agar tidak terjadi false lockout
+    if (isPastDate && busData && busData.length > 0) {
+      const hasAnyData = busData.some((b) => {
+        const ket = (b.keterangan || "").trim();
+        const hasToa =
+          Boolean(b.totalToa && b.totalToa !== "0") ||
+          Boolean(b.toaShift1 && b.toaShift1 !== "0");
+        const hasKm = Boolean(b.kmAkhir1 || b.kmAkhir2);
+        return ket.length > 0 || hasToa || hasKm;
+      });
+      if (hasAnyData) return true;
+    }
+
+    return false;
+  }, [selectedTab, confirmedShifts, activeShift, isPastDate, busData]);
+
   const handleConfirmFleetStatus = async (
     shift: 1 | 2,
     statusMap: Map<number, { s1: string; s2: string }>
@@ -857,8 +883,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                 cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
               }}
-              title={`Kode Rute Aktif: ${activeRouteCode}. Klik untuk memilih rute.`}
-              aria-label={`Rute aktif: ${activeRouteCode}`}
+              title={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_TITLE(activeRouteCode)}
+              aria-label={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_ARIA(activeRouteCode)}
               data-testid="active-route-badge-btn"
             >
               <MapPin size={13} style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }} />
@@ -1068,6 +1094,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               onUpdateBus={handleUpdateBus}
               accRange={accRangeDetails}
               onExitAccumulation={() => handleExitAccumulation()}
+              isShiftConfirmed={isShiftConfirmed}
+              activeShift={activeShift}
+              onOpenFleetStatus={() => setIsFleetModalOpen(true)}
             />
           </div>
 
@@ -1129,10 +1158,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           defaultRenops={dynamicRenops.renops}
           userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
           onStatusChange={setOperationalReportStatus}
-          onOpenFleetStatus={() => {
-            setIsReportModalOpen(false);
-            setIsFleetModalOpen(true);
-          }}
         />
       )}
 
@@ -1146,10 +1171,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           dayLabel={dynamicRenops.label}
           buses={busData}
           initialShift={activeShift}
-          onNavigateToReport={() => {
-            setIsFleetModalOpen(false);
-            setIsReportModalOpen(true);
-          }}
           onConfirmStatus={handleConfirmFleetStatus}
         />
       )}

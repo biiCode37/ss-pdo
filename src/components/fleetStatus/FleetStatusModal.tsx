@@ -21,7 +21,6 @@ export interface FleetStatusModalProps {
   dayLabel?: string;
   buses: BusData[];
   initialShift?: 1 | 2;
-  onNavigateToReport?: () => void;
   onConfirmStatus: (
     shift: 1 | 2,
     statusMap: Map<number, { s1: string; s2: string }>
@@ -37,7 +36,6 @@ function FleetStatusModalComponent({
   dayLabel,
   buses,
   initialShift = 1,
-  onNavigateToReport,
   onConfirmStatus,
 }: FleetStatusModalProps) {
   useMobileBackHandler({
@@ -141,11 +139,7 @@ function FleetStatusModalComponent({
     try {
       setIsSaving(true);
       await onConfirmStatus(currentShift, unitMap);
-      if (onNavigateToReport) {
-        onNavigateToReport();
-      } else {
-        onClose();
-      }
+      onClose();
     } catch (err) {
       console.warn('[FleetStatusModal] Gagal menyimpan status armada:', err);
     } finally {
@@ -281,72 +275,6 @@ function FleetStatusModalComponent({
             <X size={20} />
           </button>
         </div>
-
-        {/* Segmented Control: Status Armada vs Laporan Operasional */}
-        {onNavigateToReport && (
-          <div
-            style={{
-              padding: '10px 20px',
-              borderBottom: '1px solid var(--border-color, rgba(255, 255, 255, 0.06))',
-              background: 'rgba(255, 255, 255, 0.01)',
-            }}
-          >
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '6px',
-                padding: '4px',
-                borderRadius: '12px',
-                background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
-                border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
-              }}
-            >
-              <button
-                type="button"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                  padding: '7px 12px',
-                  borderRadius: '9px',
-                  border: '1px solid var(--border-color, rgba(255, 255, 255, 0.12))',
-                  background: 'var(--bg-secondary, rgba(255, 255, 255, 0.1))',
-                  color: 'var(--text-primary)',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'default',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                }}
-              >
-                <span>{TEXT_FLEET_STATUS.MODAL.SEGMENT_FLEET}</span>
-              </button>
-              <button
-                type="button"
-                onClick={onNavigateToReport}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                  padding: '7px 12px',
-                  borderRadius: '9px',
-                  border: 'none',
-                  background: 'transparent',
-                  color: 'var(--text-secondary)',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
-                title={TEXT_FLEET_STATUS.MODAL.REPORT_TITLE}
-              >
-                <span>{TEXT_FLEET_STATUS.MODAL.SEGMENT_REPORT}</span>
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Shift Switcher & Brush Toolbar */}
         <div
@@ -701,11 +629,7 @@ function FleetStatusModalComponent({
                 <span>{TEXT_FLEET_STATUS.MODAL.SAVING}</span>
               </>
             ) : (
-              <span>
-                {onNavigateToReport
-                  ? TEXT_FLEET_STATUS.MODAL.CONFIRM_CONTINUE_REPORT
-                  : TEXT_FLEET_STATUS.MODAL.CONFIRM_APPLY_SHIFT(currentShift)}
-              </span>
+              <span>{TEXT_FLEET_STATUS.MODAL.CONFIRM_APPLY_SHIFT(currentShift)}</span>
             )}
           </button>
         </div>

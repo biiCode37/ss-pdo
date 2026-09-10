@@ -17,7 +17,8 @@ import {
   pdoSwal,
 } from "../utils/alertUtils";
 import { getSatsetMode } from "../utils/modals/busInputModal";
-import { TEXT_DASHBOARD } from "../constants/texts";
+import { splitShiftKeterangan } from "../utils/keteranganUtils";
+import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "../constants/texts";
 import {
   AlertTriangle,
   Navigation,
@@ -38,6 +39,9 @@ interface Props {
   targetTrip?: { pergi: number; pulang: number } | null;
   onUpdateBus?: (updates: Partial<BusData>) => void;
   onSaveAndNext?: (savedBus: BusData) => void;
+  isShiftConfirmed?: boolean;
+  activeShift?: 1 | 2;
+  onOpenFleetStatus?: () => void;
 }
 
 function BusCardComponent({
@@ -51,6 +55,9 @@ function BusCardComponent({
   targetTrip,
   onUpdateBus,
   onSaveAndNext,
+  isShiftConfirmed,
+  activeShift = 1,
+  onOpenFleetStatus,
 }: Props) {
   const [formData, setFormData] = useState<Partial<BusData>>({
     toaShift1: bus.toaShift1 || "",
@@ -203,6 +210,18 @@ function BusCardComponent({
     }
   };
 
+  const { s1: shift1Status, s2: shift2Status } = splitShiftKeterangan(
+    formData.keterangan || bus.keterangan || ""
+  );
+
+  const relevantShift: 1 | 2 =
+    activeCategory.includes("2") ? 2 :
+    activeCategory.includes("1") ? 1 :
+    (activeShift || 1);
+
+  const activeShiftStatus = relevantShift === 1 ? shift1Status : shift2Status;
+  const isNonSgo = Boolean(activeShiftStatus && activeShiftStatus.trim() !== "");
+
   const handleOpenModal = async (
     initialTab?: "shift1" | "shift2" | "trip" | "notes",
   ) => {
@@ -211,41 +230,39 @@ function BusCardComponent({
       return;
     }
 
-    const currentKet = (formData.keterangan || bus.keterangan || "").trim();
-    const upperKet = currentKet.toUpperCase();
-    const isNonSgo = upperKet.includes("OFF") || upperKet.includes("TO");
+    // 1. Jika shift belum dikonfirmasi status armadanya, blokir input dan minta konfirmasi status armada
+    if (isShiftConfirmed === false) {
+      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
+      if (onOpenFleetStatus) {
+        onOpenFleetStatus();
+      }
+      return;
+    }
 
-    let activeFormData = { ...formData };
-
-    // Opsi B: Konfirmasi ramah non-blocking jika unit berstatus OFF atau TO
+    // 2. Jika unit berstatus non-SGO (OFF, TO EVDAL, BA), blokir pengisian data operasional
     if (isNonSgo) {
       const confirmResult = await pdoSwal.fire({
-        icon: "question",
-        title: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CONFIRM_TITLE,
-        html: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CONFIRM_HTML(escapeHtml(bus.unit), escapeHtml(currentKet)),
+        icon: "warning",
+        title: TEXT_FLEET_STATUS.MODAL.NON_SGO_ALERT_TITLE(escapeHtml(bus.unit)),
+        html: TEXT_FLEET_STATUS.MODAL.NON_SGO_ALERT_HTML(
+          escapeHtml(bus.unit),
+          escapeHtml(activeShiftStatus)
+        ),
         showCancelButton: true,
-        confirmButtonText: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CONFIRM_BTN,
-        cancelButtonText: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_CANCEL_INPUT_BTN,
-        showDenyButton: true,
-        denyButtonText: TEXT_DASHBOARD.BUS_CARD_ACTIONS.SGO_DENY_BTN,
-        confirmButtonColor: "#3ECF8E",
-        cancelButtonColor: "#38bdf8",
-        denyButtonColor: "#71717a",
+        confirmButtonText: TEXT_FLEET_STATUS.MODAL.NON_SGO_BTN_OPEN_FLEET,
+        cancelButtonText: TEXT_FLEET_STATUS.MODAL.NON_SGO_BTN_CANCEL,
+        confirmButtonColor: "#38bdf8",
+        cancelButtonColor: "#71717a",
       });
 
-      if (confirmResult.isDenied || confirmResult.isDismissed) {
-        return; // Batal
+      if (confirmResult.isConfirmed && onOpenFleetStatus) {
+        onOpenFleetStatus();
       }
-
-      if (confirmResult.isConfirmed) {
-        // Jadikan SGO & simpan update keterangan kosong
-        activeFormData = { ...activeFormData, keterangan: "" };
-        await handleSaveUpdates({ keterangan: "" });
-      }
+      return;
     }
 
     const updates = await showBusInputModal({
-      bus: { ...bus, ...activeFormData },
+      bus: { ...bus, ...formData },
       activeCategory,
       tabName,
       headerMap,
@@ -531,6 +548,13 @@ function BusCardComponent({
       ketLower.includes("bko") ||
       cardIsBelowTarget);
 
+  const lockedClass =
+    isShiftConfirmed === false
+      ? "bus-card-locked"
+      : isNonSgo
+      ? "bus-card-non-sgo"
+      : "";
+
   const statusClass = hasKendala
     ? "status-kendala"
     : hasWarning
@@ -543,7 +567,7 @@ function BusCardComponent({
     <div
       id={`bus-card-${slugifyUnitId(bus.unit)}`}
       data-bus-row={bus.rowIndex}
-      className={`bus-card glass ${statusClass}`.trim()}
+      className={`bus-card glass ${statusClass} ${lockedClass}`.trim()}
       onClick={() => handleOpenModal()}
       style={{
         cursor: tabName === "AKUMULASI" ? "default" : "pointer",
@@ -559,8 +583,30 @@ function BusCardComponent({
             padding: "14px 16px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             <span style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
+            {isShiftConfirmed === false && (
+              <span
+                className="unit-status-badge unit-status-badge-to"
+                title={TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP}
+              >
+                🔒 Belum Konfirmasi
+              </span>
+            )}
+            {isShiftConfirmed !== false && isNonSgo && (
+              <span
+                className={`unit-status-badge ${
+                  activeShiftStatus.toUpperCase().includes("OFF")
+                    ? "unit-status-badge-off"
+                    : activeShiftStatus.toUpperCase().includes("TO")
+                    ? "unit-status-badge-to"
+                    : "unit-status-badge-ba"
+                }`}
+                title={`Status unit: ${activeShiftStatus}`}
+              >
+                {activeShiftStatus}
+              </span>
+            )}
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
                 {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}

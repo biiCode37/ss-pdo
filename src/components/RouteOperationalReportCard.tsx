@@ -33,7 +33,6 @@ interface Props {
   asModal?: boolean;
   isOpen?: boolean;
   onClose?: () => void;
-  onOpenFleetStatus?: () => void;
 }
 
 function RouteOperationalReportCardComponent({
@@ -48,7 +47,6 @@ function RouteOperationalReportCardComponent({
   asModal = false,
   isOpen = true,
   onClose,
-  onOpenFleetStatus,
 }: Props) {
   useMobileBackHandler({
     id: 'route_operational_report_sheet',
@@ -871,65 +869,6 @@ function RouteOperationalReportCardComponent({
               </button>
             </div>
           </div>
-
-          {/* Segmented Control: Status Armada vs Laporan Operasional */}
-          {onOpenFleetStatus && (
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '6px',
-                padding: '4px',
-                borderRadius: '12px',
-                background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
-                border: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
-                marginBottom: '16px',
-              }}
-            >
-              <button
-                type="button"
-                onClick={onOpenFleetStatus}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                  padding: '7px 12px',
-                  borderRadius: '9px',
-                  border: 'none',
-                  background: 'transparent',
-                  color: 'var(--text-secondary)',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                }}
-                title="Buka pengaturan unit armada"
-              >
-                <span>Status Armada</span>
-              </button>
-              <button
-                type="button"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                  padding: '7px 12px',
-                  borderRadius: '9px',
-                  border: '1px solid var(--border-color, rgba(255, 255, 255, 0.12))',
-                  background: 'var(--bg-secondary, rgba(255, 255, 255, 0.1))',
-                  color: 'var(--text-primary)',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'default',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                }}
-              >
-                <span>Laporan Operasional</span>
-              </button>
-            </div>
-          )}
 
           {renderFormBody()}
         </div>

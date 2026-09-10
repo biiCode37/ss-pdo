@@ -1,8 +1,9 @@
 import React from 'react';
-import { Crown, Shield, UserCheck } from 'lucide-react';
+import { Crown, Shield, UserCheck, Compass, Radio } from 'lucide-react';
+import type { UserRole } from '../types/supabase';
 
 interface RoleBadgeProps {
-  role?: 'superadmin' | 'admin' | 'petugas' | string;
+  role?: UserRole | 'petugas' | string;
   size?: 'xs' | 'sm' | 'md';
   showIcon?: boolean;
   className?: string;
@@ -10,18 +11,18 @@ interface RoleBadgeProps {
 }
 
 export const RoleBadge: React.FC<RoleBadgeProps> = ({
-  role = 'petugas',
+  role = 'pdo',
   size = 'sm',
   showIcon = true,
   className = '',
   style,
 }) => {
-  const normalizedRole = (role || 'petugas').toLowerCase();
+  const normalizedRole = (role || 'pdo').toLowerCase();
 
   let badgeConfig = {
-    label: 'Petugas',
+    label: 'PDO',
     icon: UserCheck,
-    classes: 'role-badge-petugas text-emerald-700 from-emerald-500',
+    classes: 'role-badge-pdo role-badge-petugas text-emerald-700 from-emerald-500',
     style: {
       background: 'rgba(16, 185, 129, 0.14)',
       borderColor: 'rgba(16, 185, 129, 0.38)',
@@ -49,6 +50,39 @@ export const RoleBadge: React.FC<RoleBadgeProps> = ({
         background: 'rgba(14, 165, 233, 0.14)',
         borderColor: 'rgba(14, 165, 233, 0.42)',
         color: '#38bdf8',
+      },
+    };
+  } else if (normalizedRole === 'korwil') {
+    badgeConfig = {
+      label: 'Korwil',
+      icon: Compass,
+      classes: 'role-badge-korwil text-indigo-700 from-indigo-500',
+      style: {
+        background: 'rgba(99, 102, 241, 0.14)',
+        borderColor: 'rgba(99, 102, 241, 0.42)',
+        color: '#818cf8',
+      },
+    };
+  } else if (normalizedRole === 'korlap') {
+    badgeConfig = {
+      label: 'Korlap',
+      icon: Radio,
+      classes: 'role-badge-korlap text-orange-700 from-orange-500',
+      style: {
+        background: 'rgba(249, 115, 22, 0.14)',
+        borderColor: 'rgba(249, 115, 22, 0.42)',
+        color: '#fb923c',
+      },
+    };
+  } else if (normalizedRole === 'petugas') {
+    badgeConfig = {
+      label: 'Petugas',
+      icon: UserCheck,
+      classes: 'role-badge-petugas text-emerald-700 from-emerald-500',
+      style: {
+        background: 'rgba(16, 185, 129, 0.14)',
+        borderColor: 'rgba(16, 185, 129, 0.38)',
+        color: '#34d399',
       },
     };
   }

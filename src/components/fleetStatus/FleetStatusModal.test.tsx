@@ -166,40 +166,34 @@ describe('FleetStatusModal Component', () => {
     expect(onConfirmMock).toHaveBeenCalledWith(1, expect.any(Map));
   });
 
-  it('renders segmented control and navigates to report when onNavigateToReport is provided', async () => {
-    const onNavigateToReportMock = vi.fn();
+  it('acts as independent modal and closes modal on confirm', async () => {
+    const onCloseMock = vi.fn();
     const onConfirmMock = vi.fn().mockResolvedValue(undefined);
 
     await act(async () => {
       root.render(
         <FleetStatusModal
           isOpen={true}
-          onClose={vi.fn()}
+          onClose={onCloseMock}
           routeCode="JAK.15"
           selectedDate="2026-09-09"
           renopsTarget={60}
           buses={mockBuses}
           initialShift={1}
-          onNavigateToReport={onNavigateToReportMock}
           onConfirmStatus={onConfirmMock}
         />
       );
     });
 
-    // Check segmented control buttons
+    // Verify modal is independent: does not contain segmented control to report
     const reportTabBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Laporan Operasional')
+      b => b.textContent?.trim() === 'Laporan Operasional'
     );
-    expect(reportTabBtn).toBeDefined();
+    expect(reportTabBtn).toBeUndefined();
 
-    await act(async () => {
-      reportTabBtn?.click();
-    });
-    expect(onNavigateToReportMock).toHaveBeenCalledTimes(1);
-
-    // Check confirm button label and navigation after confirm
+    // Check confirm button
     const confirmBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Konfirmasi & Lanjut ke Laporan')
+      b => b.textContent?.includes('Konfirmasi & Terapkan Status')
     );
     expect(confirmBtn).toBeDefined();
 
@@ -207,7 +201,7 @@ describe('FleetStatusModal Component', () => {
       confirmBtn?.click();
     });
 
-    expect(onConfirmMock).toHaveBeenCalled();
-    expect(onNavigateToReportMock).toHaveBeenCalledTimes(2);
+    expect(onConfirmMock).toHaveBeenCalledTimes(1);
+    expect(onCloseMock).toHaveBeenCalledTimes(1);
   });
 });

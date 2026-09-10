@@ -44,6 +44,10 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.COMPLETION_STATUS.TITLE).toBe('Unit Dengan Keterangan Tertentu');
     expect(TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER).toBe('Cari No. Body Unit...');
     expect(TEXT_DASHBOARD.ACCUMULATION_SHEET.TITLE).toBe('Rekap Akumulasi Lintas Periode');
+    expect(TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_TITLE('JAK.115')).toContain('JAK.115');
+    expect(TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_DISPLAY_TITLE('05 Sep 2026')).toContain('05 Sep 2026');
+    expect(TEXT_DASHBOARD.BUS_LIST.DAILY_PROGRESS).toBe('Progres Harian');
+    expect(TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX('TOA')).toBe('Kolom: TOA');
   });
 
   it('exports TEXT_PDO_FORM with shift inputs and badges', () => {
@@ -92,6 +96,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_FLEET_STATUS.ALERT_BAR.ACTION_BTN).toBe('Tentukan Status');
     expect(TEXT_FLEET_STATUS.STATUS_CODES.SGO).toBe('SGO');
     expect(TEXT_FLEET_STATUS.MODAL.CONFIRM_APPLY_SHIFT(1)).toContain('Shift 1');
+    expect(TEXT_FLEET_STATUS.MODAL.LOCK_BANNER_MESSAGE(1)).toContain('Shift 1');
+    expect(TEXT_FLEET_STATUS.MODAL.NON_SGO_ALERT_TITLE('01')).toContain('01');
   });
 
   it('exports TEXT_USER_MANAGEMENT with header, tabs, and alerts', () => {

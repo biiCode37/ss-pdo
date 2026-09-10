@@ -220,4 +220,64 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
 
     expect(handleOpenReportModal).toHaveBeenCalled();
   });
+
+  it('renders date segment as static non-clickable badge and does not open sheet on click', async () => {
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab="5"
+          setSelectedTab={vi.fn()}
+          days={['1', '2', '3', '4', '5']}
+          isLoading={false}
+          isDataLoaded={true}
+          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
+          currentTabName="5"
+          onLoadData={vi.fn()}
+          reportRoute={{ id: 1, route_code: 'JAK.115' }}
+          reportStatus="draft"
+        />
+      );
+    });
+
+    const dateBadge = container.querySelector('[data-testid="date-display-badge"]') as HTMLElement;
+    expect(dateBadge).toBeTruthy();
+    expect(dateBadge.getAttribute('role')).toBeNull();
+    expect(dateBadge.getAttribute('tabindex')).toBeNull();
+
+    const sheetOverlay = container.querySelector('.route-selector-modal-overlay') as HTMLElement;
+    expect(sheetOverlay.style.display).toBe('none');
+
+    // Clicking date badge does not open the sheet
+    await act(async () => {
+      dateBadge.click();
+    });
+    expect(sheetOverlay.style.display).toBe('none');
+  });
+
+  it('opens route selector sheet only via externalOpenTrigger (from active route pill)', async () => {
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab="5"
+          setSelectedTab={vi.fn()}
+          days={['1', '2', '3', '4', '5']}
+          isLoading={false}
+          isDataLoaded={true}
+          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
+          currentTabName="5"
+          onLoadData={vi.fn()}
+          reportRoute={{ id: 1, route_code: 'JAK.115' }}
+          reportStatus="draft"
+          externalOpenTrigger={1}
+        />
+      );
+    });
+
+    const sheetOverlay = container.querySelector('.route-selector-modal-overlay') as HTMLElement;
+    expect(sheetOverlay.style.display).toBe('flex');
+  });
 });

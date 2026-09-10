@@ -79,8 +79,9 @@ export const TEXT_DASHBOARD = {
     ADD_ROUTE_LABEL_MONTH: 'Bulan Sheet',
     ADD_ROUTE_LABEL_YEAR: 'Tahun',
     SHEET_URL_LABEL: 'URL / Link Google Spreadsheet',
-    ACTIVE_ROUTE_TITLE: (route: string) => `Kode Rute Aktif: ${route}. Klik untuk memilih rute.`,
+    ACTIVE_ROUTE_TITLE: (route: string) => `Kode Rute: ${route}. Klik untuk memilih rute atau tanggal.`,
     ACTIVE_ROUTE_ARIA: (route: string) => `Rute aktif: ${route}`,
+    DATE_DISPLAY_TITLE: (date: string) => `Tanggal operasional aktif: ${date}`,
     DEFAULT_PICK_ROUTE: 'Pilih Rute',
   },
   PROFILE_MENU: {
@@ -209,6 +210,8 @@ export const TEXT_DASHBOARD = {
     SAVE_ERROR_GENERIC: 'Terjadi kesalahan saat menyimpan data ke spreadsheet.',
     COPY_KM_ALL_FILLED: 'Semua unit bus sudah memiliki nilai KM Awal Shift 2.',
     ALL_UNITS_FILLED: '🎉 Semua unit pada filter ini telah selesai diisi!',
+    DAILY_PROGRESS: 'Progres Harian',
+    COLUMN_PREFIX: (col: string) => `Kolom: ${col}`,
     CATEGORIES: {
       ALL: 'Semua Kolom',
       TRIP: 'Trip Armada',
