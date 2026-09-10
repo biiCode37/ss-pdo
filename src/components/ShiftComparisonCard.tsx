@@ -24,8 +24,8 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
           gap: "8px",
         }}
       >
-        {/* ponytail: clean title without redundant Sun icon (Shift 1 & 2 semantic icons preserved inside) */}
         <div className="analytics-card-title">
+          <Sun size={18} />
           <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TITLE}</span>
         </div>
         {dateBadge && (

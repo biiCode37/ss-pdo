@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { FileText } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
 import { TEXT_DASHBOARD } from "../constants/texts";
@@ -27,8 +28,8 @@ function CompletionStatusCardComponent({
           gap: "8px",
         }}
       >
-        {/* ponytail: clean title without decorative FileText icon */}
         <div className="analytics-card-title" style={{ marginTop: "2px" }}>
+          <FileText size={18} />
           <span>{TEXT_DASHBOARD.COMPLETION_STATUS.TITLE}</span>
         </div>
         <div

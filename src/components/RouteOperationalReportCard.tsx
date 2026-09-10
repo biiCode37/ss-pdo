@@ -3,9 +3,12 @@ import { createPortal } from 'react-dom';
 import {
   ChevronDown,
   ChevronUp,
+  Bus,
   Plus,
   Send,
   Loader2,
+  Clock,
+  AlertTriangle,
   X,
 } from 'lucide-react';
 import { fetchDailyRouteReport, upsertDailyRouteReport } from '../services/dailyRouteReportService';
@@ -462,8 +465,15 @@ function RouteOperationalReportCardComponent({
 
           {/* Section 2: Headway */}
           <div style={{ marginBottom: '16px' }}>
-            {/* ponytail: clean section label without decorative Clock icon */}
-            <div style={{ marginBottom: '8px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginBottom: '8px',
+              }}
+            >
+              <Clock size={14} color="var(--accent-color, #3ECF8E)" />
               <label
                 style={{
                   fontSize: '11.5px',
@@ -541,8 +551,15 @@ function RouteOperationalReportCardComponent({
 
           {/* Section 3: Titik Kemacetan Chips */}
           <div style={{ marginBottom: '16px' }}>
-            {/* ponytail: clean section label without decorative AlertTriangle icon */}
-            <div style={{ marginBottom: '8px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginBottom: '8px',
+              }}
+            >
+              <AlertTriangle size={14} color="var(--warning-color, #f59e0b)" />
               <label
                 style={{
                   fontSize: '11.5px',
@@ -784,36 +801,52 @@ function RouteOperationalReportCardComponent({
           {/* Modal Header */}
           <div
             style={{
-              padding: '16px 20px',
-              borderBottom: '1px solid var(--card-border)',
               display: 'flex',
-              alignItems: 'center',
               justifyContent: 'space-between',
-              background: 'var(--card-bg)',
+              alignItems: 'center',
+              paddingBottom: '12px',
+              marginBottom: '16px',
+              borderBottom: '1px solid var(--border-color, rgba(255, 255, 255, 0.08))',
             }}
           >
-            {/* ponytail: clean modal header without decorative Bus icon wrapper */}
-            <div>
-              <h3
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
                 style={{
-                  margin: 0,
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  color: 'var(--text-primary)',
-                  letterSpacing: '-0.2px',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  background: 'rgba(62, 207, 142, 0.12)',
+                  color: 'var(--accent-color, #3ECF8E)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
                 }}
               >
-                {TEXT_PDO_FORM.CARD_TITLE}
-              </h3>
-              <span
-                style={{
-                  fontSize: '12px',
-                  color: 'var(--text-secondary)',
-                  fontWeight: 500,
-                }}
-              >
-                {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
-              </span>
+                <Bus size={18} />
+              </div>
+              <div>
+                <h3
+                  style={{
+                    margin: 0,
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    letterSpacing: '-0.2px',
+                  }}
+                >
+                  {TEXT_PDO_FORM.CARD_TITLE}
+                </h3>
+                <span
+                  style={{
+                    fontSize: '12px',
+                    color: 'var(--text-secondary)',
+                    fontWeight: 500,
+                  }}
+                >
+                  {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
+                </span>
+              </div>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -938,28 +971,44 @@ function RouteOperationalReportCardComponent({
         }}
         title={isExpanded ? 'Klik untuk menciutkan form' : 'Klik untuk membuka form'}
       >
-        {/* ponytail: clean card header without decorative Bus icon wrapper */}
-        <div>
-          <h3
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div
             style={{
-              margin: 0,
-              fontSize: '15px',
-              fontWeight: 700,
-              color: 'var(--text-primary)',
-              letterSpacing: '-0.2px',
+              width: '36px',
+              height: '36px',
+              borderRadius: '10px',
+              background: 'rgba(62, 207, 142, 0.12)',
+              color: 'var(--accent-color, #3ECF8E)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
             }}
           >
-            {TEXT_PDO_FORM.CARD_TITLE}
-          </h3>
-          <span
-            style={{
-              fontSize: '12px',
-              color: 'var(--text-secondary)',
-              fontWeight: 500,
-            }}
-          >
-            {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
-          </span>
+            <Bus size={18} />
+          </div>
+          <div>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: '15px',
+                fontWeight: 700,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.2px',
+              }}
+            >
+              {TEXT_PDO_FORM.CARD_TITLE}
+            </h3>
+            <span
+              style={{
+                fontSize: '12px',
+                color: 'var(--text-secondary)',
+                fontWeight: 500,
+              }}
+            >
+              {TEXT_PDO_FORM.CARD_SUBTITLE(routeCode)}
+            </span>
+          </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

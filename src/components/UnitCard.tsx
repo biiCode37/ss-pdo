@@ -4,6 +4,10 @@ import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
 import { TEXT_DASHBOARD } from "../constants/texts";
 import {
+  Bus,
+  Navigation,
+  Users,
+  Repeat,
   AlertTriangle,
   CheckCircle2,
   Clock,
@@ -177,13 +181,19 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
           alignItems: "center",
         }}
       >
-        {/* ponytail: clean unit title without redundant Bus icon */}
         <div
           style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
             fontWeight: 800,
             fontSize: "15px",
           }}
         >
+          <Bus
+            size={17}
+            style={{ color: "var(--accent-color)", flexShrink: 0 }}
+          />
           <span>{item.unit}</span>
         </div>
 
@@ -203,8 +213,9 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
           color: "var(--text-secondary)",
         }}
       >
-        {/* Total KM - ponytail: clean typography without redundant Navigation icon */}
-        <div>
+        {/* Total KM */}
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <Navigation size={13} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
           <strong style={{ color: "var(--shift1-color)", fontWeight: 800 }}>
             {safeFormatNumber(item.totalKm)}
           </strong>{" "}
@@ -215,8 +226,9 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
 
         <span style={{ opacity: 0.3 }}>|</span>
 
-        {/* Total Pnp - ponytail: clean typography without redundant Users icon */}
-        <div>
+        {/* Total Pnp */}
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <Users size={13} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
           <strong style={{ color: "var(--text-primary)", fontWeight: 800 }}>
             {safeFormatNumber(item.totalPassengers)}
           </strong>{" "}
@@ -227,8 +239,13 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
 
         <span style={{ opacity: 0.3 }}>|</span>
 
-        {/* Capaian Trip - ponytail: clean typography without redundant Repeat icon & raw emoji */}
+        {/* Capaian Trip */}
         <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+          }}
           title={
             isBelowTarget
               ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_DEFICIT_CARD(pergiVal || "0", pulangVal || "0", targetP, targetQ)
@@ -239,6 +256,21 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
                   : undefined
           }
         >
+          <Repeat
+            size={13}
+            style={{
+              color: isBelowTarget
+                ? "var(--warning-text, #f59e0b)"
+                : isTargetAchieved
+                  ? "#10b981"
+                  : isImbalanced
+                    ? "#f97316"
+                    : hasTrip
+                      ? "var(--accent-color)"
+                      : "var(--text-secondary)",
+              flexShrink: 0,
+            }}
+          />
           {hasTrip ? (
             <strong
               style={{
@@ -252,7 +284,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
                 fontWeight: 800,
               }}
             >
-              {`${pergiVal || "0"}/${pulangVal || "0"}`}
+              {isBelowTarget ? `⚠️ ${pergiVal || "0"}/${pulangVal || "0"}` : `${pergiVal || "0"}/${pulangVal || "0"}`}
             </strong>
           ) : (
             <span style={{ color: "var(--text-secondary)", opacity: 0.7 }}>0/0</span>

@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Gauge, Users, UserCheck, Bus } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { TEXT_DASHBOARD } from "../constants/texts";
@@ -25,8 +26,8 @@ function KPICardComponent({ summary, dateBadge }: Props) {
           gap: "8px",
         }}
       >
-        {/* ponytail: clean title without decorative Gauge icon */}
         <div className="analytics-card-title">
+          <Gauge size={18} />
           <span>{TEXT_DASHBOARD.KPIS.TITLE}</span>
         </div>
         {dateBadge && (
@@ -51,8 +52,8 @@ function KPICardComponent({ summary, dateBadge }: Props) {
 
       <div className="analytics-grid-2">
         <div className="analytics-stat-box">
-          {/* ponytail: clean typography without redundant Gauge icon */}
           <div className="analytics-stat-label">
+            <Gauge size={14} style={{ color: "var(--success-color)" }} />
             <span>{TEXT_DASHBOARD.KPIS.TOTAL_KM}</span>
           </div>
           <div
@@ -65,8 +66,8 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         </div>
 
         <div className="analytics-stat-box">
-          {/* ponytail: clean typography without redundant Users icon */}
           <div className="analytics-stat-label">
+            <Users size={14} style={{ color: "var(--accent-color)" }} />
             <span>{TEXT_DASHBOARD.KPIS.TOA_PASSENGERS}</span>
           </div>
           <div
@@ -96,9 +97,16 @@ function KPICardComponent({ summary, dateBadge }: Props) {
             fontSize: "13px",
           }}
         >
-          {/* ponytail: clean typography without redundant Bus icon */}
-          <span style={{ color: "var(--text-secondary)" }}>
-            {TEXT_DASHBOARD.KPIS.KM_PER_BUS}
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "var(--text-secondary)",
+            }}
+          >
+            <Bus size={16} style={{ color: "var(--accent-color)" }} />
+            <span>{TEXT_DASHBOARD.KPIS.KM_PER_BUS}</span>
           </span>
           <b
             style={{
@@ -119,9 +127,16 @@ function KPICardComponent({ summary, dateBadge }: Props) {
             fontSize: "13px",
           }}
         >
-          {/* ponytail: clean typography without redundant UserCheck icon */}
-          <span style={{ color: "var(--text-secondary)" }}>
-            {TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM}
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "var(--text-secondary)",
+            }}
+          >
+            <UserCheck size={16} style={{ color: "var(--success-color)" }} />
+            <span>{TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM}</span>
           </span>
           <b
             style={{
