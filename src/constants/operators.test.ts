@@ -8,8 +8,8 @@ import {
 } from './operators';
 
 describe('Master Operators Constant', () => {
-  it('contains all 7 official operators', () => {
-    expect(MASTER_OPERATORS.length).toBe(7);
+  it('contains all 8 official operators and variants', () => {
+    expect(MASTER_OPERATORS.length).toBe(8);
     const codes = MASTER_OPERATORS.map((op) => op.code);
     expect(codes).toContain('KLM');
     expect(codes).toContain('KWK');
@@ -18,6 +18,7 @@ describe('Master Operators Constant', () => {
     expect(codes).toContain('LSG');
     expect(codes).toContain('KJG');
     expect(codes).toContain('KMJ/KLM');
+    expect(codes).toContain('KMJ & KJG');
   });
 
   describe('findOperator & getOperatorOfficialName', () => {
@@ -57,6 +58,11 @@ describe('Master Operators Constant', () => {
       expect(getOperatorOfficialName('KMJ / KLM')).toBe('KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)');
     });
 
+    it('resolves KSO KMJ & KJG correctly for JAK.76', () => {
+      expect(getOperatorOfficialName('KMJ & KJG')).toBe('KOMILET JAYA & KOJANG (KMJ & KJG)');
+      expect(getOperatorOfficialName('KMJ/KJG')).toBe('KOMILET JAYA & KOJANG (KMJ & KJG)');
+    });
+
     it('returns original string as graceful fallback when not found', () => {
       expect(getOperatorOfficialName('OPERATOR_ASING')).toBe('OPERATOR_ASING');
       expect(getOperatorOfficialName('')).toBe('');
@@ -68,7 +74,7 @@ describe('Master Operators Constant', () => {
   describe('getAllActiveOperators', () => {
     it('returns only active operators', () => {
       const active = getAllActiveOperators();
-      expect(active.length).toBe(7);
+      expect(active.length).toBe(8);
       expect(active.every((op) => op.isActive)).toBe(true);
     });
   });
@@ -82,6 +88,7 @@ describe('Master Operators Constant', () => {
       expect(isValidOperatorCode('LSG')).toBe(true);
       expect(isValidOperatorCode('KJG')).toBe(true);
       expect(isValidOperatorCode('KMJ/KLM')).toBe(true);
+      expect(isValidOperatorCode('KMJ & KJG')).toBe(true);
       expect(isValidOperatorCode('XYZ')).toBe(false);
       expect(isValidOperatorCode('')).toBe(false);
     });

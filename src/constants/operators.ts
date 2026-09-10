@@ -55,6 +55,12 @@ export const MASTER_OPERATORS: readonly OperatorItem[] = [
     shortName: 'KOMILET JAYA / KOLAMAS JAYA',
     fullName: 'KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)',
     isActive: true
+  },
+  {
+    code: 'KMJ & KJG',
+    shortName: 'KOMILET JAYA & KOJANG',
+    fullName: 'KOMILET JAYA & KOJANG (KMJ & KJG)',
+    isActive: true
   }
 ] as const;
 
@@ -73,6 +79,11 @@ export function findOperator(codeOrName: string | undefined | null): OperatorIte
   // 2. Cek kecocokan KSO gabungan KMJ/KLM
   if (upper.includes('KMJ') && upper.includes('KLM')) {
     return MASTER_OPERATORS.find((op) => op.code === 'KMJ/KLM');
+  }
+
+  // 3. Cek kecocokan KSO gabungan KMJ & KJG
+  if (upper.includes('KMJ') && upper.includes('KJG')) {
+    return MASTER_OPERATORS.find((op) => op.code === 'KMJ & KJG');
   }
 
   // 3. Cek KWK AC spesifik

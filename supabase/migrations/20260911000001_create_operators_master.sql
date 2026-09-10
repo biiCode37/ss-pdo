@@ -36,7 +36,7 @@ CREATE POLICY "Allow superadmin write access for operators"
     EXISTS (
       SELECT 1 FROM public.user_profiles up
       JOIN public.roles r ON up.role_id = r.id
-      WHERE up.uuid = auth.uid()::text AND r.code = 'superadmin'
+      WHERE up.uuid = auth.uid() AND r.code = 'superadmin'
     )
   );
 
@@ -53,7 +53,8 @@ VALUES
   ('KMJ', 'KOMILET JAYA', 'KOMILET JAYA (KMJ)', true),
   ('LSG', 'LESTARI SURYA GEMA PERSADA', 'LESTARI SURYA GEMA PERSADA (LSG)', true),
   ('KJG', 'KOJANG', 'KOJANG (KJG)', true),
-  ('KMJ/KLM', 'KOMILET JAYA / KOLAMAS JAYA', 'KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)', true)
+  ('KMJ/KLM', 'KOMILET JAYA / KOLAMAS JAYA', 'KOMILET JAYA / KOLAMAS JAYA (KMJ/KLM)', true),
+  ('KMJ & KJG', 'KOMILET JAYA & KOJANG', 'KOMILET JAYA & KOJANG (KMJ & KJG)', true)
 ON CONFLICT (operator_code) DO UPDATE
   SET operator_name = EXCLUDED.operator_name,
       full_name = EXCLUDED.full_name,
@@ -109,3 +110,10 @@ SET operator_id = o.id
 FROM public.operators o
 WHERE o.operator_code = 'KJG'
   AND r.operator_name = 'KJG';
+
+-- Normalisasi KMJ & KJG
+UPDATE public.routes r
+SET operator_id = o.id
+FROM public.operators o
+WHERE o.operator_code = 'KMJ & KJG'
+  AND (r.operator_name = 'KMJ & KJG' OR r.operator_name = 'KMJ/KJG');
