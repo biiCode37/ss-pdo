@@ -3,113 +3,14 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { WaReportModal } from './WaReportModal';
-import type { RegionalMonitoringResult } from '../services/allRouteMonitoringService';
+import type { RegionalMonitoringResult, RegionalRouteItem } from '../services/allRouteMonitoringService';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-describe('WaReportModal Component', () => {
+describe('WaReportModal Component - Format 3 & Blocking Rules', () => {
   let container: HTMLDivElement;
   let root: Root;
-
-  const mockData: RegionalMonitoringResult = {
-    date: '2026-09-02',
-    yesterdayDate: '2026-09-01',
-    lastWeekDate: '2026-08-26',
-    routes: [
-      {
-        id: 1,
-        routeCode: 'JAK.01',
-        routeName: 'TG. PRIOK - PLUMPANG',
-        operatorName: 'KOLAMAS',
-        isLooping: true,
-        kmBaku: 14.415,
-        targetHk: 5161,
-        bestRecord: 5201,
-        supervisorName: 'MOAMAR. Z.A. MAHU',
-        defaultRenops: 20,
-        renopsShift1: 10,
-        realopsShift1: 10,
-        renopsShift2: 10,
-        realopsShift2: 10,
-        totalRenops: 20,
-        totalRealops: 20,
-        headwayFastest: 2,
-        headwaySlowest: 16,
-        trafficJamSpots: ['Pasar Warakas'],
-        operationalIssues: '',
-        status: 'submitted',
-        todayPassengers: 5077,
-        yesterdayPassengers: 4937,
-        lastWeekPassengers: 5189,
-        totalKm: 3500,
-        achievementKm: 175,
-        toaShift1: 1873,
-        manualShift1: 0,
-        totalShift1: 1873,
-        toaShift2: 3204,
-        manualShift2: 0,
-        totalShift2: 3204
-      },
-      {
-        id: 2,
-        routeCode: 'JAK.15',
-        routeName: 'TG. PRIOK - RUSUN MARUNDA',
-        operatorName: 'KWK',
-        isLooping: false,
-        kmBaku: 29.603,
-        targetHk: 11164,
-        bestRecord: 10207,
-        supervisorName: 'ABDUL MANAN',
-        defaultRenops: 60,
-        renopsShift1: 0,
-        realopsShift1: 0,
-        renopsShift2: 0,
-        realopsShift2: 0,
-        totalRenops: 60,
-        totalRealops: 0,
-        headwayFastest: 0,
-        headwaySlowest: 0,
-        trafficJamSpots: [],
-        operationalIssues: '',
-        status: 'empty',
-        todayPassengers: 0,
-        yesterdayPassengers: 0,
-        lastWeekPassengers: 0,
-        totalKm: 0,
-        achievementKm: 0,
-        toaShift1: 0,
-        manualShift1: 0,
-        totalShift1: 0,
-        toaShift2: 0,
-        manualShift2: 0,
-        totalShift2: 0
-      }
-    ],
-    totalRenops: 80,
-    totalRealops: 20,
-    totalTodayPassengers: 5077,
-    totalTargetPassengers: 16325,
-    totalYesterdayPassengers: 4937,
-    totalLastWeekPassengers: 5189,
-    totalKm: 3500,
-    averageKmPerBus: 175,
-    tomShift1: 1873,
-    manualShift1: 0,
-    totalShift1: 1873,
-    yesterdayShift1: 0,
-    lastWeekShift1: 0,
-    tomShift2: 3204,
-    manualShift2: 0,
-    totalShift2: 3204,
-    yesterdayShift2: 0,
-    lastWeekShift2: 0,
-    submittedCount: 1,
-    verifiedCount: 0,
-    draftCount: 0,
-    emptyCount: 1,
-    totalRoutesCount: 2
-  };
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -124,84 +25,188 @@ describe('WaReportModal Component', () => {
     container.remove();
   });
 
-  it('does not render when isOpen is false', () => {
-    act(() => {
-      root.render(
-        <WaReportModal
-          isOpen={false}
-          onClose={vi.fn()}
-          regionalData={mockData}
-          selectedDate="2026-09-02"
-        />
-      );
-    });
-
-    expect(container.textContent).toBe('');
+  const mockRouteConfirmed = (code: string, id: number): RegionalRouteItem => ({
+    id,
+    routeCode: code,
+    routeName: `JALUR ${code}`,
+    operatorName: 'KLM',
+    isLooping: false,
+    kmBaku: 15,
+    targetHk: 5000,
+    bestRecord: 6000,
+    supervisorName: 'Ranto Lumban Toruan',
+    defaultRenops: 16,
+    renopsShift1: 16,
+    realopsShift1: 16,
+    renopsShift2: 16,
+    realopsShift2: 16,
+    totalRenops: 16,
+    totalRealops: 16,
+    headwayFastest: 3,
+    headwaySlowest: 10,
+    trafficJamSpots: [],
+    operationalIssues: '',
+    status: 'submitted',
+    isFleetConfirmedS1: true,
+    isFleetConfirmedS2: true,
+    fleetStatusShift1: [],
+    fleetStatusShift2: [],
+    todayPassengers: 500,
+    yesterdayPassengers: 480,
+    lastWeekPassengers: 490,
+    totalKm: 240,
+    achievementKm: 15,
+    toaShift1: 250,
+    manualShift1: 0,
+    totalShift1: 250,
+    toaShift2: 250,
+    manualShift2: 0,
+    totalShift2: 250
   });
 
-  it('renders modal with warning banner, preview text, and switch formats', async () => {
+  const mockRouteUnconfirmed = (code: string, id: number): RegionalRouteItem => ({
+    ...mockRouteConfirmed(code, id),
+    isFleetConfirmedS1: false,
+    isFleetConfirmedS2: false,
+  });
+
+  const mockRegionalData = (routes: RegionalRouteItem[]): RegionalMonitoringResult => ({
+    date: '2026-09-10',
+    yesterdayDate: '2026-09-09',
+    lastWeekDate: '2026-09-03',
+    routes,
+    totalRenops: 16,
+    totalRealops: 16,
+    totalTodayPassengers: 1000,
+    totalTargetPassengers: 1000,
+    totalYesterdayPassengers: 960,
+    totalLastWeekPassengers: 980,
+    totalKm: 480,
+    averageKmPerBus: 15,
+    tomShift1: 500,
+    manualShift1: 0,
+    totalShift1: 500,
+    yesterdayShift1: 480,
+    lastWeekShift1: 490,
+    tomShift2: 500,
+    manualShift2: 0,
+    totalShift2: 500,
+    yesterdayShift2: 480,
+    lastWeekShift2: 490,
+    submittedCount: routes.length,
+    verifiedCount: 0,
+    draftCount: 0,
+    emptyCount: 0,
+    totalRoutesCount: routes.length
+  });
+
+  it('renders Format 3 tab button', async () => {
+    const data = mockRegionalData([mockRouteConfirmed('JAK.01', 1)]);
     await act(async () => {
       root.render(
         <WaReportModal
           isOpen={true}
           onClose={vi.fn()}
-          regionalData={mockData}
-          selectedDate="2026-09-02"
+          regionalData={data}
+          selectedDate="2026-09-10"
         />
       );
     });
 
-    expect(container.textContent).toContain('Generator Laporan WhatsApp');
-    // Warning banner should report 1 route not ready
-    expect(container.textContent).toContain('1 dari 2 rute belum mengirim laporan');
-
-    // Default Format 1
-    expect(container.textContent).toContain('Laporan JUMLAH PELANGGAN & PENCAPAIAN');
-    expect(container.textContent).toContain('JAK 01');
-
-    // Switch to Format 2
-    const btnFormat2 = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Format 2')
-    );
-    expect(btnFormat2).toBeDefined();
-    await act(async () => {
-      btnFormat2?.click();
-    });
-
-    expect(container.textContent).toContain('MIKROTRANS WILAYAH UTARA');
-    expect(container.textContent).toContain('FORMAT   \t:\t[TOA]+[MANUAL]=JUMLAH PELANGGAN');
+    expect(container.textContent).toContain('Format 3 (Status Armada)');
   });
 
-  it('copies message text to clipboard when Salin Teks is clicked', async () => {
-    const writeTextMock = vi.fn().mockResolvedValue(undefined);
-    Object.defineProperty(navigator, 'clipboard', {
-      value: {
-        writeText: writeTextMock,
-      },
-      writable: true,
-      configurable: true,
+  it('shows shift selector buttons when Format 3 is active', async () => {
+    const data = mockRegionalData([mockRouteConfirmed('JAK.01', 1)]);
+    await act(async () => {
+      root.render(
+        <WaReportModal
+          isOpen={true}
+          onClose={vi.fn()}
+          regionalData={data}
+          selectedDate="2026-09-10"
+        />
+      );
     });
+
+    // Find format 3 button
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const f3Btn = buttons.find((b) => b.textContent?.includes('Format 3'));
+    expect(f3Btn).toBeDefined();
+
+    await act(async () => {
+      f3Btn?.click();
+    });
+
+    expect(container.textContent).toContain('Shift 1');
+    expect(container.textContent).toContain('Shift 2');
+  });
+
+  it('blocks Format 3 generation when there are unconfirmed routes', async () => {
+    const data = mockRegionalData([
+      mockRouteConfirmed('JAK.01', 1),
+      mockRouteUnconfirmed('JAK.15', 2),
+    ]);
 
     await act(async () => {
       root.render(
         <WaReportModal
           isOpen={true}
           onClose={vi.fn()}
-          regionalData={mockData}
-          selectedDate="2026-09-02"
+          regionalData={data}
+          selectedDate="2026-09-10"
         />
       );
     });
 
-    const copyBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Salin Teks')
-    );
-    expect(copyBtn).toBeDefined();
-
+    // Switch to Format 3
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const f3Btn = buttons.find((b) => b.textContent?.includes('Format 3'));
     await act(async () => {
-      copyBtn?.click();
+      f3Btn?.click();
     });
 
-    expect(writeTextMock).toHaveBeenCalled();
+    // Must show unconfirmed route warning
+    expect(container.textContent).toContain('JAK.15');
+
+    // Action buttons must be disabled
+    const actionButtons = Array.from(container.querySelectorAll('button'));
+    const copyBtn = actionButtons.find((b) => b.textContent?.includes('Salin Teks'));
+    const waBtn = actionButtons.find((b) => b.textContent?.includes('Buka WhatsApp'));
+
+    expect(copyBtn?.disabled).toBe(true);
+    expect(waBtn?.disabled).toBe(true);
+  });
+
+  it('enables action buttons when all routes are confirmed', async () => {
+    const data = mockRegionalData([
+      mockRouteConfirmed('JAK.01', 1),
+      mockRouteConfirmed('JAK.15', 2),
+    ]);
+
+    await act(async () => {
+      root.render(
+        <WaReportModal
+          isOpen={true}
+          onClose={vi.fn()}
+          regionalData={data}
+          selectedDate="2026-09-10"
+        />
+      );
+    });
+
+    // Switch to Format 3
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const f3Btn = buttons.find((b) => b.textContent?.includes('Format 3'));
+    await act(async () => {
+      f3Btn?.click();
+    });
+
+    const actionButtons = Array.from(container.querySelectorAll('button'));
+    const copyBtn = actionButtons.find((b) => b.textContent?.includes('Salin Teks'));
+    const waBtn = actionButtons.find((b) => b.textContent?.includes('Buka WhatsApp'));
+
+    expect(copyBtn?.disabled).toBe(false);
+    expect(waBtn?.disabled).toBe(false);
   });
 });

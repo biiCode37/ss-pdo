@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import { fetchRouteMasterList } from './dailyRouteReportService';
-import type { Route, DailyRouteReport, DailyUnitSummary } from '../types/supabase';
+import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail } from '../types/supabase';
 
 export const SUPERVISORS = [
   'Ranto Lumban Toruan',
@@ -32,6 +32,13 @@ export interface RegionalRouteItem {
   trafficJamSpots: string[];
   operationalIssues: string;
   status: 'draft' | 'submitted' | 'verified' | 'empty';
+  // Fleet status snapshot & confirmation
+  fleetStatusShift1?: FleetUnitStatusDetail[];
+  fleetStatusShift2?: FleetUnitStatusDetail[];
+  isFleetConfirmedS1?: boolean;
+  isFleetConfirmedS2?: boolean;
+  fleetConfirmedS1At?: string;
+  fleetConfirmedS2At?: string;
   // Bus summaries stats
   todayPassengers: number;
   yesterdayPassengers: number;
@@ -218,6 +225,12 @@ export async function fetchRegionalMonitoringData(
       trafficJamSpots: todayReport?.traffic_jam_spots || r.default_traffic_jam_spots || [],
       operationalIssues: todayReport?.operational_issues || '',
       status,
+      fleetStatusShift1: todayReport?.fleet_status_shift1 || [],
+      fleetStatusShift2: todayReport?.fleet_status_shift2 || [],
+      isFleetConfirmedS1: !!todayReport?.is_fleet_confirmed_s1,
+      isFleetConfirmedS2: !!todayReport?.is_fleet_confirmed_s2,
+      fleetConfirmedS1At: todayReport?.fleet_confirmed_s1_at,
+      fleetConfirmedS2At: todayReport?.fleet_confirmed_s2_at,
       todayPassengers,
       yesterdayPassengers,
       lastWeekPassengers,

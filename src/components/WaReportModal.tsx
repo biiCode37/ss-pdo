@@ -10,9 +10,11 @@ import {
 import {
   generateWaReportFormat1,
   generateWaReportFormat2,
+  generateWaReportFormat3,
   openWhatsApp,
   type RouteWaData,
-  type RegionTotals
+  type RegionTotals,
+  type RouteFleetReportItem
 } from '../utils/waReportGenerator';
 import type { RegionalMonitoringResult } from '../services/allRouteMonitoringService';
 import { showSuccessToast } from '../utils/alertUtils';
@@ -31,7 +33,9 @@ function WaReportModalComponent({
   regionalData,
   selectedDate
 }: Props) {
-  const [formatType, setFormatType] = useState<'format1' | 'format2'>('format1');
+  const [formatType, setFormatType] = useState<'format1' | 'format2' | 'format3'>('format1');
+  const defaultShift: 1 | 2 = new Date().getHours() >= 14 ? 2 : 1;
+  const [selectedShift, setSelectedShift] = useState<1 | 2>(defaultShift);
   const [supervisorFilter, setSupervisorFilter] = useState<'ALL' | 'RANTO' | 'ABDUL' | 'MOAMAR'>('ALL');
   const [copied, setCopied] = useState(false);
 
@@ -47,6 +51,17 @@ function WaReportModalComponent({
       return true;
     });
   }, [regionalData, supervisorFilter]);
+
+  // Check unconfirmed routes for Format 3 blocking (18 routes regional check)
+  const unconfirmedRoutes = useMemo(() => {
+    if (formatType !== 'format3') return [];
+    const allRoutes = regionalData?.routes || [];
+    return allRoutes.filter((r) =>
+      selectedShift === 1 ? !r.isFleetConfirmedS1 : !r.isFleetConfirmedS2
+    );
+  }, [formatType, regionalData?.routes, selectedShift]);
+
+  const isFormat3Blocked = formatType === 'format3' && unconfirmedRoutes.length > 0;
 
   // Convert to RouteWaData
   const waRouteItems: RouteWaData[] = useMemo(() => {
@@ -130,12 +145,27 @@ function WaReportModalComponent({
 
   // Generate WhatsApp Message Text
   const messageText = useMemo(() => {
-    if (!selectedDate || waRouteItems.length === 0) return '';
+    if (!selectedDate || filteredRoutes.length === 0) return '';
     if (formatType === 'format1') {
       return generateWaReportFormat1(selectedDate, waRouteItems);
     }
-    return generateWaReportFormat2(selectedDate, waRouteItems, regionTotals);
-  }, [formatType, selectedDate, waRouteItems, regionTotals]);
+    if (formatType === 'format2') {
+      return generateWaReportFormat2(selectedDate, waRouteItems, regionTotals);
+    }
+    if (formatType === 'format3') {
+      const fleetItems: RouteFleetReportItem[] = filteredRoutes.map((r, idx) => ({
+        no: idx + 1,
+        routeCode: r.routeCode,
+        routeName: r.routeName,
+        operatorName: r.operatorName,
+        renops: selectedShift === 1 ? r.renopsShift1 : r.renopsShift2,
+        realops: selectedShift === 1 ? r.realopsShift1 : r.realopsShift2,
+        nonSgoUnits: selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2,
+      }));
+      return generateWaReportFormat3(selectedDate, selectedShift, fleetItems);
+    }
+    return '';
+  }, [formatType, selectedDate, filteredRoutes, waRouteItems, regionTotals, selectedShift]);
 
   // Missing reports count
   const unsubmittedCount = useMemo(() => {
@@ -145,6 +175,7 @@ function WaReportModalComponent({
   if (!isOpen) return null;
 
   const handleCopy = async () => {
+    if (isFormat3Blocked) return;
     try {
       await navigator.clipboard.writeText(messageText);
       setCopied(true);
@@ -156,6 +187,7 @@ function WaReportModalComponent({
   };
 
   const handleOpenWa = () => {
+    if (isFormat3Blocked) return;
     openWhatsApp(messageText);
   };
 
@@ -269,7 +301,7 @@ function WaReportModalComponent({
             background: 'var(--bg-secondary, #f1f5f9)',
             borderRadius: '12px',
             padding: '3px',
-            marginBottom: '12px'
+            marginBottom: '10px'
           }}
         >
           <button
@@ -277,10 +309,10 @@ function WaReportModalComponent({
             onClick={() => setFormatType('format1')}
             style={{
               flex: 1,
-              padding: '8px 12px',
-              borderRadius: '10px',
+              padding: '7px 8px',
+              borderRadius: '9px',
               border: 'none',
-              fontSize: '13px',
+              fontSize: '11px',
               fontWeight: 600,
               background: formatType === 'format1' ? 'var(--card-bg, #ffffff)' : 'transparent',
               color: formatType === 'format1' ? '#2563eb' : 'var(--text-secondary, #64748b)',
@@ -289,10 +321,11 @@ function WaReportModalComponent({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px'
+              gap: '4px',
+              whiteSpace: 'nowrap'
             }}
           >
-            <FileText size={15} />
+            <FileText size={13} />
             {TEXT_WA_REPORT.FORMAT_1_BTN}
           </button>
           <button
@@ -300,10 +333,10 @@ function WaReportModalComponent({
             onClick={() => setFormatType('format2')}
             style={{
               flex: 1,
-              padding: '8px 12px',
-              borderRadius: '10px',
+              padding: '7px 8px',
+              borderRadius: '9px',
               border: 'none',
-              fontSize: '13px',
+              fontSize: '11px',
               fontWeight: 600,
               background: formatType === 'format2' ? 'var(--card-bg, #ffffff)' : 'transparent',
               color: formatType === 'format2' ? '#2563eb' : 'var(--text-secondary, #64748b)',
@@ -312,13 +345,90 @@ function WaReportModalComponent({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px'
+              gap: '4px',
+              whiteSpace: 'nowrap'
             }}
           >
-            <FileText size={15} />
+            <FileText size={13} />
             {TEXT_WA_REPORT.FORMAT_2_BTN}
           </button>
+          <button
+            type="button"
+            onClick={() => setFormatType('format3')}
+            style={{
+              flex: 1,
+              padding: '7px 8px',
+              borderRadius: '9px',
+              border: 'none',
+              fontSize: '11px',
+              fontWeight: 600,
+              background: formatType === 'format3' ? 'var(--card-bg, #ffffff)' : 'transparent',
+              color: formatType === 'format3' ? '#2563eb' : 'var(--text-secondary, #64748b)',
+              boxShadow: formatType === 'format3' ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '4px',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            <FileText size={13} />
+            {TEXT_WA_REPORT.FORMAT_3_BTN}
+          </button>
         </div>
+
+        {/* Sub-selector Shift for Format 3 */}
+        {formatType === 'format3' && (
+          <div
+            style={{
+              display: 'flex',
+              gap: '8px',
+              background: 'var(--bg-secondary, #f8fafc)',
+              padding: '4px',
+              borderRadius: '12px',
+              marginBottom: '10px',
+              border: '1px solid rgba(0,0,0,0.05)',
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedShift(1)}
+              style={{
+                flex: 1,
+                padding: '7px 12px',
+                borderRadius: '8px',
+                border: selectedShift === 1 ? '1px solid #2563eb' : '1px solid transparent',
+                background: selectedShift === 1 ? '#2563eb' : 'transparent',
+                color: selectedShift === 1 ? '#ffffff' : 'var(--text-secondary, #64748b)',
+                fontSize: '12px',
+                fontWeight: selectedShift === 1 ? 700 : 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {TEXT_WA_REPORT.SHIFT_SELECTOR.SHIFT_1}
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedShift(2)}
+              style={{
+                flex: 1,
+                padding: '7px 12px',
+                borderRadius: '8px',
+                border: selectedShift === 2 ? '1px solid #2563eb' : '1px solid transparent',
+                background: selectedShift === 2 ? '#2563eb' : 'transparent',
+                color: selectedShift === 2 ? '#ffffff' : 'var(--text-secondary, #64748b)',
+                fontSize: '12px',
+                fontWeight: selectedShift === 2 ? 700 : 500,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {TEXT_WA_REPORT.SHIFT_SELECTOR.SHIFT_2}
+            </button>
+          </div>
+        )}
 
         {/* Filter Lingkup Korlap */}
         <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '8px', marginBottom: '10px' }}>
@@ -352,6 +462,50 @@ function WaReportModalComponent({
           })}
         </div>
 
+        {/* Format 3 Blocking Alert */}
+        {isFormat3Blocked && (
+          <div
+            style={{
+              background: 'rgba(239, 68, 68, 0.08)',
+              border: '1px solid rgba(239, 68, 68, 0.25)',
+              borderRadius: '12px',
+              padding: '10px 12px',
+              marginBottom: '12px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#dc2626', fontWeight: 700, fontSize: '12px' }}>
+              <AlertTriangle size={16} style={{ flexShrink: 0 }} />
+              <span>{TEXT_WA_REPORT.BLOCKING_TITLE(selectedShift)}</span>
+            </div>
+            <p style={{ margin: 0, fontSize: '11px', color: 'var(--text-secondary, #64748b)', lineHeight: 1.4 }}>
+              {TEXT_WA_REPORT.BLOCKING_DESC(
+                unconfirmedRoutes.length,
+                unconfirmedRoutes.map((r) => r.routeCode)
+              )}
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '2px' }}>
+              {unconfirmedRoutes.map((r) => (
+                <span
+                  key={r.id}
+                  style={{
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: '6px',
+                    background: 'rgba(239, 68, 68, 0.15)',
+                    color: '#dc2626',
+                  }}
+                >
+                  {r.routeCode}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Monospace Message Preview Container */}
         <div
           style={{
@@ -377,6 +531,7 @@ function WaReportModalComponent({
         <div style={{ display: 'flex', gap: '10px' }}>
           <button
             type="button"
+            disabled={isFormat3Blocked}
             onClick={handleCopy}
             style={{
               flex: 1,
@@ -391,7 +546,8 @@ function WaReportModalComponent({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              cursor: 'pointer',
+              cursor: isFormat3Blocked ? 'not-allowed' : 'pointer',
+              opacity: isFormat3Blocked ? 0.45 : 1,
               transition: 'all 0.2s ease'
             }}
           >
@@ -401,6 +557,7 @@ function WaReportModalComponent({
 
           <button
             type="button"
+            disabled={isFormat3Blocked}
             onClick={handleOpenWa}
             style={{
               flex: 1.2,
@@ -415,8 +572,9 @@ function WaReportModalComponent({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              boxShadow: '0 2px 10px rgba(37, 211, 102, 0.35)',
-              cursor: 'pointer'
+              boxShadow: isFormat3Blocked ? 'none' : '0 2px 10px rgba(37, 211, 102, 0.35)',
+              cursor: isFormat3Blocked ? 'not-allowed' : 'pointer',
+              opacity: isFormat3Blocked ? 0.45 : 1,
             }}
           >
             <Share2 size={16} />
