@@ -113,7 +113,8 @@ describe('WaReportModal Component - Format 3 & Blocking Rules', () => {
       );
     });
 
-    expect(container.textContent).toContain('Format 3 (Status Armada)');
+    expect(container.textContent).toContain('Format 3');
+    expect(container.textContent).toContain('Status Armada');
   });
 
   it('shows shift selector buttons when Format 3 is active', async () => {

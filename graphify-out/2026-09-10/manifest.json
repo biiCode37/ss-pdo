@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1789052722.190311,
-    "ast_hash": "c6a8f76c9008cee4225f05c197d9d457",
+    "mtime": 1789057364.1116946,
+    "ast_hash": "aaaea1f84f86e9e250c2cfd85dd0b098",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1788856360.264655,
-    "ast_hash": "fa9e6dfedb9e5c13c1750f1414681f76",
+    "mtime": 1789057666.6527297,
+    "ast_hash": "95be58e772f12d9dc7983f56b0003c3b",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -630,8 +630,8 @@
     "semantic_hash": ""
   },
   "src/types/supabase.ts": {
-    "mtime": 1789048918.0411255,
-    "ast_hash": "0a29a14d52f4f7aa8545254ef3b6c63d",
+    "mtime": 1789057292.816616,
+    "ast_hash": "dfb4aa7ad4686084e03bb5d0a547daf3",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-04-supabase-integration.md": {
@@ -1335,13 +1335,13 @@
     "semantic_hash": ""
   },
   "src/components/WaReportModal.test.tsx": {
-    "mtime": 1788842498.1610198,
-    "ast_hash": "52805981814adea06a6bc73ee83804dc",
+    "mtime": 1789057567.5515797,
+    "ast_hash": "4c4e309d1bd3ed007a3b716a3b001262",
     "semantic_hash": ""
   },
   "src/components/WaReportModal.tsx": {
-    "mtime": 1789006674.0021086,
-    "ast_hash": "1f2ea4e5e4d3b4cd4b9624ad5a271521",
+    "mtime": 1789057621.2341533,
+    "ast_hash": "25b232956495a401aa3f3e7e8c3ed872",
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.test.ts": {
@@ -1350,13 +1350,13 @@
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.ts": {
-    "mtime": 1788842641.6326988,
-    "ast_hash": "73aacb6822c7862d931b477475222fae",
+    "mtime": 1789057522.9880154,
+    "ast_hash": "9ca5952f89e7ad53fc919134538f37f9",
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.test.ts": {
-    "mtime": 1788842283.6968699,
-    "ast_hash": "399aba227075b405647149f90c8395f7",
+    "mtime": 1789057337.936626,
+    "ast_hash": "76a7b175de318ad66e9da6df435bdfda",
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.ts": {
@@ -1365,13 +1365,13 @@
     "semantic_hash": ""
   },
   "src/utils/waReportGenerator.test.ts": {
-    "mtime": 1788841912.484309,
-    "ast_hash": "5a1ffdfc964eeecdbd3a22234bfe31ef",
+    "mtime": 1789057455.7577713,
+    "ast_hash": "9f5865e6340d3f8017c701e5e376f3e6",
     "semantic_hash": ""
   },
   "src/utils/waReportGenerator.ts": {
-    "mtime": 1788849907.0470781,
-    "ast_hash": "99321526d4e901ff7f14771442efba39",
+    "mtime": 1789057481.267588,
+    "ast_hash": "bb3dd8adf376b3be5435b1ec4ed073e5",
     "semantic_hash": ""
   },
   "supabase/migrations/20260908000001_all_route_monitoring.sql": {
@@ -1460,13 +1460,13 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_wa_report.ts": {
-    "mtime": 1788849699.5161247,
-    "ast_hash": "087aadf3a97f6fadcef2070d5d012b44",
+    "mtime": 1789057404.262565,
+    "ast_hash": "04b9a360165d43413e37f4f5dbcc9fc9",
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789053228.4872856,
-    "ast_hash": "d3f5260266cea49c3ec3f7abf204dc2b",
+    "mtime": 1789057412.2347982,
+    "ast_hash": "477f2f8d2df26bfce0f167583fad8a26",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1767,6 +1767,26 @@
   "src/components/BusList.test.tsx": {
     "mtime": 1789053248.604091,
     "ast_hash": "a5bf45825e7a3161937c64680101fec7",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260910000003_add_fleet_status_snapshot.sql": {
+    "mtime": 1789057287.713798,
+    "ast_hash": "88bb3da63f0bc66b9e90ff1950dc06f0",
+    "semantic_hash": ""
+  },
+  "contoh_file_ss/all_route_report/contoh_laporan_Status_Armada.md": {
+    "mtime": 1789055585.2444925,
+    "ast_hash": "c529001092b3c5a43b49be7207e18727",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-10-fleet-status-wa-report.md": {
+    "mtime": 1789057089.0323002,
+    "ast_hash": "115f5a6fa3c1728437e1e2ae2aeac920",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-10-fleet-status-wa-report-design.md": {
+    "mtime": 1789056635.4150336,
+    "ast_hash": "d95acf137c97eae28a90d3c778bc8644",
     "semantic_hash": ""
   }
 }

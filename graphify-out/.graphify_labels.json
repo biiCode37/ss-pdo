@@ -246,8 +246,9 @@
   "244": "RINCIAN TEMUAN",
   "245": "1. DAFTAR PERUBAHAN & IMPLEMENTASI",
   "246": "AUDIT BUGS: RESTORASI IKON VISUAL & AFEKSI IDENTITAS ARMADA (REFACTOR 32)",
-  "247": "Evaluation and iteration",
+  "247": "1. THE THREE DIALS (Core Configuration)",
   "248": "BusCard.tsx",
   "249": "Global Constraints",
-  "250": "core.ts"
+  "250": "core.ts",
+  "251": "Anti-patterns to avoid"
 }

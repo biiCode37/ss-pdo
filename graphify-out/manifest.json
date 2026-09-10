@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1789057666.6527297,
-    "ast_hash": "95be58e772f12d9dc7983f56b0003c3b",
+    "mtime": 1789057805.6664038,
+    "ast_hash": "2a6e52775956f7b15e647930393ed00a",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1335,13 +1335,13 @@
     "semantic_hash": ""
   },
   "src/components/WaReportModal.test.tsx": {
-    "mtime": 1789057567.5515797,
-    "ast_hash": "4c4e309d1bd3ed007a3b716a3b001262",
+    "mtime": 1789058174.6406412,
+    "ast_hash": "6f76bdb1af6cdabfa3ea1917094792ad",
     "semantic_hash": ""
   },
   "src/components/WaReportModal.tsx": {
-    "mtime": 1789057621.2341533,
-    "ast_hash": "25b232956495a401aa3f3e7e8c3ed872",
+    "mtime": 1789058160.1733289,
+    "ast_hash": "d4963e081fc5f8d908bcdbd3395c6b74",
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.test.ts": {
@@ -1460,13 +1460,13 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_wa_report.ts": {
-    "mtime": 1789057404.262565,
-    "ast_hash": "04b9a360165d43413e37f4f5dbcc9fc9",
+    "mtime": 1789058051.921127,
+    "ast_hash": "70483ddf46a4d8816792c384286a8008",
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789057412.2347982,
-    "ast_hash": "477f2f8d2df26bfce0f167583fad8a26",
+    "mtime": 1789058066.7502246,
+    "ast_hash": "154876a62c5fe288e6cfad1899d80dc5",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {

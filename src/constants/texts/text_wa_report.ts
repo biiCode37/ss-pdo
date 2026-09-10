@@ -7,14 +7,22 @@ export const TEXT_WA_REPORT = {
   FORMAT_1_BTN: 'Format 1 (Komprehensif)',
   FORMAT_2_BTN: 'Format 2 (Rincian Shift)',
   FORMAT_3_BTN: 'Format 3 (Status Armada)',
+  FORMAT_TABS: {
+    FORMAT_1: 'Format 1',
+    FORMAT_1_SUB: 'Pelanggan',
+    FORMAT_2: 'Format 2',
+    FORMAT_2_SUB: 'Rincian Shift',
+    FORMAT_3: 'Format 3',
+    FORMAT_3_SUB: 'Status Armada',
+  },
   FORMAT_3_DESC: 'Laporan Status Kesiapan Armada Per Shift',
   SHIFT_SELECTOR: {
     SHIFT_1: '☀️ Shift 1 (Pagi)',
     SHIFT_2: '🌙 Shift 2 (Siang)',
   },
-  BLOCKING_TITLE: (shift: number) => `⚠️ Laporan Status Armada Shift ${shift} Belum Siap Dibuat`,
-  BLOCKING_DESC: (count: number, routes: string[]) =>
-    `Masih ada ${count} rute yang belum mengonfirmasi status armada: ${routes.join(', ')}. Harap pastikan seluruh rute terkonfirmasi terlebih dahulu.`,
+  BLOCKING_TITLE: (shift: number) => `Status Armada Shift ${shift} Belum Lengkap`,
+  BLOCKING_DESC: (count: number, _routes?: string[]) =>
+    `Sebanyak ${count} rute belum mengonfirmasi status armada. Laporan dapat disalin setelah seluruh rute terkonfirmasi.`,
   UNCONFIRMED_ROUTES_BADGE: (count: number) => `${count} Rute Belum Konfirmasi`,
   FILTER_ALL: 'Semua Korlap',
   WARNING_UNSUBMITTED: (unsubmitted: number, total: number) =>

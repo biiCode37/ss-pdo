@@ -78,8 +78,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_WA_REPORT.SHIFT_SELECTOR.SHIFT_1).toContain('Shift 1');
     expect(TEXT_WA_REPORT.SHIFT_SELECTOR.SHIFT_2).toContain('Shift 2');
     expect(TEXT_WA_REPORT.BLOCKING_TITLE(1)).toContain('Shift 1');
-    expect(TEXT_WA_REPORT.BLOCKING_DESC(2, ['JAK.01', 'JAK.15'])).toContain('2 rute');
-    expect(TEXT_WA_REPORT.BLOCKING_DESC(2, ['JAK.01', 'JAK.15'])).toContain('JAK.01, JAK.15');
+    expect(TEXT_WA_REPORT.BLOCKING_DESC(2)).toContain('2 rute');
     expect(TEXT_WA_REPORT.UNCONFIRMED_ROUTES_BADGE(3)).toContain('3');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_HEADER('Kamis', '10 September 2026', 1, 'Pagi')).toContain('1 (Pagi)');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_CLOSING).toContain('diketahui');
