@@ -181,8 +181,8 @@ function FleetStatusModalComponent({
         style={{
           width: '100%',
           maxWidth: '580px',
-          height: '92vh',
-          maxHeight: '92vh',
+          height: 'min(92dvh, 760px)',
+          maxHeight: 'min(92dvh, 760px)',
           display: 'flex',
           flexDirection: 'column',
           borderTopLeftRadius: '24px',

@@ -432,67 +432,59 @@ function BusListComponent({
           </div>
         )}
 
+        {/* Hairline Progress Indicator (Ultra-clean, saves vertical space) */}
         <div
-          className="progress-section glass"
-          style={{ padding: "16px", marginBottom: "12px" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "2px 4px 6px 4px",
+            fontSize: "12px",
+            color: "var(--text-secondary)",
+          }}
+        >
+          <span style={{ fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.1px" }}>
+            {activeCategory === "ALL"
+              ? "Progres Harian"
+              : `Kolom: ${categories.find((c) => c.id === activeCategory)?.label || activeCategory}`}
+          </span>
+          <span className="tabular-nums" style={{ fontSize: "11.5px" }}>
+            <strong style={{ color: filledCount === totalCount ? "var(--success-color)" : "var(--text-primary)" }}>
+              {filledCount}
+            </strong>
+            /{totalCount} Unit ({progressPercent}%)
+          </span>
+        </div>
+
+        {/* 3px Hairline Progress Bar */}
+        <div
+          style={{
+            height: "3px",
+            background: "rgba(255, 255, 255, 0.08)",
+            borderRadius: "2px",
+            overflow: "hidden",
+            marginBottom: "10px",
+          }}
         >
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "8px",
+              height: "100%",
+              background: filledCount === totalCount ? "var(--success-color)" : "var(--accent-color)",
+              width: `${progressPercent}%`,
+              transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
-          >
-            <div style={{ fontWeight: "600", fontSize: "14px" }}>
-              {activeCategory === "ALL"
-                ? "Progres Harian"
-                : `Progres Kolom: ${categories.find((c) => c.id === activeCategory)?.label || activeCategory}`}
-            </div>
-            <div style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
-              <span
-                style={{
-                  color:
-                    filledCount === totalCount
-                      ? "var(--success-color)"
-                      : "var(--text-primary)",
-                  fontWeight: "bold",
-                }}
-              >
-                {filledCount}
-              </span>{" "}
-              / {totalCount} Unit
-            </div>
-          </div>
-          <div
-            className="progress-bar-bg"
-            style={{
-              height: "8px",
-              background: "rgba(0,0,0,0.1)",
-              borderRadius: "4px",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              className="progress-bar-fill"
-              style={{
-                height: "100%",
-                background: "var(--accent-color)",
-                width: `${progressPercent}%`,
-                transition: "width 0.5s ease-out",
-              }}
-            ></div>
-          </div>
+          />
         </div>
 
         {/* Controls Container: Row 1 (Fokus Kolom + Set Jumlah Trip) & Row 2 (Search + Filter) */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        {/* Controls Container: Row 1 (Fokus Kolom + Set Jumlah Trip) & Row 2 (Search + Filter) */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(6px, 1.5vw, 8px)" }}>
           {/* Row 1: Set Jumlah Trip (Kiri) & Fokus Kolom (Kanan) */}
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "auto 1fr",
-              gap: "8px",
+              gap: "clamp(6px, 1.5vw, 8px)",
               alignItems: "center",
             }}
           >
@@ -502,9 +494,9 @@ function BusListComponent({
               onClick={handleOpenBulkTripModal}
               disabled={isSubmittingBulk}
               style={{
-                height: "40px",
+                height: "38px",
                 padding: "0 12px",
-                borderRadius: "12px",
+                borderRadius: "11px",
                 background: "var(--card-bg)",
                 border: "1px solid var(--card-border)",
                 color: "var(--text-primary)",
@@ -548,11 +540,11 @@ function BusListComponent({
                 onChange={(e) => setActiveCategory(e.target.value)}
                 className="input-field"
                 style={{
-                  height: "40px",
-                  padding: "0 34px 0 12px",
-                  fontSize: "13px",
+                  height: "38px",
+                  padding: "0 32px 0 12px",
+                  fontSize: "12.5px",
                   fontWeight: 600,
-                  borderRadius: "12px",
+                  borderRadius: "11px",
                   background: "var(--card-bg)",
                   border: "1px solid var(--card-border)",
                   color: "var(--text-primary)",
@@ -577,10 +569,10 @@ function BusListComponent({
                 ))}
               </select>
               <ChevronDown
-                size={16}
+                size={15}
                 style={{
                   position: "absolute",
-                  right: "12px",
+                  right: "10px",
                   top: "50%",
                   transform: "translateY(-50%)",
                   color: "var(--text-secondary)",
@@ -593,39 +585,39 @@ function BusListComponent({
           {/* Row 2: Pencarian & Filter Sisa Unit */}
           <div
             className="search-container"
-            style={{ display: "flex", gap: "8px", margin: 0 }}
+            style={{ display: "flex", gap: "clamp(6px, 1.5vw, 8px)", margin: 0 }}
           >
             <div className="search-input-wrapper" style={{ flex: 1 }}>
-              <Search className="search-icon" size={18} />
+              <Search className="search-icon" size={17} />
               <input
                 type="text"
                 className="input-field search-input"
                 placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ height: "40px", fontSize: "13.5px" }}
+                style={{ height: "38px", fontSize: "13px" }}
               />
             </div>
             <button
               className={`btn ${showOnlyUnfinished ? "" : "btn-outline"}`}
               style={{
                 width: "auto",
-                padding: "0 14px",
+                padding: "0 12px",
                 display: "flex",
-                gap: "6px",
+                gap: "5px",
                 alignItems: "center",
-                height: "40px",
-                fontSize: "13px",
+                height: "38px",
+                fontSize: "12.5px",
                 fontWeight: 600,
-                borderRadius: "12px",
+                borderRadius: "11px",
                 whiteSpace: "nowrap",
               }}
               onClick={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
             >
               {showOnlyUnfinished ? (
-                <CheckCircle2 size={16} />
+                <CheckCircle2 size={15} />
               ) : (
-                <Filter size={16} />
+                <Filter size={15} />
               )}
               {showOnlyUnfinished ? TEXT_DASHBOARD.BUS_LIST.FILTER_UNFINISHED : TEXT_DASHBOARD.BUS_LIST.FILTER_BTN}
             </button>

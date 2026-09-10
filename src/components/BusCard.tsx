@@ -418,8 +418,20 @@ function BusCardComponent({
     }
 
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", justifyContent: "flex-end" }}>
-        {/* Badge Trip (Interactive Shortcut per unit) */}
+      <div
+        className="tabular-nums"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "clamp(5px, 1.2vw, 8px)",
+          fontSize: "12px",
+          padding: "3px 8px",
+          borderRadius: "10px",
+          background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
+          border: "1px solid var(--card-border)",
+        }}
+      >
+        {/* Interactive Trip Shortcut */}
         <button
           type="button"
           onClick={(e) => {
@@ -429,35 +441,24 @@ function BusCardComponent({
           className="bus-card-badge-trip"
           title={tripStatusTitle}
           style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: isBelowTarget || isImbalanced
-              ? "rgba(245, 158, 11, 0.12)"
-              : isTargetAchieved || (hasTrip && !hasTarget)
-              ? "rgba(16, 185, 129, 0.10)"
-              : "var(--input-bg)",
-            color: isBelowTarget || isImbalanced
-              ? "var(--warning-text, #f59e0b)"
-              : isTargetAchieved || (hasTrip && !hasTarget)
-              ? "#10b981"
-              : "var(--text-secondary)",
-            border: `1px solid ${
-              isBelowTarget || isImbalanced
-                ? "rgba(245, 158, 11, 0.3)"
-                : isTargetAchieved || (hasTrip && !hasTarget)
-                ? "rgba(16, 185, 129, 0.25)"
-                : "var(--card-border)"
-            }`,
             display: "inline-flex",
             alignItems: "center",
             gap: "4px",
+            background: "transparent",
+            border: "none",
             cursor: tabName === "AKUMULASI" ? "default" : "pointer",
-            transition: "all 0.15s ease",
+            fontWeight: 700,
+            fontSize: "11.5px",
+            color: isBelowTarget || isImbalanced
+              ? "var(--warning-text, #f59e0b)"
+              : isTargetAchieved || (hasTrip && !hasTarget)
+              ? "var(--success-color, #10b981)"
+              : "var(--text-secondary)",
+            padding: "2px 4px",
+            borderRadius: "6px",
           }}
         >
-          <ArrowRightLeft size={11} style={{ flexShrink: 0 }} />
+          <ArrowRightLeft size={11} style={{ flexShrink: 0, opacity: 0.85 }} />
           <span>
             {isBelowTarget
               ? `⚠️ ${pergiVal || 0}/${pulangVal || 0}`
@@ -465,41 +466,39 @@ function BusCardComponent({
           </span>
         </button>
 
-        <div
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: "var(--shift1-bg)",
-            color: "var(--shift1-color)",
-            border: "1px solid var(--shift1-border)",
-            display: "flex",
-            alignItems: "center",
-            gap: "4px",
-          }}
-        >
-          <Navigation size={12} style={{ flexShrink: 0 }} />
-          <span>{totalKm > 0 ? `${safeFormatNumber(totalKm)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}` : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}`}</span>
-        </div>
+        <span style={{ opacity: 0.25, color: "var(--text-secondary)" }}>•</span>
 
-        <div
+        {/* KM Readout */}
+        <span
           style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: "var(--input-bg)",
-            color: "var(--text-primary)",
-            border: "1px solid var(--card-border)",
-            display: "flex",
+            fontWeight: 600,
+            fontSize: "11.5px",
+            color: "var(--shift1-color)",
+            display: "inline-flex",
             alignItems: "center",
-            gap: "4px",
+            gap: "3px",
           }}
         >
-          <Users size={12} style={{ color: "var(--shift1-color)", flexShrink: 0 }} />
+          <Navigation size={11} style={{ opacity: 0.85, flexShrink: 0 }} />
+          <span>{totalKm > 0 ? `${safeFormatNumber(totalKm)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}` : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}`}</span>
+        </span>
+
+        <span style={{ opacity: 0.25, color: "var(--text-secondary)" }}>•</span>
+
+        {/* Pnp Readout */}
+        <span
+          style={{
+            fontWeight: 600,
+            fontSize: "11.5px",
+            color: "var(--text-primary)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "3px",
+          }}
+        >
+          <Users size={11} style={{ color: "var(--text-secondary)", opacity: 0.85, flexShrink: 0 }} />
           <span>{totalPnp > 0 ? `${safeFormatNumber(totalPnp)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}` : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}`}</span>
-        </div>
+        </span>
       </div>
     );
   };

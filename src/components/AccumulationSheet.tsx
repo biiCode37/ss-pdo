@@ -317,7 +317,7 @@ export function AccumulationSheet({
         style={{
           width: "100%",
           maxWidth: "560px",
-          maxHeight: "88vh",
+          maxHeight: "min(88dvh, 760px)",
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
           borderTopLeftRadius: "24px",

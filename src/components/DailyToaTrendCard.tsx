@@ -352,18 +352,19 @@ function DailyToaTrendCardComponent({
         >
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "11px",
               fontWeight: 600,
               color: "var(--text-secondary)",
               display: "flex",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
-            <Award size={11} style={{ color: "var(--total-color)" }} />
+            <Award size={12} style={{ color: "var(--total-color)" }} />
             {TEXT_DASHBOARD.TOA_TREND.PEAK_LABEL}
           </span>
           <span
+            className="tabular-nums"
             style={{
               fontSize: "14px",
               fontWeight: 700,
@@ -373,7 +374,7 @@ function DailyToaTrendCardComponent({
           >
             {peakItem ? safeFormatNumber(peakItem.totalToa) : "0"}
           </span>
-          <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
+          <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
             {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{peakItem ? peakItem.day : "-"}
           </span>
         </div>
@@ -392,18 +393,19 @@ function DailyToaTrendCardComponent({
         >
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "11px",
               fontWeight: 600,
               color: "var(--text-secondary)",
               display: "flex",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
-            <TrendingDown size={11} style={{ color: "var(--danger-text)" }} />
+            <TrendingDown size={12} style={{ color: "var(--danger-text)" }} />
             {TEXT_DASHBOARD.TOA_TREND.LOWEST_LABEL}
           </span>
           <span
+            className="tabular-nums"
             style={{
               fontSize: "14px",
               fontWeight: 700,
@@ -413,7 +415,7 @@ function DailyToaTrendCardComponent({
           >
             {lowestItem ? safeFormatNumber(lowestItem.totalToa) : "0"}
           </span>
-          <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
+          <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
             {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{lowestItem ? lowestItem.day : "-"}
           </span>
         </div>
@@ -432,18 +434,19 @@ function DailyToaTrendCardComponent({
         >
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "11px",
               fontWeight: 600,
               color: "var(--text-secondary)",
               display: "flex",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
-            <Zap size={11} style={{ color: "var(--info-text)" }} />
+            <Zap size={12} style={{ color: "var(--info-text)" }} />
             {TEXT_DASHBOARD.TOA_TREND.AVG_LABEL}
           </span>
           <span
+            className="tabular-nums"
             style={{
               fontSize: "14px",
               fontWeight: 700,
@@ -453,7 +456,7 @@ function DailyToaTrendCardComponent({
           >
             {safeFormatNumber(avgToa)}
           </span>
-          <span style={{ fontSize: "9.5px", color: "var(--text-secondary)" }}>
+          <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
             {TEXT_DASHBOARD.TOA_TREND.AVG_UNIT}
           </span>
         </div>
@@ -464,42 +467,42 @@ function DailyToaTrendCardComponent({
         style={{
           display: "flex",
           justifyContent: "flex-end",
-          gap: "10px",
-          marginBottom: "6px",
-          fontSize: "9px",
+          gap: "12px",
+          marginBottom: "8px",
+          fontSize: "11px",
           fontWeight: 600,
           color: "var(--text-secondary)",
         }}
       >
-        <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
           <span
             style={{
               width: "7px",
               height: "7px",
-              borderRadius: "2px",
-              background: "linear-gradient(180deg, #4ade80 0%, #059669 100%)",
+              borderRadius: "50%",
+              background: "var(--total-color, #4ade80)",
             }}
           ></span>
           {TEXT_DASHBOARD.TOA_TREND.LEGEND_UP}
         </span>
-        <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
           <span
             style={{
               width: "7px",
               height: "7px",
-              borderRadius: "2px",
-              background: "linear-gradient(180deg, #fb923c 0%, #ea580c 100%)",
+              borderRadius: "50%",
+              background: "var(--orange-color, #fb923c)",
             }}
           ></span>
           {TEXT_DASHBOARD.TOA_TREND.LEGEND_SLIGHT_DOWN}
         </span>
-        <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
           <span
             style={{
               width: "7px",
               height: "7px",
-              borderRadius: "2px",
-              background: "linear-gradient(180deg, #f43f5e 0%, #991b1b 100%)",
+              borderRadius: "50%",
+              background: "var(--danger-color, #f43f5e)",
             }}
           ></span>
           {TEXT_DASHBOARD.TOA_TREND.LEGEND_DRASTIC_DOWN}

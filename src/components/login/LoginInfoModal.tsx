@@ -44,7 +44,7 @@ export function LoginInfoModal({ isOpen, onClose }: LoginInfoModalProps) {
         style={{
           width: "100%",
           maxWidth: "640px",
-          maxHeight: "90vh",
+          maxHeight: "min(90dvh, 760px)",
           overflowY: "auto",
           padding: "20px 20px 32px",
           borderTopLeftRadius: "24px",

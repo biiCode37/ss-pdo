@@ -432,7 +432,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         width: '100%',
         backgroundColor: 'var(--bg-primary, #0f172a)',
         color: 'var(--text-primary, #f8fafc)',

@@ -75,7 +75,7 @@ export function AddRouteModal({
         style={{
           width: '100%',
           maxWidth: '480px',
-          maxHeight: '90vh',
+          maxHeight: 'min(90dvh, 760px)',
           overflowY: 'auto',
           padding: '24px 20px',
           borderRadius: '20px',

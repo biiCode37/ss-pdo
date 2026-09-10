@@ -766,7 +766,7 @@ function RouteOperationalReportCardComponent({
           style={{
             width: '100%',
             maxWidth: '580px',
-            maxHeight: '90vh',
+            maxHeight: 'min(90dvh, 760px)',
             overflowY: 'auto',
             padding: '16px 20px calc(28px + env(safe-area-inset-bottom, 16px)) 20px',
             borderTopLeftRadius: '24px',

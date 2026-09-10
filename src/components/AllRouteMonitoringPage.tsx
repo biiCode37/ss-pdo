@@ -194,7 +194,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         background: 'var(--bg-color, #0c0c0c)',
         color: 'var(--text-primary, #ededed)',
         paddingBottom: '96px',

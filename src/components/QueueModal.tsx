@@ -71,7 +71,7 @@ export function QueueModal({
           padding: "20px",
           width: "100%",
           maxWidth: "420px",
-          maxHeight: "80vh",
+          maxHeight: "min(80dvh, 640px)",
           overflowY: "auto",
           boxShadow: "var(--shadow)",
           border: "1px solid var(--border-color)",

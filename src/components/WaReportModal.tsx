@@ -180,7 +180,7 @@ function WaReportModalComponent({
         style={{
           width: '100%',
           maxWidth: '560px',
-          maxHeight: '90vh',
+          maxHeight: 'min(90dvh, 760px)',
           background: 'var(--card-bg, #ffffff)',
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
