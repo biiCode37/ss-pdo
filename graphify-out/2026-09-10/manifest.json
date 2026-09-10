@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
-    "mtime": 1789052341.906478,
-    "ast_hash": "ced1a8b4ad3ec1ea5cee54a03f9b2f2c",
+    "mtime": 1789053240.0097814,
+    "ast_hash": "f72c7d6d133acd56c850e64961f45e71",
     "semantic_hash": ""
   },
   "src/components/CompletionStatusCard.tsx": {
@@ -1440,8 +1440,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_dashboard.ts": {
-    "mtime": 1789052678.755147,
-    "ast_hash": "3bcfa89968dc5aede103f0f242fa3d03",
+    "mtime": 1789053218.5036576,
+    "ast_hash": "adeacaab11c5bd250dbf69a9d4375c56",
     "semantic_hash": ""
   },
   "src/constants/texts/text_errors.ts": {
@@ -1465,8 +1465,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789052684.5513432,
-    "ast_hash": "5d7eeb39ef38a77e2d6bb288879b5096",
+    "mtime": 1789053228.4872856,
+    "ast_hash": "d3f5260266cea49c3ec3f7abf204dc2b",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1765,8 +1765,8 @@
     "semantic_hash": ""
   },
   "src/components/BusList.test.tsx": {
-    "mtime": 1789052350.914884,
-    "ast_hash": "8dd85b0196b40dbdd5239e14fc1ab0aa",
+    "mtime": 1789053248.604091,
+    "ast_hash": "a5bf45825e7a3161937c64680101fec7",
     "semantic_hash": ""
   }
 }

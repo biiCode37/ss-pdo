@@ -1,7 +1,7 @@
 # Graph Report - SS_PDO  (2026-09-10)
 
 ## Corpus Check
-- 346 files · ~354,685 words
+- 346 files · ~354,763 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
