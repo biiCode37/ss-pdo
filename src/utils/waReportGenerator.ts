@@ -1,4 +1,15 @@
 import { TEXT_WA_REPORT } from '../constants/texts';
+import type { FleetUnitStatusDetail } from '../types/supabase';
+
+export interface RouteFleetReportItem {
+  no: number;
+  routeCode: string;
+  routeName?: string;
+  operatorName: string;
+  renops: number; // Target SGO
+  realops: number; // Realisasi Ops
+  nonSgoUnits?: FleetUnitStatusDetail[];
+}
 
 export interface RouteWaData {
   no: number;
@@ -224,6 +235,109 @@ export function generateWaReportFormat2(
   lines.push('```\t\t\t\t\t\t');
   lines.push('\t\t\t\t\t\t');
   lines.push(TEXT_WA_REPORT.TEMPLATE.CLOSING_FORMAT_2);
+
+  return lines.join('\n');
+}
+
+/**
+ * Mengubah kode operator menjadi nama resmi yang lengkap.
+ */
+export function getOperatorFullName(operatorCodeOrName: string): string {
+  const op = (operatorCodeOrName || '').trim().toUpperCase();
+  if (op === 'KLM' || op.includes('KOLAMAS')) return 'KOLAMAS (KLM)';
+  if (op === 'KWK' || op.includes('WAHANA KALPIKA')) return 'KOPERASI WAHANA KALPIKA (KWK)';
+  if (op === 'KBL' || op.includes('BUMI LESTARI')) return 'KENCANA BUMI LESTARI (KBL)';
+  if (op === 'KOMIDA' || op.includes('KOMIDA')) return 'KOMIDA';
+  return operatorCodeOrName;
+}
+
+/**
+ * Menghasilkan teks laporan WhatsApp Format 3 (Status Kesiapan Armada Per Shift)
+ * dengan format Executive Modern, ringkasan wilayah di atas, dan rincian unit non-SGO.
+ */
+export function generateWaReportFormat3(
+  dateStr: string,
+  shift: 1 | 2,
+  routes: RouteFleetReportItem[]
+): string {
+  const dayRaw = getIndonesianDayName(dateStr);
+  const dayTitle = dayRaw.charAt(0) + dayRaw.slice(1).toLowerCase();
+  const fullDate = formatIndonesianFullDate(dateStr);
+  const shiftName = shift === 1 ? 'Pagi' : 'Siang';
+  const divider = '━━━━━━━━━━━━━━━━━━━';
+
+  // Kalkulasi agregat wilayah
+  const totalSgo = routes.reduce((sum, r) => sum + (r.renops || 0), 0);
+  const totalRealops = routes.reduce((sum, r) => sum + (r.realops || 0), 0);
+  const totalTidakOps = Math.max(0, totalSgo - totalRealops);
+  const percentage = totalSgo > 0 ? ((totalRealops / totalSgo) * 100).toFixed(1).replace('.', ',') : '0,0';
+
+  let lengkapCount = 0;
+  let kurangCount = 0;
+
+  routes.forEach((r) => {
+    const routeTidakOps = Math.max(0, (r.renops || 0) - (r.realops || 0));
+    if (routeTidakOps === 0) {
+      lengkapCount++;
+    } else {
+      kurangCount++;
+    }
+  });
+
+  const lines: string[] = [
+    TEXT_WA_REPORT.TEMPLATE.FORMAT_3_HEADER(dayTitle, fullDate, shift, shiftName),
+    divider,
+    `*${TEXT_WA_REPORT.TEMPLATE.FORMAT_3_SUMMARY_TITLE}*`,
+    '```',
+    `Target SGO      : ${totalSgo} Unit`,
+    `Realisasi Ops   : ${totalRealops} Unit`,
+    `Tidak Ops       : ${totalTidakOps} Unit`,
+    `Ketercapaian    : ${percentage}%`,
+    `Status Rute     : ${lengkapCount} Lengkap | ${kurangCount} Kurang`,
+    '```',
+    divider,
+    `*${TEXT_WA_REPORT.TEMPLATE.FORMAT_3_ROUTE_DETAIL_TITLE}*`,
+  ];
+
+  routes.forEach((r) => {
+    const paddedNo = String(r.no).padStart(2, '0');
+    const operator = getOperatorFullName(r.operatorName);
+    const routeTidakOps = Math.max(0, (r.renops || 0) - (r.realops || 0));
+    const isLengkap = routeTidakOps === 0;
+
+    lines.push('');
+    lines.push(`*${paddedNo}. ${r.routeCode} ${operator}*`);
+    lines.push('```');
+    lines.push(`Target SGO    : ${r.renops} Unit`);
+    lines.push(`Realisasi Ops : ${r.realops} Unit`);
+    lines.push(`Tidak Ops     : ${routeTidakOps} Unit`);
+    lines.push(`Status        : ${isLengkap ? 'LENGKAP ✅' : 'TIDAK LENGKAP ✖️'}`);
+    lines.push('```');
+
+    // Filter unit non-SGO
+    const allNonSgo = r.nonSgoUnits || [];
+    const kendalaUnits = allNonSgo.filter((u) => !u.isOff);
+    const offUnits = allNonSgo.filter((u) => u.isOff);
+
+    if (kendalaUnits.length > 0) {
+      lines.push('*Rincian Tidak Ops:*');
+      kendalaUnits.forEach((u) => {
+        lines.push(`- ${u.unit} : ${u.note}`);
+      });
+    }
+
+    if (offUnits.length > 0) {
+      lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
+      offUnits.forEach((u) => {
+        lines.push(`- ${u.unit} : ${u.note}`);
+      });
+    }
+
+    lines.push(divider);
+  });
+
+  lines.push('');
+  lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_CLOSING);
 
   return lines.join('\n');
 }
