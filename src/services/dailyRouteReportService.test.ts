@@ -123,4 +123,46 @@ describe('dailyRouteReportService', () => {
     );
     expect(saved.id).toBe(99);
   });
+
+  it('upsertDailyRouteReport saves fleet status snapshots and confirmation flags', async () => {
+    const inputWithFleet = {
+      route_id: 1,
+      route_code: 'JAK.01',
+      date: '2026-09-10',
+      renops_shift1: 15,
+      realops_shift1: 14,
+      renops_shift2: 15,
+      realops_shift2: 15,
+      headway_fastest: 3,
+      headway_slowest: 10,
+      traffic_jam_spots: [],
+      status: 'draft' as const,
+      fleet_status_shift1: [
+        { unit: 'TJ-001', note: 'TO.EVDAL', isOff: false },
+        { unit: 'TJ-002', note: 'OFF', isOff: true }
+      ],
+      is_fleet_confirmed_s1: true,
+      fleet_confirmed_s1_at: '2026-09-10T05:30:00Z',
+    };
+
+    const chain: any = {};
+    chain.upsert = vi.fn().mockReturnValue(chain);
+    chain.select = vi.fn().mockReturnValue(chain);
+    chain.single = vi.fn().mockResolvedValue({ data: { id: 101, ...inputWithFleet }, error: null });
+    (supabase.from as any).mockReturnValue(chain);
+
+    const saved = await upsertDailyRouteReport(inputWithFleet);
+    expect(chain.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        route_code: 'JAK.01',
+        is_fleet_confirmed_s1: true,
+        fleet_status_shift1: [
+          { unit: 'TJ-001', note: 'TO.EVDAL', isOff: false },
+          { unit: 'TJ-002', note: 'OFF', isOff: true }
+        ],
+      }),
+      { onConflict: 'route_id,date' }
+    );
+    expect(saved.fleet_status_shift1).toHaveLength(2);
+  });
 });

@@ -20,6 +20,7 @@ import { FleetStatusModal } from "./fleetStatus/FleetStatusModal";
 import { getRenopsForDate } from "../utils/holidayUtils";
 import { combineShiftKeterangan, cleanShiftNote } from "../utils/keteranganUtils";
 import { fetchDailyRouteReport, upsertDailyRouteReport } from "../services/dailyRouteReportService";
+import type { FleetUnitStatusDetail } from "../types/supabase";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
 import { UserManagementSkeleton } from "./Skeletons";
@@ -585,8 +586,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           if (isMounted) {
             setOperationalReportStatus(report?.status || 'draft');
             setConfirmedShifts({
-              1: Boolean(report && (report.realops_shift1 > 0 || report.status === 'submitted' || report.status === 'verified')),
-              2: Boolean(report && (report.realops_shift2 > 0 || report.status === 'submitted' || report.status === 'verified')),
+              1: Boolean(report?.is_fleet_confirmed_s1 ?? (report && (report.realops_shift1 > 0 || report.status === 'submitted' || report.status === 'verified'))),
+              2: Boolean(report?.is_fleet_confirmed_s2 ?? (report && (report.realops_shift2 > 0 || report.status === 'submitted' || report.status === 'verified'))),
             });
           }
         })
@@ -667,6 +668,19 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       );
 
       if (matchedRoute?.id && operationalReportDate) {
+        const nonSgoUnits: FleetUnitStatusDetail[] = [];
+        for (const bus of busData || []) {
+          const unitVal = statusMap.get(bus.rowIndex);
+          const note = cleanShiftNote(shift === 1 ? unitVal?.s1 : unitVal?.s2);
+          if (note) {
+            nonSgoUnits.push({
+              unit: bus.unit,
+              note,
+              isOff: note.toUpperCase().includes('OFF'),
+            });
+          }
+        }
+
         await upsertDailyRouteReport({
           route_id: matchedRoute.id,
           route_code: matchedRoute.route_code,
@@ -678,7 +692,18 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           headway_fastest: 3,
           headway_slowest: 10,
           traffic_jam_spots: matchedRoute.default_traffic_jam_spots || [],
-          status: 'draft',
+          status: operationalReportStatus || 'draft',
+          ...(shift === 1
+            ? {
+                fleet_status_shift1: nonSgoUnits,
+                is_fleet_confirmed_s1: true,
+                fleet_confirmed_s1_at: new Date().toISOString(),
+              }
+            : {
+                fleet_status_shift2: nonSgoUnits,
+                is_fleet_confirmed_s2: true,
+                fleet_confirmed_s2_at: new Date().toISOString(),
+              }),
         });
       }
 
