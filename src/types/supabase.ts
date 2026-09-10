@@ -21,6 +21,12 @@ export interface Route {
   route_sheets?: RouteSheet[];
 }
 
+export interface FleetUnitStatusDetail {
+  unit: string;
+  note: string;
+  isOff: boolean;
+}
+
 export interface DailyRouteReport {
   id?: number;
   route_id: number;
@@ -37,6 +43,12 @@ export interface DailyRouteReport {
   status: 'draft' | 'submitted' | 'verified';
   submitted_by?: string;
   verified_by?: string;
+  fleet_status_shift1?: FleetUnitStatusDetail[];
+  fleet_status_shift2?: FleetUnitStatusDetail[];
+  is_fleet_confirmed_s1?: boolean;
+  is_fleet_confirmed_s2?: boolean;
+  fleet_confirmed_s1_at?: string;
+  fleet_confirmed_s2_at?: string;
   created_at?: string;
   updated_at?: string;
 }
