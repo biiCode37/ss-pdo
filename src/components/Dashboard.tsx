@@ -572,6 +572,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [operationalReportStatus, setOperationalReportStatus] = useState<'draft' | 'submitted' | 'verified'>('draft');
+  const [monitoringDate, setMonitoringDate] = useState<string | null>(null);
 
   const dynamicRenops = useMemo(() => {
     return getRenopsForDate(matchedRoute, operationalReportDate);
@@ -767,7 +768,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     return (
       <AllRouteMonitoringPage
         onBackToRouteView={() => setCurrentView('dashboard')}
-        currentDate={operationalReportDate}
+        currentDate={monitoringDate || operationalReportDate}
+        onDateChange={(date) => setMonitoringDate(date)}
         currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
         onSelectRoute={(routeCode) => {
           const cachedRoutes = getRoutesFromCache();
@@ -780,6 +782,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             if (latestSheet && latestSheet.sheet_url) {
               handleSetSheetUrl(latestSheet.sheet_url);
             }
+          }
+          if (monitoringDate) {
+            const day = String(parseInt(monitoringDate.split('-')[2], 10));
+            handleSetSelectedTab(day);
           }
           setCurrentView('dashboard');
         }}

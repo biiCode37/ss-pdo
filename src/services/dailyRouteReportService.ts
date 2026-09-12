@@ -10,7 +10,7 @@ export async function fetchRouteMasterList(): Promise<Route[]> {
   try {
     const { data, error } = await supabase
       .from('routes')
-      .select('*, operators(*)')
+      .select('*, route_operators(operator_id, operators(*))')
       .eq('is_active', true)
       .order('route_code', { ascending: true });
 
@@ -19,10 +19,14 @@ export async function fetchRouteMasterList(): Promise<Route[]> {
       return [];
     }
 
-    const formattedRoutes = (data || []).map((r: any) => ({
-      ...r,
-      operator_name: formatOperatorsDisplay(r.operators) || r.operator_name || 'Mikrotrans'
-    }));
+    const formattedRoutes = (data || []).map((r: any) => {
+      const ops = (r.route_operators || []).map((ro: any) => ro.operators).filter(Boolean);
+      return {
+        ...r,
+        operators: ops,
+        operator_name: formatOperatorsDisplay(ops) || r.operator_name || 'Mikrotrans'
+      };
+    });
 
     return formattedRoutes as Route[];
   } catch (err) {

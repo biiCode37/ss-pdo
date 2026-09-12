@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, memo } from 'react';
 import {
   Calendar,
   ChevronLeft,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import {
   fetchRegionalMonitoringData,
+  getRelativeDate,
   type RegionalMonitoringResult,
   type RegionalRouteItem
 } from '../services/allRouteMonitoringService';
@@ -88,12 +89,14 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   // Date state
   const todayStr = useMemo(() => new Date().toISOString().split('T')[0], []);
   const [selectedDate, setSelectedDate] = useState<string>(currentDate || todayStr);
+  const prevCurrentDateRef = useRef(currentDate);
 
   useEffect(() => {
-    if (currentDate && currentDate !== selectedDate) {
+    if (currentDate && currentDate !== prevCurrentDateRef.current) {
+      prevCurrentDateRef.current = currentDate;
       setSelectedDate(currentDate);
     }
-  }, [currentDate, selectedDate]);
+  }, [currentDate]);
 
   // Data state
   const [loading, setLoading] = useState<boolean>(true);
@@ -132,10 +135,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   // Date step handlers
   const handleStepDate = (days: number) => {
     try {
-      const [y, m, d] = selectedDate.split('-').map(Number);
-      const date = new Date(y, m - 1, d);
-      date.setDate(date.getDate() + days);
-      const nextDateStr = date.toISOString().split('T')[0];
+      const nextDateStr = getRelativeDate(selectedDate, days);
       setSelectedDate(nextDateStr);
       onDateChange?.(nextDateStr);
     } catch (err) {

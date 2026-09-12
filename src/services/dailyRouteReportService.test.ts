@@ -21,10 +21,28 @@ describe('dailyRouteReportService', () => {
     vi.clearAllMocks();
   });
 
-  it('fetchRouteMasterList returns active routes ordered by route_code', async () => {
+  it('fetchRouteMasterList returns active routes ordered by route_code with route_operators join', async () => {
     const mockData = [
-      { id: 1, route_code: 'JAK.01', route_name: 'TANJUNG PRIOK - PLUMPANG', km_baku: 14.415, target_hk: 5161 },
-      { id: 2, route_code: 'JAK.15', route_name: 'TANJUNG PRIOK - RUSUN MARUNDA', km_baku: 29.603, target_hk: 11164 },
+      {
+        id: 1,
+        route_code: 'JAK.01',
+        route_name: 'TANJUNG PRIOK - PLUMPANG',
+        km_baku: 14.415,
+        target_hk: 5161,
+        route_operators: [
+          { operator_id: 1, operators: { operator_code: 'KLM', operator_name: 'KOLAMAS JAYA' } }
+        ]
+      },
+      {
+        id: 2,
+        route_code: 'JAK.15',
+        route_name: 'TANJUNG PRIOK - RUSUN MARUNDA',
+        km_baku: 29.603,
+        target_hk: 11164,
+        route_operators: [
+          { operator_id: 2, operators: { operator_code: 'KWK', operator_name: 'KOPERASI WAHANA KALPIKA' } }
+        ]
+      },
     ];
 
     const mockSelect = vi.fn().mockReturnThis();
@@ -39,9 +57,12 @@ describe('dailyRouteReportService', () => {
 
     const routes = await fetchRouteMasterList();
     expect(supabase.from).toHaveBeenCalledWith('routes');
+    expect(mockSelect).toHaveBeenCalledWith('*, route_operators(operator_id, operators(*))');
     expect(routes).toHaveLength(2);
     expect(routes[0].route_code).toBe('JAK.01');
     expect(routes[0].km_baku).toBe(14.415);
+    expect(routes[0].operators).toHaveLength(1);
+    expect(routes[0].operator_name).toContain('KOLAMAS JAYA (KLM)');
   });
 
   it('fetchDailyRouteReport returns single report for route and date', async () => {

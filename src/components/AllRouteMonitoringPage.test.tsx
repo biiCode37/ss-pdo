@@ -8,14 +8,18 @@ import * as dailyReportService from '../services/dailyRouteReportService';
 import type { RegionalMonitoringResult } from '../services/allRouteMonitoringService';
 
 // Mock dependencies
-vi.mock('../services/allRouteMonitoringService', () => ({
-  fetchRegionalMonitoringData: vi.fn(),
-  SUPERVISORS: [
-    'Ranto Lumban Toruan',
-    'Abdul Manan',
-    'Moamar Z.A. Mahu'
-  ]
-}));
+vi.mock('../services/allRouteMonitoringService', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../services/allRouteMonitoringService')>();
+  return {
+    ...actual,
+    fetchRegionalMonitoringData: vi.fn(),
+    SUPERVISORS: [
+      'Ranto Lumban Toruan',
+      'Abdul Manan',
+      'Moamar Z.A. Mahu'
+    ]
+  };
+});
 
 vi.mock('../services/dailyRouteReportService', () => ({
   verifyDailyRouteReport: vi.fn(),
@@ -283,5 +287,45 @@ describe('AllRouteMonitoringPage Component', () => {
 
     // WaReportModal should now be open
     expect(container.textContent).toContain('Generator Laporan WhatsApp');
+  });
+
+  it('updates selected date and calls onDateChange when step buttons are clicked without getting reset', async () => {
+    const onDateChange = vi.fn();
+    await act(async () => {
+      root.render(
+        <AllRouteMonitoringPage
+          currentDate="2026-09-02"
+          onDateChange={onDateChange}
+        />
+      );
+    });
+
+    expect(container.textContent).toContain('2 September 2026');
+
+    // Find next day button
+    const nextBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.title === 'Hari Berikutnya'
+    );
+    expect(nextBtn).toBeDefined();
+
+    await act(async () => {
+      nextBtn?.click();
+    });
+
+    expect(container.textContent).toContain('3 September 2026');
+    expect(onDateChange).toHaveBeenCalledWith('2026-09-03');
+
+    // Find previous day button
+    const prevBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.title === 'Hari Sebelumnya'
+    );
+    expect(prevBtn).toBeDefined();
+
+    await act(async () => {
+      prevBtn?.click();
+    });
+
+    expect(container.textContent).toContain('2 September 2026');
+    expect(onDateChange).toHaveBeenCalledWith('2026-09-02');
   });
 });
