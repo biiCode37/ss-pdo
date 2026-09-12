@@ -174,8 +174,9 @@ export function cleanShiftNote(val?: string | null): string {
  * Menggabungkan keterangan Shift 1 dan Shift 2 dengan pemisah " | ".
  * - Jika kedua shift SGO (kosong): kembalikan ""
  * - Jika kedua shift memiliki keterangan identik: kembalikan 1 keterangan saja (misal "OFF")
- * - Jika hanya satu shift yang berketerangan: kembalikan keterangan tersebut
- * - Jika kedua shift memiliki keterangan berbeda: gabungkan dengan " | " (misal "BA.01 Radiator | TO EVDAL")
+ * - Jika Shift 1 berketerangan dan Shift 2 SGO: kembalikan "${note1} | SGO"
+ * - Jika Shift 1 SGO dan Shift 2 berketerangan: kembalikan "SGO | ${note2}"
+ * - Jika kedua shift memiliki keterangan berbeda: gabungkan dengan " | " (misal "OFF | TO EVDAL")
  */
 export function combineShiftKeterangan(
   s1?: string | null,
@@ -185,8 +186,8 @@ export function combineShiftKeterangan(
   const note2 = cleanShiftNote(s2);
 
   if (!note1 && !note2) return '';
-  if (note1 && !note2) return note1;
-  if (!note1 && note2) return note2;
+  if (note1 && !note2) return `${note1} | SGO`;
+  if (!note1 && note2) return `SGO | ${note2}`;
   if (note1 === note2) return note1;
 
   return `${note1} | ${note2}`;

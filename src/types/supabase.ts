@@ -153,3 +153,18 @@ export interface DailyUnitSummary {
   updated_at?: string;
 }
 
+export interface FleetStatusLog {
+  id?: number;
+  route_id: number;
+  route_code: string;
+  date: string; // YYYY-MM-DD
+  shift: 1 | 2;
+  sgo_count: number;
+  to_count: number;
+  off_count: number;
+  total_units: number;
+  fleet_status: FleetUnitStatusDetail[];
+  confirmed_by?: string;
+  created_at?: string;
+}
+

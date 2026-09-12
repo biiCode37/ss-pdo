@@ -29,7 +29,6 @@ export const TEXT_FLEET_STATUS = {
     SGO: 'SGO',
     OFF: 'OFF',
     TO: 'T.O',
-    BA: 'BA / Kendala',
   },
   ALERT_BAR: {
     SHIFT_1_UNCONFIRMED: 'Status Armada Shift 1 belum dikonfirmasi',

@@ -19,7 +19,11 @@ import { ShiftConfirmationAlertBar } from "./fleetStatus/ShiftConfirmationAlertB
 import { FleetStatusModal } from "./fleetStatus/FleetStatusModal";
 import { getRenopsForDate } from "../utils/holidayUtils";
 import { combineShiftKeterangan, cleanShiftNote } from "../utils/keteranganUtils";
-import { fetchDailyRouteReport, upsertDailyRouteReport } from "../services/dailyRouteReportService";
+import {
+  fetchDailyRouteReport,
+  upsertDailyRouteReport,
+  recordFleetStatusAuditLog,
+} from "../services/dailyRouteReportService";
 import type { FleetUnitStatusDetail } from "../types/supabase";
 import { SwipeableContainer } from "./SwipeableContainer";
 import { BottomNav } from "./BottomNav";
@@ -671,18 +675,29 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
       if (matchedRoute?.id && operationalReportDate) {
         const nonSgoUnits: FleetUnitStatusDetail[] = [];
+        let offCount = 0;
+        let toCount = 0;
+
         for (const bus of busData || []) {
           const unitVal = statusMap.get(bus.rowIndex);
           const note = cleanShiftNote(shift === 1 ? unitVal?.s1 : unitVal?.s2);
           if (note) {
+            const isOff = note.toUpperCase().includes('OFF');
+            if (isOff) offCount++;
+            else toCount++;
+
             nonSgoUnits.push({
               unit: bus.unit,
               note,
-              isOff: note.toUpperCase().includes('OFF'),
+              isOff,
             });
           }
         }
 
+        const totalUnits = busData?.length || 0;
+        const sgoCount = Math.max(0, totalUnits - nonSgoUnits.length);
+
+        // 1. Simpan snapshot terkini ke daily_route_reports
         await upsertDailyRouteReport({
           route_id: matchedRoute.id,
           route_code: matchedRoute.route_code,
@@ -706,6 +721,20 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
                 is_fleet_confirmed_s2: true,
                 fleet_confirmed_s2_at: new Date().toISOString(),
               }),
+        });
+
+        // 2. Tambahkan baris baru (Append-Only) ke tabel audit fleet_status_logs
+        await recordFleetStatusAuditLog({
+          route_id: matchedRoute.id,
+          route_code: matchedRoute.route_code,
+          date: operationalReportDate,
+          shift,
+          sgo_count: sgoCount,
+          to_count: toCount,
+          off_count: offCount,
+          total_units: totalUnits,
+          fleet_status: nonSgoUnits,
+          confirmed_by: localStorage.getItem("PDO_USER_EMAIL") || undefined,
         });
       }
 

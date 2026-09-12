@@ -10,7 +10,7 @@ const isTestEnv =
   import.meta.env?.MODE === 'test' ||
   Boolean((globalThis as unknown as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT);
 
-export type BrushMode = 'SGO' | 'OFF' | 'TO' | 'BA';
+export type BrushMode = 'SGO' | 'OFF' | 'TO';
 
 export interface FleetStatusModalProps {
   isOpen: boolean;
@@ -81,7 +81,6 @@ function FleetStatusModalComponent({
       let nextVal = '';
       if (activeBrush === 'OFF') nextVal = 'OFF';
       else if (activeBrush === 'TO') nextVal = 'TO EVDAL';
-      else if (activeBrush === 'BA') nextVal = 'BA.02 NP1'; // Default BA chip
       else nextVal = ''; // SGO (kosong)
 
       if (currentShift === 1) {
@@ -113,7 +112,6 @@ function FleetStatusModalComponent({
     let sgo = 0;
     let off = 0;
     let to = 0;
-    let ba = 0;
 
     for (const b of buses) {
       const unitVal = unitMap.get(b.rowIndex);
@@ -124,14 +122,12 @@ function FleetStatusModalComponent({
         sgo++;
       } else if (upper.includes('OFF')) {
         off++;
-      } else if (upper.includes('TO')) {
-        to++;
       } else {
-        ba++;
+        to++;
       }
     }
 
-    return { sgo, off, to, ba };
+    return { sgo, off, to };
   }, [buses, unitMap, currentShift]);
 
   // Submit konfirmasi
@@ -408,27 +404,6 @@ function FleetStatusModalComponent({
               >
                 {TEXT_FLEET_STATUS.STATUS_CODES.TO}
               </button>
-
-              {/* Status BA */}
-              <button
-                type="button"
-                onClick={() => setActiveBrush('BA')}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  padding: '5px 10px',
-                  borderRadius: '8px',
-                  border: activeBrush === 'BA' ? '1.5px solid #38bdf8' : '1px solid var(--border-color)',
-                  background: activeBrush === 'BA' ? 'rgba(14, 165, 233, 0.2)' : 'transparent',
-                  color: '#38bdf8',
-                  fontSize: '11.5px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                {TEXT_FLEET_STATUS.STATUS_CODES.BA}
-              </button>
             </div>
 
             {/* Quick Button: SGO Semua */}
@@ -598,7 +573,6 @@ function FleetStatusModalComponent({
             <span style={{ color: '#10b981' }}>SGO: {summaryCounts.sgo}</span>
             <span style={{ color: '#f59e0b' }}>OFF: {summaryCounts.off}</span>
             <span style={{ color: '#ef4444' }}>T.O: {summaryCounts.to}</span>
-            <span style={{ color: '#38bdf8' }}>BA: {summaryCounts.ba}</span>
           </div>
 
           <button

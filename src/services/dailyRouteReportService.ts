@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import type { Route, DailyRouteReport } from '../types/supabase';
+import type { Route, DailyRouteReport, FleetStatusLog } from '../types/supabase';
 import { formatOperatorsDisplay } from '../constants/operators';
 
 /**
@@ -144,3 +144,62 @@ export async function verifyDailyRouteReport(
     return false;
   }
 }
+
+/**
+ * Menambahkan catatan riwayat audit baru untuk konfirmasi / perubahan status armada (Append-Only).
+ * Tidak menimpa baris yang sudah ada, selalu melakukan INSERT baris baru untuk keperluan audit.
+ */
+export async function recordFleetStatusAuditLog(
+  log: Omit<FleetStatusLog, 'id' | 'created_at'>
+): Promise<FleetStatusLog | null> {
+  try {
+    const payload = {
+      ...log,
+      created_at: new Date().toISOString()
+    };
+
+    const { data, error } = await supabase
+      .from('fleet_status_logs')
+      .insert(payload)
+      .select('*')
+      .single();
+
+    if (error) {
+      console.warn('[dailyRouteReportService] Gagal mencatat fleet_status_logs:', error);
+      return null;
+    }
+
+    return data as FleetStatusLog;
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception recordFleetStatusAuditLog:', err);
+    return null;
+  }
+}
+
+/**
+ * Mengambil riwayat audit status armada per rute dan tanggal.
+ */
+export async function fetchFleetStatusAuditLogs(
+  routeId: number,
+  date: string
+): Promise<FleetStatusLog[]> {
+  try {
+    const { data, error } = await supabase
+      .from('fleet_status_logs')
+      .select('*')
+      .eq('route_id', routeId)
+      .eq('date', date)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('[dailyRouteReportService] Gagal mengambil audit logs:', error);
+      return [];
+    }
+
+    return (data || []) as FleetStatusLog[];
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception fetchFleetStatusAuditLogs:', err);
+    return [];
+  }
+}
+

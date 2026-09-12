@@ -192,11 +192,11 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(combineShiftKeterangan('ba 02 np 1', 'BA.02 NP1')).toBe('BA.02 NP1');
     });
 
-    it('returns single note if only one shift has a note', () => {
-      expect(combineShiftKeterangan('', 'BA.02 NP1')).toBe('BA.02 NP1');
-      expect(combineShiftKeterangan('SGO', 'OFF')).toBe('OFF');
-      expect(combineShiftKeterangan('BA.01 Radiator', '')).toBe('BA.01 Radiator');
-      expect(combineShiftKeterangan('TO EVDAL', 'SGO')).toBe('TO EVDAL');
+    it('preserves single shift note with explicit SGO when other shift is SGO', () => {
+      expect(combineShiftKeterangan('', 'BA.02 NP1')).toBe('SGO | BA.02 NP1');
+      expect(combineShiftKeterangan('SGO', 'OFF')).toBe('SGO | OFF');
+      expect(combineShiftKeterangan('BA.01 Radiator', '')).toBe('BA.01 Radiator | SGO');
+      expect(combineShiftKeterangan('TO EVDAL', 'SGO')).toBe('TO EVDAL | SGO');
     });
 
     it('combines differing notes using pipe separator with normalization', () => {
@@ -210,6 +210,16 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       const res = splitShiftKeterangan('BA.01 bocor | TO EVDAL');
       expect(res.s1).toBe('BA.01 bocor');
       expect(res.s2).toBe('TO EVDAL');
+    });
+
+    it('correctly parses SGO in pipe separated string', () => {
+      const res1 = splitShiftKeterangan('SGO | TO EVDAL');
+      expect(res1.s1).toBe('');
+      expect(res1.s2).toBe('TO EVDAL');
+
+      const res2 = splitShiftKeterangan('OFF | SGO');
+      expect(res2.s1).toBe('OFF');
+      expect(res2.s2).toBe('');
     });
 
     it('returns identical value for both shifts if no pipe separator', () => {

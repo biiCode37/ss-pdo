@@ -4,7 +4,9 @@ import {
   fetchDailyRouteReport,
   fetchDailyRouteReportsByDate,
   upsertDailyRouteReport,
-  verifyDailyRouteReport
+  verifyDailyRouteReport,
+  recordFleetStatusAuditLog,
+  fetchFleetStatusAuditLogs
 } from './dailyRouteReportService';
 import { supabase } from './supabase';
 
@@ -164,5 +166,59 @@ describe('dailyRouteReportService', () => {
       { onConflict: 'route_id,date' }
     );
     expect(saved.fleet_status_shift1).toHaveLength(2);
+  });
+
+  describe('fleet_status_logs audit trail', () => {
+    it('recordFleetStatusAuditLog performs insert without mutation', async () => {
+      const mockPayload = {
+        route_id: 1,
+        route_code: 'JAK.01',
+        date: '2026-09-12',
+        shift: 1 as const,
+        sgo_count: 18,
+        to_count: 1,
+        off_count: 1,
+        total_units: 20,
+        fleet_status: [
+          { unit: 'JAK.01-02', note: 'OFF', isOff: true }
+        ],
+        confirmed_by: 'petugas@transjakarta.co.id'
+      };
+
+      const chain: any = {};
+      chain.insert = vi.fn().mockReturnValue(chain);
+      chain.select = vi.fn().mockReturnValue(chain);
+      chain.single = vi.fn().mockResolvedValue({ data: { id: 1, ...mockPayload }, error: null });
+      (supabase.from as any).mockReturnValue(chain);
+
+      const res = await recordFleetStatusAuditLog(mockPayload);
+      expect(chain.insert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          route_code: 'JAK.01',
+          sgo_count: 18,
+          to_count: 1,
+          off_count: 1,
+        })
+      );
+      expect(res).not.toBeNull();
+      expect(res?.id).toBe(1);
+    });
+
+    it('fetchFleetStatusAuditLogs retrieves logs ordered by created_at desc', async () => {
+      const mockLogs = [
+        { id: 2, route_code: 'JAK.01', shift: 2 },
+        { id: 1, route_code: 'JAK.01', shift: 1 }
+      ];
+
+      const chain: any = {};
+      chain.select = vi.fn().mockReturnValue(chain);
+      chain.eq = vi.fn().mockReturnValue(chain);
+      chain.order = vi.fn().mockResolvedValue({ data: mockLogs, error: null });
+      (supabase.from as any).mockReturnValue(chain);
+
+      const logs = await fetchFleetStatusAuditLogs(1, '2026-09-12');
+      expect(logs).toHaveLength(2);
+      expect(logs[0].id).toBe(2);
+    });
   });
 });
