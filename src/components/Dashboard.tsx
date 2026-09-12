@@ -447,6 +447,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       setHeaderMap(headerMap);
       setCurrentSheetId(sheetId);
       setCurrentTabName(activeTab);
+      handleSetSelectedTab(activeTab);
       setMissingColumns(missing);
       setSheetSummary(summary || {});
     } catch (err: any) {

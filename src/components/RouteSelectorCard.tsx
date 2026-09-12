@@ -244,7 +244,15 @@ function RouteSelectorCardComponent({
               setSelectedMonth(parsed.month);
               setSelectedRouteCode(parsed.routeCode);
               setSheetUrl(savedMatch.sheet.sheet_url);
-              setSelectedTab(parsed.selectedTab || String(new Date().getDate()));
+
+              // BUG-FIX: Sinkronisasi tanggal saat membuka aplikasi.
+              // Jika rute tersimpan adalah periode bulan & tahun saat ini, tanggal HARUS selalu hari ini (today).
+              // Tanggal tersimpan (parsed.selectedTab) hanya digunakan jika membuka arsip periode lampau.
+              const now = new Date();
+              const isCurrentPeriod = parsed.year === now.getFullYear() && parsed.month === (now.getMonth() + 1);
+              const todayDay = String(now.getDate());
+              const restoredTab = isCurrentPeriod ? todayDay : (parsed.selectedTab || todayDay);
+              setSelectedTab(restoredTab);
               return;
             }
           }
@@ -382,11 +390,21 @@ function RouteSelectorCardComponent({
     }
   }, [loadedFlat?.routeCode, selectedRouteCode, onRouteCodeChange]);
 
+  // Selalu jaga agar selectedTab sinkron dengan data yang sedang aktif di dashboard (currentTabName)
+  useEffect(() => {
+    if (currentTabName && currentTabName !== selectedTab && !isAccumulation) {
+      setSelectedTab(currentTabName);
+    }
+  }, [currentTabName, isAccumulation]);
+
   useEffect(() => {
     if (externalOpenTrigger && externalOpenTrigger > 0) {
+      if (currentTabName && currentTabName !== selectedTab && !isAccumulation) {
+        setSelectedTab(currentTabName);
+      }
       setIsSheetOpen(true);
     }
-  }, [externalOpenTrigger]);
+  }, [externalOpenTrigger, currentTabName, selectedTab, isAccumulation]);
 
   const displayDateLabel = useMemo(() => {
     const targetYear = selectedYear ?? new Date().getFullYear();

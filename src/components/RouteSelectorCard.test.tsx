@@ -280,4 +280,98 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
     const sheetOverlay = container.querySelector('.route-selector-modal-overlay') as HTMLElement;
     expect(sheetOverlay.style.display).toBe('flex');
   });
+
+  it('syncs selectedTab reactively when currentTabName updates', async () => {
+    const handleSetSelectedTab = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab="2"
+          setSelectedTab={handleSetSelectedTab}
+          days={['1', '2', '3', '12']}
+          isLoading={false}
+          isDataLoaded={true}
+          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
+          currentTabName="12"
+          onLoadData={vi.fn()}
+          reportRoute={{ id: 1, route_code: 'JAK.115' }}
+          reportStatus="draft"
+        />
+      );
+    });
+
+    // Should call setSelectedTab with '12' to sync with currentTabName
+    expect(handleSetSelectedTab).toHaveBeenCalledWith('12');
+  });
+
+  it('syncs selectedTab with currentTabName when externalOpenTrigger is triggered', async () => {
+    const handleSetSelectedTab = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab="2"
+          setSelectedTab={handleSetSelectedTab}
+          days={['1', '2', '3', '12']}
+          isLoading={false}
+          isDataLoaded={true}
+          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
+          currentTabName="12"
+          onLoadData={vi.fn()}
+          reportRoute={{ id: 1, route_code: 'JAK.115' }}
+          reportStatus="draft"
+          externalOpenTrigger={2}
+        />
+      );
+    });
+
+    expect(handleSetSelectedTab).toHaveBeenCalledWith('12');
+    const sheetOverlay = container.querySelector('.route-selector-modal-overlay') as HTMLElement;
+    expect(sheetOverlay.style.display).toBe('flex');
+  });
+
+  it('prioritizes today date over stale savedTab in localStorage for current period', async () => {
+    const handleSetSelectedTab = vi.fn();
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+    const todayStr = String(now.getDate());
+
+    // Stale saved date in localStorage: day 2
+    localStorage.setItem(
+      'PDO_LAST_VISITED',
+      JSON.stringify({
+        sheetUrl: 'https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit',
+        selectedTab: '2',
+        routeCode: 'JAK.115',
+        month: currentMonth,
+        year: currentYear,
+      })
+    );
+
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab={todayStr}
+          setSelectedTab={handleSetSelectedTab}
+          days={['1', '2', todayStr]}
+          isLoading={false}
+          isDataLoaded={false}
+          onLoadData={vi.fn()}
+        />
+      );
+    });
+
+    // When restoring routes, for current month/year it should use todayStr, NOT '2'
+    expect(handleSetSelectedTab).toHaveBeenCalledWith(todayStr);
+
+    localStorage.removeItem('PDO_LAST_VISITED');
+  });
 });
