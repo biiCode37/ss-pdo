@@ -76,6 +76,47 @@ export function combineShiftKeterangan(s1?: string | null, s2?: string | null): 
 }
 ```
 
+### 1.4 Penghapusan Redudansi Badge Biru BA pada Kartu Bus (`BusCard.tsx`)
+- **Tindakan:**
+  Pada header kartu bus di `BusCard.tsx`, sebelumnya unit non-SGO yang bukan OFF dan bukan TO dirender dengan badge pil biru `.unit-status-badge-ba` yang menampilkan teks `activeShiftStatus` (misal: `[BA.02 Pramudi Meriang]`). Teks tersebut 100% redundan karena baris di bawahnya telah menampilkan detail catatan lengkap dengan `AlertTriangle` dan `FormattedNoteText`.
+  Badge di header kini hanya dirender khusus untuk status kesiapan armada operasional (`OFF` dan `T.O`). Untuk catatan kendala/BA lainnya, badge di header tidak ditampilkan sehingga tampilan kartu bersih tanpa duplikasi.
+
+---
+
+## 2. Before vs After
+
+### 2.1 `combineShiftKeterangan` di `src/utils/keteranganUtils.ts`
+
+#### Before:
+```ts
+export function combineShiftKeterangan(s1?: string | null, s2?: string | null): string {
+  const note1 = cleanShiftNote(s1);
+  const note2 = cleanShiftNote(s2);
+
+  if (!note1 && !note2) return '';
+  if (note1 && !note2) return note1;  // <-- Masalah: jika s2 SGO, s2 hilang
+  if (!note1 && note2) return note2;  // <-- Masalah: jika s1 SGO, s1 hilang
+  if (note1 === note2) return note1;
+
+  return `${note1} | ${note2}`;
+}
+```
+
+#### After:
+```ts
+export function combineShiftKeterangan(s1?: string | null, s2?: string | null): string {
+  const note1 = cleanShiftNote(s1);
+  const note2 = cleanShiftNote(s2);
+
+  if (!note1 && !note2) return '';
+  if (note1 && !note2) return `${note1} | SGO`;
+  if (!note1 && note2) return `SGO | ${note2}`;
+  if (note1 === note2) return note1;
+
+  return `${note1} | ${note2}`;
+}
+```
+
 ---
 
 ### 2.2 Pilihan Kuas pada `FleetStatusModal.tsx`
@@ -89,6 +130,15 @@ Toolbar memiliki 3 pilihan: `[SGO, OFF, T.O]`.
 Footer memiliki 3 counter: `SGO, OFF, T.O`.
 
 ---
+
+### 2.3 Header Kartu Bus (`BusCard.tsx`)
+
+#### Before:
+Menampilkan badge biru `[BA.02 Pramudi Meriang]` di sebelah nomor body unit, dan di baris bawahnya menampilkan lagi `⚠️ [BA.02] PRAMUDI MERIANG`.
+
+#### After:
+Badge di samping nomor body hanya menampilkan `OFF` atau `T.O`. Keterangan kendala/BA ditampilkan satu kali secara elegan pada baris catatan `⚠️ [BA.02] PRAMUDI MERIANG`.
+
 
 ## 3. Case: Skenario Lapangan
 
