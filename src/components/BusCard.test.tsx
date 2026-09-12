@@ -173,4 +173,24 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
     expect(alertUtils.showBusInputModal).not.toHaveBeenCalled();
   });
+
+  it('does not render blue BA badge in card header when unit has BA note', async () => {
+    await act(async () => {
+      root.render(
+        <BusCard
+          {...defaultProps}
+          bus={{
+            ...defaultProps.bus,
+            keterangan: 'BA.02 Pramudi Meriang',
+          }}
+          isShiftConfirmed={true}
+        />
+      );
+    });
+
+    const headerBadge = container.querySelector('.unit-status-badge');
+    expect(headerBadge).toBeNull();
+    // But FormattedNoteText still renders the note detail
+    expect(container.textContent).toContain('Pramudi Meriang');
+  });
 });

@@ -594,18 +594,21 @@ function BusCardComponent({
               </span>
             )}
             {isShiftConfirmed !== false && isNonSgo && (
-              <span
-                className={`unit-status-badge ${
-                  activeShiftStatus.toUpperCase().includes("OFF")
-                    ? "unit-status-badge-off"
-                    : activeShiftStatus.toUpperCase().includes("TO")
-                    ? "unit-status-badge-to"
-                    : "unit-status-badge-ba"
-                }`}
-                title={`Status unit: ${activeShiftStatus}`}
-              >
-                {activeShiftStatus}
-              </span>
+              activeShiftStatus.toUpperCase().includes("OFF") ? (
+                <span
+                  className="unit-status-badge unit-status-badge-off"
+                  title={`Status unit: ${activeShiftStatus}`}
+                >
+                  OFF
+                </span>
+              ) : activeShiftStatus.toUpperCase().includes("TO") ? (
+                <span
+                  className="unit-status-badge unit-status-badge-to"
+                  title={`Status unit: ${activeShiftStatus}`}
+                >
+                  T.O
+                </span>
+              ) : null
             )}
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
