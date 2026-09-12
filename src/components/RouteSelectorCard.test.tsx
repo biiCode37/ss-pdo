@@ -135,7 +135,20 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
       dateSelect.dispatchEvent(new Event('change', { bubbles: true }));
     });
 
+    expect(dateSelect.value).toBe('5');
+
+    // User clicks "Load Data Unit" to commit date and exit accumulation
+    const loadDataBtn = Array.from(container.querySelectorAll('button')).find((btn) =>
+      btn.textContent?.includes('Load Data Unit')
+    ) as HTMLButtonElement;
+    expect(loadDataBtn).toBeTruthy();
+
+    await act(async () => {
+      loadDataBtn.click();
+    });
+
     expect(handleSetSelectedTab).toHaveBeenCalledWith('5');
+    expect(handleExitAccumulation).toHaveBeenCalledWith('5');
   });
 
   it('renders exit button to return to daily mode when in AKUMULASI mode', async () => {
@@ -281,42 +294,14 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
     expect(sheetOverlay.style.display).toBe('flex');
   });
 
-  it('syncs selectedTab reactively when currentTabName updates', async () => {
-    const handleSetSelectedTab = vi.fn();
-
+  it('syncs form date dropdown with currentTabName when externalOpenTrigger is triggered', async () => {
     await act(async () => {
       root.render(
         <RouteSelectorCard
           sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
           setSheetUrl={vi.fn()}
           selectedTab="2"
-          setSelectedTab={handleSetSelectedTab}
-          days={['1', '2', '3', '12']}
-          isLoading={false}
-          isDataLoaded={true}
-          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
-          currentTabName="12"
-          onLoadData={vi.fn()}
-          reportRoute={{ id: 1, route_code: 'JAK.115' }}
-          reportStatus="draft"
-        />
-      );
-    });
-
-    // Should call setSelectedTab with '12' to sync with currentTabName
-    expect(handleSetSelectedTab).toHaveBeenCalledWith('12');
-  });
-
-  it('syncs selectedTab with currentTabName when externalOpenTrigger is triggered', async () => {
-    const handleSetSelectedTab = vi.fn();
-
-    await act(async () => {
-      root.render(
-        <RouteSelectorCard
-          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
-          setSheetUrl={vi.fn()}
-          selectedTab="2"
-          setSelectedTab={handleSetSelectedTab}
+          setSelectedTab={vi.fn()}
           days={['1', '2', '3', '12']}
           isLoading={false}
           isDataLoaded={true}
@@ -330,9 +315,15 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
       );
     });
 
-    expect(handleSetSelectedTab).toHaveBeenCalledWith('12');
     const sheetOverlay = container.querySelector('.route-selector-modal-overlay') as HTMLElement;
     expect(sheetOverlay.style.display).toBe('flex');
+
+    const selects = container.querySelectorAll('select');
+    const dateSelect = Array.from(selects).find((s) =>
+      Array.from(s.options).some((opt) => opt.text.includes('Tgl 1'))
+    ) as HTMLSelectElement;
+    expect(dateSelect).toBeTruthy();
+    expect(dateSelect.value).toBe('12');
   });
 
   it('prioritizes today date over stale savedTab in localStorage for current period', async () => {
@@ -375,7 +366,7 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
     localStorage.removeItem('PDO_LAST_VISITED');
   });
 
-  it('does NOT trigger onLoadData when picking date in dropdown, only updates state until Load Data button is clicked', async () => {
+  it('does NOT trigger onLoadData or parent re-render when picking date in dropdown, retains choice and only commits on Load Data Unit click', async () => {
     const handleSetSelectedTab = vi.fn();
     const handleLoadData = vi.fn();
     const handleExitAccumulation = vi.fn();
@@ -412,10 +403,11 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
       dateSelect.dispatchEvent(new Event('change', { bubbles: true }));
     });
 
-    // Verify setSelectedTab is called with '4'
-    expect(handleSetSelectedTab).toHaveBeenCalledWith('4');
+    // Verify date dropdown stays on '4' (DOES NOT revert to today or '2')
+    expect(dateSelect.value).toBe('4');
 
-    // CRITICAL: onLoadData and onExitAccumulation MUST NOT be triggered on dropdown change!
+    // CRITICAL: parent setSelectedTab, onLoadData, and onExitAccumulation MUST NOT be triggered on dropdown change!
+    expect(handleSetSelectedTab).not.toHaveBeenCalled();
     expect(handleLoadData).not.toHaveBeenCalled();
     expect(handleExitAccumulation).not.toHaveBeenCalled();
 
@@ -429,7 +421,8 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
       loadDataBtn.click();
     });
 
-    // onLoadData should now be called
-    expect(handleLoadData).toHaveBeenCalled();
+    // Both setSelectedTab and onLoadData should now be called with '4'
+    expect(handleSetSelectedTab).toHaveBeenCalledWith('4');
+    expect(handleLoadData).toHaveBeenCalledWith('4', 'https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit');
   });
 });

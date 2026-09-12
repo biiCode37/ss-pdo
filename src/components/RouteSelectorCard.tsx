@@ -85,6 +85,7 @@ function RouteSelectorCardComponent({
   const [selectedYear, setSelectedYear] = useState<number | null>(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [selectedRouteCode, setSelectedRouteCode] = useState<string>('');
+  const [formTab, setFormTab] = useState<string>(() => currentTabName || selectedTab || String(new Date().getDate()));
 
   const prevLoadingRef = useRef(isLoading);
   const [routes, setRoutes] = useState<Route[]>([]);
@@ -253,6 +254,7 @@ function RouteSelectorCardComponent({
               const todayDay = String(now.getDate());
               const restoredTab = isCurrentPeriod ? todayDay : (parsed.selectedTab || todayDay);
               setSelectedTab(restoredTab);
+              setFormTab(restoredTab);
               return;
             }
           }
@@ -268,7 +270,9 @@ function RouteSelectorCardComponent({
         }
         // BUG-13: Jangan menampilkan tanggal "terisi" yang menyesatkan pada
         // dropdown Tanggal yang masih disabled (belum ada rute terpilih).
-        if (!isAccumulation) setSelectedTab('');
+        if (!isAccumulation) {
+          setFormTab('');
+        }
         if (!sheetUrl) {
           setSheetUrl('');
         }
@@ -319,7 +323,7 @@ function RouteSelectorCardComponent({
     setSelectedMonth(null);
     setSelectedRouteCode('');
     setSheetUrl('');
-    if (!isAccumulation) setSelectedTab('');
+    if (!isAccumulation) setFormTab('');
   };
 
   const handleMonthChange = (month: string) => {
@@ -327,7 +331,7 @@ function RouteSelectorCardComponent({
     setSelectedMonth(m);
     setSelectedRouteCode('');
     setSheetUrl('');
-    if (!isAccumulation) setSelectedTab('');
+    if (!isAccumulation) setFormTab('');
   };
 
   const handleRouteCodeChange = (code: string) => {
@@ -337,19 +341,20 @@ function RouteSelectorCardComponent({
     if (sheetFn) {
       setSheetUrl(sheetFn.sheet.sheet_url);
       // BUG-3/12: Hanya auto-set tanggal hari ini saat mode NORMAL.
-      // Di mode AKUMULASI, selectedTab & Tanggal dropdown dibiarkan (rekap).
+      // Di mode AKUMULASI, formTab & Tanggal dropdown dibiarkan (rekap).
       if (!isAccumulation) {
         const today = String(new Date().getDate());
         const defaultDay = days.includes(today) ? today : days[0] || '';
-        setSelectedTab(defaultDay);
+        setFormTab(defaultDay);
       }
     } else {
       setSheetUrl('');
+      setFormTab('');
     }
   };
 
   const handleTabChange = (tab: string) => {
-    setSelectedTab(tab);
+    setFormTab(tab);
   };
 
   // Helper: cari sheet untuk kombinasi rute+bulan+tahun saat ini
@@ -383,21 +388,20 @@ function RouteSelectorCardComponent({
     }
   }, [loadedFlat?.routeCode, selectedRouteCode, onRouteCodeChange]);
 
-  // Selalu jaga agar selectedTab sinkron dengan data yang sedang aktif di dashboard (currentTabName)
+  // Sinkronkan pilihan form dengan tab data yang sedang aktif saat data baru dimuat
   useEffect(() => {
-    if (currentTabName && currentTabName !== selectedTab && !isAccumulation) {
-      setSelectedTab(currentTabName);
+    if (currentTabName) {
+      setFormTab(currentTabName);
     }
-  }, [currentTabName, isAccumulation]);
+  }, [currentTabName]);
 
+  // Buka drawer sheet dan inisialisasi formTab dengan tanggal aktif saat tombol pill ditekan
   useEffect(() => {
     if (externalOpenTrigger && externalOpenTrigger > 0) {
-      if (currentTabName && currentTabName !== selectedTab && !isAccumulation) {
-        setSelectedTab(currentTabName);
-      }
+      setFormTab(currentTabName || selectedTab || String(new Date().getDate()));
       setIsSheetOpen(true);
     }
-  }, [externalOpenTrigger, currentTabName, selectedTab, isAccumulation]);
+  }, [externalOpenTrigger]);
 
   const displayDateLabel = useMemo(() => {
     const targetYear = selectedYear ?? new Date().getFullYear();
@@ -686,18 +690,20 @@ function RouteSelectorCardComponent({
         onRouteCodeChange={handleRouteCodeChange}
         availableRouteCodes={availableRouteCodes}
         routeEnabled={routeEnabled}
-        selectedTab={selectedTab}
+        selectedTab={formTab}
         onTabChange={handleTabChange}
         days={days}
         dateEnabled={dateEnabled}
-        isAccumulation={isAccumulation}
+        isAccumulation={formTab === 'AKUMULASI' || isAccumulation}
         isLoading={isLoading}
         sheetUrl={sheetUrl}
         onLoadData={(tab, targetUrl) => {
-          if (isAccumulation && tab && tab !== 'AKUMULASI' && onExitAccumulation) {
-            onExitAccumulation(tab);
+          const finalTab = tab || formTab;
+          setSelectedTab(finalTab);
+          if (isAccumulation && finalTab && finalTab !== 'AKUMULASI' && onExitAccumulation) {
+            onExitAccumulation(finalTab);
           } else {
-            onLoadData(tab, targetUrl);
+            onLoadData(finalTab, targetUrl);
           }
           setIsSheetOpen(false);
         }}

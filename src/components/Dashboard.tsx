@@ -558,12 +558,13 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   }, [matchedRoute, currentRouteCode, selectedRouteCode]);
 
   const operationalReportDate = useMemo(() => {
-    const dayNum = parseInt(selectedTab, 10);
+    const rawTab = currentTabName || selectedTab;
+    const dayNum = parseInt(rawTab, 10);
     if (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) {
       return `${activeYear}-${String(activeMonth).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
     }
     return new Date().toISOString().split("T")[0];
-  }, [selectedTab, activeYear, activeMonth]);
+  }, [currentTabName, selectedTab, activeYear, activeMonth]);
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [operationalReportStatus, setOperationalReportStatus] = useState<'draft' | 'submitted' | 'verified'>('draft');
