@@ -713,7 +713,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       showSuccessToast(TEXT_FLEET_STATUS.TOAST.APPLY_SUCCESS(shift));
     } catch (err: any) {
       console.warn('[Dashboard] Gagal menerapkan status armada:', err);
-      showErrorToast(err?.message || TEXT_FLEET_STATUS.TOAST.APPLY_ERROR);
+      const friendlyErr = formatUserError(err, TEXT_FLEET_STATUS.TOAST.APPLY_ERROR);
+      if (friendlyErr) {
+        showErrorToast(friendlyErr);
+      }
       throw err;
     }
   };

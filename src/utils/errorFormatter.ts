@@ -107,6 +107,19 @@ export function formatUserError(
     return TEXT_ERRORS.PERMISSION_DENIED_GENERAL;
   }
 
+  // 8. Database / Schema / PostgREST Internal Errors (Anti-leak technical DB errors to UI)
+  if (
+    lowerMsg.includes("schema cache") ||
+    lowerMsg.includes("pgrst") ||
+    lowerMsg.includes("column of") ||
+    lowerMsg.includes("relation") ||
+    lowerMsg.includes("violates") ||
+    lowerMsg.includes("syntax error") ||
+    lowerMsg.includes("gagal menyimpan laporan operasional rute")
+  ) {
+    return fallbackMessage || TEXT_ERRORS.SAVE_REPORT_FAILED;
+  }
+
   // Fallback to custom message or default friendly Indonesian message
   return (
     fallbackMessage ||
