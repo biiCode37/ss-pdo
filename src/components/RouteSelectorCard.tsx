@@ -350,13 +350,6 @@ function RouteSelectorCardComponent({
 
   const handleTabChange = (tab: string) => {
     setSelectedTab(tab);
-    if (tab && tab !== 'AKUMULASI') {
-      if (onExitAccumulation) {
-        onExitAccumulation(tab);
-      } else {
-        onLoadData(tab, sheetUrl);
-      }
-    }
   };
 
   // Helper: cari sheet untuk kombinasi rute+bulan+tahun saat ini
@@ -701,7 +694,11 @@ function RouteSelectorCardComponent({
         isLoading={isLoading}
         sheetUrl={sheetUrl}
         onLoadData={(tab, targetUrl) => {
-          onLoadData(tab, targetUrl);
+          if (isAccumulation && tab && tab !== 'AKUMULASI' && onExitAccumulation) {
+            onExitAccumulation(tab);
+          } else {
+            onLoadData(tab, targetUrl);
+          }
           setIsSheetOpen(false);
         }}
         onOpenAddRoute={() => setIsAddingRoute(true)}

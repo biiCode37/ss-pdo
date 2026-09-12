@@ -374,4 +374,62 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
 
     localStorage.removeItem('PDO_LAST_VISITED');
   });
+
+  it('does NOT trigger onLoadData when picking date in dropdown, only updates state until Load Data button is clicked', async () => {
+    const handleSetSelectedTab = vi.fn();
+    const handleLoadData = vi.fn();
+    const handleExitAccumulation = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab="2"
+          setSelectedTab={handleSetSelectedTab}
+          days={['1', '2', '3', '4', '5']}
+          isLoading={false}
+          isDataLoaded={true}
+          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
+          currentTabName="2"
+          onLoadData={handleLoadData}
+          onExitAccumulation={handleExitAccumulation}
+          externalOpenTrigger={1}
+        />
+      );
+    });
+
+    const selects = container.querySelectorAll('select');
+    const dateSelect = Array.from(selects).find((s) =>
+      Array.from(s.options).some((opt) => opt.text.includes('Tgl 1'))
+    ) as HTMLSelectElement;
+
+    expect(dateSelect).toBeTruthy();
+
+    // User chooses day 4 from dropdown
+    await act(async () => {
+      dateSelect.value = '4';
+      dateSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    // Verify setSelectedTab is called with '4'
+    expect(handleSetSelectedTab).toHaveBeenCalledWith('4');
+
+    // CRITICAL: onLoadData and onExitAccumulation MUST NOT be triggered on dropdown change!
+    expect(handleLoadData).not.toHaveBeenCalled();
+    expect(handleExitAccumulation).not.toHaveBeenCalled();
+
+    // Now user clicks "Load Data Unit" button
+    const loadDataBtn = Array.from(container.querySelectorAll('button')).find((btn) =>
+      btn.textContent?.includes('Load Data Unit')
+    ) as HTMLButtonElement;
+    expect(loadDataBtn).toBeTruthy();
+
+    await act(async () => {
+      loadDataBtn.click();
+    });
+
+    // onLoadData should now be called
+    expect(handleLoadData).toHaveBeenCalled();
+  });
 });
