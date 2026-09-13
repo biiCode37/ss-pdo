@@ -1,37 +1,17 @@
-import { useState, useEffect, useMemo, useCallback, memo } from "react";
-import type { BusData, HeaderMap } from "../services/googleSheets";
-import { parseIndonesianNumber } from "../utils/numberUtils";
-import { updateBulkBusData } from "../services/googleSheets";
+import { useState, useMemo, useCallback, memo } from "react";
+import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { BusCard } from "./BusCard";
-import {
-  Search,
-  Filter,
-  CheckCircle2,
-  Loader2,
-  ChevronDown,
-  AlertTriangle,
-  ArrowRight,
-} from "lucide-react";
-import {
-  showSuccessToast,
-  showErrorAlert,
-  showWarningToast,
-  showBulkTripModal,
-  showBulkCopyKmModal,
-} from "../utils/alertUtils";
-import { getSatsetMode } from "../utils/modals/busInputModal";
 import { BusCardSkeleton } from "./Skeletons";
-import { detectTargetTrip } from "../utils/unitAnalytics";
-import {
-  filterBusesForKmCopy,
-  splitShiftKeterangan,
-  cleanShiftNote,
-} from "../utils/keteranganUtils";
-import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "../constants/texts";
+import { getSatsetMode } from "@/utils/modals/busInputModal";
+import { showSuccessToast } from "@/utils/alertUtils";
+import { TEXT_DASHBOARD } from "@/constants/texts";
+import type { SyncItem } from "@/hooks/useOfflineSync";
 
-import type { SyncItem } from "../hooks/useOfflineSync";
+import { isUnitAllowedForInput, isBusFilled } from "./busList/busListUtils";
+import { useBulkOperations } from "./busList/useBulkOperations";
+import { BusListHeader } from "./busList/BusListHeader";
 
-interface Props {
+export interface BusListProps {
   data: BusData[];
   sheetId: string;
   tabName: string;
@@ -68,336 +48,69 @@ function BusListComponent({
   isShiftConfirmed,
   activeShift = 1,
   onOpenFleetStatus,
-}: Props) {
+}: BusListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [activeCategory, setActiveCategory] = useState("ALL");
-  const [bulkPergi, setBulkPergi] = useState("");
-  const [bulkPulang, setBulkPulang] = useState("");
-  const [isSubmittingBulk, setIsSubmittingBulk] = useState(false);
 
-  const handleOpenBulkTripModal = async () => {
-    if (!data || data.length === 0) return;
-    if (tabName === "AKUMULASI") {
-      showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
-      return;
-    }
-    if (isShiftConfirmed === false) {
-      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
-      if (onOpenFleetStatus) onOpenFleetStatus();
-      return;
-    }
+  const {
+    bulkPergi,
+    bulkPulang,
+    isSubmittingBulk,
+    targetTrip,
+    availableKmS1Buses,
+    skippedWithNotesCount,
+    handleOpenBulkTripModal,
+    handleBulkCopyKmS1,
+  } = useBulkOperations({
+    data,
+    sheetId,
+    tabName,
+    headerMap,
+    addToQueue,
+    onUpdateBus,
+    isShiftConfirmed,
+    onOpenFleetStatus,
+  });
 
-    const result = await showBulkTripModal({
-      currentPergi: bulkPergi,
-      currentPulang: bulkPulang,
-      headerMap,
-      unitCount: data.length,
-    });
-
-    if (!result) return;
-
-    setBulkPergi(result.tripPergi);
-    setBulkPulang(result.tripPulang);
-
-    setIsSubmittingBulk(true);
-    const updatesList = data.map((bus) => {
-      const isOff =
-        bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
-      return {
-        rowIndex: bus.rowIndex,
-        updates: {
-          tripPergi: isOff ? "" : result.tripPergi,
-          tripPulang: isOff ? "" : result.tripPulang,
-        },
-      };
-    });
-
-    try {
-      if (navigator.onLine) {
-        await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
-      } else {
-        data.forEach((bus) => {
-          const isOff =
-            bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
-          addToQueue({
-            sheetId,
-            tabName,
-            rowIndex: bus.rowIndex,
-            updates: {
-              tripPergi: isOff ? "" : result.tripPergi,
-              tripPulang: isOff ? "" : result.tripPulang,
-            },
-            headerMap,
-          });
-        });
-      }
-
-      if (onUpdateBus) {
-        data.forEach((bus) => {
-          const isOff =
-            bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
-          onUpdateBus(bus.rowIndex, {
-            tripPergi: isOff ? "" : result.tripPergi,
-            tripPulang: isOff ? "" : result.tripPulang,
-          });
-        });
-      }
-
-      showSuccessToast(
-        TEXT_DASHBOARD.BUS_LIST.SET_TRIP_SUCCESS(result.tripPergi, result.tripPulang, data.length),
-      );
-    } catch (err: any) {
-      showErrorAlert(
-        TEXT_DASHBOARD.BUS_LIST.SET_TRIP_FAILED,
-        err.message || TEXT_DASHBOARD.BUS_LIST.SAVE_ERROR_GENERIC,
-      );
-    } finally {
-      setIsSubmittingBulk(false);
-    }
-  };
-
-  // Menentukan target trip operasional rute saat ini
-  const targetTrip = useMemo(() => {
-    const manualP = parseIndonesianNumber(bulkPergi, 0);
-    const manualQ = parseIndonesianNumber(bulkPulang, 0);
-    if (manualP > 0 && manualQ > 0) {
-      return { pergi: manualP, pulang: manualQ };
-    }
-
-    // ponytail: reuse helper detectTargetTrip terpusat
-    return detectTargetTrip(data);
-  }, [bulkPergi, bulkPulang, data]);
-
-  // Otomatis sinkronkan bulkPergi & bulkPulang jika masih kosong tapi targetTrip terdeteksi dari data armada
-  useEffect(() => {
-    if (!bulkPergi && !bulkPulang && targetTrip) {
-      setBulkPergi(String(targetTrip.pergi));
-      setBulkPulang(String(targetTrip.pulang));
-    }
-  }, [targetTrip, bulkPergi, bulkPulang]);
-
-  // ponytail: filter unit yang eligible untuk salin KM S1 (lewati yang berketerangan)
-  const { availableKmS1Buses, skippedWithNotesCount } = useMemo(() => {
-    const { eligibleBuses, skippedWithNotesCount } = filterBusesForKmCopy(data || []);
-    return {
-      availableKmS1Buses: eligibleBuses,
-      skippedWithNotesCount,
-    };
-  }, [data]);
-
-  const emptyKmAwal2Count = useMemo(() => {
-    return availableKmS1Buses.filter(
-      (b) => !b.kmAwal2 || String(b.kmAwal2).trim() === "",
-    ).length;
-  }, [availableKmS1Buses]);
-
-  const handleBulkCopyKmS1 = async () => {
-    if (tabName === "AKUMULASI") {
-      showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
-      return;
-    }
-    if (isShiftConfirmed === false) {
-      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
-      if (onOpenFleetStatus) onOpenFleetStatus();
-      return;
-    }
-
-    if (availableKmS1Buses.length === 0) {
-      if (skippedWithNotesCount > 0) {
-        showWarningToast(
-          TEXT_DASHBOARD.BUS_LIST.COPY_KM_SKIPPED_ALL(skippedWithNotesCount),
-        );
-      } else {
-        showWarningToast(
-          TEXT_DASHBOARD.BUS_LIST.COPY_KM_NO_DATA,
-        );
-      }
-      return;
-    }
-
-    const mode = await showBulkCopyKmModal({
-      totalUnitsWithKmS1: availableKmS1Buses.length,
-      emptyKmAwal2Count,
-      skippedWithNotesCount,
-    });
-
-    if (!mode) return;
-
-    const targetBuses =
-      mode === "only_empty"
-        ? availableKmS1Buses.filter(
-            (b) => !b.kmAwal2 || String(b.kmAwal2).trim() === "",
-          )
-        : availableKmS1Buses;
-
-    if (targetBuses.length === 0) {
-      showWarningToast(TEXT_DASHBOARD.BUS_LIST.COPY_KM_ALL_FILLED);
-      return;
-    }
-
-    setIsSubmittingBulk(true);
-    const updatesList = targetBuses.map((bus) => ({
-      rowIndex: bus.rowIndex,
-      updates: {
-        kmAwal2: bus.kmAkhir1,
-      },
-    }));
-
-    try {
-      if (navigator.onLine) {
-        await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
-      } else {
-        targetBuses.forEach((bus) => {
-          addToQueue({
-            sheetId,
-            tabName,
-            rowIndex: bus.rowIndex,
-            updates: {
-              kmAwal2: bus.kmAkhir1,
-            },
-            headerMap,
-          });
-        });
-      }
-
-      if (onUpdateBus) {
-        targetBuses.forEach((bus) => {
-          onUpdateBus(bus.rowIndex, {
-            kmAwal2: bus.kmAkhir1,
-          });
-        });
-      }
-
-      const noteSuffix =
-        skippedWithNotesCount > 0
-          ? ` ${TEXT_DASHBOARD.BUS_LIST.COPY_KM_SKIPPED_TEXT(skippedWithNotesCount)}`
-          : "";
-      showSuccessToast(
-        TEXT_DASHBOARD.BUS_LIST.COPY_KM_SUCCESS(targetBuses.length, noteSuffix),
-      );
-    } catch (err: any) {
-      showErrorAlert(
-        TEXT_DASHBOARD.BUS_LIST.COPY_KM_FAILED,
-        err.message || TEXT_DASHBOARD.BUS_LIST.SAVE_ERROR_GENERIC,
-      );
-    } finally {
-      setIsSubmittingBulk(false);
-    }
-  };
-
-  const categories = [
-    { id: "ALL", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.ALL },
-    { id: "trip", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TRIP },
-    { id: "toaShift1", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TOA_S1 },
-    { id: "totalToa", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TOTAL_TOA },
-    { id: "kmAwal1", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_1 },
-    { id: "kmAkhir1", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AKHIR_1 },
-    { id: "kmAwal2", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AWAL_2 },
-    { id: "kmAkhir2", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.KM_AKHIR_2 },
-  ];
-
-  // Menentukan apakah unit diperbolehkan untuk diinput datanya berdasarkan status armada (SGO)
-  const isUnitAllowedForInput = useCallback(
-    (bus: BusData) => {
-      const { s1, s2 } = splitShiftKeterangan(bus.keterangan);
-      const isSgoS1 = !cleanShiftNote(s1);
-      const isSgoS2 = !cleanShiftNote(s2);
-
-      // Kategori khusus Shift 1: hanya unit yang berstatus SGO di Shift 1
-      if (
-        activeCategory === "toaShift1" ||
-        activeCategory === "kmAwal1" ||
-        activeCategory === "kmAkhir1"
-      ) {
-        return isSgoS1;
-      }
-
-      // Kategori khusus Shift 2: hanya unit yang berstatus SGO di Shift 2
-      if (
-        activeCategory === "toaShift2" ||
-        activeCategory === "kmAwal2" ||
-        activeCategory === "kmAkhir2"
-      ) {
-        return isSgoS2;
-      }
-
-      // Kategori Trip: unit yang beroperasi minimal di salah satu shift (S1 atau S2)
-      if (activeCategory === "trip") {
-        return isSgoS1 || isSgoS2;
-      }
-
-      // Kategori ALL (Progres Harian): unit yang beroperasi minimal di salah satu shift
-      return isSgoS1 || isSgoS2;
-    },
+  const checkAllowed = useCallback(
+    (bus: BusData) => isUnitAllowedForInput(bus, activeCategory),
     [activeCategory],
   );
 
-  // Logic selesai bergantung pada kategori yang aktif dan status operasional unit
-  const isBusFilled = useCallback(
-    (bus: BusData) => {
-      const hasValue = (val: any) =>
-        val !== undefined && val !== null && String(val).trim() !== "";
-
-      const { s1, s2 } = splitShiftKeterangan(bus.keterangan);
-      const isSgoS1 = !cleanShiftNote(s1);
-      const isSgoS2 = !cleanShiftNote(s2);
-
-      if (activeCategory === "ALL") {
-        // Jika unit non-operasional di kedua shift, unit tidak perlu diisi
-        if (!isSgoS1 && !isSgoS2) return true;
-
-        const s1Filled =
-          !isSgoS1 ||
-          (hasValue(bus.toaShift1) &&
-            hasValue(bus.kmAwal1) &&
-            hasValue(bus.kmAkhir1));
-
-        const s2Filled =
-          !isSgoS2 ||
-          (hasValue(bus.totalToa) &&
-            hasValue(bus.kmAwal2) &&
-            hasValue(bus.kmAkhir2));
-
-        return s1Filled && s2Filled;
-      } else if (activeCategory === "trip") {
-        return hasValue(bus.tripPergi) || hasValue(bus.tripPulang);
-      } else {
-        return hasValue(bus[activeCategory as keyof BusData]);
-      }
-    },
+  const checkFilled = useCallback(
+    (bus: BusData) => isBusFilled(bus, activeCategory),
     [activeCategory],
   );
 
   const { filledCount, totalCount, progressPercent } = useMemo(() => {
-    // Progres bar hanya menghitung unit yang diperbolehkan untuk diinput datanya (unit SGO / operasional)
-    const allowedBuses = data.filter(isUnitAllowedForInput);
-    const filled = allowedBuses.filter(isBusFilled).length;
+    const allowedBuses = data.filter(checkAllowed);
+    const filled = allowedBuses.filter(checkFilled).length;
     const total = allowedBuses.length;
     const percent = total === 0 ? 0 : Math.round((filled / total) * 100);
     return { filledCount: filled, totalCount: total, progressPercent: percent };
-  }, [data, isUnitAllowedForInput, isBusFilled]);
+  }, [data, checkAllowed, checkFilled]);
 
   const filteredData = useMemo(() => {
     let result = data;
 
     if (showOnlyUnfinished) {
       result = result.filter(
-        (bus) => isUnitAllowedForInput(bus) && !isBusFilled(bus),
+        (bus) => checkAllowed(bus) && !checkFilled(bus),
       );
     }
 
-    // Sort: Unfinished (unit operasional aktif belum lengkap) di atas, lalu yang selesai, lalu yang non-SGO
+    // Sort: Unfinished di atas, lalu yang selesai, lalu yang non-SGO
     result = [...result].sort((a, b) => {
-      const aAllowed = isUnitAllowedForInput(a);
-      const bAllowed = isUnitAllowedForInput(b);
+      const aAllowed = checkAllowed(a);
+      const bAllowed = checkAllowed(b);
       if (aAllowed !== bAllowed) {
         return aAllowed ? -1 : 1;
       }
-      const aFilled = isBusFilled(a);
-      const bFilled = isBusFilled(b);
+      const aFilled = checkFilled(a);
+      const bFilled = checkFilled(b);
       if (aFilled === bFilled) return 0;
-      return aFilled ? 1 : -1; // false (0) comes before true (1)
+      return aFilled ? 1 : -1;
     });
 
     if (searchQuery) {
@@ -408,29 +121,26 @@ function BusListComponent({
     }
 
     return result;
-  }, [data, searchQuery, showOnlyUnfinished, isUnitAllowedForInput, isBusFilled]);
+  }, [data, searchQuery, showOnlyUnfinished, checkAllowed, checkFilled]);
 
   // Handler Auto-Next Bus ketika Mode Satset aktif
   const handleSaveAndNext = useCallback(
     (savedBus: BusData) => {
       if (!getSatsetMode()) return;
 
-      // Jeda mikro 120ms agar transisi antar modal terasa sangat mulus
       setTimeout(() => {
         const currentIndex = filteredData.findIndex(
           (b) => b.rowIndex === savedBus.rowIndex,
         );
 
-        // Cari unit berikutnya yang belum terisi di daftar terfilter
         let nextBus = filteredData
           .slice(currentIndex + 1)
-          .find((b) => b.rowIndex !== savedBus.rowIndex && !isBusFilled(b));
+          .find((b) => b.rowIndex !== savedBus.rowIndex && !checkFilled(b));
 
-        // Jika dari posisi saat ini ke bawah sudah terisi semua, cari dari atas daftar
         if (!nextBus) {
           nextBus = filteredData
             .slice(0, currentIndex)
-            .find((b) => b.rowIndex !== savedBus.rowIndex && !isBusFilled(b));
+            .find((b) => b.rowIndex !== savedBus.rowIndex && !checkFilled(b));
         }
 
         if (nextBus) {
@@ -445,394 +155,35 @@ function BusListComponent({
         }
       }, 120);
     },
-    [filteredData, isBusFilled],
+    [filteredData, checkFilled],
   );
 
   return (
     <div>
-      <div className="sticky-buslist-header">
-        {tabName === "AKUMULASI" && (
-          <div
-            style={{
-              background: "rgba(234, 179, 8, 0.15)",
-              border: "1px solid rgba(234, 179, 8, 0.4)",
-              color: "var(--warning-color, #eab308)",
-              padding: "10px 14px",
-              borderRadius: "12px",
-              fontSize: "12.5px",
-              fontWeight: 600,
-              marginBottom: "12px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "8px",
-              boxShadow: "0 2px 8px rgba(234, 179, 8, 0.15)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: "240px" }}>
-              <span style={{ fontSize: "16px" }}>⚠️</span>
-              <span>
-                Rekap Akumulasi (Tgl{" "}
-                {(() => {
-                  const sDay = accRange?.startDay ?? 1;
-                  const eDay = accRange?.endDay ?? new Date().getDate();
-                  if (
-                    accRange?.startMonth &&
-                    accRange?.endMonth &&
-                    (accRange.startMonth !== accRange.endMonth ||
-                      accRange.startYear !== accRange.endYear)
-                  ) {
-                    return `${sDay}/${accRange.startMonth} - ${eDay}/${accRange.endMonth}`;
-                  }
-                  return `${sDay} - ${eDay}`;
-                })()}
-                ) aktif. Penginputan dikunci pada mode akumulasi.
-              </span>
-            </div>
-            {onExitAccumulation && (
-              <button
-                type="button"
-                onClick={onExitAccumulation}
-                style={{
-                  background: "rgba(234, 179, 8, 0.2)",
-                  border: "1px solid rgba(234, 179, 8, 0.45)",
-                  color: "var(--warning-color, #eab308)",
-                  borderRadius: "8px",
-                  padding: "5px 12px",
-                  fontSize: "11.5px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Kembali ke Harian ➔
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Hairline Progress Indicator (Ultra-clean, saves vertical space) */}
-        {(isShiftConfirmed || tabName === "AKUMULASI") && (
-          <div data-testid="daily-progress-container">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "2px 4px 6px 4px",
-                fontSize: "12px",
-                color: "var(--text-secondary)",
-              }}
-            >
-              <span style={{ fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.1px" }}>
-                {activeCategory === "ALL"
-                  ? TEXT_DASHBOARD.BUS_LIST.DAILY_PROGRESS
-                  : TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX(categories.find((c) => c.id === activeCategory)?.label || activeCategory)}
-              </span>
-              <span className="tabular-nums" style={{ fontSize: "11.5px" }}>
-                <strong style={{ color: filledCount === totalCount ? "var(--success-color)" : "var(--text-primary)" }}>
-                  {filledCount}
-                </strong>
-                /{totalCount} Unit ({progressPercent}%)
-              </span>
-            </div>
-
-            {/* 3px Hairline Progress Bar */}
-            <div
-              style={{
-                height: "3px",
-                background: "rgba(255, 255, 255, 0.08)",
-                borderRadius: "2px",
-                overflow: "hidden",
-                marginBottom: "10px",
-              }}
-            >
-              <div
-                style={{
-                  height: "100%",
-                  background: filledCount === totalCount ? "var(--success-color)" : "var(--accent-color)",
-                  width: `${progressPercent}%`,
-                  transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
-                }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Banner Peringatan Status Armada Belum Dikonfirmasi */}
-        {!isShiftConfirmed && tabName !== "AKUMULASI" && (
-          <div
-            className="shift-lock-banner"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "8px",
-              padding: "10px 14px",
-              borderRadius: "12px",
-              background: "rgba(245, 158, 11, 0.12)",
-              border: "1px solid rgba(245, 158, 11, 0.35)",
-              color: "var(--warning-text, #f59e0b)",
-              marginBottom: "10px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                flex: "1 1 auto",
-              }}
-            >
-              <AlertTriangle size={16} style={{ flexShrink: 0 }} />
-              <span style={{ fontSize: "12px", fontWeight: 600, lineHeight: 1.35 }}>
-                {TEXT_FLEET_STATUS.MODAL.LOCK_BANNER_MESSAGE(activeShift || 1)}
-              </span>
-            </div>
-            {onOpenFleetStatus && (
-              <button
-                type="button"
-                onClick={onOpenFleetStatus}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  padding: "5px 12px",
-                  borderRadius: "8px",
-                  background: "rgba(245, 158, 11, 0.22)",
-                  border: "1px solid rgba(245, 158, 11, 0.45)",
-                  color: "inherit",
-                  fontSize: "11.5px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                <span>{TEXT_FLEET_STATUS.ALERT_BAR.ACTION_BTN}</span>
-                <ArrowRight size={13} />
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Controls Container: Row 1 (Fokus Kolom + Set Jumlah Trip) & Row 2 (Search + Filter) */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(6px, 1.5vw, 8px)" }}>
-          {/* Row 1: Set Jumlah Trip (Kiri) & Fokus Kolom (Kanan) */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: "clamp(6px, 1.5vw, 8px)",
-              alignItems: "center",
-            }}
-          >
-            {/* Set Jumlah Trip Trigger Button (Kiri) */}
-            <button
-              type="button"
-              onClick={handleOpenBulkTripModal}
-              disabled={isSubmittingBulk}
-              style={{
-                height: "38px",
-                padding: "0 12px",
-                borderRadius: "11px",
-                background: "var(--card-bg)",
-                border: "1px solid var(--card-border)",
-                color: "var(--text-primary)",
-                fontWeight: 600,
-                fontSize: "12.5px",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "6px",
-                whiteSpace: "nowrap",
-                cursor: "pointer",
-                boxShadow: "none",
-                transition: "opacity 0.12s ease",
-                opacity: isSubmittingBulk ? 0.7 : 1,
-              }}
-              title={
-                bulkPergi && bulkPulang
-                  ? TEXT_DASHBOARD.BUS_LIST.SET_TRIP_WITH_COUNT(bulkPergi, bulkPulang)
-                  : TEXT_DASHBOARD.BUS_LIST.SET_TRIP_TITLE
-              }
-            >
-              {isSubmittingBulk && (
-                <Loader2
-                  size={14}
-                  className="spinner"
-                  style={{ color: "var(--accent-color)" }}
-                />
-              )}
-              <span style={{ color: "var(--text-primary)" }}>
-                {TEXT_DASHBOARD.BUS_LIST.SET_TRIP_BTN}
-                {bulkPergi && bulkPulang
-                  ? ` (${bulkPergi}/${bulkPulang})`
-                  : ""}
-              </span>
-            </button>
-
-            {/* Dropdown Fokus Kolom (Kanan) */}
-            <div style={{ position: "relative", width: "100%", minWidth: 0 }}>
-              <select
-                value={activeCategory}
-                onChange={(e) => setActiveCategory(e.target.value)}
-                className="input-field"
-                style={{
-                  height: "38px",
-                  padding: "0 32px 0 12px",
-                  fontSize: "12.5px",
-                  fontWeight: 600,
-                  borderRadius: "11px",
-                  background: "var(--card-bg)",
-                  border: "1px solid var(--card-border)",
-                  color: "var(--text-primary)",
-                  cursor: "pointer",
-                  width: "100%",
-                  appearance: "none",
-                  WebkitAppearance: "none",
-                  MozAppearance: "none",
-                }}
-              >
-                {categories.map((cat) => (
-                  <option
-                    key={cat.id}
-                    value={cat.id}
-                    style={{
-                      background: "var(--surface-color, #1e293b)",
-                      color: "var(--text-primary, #f8fafc)",
-                    }}
-                  >
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown
-                size={15}
-                style={{
-                  position: "absolute",
-                  right: "10px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "var(--text-secondary)",
-                  pointerEvents: "none",
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Row 2: Pencarian & Filter Sisa Unit */}
-          <div
-            className="search-container"
-            style={{ display: "flex", gap: "clamp(6px, 1.5vw, 8px)", margin: 0 }}
-          >
-            <div className="search-input-wrapper" style={{ flex: 1 }}>
-              <Search className="search-icon" size={17} />
-              <input
-                type="text"
-                className="input-field search-input"
-                placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ height: "38px", fontSize: "13px" }}
-              />
-            </div>
-            <button
-              className={`btn ${showOnlyUnfinished ? "" : "btn-outline"}`}
-              style={{
-                width: "auto",
-                padding: "0 12px",
-                display: "flex",
-                gap: "5px",
-                alignItems: "center",
-                height: "38px",
-                fontSize: "12.5px",
-                fontWeight: 600,
-                borderRadius: "11px",
-                whiteSpace: "nowrap",
-              }}
-              onClick={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
-            >
-              {showOnlyUnfinished ? (
-                <CheckCircle2 size={15} />
-              ) : (
-                <Filter size={15} />
-              )}
-              {showOnlyUnfinished ? TEXT_DASHBOARD.BUS_LIST.FILTER_UNFINISHED : TEXT_DASHBOARD.BUS_LIST.FILTER_BTN}
-            </button>
-          </div>
-
-          {/* Contextual Action: Bulk Copy KM S1 to KM S2 (Hanya tampil saat tab KM Awal S2 aktif) */}
-          {activeCategory === "kmAwal2" && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: "8px",
-                padding: "8px 12px",
-                borderRadius: "12px",
-                background: "rgba(56, 189, 248, 0.08)",
-                border:
-                  "1px solid var(--shift1-border, rgba(56, 189, 248, 0.25))",
-                animation: "fadeIn 0.2s ease-out forwards",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: "var(--text-secondary)",
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                  gap: "6px",
-                  flex: "1 1 auto",
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: 700,
-                    color: "var(--shift1-color, #38bdf8)",
-                  }}
-                >
-                  {TEXT_DASHBOARD.BUS_LIST.COPY_KM_READY_COUNT(availableKmS1Buses.length)}
-                </span>
-                <span>{TEXT_DASHBOARD.BUS_LIST.COPY_KM_READY_TEXT}</span>
-                {skippedWithNotesCount > 0 && (
-                  <span
-                    style={{
-                      fontSize: "11px",
-                      color: "var(--warning-text, #f59e0b)",
-                    }}
-                  >
-                    {TEXT_DASHBOARD.BUS_LIST.COPY_KM_SKIPPED_TEXT(skippedWithNotesCount)}
-                  </span>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={handleBulkCopyKmS1}
-                disabled={isSubmittingBulk || availableKmS1Buses.length === 0}
-                className="swal-copy-km-chip"
-                style={{
-                  padding: "6px 12px",
-                  fontSize: "12px",
-                  fontWeight: 700,
-                  borderRadius: "8px",
-                  cursor:
-                    availableKmS1Buses.length === 0 ? "not-allowed" : "pointer",
-                  opacity: availableKmS1Buses.length === 0 ? 0.5 : 1,
-                  flexShrink: 0,
-                }}
-              >
-                {TEXT_DASHBOARD.BUS_LIST.COPY_KM_BTN}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      <BusListHeader
+        tabName={tabName}
+        accRange={accRange}
+        onExitAccumulation={onExitAccumulation}
+        isShiftConfirmed={isShiftConfirmed}
+        activeShift={activeShift}
+        onOpenFleetStatus={onOpenFleetStatus}
+        activeCategory={activeCategory}
+        onCategoryChange={setActiveCategory}
+        filledCount={filledCount}
+        totalCount={totalCount}
+        progressPercent={progressPercent}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        showOnlyUnfinished={showOnlyUnfinished}
+        onToggleUnfinished={() => setShowOnlyUnfinished(!showOnlyUnfinished)}
+        bulkPergi={bulkPergi}
+        bulkPulang={bulkPulang}
+        isSubmittingBulk={isSubmittingBulk}
+        onOpenBulkTripModal={handleOpenBulkTripModal}
+        availableKmS1Count={availableKmS1Buses.length}
+        skippedWithNotesCount={skippedWithNotesCount}
+        onBulkCopyKmS1={handleBulkCopyKmS1}
+      />
 
       {isLoading ? (
         <BusCardSkeleton count={5} />
@@ -878,3 +229,4 @@ function BusListComponent({
 }
 
 export const BusList = memo(BusListComponent);
+export default BusList;
