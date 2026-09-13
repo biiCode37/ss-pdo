@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1789284979.72771,
-    "ast_hash": "109a678a539f14951d6936d9401a3148",
+    "mtime": 1789289542.7522159,
+    "ast_hash": "d1065f59fdbe13a680af63ae5948d456",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -2065,8 +2065,8 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/index.ts": {
-    "mtime": 1789284900.3026285,
-    "ast_hash": "7a2764e58f5454b6b8370173b1e2d09f",
+    "mtime": 1789289532.8488972,
+    "ast_hash": "a28ffb1535fd0dae9c4a7a28df15e2a7",
     "semantic_hash": ""
   },
   "src/components/dashboard/useDashboardData.ts": {
@@ -2522,6 +2522,36 @@
   "refactor-ss-pdo/refact_52/REPAIR_REPORT.md": {
     "mtime": 1789289099.9090843,
     "ast_hash": "abc88cb77652f54e6d89df3a1638d02b",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/useDashboardSyncHandlers.test.tsx": {
+    "mtime": 1789289639.6535425,
+    "ast_hash": "62d9b4c1080c730a420b509a0ef9ad38",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/useDashboardSyncHandlers.ts": {
+    "mtime": 1789289530.079383,
+    "ast_hash": "8189f00c004e53355756b2bf89d8470a",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/useDashboardUiState.test.tsx": {
+    "mtime": 1789289558.8577862,
+    "ast_hash": "2dddc3c47c5c2fe994cdab0cf9bc1f82",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/useDashboardUiState.ts": {
+    "mtime": 1789289524.6487124,
+    "ast_hash": "c2ea5e140159b948b31eee245ecccf0a",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_53/AUDIT_BUGS.md": {
+    "mtime": 1789289446.3691022,
+    "ast_hash": "a05a88c432344737eddd29e4000df7fb",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_53/REPAIR_REPORT.md": {
+    "mtime": 1789289453.3482306,
+    "ast_hash": "b4714295c9ccead28bd506a1b55e4417",
     "semantic_hash": ""
   }
 }
