@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "src/components/ProfileMenuSheet.tsx": {
-    "mtime": 1789049424.9088707,
-    "ast_hash": "d4325d779ee728aa89842178795e233e",
+    "mtime": 1789286116.7855818,
+    "ast_hash": "2b4045ac1a66a3a47a1caf5998e1c18d",
     "semantic_hash": ""
   },
   "src/components/FormattedNoteText.tsx": {
@@ -2122,6 +2122,61 @@
   "refactor-ss-pdo/refact_43/REPAIR_REPORT.md": {
     "mtime": 1789285061.7403271,
     "ast_hash": "ff4ccd9f86770a0309445a12bb6888a6",
+    "semantic_hash": ""
+  },
+  "src/components/ProfileMenuSheet.test.tsx": {
+    "mtime": 1789286154.6517813,
+    "ast_hash": "7fbf779889197a4b3122a61c2cebd176",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/ProfileAdminSection.tsx": {
+    "mtime": 1789286058.0413723,
+    "ast_hash": "ad7a460708a4cf63d695ad6f32765790",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/ProfileFeaturesSection.tsx": {
+    "mtime": 1789286065.2636845,
+    "ast_hash": "3b2f3d2b5792832ce393f9e63cbf6444",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/ProfileMenuFooter.tsx": {
+    "mtime": 1789286067.8933742,
+    "ast_hash": "dd721fd4d97486c8c6493fa2ef14d22e",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/ProfileUserCard.tsx": {
+    "mtime": 1789286053.647339,
+    "ast_hash": "39903bd16b9fbccee0109128a5cf71e7",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/index.ts": {
+    "mtime": 1789286069.5582147,
+    "ast_hash": "43012db83c164c27aaf29dbf7bebbd20",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/types.ts": {
+    "mtime": 1789286040.6602066,
+    "ast_hash": "6581e559de541a452d2eaa5e51ab19cd",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/useProfileData.ts": {
+    "mtime": 1789286045.3074815,
+    "ast_hash": "408480469a727a2017228dbe7f861ea5",
+    "semantic_hash": ""
+  },
+  "src/components/profileMenu/useSheetGesture.ts": {
+    "mtime": 1789286049.5255065,
+    "ast_hash": "221998b3bc1fc35ddc594e11598bf273",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_44/AUDIT_BUGS.md": {
+    "mtime": 1789285550.549956,
+    "ast_hash": "91439f0c7791241a971d4538d89d9a3b",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_44/REPAIR_REPORT.md": {
+    "mtime": 1789285556.712288,
+    "ast_hash": "1eab1fe76789fb6f16b5c008c58b88d4",
     "semantic_hash": ""
   }
 }

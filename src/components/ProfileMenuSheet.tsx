@@ -1,49 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import {
-  X,
-  User,
-  Layers,
-  Sun,
-  Moon,
-  LogOut,
-  CloudOff,
-  ChevronRight,
-  Sparkles,
-  Users,
-  History,
-  Globe,
-} from "lucide-react";
-import { verifyUserProfile, upsertUserProfile } from "../services/routeService";
-import { fetchGoogleUserProfile } from "../services/googleSheets/auth";
-import {
-  showLogoutConfirm,
-  showFormatSheetConfirm,
-  showToast,
-  showSuccessToast,
-  showWarningToast,
-  showErrorAlert,
-} from "../utils/alertUtils";
-import { formatUserError } from "../utils/errorFormatter";
-import { getStoredUserRole, type UserRole } from "../utils/roleStorage";
-import { RoleBadge } from "./RoleBadge";
-import { TEXT_DASHBOARD } from "../constants/texts";
-
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-  onOpenAccumulation?: () => void;
-  onOpenRegionalMonitoring?: () => void;
-  onOpenUserManagement?: () => void;
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
-  offlineQueueCount: number;
-  isOnline: boolean;
-  onLogout: () => void;
-  onFormatWholeSheet?: () => Promise<void>;
-  currentTabName?: string;
-  hasActiveData?: boolean;
-}
+import { ProfileUserCard } from "./profileMenu/ProfileUserCard";
+import { ProfileAdminSection } from "./profileMenu/ProfileAdminSection";
+import { ProfileFeaturesSection } from "./profileMenu/ProfileFeaturesSection";
+import { ProfileMenuFooter } from "./profileMenu/ProfileMenuFooter";
+import { useProfileData } from "./profileMenu/useProfileData";
+import { useSheetGesture } from "./profileMenu/useSheetGesture";
+import type { ProfileMenuSheetProps } from "./profileMenu/types";
 
 export function ProfileMenuSheet({
   isOpen,
@@ -59,30 +22,33 @@ export function ProfileMenuSheet({
   onFormatWholeSheet,
   currentTabName,
   hasActiveData,
-}: Props) {
+}: ProfileMenuSheetProps) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  // BUG-57: Avatar gagal load dilacak via state agar fallback bisa pulih
-  // saat URL baru tersedia (sebelumnya display:none imperatif permanen).
-  const [avatarFailed, setAvatarFailed] = useState(false);
-  const [userProfile, setUserProfile] = useState<{
-    full_name: string;
-    email: string;
-    avatar_url?: string;
-    role?: UserRole | 'petugas';
-  }>({
-    full_name: localStorage.getItem("PDO_USER_NAME") || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
-    email: localStorage.getItem("PDO_USER_EMAIL") || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
-    avatar_url: localStorage.getItem("PDO_USER_AVATAR") || undefined,
-    role: getStoredUserRole(),
-  });
+  const { userProfile, avatarFailed, setAvatarFailed } = useProfileData(isOpen);
+
   const contentRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const mountTimeRef = useRef(0);
-  const touchStartYRef = useRef(0);
-  const touchStartTimeRef = useRef(0);
-  const isDraggingRef = useRef(false);
-  const currentDragYRef = useRef(0);
+  const isClosingRef = useRef(false);
+
+  const handleDismiss = () => {
+    if (isClosingRef.current) return;
+    isClosingRef.current = true;
+    setIsClosing(true);
+    setTimeout(onClose, 220);
+  };
+
+  // BUG-58: Ref agar listener Escape memanggil handleDismiss terbaru
+  // (closure lama selalu melihat isClosing=false → dismiss ganda)
+  const handleDismissRef = useRef(handleDismiss);
+  handleDismissRef.current = handleDismiss;
+
+  const { handleTouchStart, handleTouchMove, handleTouchEnd } = useSheetGesture({
+    contentRef,
+    overlayRef,
+    onDismiss: handleDismiss,
+  });
 
   useEffect(() => {
     if (!isOpen) {
@@ -93,68 +59,6 @@ export function ProfileMenuSheet({
     }
 
     mountTimeRef.current = Date.now();
-
-    // Ambil data profil dari localStorage & sync dari Supabase DB
-    const cachedEmail = localStorage.getItem("PDO_USER_EMAIL") || "";
-    const cachedName = localStorage.getItem("PDO_USER_NAME") || "";
-    const cachedAvatar = localStorage.getItem("PDO_USER_AVATAR") || "";
-
-    if (cachedEmail || cachedName) {
-      setUserProfile({
-        full_name: cachedName || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
-        email: cachedEmail || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_EMAIL,
-        avatar_url: cachedAvatar || undefined,
-        role: getStoredUserRole(),
-      });
-    }
-
-    // Jika avatar belum ada di localStorage, ambil langsung dari Google UserInfo API
-    if (!cachedAvatar) {
-      fetchGoogleUserProfile().then((info) => {
-        if (info && info.picture) {
-          setUserProfile((prev) => ({
-            ...prev,
-            avatar_url: info.picture,
-            full_name: info.name || prev.full_name,
-          }));
-          if (cachedEmail) {
-            upsertUserProfile({
-              email: cachedEmail,
-              full_name: info.name || cachedName || cachedEmail,
-              avatar_url: info.picture,
-            }).catch(() => {});
-          }
-        }
-      });
-    }
-
-    if (cachedEmail) {
-      verifyUserProfile(cachedEmail).then((res) => {
-        if (res.isAllowed && res.profile) {
-          const profile = res.profile;
-          const effectiveAvatar =
-            profile.avatar_url ||
-            localStorage.getItem("PDO_USER_AVATAR") ||
-            undefined;
-
-          setUserProfile((prev) => ({
-            full_name: profile.full_name || prev.full_name || cachedEmail,
-            email: profile.email || prev.email,
-            avatar_url: effectiveAvatar || prev.avatar_url,
-            role: profile.role || prev.role || "pdo",
-          }));
-
-          if (profile.full_name)
-            localStorage.setItem("PDO_USER_NAME", profile.full_name);
-          if (profile.email)
-            localStorage.setItem("PDO_USER_EMAIL", profile.email);
-          if (profile.role)
-            localStorage.setItem("PDO_USER_ROLE", profile.role);
-          if (effectiveAvatar)
-            localStorage.setItem("PDO_USER_AVATAR", effectiveAvatar);
-        }
-      });
-    }
 
     const frameId = requestAnimationFrame(() => setIsMounted(true));
 
@@ -171,109 +75,6 @@ export function ProfileMenuSheet({
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const handleDismiss = () => {
-    if (isClosingRef.current) return;
-    isClosingRef.current = true;
-    setIsClosing(true);
-    setTimeout(onClose, 220);
-  };
-
-  // BUG-58: Ref agar listener Escape memanggil handleDismiss terbaru
-  // (closure lama selalu melihat isClosing=false → dismiss ganda)
-  const isClosingRef = useRef(false);
-  const handleDismissRef = useRef(handleDismiss);
-  handleDismissRef.current = handleDismiss;
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    if (contentRef.current && contentRef.current.scrollTop <= 0) {
-      touchStartYRef.current = e.touches[0].clientY;
-      touchStartTimeRef.current = Date.now();
-      isDraggingRef.current = true;
-      currentDragYRef.current = 0;
-    }
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    if (!isDraggingRef.current || touchStartYRef.current === 0) return;
-    const currentY = e.touches[0].clientY;
-    const diff = currentY - touchStartYRef.current;
-    if (diff > 0 && contentRef.current) {
-      currentDragYRef.current = diff;
-      contentRef.current.style.transition = 'none';
-      contentRef.current.style.transform = `translateY(${diff}px) scale(${Math.max(0.95, 1 - diff / 2000)})`;
-      if (overlayRef.current) {
-        overlayRef.current.style.transition = 'none';
-        const opacity = Math.max(0.2, 0.65 - diff / 500);
-        overlayRef.current.style.backgroundColor = `rgba(0, 0, 0, ${opacity})`;
-      }
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    e.stopPropagation();
-    if (!isDraggingRef.current) return;
-    isDraggingRef.current = false;
-    const diff = currentDragYRef.current;
-    const duration = Date.now() - touchStartTimeRef.current;
-    const velocity = duration > 0 ? diff / duration : 0;
-    touchStartYRef.current = 0;
-
-    if (diff > 60 || (diff > 25 && velocity > 0.35)) {
-      if (contentRef.current) {
-        contentRef.current.style.transition = 'transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
-        contentRef.current.style.transform = 'translateY(100%) scale(0.95)';
-      }
-      if (overlayRef.current) {
-        overlayRef.current.style.transition = 'opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
-        overlayRef.current.style.opacity = '0';
-      }
-      handleDismiss();
-    } else {
-      if (contentRef.current) {
-        contentRef.current.style.transition = 'transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
-        contentRef.current.style.transform = 'translateY(0px) scale(1)';
-      }
-      if (overlayRef.current) {
-        overlayRef.current.style.transition = 'background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1)';
-        overlayRef.current.style.backgroundColor = 'rgba(0, 0, 0, 0.65)';
-      }
-    }
-  };
-
-  const [isFormatting, setIsFormatting] = useState(false);
-
-  const handleFormatSpreadsheetClick = async () => {
-    if (!onFormatWholeSheet) return;
-    if (!hasActiveData) {
-      showWarningToast(TEXT_DASHBOARD.PROFILE_MENU.SELECT_ROUTE_DATE_FIRST);
-      return;
-    }
-
-    handleDismiss();
-    const confirmed = await showFormatSheetConfirm(currentTabName || "aktif");
-    if (!confirmed) return;
-
-    try {
-      setIsFormatting(true);
-      showToast({
-        title: TEXT_DASHBOARD.PROFILE_MENU.FORMATTING_PROGRESS,
-        icon: "info",
-        timer: 2500,
-      });
-      await onFormatWholeSheet();
-      showSuccessToast(TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SUCCESS);
-    } catch (err: any) {
-      showErrorAlert(
-        formatUserError(err, TEXT_DASHBOARD.PROFILE_MENU.FORMAT_FAILED) ||
-          TEXT_DASHBOARD.PROFILE_MENU.FORMAT_FAILED,
-      );
-    } finally {
-      setIsFormatting(false);
-    }
-  };
 
   if (!isOpen) return null;
 
@@ -328,500 +129,45 @@ export function ProfileMenuSheet({
           border: "1px solid var(--card-border)",
           borderBottom: "none",
           boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
-          transform: isClosing || !isMounted ? "translateY(100%) scale(0.95)" : "translateY(0px) scale(1)",
+          transform:
+            isClosing || !isMounted
+              ? "translateY(100%) scale(0.95)"
+              : "translateY(0px) scale(1)",
           transition: "transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
           overflowY: "auto",
           WebkitOverflowScrolling: "touch",
         }}
       >
-        {/* Top Handle Bar for Touch Drag */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            paddingBottom: "16px",
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "4px",
-              borderRadius: "2px",
-              background: "var(--text-secondary)",
-              opacity: 0.3,
-            }}
-          />
-        </div>
+        <ProfileUserCard
+          userProfile={userProfile}
+          avatarFailed={avatarFailed}
+          onAvatarError={() => setAvatarFailed(true)}
+          onDismiss={handleDismiss}
+        />
 
-        {/* User Card Header */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "12px 14px",
-            background: "rgba(62, 207, 142, 0.06)",
-            borderRadius: "16px",
-            border: "1px solid rgba(62, 207, 142, 0.18)",
-            marginBottom: "20px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
-            {userProfile.avatar_url && !avatarFailed ? (
-              <img
-                src={userProfile.avatar_url}
-                alt={userProfile.full_name}
-                referrerPolicy="no-referrer"
-                onError={() => setAvatarFailed(true)}
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  flexShrink: 0,
-                  boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "50%",
-                  background:
-                    "linear-gradient(135deg, #3ECF8E, #24B47E)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#061a10",
-                  flexShrink: 0,
-                  boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
-                }}
-              >
-                <User size={22} />
-              </div>
-            )}
-            <div style={{ minWidth: 0, overflow: "hidden" }}>
-              <div
-                style={{
-                  fontWeight: 700,
-                  fontSize: "14.5px",
-                  color: "var(--text-primary)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {userProfile.full_name}
-                </span>
-                <RoleBadge role={userProfile.role} size="xs" />
-              </div>
-              <span
-                style={{
-                  fontSize: "11.5px",
-                  color: "var(--text-secondary)",
-                  display: "block",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  marginTop: "2px",
-                }}
-              >
-                {userProfile.email}
-              </span>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={handleDismiss}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "var(--text-secondary)",
-              padding: "6px",
-            }}
-            title={TEXT_DASHBOARD.PROFILE_MENU.TITLE}
-          >
-            <X size={20} />
-          </button>
-        </div>
+        <ProfileAdminSection
+          role={userProfile.role}
+          onClose={onClose}
+          onOpenUserManagement={onOpenUserManagement}
+        />
 
-        {/* SECTION: Administrasi Sistem (Khusus Superadmin & Admin) */}
-        {(userProfile.role === "superadmin" || userProfile.role === "admin") && (
-          <div style={{ marginBottom: "20px" }}>
-            <span
-              style={{
-                fontSize: "10.5px",
-                fontWeight: 700,
-                letterSpacing: "0.5px",
-                color: "var(--text-secondary)",
-                textTransform: "uppercase",
-                display: "block",
-                marginBottom: "8px",
-                paddingLeft: "4px",
-              }}
-            >
-              {TEXT_DASHBOARD.PROFILE_MENU.ADMIN_SECTION}
-            </span>
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              {/* Kelola Pengguna */}
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  onOpenUserManagement?.();
-                }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "12px 14px",
-                  borderRadius: "12px",
-                  background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-                  border: "1px solid var(--card-border)",
-                  color: "var(--text-primary)",
-                  fontWeight: 500,
-                  fontSize: "13.5px",
-                  cursor: "pointer",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <Users size={18} style={{ color: "#3b82f6" }} />
-                  <div style={{ textAlign: "left" }}>
-                    <div>{TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT}</div>
-                    <div
-                      style={{
-                        fontSize: "11px",
-                        color: "var(--text-secondary)",
-                        marginTop: "1px",
-                      }}
-                    >
-                      {TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT_DESC}
-                    </div>
-                  </div>
-                </div>
-                <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
-              </button>
+        <ProfileFeaturesSection
+          onDismiss={handleDismiss}
+          onOpenRegionalMonitoring={onOpenRegionalMonitoring}
+          onOpenAccumulation={onOpenAccumulation}
+          onFormatWholeSheet={onFormatWholeSheet}
+          currentTabName={currentTabName}
+          hasActiveData={hasActiveData}
+          isDarkMode={isDarkMode}
+          onToggleTheme={onToggleTheme}
+          isOnline={isOnline}
+          offlineQueueCount={offlineQueueCount}
+        />
 
-              {/* Log Aktivitas & Audit (Disabled - Coming Soon) */}
-              {/* BUG-66: Halaman belum siap production — dikunci untuk SEMUA
-                  role. Button disabled & nonaktifkan pintu masuk satu-satunya. */}
-              <button
-                type="button"
-                disabled={true}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "12px 14px",
-                  borderRadius: "12px",
-                  background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-                  border: "1px solid var(--card-border)",
-                  color: "var(--text-secondary)",
-                  fontWeight: 500,
-                  fontSize: "13.5px",
-                  cursor: "not-allowed",
-                  opacity: 0.65,
-                }}
-                title={TEXT_DASHBOARD.PROFILE_MENU.COMING_SOON_TITLE}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <History size={18} style={{ color: "var(--text-secondary)" }} />
-                  <div style={{ textAlign: "left" }}>
-                    <div>{TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG}</div>
-                    <div
-                      style={{
-                        fontSize: "11px",
-                        color: "var(--text-secondary)",
-                        marginTop: "1px",
-                      }}
-                    >
-                      {TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG_DESC}
-                    </div>
-                  </div>
-                </div>
-                <span
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: 700,
-                    padding: "2px 7px",
-                    borderRadius: "6px",
-                    background: "rgba(245, 158, 11, 0.15)",
-                    color: "var(--warning-color, #f59e0b)",
-                    border: "1px solid rgba(245, 158, 11, 0.3)",
-                    letterSpacing: "0.4px",
-                    textTransform: "uppercase",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {TEXT_DASHBOARD.PROFILE_MENU.COMING_SOON}
-                </span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* SECTION: Fitur & Utilitas */}
-        <div style={{ marginBottom: "20px" }}>
-          <span
-            style={{
-              fontSize: "10.5px",
-              fontWeight: 700,
-              letterSpacing: "0.5px",
-              color: "var(--text-secondary)",
-              textTransform: "uppercase",
-              display: "block",
-              marginBottom: "8px",
-              paddingLeft: "4px",
-            }}
-          >
-            {TEXT_DASHBOARD.PROFILE_MENU.FEATURES_SECTION}
-          </span>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {/* Monitoring Wilayah & Laporan WA */}
-            <button
-              type="button"
-              onClick={() => {
-                handleDismiss();
-                onOpenRegionalMonitoring?.();
-              }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-                border: "1px solid var(--card-border)",
-                color: "var(--text-primary)",
-                fontWeight: 500,
-                fontSize: "13.5px",
-                cursor: "pointer",
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <Globe size={18} style={{ color: "var(--accent-color)" }} />
-                <div style={{ textAlign: "left" }}>
-                  <div>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</div>
-                  <div
-                    style={{
-                      fontSize: "11px",
-                      color: "var(--text-secondary)",
-                      marginTop: "1px",
-                    }}
-                  >
-                    {TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING_DESC}
-                  </div>
-                </div>
-              </div>
-              <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
-            </button>
-
-            {/* Rekap Akumulasi Lintas Periode */}
-            {/* BUG-59: Fitur sebelumnya hard-coded disabled "Coming Soon"
-                padahal AccumulationSheet sudah lengkap & handler tersambung
-                dari Dashboard — aktifkan wiring yang benar. */}
-            <button
-              type="button"
-              onClick={() => {
-                handleDismiss();
-                onOpenAccumulation?.();
-              }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-                border: "1px solid var(--card-border)",
-                color: "var(--text-primary)",
-                fontWeight: 500,
-                fontSize: "13.5px",
-                cursor: "pointer",
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <Layers size={18} style={{ color: "var(--accent-color)" }} />
-                <span>{TEXT_DASHBOARD.PROFILE_MENU.CROSS_PERIOD}</span>
-              </div>
-              <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
-            </button>
-
-            {/* Rapikan & Format Spreadsheet */}
-            <button
-              type="button"
-              onClick={handleFormatSpreadsheetClick}
-              disabled={isFormatting}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-                border: "1px solid var(--card-border)",
-                color: "var(--text-primary)",
-                fontWeight: 500,
-                fontSize: "13.5px",
-                cursor: isFormatting ? "wait" : "pointer",
-                opacity: isFormatting ? 0.7 : 1,
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <Sparkles size={18} style={{ color: "var(--accent-color)" }} />
-                <div style={{ textAlign: "left" }}>
-                  <div>{TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET}</div>
-                  <div
-                    style={{
-                      fontSize: "11px",
-                      color: "var(--text-secondary)",
-                      marginTop: "1px",
-                    }}
-                  >
-                    {TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET_DESC}
-                  </div>
-                </div>
-              </div>
-              <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
-            </button>
-
-            {/* Toggle Theme */}
-            <button
-              type="button"
-              onClick={onToggleTheme}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "12px 14px",
-                borderRadius: "12px",
-                background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-                border: "1px solid var(--card-border)",
-                color: "var(--text-primary)",
-                fontWeight: 500,
-                fontSize: "13.5px",
-                cursor: "pointer",
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                {isDarkMode ? (
-                  <Sun size={18} style={{ color: "#f59e0b" }} />
-                ) : (
-                  <Moon size={18} style={{ color: "var(--accent-color)" }} />
-                )}
-                <span>{TEXT_DASHBOARD.PROFILE_MENU.THEME_MODE}</span>
-              </div>
-              <span
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  color: "var(--text-secondary)",
-                  background: "var(--surface-color)",
-                  padding: "4px 8px",
-                  borderRadius: "6px",
-                  border: "1px solid var(--card-border)",
-                }}
-              >
-                {isDarkMode ? TEXT_DASHBOARD.PROFILE_MENU.DARK_MODE : TEXT_DASHBOARD.PROFILE_MENU.LIGHT_MODE}
-              </span>
-            </button>
-
-            {/* Status Antrean Sync Offline (jika ada) */}
-            {(!isOnline || offlineQueueCount > 0) && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "12px 14px",
-                  borderRadius: "12px",
-                  background: "rgba(245, 158, 11, 0.08)",
-                  border: "1px solid rgba(245, 158, 11, 0.2)",
-                  color: "var(--warning-color, #f59e0b)",
-                  fontWeight: 600,
-                  fontSize: "13px",
-                }}
-              >
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
-                >
-                  <CloudOff size={18} />
-                  <span>{!isOnline ? TEXT_DASHBOARD.PROFILE_MENU.OFFLINE_MODE : TEXT_DASHBOARD.PROFILE_MENU.SYNC_QUEUE}</span>
-                </div>
-                {offlineQueueCount > 0 && (
-                  <span
-                    style={{
-                      background: "#f59e0b",
-                      color: "#000",
-                      padding: "2px 8px",
-                      borderRadius: "10px",
-                      fontSize: "11px",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {offlineQueueCount} {TEXT_DASHBOARD.PROFILE_MENU.PENDING_SUFFIX}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Catatan Transparansi Aktivitas */}
-        <div style={{ textAlign: "center", padding: "0 8px 2px 8px" }}>
-          <p style={{ fontSize: "11px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.4, opacity: 0.8 }}>
-            {TEXT_DASHBOARD.PROFILE_MENU.SESSION_NOTE}
-          </p>
-        </div>
-
-        {/* SECTION: Manajemen Akun (Logout) */}
-        <div>
-          <button
-            type="button"
-            onClick={async () => {
-              const confirmed = await showLogoutConfirm();
-              if (confirmed) {
-                onLogout();
-                handleDismiss();
-              }
-            }}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-              padding: "12px",
-              borderRadius: "12px",
-              background: "rgba(247, 85, 85, 0.08)",
-              border: "1px solid rgba(247, 85, 85, 0.2)",
-              color: "var(--danger-color, #f75555)",
-              fontWeight: 700,
-              fontSize: "14px",
-              cursor: "pointer",
-              transition: "all 0.15s ease",
-            }}
-          >
-            <LogOut size={18} />
-            <span>{TEXT_DASHBOARD.PROFILE_MENU.LOGOUT_BTN}</span>
-          </button>
-        </div>
+        <ProfileMenuFooter onLogout={onLogout} onDismiss={handleDismiss} />
       </div>
     </div>,
     document.body,
   );
 }
+export default ProfileMenuSheet;
