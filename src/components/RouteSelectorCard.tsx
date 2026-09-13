@@ -229,9 +229,9 @@ function RouteSelectorCardComponent({
         }))
       );
       if (flat.length > 0) {
-        // Cek riwayat dari localStorage (BUG-42)
+        // Cek riwayat dari localStorage (BUG-42) - hanya saat membuka aplikasi baru (!isDataLoaded)
         try {
-          const saved = localStorage.getItem('PDO_LAST_VISITED');
+          const saved = !isDataLoaded ? localStorage.getItem('PDO_LAST_VISITED') : null;
           if (saved) {
             const parsed = JSON.parse(saved);
             const savedMatch = flat.find(f =>
@@ -270,7 +270,7 @@ function RouteSelectorCardComponent({
         }
         // BUG-13: Jangan menampilkan tanggal "terisi" yang menyesatkan pada
         // dropdown Tanggal yang masih disabled (belum ada rute terpilih).
-        if (!isAccumulation) {
+        if (!isAccumulation && !currentTabName && !selectedTab) {
           setFormTab('');
         }
         if (!sheetUrl) {
