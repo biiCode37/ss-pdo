@@ -1,0 +1,271 @@
+import React from "react";
+import {
+  Bus,
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  RefreshCw,
+  FileSpreadsheet,
+} from "lucide-react";
+import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
+import { formatIndonesianDateLabel } from "./monitoringUtils";
+
+interface MonitoringHeaderProps {
+  onBackToRouteView?: () => void;
+  selectedDate: string;
+  onStepDate: (days: number) => void;
+  onDateInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRefresh: () => void;
+  refreshing: boolean;
+  loading: boolean;
+  onOpenWaModal: () => void;
+  hasData: boolean;
+}
+
+export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
+  onBackToRouteView,
+  selectedDate,
+  onStepDate,
+  onDateInputChange,
+  onRefresh,
+  refreshing,
+  loading,
+  onOpenWaModal,
+  hasData,
+}) => {
+  return (
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 40,
+        background: "var(--card-bg, rgba(23, 23, 23, 0.95))",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderBottom: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+        padding: "12px 16px",
+        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "12px",
+        }}
+      >
+        {/* Pojok Kiri: Tombol Kembali & Judul */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          {onBackToRouteView && (
+            <button
+              type="button"
+              onClick={onBackToRouteView}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "7px 12px",
+                borderRadius: "10px",
+                fontSize: "13px",
+                fontWeight: 600,
+                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+                color: "var(--text-primary, #ededed)",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              title={TEXT_MONITORING.HEADER.BTN_BACK_TITLE}
+            >
+              <ArrowLeft size={16} />
+              <span>{TEXT_MONITORING.HEADER.BTN_BACK}</span>
+            </button>
+          )}
+
+          <div>
+            <h1
+              style={{
+                fontSize: "17px",
+                fontWeight: 800,
+                margin: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                color: "var(--text-primary, #ededed)",
+                letterSpacing: "-0.3px",
+              }}
+            >
+              <Bus
+                size={20}
+                style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
+              />
+              <span>{TEXT_MONITORING.HEADER.TITLE}</span>
+            </h1>
+            <span
+              style={{
+                fontSize: "11px",
+                color: "var(--text-secondary, #8b8b8b)",
+                fontWeight: 500,
+                display: "block",
+                marginTop: "1px",
+              }}
+            >
+              {TEXT_MONITORING.HEADER.SUBTITLE}
+            </span>
+          </div>
+        </div>
+
+        {/* Pojok Kanan: Date Navigator, Refresh, & Tombol WA */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* Date Navigator Box */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+              borderRadius: "12px",
+              padding: "2px",
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => onStepDate(-1)}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "var(--text-primary, #ededed)",
+                padding: "6px 8px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+              }}
+              title={TEXT_COMMON.NAV.PREV_DAY}
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            <label
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "4px 8px",
+                cursor: "pointer",
+                fontSize: "12px",
+                fontWeight: 700,
+                color: "var(--text-primary, #ededed)",
+                userSelect: "none",
+              }}
+            >
+              <Calendar
+                size={14}
+                style={{ color: "var(--accent-color, #3ECF8E)" }}
+              />
+              <span>{formatIndonesianDateLabel(selectedDate)}</span>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={onDateInputChange}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  opacity: 0,
+                  cursor: "pointer",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </label>
+
+            <button
+              type="button"
+              onClick={() => onStepDate(1)}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "var(--text-primary, #ededed)",
+                padding: "6px 8px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+              }}
+              title={TEXT_COMMON.NAV.NEXT_DAY}
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+
+          {/* Refresh Button */}
+          <button
+            type="button"
+            onClick={onRefresh}
+            disabled={refreshing || loading}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "36px",
+              height: "36px",
+              borderRadius: "12px",
+              background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+              color: "var(--text-primary, #ededed)",
+              cursor: refreshing || loading ? "wait" : "pointer",
+              opacity: refreshing || loading ? 0.6 : 1,
+              transition: "all 0.2s ease",
+            }}
+            title={TEXT_MONITORING.HEADER.REFRESH_TITLE}
+          >
+            <RefreshCw
+              size={16}
+              style={{
+                animation: refreshing ? "spin 1s linear infinite" : "none",
+              }}
+            />
+          </button>
+
+          {/* Buat Laporan WA Button */}
+          <button
+            type="button"
+            onClick={onOpenWaModal}
+            disabled={!hasData || loading}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 14px",
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+              color: "#ffffff",
+              border: "none",
+              fontSize: "12.5px",
+              fontWeight: 700,
+              cursor: !hasData || loading ? "not-allowed" : "pointer",
+              opacity: !hasData || loading ? 0.5 : 1,
+              boxShadow: "0 4px 12px rgba(37, 211, 102, 0.3)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <FileSpreadsheet size={16} />
+            <span>{TEXT_MONITORING.HEADER.BTN_WA_REPORT}</span>
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};

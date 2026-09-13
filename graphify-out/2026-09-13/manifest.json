@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1789223630.8601582,
-    "ast_hash": "045e394fa9f79777be45685c098fc286",
+    "mtime": 1789283480.87215,
+    "ast_hash": "d988da5311de06b70c90a7f1b189aa57",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "tsconfig.app.json": {
-    "mtime": 1787322418.5808074,
-    "ast_hash": "a253a817589176fe482b58b7dfbcb89b",
+    "mtime": 1789283177.385052,
+    "ast_hash": "a1f982e1259f3d74ea70e7abceadf2ae",
     "semantic_hash": ""
   },
   "tsconfig.json": {
@@ -185,8 +185,8 @@
     "semantic_hash": "f9cb81ddcea69ffdab672fc8c48dca66"
   },
   "vite.config.ts": {
-    "mtime": 1787639054.643509,
-    "ast_hash": "c9f3d89fa4c25d716f0fba5a6246b0da",
+    "mtime": 1789283166.3086379,
+    "ast_hash": "2255635d02cac6684f9a4d2ca8e1ef67",
     "semantic_hash": ""
   },
   "src/utils/numberUtils.ts": {
@@ -925,8 +925,8 @@
     "semantic_hash": ""
   },
   "src/utils/modals/busInputModal.ts": {
-    "mtime": 1788967142.729083,
-    "ast_hash": "71b12c3f98606244ed7a9384b4ac29c6",
+    "mtime": 1789283361.0852962,
+    "ast_hash": "2cde5daf1f806faf2467b7f18bb660ae",
     "semantic_hash": ""
   },
   "src/hooks/__tests__/useOfflineSync.test.tsx": {
@@ -1882,6 +1882,46 @@
   ".agents/rules/mcp-context7-playwright.md": {
     "mtime": 1789280950.982042,
     "ast_hash": "af7b16ecc721bc44e1c6f135b5206cdf",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/DashboardContentTabs.tsx": {
+    "mtime": 1789283540.440897,
+    "ast_hash": "51416d163ade193ca5b8cc03961de9b2",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/DashboardHeader.tsx": {
+    "mtime": 1789283529.6844127,
+    "ast_hash": "cb7fecfc0a340030eb47bc5a664ae19a",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/DashboardModals.tsx": {
+    "mtime": 1789283537.3510764,
+    "ast_hash": "130e7b1daab842942aa770ab11324ca1",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/DashboardStatusBanners.tsx": {
+    "mtime": 1789283533.3950222,
+    "ast_hash": "00ef7520d80f0089d905f403a5711ce8",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/busModalHandlers.ts": {
+    "mtime": 1789283356.1687355,
+    "ast_hash": "fb0533d23fc1dd9baa31e574f097b90c",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/busModalTemplate.ts": {
+    "mtime": 1789283336.4107103,
+    "ast_hash": "8a70b76d0cc3c54545de2cbd07a60317",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/busModalTypes.ts": {
+    "mtime": 1789283306.8103685,
+    "ast_hash": "5f71a281196cdb143119335b813e65ff",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/busModalValidation.ts": {
+    "mtime": 1789283312.578815,
+    "ast_hash": "726a6faa085e49c9674487974966a7df",
     "semantic_hash": ""
   }
 }
