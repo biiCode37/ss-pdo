@@ -1,32 +1,23 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import {
-  reauthenticateSession,
-  formatWholeSheet,
-} from "@/services/googleSheets";
+import { lazy, Suspense } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { UserManagementSkeleton } from "@/components/Skeletons";
 import { AllRouteMonitoringPage } from "@/components/AllRouteMonitoringPage";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
-import { useMobileBackHandler } from "@/hooks/useMobileBackHandler";
-import { formatUserError } from "@/utils/errorFormatter";
-import { slugifyUnitId } from "@/utils/analytics";
 import { getStoredUserRole } from "@/utils/roleStorage";
-import {
-  showDeleteQueueConfirm,
-  showAuthExpiredAlert,
-  showSuccessToast,
-  showErrorToast,
-} from "@/utils/alertUtils";
-import { getRoutesFromCache } from "@/utils/cacheUtils";
+import { showAuthExpiredAlert, showSuccessToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
-import { DashboardHeader } from "./dashboard/DashboardHeader";
-import { DashboardStatusBanners } from "./dashboard/DashboardStatusBanners";
-import { DashboardContentTabs } from "./dashboard/DashboardContentTabs";
-import { DashboardModals } from "./dashboard/DashboardModals";
-import { useDashboardData } from "./dashboard/useDashboardData";
-import { useDashboardFleet } from "./dashboard/useDashboardFleet";
-import { usePullToRefresh } from "./dashboard/usePullToRefresh";
+import {
+  DashboardHeader,
+  DashboardStatusBanners,
+  DashboardContentTabs,
+  DashboardModals,
+  useDashboardData,
+  useDashboardFleet,
+  usePullToRefresh,
+  useDashboardUiState,
+  useDashboardSyncHandlers,
+} from "./dashboard/index";
 
 // Dynamic Code Splitting for infrequently visited administration pages
 const UserManagementPage = lazy(() =>
@@ -76,31 +67,35 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     handleApplyAccumulation,
   } = useDashboardData();
 
-  // 2. Global System & Offline / Auth States
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [isAuthExpired, setIsAuthExpired] = useState(false);
-  const [isReauthenticating, setIsReauthenticating] = useState(false);
-  const [isQueueModalOpen, setIsQueueModalOpen] = useState(false);
-  const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<
-    "dashboard" | "user_management" | "regional_monitoring"
-  >("dashboard");
-  const [monitoringDate, setMonitoringDate] = useState<string | null>(null);
-
-  const [mainTab, setMainTab] = useState<"input" | "analytics" | "units">(
-    "analytics",
-  );
-
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    return (
-      (document.documentElement.getAttribute("data-theme") as
-        | "light"
-        | "dark") || "dark"
-    );
+  // 2. Global UI, Modal, Swipe & Navigation State Hook
+  const {
+    isOnline,
+    isAuthExpired,
+    setIsAuthExpired,
+    isReauthenticating,
+    setIsReauthenticating,
+    isQueueModalOpen,
+    setIsQueueModalOpen,
+    isAccSheetOpen,
+    setIsAccSheetOpen,
+    isProfileMenuOpen,
+    setIsProfileMenuOpen,
+    currentView,
+    setCurrentView,
+    monitoringDate,
+    setMonitoringDate,
+    mainTab,
+    setMainTab,
+    theme,
+    toggleTheme,
+    handleSwipeNextTab,
+    handleSwipePrevTab,
+    handleSelectUnit,
+  } = useDashboardUiState({
+    onClearError: () => setError(null),
   });
 
-  // 3. Fleet Status & Report Hook
+  // 3. Fleet Status & Operational Report Hook
   const {
     isReportModalOpen,
     setIsReportModalOpen,
@@ -124,52 +119,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     setBusData,
   });
 
-  // 4. Pull to Refresh Gesture Hook
-  const {
-    touchStartY,
-    pullDistance,
-    isRefreshing,
-    handleTouchStart,
-    handleTouchMove,
-    handleTouchEnd,
-  } = usePullToRefresh({
-    onRefresh: () => handleLoadData(true),
-    isOnline,
-    onError: (msg: string) => setError(msg),
-  });
-
-  // 5. Mobile Hardware Back Navigation
-  useMobileBackHandler({
-    id: "regional_monitoring_view",
-    isOpen: currentView === "regional_monitoring",
-    onClose: () => setCurrentView("dashboard"),
-  });
-
-  useMobileBackHandler({
-    id: "user_management_view",
-    isOpen: currentView === "user_management",
-    onClose: () => setCurrentView("dashboard"),
-  });
-
-  useMobileBackHandler({
-    id: "profile_menu_sheet",
-    isOpen: isProfileMenuOpen,
-    onClose: () => setIsProfileMenuOpen(false),
-  });
-
-  useMobileBackHandler({
-    id: "acc_sheet",
-    isOpen: isAccSheetOpen,
-    onClose: () => setIsAccSheetOpen(false),
-  });
-
-  useMobileBackHandler({
-    id: "queue_modal",
-    isOpen: isQueueModalOpen,
-    onClose: () => setIsQueueModalOpen(false),
-  });
-
-  // 6. Offline Queue & Background Sync
+  // 4. Offline Queue & Background Sync
   const {
     queue,
     addToQueue,
@@ -189,94 +139,42 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     },
   });
 
-  const handleDeleteQueueItem = async (itemId: string) => {
-    const confirmed = await showDeleteQueueConfirm();
-    if (confirmed) {
-      removeItem(itemId);
-      showSuccessToast(TEXT_DASHBOARD.QUEUE_ITEM_DELETED);
-    }
-  };
+  // 5. Sync, Reauthentication, & Sheet Action Handlers
+  const {
+    handleDeleteQueueItem,
+    handleReauthenticate,
+    handleSelectMonitoringRoute,
+    handleFormatWholeSheet,
+  } = useDashboardSyncHandlers({
+    removeItem,
+    processQueue,
+    currentSheetId,
+    currentTabName,
+    busData,
+    headerMap,
+    handleLoadData,
+    handleSetSheetUrl,
+    handleSetSelectedTab,
+    setCurrentView,
+    monitoringDate,
+    setError,
+    setIsAuthExpired,
+    setIsReauthenticating,
+  });
 
-  const handleReauthenticate = async () => {
-    setIsReauthenticating(true);
-    try {
-      await reauthenticateSession();
-      setIsAuthExpired(false);
-      setError(null);
-      if (currentSheetId && currentTabName) {
-        handleLoadData(true, currentTabName);
-      }
-      try {
-        await processQueue();
-      } catch (queueError: any) {
-        console.warn("Error processing queue after re-auth:", queueError);
-      }
-      showSuccessToast(TEXT_DASHBOARD.SESSION_REFRESH_SUCCESS);
-    } catch (err: any) {
-      const errFormatted = formatUserError(
-        err,
-        TEXT_DASHBOARD.SESSION_REFRESH_FAIL,
-      );
-      setError(errFormatted);
-      if (errFormatted) {
-        showErrorToast(errFormatted);
-      }
-    } finally {
-      setIsReauthenticating(false);
-    }
-  };
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("PDO_THEME", newTheme);
-  };
-
-  const mainTabs: Array<"input" | "analytics" | "units"> = [
-    "input",
-    "analytics",
-    "units",
-  ];
-
-  const handleSwipeNextTab = () => {
-    setMainTab((prev) => {
-      const currentIndex = mainTabs.indexOf(prev);
-      const nextIndex = (currentIndex + 1) % mainTabs.length;
-      return mainTabs[nextIndex];
-    });
-  };
-
-  const handleSwipePrevTab = () => {
-    setMainTab((prev) => {
-      const currentIndex = mainTabs.indexOf(prev);
-      const prevIndex = (currentIndex - 1 + mainTabs.length) % mainTabs.length;
-      return mainTabs[prevIndex];
-    });
-  };
-
-  useEffect(() => {
-    const handleAuthExpired = () => {
-      setIsAuthExpired(true);
-    };
-    const handleLoginSuccess = () => {
-      setIsAuthExpired(false);
-      setError(null);
-    };
-    window.addEventListener("google-auth-expired", handleAuthExpired);
-    window.addEventListener("google-login-success", handleLoginSuccess);
-
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-    return () => {
-      window.removeEventListener("google-auth-expired", handleAuthExpired);
-      window.removeEventListener("google-login-success", handleLoginSuccess);
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
+  // 6. Pull to Refresh Gesture Hook
+  const {
+    touchStartY,
+    pullDistance,
+    isRefreshing,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+  } = usePullToRefresh({
+    onRefresh: () => handleLoadData(true),
+    isOnline,
+    onError: (msg: string) => setError(msg),
+  });
 
   // 7. Dynamic Administration & Regional Views
   if (currentView === "user_management") {
@@ -299,30 +197,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         currentDate={monitoringDate || operationalReportDate}
         onDateChange={(date) => setMonitoringDate(date)}
         currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
-        onSelectRoute={(routeCode) => {
-          const cachedRoutes = getRoutesFromCache();
-          const matched = cachedRoutes.find(
-            (r: any) =>
-              r.route_code?.toLowerCase() === routeCode.toLowerCase() ||
-              r.name?.toLowerCase().includes(routeCode.toLowerCase()),
-          );
-          if (
-            matched &&
-            matched.route_sheets &&
-            matched.route_sheets.length > 0
-          ) {
-            const latestSheet =
-              matched.route_sheets[matched.route_sheets.length - 1];
-            if (latestSheet && latestSheet.sheet_url) {
-              handleSetSheetUrl(latestSheet.sheet_url);
-            }
-          }
-          if (monitoringDate) {
-            const day = String(parseInt(monitoringDate.split("-")[2], 10));
-            handleSetSelectedTab(day);
-          }
-          setCurrentView("dashboard");
-        }}
+        onSelectRoute={handleSelectMonitoringRoute}
       />
     );
   }
@@ -414,24 +289,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           activeMonth={activeMonth}
           activeYear={activeYear}
           onSelectTab={handleSelectTab}
-          onSelectUnit={(unit: string) => {
-            setMainTab("units");
-            setTimeout(() => {
-              const slug = slugifyUnitId(unit);
-              const el =
-                document.getElementById(`unit-card-${slug}`) ||
-                document.getElementById(`bus-card-${slug}`);
-              if (el) {
-                el.scrollIntoView({ behavior: "smooth", block: "center" });
-                el.classList.remove("bus-card-highlight");
-                void el.offsetWidth;
-                el.classList.add("bus-card-highlight");
-                setTimeout(() => {
-                  el.classList.remove("bus-card-highlight");
-                }, 6000);
-              }
-            }, 150);
-          }}
+          onSelectUnit={handleSelectUnit}
           missingColumns={missingColumns}
         />
       )}
@@ -479,17 +337,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onToggleTheme={toggleTheme}
         isOnline={isOnline}
         onLogout={onLogout}
-        onFormatWholeSheet={async () => {
-          if (!currentSheetId || !currentTabName || !busData || !headerMap) {
-            throw new Error(TEXT_DASHBOARD.SHEET_NOT_LOADED);
-          }
-          await formatWholeSheet(
-            currentSheetId,
-            currentTabName,
-            busData,
-            headerMap,
-          );
-        }}
+        onFormatWholeSheet={handleFormatWholeSheet}
         currentTabName={currentTabName}
         hasActiveData={Boolean(
           currentSheetId && currentTabName && busData && busData.length > 0,

@@ -5,3 +5,5 @@ export * from "./DashboardModals";
 export * from "./useDashboardData";
 export * from "./useDashboardFleet";
 export * from "./usePullToRefresh";
+export * from "./useDashboardUiState";
+export * from "./useDashboardSyncHandlers";
