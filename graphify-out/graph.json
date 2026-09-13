@@ -1820,7 +1820,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "ref_react",
-      "community": 251,
+      "community": 320,
       "community_name": "react",
       "norm_label": "react"
     },
@@ -2469,8 +2469,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_allroutemonitoringpage_test",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 240,
+      "community_name": "AllRouteMonitoringPage.tsx",
       "norm_label": "allroutemonitoringpage.test.tsx"
     },
     {
@@ -2480,8 +2480,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_components_allroutemonitoringpage_test_mockdata",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 240,
+      "community_name": "AllRouteMonitoringPage.tsx",
       "norm_label": "mockdata"
     },
     {
@@ -2513,8 +2513,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_components_allroutemonitoringpage_allroutemonitoringpage",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 240,
+      "community_name": "AllRouteMonitoringPage.tsx",
       "norm_label": "allroutemonitoringpage"
     },
     {
@@ -2535,8 +2535,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_analyticsdashboard_props",
-      "community": 276,
-      "community_name": "utils/analytics.ts",
+      "community": 280,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "props"
     },
     {
@@ -2678,7 +2678,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buslist_test",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "buslist.test.tsx"
     },
@@ -2689,7 +2689,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_buslist_test_createmockbus",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "createmockbus()"
     },
@@ -2700,7 +2700,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buslist",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "buslist.tsx"
     },
@@ -2711,7 +2711,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_buslist_buslistprops",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "buslistprops"
     },
@@ -2722,7 +2722,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_components_buslist_buslistcomponent",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "buslistcomponent()"
     },
@@ -2733,7 +2733,7 @@
       "source_location": "L231",
       "_origin": "ast",
       "id": "src_components_buslist_buslist",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "buslist"
     },
@@ -2877,7 +2877,7 @@
       "_origin": "ast",
       "id": "src_components_formattednotetext",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "formattednotetext.tsx"
     },
     {
@@ -2888,7 +2888,7 @@
       "_origin": "ast",
       "id": "src_components_formattednotetext_formattednotetext",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "formattednotetext()"
     },
     {
@@ -3097,7 +3097,7 @@
       "_origin": "ast",
       "id": "src_components_rolebadge_test",
       "community": 278,
-      "community_name": "RoleBadge.tsx",
+      "community_name": "types/supabase.ts",
       "norm_label": "rolebadge.test.tsx"
     },
     {
@@ -3108,7 +3108,7 @@
       "_origin": "ast",
       "id": "src_components_rolebadge",
       "community": 278,
-      "community_name": "RoleBadge.tsx",
+      "community_name": "types/supabase.ts",
       "norm_label": "rolebadge.tsx"
     },
     {
@@ -3119,7 +3119,7 @@
       "_origin": "ast",
       "id": "src_components_rolebadge_rolebadgeprops",
       "community": 278,
-      "community_name": "RoleBadge.tsx",
+      "community_name": "types/supabase.ts",
       "norm_label": "rolebadgeprops"
     },
     {
@@ -3130,7 +3130,7 @@
       "_origin": "ast",
       "id": "src_components_rolebadge_rolebadge",
       "community": 278,
-      "community_name": "RoleBadge.tsx",
+      "community_name": "types/supabase.ts",
       "norm_label": "rolebadge()"
     },
     {
@@ -3141,7 +3141,7 @@
       "_origin": "ast",
       "id": "src_components_routeoperationalreportcard_test",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "routeoperationalreportcard.test.tsx"
     },
     {
@@ -3152,7 +3152,7 @@
       "_origin": "ast",
       "id": "src_components_routeoperationalreportcard",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "routeoperationalreportcard.tsx"
     },
     {
@@ -3163,7 +3163,7 @@
       "_origin": "ast",
       "id": "src_components_routeoperationalreportcard_routeoperationalreportcardprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "routeoperationalreportcardprops"
     },
     {
@@ -3174,7 +3174,7 @@
       "_origin": "ast",
       "id": "src_components_routeoperationalreportcard_routeoperationalreportcardcomponent",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "routeoperationalreportcardcomponent()"
     },
     {
@@ -3185,7 +3185,7 @@
       "_origin": "ast",
       "id": "src_components_routeoperationalreportcard_routeoperationalreportcard",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "routeoperationalreportcard"
     },
     {
@@ -3284,7 +3284,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "skeletons.tsx"
     },
     {
@@ -3295,7 +3295,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonboxprops",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "skeletonboxprops"
     },
     {
@@ -3306,7 +3306,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonbox",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "skeletonbox()"
     },
     {
@@ -3317,7 +3317,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons_buscardskeleton",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "buscardskeleton()"
     },
     {
@@ -3328,7 +3328,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons_dailytoatrendskeleton",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "dailytoatrendskeleton()"
     },
     {
@@ -3339,7 +3339,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons_unitcardskeleton",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "unitcardskeleton()"
     },
     {
@@ -3350,7 +3350,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons_auditlogskeleton",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "auditlogskeleton()"
     },
     {
@@ -3361,7 +3361,7 @@
       "_origin": "ast",
       "id": "src_components_skeletons_usermanagementskeleton",
       "community": 307,
-      "community_name": "BusList.tsx",
+      "community_name": "Skeletons.tsx",
       "norm_label": "usermanagementskeleton()"
     },
     {
@@ -3371,7 +3371,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer",
-      "community": 251,
+      "community": 320,
       "community_name": "react",
       "norm_label": "swipeablecontainer.tsx"
     },
@@ -3382,7 +3382,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainerprops",
-      "community": 251,
+      "community": 320,
       "community_name": "react",
       "norm_label": "swipeablecontainerprops"
     },
@@ -3393,7 +3393,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainer",
-      "community": 251,
+      "community": 320,
       "community_name": "react",
       "norm_label": "swipeablecontainer()"
     },
@@ -3404,8 +3404,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_unitcard",
-      "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community": 250,
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitcard.tsx"
     },
     {
@@ -3415,8 +3415,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_components_unitcard_props",
-      "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community": 250,
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "props"
     },
     {
@@ -3426,8 +3426,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_components_unitcard_renderstatusbadge",
-      "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community": 250,
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "renderstatusbadge()"
     },
     {
@@ -3437,8 +3437,8 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "src_components_unitcard_unitcardcomponent",
-      "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community": 250,
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitcardcomponent()"
     },
     {
@@ -3449,7 +3449,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_unitcard",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitcard"
     },
     {
@@ -3459,8 +3459,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_unitdetailmodal",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 276,
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitdetailmodal.tsx"
     },
     {
@@ -3470,8 +3470,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_unitdetailmodal_props",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 280,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "props"
     },
     {
@@ -3481,8 +3481,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_components_unitdetailmodal_unitdetailmodal",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 276,
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitdetailmodal()"
     },
     {
@@ -3493,7 +3493,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitsummarydashboard.tsx"
     },
     {
@@ -3504,7 +3504,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_props",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "props"
     },
     {
@@ -3515,7 +3515,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_unitsummarydashboardcomponent",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitsummarydashboardcomponent()"
     },
     {
@@ -3526,7 +3526,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_unitsummarydashboard",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitsummarydashboard"
     },
     {
@@ -3635,8 +3635,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_wareportmodal_test",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 285,
+      "community_name": "WaReportModal.tsx",
       "norm_label": "wareportmodal.test.tsx"
     },
     {
@@ -3668,8 +3668,8 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "src_components_wareportmodal_wareportmodal",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 285,
+      "community_name": "WaReportModal.tsx",
       "norm_label": "wareportmodal"
     },
     {
@@ -3679,7 +3679,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_tests_swipeablecontainer_test",
-      "community": 251,
+      "community": 320,
       "community_name": "react",
       "norm_label": "swipeablecontainer.test.tsx"
     },
@@ -4065,7 +4065,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistaccumulationbanner",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistaccumulationbanner.tsx"
     },
     {
@@ -4076,7 +4076,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistaccumulationbanner_buslistaccumulationbannerprops",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistaccumulationbannerprops"
     },
     {
@@ -4087,7 +4087,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistaccumulationbanner_buslistaccumulationbanner",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistaccumulationbanner()"
     },
     {
@@ -4098,7 +4098,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistcontrolbar",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistcontrolbar.tsx"
     },
     {
@@ -4109,7 +4109,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistcontrolbar_buslistcontrolbarprops",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistcontrolbarprops"
     },
     {
@@ -4120,7 +4120,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistcontrolbar_buslistcontrolbar",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistcontrolbar()"
     },
     {
@@ -4131,7 +4131,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistheader_test",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistheader.test.tsx"
     },
     {
@@ -4142,7 +4142,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistheader",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistheader.tsx"
     },
     {
@@ -4153,7 +4153,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistheader_buslistheaderprops",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistheaderprops"
     },
     {
@@ -4164,7 +4164,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistheader_buslistheader",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistheader()"
     },
     {
@@ -4175,7 +4175,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistprogressbar",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistprogressbar.tsx"
     },
     {
@@ -4186,7 +4186,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistprogressbar_buslistprogressbarprops",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistprogressbarprops"
     },
     {
@@ -4197,7 +4197,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistprogressbar_buslistprogressbar",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistprogressbar()"
     },
     {
@@ -4208,7 +4208,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistshiftlockbanner",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistshiftlockbanner.tsx"
     },
     {
@@ -4219,7 +4219,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistshiftlockbanner_buslistshiftlockbannerprops",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistshiftlockbannerprops"
     },
     {
@@ -4230,7 +4230,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistshiftlockbanner_buslistshiftlockbanner",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistshiftlockbanner()"
     },
     {
@@ -4241,7 +4241,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistutils",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslistutils.ts"
     },
     {
@@ -4252,7 +4252,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_buslistutils_bus_categories",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "bus_categories"
     },
     {
@@ -4262,7 +4262,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_components_buslist_buslistutils_isunitallowedforinput",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "isunitallowedforinput()"
     },
@@ -4273,7 +4273,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_components_buslist_buslistutils_isbusfilled",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "isbusfilled()"
     },
@@ -4285,7 +4285,7 @@
       "_origin": "ast",
       "id": "src_components_buslist_index",
       "community": 312,
-      "community_name": "BusListHeader.tsx",
+      "community_name": "BusList.tsx",
       "norm_label": "buslist/index.ts"
     },
     {
@@ -4295,7 +4295,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buslist_usebulkoperations",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "usebulkoperations.ts"
     },
@@ -4306,7 +4306,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_components_buslist_usebulkoperations_usebulkoperationsprops",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "usebulkoperationsprops"
     },
@@ -4317,7 +4317,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_components_buslist_usebulkoperations_usebulkoperations",
-      "community": 307,
+      "community": 312,
       "community_name": "BusList.tsx",
       "norm_label": "usebulkoperations()"
     },
@@ -5165,7 +5165,7 @@
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_test",
       "community": 320,
-      "community_name": "ShiftConfirmationAlertBar.tsx",
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbar.test.tsx"
     },
     {
@@ -5176,7 +5176,7 @@
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar",
       "community": 320,
-      "community_name": "ShiftConfirmationAlertBar.tsx",
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbar.tsx"
     },
     {
@@ -5187,7 +5187,7 @@
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbarprops",
       "community": 320,
-      "community_name": "ShiftConfirmationAlertBar.tsx",
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbarprops"
     },
     {
@@ -5198,7 +5198,7 @@
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbarcomponent",
       "community": 320,
-      "community_name": "ShiftConfirmationAlertBar.tsx",
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbarcomponent()"
     },
     {
@@ -5209,7 +5209,7 @@
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbar",
       "community": 320,
-      "community_name": "ShiftConfirmationAlertBar.tsx",
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbar"
     },
     {
@@ -5869,7 +5869,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportaccordionheader",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportaccordionheader.tsx"
     },
     {
@@ -5880,7 +5880,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportaccordionheader_reportaccordionheaderprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportaccordionheaderprops"
     },
     {
@@ -5891,7 +5891,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportaccordionheader_reportaccordionheader",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportaccordionheader()"
     },
     {
@@ -5902,7 +5902,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportarmadasection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportarmadasection.tsx"
     },
     {
@@ -5913,7 +5913,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportarmadasection_reportarmadasectionprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportarmadasectionprops"
     },
     {
@@ -5924,7 +5924,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportarmadasection_reportarmadasection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportarmadasection()"
     },
     {
@@ -5935,7 +5935,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportheadwaysection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportheadwaysection.tsx"
     },
     {
@@ -5946,7 +5946,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportheadwaysection_reportheadwaysectionprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportheadwaysectionprops"
     },
     {
@@ -5957,7 +5957,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportheadwaysection_reportheadwaysection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportheadwaysection()"
     },
     {
@@ -5968,7 +5968,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportissuessection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportissuessection.tsx"
     },
     {
@@ -5979,7 +5979,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportissuessection_reportissuessectionprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportissuessectionprops"
     },
     {
@@ -5990,7 +5990,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportissuessection_reportissuessection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportissuessection()"
     },
     {
@@ -6001,7 +6001,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportmodallayout",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportmodallayout.tsx"
     },
     {
@@ -6012,7 +6012,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportmodallayout_reportmodallayoutprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportmodallayoutprops"
     },
     {
@@ -6023,7 +6023,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportmodallayout_reportmodallayout",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportmodallayout()"
     },
     {
@@ -6034,7 +6034,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportstatusbadge",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportstatusbadge.tsx"
     },
     {
@@ -6045,7 +6045,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportstatusbadge_reportstatusbadgeprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportstatusbadgeprops"
     },
     {
@@ -6056,7 +6056,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reportstatusbadge_reportstatusbadge",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reportstatusbadge()"
     },
     {
@@ -6067,7 +6067,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reporttrafficjamssection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reporttrafficjamssection.tsx"
     },
     {
@@ -6078,7 +6078,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reporttrafficjamssection_reporttrafficjamssectionprops",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reporttrafficjamssectionprops"
     },
     {
@@ -6089,7 +6089,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_reporttrafficjamssection_reporttrafficjamssection",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "reporttrafficjamssection()"
     },
     {
@@ -6100,7 +6100,7 @@
       "_origin": "ast",
       "id": "src_components_pdoreport_index",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "pdoreport/index.ts"
     },
     {
@@ -6341,8 +6341,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "addroutemodal.tsx"
     },
     {
@@ -6352,8 +6352,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal_addroutemodalprops",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "addroutemodalprops"
     },
     {
@@ -6363,8 +6363,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal_addroutemodal",
-      "community": 282,
-      "community_name": "RouteSelectorCard.tsx",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "addroutemodal()"
     },
     {
@@ -6374,8 +6374,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_routeselector_routeselectorsheet",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "routeselectorsheet.tsx"
     },
     {
@@ -6385,8 +6385,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_routeselector_routeselectorsheet_routeselectorsheetprops",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "routeselectorsheetprops"
     },
     {
@@ -6396,8 +6396,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_components_routeselector_routeselectorsheet_routeselectorsheet",
-      "community": 282,
-      "community_name": "RouteSelectorCard.tsx",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "routeselectorsheet()"
     },
     {
@@ -7188,8 +7188,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_texts_text_auth",
-      "community": 242,
-      "community_name": "LoginScreen.tsx",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "text_auth.ts"
     },
     {
@@ -7210,8 +7210,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_texts_text_common",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "text_common.ts"
     },
     {
@@ -7221,8 +7221,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_constants_texts_text_common_text_common",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 254,
+      "community_name": "historyNavigation.ts",
       "norm_label": "text_common"
     },
     {
@@ -7321,7 +7321,7 @@
       "_origin": "ast",
       "id": "src_constants_texts_text_pdo_form",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "text_pdo_form.ts"
     },
     {
@@ -7332,7 +7332,7 @@
       "_origin": "ast",
       "id": "src_constants_texts_text_pdo_form_text_pdo_form",
       "community": 251,
-      "community_name": "react",
+      "community_name": "RouteOperationalReportCard.tsx",
       "norm_label": "text_pdo_form"
     },
     {
@@ -7342,8 +7342,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_texts_text_unit_detail",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "text_unit_detail.ts"
     },
     {
@@ -7353,8 +7353,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_constants_texts_text_unit_detail_text_unit_detail",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "text_unit_detail"
     },
     {
@@ -7551,8 +7551,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesyncoptions",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 280,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "useofflinesyncoptions"
     },
     {
@@ -7650,8 +7650,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_regionalmonitoringresult",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 285,
+      "community_name": "WaReportModal.tsx",
       "norm_label": "regionalmonitoringresult"
     },
     {
@@ -7804,8 +7804,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 276,
+      "community_name": "utils/analytics.ts",
       "norm_label": "googlesheets.ts"
     },
     {
@@ -7815,7 +7815,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "googlesheets/analytics.ts"
     },
@@ -7826,7 +7826,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_monthlytoatrendcache",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "monthlytoatrendcache"
     },
@@ -7837,7 +7837,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_clearmonthlytoatrendcache",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "clearmonthlytoatrendcache()"
     },
@@ -7848,7 +7848,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_getmonthlytoatrend",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "getmonthlytoatrend()"
     },
@@ -7859,7 +7859,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_getaccumulatedbusdata",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "getaccumulatedbusdata()"
     },
@@ -7870,7 +7870,7 @@
       "source_location": "L384",
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_inspectspreadsheetheader",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "inspectspreadsheetheader()"
     },
@@ -7897,12 +7897,23 @@
       "norm_label": "auth.ts"
     },
     {
+      "label": "authGis.ts",
+      "file_type": "code",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_services_googlesheets_authgis",
+      "community": 267,
+      "community_name": "auth.ts",
+      "norm_label": "authgis.ts"
+    },
+    {
       "label": "getGapi()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L7",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L4",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_getgapi",
+      "id": "src_services_googlesheets_authgis_getgapi",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "getgapi()"
@@ -7910,10 +7921,10 @@
     {
       "label": "getGoogleCreds()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L11",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L8",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_getgooglecreds",
+      "id": "src_services_googlesheets_authgis_getgooglecreds",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "getgooglecreds()"
@@ -7921,21 +7932,43 @@
     {
       "label": "hasGoogleCreds()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L18",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L15",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_hasgooglecreds",
+      "id": "src_services_googlesheets_authgis_hasgooglecreds",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "hasgooglecreds()"
     },
     {
+      "label": "getTokenClient()",
+      "file_type": "code",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "src_services_googlesheets_authgis_gettokenclient",
+      "community": 267,
+      "community_name": "auth.ts",
+      "norm_label": "gettokenclient()"
+    },
+    {
+      "label": "setTokenClient()",
+      "file_type": "code",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "src_services_googlesheets_authgis_settokenclient",
+      "community": 267,
+      "community_name": "auth.ts",
+      "norm_label": "settokenclient()"
+    },
+    {
       "label": "initGoogleApi()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L25",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L27",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_initgoogleapi",
+      "id": "src_services_googlesheets_authgis_initgoogleapi",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "initgoogleapi()"
@@ -7943,54 +7976,87 @@
     {
       "label": "signIn()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L182",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L229",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_signin",
-      "community": 242,
-      "community_name": "LoginScreen.tsx",
+      "id": "src_services_googlesheets_authgis_signin",
+      "community": 267,
+      "community_name": "auth.ts",
       "norm_label": "signin()"
     },
     {
       "label": "signOut()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L228",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L282",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_signout",
+      "id": "src_services_googlesheets_authgis_signout",
       "community": 277,
       "community_name": "App.tsx",
       "norm_label": "signout()"
     },
     {
-      "label": "ensureValidToken()",
+      "label": "authSession.ts",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L261",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L1",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_ensurevalidtoken",
+      "id": "src_services_googlesheets_authsession",
       "community": 267,
       "community_name": "auth.ts",
-      "norm_label": "ensurevalidtoken()"
+      "norm_label": "authsession.ts"
+    },
+    {
+      "label": "stopTokenRefreshTimer()",
+      "file_type": "code",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_services_googlesheets_authsession_stoptokenrefreshtimer",
+      "community": 267,
+      "community_name": "auth.ts",
+      "norm_label": "stoptokenrefreshtimer()"
+    },
+    {
+      "label": "startTokenRefreshTimer()",
+      "file_type": "code",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "src_services_googlesheets_authsession_starttokenrefreshtimer",
+      "community": 267,
+      "community_name": "auth.ts",
+      "norm_label": "starttokenrefreshtimer()"
     },
     {
       "label": "refreshTokenInteractiveOrSilent()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L286",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L46",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_refreshtokeninteractiveorsilent",
+      "id": "src_services_googlesheets_authsession_refreshtokeninteractiveorsilent",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "refreshtokeninteractiveorsilent()"
     },
     {
+      "label": "ensureValidToken()",
+      "file_type": "code",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L111",
+      "_origin": "ast",
+      "id": "src_services_googlesheets_authsession_ensurevalidtoken",
+      "community": 267,
+      "community_name": "auth.ts",
+      "norm_label": "ensurevalidtoken()"
+    },
+    {
       "label": "reauthenticateSession()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L345",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L139",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_reauthenticatesession",
+      "id": "src_services_googlesheets_authsession_reauthenticatesession",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "reauthenticatesession()"
@@ -7998,21 +8064,21 @@
     {
       "label": "withAuthRetry()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L393",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L195",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_withauthretry",
+      "id": "src_services_googlesheets_authsession_withauthretry",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "withauthretry()"
     },
     {
       "label": "fetchGoogleUserProfile()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L413",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L217",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_fetchgoogleuserprofile",
+      "id": "src_services_googlesheets_authsession_fetchgoogleuserprofile",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "fetchgoogleuserprofile()"
@@ -8020,35 +8086,13 @@
     {
       "label": "checkSignedInAsync()",
       "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L461",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L273",
       "_origin": "ast",
-      "id": "src_services_googlesheets_auth_checksignedinasync",
+      "id": "src_services_googlesheets_authsession_checksignedinasync",
       "community": 267,
       "community_name": "auth.ts",
       "norm_label": "checksignedinasync()"
-    },
-    {
-      "label": "startTokenRefreshTimer()",
-      "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L545",
-      "_origin": "ast",
-      "id": "src_services_googlesheets_auth_starttokenrefreshtimer",
-      "community": 267,
-      "community_name": "auth.ts",
-      "norm_label": "starttokenrefreshtimer()"
-    },
-    {
-      "label": "stopTokenRefreshTimer()",
-      "file_type": "code",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L563",
-      "_origin": "ast",
-      "id": "src_services_googlesheets_auth_stoptokenrefreshtimer",
-      "community": 267,
-      "community_name": "auth.ts",
-      "norm_label": "stoptokenrefreshtimer()"
     },
     {
       "label": "core.ts",
@@ -8068,8 +8112,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_normalizestring",
-      "community": 291,
-      "community_name": "core.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "normalizestring()"
     },
     {
@@ -8079,8 +8123,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_header_keywords",
-      "community": 291,
-      "community_name": "core.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "header_keywords"
     },
     {
@@ -8090,7 +8134,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_findcolumnindex",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "findcolumnindex()"
     },
@@ -8101,7 +8145,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_detectheaderrowandbuildcomposite",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "detectheaderrowandbuildcomposite()"
     },
@@ -8167,7 +8211,7 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_getbusdata",
-      "community": 287,
+      "community": 323,
       "community_name": "googleSheets/analytics.ts",
       "norm_label": "getbusdata()"
     },
@@ -8245,7 +8289,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_test",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "transport.test.ts"
     },
     {
@@ -8256,7 +8300,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_test_mockspreadsheets",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "mockspreadsheets"
     },
     {
@@ -8267,7 +8311,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_test_mockgapi",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "mockgapi"
     },
     {
@@ -8278,7 +8322,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "transport.ts"
     },
     {
@@ -8289,7 +8333,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_getgapisheets",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "getgapisheets()"
     },
     {
@@ -8300,7 +8344,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_transportmode",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "transportmode"
     },
     {
@@ -8311,7 +8355,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_cachedproxystatus",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "cachedproxystatus"
     },
     {
@@ -8322,7 +8366,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_settransportmode",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "settransportmode()"
     },
     {
@@ -8333,7 +8377,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_gettransportmode",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "gettransportmode()"
     },
     {
@@ -8344,7 +8388,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_checkproxyhealth",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "checkproxyhealth()"
     },
     {
@@ -8355,7 +8399,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_isusingserviceaccount",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "isusingserviceaccount()"
     },
     {
@@ -8366,7 +8410,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_fetchspreadsheetmeta",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "fetchspreadsheetmeta()"
     },
     {
@@ -8377,7 +8421,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_fetchsheetvalues",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "fetchsheetvalues()"
     },
     {
@@ -8388,7 +8432,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_fetchsheetvaluesbatch",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "fetchsheetvaluesbatch()"
     },
     {
@@ -8399,7 +8443,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_updatesheetvaluesbatch",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "updatesheetvaluesbatch()"
     },
     {
@@ -8410,7 +8454,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_batchupdatespreadsheet",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "transport.ts",
       "norm_label": "batchupdatespreadsheet()"
     },
     {
@@ -8420,8 +8464,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_types",
-      "community": 206,
-      "community_name": "mutations.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "googlesheets/types.ts"
     },
     {
@@ -8431,8 +8475,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_headermap",
-      "community": 206,
-      "community_name": "mutations.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "headermap"
     },
     {
@@ -8442,8 +8486,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_busdata",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 280,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "busdata"
     },
     {
@@ -8453,8 +8497,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_authresult",
-      "community": 267,
-      "community_name": "auth.ts",
+      "community": 277,
+      "community_name": "App.tsx",
       "norm_label": "authresult"
     },
     {
@@ -8464,8 +8508,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_spreadsheetinspectionresult",
-      "community": 206,
-      "community_name": "mutations.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "spreadsheetinspectionresult"
     },
     {
@@ -8475,8 +8519,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_monthlytoatrenditem",
-      "community": 206,
-      "community_name": "mutations.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "monthlytoatrenditem"
     },
     {
@@ -8487,7 +8531,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_test",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "routeservice.test.ts"
     },
     {
@@ -8498,7 +8542,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_test_localstoragemock",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "localstoragemock"
     },
     {
@@ -8520,7 +8564,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "audit.ts"
     },
     {
@@ -8531,7 +8575,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_readpendingactivitylogs",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "readpendingactivitylogs()"
     },
     {
@@ -8542,7 +8586,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_writependingactivitylogs",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "writependingactivitylogs()"
     },
     {
@@ -8553,7 +8597,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_logactivity",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "logactivity()"
     },
     {
@@ -8575,7 +8619,7 @@
       "_origin": "ast",
       "id": "src_services_routes_index",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "routes/index.ts"
     },
     {
@@ -8585,8 +8629,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_routes_routes",
-      "community": 263,
-      "community_name": "types/supabase.ts",
+      "community": 319,
+      "community_name": "routes.ts",
       "norm_label": "routes.ts"
     },
     {
@@ -8596,8 +8640,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_services_routes_routes_fetchrouteswithsheets",
-      "community": 263,
-      "community_name": "types/supabase.ts",
+      "community": 319,
+      "community_name": "routes.ts",
       "norm_label": "fetchrouteswithsheets()"
     },
     {
@@ -8608,7 +8652,7 @@
       "_origin": "ast",
       "id": "src_services_routes_routes_createroutewithsheet",
       "community": 319,
-      "community_name": "routeValidation.ts",
+      "community_name": "routes.ts",
       "norm_label": "createroutewithsheet()"
     },
     {
@@ -8618,8 +8662,8 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "src_services_routes_routes_deleteroutesheet",
-      "community": 263,
-      "community_name": "types/supabase.ts",
+      "community": 319,
+      "community_name": "routes.ts",
       "norm_label": "deleteroutesheet()"
     },
     {
@@ -8629,8 +8673,8 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "src_services_routes_routes_upsertdailyunitsummaries",
-      "community": 263,
-      "community_name": "types/supabase.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "upsertdailyunitsummaries()"
     },
     {
@@ -8652,7 +8696,7 @@
       "_origin": "ast",
       "id": "src_services_routes_sync",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "sync.ts"
     },
     {
@@ -8663,7 +8707,7 @@
       "_origin": "ast",
       "id": "src_services_routes_sync_flushpendinglocalsync",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "flushpendinglocalsync()"
     },
     {
@@ -8673,8 +8717,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_routes_types",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 280,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "routes/types.ts"
     },
     {
@@ -8684,8 +8728,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_services_routes_types_crossperiodsummaryresult",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 280,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "crossperiodsummaryresult"
     },
     {
@@ -8696,7 +8740,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "users.ts"
     },
     {
@@ -8707,7 +8751,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_role_code_to_id",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "role_code_to_id"
     },
     {
@@ -8718,7 +8762,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_role_id_to_code",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "role_id_to_code"
     },
     {
@@ -8729,7 +8773,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_tryofflineprofilefallback",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "tryofflineprofilefallback()"
     },
     {
@@ -8751,7 +8795,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_upsertuserprofile",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "upsertuserprofile()"
     },
     {
@@ -8773,7 +8817,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_fetchalluserprofiles",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "fetchalluserprofiles()"
     },
     {
@@ -8784,7 +8828,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_fetchmasterroles",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "fetchmasterroles()"
     },
     {
@@ -8795,7 +8839,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_adduserprofile",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "adduserprofile()"
     },
     {
@@ -8806,7 +8850,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_updateuserprofilerole",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "updateuserprofilerole()"
     },
     {
@@ -8817,7 +8861,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_toggleuserprofilestatus",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "toggleuserprofilestatus()"
     },
     {
@@ -8828,7 +8872,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_revokeuserprofile",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "revokeuserprofile()"
     },
     {
@@ -8838,8 +8882,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_supabase",
-      "community": 263,
-      "community_name": "types/supabase.ts",
+      "community": 256,
+      "community_name": "dailyRouteReportService.ts",
       "norm_label": "services/supabase.ts"
     },
     {
@@ -8850,7 +8894,7 @@
       "_origin": "ast",
       "id": "src_services_supabase_issupabaseconfigured",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "issupabaseconfigured"
     },
     {
@@ -8860,8 +8904,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_services_supabase_supabase",
-      "community": 263,
-      "community_name": "types/supabase.ts",
+      "community": 256,
+      "community_name": "dailyRouteReportService.ts",
       "norm_label": "supabase"
     },
     {
@@ -8871,7 +8915,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_types_supabase",
-      "community": 263,
+      "community": 278,
       "community_name": "types/supabase.ts",
       "norm_label": "types/supabase.ts"
     },
@@ -8882,7 +8926,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_types_supabase_operator",
-      "community": 263,
+      "community": 278,
       "community_name": "types/supabase.ts",
       "norm_label": "operator"
     },
@@ -8904,8 +8948,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_types_supabase_fleetunitstatusdetail",
-      "community": 315,
-      "community_name": "waReportGenerator.ts",
+      "community": 256,
+      "community_name": "dailyRouteReportService.ts",
       "norm_label": "fleetunitstatusdetail"
     },
     {
@@ -8915,8 +8959,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_types_supabase_dailyroutereport",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 278,
+      "community_name": "types/supabase.ts",
       "norm_label": "dailyroutereport"
     },
     {
@@ -8938,7 +8982,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_userrole",
       "community": 278,
-      "community_name": "RoleBadge.tsx",
+      "community_name": "types/supabase.ts",
       "norm_label": "userrole"
     },
     {
@@ -8949,7 +8993,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_role",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "role"
     },
     {
@@ -8960,7 +9004,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_userprofile",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "userprofile"
     },
     {
@@ -8971,7 +9015,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_activitylog",
       "community": 263,
-      "community_name": "types/supabase.ts",
+      "community_name": "users.ts",
       "norm_label": "activitylog"
     },
     {
@@ -8981,7 +9025,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "src_types_supabase_syncqueuebackup",
-      "community": 263,
+      "community": 278,
       "community_name": "types/supabase.ts",
       "norm_label": "syncqueuebackup"
     },
@@ -8992,7 +9036,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "src_types_supabase_dailyunitsummary",
-      "community": 263,
+      "community": 278,
       "community_name": "types/supabase.ts",
       "norm_label": "dailyunitsummary"
     },
@@ -9003,8 +9047,8 @@
       "source_location": "L156",
       "_origin": "ast",
       "id": "src_types_supabase_fleetstatuslog",
-      "community": 256,
-      "community_name": "dailyRouteReportService.ts",
+      "community": 278,
+      "community_name": "types/supabase.ts",
       "norm_label": "fleetstatuslog"
     },
     {
@@ -9124,8 +9168,8 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "src_utils_alertutils_showerroralert",
-      "community": 277,
-      "community_name": "App.tsx",
+      "community": 218,
+      "community_name": "alertUtils.ts",
       "norm_label": "showerroralert()"
     },
     {
@@ -9212,8 +9256,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_utils_analytics_slugifyunitid",
-      "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community": 250,
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "slugifyunitid()"
     },
     {
@@ -9454,8 +9498,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_conflictmerge_test",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 326,
+      "community_name": "conflictMerge.ts",
       "norm_label": "conflictmerge.test.ts"
     },
     {
@@ -9465,8 +9509,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_conflictmerge",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 326,
+      "community_name": "conflictMerge.ts",
       "norm_label": "conflictmerge.ts"
     },
     {
@@ -9476,8 +9520,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_utils_conflictmerge_editable_bus_fields",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 326,
+      "community_name": "conflictMerge.ts",
       "norm_label": "editable_bus_fields"
     },
     {
@@ -9487,8 +9531,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_utils_conflictmerge_mergeremotebusdatawithlocalupdates",
-      "community": 250,
-      "community_name": "BusData",
+      "community": 326,
+      "community_name": "conflictMerge.ts",
       "norm_label": "mergeremotebusdatawithlocalupdates()"
     },
     {
@@ -9498,8 +9542,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorclassifier_test",
-      "community": 280,
-      "community_name": "useOfflineSync.ts",
+      "community": 206,
+      "community_name": "mutations.ts",
       "norm_label": "errorclassifier.test.ts"
     },
     {
@@ -9509,8 +9553,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorclassifier",
-      "community": 280,
-      "community_name": "useOfflineSync.ts",
+      "community": 206,
+      "community_name": "mutations.ts",
       "norm_label": "errorclassifier.ts"
     },
     {
@@ -9520,8 +9564,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_utils_errorclassifier_isautherror",
-      "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community": 206,
+      "community_name": "mutations.ts",
       "norm_label": "isautherror()"
     },
     {
@@ -9763,7 +9807,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils_test",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "keteranganutils.test.ts"
     },
     {
@@ -9774,7 +9818,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "keteranganutils.ts"
     },
     {
@@ -9785,7 +9829,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils_parsedketerangan",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "parsedketerangan"
     },
     {
@@ -9807,7 +9851,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils_parseketerangan",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "parseketerangan()"
     },
     {
@@ -9818,7 +9862,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils_filterbusesforkmcopy",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "filterbusesforkmcopy()"
     },
     {
@@ -9829,7 +9873,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils_cleanshiftnote",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "cleanshiftnote()"
     },
     {
@@ -9840,7 +9884,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils_combineshiftketerangan",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "combineshiftketerangan()"
     },
     {
@@ -9851,7 +9895,7 @@
       "_origin": "ast",
       "id": "src_utils_keteranganutils_splitshiftketerangan",
       "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community_name": "keteranganUtils.ts",
       "norm_label": "splitshiftketerangan()"
     },
     {
@@ -10456,7 +10500,7 @@
       "_origin": "ast",
       "id": "src_utils_routevalidation_test",
       "community": 319,
-      "community_name": "routeValidation.ts",
+      "community_name": "routes.ts",
       "norm_label": "routevalidation.test.ts"
     },
     {
@@ -10467,7 +10511,7 @@
       "_origin": "ast",
       "id": "src_utils_routevalidation",
       "community": 319,
-      "community_name": "routeValidation.ts",
+      "community_name": "routes.ts",
       "norm_label": "routevalidation.ts"
     },
     {
@@ -10478,7 +10522,7 @@
       "_origin": "ast",
       "id": "src_utils_routevalidation_formatroutecode",
       "community": 319,
-      "community_name": "routeValidation.ts",
+      "community_name": "routes.ts",
       "norm_label": "formatroutecode()"
     },
     {
@@ -10489,7 +10533,7 @@
       "_origin": "ast",
       "id": "src_utils_routevalidation_validateroutecode",
       "community": 319,
-      "community_name": "routeValidation.ts",
+      "community_name": "routes.ts",
       "norm_label": "validateroutecode()"
     },
     {
@@ -10500,7 +10544,7 @@
       "_origin": "ast",
       "id": "src_utils_routevalidation_validategooglesheetsurl",
       "community": 319,
-      "community_name": "routeValidation.ts",
+      "community_name": "routes.ts",
       "norm_label": "validategooglesheetsurl()"
     },
     {
@@ -10510,8 +10554,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_utils_routevalidation_extractroutenamefromheaders",
-      "community": 319,
-      "community_name": "routeValidation.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "extractroutenamefromheaders()"
     },
     {
@@ -10543,8 +10587,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_utils_sheetcolorutils_googlecolor",
-      "community": 206,
-      "community_name": "mutations.ts",
+      "community": 323,
+      "community_name": "googleSheets/analytics.ts",
       "norm_label": "googlecolor"
     },
     {
@@ -10665,7 +10709,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_test",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitanalytics.test.ts"
     },
     {
@@ -10676,7 +10720,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_test_mockbusdata",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "mockbusdata"
     },
     {
@@ -10687,7 +10731,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitanalytics.ts"
     },
     {
@@ -10697,8 +10741,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitshiftstatus",
-      "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community": 250,
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitshiftstatus"
     },
     {
@@ -10708,8 +10752,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitsummaryitem",
-      "community": 314,
-      "community_name": "UnitCard.tsx",
+      "community": 250,
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitsummaryitem"
     },
     {
@@ -10720,7 +10764,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitsummarymetrics",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "unitsummarymetrics"
     },
     {
@@ -10731,7 +10775,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_getunitshiftstatus",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "getunitshiftstatus()"
     },
     {
@@ -10742,7 +10786,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_extractunitlist",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "extractunitlist()"
     },
     {
@@ -10753,7 +10797,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_calculateunitmetricsfromrow",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "calculateunitmetricsfromrow()"
     },
     {
@@ -10764,7 +10808,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_calculateunitmetrics",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "calculateunitmetrics()"
     },
     {
@@ -10775,7 +10819,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_extractaccumulatedunitlist",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "extractaccumulatedunitlist()"
     },
     {
@@ -10786,7 +10830,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_detecttargettrip",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "UnitSummaryDashboard.tsx",
       "norm_label": "detecttargettrip()"
     },
     {
@@ -35133,6 +35177,138 @@
       "norm_label": "case 2: salah ketik odometer km akhir lebih kecil dari km awal"
     },
     {
+      "label": "refact_56/AUDIT_BUGS.md",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_audit_bugs",
+      "community": 325,
+      "community_name": "1. Daftar Temuan Masalah & Risiko Arsitektur",
+      "norm_label": "refact_56/audit_bugs.md"
+    },
+    {
+      "label": "Audit Temuan Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert `alertUtils.ts` (~510 baris)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_audit_bugs_audit_temuan_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils_ts_510_baris",
+      "community": 325,
+      "community_name": "1. Daftar Temuan Masalah & Risiko Arsitektur",
+      "norm_label": "audit temuan refact 56: dekomposisi modal operasi massal & utilitas alert `alertutils.ts` (~510 baris)"
+    },
+    {
+      "label": "1. Daftar Temuan Masalah & Risiko Arsitektur",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/AUDIT_BUGS.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_audit_bugs_1_daftar_temuan_masalah_risiko_arsitektur",
+      "community": 325,
+      "community_name": "1. Daftar Temuan Masalah & Risiko Arsitektur",
+      "norm_label": "1. daftar temuan masalah & risiko arsitektur"
+    },
+    {
+      "label": "REF56-ARCH-001: God File Utility `src/utils/alertUtils.ts` (510 baris)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/AUDIT_BUGS.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_audit_bugs_ref56_arch_001_god_file_utility_src_utils_alertutils_ts_510_baris",
+      "community": 325,
+      "community_name": "1. Daftar Temuan Masalah & Risiko Arsitektur",
+      "norm_label": "ref56-arch-001: god file utility `src/utils/alertutils.ts` (510 baris)"
+    },
+    {
+      "label": "refact_56/REPAIR_REPORT.md",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "refact_56/repair_report.md"
+    },
+    {
+      "label": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report_repair_report_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "repair report refact 56: dekomposisi modal operasi massal & utilitas alert (alertutils)"
+    },
+    {
+      "label": "1. Implementasi & Detail Perubahan",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report_1_implementasi_detail_perubahan",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "1. implementasi & detail perubahan"
+    },
+    {
+      "label": "A. Pembagian Modul Terfokus",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report_a_pembagian_modul_terfokus",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "a. pembagian modul terfokus"
+    },
+    {
+      "label": "2. Perbandingan Before vs After",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report_2_perbandingan_before_vs_after",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "2. perbandingan before vs after"
+    },
+    {
+      "label": "3. Skenario Lapangan (Field Cases)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report_3_skenario_lapangan_field_cases",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "3. skenario lapangan (field cases)"
+    },
+    {
+      "label": "Case 1: Pengawas Mengisi Target Ritase Harian ke Seluruh Armada Bus Sekaligus",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report_case_1_pengawas_mengisi_target_ritase_harian_ke_seluruh_armada_bus_sekaligus",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "case 1: pengawas mengisi target ritase harian ke seluruh armada bus sekaligus"
+    },
+    {
+      "label": "Case 2: Pergantian Shift Siang Menuntut Salin Odometer Massal",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_56_repair_report_case_2_pergantian_shift_siang_menuntut_salin_odometer_massal",
+      "community": 324,
+      "community_name": "Repair Report Refact 56: Dekomposisi Modal Operasi Massal & Utilitas Alert (alertUtils)",
+      "norm_label": "case 2: pergantian shift siang menuntut salin odometer massal"
+    },
+    {
       "label": "01_daftar_masalah_ss_pdo_refactor5.md",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_5/01_daftar_masalah_ss_pdo_refactor5.md",
@@ -44410,7 +44586,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app",
-      "target": "src_services_googlesheets_auth_checksignedinasync",
+      "target": "src_services_googlesheets_authgis_hasgooglecreds",
       "confidence_score": 1.0
     },
     {
@@ -44422,7 +44598,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app",
-      "target": "src_services_googlesheets_auth_hasgooglecreds",
+      "target": "src_services_googlesheets_authgis_initgoogleapi",
       "confidence_score": 1.0
     },
     {
@@ -44434,7 +44610,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app",
-      "target": "src_services_googlesheets_auth_initgoogleapi",
+      "target": "src_services_googlesheets_authgis_signout",
       "confidence_score": 1.0
     },
     {
@@ -44446,7 +44622,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app",
-      "target": "src_services_googlesheets_auth_signout",
+      "target": "src_services_googlesheets_authsession_checksignedinasync",
       "confidence_score": 1.0
     },
     {
@@ -44611,23 +44787,11 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/App.tsx",
-      "source_location": "L44",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_app",
-      "target": "src_services_googlesheets_auth_checksignedinasync"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/App.tsx",
       "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_app",
-      "target": "src_services_googlesheets_auth_hasgooglecreds"
+      "target": "src_services_googlesheets_authgis_hasgooglecreds"
     },
     {
       "relation": "calls",
@@ -44639,7 +44803,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_app",
-      "target": "src_services_googlesheets_auth_initgoogleapi"
+      "target": "src_services_googlesheets_authgis_initgoogleapi"
     },
     {
       "relation": "calls",
@@ -44651,7 +44815,19 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_app",
-      "target": "src_services_googlesheets_auth_signout"
+      "target": "src_services_googlesheets_authgis_signout"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/App.tsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_app",
+      "target": "src_services_googlesheets_authsession_checksignedinasync"
     },
     {
       "relation": "calls",
@@ -47154,7 +47330,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen",
-      "target": "src_services_googlesheets_auth_signin",
+      "target": "src_services_googlesheets_authgis_signin",
       "confidence_score": 1.0
     },
     {
@@ -47166,7 +47342,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen",
-      "target": "src_services_googlesheets_auth_signout",
+      "target": "src_services_googlesheets_authgis_signout",
       "confidence_score": 1.0
     },
     {
@@ -47251,7 +47427,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen_loginscreen",
-      "target": "src_services_googlesheets_auth_signin"
+      "target": "src_services_googlesheets_authgis_signin"
     },
     {
       "relation": "calls",
@@ -47263,7 +47439,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_loginscreen_loginscreen",
-      "target": "src_services_googlesheets_auth_signout"
+      "target": "src_services_googlesheets_authgis_signout"
     },
     {
       "relation": "calls",
@@ -57115,7 +57291,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_auth_test",
-      "target": "src_services_googlesheets_auth_getgapi",
+      "target": "src_services_googlesheets_authgis_getgapi",
       "confidence_score": 1.0
     },
     {
@@ -57127,7 +57303,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_auth_test",
-      "target": "src_services_googlesheets_auth_getgooglecreds",
+      "target": "src_services_googlesheets_authgis_getgooglecreds",
       "confidence_score": 1.0
     },
     {
@@ -57139,7 +57315,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_auth_test",
-      "target": "src_services_googlesheets_auth_hasgooglecreds",
+      "target": "src_services_googlesheets_authgis_hasgooglecreds",
       "confidence_score": 1.0
     },
     {
@@ -57151,269 +57327,259 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_auth_test",
-      "target": "src_services_googlesheets_auth_initgoogleapi",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L461",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_checksignedinasync",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L261",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_ensurevalidtoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L413",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_fetchgoogleuserprofile",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_getgapi",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_getgooglecreds",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_hasgooglecreds",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_initgoogleapi",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L345",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_reauthenticatesession",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L286",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_refreshtokeninteractiveorsilent",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L182",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_signin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L228",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_signout",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L545",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_starttokenrefreshtimer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L563",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_stoptokenrefreshtimer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L393",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_auth_withauthretry",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_transport",
+      "target": "src_services_googlesheets_authgis_initgoogleapi",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_transport_checkproxyhealth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_transport_isusingserviceaccount",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
+      "source_file": "src/services/googleSheets/auth.test.ts",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_types",
+      "source": "src_services_googlesheets_auth_test",
+      "target": "src_services_googlesheets_authsession_checksignedinasync",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
+      "source_file": "src/services/googleSheets/auth.test.ts",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_googlesheets_types_authresult",
+      "source": "src_services_googlesheets_auth_test",
+      "target": "src_services_googlesheets_authsession_starttokenrefreshtimer",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L1",
+      "source_file": "src/services/googleSheets/auth.test.ts",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth",
-      "target": "src_services_routes_audit_logactivity",
+      "source": "src_services_googlesheets_auth_test",
+      "target": "src_services_googlesheets_authsession_stoptokenrefreshtimer",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "re_exports",
+      "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L1",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_auth",
-      "target": "src_services_routeservice",
+      "target": "src_services_googlesheets_authgis",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "re_exports",
+      "context": "re-export",
       "confidence": "EXTRACTED",
       "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L2",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_auth",
-      "target": "src_utils_errorclassifier",
+      "target": "src_services_googlesheets_authgis_getgapi",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "re_exports",
+      "context": "re-export",
       "confidence": "EXTRACTED",
       "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L2",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_auth",
-      "target": "src_utils_errorclassifier_isautherror",
+      "target": "src_services_googlesheets_authgis_getgooglecreds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authgis_gettokenclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authgis_hasgooglecreds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authgis_initgoogleapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authgis_settokenclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authgis_signin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authgis_signout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_checksignedinasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_ensurevalidtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_fetchgoogleuserprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_reauthenticatesession",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_refreshtokeninteractiveorsilent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_starttokenrefreshtimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_stoptokenrefreshtimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/auth.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_auth",
+      "target": "src_services_googlesheets_authsession_withauthretry",
       "confidence_score": 1.0
     },
     {
@@ -57429,64 +57595,212 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L501",
+      "source_file": "src/services/googleSheets/transport.ts",
+      "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_checksignedinasync",
-      "target": "src_services_googlesheets_auth_getgapi",
+      "source": "src_services_googlesheets_transport",
+      "target": "src_services_googlesheets_auth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_getgapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_getgooglecreds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_gettokenclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_hasgooglecreds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_initgoogleapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_settokenclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L229",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_signin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L282",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_googlesheets_authgis_signout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_routes_audit_logactivity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis",
+      "target": "src_services_routeservice",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authgis",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L271",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_ensurevalidtoken",
-      "target": "src_services_googlesheets_auth_getgapi",
+      "source": "src_services_googlesheets_authgis_initgoogleapi",
+      "target": "src_services_googlesheets_authgis_getgapi",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L415",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L315",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_fetchgoogleuserprofile",
-      "target": "src_services_googlesheets_auth_getgapi",
+      "source": "src_services_googlesheets_authgis_signout",
+      "target": "src_services_googlesheets_authgis_getgapi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authgis_getgapi",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L57",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L317",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_initgoogleapi",
-      "target": "src_services_googlesheets_auth_getgapi",
-      "confidence_score": 1.0
+      "source": "src_services_googlesheets_authsession_checksignedinasync",
+      "target": "src_services_googlesheets_authgis_getgapi"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L255",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_signout",
-      "target": "src_services_googlesheets_auth_getgapi",
-      "confidence_score": 1.0
+      "source": "src_services_googlesheets_authsession_ensurevalidtoken",
+      "target": "src_services_googlesheets_authgis_getgapi"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L223",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_fetchgoogleuserprofile",
+      "target": "src_services_googlesheets_authgis_getgapi"
     },
     {
       "relation": "imports",
@@ -57497,7 +57811,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport",
-      "target": "src_services_googlesheets_auth_getgapi",
+      "target": "src_services_googlesheets_authgis_getgapi",
       "confidence_score": 1.0
     },
     {
@@ -57509,55 +57823,55 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport_getgapisheets",
-      "target": "src_services_googlesheets_auth_getgapi",
+      "target": "src_services_googlesheets_authgis_getgapi",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L19",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_hasgooglecreds",
-      "target": "src_services_googlesheets_auth_getgooglecreds",
+      "source": "src_services_googlesheets_authgis_hasgooglecreds",
+      "target": "src_services_googlesheets_authgis_getgooglecreds",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L26",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_initgoogleapi",
-      "target": "src_services_googlesheets_auth_getgooglecreds",
+      "source": "src_services_googlesheets_authgis_initgoogleapi",
+      "target": "src_services_googlesheets_authgis_getgooglecreds",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L27",
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_initgoogleapi",
-      "target": "src_services_googlesheets_auth_hasgooglecreds",
+      "source": "src_services_googlesheets_authgis_initgoogleapi",
+      "target": "src_services_googlesheets_authgis_hasgooglecreds",
       "confidence_score": 1.0
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L112",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_initgoogleapi",
-      "target": "src_services_googlesheets_auth_starttokenrefreshtimer",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authgis_gettokenclient",
       "confidence_score": 1.0
     },
     {
@@ -57565,11 +57879,303 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "src/services/googleSheets/auth.ts",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L140",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_reauthenticatesession",
+      "target": "src_services_googlesheets_authgis_gettokenclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_refreshtokeninteractiveorsilent",
+      "target": "src_services_googlesheets_authgis_gettokenclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_starttokenrefreshtimer",
+      "target": "src_services_googlesheets_authgis_gettokenclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L148",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis_initgoogleapi",
+      "target": "src_services_routes_audit_logactivity"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authGis.ts",
+      "source_location": "L284",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authgis_signout",
+      "target": "src_services_routes_audit_logactivity"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L273",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_checksignedinasync",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
       "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_initgoogleapi",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_ensurevalidtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_fetchgoogleuserprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L139",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_reauthenticatesession",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_refreshtokeninteractiveorsilent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_starttokenrefreshtimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_stoptokenrefreshtimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L195",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_authsession_withauthretry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_transport",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_transport_checkproxyhealth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_transport_isusingserviceaccount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_services_googlesheets_types_authresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_utils_errorclassifier",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession",
+      "target": "src_utils_errorclassifier_isautherror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_starttokenrefreshtimer",
+      "target": "src_services_googlesheets_authsession_stoptokenrefreshtimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L327",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_checksignedinasync",
+      "target": "src_services_googlesheets_authsession_starttokenrefreshtimer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_ensurevalidtoken",
+      "target": "src_services_googlesheets_authsession_refreshtokeninteractiveorsilent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L292",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_checksignedinasync",
+      "target": "src_services_googlesheets_authsession_ensurevalidtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L200",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_withauthretry",
+      "target": "src_services_googlesheets_authsession_ensurevalidtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L197",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_googlesheets_authsession_withauthretry",
       "target": "src_services_googlesheets_transport_isusingserviceaccount"
     },
     {
@@ -57577,83 +58183,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L117",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L204",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_initgoogleapi",
-      "target": "src_services_routes_audit_logactivity"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L230",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_signout",
-      "target": "src_services_routes_audit_logactivity"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L478",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_checksignedinasync",
-      "target": "src_services_googlesheets_auth_ensurevalidtoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L281",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_ensurevalidtoken",
-      "target": "src_services_googlesheets_auth_refreshtokeninteractiveorsilent",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L398",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_withauthretry",
-      "target": "src_services_googlesheets_auth_ensurevalidtoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L395",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_withauthretry",
-      "target": "src_services_googlesheets_transport_isusingserviceaccount"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L402",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_withauthretry",
+      "source": "src_services_googlesheets_authsession_withauthretry",
       "target": "src_utils_errorclassifier_isautherror"
     },
     {
@@ -57665,7 +58199,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport",
-      "target": "src_services_googlesheets_auth_withauthretry",
+      "target": "src_services_googlesheets_authsession_withauthretry",
       "confidence_score": 1.0
     },
     {
@@ -57678,7 +58212,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport_batchupdatespreadsheet",
-      "target": "src_services_googlesheets_auth_withauthretry"
+      "target": "src_services_googlesheets_authsession_withauthretry"
     },
     {
       "relation": "calls",
@@ -57690,7 +58224,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport_fetchsheetvalues",
-      "target": "src_services_googlesheets_auth_withauthretry"
+      "target": "src_services_googlesheets_authsession_withauthretry"
     },
     {
       "relation": "calls",
@@ -57702,7 +58236,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport_fetchsheetvaluesbatch",
-      "target": "src_services_googlesheets_auth_withauthretry"
+      "target": "src_services_googlesheets_authsession_withauthretry"
     },
     {
       "relation": "calls",
@@ -57714,7 +58248,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport_fetchspreadsheetmeta",
-      "target": "src_services_googlesheets_auth_withauthretry"
+      "target": "src_services_googlesheets_authsession_withauthretry"
     },
     {
       "relation": "calls",
@@ -57726,30 +58260,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_googlesheets_transport_updatesheetvaluesbatch",
-      "target": "src_services_googlesheets_auth_withauthretry"
+      "target": "src_services_googlesheets_authsession_withauthretry"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L469",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L283",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_checksignedinasync",
-      "target": "src_services_googlesheets_auth_fetchgoogleuserprofile",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L511",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_checksignedinasync",
-      "target": "src_services_googlesheets_auth_starttokenrefreshtimer",
+      "source": "src_services_googlesheets_authsession_checksignedinasync",
+      "target": "src_services_googlesheets_authsession_fetchgoogleuserprofile",
       "confidence_score": 1.0
     },
     {
@@ -57757,24 +58279,12 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L466",
+      "source_file": "src/services/googleSheets/authSession.ts",
+      "source_location": "L280",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_services_googlesheets_auth_checksignedinasync",
+      "source": "src_services_googlesheets_authsession_checksignedinasync",
       "target": "src_services_googlesheets_transport_checkproxyhealth"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/googleSheets/auth.ts",
-      "source_location": "L546",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_services_googlesheets_auth_starttokenrefreshtimer",
-      "target": "src_services_googlesheets_auth_stoptokenrefreshtimer",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -87867,6 +88377,116 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_audit_bugs",
+      "target": "refactor_ss_pdo_refact_56_audit_bugs_audit_temuan_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils_ts_510_baris",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/AUDIT_BUGS.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_audit_bugs_audit_temuan_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils_ts_510_baris",
+      "target": "refactor_ss_pdo_refact_56_audit_bugs_1_daftar_temuan_masalah_risiko_arsitektur",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/AUDIT_BUGS.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_audit_bugs_1_daftar_temuan_masalah_risiko_arsitektur",
+      "target": "refactor_ss_pdo_refact_56_audit_bugs_ref56_arch_001_god_file_utility_src_utils_alertutils_ts_510_baris",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_repair_report",
+      "target": "refactor_ss_pdo_refact_56_repair_report_repair_report_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_repair_report_repair_report_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils",
+      "target": "refactor_ss_pdo_refact_56_repair_report_1_implementasi_detail_perubahan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_repair_report_repair_report_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils",
+      "target": "refactor_ss_pdo_refact_56_repair_report_2_perbandingan_before_vs_after",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_repair_report_repair_report_refact_56_dekomposisi_modal_operasi_massal_utilitas_alert_alertutils",
+      "target": "refactor_ss_pdo_refact_56_repair_report_3_skenario_lapangan_field_cases",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_repair_report_1_implementasi_detail_perubahan",
+      "target": "refactor_ss_pdo_refact_56_repair_report_a_pembagian_modul_terfokus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_repair_report_3_skenario_lapangan_field_cases",
+      "target": "refactor_ss_pdo_refact_56_repair_report_case_1_pengawas_mengisi_target_ritase_harian_ke_seluruh_armada_bus_sekaligus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_56/REPAIR_REPORT.md",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_56_repair_report_3_skenario_lapangan_field_cases",
+      "target": "refactor_ss_pdo_refact_56_repair_report_case_2_pergantian_shift_siang_menuntut_salin_odometer_massal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_5/01_daftar_masalah_ss_pdo_refactor5.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -92134,5 +92754,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e59d37f090089003c45c111611230ba846826615"
+  "built_at_commit": "8b37b6e6fbd3be0a149c3b15dd341cdd18a60701"
 }
