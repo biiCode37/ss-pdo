@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1789283480.87215,
-    "ast_hash": "d988da5311de06b70c90a7f1b189aa57",
+    "mtime": 1789284979.72771,
+    "ast_hash": "109a678a539f14951d6936d9401a3148",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -2062,6 +2062,36 @@
   "refactor-ss-pdo/refact_41/REPAIR_REPORT.md": {
     "mtime": 1789284557.0801725,
     "ast_hash": "3d535896495dce9a76175b288ef3ee61",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/index.ts": {
+    "mtime": 1789284900.3026285,
+    "ast_hash": "7a2764e58f5454b6b8370173b1e2d09f",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/useDashboardData.ts": {
+    "mtime": 1789284890.2708857,
+    "ast_hash": "4d7d571b31e9ba55cd08a488011a2337",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/useDashboardFleet.ts": {
+    "mtime": 1789284897.3386545,
+    "ast_hash": "d2422c6e5a3177389e33af7c63c9869d",
+    "semantic_hash": ""
+  },
+  "src/components/dashboard/usePullToRefresh.ts": {
+    "mtime": 1789284879.6023173,
+    "ast_hash": "90cbc532e13cefee8e67dc4115f03583",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_42/AUDIT_BUGS.md": {
+    "mtime": 1789284787.530228,
+    "ast_hash": "7c5df3863e328d2e8d221b97cd1b0c18",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_42/REPAIR_REPORT.md": {
+    "mtime": 1789284794.044923,
+    "ast_hash": "5ad4a1931526b15dd317b8f5b1213f08",
     "semantic_hash": ""
   }
 }
