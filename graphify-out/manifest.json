@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
-    "mtime": 1789221582.6976218,
-    "ast_hash": "60122db2f6b522ad868bd8b4560fdd3b",
+    "mtime": 1789287972.1137476,
+    "ast_hash": "62a35cd5c2ab4eab5a45f5baad6b3ca3",
     "semantic_hash": ""
   },
   "src/components/BusList.tsx": {
@@ -1440,8 +1440,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_dashboard.ts": {
-    "mtime": 1789053218.5036576,
-    "ast_hash": "adeacaab11c5bd250dbf69a9d4375c56",
+    "mtime": 1789287950.3423204,
+    "ast_hash": "dfd65c132adb76d68437678b647e2a31",
     "semantic_hash": ""
   },
   "src/constants/texts/text_errors.ts": {
@@ -1465,8 +1465,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789058066.7502246,
-    "ast_hash": "154876a62c5fe288e6cfad1899d80dc5",
+    "mtime": 1789287958.3363025,
+    "ast_hash": "3bef8bd720617c3076c714dfc87ae43d",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -2327,6 +2327,46 @@
   "refactor-ss-pdo/refact_47/REPAIR_REPORT.md": {
     "mtime": 1789287082.2781942,
     "ast_hash": "ecc190db44180cf6f7fd739448689894",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/BusCardSummary.tsx": {
+    "mtime": 1789287961.5181491,
+    "ast_hash": "e3a12ba8dbd82c90a9ed202e6ee6c1e5",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/busCardStyles.ts": {
+    "mtime": 1789287853.3616078,
+    "ast_hash": "1beafd23432a0a378a851b4ded95e5fa",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/index.ts": {
+    "mtime": 1789287964.2172537,
+    "ast_hash": "4ec34e9eb275bdd78673b64a4bd30ed1",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/types.ts": {
+    "mtime": 1789287844.6209161,
+    "ast_hash": "7c3e2f0b0e045378643125afdd994efa",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/useBusCardModal.ts": {
+    "mtime": 1789287929.9762068,
+    "ast_hash": "c5786fef5523d886ebb3da1c994ab9f0",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/useBusCardSave.ts": {
+    "mtime": 1789287924.1551263,
+    "ast_hash": "c9371dde426613a26459866b1187aee6",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_48/AUDIT_BUGS.md": {
+    "mtime": 1789287505.4371555,
+    "ast_hash": "bbecfeca7d8f89970d8103ae7bae9a37",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_48/REPAIR_REPORT.md": {
+    "mtime": 1789287511.5754156,
+    "ast_hash": "354ebe239c74176b74e391ba8113627d",
     "semantic_hash": ""
   }
 }

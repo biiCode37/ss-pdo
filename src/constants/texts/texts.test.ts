@@ -48,6 +48,10 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_DISPLAY_TITLE('05 Sep 2026')).toContain('05 Sep 2026');
     expect(TEXT_DASHBOARD.BUS_LIST.DAILY_PROGRESS).toBe('Progres Harian');
     expect(TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX('TOA')).toBe('Kolom: TOA');
+    expect(TEXT_DASHBOARD.BUS_LIST.CATEGORIES.MANUAL_S1).toBe('Manual S1');
+    expect(TEXT_DASHBOARD.BUS_LIST.CATEGORIES.MANUAL_S2).toBe('Manual S2');
+    expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNCONFIRMED_BADGE).toBe('🔒 Belum Konfirmasi');
+    expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP('OFF')).toBe('Status unit: OFF');
   });
 
   it('exports TEXT_PDO_FORM with shift inputs and badges', () => {

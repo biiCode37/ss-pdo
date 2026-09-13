@@ -217,6 +217,8 @@ export const TEXT_DASHBOARD = {
       TRIP: 'Trip Armada',
       TOA_S1: 'TOA S1',
       TOTAL_TOA: 'Total TOA',
+      MANUAL_S1: 'Manual S1',
+      MANUAL_S2: 'Manual S2',
       KM_AWAL_1: 'KM Awal S1',
       KM_AKHIR_1: 'KM Akhir S1',
       KM_AWAL_2: 'KM Awal S2',
@@ -225,6 +227,8 @@ export const TEXT_DASHBOARD = {
     },
   },
   BUS_CARD_ACTIONS: {
+    UNCONFIRMED_BADGE: '🔒 Belum Konfirmasi',
+    UNIT_STATUS_TOOLTIP: (status: string) => `Status unit: ${status}`,
     SGO_CONFIRM_TITLE: 'Konfirmasi Operasional Bus',
     SGO_CONFIRM_HTML: (unit: string, ket: string) =>
       `Unit <strong>${unit}</strong> saat ini berstatus <strong>${ket}</strong>.<br><br>Apakah unit ini dioperasikan (SGO)?`,
