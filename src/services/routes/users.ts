@@ -253,7 +253,7 @@ export async function fetchMasterRoles(): Promise<Role[]> {
  */
 export async function addUserProfile(params: {
   email: string;
-  full_name: string;
+  full_name?: string;
   role?: UserRole | 'petugas';
   role_id?: number;
   notes?: string;
@@ -275,7 +275,7 @@ export async function addUserProfile(params: {
     const { data, error } = await supabase.from('user_profiles').insert([
       {
         email: cleanEmail,
-        full_name: params.full_name.trim(),
+        full_name: params.full_name?.trim() || cleanEmail.split('@')[0],
         role_id: assignedRoleId,
         notes: params.notes?.trim() || null,
         created_by: params.created_by || null,

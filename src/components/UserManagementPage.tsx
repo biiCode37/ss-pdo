@@ -1,87 +1,34 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import {
-  ArrowLeft,
-  UserPlus,
-  Search,
-  Users,
-  RefreshCw,
-  Clock,
-} from 'lucide-react';
-import type { UserProfile, UserRole } from '../types/supabase';
+import React, { useState, useEffect, useMemo } from "react";
+import type { UserProfile, UserRole } from "@/types/supabase";
 import {
   fetchAllUserProfiles,
   addUserProfile,
   updateUserProfileRole,
   toggleUserProfileStatus,
   upsertUserProfile,
-} from '../services/routeService';
-import { fetchGoogleUserProfile } from '../services/googleSheets/auth';
-import { RoleBadge } from './RoleBadge';
-import { escapeHtml, showSuccessToast, showErrorAlert, pdoSwal } from '../utils/alertUtils';
-import { SkeletonBox } from './Skeletons';
-import { TEXT_USER_MANAGEMENT } from '../constants/texts';
+} from "@/services/routeService";
+import { fetchGoogleUserProfile } from "@/services/googleSheets/auth";
+import { escapeHtml, showSuccessToast, showErrorAlert } from "@/utils/alertUtils";
+import { TEXT_USER_MANAGEMENT } from "@/constants/texts";
+import {
+  UserManagementHeader,
+  UserManagementFilters,
+  type FilterTab,
+  type UserCounts,
+  UserCardItem,
+  UserManagementSkeleton,
+  UserManagementEmptyState,
+  promptAddUserModal,
+  promptEditRoleModal,
+  promptToggleStatusModal,
+} from "./userManagement";
 
 interface UserManagementPageProps {
   onBack: () => void;
   currentUserEmail: string;
-  currentUserRole: UserRole | 'petugas';
+  currentUserRole: UserRole | "petugas";
   isDarkMode?: boolean;
 }
-
-type FilterTab = 'all' | 'superadmin' | 'admin' | 'korwil' | 'korlap' | 'pdo' | 'petugas' | 'inactive';
-
-const UserCardAvatar: React.FC<{
-  user: UserProfile;
-  isSelf: boolean;
-}> = ({ user, isSelf }) => {
-  const [imgError, setImgError] = useState(false);
-  const effectiveAvatar =
-    user.avatar_url ||
-    (isSelf ? localStorage.getItem('PDO_USER_AVATAR') || undefined : undefined);
-
-  if (effectiveAvatar && !imgError) {
-    return (
-      <img
-        src={effectiveAvatar}
-        alt={user.full_name || user.email}
-        referrerPolicy="no-referrer"
-        crossOrigin="anonymous"
-        onError={() => setImgError(true)}
-        style={{
-          width: '42px',
-          height: '42px',
-          borderRadius: '12px',
-          objectFit: 'cover',
-          border: '1px solid var(--card-border, rgba(255, 255, 255, 0.15))',
-          flexShrink: 0,
-        }}
-      />
-    );
-  }
-
-  const initial = (user.full_name || user.email || '?').trim().charAt(0).toUpperCase();
-
-  return (
-    <div
-      style={{
-        width: '42px',
-        height: '42px',
-        borderRadius: '12px',
-        background: 'rgba(59, 130, 246, 0.12)',
-        border: '1px solid rgba(59, 130, 246, 0.25)',
-        color: '#60a5fa',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontWeight: 700,
-        fontSize: '15px',
-        flexShrink: 0,
-      }}
-    >
-      {initial}
-    </div>
-  );
-};
 
 export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   onBack,
@@ -90,14 +37,14 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
 }) => {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<FilterTab>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<FilterTab>("all");
 
   const loadUsers = async () => {
     setIsLoading(true);
     try {
       const data = await fetchAllUserProfiles();
-      const cachedAvatar = localStorage.getItem('PDO_USER_AVATAR');
+      const cachedAvatar = localStorage.getItem("PDO_USER_AVATAR");
       const enrichedData = data.map((u) => {
         if (
           u.email.toLowerCase() === currentUserEmail.toLowerCase() &&
@@ -110,7 +57,7 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       });
       setUsers(enrichedData);
     } catch (err) {
-      console.error('[UserManagement] Gagal memuat user:', err);
+      console.error("[UserManagement] Gagal memuat user:", err);
       showErrorAlert(
         TEXT_USER_MANAGEMENT.ALERTS.LOAD_FAILED_TITLE,
         TEXT_USER_MANAGEMENT.ALERTS.LOAD_FAILED_TEXT,
@@ -122,27 +69,33 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
 
   useEffect(() => {
     loadUsers();
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: "instant" });
 
     // Sync avatar from Google if missing
-    if (!localStorage.getItem('PDO_USER_AVATAR')) {
-      fetchGoogleUserProfile().then((info) => {
-        if (info && info.picture) {
-          localStorage.setItem('PDO_USER_AVATAR', info.picture);
-          upsertUserProfile({
-            email: currentUserEmail,
-            full_name: info.name || currentUserEmail,
-            avatar_url: info.picture,
-          }).catch(() => {});
-          setUsers((prev) =>
-            prev.map((u) =>
-              u.email.toLowerCase() === currentUserEmail.toLowerCase()
-                ? { ...u, avatar_url: info.picture }
-                : u
-            )
-          );
-        }
-      }).catch(() => {});
+    if (!localStorage.getItem("PDO_USER_AVATAR")) {
+      fetchGoogleUserProfile()
+        .then((info) => {
+          if (info && info.picture) {
+            localStorage.setItem("PDO_USER_AVATAR", info.picture);
+            upsertUserProfile({
+              email: currentUserEmail,
+              full_name: info.name || currentUserEmail,
+              avatar_url: info.picture,
+            }).catch((err) => {
+              console.warn("[UserManagement] Gagal upsert avatar profil Google:", err);
+            });
+            setUsers((prev) =>
+              prev.map((u) =>
+                u.email.toLowerCase() === currentUserEmail.toLowerCase()
+                  ? { ...u, avatar_url: info.picture }
+                  : u,
+              ),
+            );
+          }
+        })
+        .catch((err) => {
+          console.warn("[UserManagement] Gagal fetch profil Google:", err);
+        });
     }
   }, []);
 
@@ -150,17 +103,19 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   const filteredUsers = useMemo(() => {
     return users.filter((u) => {
       // Tab filter
-      if (activeTab === 'superadmin' && u.role !== 'superadmin') return false;
-      if (activeTab === 'admin' && u.role !== 'admin') return false;
-      if (activeTab === 'korwil' && u.role !== 'korwil') return false;
-      if (activeTab === 'korlap' && u.role !== 'korlap') return false;
-      if ((activeTab === 'pdo' || activeTab === 'petugas') && u.role !== 'pdo') return false;
-      if (activeTab === 'inactive' && u.is_active !== false) return false;
+      if (activeTab === "superadmin" && u.role !== "superadmin") return false;
+      if (activeTab === "admin" && u.role !== "admin") return false;
+      if (activeTab === "korwil" && u.role !== "korwil") return false;
+      if (activeTab === "korlap" && u.role !== "korlap") return false;
+      if ((activeTab === "pdo" || activeTab === "petugas") && u.role !== "pdo")
+        return false;
+      if (activeTab === "inactive" && u.is_active !== false) return false;
 
       // Role isolation: Admin hanya bisa melihat petugas/lapangan dan dirinya sendiri
-      if (currentUserRole === 'admin') {
+      if (currentUserRole === "admin") {
         const isSelf = u.email.toLowerCase() === currentUserEmail.toLowerCase();
-        const isOperational = u.role === 'pdo' || u.role === 'korlap' || u.role === 'korwil';
+        const isOperational =
+          u.role === "pdo" || u.role === "korlap" || u.role === "korwil";
         if (!isSelf && !isOperational) return false;
       }
 
@@ -176,24 +131,25 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
   }, [users, activeTab, searchQuery, currentUserRole, currentUserEmail]);
 
   // Counts per Category Tab
-  const counts = useMemo(() => {
-    const isPdoOrPetugas = currentUserRole === 'pdo' || currentUserRole === 'petugas';
+  const counts: UserCounts = useMemo(() => {
+    const isPdoOrPetugas =
+      currentUserRole === "pdo" || currentUserRole === "petugas";
     const base = isPdoOrPetugas
       ? users.filter(
           (u) =>
             u.email.toLowerCase() === currentUserEmail.toLowerCase() ||
-            u.role === 'pdo'
+            u.role === "pdo",
         )
       : users;
 
     return {
       all: base.length,
-      superadmin: base.filter((u) => u.role === 'superadmin').length,
-      admin: base.filter((u) => u.role === 'admin').length,
-      korwil: base.filter((u) => u.role === 'korwil').length,
-      korlap: base.filter((u) => u.role === 'korlap').length,
-      pdo: base.filter((u) => u.role === 'pdo').length,
-      petugas: base.filter((u) => u.role === 'pdo').length,
+      superadmin: base.filter((u) => u.role === "superadmin").length,
+      admin: base.filter((u) => u.role === "admin").length,
+      korwil: base.filter((u) => u.role === "korwil").length,
+      korlap: base.filter((u) => u.role === "korlap").length,
+      pdo: base.filter((u) => u.role === "pdo").length,
+      petugas: base.filter((u) => u.role === "pdo").length,
       inactive: base.filter((u) => u.is_active === false).length,
       active: base.filter((u) => u.is_active !== false).length,
     };
@@ -201,808 +157,168 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
 
   // Handle Add User Modal
   const handleOpenAddUserModal = async () => {
-    // BUG-55: Guard RBAC internal — sebelumnya hanya mengandalkan gating di
-    // parent; role localStorage rusak/stale bisa membuka UI tambah user.
-    if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
-      showErrorAlert(
-        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
-        TEXT_USER_MANAGEMENT.ALERTS.ADD_USER_FORBIDDEN,
-      );
-      return;
-    }
+    const formValues = await promptAddUserModal(currentUserRole);
+    if (!formValues) return;
 
-    const isSuper = currentUserRole === 'superadmin';
-    const roleOptionsHtml = isSuper
-      ? `
-        <option value="pdo">${TEXT_USER_MANAGEMENT.ROLES.PDO_OPTION}</option>
-        <option value="korlap">${TEXT_USER_MANAGEMENT.ROLES.KORLAP_OPTION}</option>
-        <option value="korwil">${TEXT_USER_MANAGEMENT.ROLES.KORWIL_OPTION}</option>
-        <option value="admin">${TEXT_USER_MANAGEMENT.ROLES.ADMIN_OPTION}</option>
-        <option value="superadmin">${TEXT_USER_MANAGEMENT.ROLES.SUPERADMIN_OPTION}</option>
-      `
-      : `
-        <option value="pdo">${TEXT_USER_MANAGEMENT.ROLES.PDO_OPTION}</option>
-        <option value="korlap">${TEXT_USER_MANAGEMENT.ROLES.KORLAP_OPTION}</option>
-        <option value="korwil">${TEXT_USER_MANAGEMENT.ROLES.KORWIL_OPTION}</option>
-      `;
-
-    const { value: formValues } = await pdoSwal.fire({
-      title: TEXT_USER_MANAGEMENT.MODAL_ADD.TITLE,
-      html: `
-        <div style="text-align:left;font-size:13px;display:flex;flex-direction:column;gap:14px;margin-top:6px;">
-          <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_LABEL} <span style="color:#ef4444">*</span></label>
-            <input id="swal-email" type="email" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_PLACEHOLDER}" class="pdo-swal-input" />
-          </div>
-          <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NAME_LABEL}</label>
-            <input id="swal-name" type="text" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.NAME_PLACEHOLDER}" class="pdo-swal-input" />
-          </div>
-          <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.ROLE_LABEL}</label>
-            <select id="swal-role" class="pdo-swal-select">
-              ${roleOptionsHtml}
-            </select>
-          </div>
-          <div>
-            <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NOTES_LABEL}</label>
-            <input id="swal-notes" type="text" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.NOTES_PLACEHOLDER}" class="pdo-swal-input" />
-          </div>
-        </div>
-      `,
-      showCancelButton: true,
-      confirmButtonText: TEXT_USER_MANAGEMENT.MODAL_ADD.CONFIRM_BTN,
-      cancelButtonText: TEXT_USER_MANAGEMENT.MODAL_ADD.CANCEL_BTN,
-      customClass: {
-        container: 'pdo-swal-container',
-        popup: 'pdo-swal-popup',
-        confirmButton: 'pdo-swal-confirm-btn',
-        cancelButton: 'pdo-swal-cancel-btn',
-      },
-      buttonsStyling: false,
-      focusConfirm: false,
-      preConfirm: () => {
-        const email = (document.getElementById('swal-email') as HTMLInputElement)?.value?.trim();
-        const full_name = (document.getElementById('swal-name') as HTMLInputElement)?.value?.trim();
-        const role = (document.getElementById('swal-role') as HTMLSelectElement)?.value as any;
-        const notes = (document.getElementById('swal-notes') as HTMLInputElement)?.value?.trim();
-
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-          pdoSwal.showValidationMessage('Masukkan format email yang valid!');
-          return false;
-        }
-
-        return { email, full_name, role, notes };
-      },
+    const res = await addUserProfile({
+      email: formValues.email,
+      full_name: formValues.full_name || undefined,
+      role: formValues.role || "pdo",
+      notes: formValues.notes || undefined,
+      created_by: currentUserEmail,
     });
 
-    if (formValues) {
-      const res = await addUserProfile({
-        email: formValues.email,
-        full_name: formValues.full_name || undefined,
-        role: formValues.role || 'pdo',
-        notes: formValues.notes || undefined,
-        created_by: currentUserEmail,
-      });
-
-      if (res.success) {
-        showSuccessToast(TEXT_USER_MANAGEMENT.TOAST.ADD_SUCCESS(escapeHtml(formValues.email)));
-        loadUsers();
-      } else {
-        showErrorAlert(
-          TEXT_USER_MANAGEMENT.ALERTS.ADD_FAILED_TITLE,
-          res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
-        );
-      }
+    if (res.success) {
+      showSuccessToast(
+        TEXT_USER_MANAGEMENT.TOAST.ADD_SUCCESS(escapeHtml(formValues.email)),
+      );
+      loadUsers();
+    } else {
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.ADD_FAILED_TITLE,
+        res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
+      );
     }
   };
 
   // Handle Edit Role Modal
   const handleEditRole = async (user: UserProfile) => {
-    if (currentUserRole !== 'superadmin') {
-      showErrorAlert(
-        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
-        TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FORBIDDEN,
+    const newRole = await promptEditRoleModal(user, currentUserRole);
+    if (!newRole || newRole === user.role) return;
+
+    const res = await updateUserProfileRole(
+      user.email,
+      newRole,
+      currentUserEmail,
+    );
+    if (res.success) {
+      showSuccessToast(
+        TEXT_USER_MANAGEMENT.TOAST.EDIT_ROLE_SUCCESS(
+          escapeHtml(user.email),
+          escapeHtml(newRole),
+        ),
       );
-      return;
-    }
-
-    const { value: newRole } = await pdoSwal.fire({
-      title: TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.TITLE,
-      html: `
-        <div style="text-align:left;font-size:13px;margin-top:6px;">
-          <p style="margin:0 0 10px;color:var(--text-secondary);font-size:12.5px;">${TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.PROMPT(escapeHtml(user.email))}</p>
-          <select id="swal-new-role" class="pdo-swal-select">
-            <option value="pdo" ${user.role === 'pdo' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.PDO_OPTION}</option>
-            <option value="korlap" ${user.role === 'korlap' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.KORLAP_OPTION}</option>
-            <option value="korwil" ${user.role === 'korwil' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.KORWIL_OPTION}</option>
-            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.ADMIN_OPTION}</option>
-            <option value="superadmin" ${user.role === 'superadmin' ? 'selected' : ''}>${TEXT_USER_MANAGEMENT.ROLES.SUPERADMIN_OPTION}</option>
-          </select>
-        </div>
-      `,
-      showCancelButton: true,
-      confirmButtonText: TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.CONFIRM_BTN,
-      cancelButtonText: TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.CANCEL_BTN,
-      customClass: {
-        container: 'pdo-swal-container',
-        popup: 'pdo-swal-popup',
-        confirmButton: 'pdo-swal-confirm-btn',
-        cancelButton: 'pdo-swal-cancel-btn',
-      },
-      buttonsStyling: false,
-      preConfirm: () => {
-        return (document.getElementById('swal-new-role') as HTMLSelectElement)?.value;
-      },
-    });
-
-    if (newRole && newRole !== user.role) {
-      const res = await updateUserProfileRole(user.email, newRole as any, currentUserEmail);
-      if (res.success) {
-        showSuccessToast(
-          TEXT_USER_MANAGEMENT.TOAST.EDIT_ROLE_SUCCESS(
-            escapeHtml(user.email),
-            escapeHtml(newRole),
-          ),
-        );
-        setUsers((prev) =>
-          prev.map((u) => (u.email === user.email ? { ...u, role: newRole as any } : u))
-        );
-      } else {
-        showErrorAlert(
-          TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FAILED_TITLE,
-          res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
-        );
-      }
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.email === user.email ? { ...u, role: newRole } : u,
+        ),
+      );
+    } else {
+      showErrorAlert(
+        TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FAILED_TITLE,
+        res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
+      );
     }
   };
 
   // Handle Toggle Active Status
   const handleToggleStatus = async (user: UserProfile) => {
-    // BUG-55: Guard RBAC internal untuk toggle status
-    if (currentUserRole !== 'superadmin' && currentUserRole !== 'admin') {
-      showErrorAlert(
-        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
-        TEXT_USER_MANAGEMENT.ALERTS.TOGGLE_STATUS_FORBIDDEN,
+    const modalRes = await promptToggleStatusModal(
+      user,
+      currentUserRole,
+      currentUserEmail,
+    );
+    if (!modalRes || !modalRes.confirmed) return;
+
+    const { nextStatus, actionText } = modalRes;
+    const res = await toggleUserProfileStatus(
+      user.email,
+      nextStatus,
+      currentUserEmail,
+    );
+    if (res.success) {
+      showSuccessToast(
+        TEXT_USER_MANAGEMENT.TOAST.STATUS_SUCCESS(
+          escapeHtml(user.email),
+          actionText,
+        ),
       );
-      return;
-    }
-
-    const isSelf = user.email.toLowerCase() === currentUserEmail.toLowerCase();
-    if (isSelf) {
-      showErrorAlert(
-        TEXT_USER_MANAGEMENT.ALERTS.ACTION_DENIED,
-        TEXT_USER_MANAGEMENT.ALERTS.CANNOT_DEACTIVATE_SELF,
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.email === user.email ? { ...u, is_active: nextStatus } : u,
+        ),
       );
-      return;
-    }
-
-    if (currentUserRole === 'admin' && (user.role === 'admin' || user.role === 'superadmin')) {
+    } else {
       showErrorAlert(
-        TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED,
-        TEXT_USER_MANAGEMENT.ALERTS.ADMIN_EDIT_ADMIN_FORBIDDEN,
+        TEXT_USER_MANAGEMENT.ALERTS.GENERIC_FAILED_TITLE,
+        res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
       );
-      return;
-    }
-
-    const nextStatus = user.is_active === false ? true : false;
-    const actionText = nextStatus
-      ? TEXT_USER_MANAGEMENT.MODAL_STATUS.ACTION_ACTIVATE
-      : TEXT_USER_MANAGEMENT.MODAL_STATUS.ACTION_DEACTIVATE;
-
-    const { isConfirmed } = await pdoSwal.fire({
-      title: TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE,
-      html: TEXT_USER_MANAGEMENT.MODAL_STATUS.PROMPT(actionText, escapeHtml(user.email)),
-      icon: nextStatus ? 'question' : 'warning',
-      showCancelButton: true,
-      confirmButtonText: nextStatus
-        ? TEXT_USER_MANAGEMENT.MODAL_STATUS.CONFIRM_ACTIVATE
-        : TEXT_USER_MANAGEMENT.MODAL_STATUS.CONFIRM_DEACTIVATE,
-      cancelButtonText: TEXT_USER_MANAGEMENT.MODAL_STATUS.CANCEL_BTN,
-      customClass: {
-        container: 'pdo-swal-container',
-        popup: 'pdo-swal-popup',
-        confirmButton: nextStatus
-          ? 'pdo-swal-confirm-btn'
-          : 'pdo-swal-confirm-btn pdo-swal-confirm-danger-btn',
-        cancelButton: 'pdo-swal-cancel-btn',
-      },
-      buttonsStyling: false,
-    });
-
-    if (isConfirmed) {
-      const res = await toggleUserProfileStatus(user.email, nextStatus, currentUserEmail);
-      if (res.success) {
-        showSuccessToast(
-          TEXT_USER_MANAGEMENT.TOAST.STATUS_SUCCESS(escapeHtml(user.email), actionText),
-        );
-        setUsers((prev) =>
-          prev.map((u) => (u.email === user.email ? { ...u, is_active: nextStatus } : u))
-        );
-      } else {
-        showErrorAlert(
-          TEXT_USER_MANAGEMENT.ALERTS.GENERIC_FAILED_TITLE,
-          res.message || TEXT_USER_MANAGEMENT.ALERTS.GENERIC_ERROR,
-        );
-      }
     }
   };
 
   return (
     <div
       style={{
-        minHeight: '100dvh',
-        width: '100%',
-        backgroundColor: 'var(--bg-primary, #0f172a)',
-        color: 'var(--text-primary, #f8fafc)',
-        display: 'flex',
-        flexDirection: 'column',
+        minHeight: "100dvh",
+        width: "100%",
+        backgroundColor: "var(--bg-primary, #0f172a)",
+        color: "var(--text-primary, #f8fafc)",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* Sticky Top Navigation Bar */}
-      <header
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-          background: 'var(--card-bg, rgba(15, 23, 42, 0.92))',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
-          padding: '12px 16px',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '900px',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-            <button
-              onClick={onBack}
-              className="btn btn-outline"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '7px 11px',
-                borderRadius: '10px',
-                fontSize: '12.5px',
-                fontWeight: 600,
-                border: '1px solid var(--card-border, rgba(255,255,255,0.15))',
-                background: 'rgba(255,255,255,0.05)',
-                color: 'var(--text-primary, #f8fafc)',
-                cursor: 'pointer',
-                flexShrink: 0,
-                transition: 'all 0.15s ease',
-              }}
-              title={TEXT_USER_MANAGEMENT.HEADER.BACK_TITLE}
-            >
-              <ArrowLeft size={16} />
-              <span className="hidden sm:inline">{TEXT_USER_MANAGEMENT.HEADER.BACK_BTN}</span>
-            </button>
-
-            <div style={{ minWidth: 0 }}>
-              <h1
-                style={{
-                margin: 0,
-                fontSize: '15.5px',
-                fontWeight: 700,
-                color: 'var(--text-primary, #f8fafc)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-                <Users size={18} className="text-blue-500" style={{ flexShrink: 0 }} />
-                <span>{TEXT_USER_MANAGEMENT.HEADER.TITLE}</span>
-              </h1>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: '11px',
-                  color: 'var(--text-secondary, #94a3b8)',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {TEXT_USER_MANAGEMENT.HEADER.SUBTITLE(counts.active, counts.all)}
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-            <button
-              onClick={loadUsers}
-              disabled={isLoading}
-              className="btn btn-outline"
-              style={{
-                padding: '7px 9px',
-                borderRadius: '10px',
-                border: '1px solid var(--card-border, rgba(255,255,255,0.12))',
-                background: 'rgba(255,255,255,0.04)',
-                color: 'var(--text-secondary, #94a3b8)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-              }}
-              title={TEXT_USER_MANAGEMENT.HEADER.REFRESH_TITLE}
-            >
-              <RefreshCw size={15} className={isLoading ? 'animate-spin' : ''} />
-            </button>
-
-            <button
-              onClick={handleOpenAddUserModal}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                padding: '7px 13px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-                color: '#ffffff',
-                border: 'none',
-                fontSize: '12.5px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
-                whiteSpace: 'nowrap',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              <UserPlus size={15} />
-              <span>{TEXT_USER_MANAGEMENT.HEADER.ADD_BTN}</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      <UserManagementHeader
+        onBack={onBack}
+        activeCount={counts.active}
+        totalCount={counts.all}
+        isLoading={isLoading}
+        onRefresh={loadUsers}
+        onOpenAddUserModal={handleOpenAddUserModal}
+      />
 
       {/* Main Container */}
       <main
         style={{
           flex: 1,
-          maxWidth: '900px',
-          width: '100%',
-          margin: '0 auto',
-          padding: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          paddingBottom: 'calc(40px + env(safe-area-inset-bottom, 0px))',
+          maxWidth: "900px",
+          width: "100%",
+          margin: "0 auto",
+          padding: "16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          paddingBottom: "calc(40px + env(safe-area-inset-bottom, 0px))",
         }}
       >
         {/* Search & Tabs Controls */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-          }}
-        >
-          {/* Search Box */}
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-            }}
-          >
-            <Search
-              size={17}
-              style={{
-                position: 'absolute',
-                left: '14px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: 'var(--text-secondary, #94a3b8)',
-              }}
-            />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={TEXT_USER_MANAGEMENT.SEARCH_PLACEHOLDER}
-              style={{
-                width: '100%',
-                padding: '10px 14px 10px 40px',
-                borderRadius: '12px',
-                border: '1px solid var(--card-border, rgba(255,255,255,0.12))',
-                background: 'var(--card-bg, rgba(30, 41, 59, 0.6))',
-                color: 'var(--text-primary, #f8fafc)',
-                fontSize: '13.5px',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
-            />
-          </div>
-
-          {/* Segmented Filter Tabs */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '6px',
-              overflowX: 'auto',
-              paddingBottom: '4px',
-              scrollbarWidth: 'none',
-            }}
-          >
-            {[
-              { key: 'all', label: TEXT_USER_MANAGEMENT.TABS.ALL, count: counts.all },
-              ...(currentUserRole === 'superadmin'
-                ? [
-                    { key: 'superadmin', label: TEXT_USER_MANAGEMENT.TABS.SUPERADMIN, count: counts.superadmin },
-                    { key: 'admin', label: TEXT_USER_MANAGEMENT.TABS.ADMIN, count: counts.admin },
-                  ]
-                : []),
-              { key: 'korwil', label: TEXT_USER_MANAGEMENT.TABS.KORWIL, count: counts.korwil },
-              { key: 'korlap', label: TEXT_USER_MANAGEMENT.TABS.KORLAP, count: counts.korlap },
-              { key: 'pdo', label: TEXT_USER_MANAGEMENT.TABS.PDO, count: counts.pdo },
-              { key: 'inactive', label: TEXT_USER_MANAGEMENT.TABS.INACTIVE, count: counts.inactive },
-            ].map((tab) => {
-              const isActive = activeTab === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key as FilterTab)}
-                  style={{
-                    padding: '6px 12px',
-                    borderRadius: '10px',
-                    fontSize: '12.5px',
-                    fontWeight: isActive ? 600 : 500,
-                    border: '1px solid',
-                    borderColor: isActive
-                      ? '#3b82f6'
-                      : 'var(--card-border, rgba(255,255,255,0.08))',
-                    background: isActive ? 'rgba(59, 130, 246, 0.15)' : 'rgba(255,255,255,0.03)',
-                    color: isActive ? '#60a5fa' : 'var(--text-secondary, #94a3b8)',
-                    whiteSpace: 'nowrap',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  <span>{tab.label}</span>
-                  <span
-                    style={{
-                      fontSize: '11px',
-                      padding: '1px 6px',
-                      borderRadius: '8px',
-                      background: isActive ? 'rgba(59, 130, 246, 0.3)' : 'rgba(255,255,255,0.08)',
-                      color: isActive ? '#ffffff' : 'var(--text-secondary, #94a3b8)',
-                    }}
-                  >
-                    {tab.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <UserManagementFilters
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          counts={counts}
+          currentUserRole={currentUserRole}
+        />
 
         {/* User Card List */}
         {isLoading ? (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-              gap: '12px',
-            }}
-          >
-            {Array.from({ length: 6 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="glass"
-                style={{
-                  borderRadius: '16px',
-                  padding: '16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '12px',
-                  border: '1px solid var(--card-border, rgba(255,255,255,0.08))',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <SkeletonBox width="44px" height="44px" borderRadius="12px" style={{ flexShrink: 0 }} />
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    <SkeletonBox width="120px" height="15px" borderRadius="6px" />
-                    <SkeletonBox width="160px" height="12px" borderRadius="4px" />
-                    <SkeletonBox width="70px" height="18px" borderRadius="6px" />
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '6px' }}>
-                  <SkeletonBox width="100px" height="12px" borderRadius="4px" />
-                  <SkeletonBox width="60px" height="12px" borderRadius="4px" />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid var(--card-border, rgba(255,255,255,0.05))' }}>
-                  <SkeletonBox width="70px" height="26px" borderRadius="8px" />
-                  <SkeletonBox width="90px" height="26px" borderRadius="8px" />
-                </div>
-              </div>
-            ))}
-          </div>
+          <UserManagementSkeleton />
         ) : filteredUsers.length === 0 ? (
-          <div
-            style={{
-              padding: '60px 20px',
-              textAlign: 'center',
-              background: 'var(--card-bg, rgba(30, 41, 59, 0.4))',
-              borderRadius: '16px',
-              border: '1px dashed var(--card-border, rgba(255,255,255,0.12))',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '10px',
-            }}
-          >
-            <Users size={36} style={{ color: 'var(--text-secondary, #64748b)', opacity: 0.5 }} />
-            <h3 style={{ margin: 0, fontSize: '15px', color: 'var(--text-primary, #f8fafc)' }}>
-              {TEXT_USER_MANAGEMENT.EMPTY_STATE.TITLE}
-            </h3>
-            <p style={{ margin: 0, fontSize: '12.5px', color: 'var(--text-secondary, #94a3b8)', maxWidth: '300px' }}>
-              {searchQuery
-                ? TEXT_USER_MANAGEMENT.EMPTY_STATE.SEARCH_NO_MATCH
-                : TEXT_USER_MANAGEMENT.EMPTY_STATE.CATEGORY_EMPTY}
-            </p>
-          </div>
+          <UserManagementEmptyState isSearchActive={Boolean(searchQuery)} />
         ) : (
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-              gap: '12px',
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+              gap: "12px",
             }}
           >
-            {filteredUsers.map((user) => {
-              const isSelf = user.email.toLowerCase() === currentUserEmail.toLowerCase();
-              const isActive = user.is_active !== false;
-
-              return (
-                <div
-                  key={user.email}
-                  style={{
-                    background: 'var(--card-bg, rgba(30, 41, 59, 0.7))',
-                    border: '1px solid',
-                    borderColor: isSelf
-                      ? 'rgba(59, 130, 246, 0.4)'
-                      : 'var(--card-border, rgba(255,255,255,0.08))',
-                    borderRadius: '16px',
-                    padding: '16px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
-                    position: 'relative',
-                    boxShadow: isSelf ? '0 0 20px rgba(59, 130, 246, 0.1)' : 'none',
-                  }}
-                >
-                  {/* Top Section: Avatar & Info (Left) | Role & Status Badge (Top-Right) */}
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px' }}>
-                    {/* Left: Avatar + Full Name + Email */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
-                      <UserCardAvatar user={user} isSelf={isSelf} />
-
-                      <div style={{ minWidth: 0, flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                          <span
-                            style={{
-                              fontWeight: 700,
-                              fontSize: '14px',
-                              color: 'var(--text-primary, #f8fafc)',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}
-                          >
-                            {user.full_name || TEXT_USER_MANAGEMENT.CARD.NO_NAME}
-                          </span>
-                          {isSelf && (
-                            <span
-                              style={{
-                                fontSize: '10px',
-                                fontWeight: 700,
-                                padding: '1px 5px',
-                                borderRadius: '5px',
-                                background: 'rgba(59, 130, 246, 0.2)',
-                                color: '#60a5fa',
-                              }}
-                            >
-                              {TEXT_USER_MANAGEMENT.CARD.YOU_BADGE}
-                            </span>
-                          )}
-                        </div>
-
-                        <div
-                          style={{
-                            fontSize: '12px',
-                            color: 'var(--text-secondary, #94a3b8)',
-                            marginTop: '2px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                          }}
-                          title={user.email}
-                        >
-                          {user.email}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Top-Right: Role Badge */}
-                    <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                      <RoleBadge role={user.role || 'pdo'} />
-                    </div>
-                  </div>
-
-                  {/* Notes / Sub-info without decorative icon */}
-                  {user.notes && (
-                    <div
-                      style={{
-                        padding: '8px 10px',
-                        borderRadius: '10px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid var(--card-border, rgba(255, 255, 255, 0.05))',
-                        fontSize: '11.5px',
-                        color: 'var(--text-secondary, #94a3b8)',
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      <span>{user.notes}</span>
-                    </div>
-                  )}
-
-                  {/* Metadata Row: Last login & Creator (Clock icon preserved) */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      fontSize: '11px',
-                      color: 'var(--text-secondary, #64748b)',
-                      paddingTop: '6px',
-                      borderTop: '1px solid var(--card-border, rgba(255, 255, 255, 0.05))',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Clock size={11} />
-                      <span>
-                        {user.last_login_at
-                          ? new Date(user.last_login_at).toLocaleDateString('id-ID', {
-                              day: 'numeric',
-                              month: 'short',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })
-                          : TEXT_USER_MANAGEMENT.CARD.NEVER_LOGGED_IN}
-                      </span>
-                    </div>
-
-                    {user.created_by && (
-                      <span title={TEXT_USER_MANAGEMENT.CARD.CREATED_BY_TITLE(user.created_by)}>
-                        {TEXT_USER_MANAGEMENT.CARD.CREATED_BY(user.created_by.split('@')[0])}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Actions Section (Only for non-superadmin users) */}
-                  {user.role !== 'superadmin' && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '8px',
-                        paddingTop: '8px',
-                        borderTop: '1px solid var(--card-border, rgba(255, 255, 255, 0.05))',
-                      }}
-                    >
-                      {/* Interactive iOS-style Toggle Switch */}
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={isActive}
-                        onClick={() => handleToggleStatus(user)}
-                        disabled={isSelf}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          background: 'transparent',
-                          border: 'none',
-                          padding: '2px 0',
-                          cursor: isSelf ? 'not-allowed' : 'pointer',
-                          opacity: isSelf ? 0.45 : 1,
-                          outline: 'none',
-                        }}
-                        title={
-                          isSelf
-                            ? TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE_SELF
-                            : isActive
-                            ? TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE_DEACTIVATE
-                            : TEXT_USER_MANAGEMENT.MODAL_STATUS.TITLE_ACTIVATE
-                        }
-                      >
-                        <div
-                          style={{
-                            width: '36px',
-                            height: '20px',
-                            borderRadius: '9999px',
-                            background: isActive ? '#10b981' : 'rgba(255, 255, 255, 0.16)',
-                            border: isActive
-                              ? '1px solid rgba(16, 185, 129, 0.4)'
-                              : '1px solid var(--card-border, rgba(255, 255, 255, 0.15))',
-                            position: 'relative',
-                            transition: 'background-color 0.25s cubic-bezier(0.32, 0.72, 0, 1), border-color 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            boxSizing: 'border-box',
-                            padding: '2px',
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: '14px',
-                              height: '14px',
-                              borderRadius: '50%',
-                              background: '#ffffff',
-                              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
-                              transform: isActive ? 'translateX(16px)' : 'translateX(0px)',
-                              transition: 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
-                            }}
-                          />
-                        </div>
-                        <span
-                          style={{
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            color: isActive ? '#34d399' : 'var(--text-secondary, #94a3b8)',
-                            userSelect: 'none',
-                          }}
-                        >
-                          {isActive ? TEXT_USER_MANAGEMENT.MODAL_STATUS.LABEL_ACTIVE : TEXT_USER_MANAGEMENT.MODAL_STATUS.LABEL_INACTIVE}
-                        </span>
-                      </button>
-
-                      {/* Role Actions (Clean text button) */}
-                      <div>
-                        {currentUserRole === 'superadmin' && (
-                          <button
-                            onClick={() => handleEditRole(user)}
-                            style={{
-                              padding: '6px 12px',
-                              borderRadius: '8px',
-                              fontSize: '11.5px',
-                              fontWeight: 600,
-                              border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
-                              background: 'rgba(255, 255, 255, 0.05)',
-                              color: 'var(--text-primary, #f8fafc)',
-                              cursor: 'pointer',
-                              transition: 'all 0.15s ease',
-                            }}
-                            title={TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.BTN_TITLE}
-                          >
-                            {TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.BTN_EDIT}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            {filteredUsers.map((user) => (
+              <UserCardItem
+                key={user.email}
+                user={user}
+                currentUserEmail={currentUserEmail}
+                currentUserRole={currentUserRole}
+                onToggleStatus={handleToggleStatus}
+                onEditRole={handleEditRole}
+              />
+            ))}
           </div>
         )}
       </main>
     </div>
   );
 };
+
+export default UserManagementPage;
