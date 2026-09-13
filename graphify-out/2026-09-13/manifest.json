@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "src/components/DailyToaTrendCard.tsx": {
-    "mtime": 1789006673.9613702,
-    "ast_hash": "e4423200fad99cc499b0782d18573c70",
+    "mtime": 1789286644.2212665,
+    "ast_hash": "14c7d03002761dfb7b684ac625ac9e1a",
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
@@ -2177,6 +2177,66 @@
   "refactor-ss-pdo/refact_44/REPAIR_REPORT.md": {
     "mtime": 1789285556.712288,
     "ast_hash": "1eab1fe76789fb6f16b5c008c58b88d4",
+    "semantic_hash": ""
+  },
+  "src/components/DailyToaTrendCard.test.tsx": {
+    "mtime": 1789286649.6458766,
+    "ast_hash": "1747e7114f1ec328a61bd8c70fa3969c",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/ToaBarChart.tsx": {
+    "mtime": 1789286627.1385522,
+    "ast_hash": "16ac795e8c463db50a4e71380f1eb696",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/ToaExecutiveStats.tsx": {
+    "mtime": 1789286608.2535543,
+    "ast_hash": "a936fe35afdead188125b470999f6139",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/ToaTrendErrorState.tsx": {
+    "mtime": 1789286631.8779483,
+    "ast_hash": "2de30a44c53675d803ab65f0cc6498af",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/ToaTrendHeader.tsx": {
+    "mtime": 1789286599.7773018,
+    "ast_hash": "f8aa0d42a330aec72732bf4fe9a0835b",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/ToaTrendLegend.tsx": {
+    "mtime": 1789286612.8227167,
+    "ast_hash": "002aa050371798c23b1d70c6dafce4cb",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/index.ts": {
+    "mtime": 1789286637.5299141,
+    "ast_hash": "dcd9c52f5b4e6277c65079fc87c105e3",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/types.ts": {
+    "mtime": 1789286579.588261,
+    "ast_hash": "a311e1cba592891a885f1d14508042c0",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/useMonthlyTrendData.ts": {
+    "mtime": 1789286584.511918,
+    "ast_hash": "edb1541908d6f17a56b273608e8dfd08",
+    "semantic_hash": ""
+  },
+  "src/components/dailyToaTrend/useTrendMetrics.ts": {
+    "mtime": 1789286594.6770198,
+    "ast_hash": "444aa2880e47c6e1de833227ca4c8bed",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_45/AUDIT_BUGS.md": {
+    "mtime": 1789286219.4882123,
+    "ast_hash": "c800c8068e4a8ad211400ca18b883892",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_45/REPAIR_REPORT.md": {
+    "mtime": 1789286226.5579095,
+    "ast_hash": "2d9090e5cefe824e3c2817b6a10509b3",
     "semantic_hash": ""
   }
 }
