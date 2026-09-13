@@ -1430,8 +1430,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
-    "mtime": 1788966901.5846562,
-    "ast_hash": "feb5527da952a18d372c113762b68ddb",
+    "mtime": 1789288967.506951,
+    "ast_hash": "c8dc7f708bd0be0b1d48815a60e38698",
     "semantic_hash": ""
   },
   "src/constants/texts/text_common.ts": {
@@ -1465,8 +1465,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789288711.5128746,
-    "ast_hash": "006228014d301226ca56d36450e2cff7",
+    "mtime": 1789288972.4964843,
+    "ast_hash": "15b41913dd453e997d3a459f389a767d",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1540,8 +1540,8 @@
     "semantic_hash": ""
   },
   "src/components/login/LoginInfoModal.tsx": {
-    "mtime": 1789003514.6568203,
-    "ast_hash": "65729a4732462f6e158ef12d56b10ff4",
+    "mtime": 1789289003.510713,
+    "ast_hash": "468944d7640d3b29924f188a86f04328",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_21/AUDIT_BUGS.md": {
@@ -2452,6 +2452,41 @@
   "refactor-ss-pdo/refact_50/REPAIR_REPORT.md": {
     "mtime": 1789288360.0273724,
     "ast_hash": "f4688cbcc577624873826afb8ec540ba",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginInfoAboutSection.tsx": {
+    "mtime": 1789288986.2975466,
+    "ast_hash": "563ab33149f6aae7a0471783bb680cdc",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginInfoComparisonSection.tsx": {
+    "mtime": 1789288993.2475555,
+    "ast_hash": "e6c80e7bae61d1465523eae1d67608f7",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginInfoHeader.tsx": {
+    "mtime": 1789288982.05842,
+    "ast_hash": "bbb3d3f08cfa81f524768b0026ff832c",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginInfoModal.test.tsx": {
+    "mtime": 1789289008.2990322,
+    "ast_hash": "0f826fedad5da7a3bb33f5cd4317fbcb",
+    "semantic_hash": ""
+  },
+  "src/components/login/LoginInfoPermissionsSection.tsx": {
+    "mtime": 1789288997.9487703,
+    "ast_hash": "1816bc6f12b64351e5a12d722e23f746",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_51/AUDIT_BUGS.md": {
+    "mtime": 1789288851.5741448,
+    "ast_hash": "66b2540d13440f8b731c6c8281d71416",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_51/REPAIR_REPORT.md": {
+    "mtime": 1789288860.0265055,
+    "ast_hash": "0e41be6084a16623ea31658c10213ef1",
     "semantic_hash": ""
   }
 }

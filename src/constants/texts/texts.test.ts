@@ -29,6 +29,10 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_AUTH.SIGN_IN_BTN).toBeDefined();
     expect(TEXT_AUTH.SESSION_EXPIRED_TITLE).toBeDefined();
     expect(TEXT_AUTH.FEATURE_CARDS.CARD_1_TITLE).toBe('Dashboard Capaian Rute');
+    expect(TEXT_AUTH.INFO_MODAL_TITLE).toBe('Tentang Aplikasi & Izin Akses');
+    expect(TEXT_AUTH.INFO_MODAL_CLOSE).toBe('Tutup & Kembali');
+    expect(TEXT_AUTH.VIEW_PERMISSIONS_DETAIL).toBe('Lihat rincian izin resmi Google');
+    expect(TEXT_AUTH.HIDE_PERMISSIONS_DETAIL).toBe('Sembunyikan rincian izin resmi Google');
   });
 
   it('exports TEXT_DASHBOARD with app header, tabs, and selectors', () => {

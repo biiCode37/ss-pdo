@@ -1465,8 +1465,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789287958.3363025,
-    "ast_hash": "3bef8bd720617c3076c714dfc87ae43d",
+    "mtime": 1789288711.5128746,
+    "ast_hash": "006228014d301226ca56d36450e2cff7",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1610,8 +1610,8 @@
     "semantic_hash": ""
   },
   "src/components/fleetStatus/FleetStatusModal.tsx": {
-    "mtime": 1789220854.5524144,
-    "ast_hash": "60fe9d8e679579626f243b3f29e2e6c2",
+    "mtime": 1789288758.2772052,
+    "ast_hash": "9144fc4a44c1e8173ac34377ae4d5496",
     "semantic_hash": ""
   },
   "src/components/fleetStatus/ShiftConfirmationAlertBar.test.tsx": {
@@ -1700,8 +1700,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_fleet_status.ts": {
-    "mtime": 1789220830.7755132,
-    "ast_hash": "c42b3b8b7e8b01afa9baa63ba5dc604a",
+    "mtime": 1789288704.8920288,
+    "ast_hash": "511c31884df0082c484a342a621b58da",
     "semantic_hash": ""
   },
   "src/constants/texts/text_unit_detail.ts": {
@@ -2407,6 +2407,51 @@
   "refactor-ss-pdo/refact_49/REPAIR_REPORT.md": {
     "mtime": 1789288085.565756,
     "ast_hash": "1ef8595a467cd26e2b582f429d75c5e6",
+    "semantic_hash": ""
+  },
+  "src/components/fleetStatus/FleetStatusFooter.tsx": {
+    "mtime": 1789288749.5689662,
+    "ast_hash": "22393a88684aa9342af47ab94333d0f1",
+    "semantic_hash": ""
+  },
+  "src/components/fleetStatus/FleetStatusGrid.tsx": {
+    "mtime": 1789288745.2218268,
+    "ast_hash": "78c41c8ce18300422c9eb1badf896cf7",
+    "semantic_hash": ""
+  },
+  "src/components/fleetStatus/FleetStatusHeader.tsx": {
+    "mtime": 1789288733.0057144,
+    "ast_hash": "3c41cd19bbd703e4ce5351140537c2ca",
+    "semantic_hash": ""
+  },
+  "src/components/fleetStatus/FleetStatusToolbar.tsx": {
+    "mtime": 1789288739.3263414,
+    "ast_hash": "82f1e76f303d14f0b9e88cd15e50327d",
+    "semantic_hash": ""
+  },
+  "src/components/fleetStatus/index.ts": {
+    "mtime": 1789288752.2434826,
+    "ast_hash": "fe4319a09ed24b2980831cf2e67c1aa9",
+    "semantic_hash": ""
+  },
+  "src/components/fleetStatus/types.ts": {
+    "mtime": 1789288720.1447895,
+    "ast_hash": "ca35f8228bb383cccd4c8fe3415cbf87",
+    "semantic_hash": ""
+  },
+  "src/components/fleetStatus/useFleetStatusData.ts": {
+    "mtime": 1789288728.505064,
+    "ast_hash": "da63c550aced6d9004f9edaec3352848",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_50/AUDIT_BUGS.md": {
+    "mtime": 1789288353.61358,
+    "ast_hash": "9e21af7f50d2c5374492ec8030a73db7",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_50/REPAIR_REPORT.md": {
+    "mtime": 1789288360.0273724,
+    "ast_hash": "f4688cbcc577624873826afb8ec540ba",
     "semantic_hash": ""
   }
 }

@@ -26,6 +26,10 @@ export const TEXT_AUTH = {
   ABOUT_TITLE: 'Tentang PUSM',
   VS_TITLE: 'Spreadsheet vs PUSM',
   PERMISSIONS_TITLE: 'PUSM Perlu Izin Akun Google',
+  INFO_MODAL_TITLE: 'Tentang Aplikasi & Izin Akses',
+  INFO_MODAL_CLOSE: 'Tutup & Kembali',
+  VIEW_PERMISSIONS_DETAIL: 'Lihat rincian izin resmi Google',
+  HIDE_PERMISSIONS_DETAIL: 'Sembunyikan rincian izin resmi Google',
   FEATURES_TITLE: 'Fitur Utama Aplikasi',
   LEGAL: {
     PRIVACY: 'Kebijakan Privasi',
