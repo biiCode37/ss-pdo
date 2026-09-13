@@ -940,8 +940,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/auth.ts": {
-    "mtime": 1788859061.436407,
-    "ast_hash": "decbedf464d4966d49ec10ad77c8e8fa",
+    "mtime": 1789300993.2145798,
+    "ast_hash": "2b3e583cc7b80085a3ce226626a6576c",
     "semantic_hash": ""
   },
   "src/services/googleSheets/core.ts": {
@@ -1500,8 +1500,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/auth.test.ts": {
-    "mtime": 1788859137.363265,
-    "ast_hash": "28c45a98fdb2ef85dd6c1a6e529b2653",
+    "mtime": 1789301028.787165,
+    "ast_hash": "0df3a14b143db231362820d2b896ab78",
     "semantic_hash": ""
   },
   "src/components/BottomNav.test.tsx": {
@@ -2612,6 +2612,26 @@
   "refactor-ss-pdo/refact_55/REPAIR_REPORT.md": {
     "mtime": 1789290354.6115003,
     "ast_hash": "08060cdaf4ff0fac82b29330fcbf0409",
+    "semantic_hash": ""
+  },
+  "src/services/googleSheets/authGis.ts": {
+    "mtime": 1789300981.3402424,
+    "ast_hash": "9421fdab1092364f41b84425f9a50825",
+    "semantic_hash": ""
+  },
+  "src/services/googleSheets/authSession.ts": {
+    "mtime": 1789300990.3760238,
+    "ast_hash": "3a009fa1a2d8f7035e4ed3e09903211f",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_56/AUDIT_BUGS.md": {
+    "mtime": 1789290892.3290465,
+    "ast_hash": "68b197d344aec96988d5fbbeb6830437",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_56/REPAIR_REPORT.md": {
+    "mtime": 1789290899.3979533,
+    "ast_hash": "d218240b40e590b38b1ce73e9173d8cb",
     "semantic_hash": ""
   }
 }

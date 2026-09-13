@@ -8,15 +8,20 @@ import {
   checkSignedInAsync,
   startTokenRefreshTimer,
   stopTokenRefreshTimer,
+  setTokenClient,
 } from "./auth";
+import { setTransportMode } from "./transport";
 
 describe("auth service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
+    setTransportMode("client_oauth");
   });
 
   afterEach(() => {
+    setTransportMode("auto");
+    setTokenClient(null);
     // Bersihkan script tag yang di-inject selama test
     document
       .querySelectorAll(
