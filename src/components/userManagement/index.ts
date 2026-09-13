@@ -4,3 +4,5 @@ export * from "./UserManagementFilters";
 export * from "./UserCardItem";
 export * from "./UserManagementStates";
 export * from "./userManagementModals";
+export * from "./RoleBadge";
+export * from "./UserManagementPage";

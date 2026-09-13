@@ -17,7 +17,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 };
 
 // Mock routeService
-vi.mock('../services/routeService', () => ({
+vi.mock('@/services/routeService', () => ({
   fetchRoutesWithSheets: vi.fn().mockResolvedValue([
     {
       id: 1,
@@ -40,7 +40,7 @@ vi.mock('../services/routeService', () => ({
 }));
 
 // Mock cacheUtils
-vi.mock('../utils/cacheUtils', () => ({
+vi.mock('@/utils/cacheUtils', () => ({
   getRoutesFromCache: vi.fn().mockReturnValue([
     {
       id: 1,

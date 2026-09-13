@@ -5,3 +5,5 @@ export * from "./ProfileUserCard";
 export * from "./ProfileAdminSection";
 export * from "./ProfileFeaturesSection";
 export * from "./ProfileMenuFooter";
+export * from "./ProfileMenuSheet";
+export * from "./UserProfileHeader";

@@ -3,13 +3,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react';
 import { AllRouteMonitoringPage } from './AllRouteMonitoringPage';
-import * as regionalService from '../services/allRouteMonitoringService';
-import * as dailyReportService from '../services/dailyRouteReportService';
-import type { RegionalMonitoringResult } from '../services/allRouteMonitoringService';
+import * as regionalService from '@/services/allRouteMonitoringService';
+import * as dailyReportService from '@/services/dailyRouteReportService';
+import type { RegionalMonitoringResult } from '@/services/allRouteMonitoringService';
 
 // Mock dependencies
-vi.mock('../services/allRouteMonitoringService', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../services/allRouteMonitoringService')>();
+vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/services/allRouteMonitoringService')>();
   return {
     ...actual,
     fetchRegionalMonitoringData: vi.fn(),
@@ -21,11 +21,11 @@ vi.mock('../services/allRouteMonitoringService', async (importOriginal) => {
   };
 });
 
-vi.mock('../services/dailyRouteReportService', () => ({
+vi.mock('@/services/dailyRouteReportService', () => ({
   verifyDailyRouteReport: vi.fn(),
 }));
 
-vi.mock('../utils/alertUtils', () => ({
+vi.mock('@/utils/alertUtils', () => ({
   showSuccessToast: vi.fn(),
   showErrorToast: vi.fn(),
   showErrorAlert: vi.fn(),

@@ -6,3 +6,4 @@ export * from "./ToaExecutiveStats";
 export * from "./ToaTrendLegend";
 export * from "./ToaBarChart";
 export * from "./ToaTrendErrorState";
+export * from "./DailyToaTrendCard";

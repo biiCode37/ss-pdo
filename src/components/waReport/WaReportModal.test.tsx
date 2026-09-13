@@ -3,7 +3,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { WaReportModal } from './WaReportModal';
-import type { RegionalMonitoringResult, RegionalRouteItem } from '../services/allRouteMonitoringService';
+import type { RegionalMonitoringResult, RegionalRouteItem } from '@/services/allRouteMonitoringService';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;

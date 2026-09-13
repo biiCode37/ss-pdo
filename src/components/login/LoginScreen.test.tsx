@@ -3,7 +3,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { LoginScreen } from "./LoginScreen";
-import { TEXT_AUTH, TEXT_DASHBOARD } from "../constants/texts";
+import { TEXT_AUTH, TEXT_DASHBOARD } from "../../constants/texts";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -14,12 +14,12 @@ const mockSignOut = vi.fn();
 const mockVerifyUserProfile = vi.fn();
 const mockUpsertUserProfile = vi.fn().mockResolvedValue({});
 
-vi.mock("../services/googleSheets", () => ({
+vi.mock("../../services/googleSheets", () => ({
   signIn: () => mockSignIn(),
   signOut: () => mockSignOut(),
 }));
 
-vi.mock("../services/routeService", () => ({
+vi.mock("../../services/routeService", () => ({
   verifyUserProfile: (email: string) => mockVerifyUserProfile(email),
   upsertUserProfile: (profile: any) => mockUpsertUserProfile(profile),
 }));

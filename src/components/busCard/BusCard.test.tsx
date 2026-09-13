@@ -3,9 +3,9 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { BusCard } from './BusCard';
-import * as alertUtils from '../utils/alertUtils';
+import * as alertUtils from '@/utils/alertUtils';
 
-import type { BusData } from '../services/googleSheets';
+import type { BusData } from '@/services/googleSheets';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -27,8 +27,8 @@ const createMockBus = (partial: Partial<BusData> & { rowIndex: number; unit: str
   ...partial,
 });
 
-vi.mock('../utils/alertUtils', async () => {
-  const actual = await vi.importActual('../utils/alertUtils');
+vi.mock('@/utils/alertUtils', async () => {
+  const actual = await vi.importActual<typeof import('@/utils/alertUtils')>('@/utils/alertUtils');
   return {
     ...actual,
     pdoSwal: {
@@ -39,7 +39,7 @@ vi.mock('../utils/alertUtils', async () => {
   };
 });
 
-vi.mock('../services/googleSheets', () => ({
+vi.mock('@/services/googleSheets', () => ({
   getBusRowData: vi.fn().mockResolvedValue({}),
   updateBusData: vi.fn().mockResolvedValue({ success: true }),
 }));

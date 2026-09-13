@@ -3,12 +3,12 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { RouteOperationalReportCard } from './RouteOperationalReportCard';
-import * as dailyReportService from '../services/dailyRouteReportService';
+import * as dailyReportService from '@/services/dailyRouteReportService';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-vi.mock('../services/dailyRouteReportService', () => ({
+vi.mock('@/services/dailyRouteReportService', () => ({
   fetchDailyRouteReport: vi.fn(),
   upsertDailyRouteReport: vi.fn(),
 }));
