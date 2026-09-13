@@ -9,6 +9,7 @@ import {
   useBusCardSave,
   useBusCardModal,
   BusCardSummary,
+  BusInputModal,
 } from "./index";
 
 function BusCardComponent({
@@ -36,7 +37,15 @@ function BusCardComponent({
     onSaveAndNext,
   });
 
-  const { isNonSgo, activeShiftStatus, handleOpenModal } = useBusCardModal({
+  const {
+    isNonSgo,
+    activeShiftStatus,
+    handleOpenModal,
+    isModalOpen,
+    modalInitialTab,
+    handleCloseModal,
+    handleSaveModalUpdates,
+  } = useBusCardModal({
     bus,
     formData,
     tabName,
@@ -57,8 +66,9 @@ function BusCardComponent({
   });
 
   return (
-    <div
-      id={`bus-card-${slugifyUnitId(bus.unit)}`}
+    <>
+      <div
+        id={`bus-card-${slugifyUnitId(bus.unit)}`}
       data-bus-row={bus.rowIndex}
       className={`bus-card glass ${statusClass} ${lockedClass}`.trim()}
       onClick={() => handleOpenModal()}
@@ -162,7 +172,19 @@ function BusCardComponent({
           </div>
         </div>
       )}
-    </div>
+      </div>
+      {isModalOpen && (
+        <BusInputModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          bus={{ ...bus, ...formData }}
+          headerMap={headerMap}
+          activeCategory={activeCategory}
+          initialTab={modalInitialTab}
+          onSave={handleSaveModalUpdates}
+        />
+      )}
+    </>
   );
 }
 

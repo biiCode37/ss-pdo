@@ -1,8 +1,8 @@
+import { useState } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { splitShiftKeterangan } from "@/utils/keteranganUtils";
 import {
   showWarningToast,
-  showBusInputModal,
   escapeHtml,
   pdoSwal,
 } from "@/utils/alertUtils";
@@ -12,7 +12,7 @@ interface UseBusCardModalOptions {
   bus: BusData;
   formData: Partial<BusData>;
   tabName: string;
-  headerMap: HeaderMap;
+  headerMap?: HeaderMap;
   activeCategory: string;
   activeShift?: 1 | 2;
   isShiftConfirmed?: boolean;
@@ -24,13 +24,17 @@ export function useBusCardModal({
   bus,
   formData,
   tabName,
-  headerMap,
   activeCategory,
   activeShift = 1,
   isShiftConfirmed,
   onOpenFleetStatus,
   handleSaveUpdates,
 }: UseBusCardModalOptions) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalInitialTab, setModalInitialTab] = useState<
+    "shift1" | "shift2" | "trip" | "notes"
+  >("shift1");
+
   const { s1: shift1Status, s2: shift2Status } = splitShiftKeterangan(
     formData.keterangan || bus.keterangan || "",
   );
@@ -82,22 +86,26 @@ export function useBusCardModal({
       return;
     }
 
-    const updates = await showBusInputModal({
-      bus: { ...bus, ...formData },
-      activeCategory,
-      tabName,
-      headerMap,
-      initialTab,
-    });
+    setModalInitialTab(initialTab || "shift1");
+    setIsModalOpen(true);
+  };
 
-    if (updates) {
-      await handleSaveUpdates(updates);
-    }
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveModalUpdates = async (updates: Partial<BusData>) => {
+    await handleSaveUpdates(updates);
   };
 
   return {
     isNonSgo,
     activeShiftStatus,
     handleOpenModal,
+    isModalOpen,
+    modalInitialTab,
+    handleCloseModal,
+    handleSaveModalUpdates,
   };
 }
+

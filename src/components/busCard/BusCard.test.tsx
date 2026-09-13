@@ -76,7 +76,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     container.remove();
   });
 
-  it('opens showBusInputModal directly if unit is SGO (no notes)', async () => {
+  it('opens BusInputModal directly if unit is SGO (no notes)', async () => {
     await act(async () => {
       root.render(<BusCard {...defaultProps} />);
     });
@@ -89,7 +89,9 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     });
 
     expect(alertUtils.pdoSwal.fire).not.toHaveBeenCalled();
-    expect(alertUtils.showBusInputModal).toHaveBeenCalled();
+    const modal = document.body.querySelector('.bus-input-modal-overlay');
+    expect(modal).not.toBeNull();
+    expect(document.body.textContent).toContain('JAK.15-01');
   });
 
   it('blocks operational input and prompts to open fleet status when tapping unit with OFF status', async () => {
@@ -121,7 +123,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       })
     );
     expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
-    expect(alertUtils.showBusInputModal).not.toHaveBeenCalled();
+    expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
   });
 
   it('cancels action if non-SGO confirmation alert is canceled', async () => {
@@ -148,7 +150,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
 
     expect(alertUtils.pdoSwal.fire).toHaveBeenCalled();
     expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
-    expect(alertUtils.showBusInputModal).not.toHaveBeenCalled();
+    expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
   });
 
   it('blocks editing and triggers onOpenFleetStatus when isShiftConfirmed is false', async () => {
@@ -171,7 +173,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
 
     expect(alertUtils.showWarningToast).toHaveBeenCalled();
     expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
-    expect(alertUtils.showBusInputModal).not.toHaveBeenCalled();
+    expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
   });
 
   it('does not render blue BA badge in card header when unit has BA note', async () => {

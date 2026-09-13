@@ -152,6 +152,11 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S1).toBe('KM Akhir Shift 1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.KM_AKHIR_LESS_THAN_AWAL('Shift 1', '100', '200')).toContain('tidak boleh lebih kecil');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.KM_DIFF_EXCEEDS_MAX('Shift 1', 250, 230)).toContain('melebihi batas');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE).toBe('Input Data Operasional Armada');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER).toBe('Periksa kembali input:');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_HAS_MANUAL_S1).toBe('Ada Tiket Manual Shift 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S1).toBe('Jarak Tempuh S1:');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TRIP_LABEL).toBe('Total Ritase:');
   });
 
   it('exports BULK_TRIP and FORMAT_SHEET with dynamic template functions', () => {
