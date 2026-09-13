@@ -4,6 +4,8 @@
 export const TEXT_FLEET_STATUS = {
   MODAL: {
     TITLE: 'Status Armada',
+    HEADER_TITLE: (route: string) => `Status Armada: ${route}`,
+    TARGET_RENOPS: (target: number) => `Target Renops: ${target} Unit`,
     SEGMENT_FLEET: 'Status Armada',
     SEGMENT_REPORT: 'Laporan Operasional',
     REPORT_TITLE: 'Buka laporan operasional',

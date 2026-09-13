@@ -1340,8 +1340,8 @@
     "semantic_hash": ""
   },
   "src/components/WaReportModal.tsx": {
-    "mtime": 1789058160.1733289,
-    "ast_hash": "d4963e081fc5f8d908bcdbd3395c6b74",
+    "mtime": 1789288269.3132725,
+    "ast_hash": "0dce83da7123b3611ab0e313af3e20c9",
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.test.ts": {
@@ -2367,6 +2367,46 @@
   "refactor-ss-pdo/refact_48/REPAIR_REPORT.md": {
     "mtime": 1789287511.5754156,
     "ast_hash": "354ebe239c74176b74e391ba8113627d",
+    "semantic_hash": ""
+  },
+  "src/components/waReport/WaReportFormatTabs.tsx": {
+    "mtime": 1789288253.8931475,
+    "ast_hash": "2cd8bedc1aa802180f4a783a9078cf35",
+    "semantic_hash": ""
+  },
+  "src/components/waReport/WaReportHeader.tsx": {
+    "mtime": 1789288242.4066088,
+    "ast_hash": "142df5759aeb2613041bc13cf5dc5670",
+    "semantic_hash": ""
+  },
+  "src/components/waReport/WaReportPreview.tsx": {
+    "mtime": 1789288260.850256,
+    "ast_hash": "d6c9c6e7b1c025afad1d9e2a1678f7ec",
+    "semantic_hash": ""
+  },
+  "src/components/waReport/index.ts": {
+    "mtime": 1789288263.362585,
+    "ast_hash": "2268ff37971678b55894b4ebc77e48a3",
+    "semantic_hash": ""
+  },
+  "src/components/waReport/types.ts": {
+    "mtime": 1789288226.3385112,
+    "ast_hash": "8340f8576cc4b3a6b8cbd1f8de4f6ddd",
+    "semantic_hash": ""
+  },
+  "src/components/waReport/useWaReportData.ts": {
+    "mtime": 1789288237.4092865,
+    "ast_hash": "e726f47a87b695f39425e5328504b970",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_49/AUDIT_BUGS.md": {
+    "mtime": 1789288078.3237648,
+    "ast_hash": "ba55d66e269622b83245c840558ef6bf",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_49/REPAIR_REPORT.md": {
+    "mtime": 1789288085.565756,
+    "ast_hash": "1ef8595a467cd26e2b582f429d75c5e6",
     "semantic_hash": ""
   }
 }

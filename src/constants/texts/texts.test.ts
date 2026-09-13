@@ -165,5 +165,17 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.UNIT_CARD.ARIA_VIEW_DETAIL('101')).toBe('Lihat detail unit 101');
     expect(TEXT_DASHBOARD.BUS_LIST.ALL_UNITS_FILLED).toContain('selesai diisi');
   });
+
+  it('exports TEXT_FLEET_STATUS with modal titles and shift status codes', () => {
+    expect(TEXT_FLEET_STATUS.MODAL.TITLE).toBe('Status Armada');
+    expect(TEXT_FLEET_STATUS.MODAL.HEADER_TITLE('JAK.15')).toBe('Status Armada: JAK.15');
+    expect(TEXT_FLEET_STATUS.MODAL.TARGET_RENOPS(60)).toBe('Target Renops: 60 Unit');
+    expect(TEXT_FLEET_STATUS.MODAL.SHIFT_1_TAB).toContain('Shift 1');
+    expect(TEXT_FLEET_STATUS.MODAL.SHIFT_2_TAB).toContain('Shift 2');
+    expect(TEXT_FLEET_STATUS.MODAL.SGO_ALL_BTN).toBe('SGO Semua Unit');
+    expect(TEXT_FLEET_STATUS.STATUS_CODES.SGO).toBe('SGO');
+    expect(TEXT_FLEET_STATUS.STATUS_CODES.OFF).toBe('OFF');
+    expect(TEXT_FLEET_STATUS.STATUS_CODES.TO).toBe('T.O');
+  });
 });
 
