@@ -1,75 +1,52 @@
 import { useState, useEffect, useRef, useMemo, lazy, Suspense } from "react";
-import type { BusData, HeaderMap } from "../services/googleSheets";
+import type { BusData, HeaderMap } from "@/services/googleSheets";
 import {
   getBusData,
   getAccumulatedBusData,
   reauthenticateSession,
   formatWholeSheet,
-  isUsingServiceAccount,
   updateBulkBusData,
-} from "../services/googleSheets";
-import { extractSpreadsheetId } from "../utils/sheetIdentity";
-import { BusList } from "./BusList";
-import { AnalyticsDashboard } from "./AnalyticsDashboard";
-import { ProfileMenuSheet } from "./ProfileMenuSheet";
-import { UserProfileHeader } from "./UserProfileHeader";
-import { RouteSelectorCard } from "./RouteSelectorCard";
-import { RouteOperationalReportCard } from "./RouteOperationalReportCard";
-import { ShiftConfirmationAlertBar } from "./fleetStatus/ShiftConfirmationAlertBar";
-import { FleetStatusModal } from "./fleetStatus/FleetStatusModal";
-import { getRenopsForDate } from "../utils/holidayUtils";
-import { combineShiftKeterangan, cleanShiftNote } from "../utils/keteranganUtils";
+} from "@/services/googleSheets";
+import { extractSpreadsheetId } from "@/utils/sheetIdentity";
+import { getRenopsForDate } from "@/utils/holidayUtils";
+import { combineShiftKeterangan, cleanShiftNote } from "@/utils/keteranganUtils";
 import {
   fetchDailyRouteReport,
   upsertDailyRouteReport,
   recordFleetStatusAuditLog,
-} from "../services/dailyRouteReportService";
-import type { FleetUnitStatusDetail } from "../types/supabase";
-import { SwipeableContainer } from "./SwipeableContainer";
-import { BottomNav } from "./BottomNav";
-import { UserManagementSkeleton } from "./Skeletons";
-
-// Dynamic Code Splitting for infrequently visited administration pages
-const UserManagementPage = lazy(() =>
-  import("./UserManagementPage").then((m) => ({ default: m.UserManagementPage }))
-);
-import { AllRouteMonitoringPage } from "./AllRouteMonitoringPage";
-import {
-  CloudOff,
-  RefreshCw,
-  AlertTriangle,
-  MapPin,
-  ChevronDown,
-} from "lucide-react";
-import { QueueModal } from "./QueueModal";
-import { useOfflineSync } from "../hooks/useOfflineSync";
-import { useMobileBackHandler } from "../hooks/useMobileBackHandler";
-import { formatUserError } from "../utils/errorFormatter";
-import { extractMonthYearLabel, slugifyUnitId } from "../utils/analytics";
-import { getStoredUserRole } from "../utils/roleStorage";
+} from "@/services/dailyRouteReportService";
+import type { FleetUnitStatusDetail } from "@/types/supabase";
+import { BottomNav } from "@/components/BottomNav";
+import { UserManagementSkeleton } from "@/components/Skeletons";
+import { AllRouteMonitoringPage } from "@/components/AllRouteMonitoringPage";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
+import { useMobileBackHandler } from "@/hooks/useMobileBackHandler";
+import { formatUserError } from "@/utils/errorFormatter";
+import { slugifyUnitId } from "@/utils/analytics";
+import { getStoredUserRole } from "@/utils/roleStorage";
 import {
   showDeleteQueueConfirm,
   showAuthExpiredAlert,
   showSuccessToast,
   showErrorToast,
-  showInfoToast,
-  showWarningToast,
-} from "../utils/alertUtils";
-
-import { UnitSummaryDashboard } from "./UnitSummaryDashboard";
-import { AccumulationSheet } from "./AccumulationSheet";
-import { getCrossPeriodAccumulation } from "../services/routeService";
+} from "@/utils/alertUtils";
+import { getCrossPeriodAccumulation } from "@/services/routeService";
 import {
   getMonthYearForSheet,
   getRouteCodeForSheet,
   getRoutesFromCache,
-} from "../utils/cacheUtils";
-import {
-  BusCardSkeleton,
-  DailyToaTrendSkeleton,
-  UnitCardSkeleton,
-} from "./Skeletons";
-import { TEXT_DASHBOARD, TEXT_AUTH, TEXT_COMMON, TEXT_FLEET_STATUS } from "../constants/texts";
+} from "@/utils/cacheUtils";
+import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "@/constants/texts";
+
+import { DashboardHeader } from "./dashboard/DashboardHeader";
+import { DashboardStatusBanners } from "./dashboard/DashboardStatusBanners";
+import { DashboardContentTabs } from "./dashboard/DashboardContentTabs";
+import { DashboardModals } from "./dashboard/DashboardModals";
+
+// Dynamic Code Splitting for infrequently visited administration pages
+const UserManagementPage = lazy(() =>
+  import("./UserManagementPage").then((m) => ({ default: m.UserManagementPage }))
+);
 
 interface Props {
   onLogout: () => void;
@@ -136,7 +113,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   const [isReauthenticating, setIsReauthenticating] = useState(false);
   const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'dashboard' | 'user_management' | 'regional_monitoring'>('dashboard');
+  const [currentView, setCurrentView] = useState<
+    "dashboard" | "user_management" | "regional_monitoring"
+  >("dashboard");
 
   // Mobile Back Navigation Handlers (PWA / Mobile hardware gesture support)
   useMobileBackHandler({
@@ -150,7 +129,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     isOpen: currentView === "user_management",
     onClose: () => setCurrentView("dashboard"),
   });
-
 
   useMobileBackHandler({
     id: "profile_menu_sheet",
@@ -170,7 +148,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     onClose: () => setIsQueueModalOpen(false),
   });
 
-  // ponytail: track custom accumulation range for startDay parameter
+  // Track custom accumulation range for startDay parameter
   const [accRange, setAccRange] = useState<{
     start: number;
     end: number;
@@ -184,21 +162,17 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     endYear: number;
   } | null>(null);
 
-  // Memoized activeMonth and activeYear from cached routes (SOL-R6-017 / SOL-R6-018)
+  // Memoized activeMonth and activeYear from cached routes
   const { activeMonth, activeYear } = useMemo(() => {
     const { month, year } = getMonthYearForSheet(sheetUrl);
     return { activeMonth: month, activeYear: year };
   }, [sheetUrl]);
 
-  // BUG-15: ResizeObserver cleanup properly handled via dependency array
-  // BUG-19: Request ID tracking for race condition protection
-  // BUG-19: Use AbortController for request cancellation
   const abortControllerRef = useRef<AbortController | null>(null);
   const requestIdRef = useRef<number>(0);
   const headerBlockRef = useRef<HTMLDivElement>(null);
 
-  // ROUTE-12-01: Ref sinkron untuk sheetUrl/selectedTab — membaca state TERBARU
-  // seketika tanpa delay 1 siklus render useEffect
+  // Ref sinkron untuk sheetUrl/selectedTab
   const sheetUrlRef = useRef(sheetUrl);
   const selectedTabRef = useRef(selectedTab);
 
@@ -229,7 +203,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
     const updateHeight = () => {
       const h = el.offsetHeight;
-      document.documentElement.style.setProperty("--sticky-header-height", `${h}px`);
+      document.documentElement.style.setProperty(
+        "--sticky-header-height",
+        `${h}px`,
+      );
     };
 
     updateHeight();
@@ -254,13 +231,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     forceConflictItem,
   } = useOfflineSync({
     onSyncSuccess: (rowIndex, _sheetId, _tabName, updates) => {
-      // BUG-06: Update busData saat sinkronisasi antrean berhasil
-      // Ini mencegah false positive "Tabrakan Data" pada edit berikutnya
       handleUpdateBus(rowIndex, updates);
       showSuccessToast(TEXT_DASHBOARD.QUEUE_SYNC_SUCCESS);
     },
     onAuthError: () => {
-      // BUG-23: Handle auth error when offline sync queue encounters 401 session expiry
       setIsAuthExpired(true);
       showAuthExpiredAlert(handleReauthenticate);
     },
@@ -283,16 +257,17 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       if (currentSheetId && currentTabName) {
         handleLoadData(true, currentTabName);
       }
-      // BUG-21: Wrap processQueue to catch errors
       try {
         await processQueue();
       } catch (queueError: any) {
-        console.warn('Error processing queue after re-auth:', queueError);
-        // Silently continue, the main process was already handled by handleLoadData
+        console.warn("Error processing queue after re-auth:", queueError);
       }
       showSuccessToast(TEXT_DASHBOARD.SESSION_REFRESH_SUCCESS);
     } catch (err: any) {
-      const errFormatted = formatUserError(err, TEXT_DASHBOARD.SESSION_REFRESH_FAIL);
+      const errFormatted = formatUserError(
+        err,
+        TEXT_DASHBOARD.SESSION_REFRESH_FAIL,
+      );
       setError(errFormatted);
       if (errFormatted) {
         showErrorToast(errFormatted);
@@ -332,7 +307,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   };
 
   useEffect(() => {
-    // Listen for auth expiration / login success events
     const handleAuthExpired = () => {
       setIsAuthExpired(true);
     };
@@ -355,21 +329,20 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     };
   }, []);
 
-  // BUG-68: Auto-load HANYA sekali saat cold-start (jika ada sheetUrl
-  // tersimpan dari localStorage). Pemilihan/ubahan dropdown (tahun, bulan,
-  // rute, tanggal) TIDAK memicu load — hanya tombol "Load Data".
   const didInitialAutoLoadRef = useRef(false);
   useEffect(() => {
     if (didInitialAutoLoadRef.current) return;
     if (!sheetUrlRef.current || busData) return;
     didInitialAutoLoadRef.current = true;
     handleLoadData(false);
-    // Mount-only; sheetUrl/busData dibaca via ref agar selalu fresh.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function handleLoadData(isRefresh = false, targetTab?: string, targetSheetUrl?: string) {
-    // ROUTE-12-01: Baca dari targetSheetUrl eksplisit jika tersedia, atau baca dari ref terkini
+  async function handleLoadData(
+    isRefresh = false,
+    targetTab?: string,
+    targetSheetUrl?: string,
+  ) {
     const currentSheetUrl = targetSheetUrl || sheetUrlRef.current;
     const activeTab = targetTab || selectedTabRef.current;
     if (!currentSheetUrl) {
@@ -379,13 +352,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
     const sheetId = extractSpreadsheetId(currentSheetUrl);
     if (!sheetId) {
-      setError(
-        TEXT_DASHBOARD.INVALID_SHEET_LINK,
-      );
+      setError(TEXT_DASHBOARD.INVALID_SHEET_LINK);
       return;
     }
 
-    // BUG-19: Cancel previous request before starting new one
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -396,7 +366,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
     setIsLoading(true);
     setError(null);
-    // Keep previous busData in memory while loading new date data to prevent component unmounting/flicker
 
     if (isRefresh || sheetId !== currentSheetId) {
       setRefreshKey((prev) => prev + 1);
@@ -458,20 +427,14 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       if (currentRequestId !== requestIdRef.current) return;
       if (err.name === "AbortError") return;
 
-      setError(
-        formatUserError(
-          err,
-          TEXT_DASHBOARD.LOAD_DATA_FAIL,
-        ),
-      );
+      setError(formatUserError(err, TEXT_DASHBOARD.LOAD_DATA_FAIL));
     } finally {
       if (currentRequestId === requestIdRef.current) {
         setIsLoading(false);
       }
     }
-  };
+  }
 
-  // BUG-20: Handle async tab selection properly (untuk tab bar / chart analitik)
   const handleSelectTab = async (newTab: string) => {
     handleSetSelectedTab(newTab);
     if (currentSheetId || sheetUrlRef.current) {
@@ -479,10 +442,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     }
   };
 
-  // ACC-17-01: Handler untuk keluar dari mode akumulasi kembali ke mode tanggal harian
   const handleExitAccumulation = async (targetDay?: string) => {
     const today = String(new Date().getDate());
-    const dayToSelect = targetDay || (days.includes(today) ? today : (days[0] || "1"));
+    const dayToSelect =
+      targetDay || (days.includes(today) ? today : days[0] || "1");
     setAccRange(null);
     setAccRangeDetails(null);
     handleSetSelectedTab(dayToSelect);
@@ -513,13 +476,12 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     const currentY = e.touches[0].clientY;
     const diff = currentY - touchStartY;
     if (diff > 0) {
-      setPullDistance(Math.min(diff, 100)); // cap at 100px
+      setPullDistance(Math.min(diff, 100));
     }
   };
 
   const handleTouchEnd = () => {
     if (pullDistance > 60) {
-      // BUG-14: Cek status online sebelum refresh
       if (!isOnline) {
         setError(TEXT_DASHBOARD.REFRESH_OFFLINE_ERR);
         setIsRefreshing(false);
@@ -539,7 +501,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     }
   };
 
-  // Generate options for days 1-31
   const days = Array.from({ length: 31 }, (_, i) => String(i + 1));
 
   const currentRouteCode = useMemo(() => {
@@ -571,7 +532,9 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   }, [currentTabName, selectedTab, activeYear, activeMonth]);
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const [operationalReportStatus, setOperationalReportStatus] = useState<'draft' | 'submitted' | 'verified'>('draft');
+  const [operationalReportStatus, setOperationalReportStatus] = useState<
+    "draft" | "submitted" | "verified"
+  >("draft");
   const [monitoringDate, setMonitoringDate] = useState<string | null>(null);
 
   const dynamicRenops = useMemo(() => {
@@ -580,7 +543,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   const activeShift: 1 | 2 = new Date().getHours() >= 14 ? 2 : 1;
   const [isFleetModalOpen, setIsFleetModalOpen] = useState(false);
-  const [confirmedShifts, setConfirmedShifts] = useState<{ 1: boolean; 2: boolean }>({
+  const [confirmedShifts, setConfirmedShifts] = useState<{
+    1: boolean;
+    2: boolean;
+  }>({
     1: false,
     2: false,
   });
@@ -591,21 +557,33 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       fetchDailyRouteReport(matchedRoute.id, operationalReportDate)
         .then((report) => {
           if (isMounted) {
-            setOperationalReportStatus(report?.status || 'draft');
+            setOperationalReportStatus(report?.status || "draft");
             setConfirmedShifts({
-              1: Boolean(report?.is_fleet_confirmed_s1 ?? (report && (report.realops_shift1 > 0 || report.status === 'submitted' || report.status === 'verified'))),
-              2: Boolean(report?.is_fleet_confirmed_s2 ?? (report && (report.realops_shift2 > 0 || report.status === 'submitted' || report.status === 'verified'))),
+              1: Boolean(
+                report?.is_fleet_confirmed_s1 ??
+                  (report &&
+                    (report.realops_shift1 > 0 ||
+                      report.status === "submitted" ||
+                      report.status === "verified")),
+              ),
+              2: Boolean(
+                report?.is_fleet_confirmed_s2 ??
+                  (report &&
+                    (report.realops_shift2 > 0 ||
+                      report.status === "submitted" ||
+                      report.status === "verified")),
+              ),
             });
           }
         })
         .catch(() => {
           if (isMounted) {
-            setOperationalReportStatus('draft');
+            setOperationalReportStatus("draft");
             setConfirmedShifts({ 1: false, 2: false });
           }
         });
     } else {
-      setOperationalReportStatus('draft');
+      setOperationalReportStatus("draft");
       setConfirmedShifts({ 1: false, 2: false });
     }
     return () => {
@@ -622,8 +600,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     if (selectedTab === "AKUMULASI") return true;
     if (confirmedShifts[activeShift]) return true;
 
-    // Jika tanggal lampau dan data bus di sheet sudah ada isinya (keterangan/TOA/KM),
-    // anggap status armada sudah ditentukan agar tidak terjadi false lockout
     if (isPastDate && busData && busData.length > 0) {
       const hasAnyData = busData.some((b) => {
         const ket = (b.keterangan || "").trim();
@@ -641,7 +617,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   const handleConfirmFleetStatus = async (
     shift: 1 | 2,
-    statusMap: Map<number, { s1: string; s2: string }>
+    statusMap: Map<number, { s1: string; s2: string }>,
   ) => {
     if (!currentSheetId || !currentTabName || !headerMap) return;
 
@@ -663,7 +639,12 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     }
 
     try {
-      await updateBulkBusData(currentSheetId, currentTabName, updatesList, headerMap);
+      await updateBulkBusData(
+        currentSheetId,
+        currentTabName,
+        updatesList,
+        headerMap,
+      );
 
       setBusData((prev) =>
         prev
@@ -671,7 +652,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               const match = updatesList.find((u) => u.rowIndex === bus.rowIndex);
               return match ? { ...bus, ...match.updates } : bus;
             })
-          : null
+          : null,
       );
 
       if (matchedRoute?.id && operationalReportDate) {
@@ -683,7 +664,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           const unitVal = statusMap.get(bus.rowIndex);
           const note = cleanShiftNote(shift === 1 ? unitVal?.s1 : unitVal?.s2);
           if (note) {
-            const isOff = note.toUpperCase().includes('OFF');
+            const isOff = note.toUpperCase().includes("OFF");
             if (isOff) offCount++;
             else toCount++;
 
@@ -698,7 +679,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         const totalUnits = busData?.length || 0;
         const sgoCount = Math.max(0, totalUnits - nonSgoUnits.length);
 
-        // 1. Simpan snapshot terkini ke daily_route_reports
         await upsertDailyRouteReport({
           route_id: matchedRoute.id,
           route_code: matchedRoute.route_code,
@@ -710,7 +690,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           headway_fastest: 3,
           headway_slowest: 10,
           traffic_jam_spots: matchedRoute.default_traffic_jam_spots || [],
-          status: operationalReportStatus || 'draft',
+          status: operationalReportStatus || "draft",
           ...(shift === 1
             ? {
                 fleet_status_shift1: nonSgoUnits,
@@ -724,7 +704,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               }),
         });
 
-        // 2. Tambahkan baris baru (Append-Only) ke tabel audit fleet_status_logs
         await recordFleetStatusAuditLog({
           route_id: matchedRoute.id,
           route_code: matchedRoute.route_code,
@@ -742,8 +721,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       setConfirmedShifts((prev) => ({ ...prev, [shift]: true }));
       showSuccessToast(TEXT_FLEET_STATUS.TOAST.APPLY_SUCCESS(shift));
     } catch (err: any) {
-      console.warn('[Dashboard] Gagal menerapkan status armada:', err);
-      const friendlyErr = formatUserError(err, TEXT_FLEET_STATUS.TOAST.APPLY_ERROR);
+      console.warn("[Dashboard] Gagal menerapkan status armada:", err);
+      const friendlyErr = formatUserError(
+        err,
+        TEXT_FLEET_STATUS.TOAST.APPLY_ERROR,
+      );
       if (friendlyErr) {
         showErrorToast(friendlyErr);
       }
@@ -751,11 +733,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     }
   };
 
-  if (currentView === 'user_management') {
+  if (currentView === "user_management") {
     return (
       <Suspense fallback={<UserManagementSkeleton />}>
         <UserManagementPage
-          onBack={() => setCurrentView('dashboard')}
+          onBack={() => setCurrentView("dashboard")}
           currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
           currentUserRole={getStoredUserRole()}
           isDarkMode={theme === "dark"}
@@ -764,36 +746,36 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     );
   }
 
-  if (currentView === 'regional_monitoring') {
+  if (currentView === "regional_monitoring") {
     return (
       <AllRouteMonitoringPage
-        onBackToRouteView={() => setCurrentView('dashboard')}
+        onBackToRouteView={() => setCurrentView("dashboard")}
         currentDate={monitoringDate || operationalReportDate}
         onDateChange={(date) => setMonitoringDate(date)}
         currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
         onSelectRoute={(routeCode) => {
           const cachedRoutes = getRoutesFromCache();
-          const matched = cachedRoutes.find((r: any) =>
-            r.route_code?.toLowerCase() === routeCode.toLowerCase() ||
-            r.name?.toLowerCase().includes(routeCode.toLowerCase())
+          const matched = cachedRoutes.find(
+            (r: any) =>
+              r.route_code?.toLowerCase() === routeCode.toLowerCase() ||
+              r.name?.toLowerCase().includes(routeCode.toLowerCase()),
           );
           if (matched && matched.route_sheets && matched.route_sheets.length > 0) {
-            const latestSheet = matched.route_sheets[matched.route_sheets.length - 1];
+            const latestSheet =
+              matched.route_sheets[matched.route_sheets.length - 1];
             if (latestSheet && latestSheet.sheet_url) {
               handleSetSheetUrl(latestSheet.sheet_url);
             }
           }
           if (monitoringDate) {
-            const day = String(parseInt(monitoringDate.split('-')[2], 10));
+            const day = String(parseInt(monitoringDate.split("-")[2], 10));
             handleSetSelectedTab(day);
           }
-          setCurrentView('dashboard');
+          setCurrentView("dashboard");
         }}
       />
     );
   }
-
-  
 
   return (
     <div
@@ -802,472 +784,140 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div
-        style={{
-          height: pullDistance > 0 ? `${pullDistance}px` : "0",
-          overflow: "hidden",
-          transition: touchStartY === 0 ? "height 0.3s ease" : "none",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            transform: `rotate(${pullDistance * 3}deg)`,
-            color: "var(--accent-color)",
-          }}
-        >
-          <RefreshCw size={24} className={isRefreshing ? "spinner" : ""} />
-        </div>
-      </div>
+      {/* 1. Header & Sticky Route Selector */}
+      <DashboardHeader
+        headerBlockRef={headerBlockRef}
+        onOpenProfile={() => setIsProfileMenuOpen(true)}
+        activeRouteCode={activeRouteCode}
+        onOpenRouteSelector={() =>
+          setRouteSelectorOpenTrigger((prev) => prev + 1)
+        }
+        queue={queue}
+        onOpenQueue={() => setIsQueueModalOpen(true)}
+        sheetUrl={sheetUrl}
+        setSheetUrl={handleSetSheetUrl}
+        selectedTab={selectedTab}
+        setSelectedTab={handleSetSelectedTab}
+        days={days}
+        isLoading={isLoading}
+        isDataLoaded={!!busData}
+        currentSheetId={currentSheetId}
+        currentTabName={currentTabName}
+        onLoadData={(tab, targetUrl) => handleLoadData(true, tab, targetUrl)}
+        accRange={accRangeDetails}
+        onExitAccumulation={handleExitAccumulation}
+        reportRoute={matchedRoute}
+        reportStatus={operationalReportStatus}
+        onOpenReportModal={() => setIsReportModalOpen(true)}
+        onRouteCodeChange={(code) => setSelectedRouteCode(code)}
+        routeSelectorOpenTrigger={routeSelectorOpenTrigger}
+      />
 
-      {!isOnline && (
-        <div className="offline-banner">
-          {TEXT_COMMON.STATUS.OFFLINE_BANNER}
-        </div>
-      )}
+      {/* 2. Status Banners, Skeletons, & Alerts */}
+      <DashboardStatusBanners
+        pullDistance={pullDistance}
+        touchStartY={touchStartY}
+        isRefreshing={isRefreshing}
+        isOnline={isOnline}
+        isAuthExpired={isAuthExpired}
+        isReauthenticating={isReauthenticating}
+        onReauthenticate={handleReauthenticate}
+        error={error}
+        missingColumns={missingColumns}
+        needsReauth={needsReauth}
+        confirmedShifts={confirmedShifts}
+        matchedRoute={matchedRoute}
+        selectedTab={selectedTab}
+        busData={busData}
+        activeShift={activeShift}
+        onOpenFleetModal={() => setIsFleetModalOpen(true)}
+        isLoading={isLoading}
+        mainTab={mainTab}
+      />
 
-      {!isUsingServiceAccount() && isAuthExpired && (
-        <div
-          style={{
-            background: "var(--danger-color, #ef4444)",
-            color: "#ffffff",
-            padding: "12px 16px",
-            borderRadius: "12px",
-            marginBottom: "16px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "12px",
-            boxShadow: "0 4px 12px rgba(239, 68, 68, 0.25)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              fontSize: "14px",
-              fontWeight: 600,
-            }}
-          >
-            <AlertTriangle size={20} />
-            <span>
-              {TEXT_AUTH.SESSION_EXPIRED_BANNER}
-            </span>
-          </div>
-          <button
-            type="button"
-            className="btn"
-            style={{
-              background: "#ffffff",
-              color: "var(--danger-color, #ef4444)",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              border: "none",
-              padding: "8px 14px",
-              fontSize: "13px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-            onClick={handleReauthenticate}
-            disabled={isReauthenticating}
-          >
-            {isReauthenticating ? (
-              <RefreshCw size={14} className="spinner" />
-            ) : (
-              <RefreshCw size={14} />
-            )}
-            {isReauthenticating ? TEXT_COMMON.STATUS.PROCESSING : TEXT_AUTH.REAUTH_BTN}
-          </button>
-        </div>
-      )}
-      {/* Sticky Freeze Header Block (Title, Profile, & Route Selector) */}
-      <div
-        ref={headerBlockRef}
-        className="sticky-top-block"
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 40,
-          background: "var(--bg-color)",
-          paddingTop: "12px",
-          paddingBottom: "4px",
-          marginTop: "-16px",
-          marginLeft: "-16px",
-          marginRight: "-16px",
-          paddingLeft: "16px",
-          paddingRight: "16px",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
-        }}
-      >
-        <div
-          className="app-header"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "10px",
-            padding: 0,
-            gap: "12px",
-            textAlign: "left",
-          }}
-        >
-          {/* POJOK KIRI: Profil Akun Pengguna (Avatar, Nama, Role, Email) */}
-          <UserProfileHeader onOpenProfile={() => setIsProfileMenuOpen(true)} />
-
-          {/* POJOK KANAN: Badge Kode Rute Aktif + Status Antrean Offline */}
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-              alignItems: "center",
-              flexShrink: 0,
-            }}
-          >
-            {/* Badge Kode Rute Aktif */}
-            <button
-              type="button"
-              onClick={() => setRouteSelectorOpenTrigger((prev) => prev + 1)}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "5px",
-                padding: "6px 10px",
-                borderRadius: "10px",
-                background: "var(--accent-bg, rgba(62, 207, 142, 0.12))",
-                border: "1px solid var(--accent-border, rgba(62, 207, 142, 0.32))",
-                color: "var(--accent-color, #3ECF8E)",
-                fontSize: "12.5px",
-                fontWeight: 700,
-                letterSpacing: "0.2px",
-                cursor: "pointer",
-                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-              }}
-              title={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_TITLE(activeRouteCode)}
-              aria-label={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_ARIA(activeRouteCode)}
-              data-testid="active-route-badge-btn"
-            >
-              <MapPin size={13} style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }} />
-              <span>{activeRouteCode}</span>
-              <ChevronDown size={12} style={{ opacity: 0.65, flexShrink: 0 }} />
-            </button>
-
-            {queue.length > 0 && (
-              <div
-                onClick={() => setIsQueueModalOpen(true)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  color: queue.some(
-                    (q) => q.status === "failed" || q.status === "conflict",
-                  )
-                    ? "var(--danger-color)"
-                    : "var(--warning-color)",
-                  fontSize: "12px",
-                  fontWeight: "bold",
-                  background: queue.some(
-                    (q) => q.status === "failed" || q.status === "conflict",
-                  )
-                    ? "rgba(247, 85, 85, 0.12)"
-                    : "rgba(245, 158, 11, 0.12)",
-                  padding: "4px 8px",
-                  borderRadius: "20px",
-                  cursor: "pointer",
-                  border:
-                    "1px solid " +
-                    (queue.some(
-                      (q) => q.status === "failed" || q.status === "conflict",
-                    )
-                      ? "rgba(247, 85, 85, 0.25)"
-                      : "rgba(245, 158, 11, 0.25)"),
-                }}
-                title={TEXT_DASHBOARD.SYNC_QUEUE_TITLE}
-              >
-                {queue.some(
-                  (q) => q.status === "failed" || q.status === "conflict",
-                ) ? (
-                  <AlertTriangle size={14} />
-                ) : (
-                  <CloudOff size={14} />
-                )}
-                <span>{queue.length}</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <RouteSelectorCard
-          sheetUrl={sheetUrl}
-          setSheetUrl={handleSetSheetUrl}
-          selectedTab={selectedTab}
-          setSelectedTab={handleSetSelectedTab}
-          days={days}
-          isLoading={isLoading}
-          isDataLoaded={!!busData}
+      {/* 3. Main Content Swipeable Tabs */}
+      {busData && headerMap && (
+        <DashboardContentTabs
+          mainTab={mainTab}
+          onSwipeNext={handleSwipeNextTab}
+          onSwipePrev={handleSwipePrevTab}
+          busData={busData}
+          headerMap={headerMap}
           currentSheetId={currentSheetId}
           currentTabName={currentTabName}
-          onLoadData={(tab, targetUrl) => handleLoadData(true, tab, targetUrl)}
-          accRange={accRangeDetails}
-          onExitAccumulation={handleExitAccumulation}
-          reportRoute={matchedRoute}
-          reportStatus={operationalReportStatus}
-          onOpenReportModal={() => setIsReportModalOpen(true)}
-          onRouteCodeChange={(code) => setSelectedRouteCode(code)}
-          externalOpenTrigger={routeSelectorOpenTrigger}
-        />
-      </div>
-
-      <ShiftConfirmationAlertBar
-        isOpen={
-          !confirmedShifts[activeShift] &&
-          Boolean(matchedRoute) &&
-          selectedTab !== "AKUMULASI" &&
-          Boolean(busData && busData.length > 0)
-        }
-        shift={activeShift}
-        routeCode={matchedRoute?.route_code || ""}
-        onOpenModal={() => setIsFleetModalOpen(true)}
-      />
-
-      {error && !isAuthExpired && (
-        <div className="error-text" style={{ marginBottom: 16 }}>
-          {error}
-        </div>
-      )}
-
-      {missingColumns.length > 0 && (
-        <div
-          style={{
-            marginTop: 12,
-            marginBottom: 16,
-            padding: "10px 14px",
-            background: "rgba(234, 179, 8, 0.12)",
-            border: "1px solid rgba(234, 179, 8, 0.4)",
-            borderRadius: "8px",
-            fontSize: "13px",
-            lineHeight: 1.5,
-            color: "var(--warning-color)",
-          }}
-        >
-          ⚠️ Kolom berikut <strong>tidak terdeteksi</strong> di header sheet dan{" "}
-          <strong>TIDAK akan tersimpan</strong>: {missingColumns.join(", ")}.
-          Hubungi admin untuk memperbaiki header.
-        </div>
-      )}
-
-      {needsReauth && (
-        <div
-          className="card"
-          style={{
-            marginTop: "16px",
-            marginBottom: "16px",
-            backgroundColor: "rgba(239, 68, 68, 0.1)",
-            borderColor: "var(--danger-color, #ef4444)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "12px",
-            padding: "12px 16px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--danger-color, #ef4444)" }}>
-            <AlertTriangle size={18} style={{ flexShrink: 0 }} />
-            <span>{TEXT_AUTH.SESSION_NEED_REAUTH}</span>
-          </div>
-          <button
-            onClick={() => reauthenticateSession().catch(() => {})}
-            style={{
-              padding: "6px 12px",
-              backgroundColor: "var(--danger-color, #ef4444)",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              fontSize: "12px",
-              fontWeight: 600,
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {TEXT_AUTH.REFRESH_SESSION_BTN}
-          </button>
-        </div>
-      )}
-
-      {isLoading && !busData && (
-        <div style={{ marginTop: "16px" }}>
-          {mainTab === "analytics" && <DailyToaTrendSkeleton />}
-          {mainTab === "input" && <BusCardSkeleton count={5} />}
-          {mainTab === "units" && <UnitCardSkeleton count={6} />}
-        </div>
-      )}
-
-      {busData && headerMap && (
-        <SwipeableContainer
-          onSwipeLeft={handleSwipeNextTab}
-          onSwipeRight={handleSwipePrevTab}
-        >
-          <div style={{ display: mainTab === "input" ? "block" : "none" }}>
-            {missingColumns.length > 0 && (
-              <div
-                className="card"
-                style={{
-                  marginBottom: "16px",
-                  backgroundColor: "var(--warning-bg, rgba(245, 158, 11, 0.1))",
-                  borderColor: "var(--warning-border, #f59e0b)",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    color: "var(--warning-text, #d97706)",
-                    fontWeight: 600,
-                  }}
-                >
-                  <AlertTriangle size={18} />
-                  <span>{TEXT_DASHBOARD.MISSING_COLS_TITLE}</span>
-                </div>
-                <ul
-                  style={{
-                    margin: "8px 0 0 24px",
-                    fontSize: "14px",
-                    color: "var(--text-secondary)",
-                  }}
-                >
-                  {missingColumns.map((col, i) => (
-                    <li key={i}>{col}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            <BusList
-              data={busData}
-              sheetId={currentSheetId}
-              tabName={currentTabName}
-              headerMap={headerMap}
-              syncQueue={queue}
-              addToQueue={addToQueue}
-              isLoading={isLoading}
-              onUpdateBus={handleUpdateBus}
-              accRange={accRangeDetails}
-              onExitAccumulation={() => handleExitAccumulation()}
-              isShiftConfirmed={isShiftConfirmed}
-              activeShift={activeShift}
-              onOpenFleetStatus={() => setIsFleetModalOpen(true)}
-            />
-          </div>
-
-          <div style={{ display: mainTab === "analytics" ? "block" : "none" }}>
-            <AnalyticsDashboard
-              busData={busData}
-              sheetSummary={sheetSummary}
-              sheetId={currentSheetId}
-              selectedTab={selectedTab}
-              refreshKey={refreshKey}
-              monthLabel={extractMonthYearLabel(sheetUrl)}
-              activeMonth={activeMonth}
-              activeYear={activeYear}
-              accRange={accRangeDetails}
-              onSelectTab={handleSelectTab}
-              onSelectUnit={(unit) => {
-                setMainTab("units");
+          queue={queue}
+          addToQueue={addToQueue}
+          isLoading={isLoading}
+          onUpdateBus={handleUpdateBus}
+          accRangeDetails={accRangeDetails}
+          onExitAccumulation={() => handleExitAccumulation()}
+          isShiftConfirmed={isShiftConfirmed}
+          activeShift={activeShift}
+          onOpenFleetStatus={() => setIsFleetModalOpen(true)}
+          sheetSummary={sheetSummary}
+          selectedTab={selectedTab}
+          refreshKey={refreshKey}
+          sheetUrl={sheetUrl}
+          activeMonth={activeMonth}
+          activeYear={activeYear}
+          onSelectTab={handleSelectTab}
+          onSelectUnit={(unit) => {
+            setMainTab("units");
+            setTimeout(() => {
+              const slug = slugifyUnitId(unit);
+              const el =
+                document.getElementById(`unit-card-${slug}`) ||
+                document.getElementById(`bus-card-${slug}`);
+              if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+                el.classList.remove("bus-card-highlight");
+                void el.offsetWidth;
+                el.classList.add("bus-card-highlight");
                 setTimeout(() => {
-                  const slug = slugifyUnitId(unit);
-                  const el =
-                    document.getElementById(`unit-card-${slug}`) ||
-                    document.getElementById(`bus-card-${slug}`);
-                  if (el) {
-                    el.scrollIntoView({ behavior: "smooth", block: "center" });
-                    el.classList.remove("bus-card-highlight");
-                    void el.offsetWidth;
-                    el.classList.add("bus-card-highlight");
-                    setTimeout(() => {
-                      el.classList.remove("bus-card-highlight");
-                    }, 6000);
-                  }
-                }, 150);
-              }}
-            />
-          </div>
-
-          <div style={{ display: mainTab === "units" ? "block" : "none" }}>
-            <UnitSummaryDashboard
-              busData={busData}
-              sheetId={currentSheetId}
-              selectedTab={selectedTab}
-              activeMonth={activeMonth}
-              activeYear={activeYear}
-              accRange={accRangeDetails}
-            />
-          </div>
-        </SwipeableContainer>
-      )}
-
-      {matchedRoute && selectedTab !== "AKUMULASI" && (
-        <RouteOperationalReportCard
-          asModal={true}
-          isOpen={isReportModalOpen}
-          onClose={() => setIsReportModalOpen(false)}
-          routeId={matchedRoute.id}
-          routeCode={matchedRoute.route_code}
-          selectedDate={operationalReportDate}
-          defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
-          defaultRenops={dynamicRenops.renops}
-          userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
-          onStatusChange={setOperationalReportStatus}
+                  el.classList.remove("bus-card-highlight");
+                }, 6000);
+              }
+            }, 150);
+          }}
+          missingColumns={missingColumns}
         />
       )}
 
-      {matchedRoute && selectedTab !== "AKUMULASI" && busData && (
-        <FleetStatusModal
-          isOpen={isFleetModalOpen}
-          onClose={() => setIsFleetModalOpen(false)}
-          routeCode={matchedRoute.route_code}
-          selectedDate={operationalReportDate}
-          renopsTarget={dynamicRenops.renops}
-          dayLabel={dynamicRenops.label}
-          buses={busData}
-          initialShift={activeShift}
-          onConfirmStatus={handleConfirmFleetStatus}
-        />
-      )}
-
-      <QueueModal
-        isOpen={isQueueModalOpen}
-        onClose={() => setIsQueueModalOpen(false)}
+      {/* 4. Modals & Bottom Sheets */}
+      <DashboardModals
+        matchedRoute={matchedRoute}
+        selectedTab={selectedTab}
+        isReportModalOpen={isReportModalOpen}
+        onCloseReportModal={() => setIsReportModalOpen(false)}
+        operationalReportDate={operationalReportDate}
+        dynamicRenops={dynamicRenops}
+        onOperationalStatusChange={setOperationalReportStatus}
+        busData={busData}
+        isFleetModalOpen={isFleetModalOpen}
+        onCloseFleetModal={() => setIsFleetModalOpen(false)}
+        activeShift={activeShift}
+        onConfirmFleetStatus={handleConfirmFleetStatus}
+        isQueueModalOpen={isQueueModalOpen}
+        onCloseQueueModal={() => setIsQueueModalOpen(false)}
         queue={queue}
-        onRetry={(id) => {
-          retryItem(id);
-          showInfoToast(TEXT_DASHBOARD.QUEUE_RETRYING);
-        }}
-        onDelete={handleDeleteQueueItem}
-        onResolveConflict={(id) => {
-          resolveConflict(id);
-          showInfoToast(TEXT_DASHBOARD.QUEUE_USE_SERVER);
-        }}
-        onForceConflict={(id) => {
-          forceConflictItem(id);
-          showWarningToast(TEXT_DASHBOARD.QUEUE_OVERWRITE_SERVER);
-        }}
-        onProcessQueue={processQueue}
-      />
-
-      <AccumulationSheet
-        isOpen={isAccSheetOpen}
-        onClose={() => setIsAccSheetOpen(false)}
-        currentMonth={activeMonth}
-        currentYear={activeYear}
-        isAccumulationActive={selectedTab === "AKUMULASI"}
+        retryItem={retryItem}
+        onDeleteQueueItem={handleDeleteQueueItem}
+        resolveConflict={resolveConflict}
+        forceConflictItem={forceConflictItem}
+        processQueue={processQueue}
+        isAccSheetOpen={isAccSheetOpen}
+        onCloseAccSheet={() => setIsAccSheetOpen(false)}
+        activeMonth={activeMonth}
+        activeYear={activeYear}
         onResetAccumulation={() => handleExitAccumulation()}
-        onApply={async (sDay, sMonth, sYear, eDay, eMonth, eYear) => {
+        onApplyAccumulation={async (
+          sDay,
+          sMonth,
+          sYear,
+          eDay,
+          eMonth,
+          eYear,
+        ) => {
           setAccRangeDetails({
             startDay: sDay,
             startMonth: sMonth,
@@ -1282,10 +932,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           setError(null);
 
           try {
-            // 1. Cari route_code aktif via cacheUtils (SOL-R6-017 / SOL-R6-018)
             const activeRouteCode = getRouteCodeForSheet(sheetUrl);
-
-            // 2. Coba kueri instan Supabase (Opsi B: Aggregation Layer Cache)
             let crossResult = null;
             if (activeRouteCode) {
               crossResult = await getCrossPeriodAccumulation(
@@ -1300,14 +947,13 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             }
 
             if (crossResult && crossResult.data.length > 0) {
-              // Opsi B Supabase Cache Berhasil!
               setBusData(crossResult.data);
               setCurrentTabName("AKUMULASI");
               setSheetSummary({});
               setRefreshKey((prev) => prev + 1);
             } else {
-              // Fallback Opsi A: Google Sheets API
-              let targetSheetId = currentSheetId || extractSpreadsheetId(sheetUrl);
+              let targetSheetId =
+                currentSheetId || extractSpreadsheetId(sheetUrl);
               if (activeRouteCode) {
                 const routes = getRoutesFromCache();
                 const route = routes.find(
@@ -1326,7 +972,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               }
 
               if (targetSheetId) {
-                const result = await getAccumulatedBusData(targetSheetId, eDay, sDay);
+                const result = await getAccumulatedBusData(
+                  targetSheetId,
+                  eDay,
+                  sDay,
+                );
                 setBusData(result.data);
                 setHeaderMap(result.headerMap);
                 setCurrentSheetId(targetSheetId);
@@ -1337,55 +987,52 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
               }
             }
           } catch (err: any) {
-            setError(
-              formatUserError(err, TEXT_DASHBOARD.ACCUMULATION_LOAD_FAIL),
-            );
+            setError(formatUserError(err, TEXT_DASHBOARD.ACCUMULATION_LOAD_FAIL));
           } finally {
             setIsLoading(false);
           }
         }}
-      />
-
-      <BottomNav
-        activeTab={mainTab}
-        onSelectTab={setMainTab}
-        onOpenMore={() => setIsProfileMenuOpen(true)}
-        pendingQueueCount={
-          queue.filter(
-            (q) => q.status === "pending" || q.status === "failed",
-          ).length
-        }
-      />
-
-      <ProfileMenuSheet
-        isOpen={isProfileMenuOpen}
-        onClose={() => setIsProfileMenuOpen(false)}
+        isProfileMenuOpen={isProfileMenuOpen}
+        onCloseProfileMenu={() => setIsProfileMenuOpen(false)}
         onOpenAccumulation={() => setIsAccSheetOpen(true)}
         onOpenRegionalMonitoring={() => {
           setIsProfileMenuOpen(false);
-          setCurrentView('regional_monitoring');
+          setCurrentView("regional_monitoring");
         }}
         onOpenUserManagement={() => {
           setIsProfileMenuOpen(false);
-          setCurrentView('user_management');
+          setCurrentView("user_management");
         }}
-        isDarkMode={theme === "dark"}
+        theme={theme}
         onToggleTheme={toggleTheme}
-        offlineQueueCount={
-          queue.filter(
-            (q) => q.status === "pending" || q.status === "failed",
-          ).length
-        }
         isOnline={isOnline}
         onLogout={onLogout}
         onFormatWholeSheet={async () => {
           if (!currentSheetId || !currentTabName || !busData || !headerMap) {
             throw new Error(TEXT_DASHBOARD.SHEET_NOT_LOADED);
           }
-          await formatWholeSheet(currentSheetId, currentTabName, busData, headerMap);
+          await formatWholeSheet(
+            currentSheetId,
+            currentTabName,
+            busData,
+            headerMap,
+          );
         }}
         currentTabName={currentTabName}
-        hasActiveData={Boolean(currentSheetId && currentTabName && busData && busData.length > 0)}
+        hasActiveData={Boolean(
+          currentSheetId && currentTabName && busData && busData.length > 0,
+        )}
+      />
+
+      {/* 5. Mobile Bottom Navigation */}
+      <BottomNav
+        activeTab={mainTab}
+        onSelectTab={setMainTab}
+        onOpenMore={() => setIsProfileMenuOpen(true)}
+        pendingQueueCount={
+          queue.filter((q) => q.status === "pending" || q.status === "failed")
+            .length
+        }
       />
     </div>
   );
