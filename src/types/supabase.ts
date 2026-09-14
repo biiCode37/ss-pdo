@@ -60,6 +60,16 @@ export interface DailyRouteReport {
   is_fleet_confirmed_s2?: boolean;
   fleet_confirmed_s1_at?: string;
   fleet_confirmed_s2_at?: string;
+  // Kolom metrik capaian teragregasi
+  toa_shift1?: number;
+  manual_shift1?: number;
+  toa_shift2?: number;
+  manual_shift2?: number;
+  total_passengers?: number;
+  total_km?: number;
+  achievement_km?: number;
+  total_trip?: number;
+  last_synced_at?: string;
   created_at?: string;
   updated_at?: string;
 }
