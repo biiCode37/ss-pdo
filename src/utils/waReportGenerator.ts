@@ -113,55 +113,49 @@ export function generateWaReportFormat1(dateStr: string, routes: RouteWaData[]):
   const fullDate = formatIndonesianFullDate(dateStr);
 
   const lines: string[] = [
-    `${TEXT_WA_REPORT.TEMPLATE.GREETING}\t\t\t`,
-    `\`\`\`${TEXT_WA_REPORT.TEMPLATE.FORMAT_1_TITLE}\`\`\`\t\t\t`,
-    '```\t\t\t',
-    `Hari   \t:\t${dayName}\t`,
-    `Tanggal\t:\t${fullDate}\t`,
-    'Shift  \t:\t1 & 2\t',
-    '```\t\t\t',
-    '\t\t\t'
+    `${TEXT_WA_REPORT.TEMPLATE.GREETING}`,
+    `*${TEXT_WA_REPORT.TEMPLATE.FORMAT_1_TITLE}*`,
+    '```',
+    `Hari    : ${dayName}`,
+    `Tanggal : ${fullDate}`,
+    'Shift   : 1 & 2',
+    '```',
+    ''
   ];
 
   routes.forEach((r) => {
+    const paddedNo = String(r.no).padStart(2, '0');
     const loopingSuffix = r.isLooping ? ' (_Looping_)' : '';
     const percentage = r.targetHk > 0 ? (r.todayPassengers / r.targetHk) * 100 : 0;
 
-    lines.push(`*${r.no}. ${r.routeCode} | ${r.routeName}*${loopingSuffix}\`\`\`\t\t\t`);
-    lines.push(`- ${getOperatorFullName(r.operatorName)}\t\t\t`);
-    lines.push('\t\t\t');
-    lines.push(`HARI INI\t:\t${formatWaNumber(r.todayPassengers)}\t`);
-    lines.push(`KEMAREN\t:\t${formatWaNumber(r.yesterdayPassengers)}\t`);
-    lines.push(`MINGGU LALU\t:\t${formatWaNumber(r.lastWeekPassengers)}\t`);
-    lines.push(`TARGET  HK\t:\t${formatWaNumber(r.targetHk)}\t`);
-    lines.push(`BEST RECORD\t:\t${formatWaNumber(r.bestRecord)}\t`);
-    lines.push(`PERSENTASE\t:\t${formatWaDecimal(percentage, 2)}%\t`);
-    lines.push(`PENCAPAIAN KM\t:\t${formatWaDecimal(r.achievementKm, 2)}\t`);
-    lines.push(`KM BAKU\t:\t${formatWaDecimal(r.kmBaku, 3)}\t`);
-    lines.push('\t\t\t');
-    lines.push(`RENOPS   \t:\t${r.renops}\tUnit`);
-    lines.push(`REALISASI\t:\t${r.realops}\tUnit`);
-    lines.push('KENDALA  \t:\t\t');
-
-    if (r.operationalIssues) {
-      lines.push(`- ${r.operationalIssues}\t\t\t`);
-    }
-
+    lines.push(`*${paddedNo}. ${r.routeCode} | ${r.routeName}*${loopingSuffix}`);
+    lines.push(`- ${getOperatorFullName(r.operatorName)}`);
+    lines.push('```');
+    lines.push(`HARI INI      : ${formatWaNumber(r.todayPassengers)}`);
+    lines.push(`KEMARIN       : ${formatWaNumber(r.yesterdayPassengers)}`);
+    lines.push(`MINGGU LALU   : ${formatWaNumber(r.lastWeekPassengers)}`);
+    lines.push(`TARGET HK     : ${formatWaNumber(r.targetHk)}`);
+    lines.push(`BEST RECORD   : ${formatWaNumber(r.bestRecord)}`);
+    lines.push(`PERSENTASE    : ${formatWaDecimal(percentage, 2)}%`);
+    lines.push(`PENCAPAIAN KM : ${formatWaDecimal(r.achievementKm, 2)}`);
+    lines.push(`KM BAKU       : ${formatWaDecimal(r.kmBaku, 3)}`);
+    lines.push('');
+    lines.push(`RENOPS        : ${r.renops} Unit`);
+    lines.push(`REALISASI     : ${r.realops} Unit`);
+    lines.push(`KENDALA       : ${r.operationalIssues ? r.operationalIssues : '-'}`);
+    lines.push('TITIK KEMACETAN:');
     if (r.trafficJamSpots && r.trafficJamSpots.length > 0) {
-      lines.push('- TITIK KEMACETAN :\t\t\t');
       r.trafficJamSpots.forEach((spot, idx) => {
-        lines.push(`${idx + 1}. ${spot}\t\t\t`);
+        lines.push(`${idx + 1}. ${spot}`);
       });
     } else {
-      lines.push('- TITIK KEMACETAN :\t\t\t');
-      lines.push('-\t\t\t');
+      lines.push('-');
     }
-
-    lines.push('\t\t\t');
-    lines.push(`-Headway tercepat\t:\t${r.headwayFastest}\t Menit`);
-    lines.push(`-Headway terlama \t:\t${r.headwaySlowest}\tMenit`);
-    lines.push('```\t\t\t');
-    lines.push('\t\t\t');
+    lines.push('');
+    lines.push(`Headway Tercepat: ${r.headwayFastest} Menit`);
+    lines.push(`Headway Terlama : ${r.headwaySlowest} Menit`);
+    lines.push('```');
+    lines.push('');
   });
 
   lines.push(TEXT_WA_REPORT.TEMPLATE.CLOSING_FORMAT_1);
@@ -181,60 +175,68 @@ export function generateWaReportFormat2(
   const fullDate = formatIndonesianFullDate(dateStr);
 
   const lines: string[] = [
-    `*${TEXT_WA_REPORT.TEMPLATE.REGION_NAME}*\t\t\t\t\t\t`,
-    '```\t\t\t\t\t\t',
-    `${TEXT_WA_REPORT.TEMPLATE.GREETING}\t\t\t\t\t\t`,
-    `HARI     \t:\t${dayName}\t\t\t\t`,
-    `TANGGAL  \t:\t${fullDate}\t\t\t\t`,
-    `${TEXT_WA_REPORT.TEMPLATE.FORMAT_2_SUBJECT}\t\t\t\t`,
-    'SHIFT    \t:\t1 & 2\t\t\t\t',
-    `${TEXT_WA_REPORT.TEMPLATE.FORMAT_2_SUBTITLE}\t\t\t\t`,
-    '```\t\t\t\t\t\t',
-    '=============================\t\t\t\t\t\t',
-    '\t\t\t\t\t\t'
+    `*${TEXT_WA_REPORT.TEMPLATE.REGION_NAME}*`,
+    '```',
+    `${TEXT_WA_REPORT.TEMPLATE.GREETING_FORMAL}`,
+    'Izin Melaporkan Hasil Operasi Angkutan Mikrotrans Wilayah Jakarta Utara',
+    `HARI     : ${dayName}`,
+    `TANGGAL  : ${fullDate}`,
+    `PERIHAL  : LAPORAN PELANGGAN`,
+    'SHIFT    : 1 & 2',
+    'FORMAT   : [TOA] + [MANUAL] = JUMLAH PELANGGAN',
+    '```',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━',
+    ''
   ];
 
   routes.forEach((r) => {
     const paddedNo = String(r.no).padStart(2, '0');
     const loopingSuffix = r.isLooping ? ' (_LOOPING_)' : '';
 
-    lines.push(`*${paddedNo}. ${r.routeCode} | ${r.routeName}*${loopingSuffix}\t\t\t\t\t\t`);
-    lines.push('```\t\t\t\t\t\t');
-    lines.push(
-      `• SHIFT 1\t:\t${formatWaNumber(r.toaShift1)}\t+\t${formatWaNumber(r.manualShift1)}\t=\t${formatWaNumber(r.totalShift1)}`
-    );
-    lines.push(
-      `• SHIFT 2\t:\t${formatWaNumber(r.toaShift2)}\t+\t${formatWaNumber(r.manualShift2)}\t=\t${formatWaNumber(r.totalShift2)}`
-    );
-    lines.push('____________________________+\t\t\t\t\t\t');
-    lines.push(`JUMLAH  \t:\t${formatWaNumber(r.todayPassengers)}\t\t\t\t`);
-    lines.push('```\t\t\t\t\t\t');
+    const s1Toa = formatWaNumber(r.toaShift1).padStart(6, ' ');
+    const s1Man = formatWaNumber(r.manualShift1).padStart(5, ' ');
+    const s1Tot = formatWaNumber(r.totalShift1).padStart(6, ' ');
+
+    const s2Toa = formatWaNumber(r.toaShift2).padStart(6, ' ');
+    const s2Man = formatWaNumber(r.manualShift2).padStart(5, ' ');
+    const s2Tot = formatWaNumber(r.totalShift2).padStart(6, ' ');
+
+    lines.push(`*${paddedNo}. ${r.routeCode} | ${r.routeName}*${loopingSuffix}`);
+    lines.push('```');
+    lines.push(`• SHIFT 1 : ${s1Toa} + ${s1Man} = ${s1Tot}`);
+    lines.push(`• SHIFT 2 : ${s2Toa} + ${s2Man} = ${s2Tot}`);
+    lines.push('───────────────────────────────────');
+    lines.push(`JUMLAH    : ${formatWaNumber(r.todayPassengers)} Pelanggan`);
+    lines.push('```');
+    lines.push('');
   });
 
-  lines.push('=========================\t\t\t\t\t\t');
-  lines.push('\t\t\t\t\t\t');
-  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.SHIFT_1_TOTAL}*\t\t\t\t\t\t`);
-  lines.push('```\t\t\t\t\t\t');
-  lines.push(`TOM    \t:\t${formatWaNumber(totals.tomShift1)}\t\t\t\t`);
-  lines.push(`MANUAL \t:\t${formatWaNumber(totals.manualShift1)}\t\t\t\t`);
-  lines.push(`JUMLAH \t:\t${formatWaNumber(totals.totalShift1)}\t\t\t\t`);
-  lines.push(`KEMARIN\t:\t${formatWaNumber(totals.yesterdayShift1)}\t\t\t\t`);
-  lines.push(`MINGGU LALU\t:\t${formatWaNumber(totals.lastWeekShift1)}\t\t\t\t`);
-  lines.push('```\t\t\t\t\t\t');
-  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.SHIFT_2_TOTAL}*\t\t\t\t\t\t`);
-  lines.push('```\t\t\t\t\t\t');
-  lines.push(`TOM    \t:\t${formatWaNumber(totals.tomShift2)}\t\t\t\t`);
-  lines.push(`MANUAL \t:\t${formatWaNumber(totals.manualShift2)}\t\t\t\t`);
-  lines.push(`JUMLAH \t:\t${formatWaNumber(totals.totalShift2)}\t\t\t\t`);
-  lines.push(`KEMARIN\t:\t${formatWaNumber(totals.yesterdayShift2)}\t\t\t\t`);
-  lines.push(`MINGGU LALU\t:\t${formatWaNumber(totals.lastWeekShift2)}\t\t\t\t`);
-  lines.push('\t\t\t\t\t\t');
-  lines.push(`TOTAL  \t:\t${formatWaNumber(totals.totalToday)}\t\t\t\t`);
-  lines.push(`TARGET \t:\t${formatWaNumber(totals.totalTarget)}\t\t\t\t`);
-  lines.push(`KEMARIN\t:\t${formatWaNumber(totals.totalYesterday)}\t\t\t\t`);
-  lines.push(`MINGGU LALU\t:\t${formatWaNumber(totals.totalLastWeek)}\t\t\t\t`);
-  lines.push('```\t\t\t\t\t\t');
-  lines.push('\t\t\t\t\t\t');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.TOTAL_REGION_TITLE}*`);
+  lines.push('');
+  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.SHIFT_1_TOTAL}*`);
+  lines.push('```');
+  lines.push(`TOM         : ${formatWaNumber(totals.tomShift1).padStart(7, ' ')}`);
+  lines.push(`MANUAL      : ${formatWaNumber(totals.manualShift1).padStart(7, ' ')}`);
+  lines.push(`JUMLAH      : ${formatWaNumber(totals.totalShift1).padStart(7, ' ')}`);
+  lines.push(`KEMARIN     : ${formatWaNumber(totals.yesterdayShift1).padStart(7, ' ')}`);
+  lines.push(`MINGGU LALU : ${formatWaNumber(totals.lastWeekShift1).padStart(7, ' ')}`);
+  lines.push('```');
+  lines.push('');
+  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.SHIFT_2_TOTAL}*`);
+  lines.push('```');
+  lines.push(`TOM         : ${formatWaNumber(totals.tomShift2).padStart(7, ' ')}`);
+  lines.push(`MANUAL      : ${formatWaNumber(totals.manualShift2).padStart(7, ' ')}`);
+  lines.push(`JUMLAH      : ${formatWaNumber(totals.totalShift2).padStart(7, ' ')}`);
+  lines.push(`KEMARIN     : ${formatWaNumber(totals.yesterdayShift2).padStart(7, ' ')}`);
+  lines.push(`MINGGU LALU : ${formatWaNumber(totals.lastWeekShift2).padStart(7, ' ')}`);
+  lines.push('');
+  lines.push(`TOTAL       : ${formatWaNumber(totals.totalToday).padStart(7, ' ')}`);
+  lines.push(`TARGET      : ${formatWaNumber(totals.totalTarget).padStart(7, ' ')}`);
+  lines.push(`KEMARIN     : ${formatWaNumber(totals.totalYesterday).padStart(7, ' ')}`);
+  lines.push(`MINGGU LALU : ${formatWaNumber(totals.totalLastWeek).padStart(7, ' ')}`);
+  lines.push('```');
+  lines.push('');
   lines.push(TEXT_WA_REPORT.TEMPLATE.CLOSING_FORMAT_2);
 
   return lines.join('\n');

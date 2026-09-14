@@ -1,8 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import {
+  generateWaReportFormat1,
+  generateWaReportFormat2,
   generateWaReportFormat3,
   getOperatorFullName,
-  type RouteFleetReportItem
+  type RouteFleetReportItem,
+  type RouteWaData,
+  type RegionTotals
 } from './waReportGenerator';
 
 describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
@@ -149,5 +153,143 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
 
     expect(report).toContain('*01. JAK.01*');
     expect(report).toContain('- KOLAMAS JAYA (KLM)');
+  });
+});
+
+describe('waReportGenerator - Format 1 (Komprehensif)', () => {
+  const mockRoutes: RouteWaData[] = [
+    {
+      no: 1,
+      routeCode: 'JAK.01',
+      routeName: 'TG. PRIOK - PLUMPANG',
+      operatorName: 'KLM',
+      isLooping: true,
+      todayPassengers: 5077,
+      yesterdayPassengers: 4937,
+      lastWeekPassengers: 5189,
+      targetHk: 5161,
+      bestRecord: 5201,
+      achievementKm: 178.05,
+      kmBaku: 14.415,
+      renops: 20,
+      realops: 20,
+      trafficJamSpots: ['Jl. Plumpang Raya'],
+      operationalIssues: 'Lancar terkendali',
+      headwayFastest: 3,
+      headwaySlowest: 10,
+      toaShift1: 1873,
+      manualShift1: 0,
+      totalShift1: 1873,
+      toaShift2: 3204,
+      manualShift2: 0,
+      totalShift2: 3204,
+    }
+  ];
+
+  it('generates Format 1 without tab characters and with correct monospace layout', () => {
+    const report = generateWaReportFormat1('2026-09-02', mockRoutes);
+
+    // Pastikan tidak ada tab (\t) liar yang merusak layout ponsel
+    expect(report).not.toContain('\t');
+
+    // Header checks
+    expect(report).toContain('Hari    : RABU');
+    expect(report).toContain('Tanggal : 2 September 2026');
+    expect(report).toContain('Shift   : 1 & 2');
+
+    // Route card checks
+    expect(report).toContain('*01. JAK.01 | TG. PRIOK - PLUMPANG* (_Looping_)');
+    expect(report).toContain('- KOLAMAS JAYA (KLM)');
+    expect(report).toContain('HARI INI      : 5.077');
+    expect(report).toContain('KEMARIN       : 4.937');
+    expect(report).toContain('MINGGU LALU   : 5.189');
+    expect(report).toContain('TARGET HK     : 5.161');
+    expect(report).toContain('BEST RECORD   : 5.201');
+    expect(report).toContain('PENCAPAIAN KM : 178,05');
+    expect(report).toContain('KM BAKU       : 14,415');
+    expect(report).toContain('RENOPS        : 20 Unit');
+    expect(report).toContain('REALISASI     : 20 Unit');
+    expect(report).toContain('KENDALA       : Lancar terkendali');
+    expect(report).toContain('TITIK KEMACETAN:');
+    expect(report).toContain('1. Jl. Plumpang Raya');
+    expect(report).toContain('Headway Tercepat: 3 Menit');
+    expect(report).toContain('Headway Terlama : 10 Menit');
+  });
+});
+
+describe('waReportGenerator - Format 2 (Rincian Shift)', () => {
+  const mockRoutes: RouteWaData[] = [
+    {
+      no: 1,
+      routeCode: 'JAK.01',
+      routeName: 'TG. PRIOK - PLUMPANG',
+      operatorName: 'KLM',
+      isLooping: true,
+      todayPassengers: 5077,
+      yesterdayPassengers: 4937,
+      lastWeekPassengers: 5189,
+      targetHk: 5161,
+      bestRecord: 5201,
+      achievementKm: 178.05,
+      kmBaku: 14.415,
+      renops: 20,
+      realops: 20,
+      trafficJamSpots: [],
+      operationalIssues: '',
+      headwayFastest: 3,
+      headwaySlowest: 10,
+      toaShift1: 1873,
+      manualShift1: 0,
+      totalShift1: 1873,
+      toaShift2: 3204,
+      manualShift2: 0,
+      totalShift2: 3204,
+    }
+  ];
+
+  const mockTotals: RegionTotals = {
+    tomShift1: 39813,
+    manualShift1: 204,
+    totalShift1: 40017,
+    yesterdayShift1: 38920,
+    lastWeekShift1: 41200,
+    tomShift2: 64120,
+    manualShift2: 310,
+    totalShift2: 64430,
+    yesterdayShift2: 63800,
+    lastWeekShift2: 65100,
+    totalToday: 104447,
+    totalTarget: 108500,
+    totalYesterday: 102720,
+    totalLastWeek: 106300,
+  };
+
+  it('generates Format 2 without tab characters and with neat column alignment', () => {
+    const report = generateWaReportFormat2('2026-09-02', mockRoutes, mockTotals);
+
+    // Pastikan bebas dari tab
+    expect(report).not.toContain('\t');
+
+    // Header checks
+    expect(report).toContain('*MIKROTRANS WILAYAH UTARA*');
+    expect(report).toContain('Selamat Malam Bapak / Ibu,');
+    expect(report).toContain('HARI     : RABU');
+    expect(report).toContain('TANGGAL  : 2 September 2026');
+
+    // Route checks with monospace aligned columns
+    expect(report).toContain('*01. JAK.01 | TG. PRIOK - PLUMPANG* (_LOOPING_)');
+    expect(report).toContain('• SHIFT 1 :  1.873 +     0 =  1.873');
+    expect(report).toContain('• SHIFT 2 :  3.204 +     0 =  3.204');
+    expect(report).toContain('JUMLAH    : 5.077 Pelanggan');
+
+    // Region Totals checks
+    expect(report).toContain('*TOTAL WILAYAH JAKARTA UTARA*');
+    expect(report).toContain('*• Total Shift 1*');
+    expect(report).toContain('TOM         :  39.813');
+    expect(report).toContain('MANUAL      :     204');
+    expect(report).toContain('JUMLAH      :  40.017');
+    expect(report).toContain('*• Total Shift 2*');
+    expect(report).toContain('TOTAL       : 104.447');
+    expect(report).toContain('TARGET      : 108.500');
   });
 });
