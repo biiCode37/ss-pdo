@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   parseGlobalSheetDateBlock,
   normalizeRouteCode,
-  type GlobalRouteDailyMetrics,
 } from "./globalReportReader";
 
 describe("Global Spreadsheet Reader (globalReportReader)", () => {

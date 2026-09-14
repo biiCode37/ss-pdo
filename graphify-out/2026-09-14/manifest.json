@@ -630,8 +630,8 @@
     "semantic_hash": ""
   },
   "src/types/supabase.ts": {
-    "mtime": 1789386674.6465504,
-    "ast_hash": "8478e222b3615630d83db0157adf97d5",
+    "mtime": 1789220886.2265959,
+    "ast_hash": "d09b0f060df874d2c664ec4f30ee3494",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-04-supabase-integration.md": {
@@ -830,8 +830,8 @@
     "semantic_hash": ""
   },
   "src/utils/alertUtils.ts": {
-    "mtime": 1789387163.3841555,
-    "ast_hash": "605ed6448e3e32ab6fe500e3440a61b9",
+    "mtime": 1789290813.446506,
+    "ast_hash": "f4def4645bbaee1a61dec5068c546888",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-08-15-progressive-disclosure-input-modal-design.md": {
@@ -950,8 +950,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/index.ts": {
-    "mtime": 1789386869.8907664,
-    "ast_hash": "d3ae67b00b5b219e258eb4b632fd3e37",
+    "mtime": 1788676457.0252964,
+    "ast_hash": "09f24e1cdf97f8f41a86394588caaa5c",
     "semantic_hash": ""
   },
   "src/services/googleSheets/mutations.ts": {
@@ -1320,13 +1320,13 @@
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.test.ts": {
-    "mtime": 1789386988.990308,
-    "ast_hash": "4d666d33c11fc973f7ca654bdcf1b12a",
+    "mtime": 1788842518.376328,
+    "ast_hash": "5488b10d74c0ab89b30c35cc822000db",
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.ts": {
-    "mtime": 1789386967.5457635,
-    "ast_hash": "fb7dce13fac2d913308d4f99e3d88791",
+    "mtime": 1789057522.9880154,
+    "ast_hash": "9ca5952f89e7ad53fc919134538f37f9",
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.test.ts": {
@@ -1335,18 +1335,18 @@
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.ts": {
-    "mtime": 1789386929.6783264,
-    "ast_hash": "ffbb17141d931109c2827b234e0cf63d",
+    "mtime": 1789223419.3826022,
+    "ast_hash": "1a19ea10400ad352ab32398d9e08f450",
     "semantic_hash": ""
   },
   "src/utils/waReportGenerator.test.ts": {
-    "mtime": 1789387080.4630623,
-    "ast_hash": "b04e0fb9b5b6c08d2ab697f2258c4a1a",
+    "mtime": 1789063360.6906521,
+    "ast_hash": "d5b378b5388a3a9397de2aadce662e12",
     "semantic_hash": ""
   },
   "src/utils/waReportGenerator.ts": {
-    "mtime": 1789387063.7126331,
-    "ast_hash": "8f7a5ce62a4b21dbda90a4a3314fd8ff",
+    "mtime": 1789061829.6926122,
+    "ast_hash": "1e1d5a813634b5c8fec743f606f37034",
     "semantic_hash": ""
   },
   "supabase/migrations/20260908000001_all_route_monitoring.sql": {
@@ -1425,8 +1425,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1789387136.660774,
-    "ast_hash": "4403c71005591d7ba4a0124957877b73",
+    "mtime": 1788849695.4001882,
+    "ast_hash": "bf7b0fa03f92b325ad0bf9f0750d4d27",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1435,13 +1435,13 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_wa_report.ts": {
-    "mtime": 1789387044.868395,
-    "ast_hash": "1085a6b8fdb9db0a69753c3d183bef35",
+    "mtime": 1789058051.921127,
+    "ast_hash": "70483ddf46a4d8816792c384286a8008",
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789387143.8359227,
-    "ast_hash": "628d7396a7660de54d34a3218bc83d73",
+    "mtime": 1789302038.217413,
+    "ast_hash": "965db1a537619a3483b644c33bbc1db8",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1880,8 +1880,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.tsx": {
-    "mtime": 1789387187.046035,
-    "ast_hash": "d1f295796b47a1a4a000266e0ac6695e",
+    "mtime": 1789284123.9343526,
+    "ast_hash": "8e0ef3bd2cbfba8f6f13f654fdf9c7ed",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringKpiCards.tsx": {
@@ -2660,13 +2660,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.test.tsx": {
-    "mtime": 1789387295.3181152,
-    "ast_hash": "133f69f32ff4897a3b92532465f596f8",
+    "mtime": 1789301608.472608,
+    "ast_hash": "4a2c9c387cc550edab31eecdc8fe5c3c",
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.tsx": {
-    "mtime": 1789387219.882122,
-    "ast_hash": "959e7c81705865f98f60485f00d62a16",
+    "mtime": 1789301589.041891,
+    "ast_hash": "2e77c6a1308346ae67031434c6de71aa",
     "semantic_hash": ""
   },
   "src/components/monitoring/index.ts": {
@@ -2772,46 +2772,6 @@
   "refactor-ss-pdo/refact_59/REPAIR_REPORT.md": {
     "mtime": 1789301901.548987,
     "ast_hash": "b5e4d96a52b691b4554913ea9026d2bc",
-    "semantic_hash": ""
-  },
-  "src/services/googleSheets/globalReportReader.test.ts": {
-    "mtime": 1789387393.0873597,
-    "ast_hash": "34f528eabaf39a1bf2607e42b2868fcc",
-    "semantic_hash": ""
-  },
-  "src/services/googleSheets/globalReportReader.ts": {
-    "mtime": 1789386860.469474,
-    "ast_hash": "e6b3fdff992358450175c754ad843943",
-    "semantic_hash": ""
-  },
-  "src/utils/modals/regionalSyncModal.ts": {
-    "mtime": 1789387154.862252,
-    "ast_hash": "3bfa3a9c142a98ad0b7e7b1d40a13b72",
-    "semantic_hash": ""
-  },
-  "supabase/migrations/20260914000001_add_daily_route_reports_metrics.sql": {
-    "mtime": 1789386665.153206,
-    "ast_hash": "9f2527a00273b75db44ad53c2539af10",
-    "semantic_hash": ""
-  },
-  "docs/superpowers/plans/2026-09-14-regional-monitoring-and-wa-generator-v2.md": {
-    "mtime": 1789386644.679825,
-    "ast_hash": "169a4031c1e959a785bb10245e6bcc08",
-    "semantic_hash": ""
-  },
-  "docs/superpowers/specs/2026-09-14-regional-monitoring-and-wa-generator-v2-design.md": {
-    "mtime": 1789386524.3355906,
-    "ast_hash": "63b0938f85652aedef3ff37bacc6e672",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_60/AUDIT_BUGS.md": {
-    "mtime": 1789302356.6774278,
-    "ast_hash": "4e2aa78a0fe25a3898121724e7571940",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_60/REPAIR_REPORT.md": {
-    "mtime": 1789302362.5233812,
-    "ast_hash": "df76c5d7ae03684128409b2d9b682359",
     "semantic_hash": ""
   }
 }
