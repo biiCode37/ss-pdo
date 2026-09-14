@@ -7,6 +7,7 @@ import {
   Calendar,
   RefreshCw,
   FileSpreadsheet,
+  Download,
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
@@ -21,6 +22,8 @@ interface MonitoringHeaderProps {
   loading: boolean;
   onOpenWaModal: () => void;
   hasData: boolean;
+  onSyncGlobal?: () => void;
+  syncingGlobal?: boolean;
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
@@ -33,6 +36,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   loading,
   onOpenWaModal,
   hasData,
+  onSyncGlobal,
+  syncingGlobal,
 }) => {
   return (
     <header
@@ -238,6 +243,39 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               }}
             />
           </button>
+
+          {/* Tarik Data Global Button */}
+          {onSyncGlobal && (
+            <button
+              type="button"
+              onClick={onSyncGlobal}
+              disabled={syncingGlobal || loading}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 12px",
+                borderRadius: "12px",
+                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+                color: "var(--accent-color, #3ECF8E)",
+                fontSize: "12.5px",
+                fontWeight: 700,
+                cursor: syncingGlobal || loading ? "wait" : "pointer",
+                opacity: syncingGlobal || loading ? 0.6 : 1,
+                transition: "all 0.2s ease",
+              }}
+              title={TEXT_MONITORING.HEADER.BTN_SYNC_GLOBAL_TITLE}
+            >
+              <Download
+                size={16}
+                style={{
+                  animation: syncingGlobal ? "bounce 1s infinite" : "none",
+                }}
+              />
+              <span>{TEXT_MONITORING.HEADER.BTN_SYNC_GLOBAL}</span>
+            </button>
+          )}
 
           {/* Buat Laporan WA Button */}
           <button

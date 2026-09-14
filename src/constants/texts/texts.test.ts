@@ -75,6 +75,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.KPI.PASSENGER_LABEL).toBe('Total Pelanggan');
     expect(TEXT_MONITORING.KPI.KM_LABEL).toBe('Total Jarak Tempuh');
     expect(TEXT_MONITORING.KPI.SHIFT_DISTRIBUTION).toBe('Distribusi Shift');
+    expect(TEXT_MONITORING.HEADER.BTN_SYNC_GLOBAL).toBeDefined();
+    expect(TEXT_MONITORING.SYNC_MODAL.TITLE).toBeDefined();
+    expect(TEXT_MONITORING.SYNC_MODAL.SUCCESS_DESC(18)).toContain('18 rute');
   });
 
   it('exports TEXT_WA_REPORT with modal titles and format labels', () => {

@@ -14,6 +14,11 @@ import {
   type BulkTripModalOptions,
   type BulkCopyKmModalOptions,
 } from "./modals/bulkModals";
+import {
+  showRegionalSyncModal,
+  type RegionalSyncModalOptions,
+  type RegionalSyncModalResult,
+} from "./modals/regionalSyncModal";
 import { TEXT_ALERTS } from "../constants/texts";
 
 // Re-exports untuk kompatibilitas penuh (Zero Breaking Change)
@@ -28,8 +33,15 @@ export {
   showBulkTripModal,
   showBulkCopyKmModal,
   showFormatSheetConfirm,
+  showRegionalSyncModal,
 };
-export type { BusModalOptions, BulkTripModalOptions, BulkCopyKmModalOptions };
+export type {
+  BusModalOptions,
+  BulkTripModalOptions,
+  BulkCopyKmModalOptions,
+  RegionalSyncModalOptions,
+  RegionalSyncModalResult,
+};
 
 /**
  * Menampilkan Toast notifikasi singkat non-blocking

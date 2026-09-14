@@ -7,12 +7,12 @@ import * as regionalService from '@/services/allRouteMonitoringService';
 import * as dailyReportService from '@/services/dailyRouteReportService';
 import type { RegionalMonitoringResult } from '@/services/allRouteMonitoringService';
 
-// Mock dependencies
 vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services/allRouteMonitoringService')>();
   return {
     ...actual,
     fetchRegionalMonitoringData: vi.fn(),
+    syncRegionalDailyFromGlobalSheet: vi.fn(),
     SUPERVISORS: [
       'Ranto Lumban Toruan',
       'Abdul Manan',
@@ -29,6 +29,7 @@ vi.mock('@/utils/alertUtils', () => ({
   showSuccessToast: vi.fn(),
   showErrorToast: vi.fn(),
   showErrorAlert: vi.fn(),
+  showRegionalSyncModal: vi.fn(),
 }));
 
 const mockData: RegionalMonitoringResult = {
@@ -327,5 +328,39 @@ describe('AllRouteMonitoringPage Component', () => {
 
     expect(container.textContent).toContain('2 September 2026');
     expect(onDateChange).toHaveBeenCalledWith('2026-09-02');
+  });
+
+  it('triggers global sync modal and calls syncRegionalDailyFromGlobalSheet', async () => {
+    const alertUtils = await import('@/utils/alertUtils');
+    (alertUtils.showRegionalSyncModal as any).mockResolvedValue({
+      spreadsheetUrl: 'https://docs.google.com/spreadsheets/d/abc-123',
+      sheetName: 'SEPTEMBER 2026',
+    });
+    (regionalService.syncRegionalDailyFromGlobalSheet as any).mockResolvedValue({
+      success: true,
+      syncedCount: 18,
+      errors: [],
+    });
+
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+
+    const syncBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.textContent?.includes('Tarik Data Global')
+    );
+    expect(syncBtn).toBeDefined();
+
+    await act(async () => {
+      syncBtn?.click();
+    });
+
+    expect(alertUtils.showRegionalSyncModal).toHaveBeenCalledWith({ dateStr: '2026-09-02' });
+    expect(regionalService.syncRegionalDailyFromGlobalSheet).toHaveBeenCalledWith(
+      '2026-09-02',
+      'https://docs.google.com/spreadsheets/d/abc-123',
+      'SEPTEMBER 2026'
+    );
+    expect(alertUtils.showSuccessToast).toHaveBeenCalledWith(expect.stringContaining('18 rute'));
   });
 });

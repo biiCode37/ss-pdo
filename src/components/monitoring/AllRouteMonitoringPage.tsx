@@ -2,12 +2,13 @@ import { useState, useEffect, useCallback, useMemo, useRef, memo } from "react";
 import {
   fetchRegionalMonitoringData,
   getRelativeDate,
+  syncRegionalDailyFromGlobalSheet,
   type RegionalMonitoringResult,
 } from "@/services/allRouteMonitoringService";
 import { verifyDailyRouteReport } from "@/services/dailyRouteReportService";
 import { WaReportModal } from "@/components/WaReportModal";
-import { showSuccessToast, showErrorAlert } from "@/utils/alertUtils";
-import { TEXT_ERRORS, TEXT_ALERTS } from "@/constants/texts";
+import { showSuccessToast, showErrorAlert, showRegionalSyncModal } from "@/utils/alertUtils";
+import { TEXT_ERRORS, TEXT_ALERTS, TEXT_MONITORING } from "@/constants/texts";
 
 import {
   SUPERVISOR_TABS,
@@ -57,6 +58,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [data, setData] = useState<RegionalMonitoringResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [syncingGlobal, setSyncingGlobal] = useState<boolean>(false);
 
   // Filter state
   const [selectedSupervisorTab, setSelectedSupervisorTab] =
@@ -139,6 +141,39 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     }
   };
 
+  // Global spreadsheet sync handler
+  const handleSyncGlobal = async () => {
+    try {
+      const modalResult = await showRegionalSyncModal({ dateStr: selectedDate });
+      if (!modalResult) return;
+
+      setSyncingGlobal(true);
+      const res = await syncRegionalDailyFromGlobalSheet(
+        selectedDate,
+        modalResult.spreadsheetUrl,
+        modalResult.sheetName
+      );
+
+      if (res.success) {
+        showSuccessToast(TEXT_MONITORING.SYNC_MODAL.SUCCESS_DESC(res.syncedCount));
+        await loadData(true);
+      } else {
+        showErrorAlert(
+          TEXT_MONITORING.SYNC_MODAL.FAILED_TITLE,
+          res.errors.join("\n") || "Gagal menyinkronkan data spreadsheet global"
+        );
+      }
+    } catch (err: unknown) {
+      console.warn("[AllRouteMonitoringPage] Gagal sync global:", err);
+      showErrorAlert(
+        TEXT_MONITORING.SYNC_MODAL.FAILED_TITLE,
+        TEXT_ERRORS.LOAD_DATA_FAILED
+      );
+    } finally {
+      setSyncingGlobal(false);
+    }
+  };
+
   // Filtered routes
   const filteredRoutes = useMemo(() => {
     if (!data) return [];
@@ -174,6 +209,8 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         loading={loading}
         onOpenWaModal={() => setIsWaModalOpen(true)}
         hasData={Boolean(data)}
+        onSyncGlobal={handleSyncGlobal}
+        syncingGlobal={syncingGlobal}
       />
 
       {/* 2. Main Content Area */}
