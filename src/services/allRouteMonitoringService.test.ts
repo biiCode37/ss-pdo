@@ -1,10 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   getRelativeDate,
-  fetchRegionalMonitoringData
+  fetchRegionalMonitoringData,
+  syncRegionalDailyFromGlobalSheet
 } from './allRouteMonitoringService';
 import { supabase } from './supabase';
 import * as dailyReportService from './dailyRouteReportService';
+import * as googleSheetsService from './googleSheets';
 
 vi.mock('./supabase', () => ({
   supabase: {
@@ -14,6 +16,11 @@ vi.mock('./supabase', () => ({
 
 vi.mock('./dailyRouteReportService', () => ({
   fetchRouteMasterList: vi.fn(),
+  syncRouteMetricsToReport: vi.fn(),
+}));
+
+vi.mock('./googleSheets', () => ({
+  fetchGlobalReportDailyMetrics: vi.fn(),
 }));
 
 describe('allRouteMonitoringService', () => {
@@ -146,5 +153,131 @@ describe('allRouteMonitoringService', () => {
     expect(result.submittedCount).toBe(1);
     expect(result.emptyCount).toBe(1);
     expect(result.totalTodayPassengers).toBe(5077);
+  });
+
+  it('prioritizes pre-synced metrics from daily_route_reports over unit summaries', async () => {
+    const mockRoutes = [
+      {
+        id: 1,
+        route_code: 'JAK.01',
+        route_name: 'TG. PRIOK - PLUMPANG',
+        operator_name: 'KOLAMAS',
+        is_looping: true,
+        km_baku: 14.415,
+        target_hk: 5161,
+        best_record: 5201,
+        default_renops: 20,
+        supervisor_name: 'MOAMAR. Z.A. MAHU',
+        default_traffic_jam_spots: []
+      }
+    ];
+
+    (dailyReportService.fetchRouteMasterList as any).mockResolvedValue(mockRoutes);
+
+    // Pre-synced metrics di daily_route_reports
+    const mockReports = [
+      {
+        route_id: 1,
+        route_code: 'JAK.01',
+        date: '2026-09-02',
+        renops_shift1: 20,
+        realops_shift1: 20,
+        toa_shift1: 1900,
+        manual_shift1: 10,
+        toa_shift2: 3200,
+        manual_shift2: 20,
+        total_passengers: 5130,
+        total_km: 3600,
+        achievement_km: 180,
+        total_trip: 250,
+        status: 'verified'
+      }
+    ];
+
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'daily_route_reports') {
+        return {
+          select: vi.fn().mockReturnThis(),
+          in: vi.fn().mockResolvedValue({ data: mockReports, error: null })
+        };
+      }
+      if (table === 'daily_unit_summaries') {
+        return {
+          select: vi.fn().mockReturnThis(),
+          or: vi.fn().mockResolvedValue({ data: [], error: null })
+        };
+      }
+      return { select: vi.fn().mockReturnThis() };
+    });
+
+    const result = await fetchRegionalMonitoringData('2026-09-02');
+    const jak01 = result.routes[0];
+
+    expect(jak01.todayPassengers).toBe(5130);
+    expect(jak01.totalKm).toBe(3600);
+    expect(jak01.toaShift1).toBe(1900);
+    expect(jak01.manualShift1).toBe(10);
+    expect(jak01.totalShift1).toBe(1910);
+    expect(jak01.achievementKm).toBe(180);
+    expect(result.totalTodayPassengers).toBe(5130);
+    expect(result.totalKm).toBe(3600);
+  });
+
+  it('syncs 18 routes from global spreadsheet to daily_route_reports', async () => {
+    const mockRoutes = [
+      { id: 1, route_code: 'JAK.01' },
+      { id: 2, route_code: 'JAK.05' }
+    ];
+    (dailyReportService.fetchRouteMasterList as any).mockResolvedValue(mockRoutes);
+
+    const mockMetricsMap = new Map();
+    mockMetricsMap.set('JAK.01', {
+      routeCode: 'JAK.01',
+      renops: 20,
+      realops: 20,
+      kmTempuh: 3560.96,
+      toaShift1: 1873,
+      manualShift1: 0,
+      totalShift1: 1873,
+      toaShift2: 3204,
+      manualShift2: 0,
+      totalShift2: 3204,
+      totalPassengers: 5077,
+      kmPerBus: 178.05,
+      targetPassengers: 5161,
+      totalRitase: 247,
+    });
+
+    (googleSheetsService.fetchGlobalReportDailyMetrics as any).mockResolvedValue(mockMetricsMap);
+
+    const mockUpsert = vi.fn().mockResolvedValue({ error: null });
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'daily_route_reports') {
+        return {
+          upsert: mockUpsert
+        };
+      }
+      return {};
+    });
+
+    const syncResult = await syncRegionalDailyFromGlobalSheet(
+      '2026-09-02',
+      'https://docs.google.com/spreadsheets/d/test-global-id/edit',
+      'SEPTEMBER 2026'
+    );
+
+    expect(syncResult.success).toBe(true);
+    expect(syncResult.syncedCount).toBe(1);
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        route_id: 1,
+        route_code: 'JAK.01',
+        date: '2026-09-02',
+        total_passengers: 5077,
+        total_km: 3560.96,
+        total_trip: 247
+      }),
+      { onConflict: 'route_id,date' }
+    );
   });
 });

@@ -1,5 +1,7 @@
 import { supabase } from './supabase';
 import { fetchRouteMasterList } from './dailyRouteReportService';
+import { fetchGlobalReportDailyMetrics } from './googleSheets';
+import { extractSpreadsheetId } from '../utils/sheetIdentity';
 import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail } from '../types/supabase';
 
 export const SUPERVISORS = [
@@ -156,10 +158,12 @@ export async function fetchRegionalMonitoringData(
   const routeItems: RegionalRouteItem[] = routes.map((r: Route) => {
     const code = r.route_code;
 
-    // Laporan hari ini
+    // Laporan hari ini, kemarin, dan minggu lalu
     const todayReport = reports.find((rep) => rep.route_code === code && rep.date === dateStr);
+    const yesterdayReport = reports.find((rep) => rep.route_code === code && rep.date === yesterdayDate);
+    const lastWeekReport = reports.find((rep) => rep.route_code === code && rep.date === lastWeekDate);
 
-    // Filter summaries per tanggal
+    // Filter summaries per tanggal (sebagai fallback jika laporan metrik belum tersinkron)
     const todaySums = summaries.filter(
       (s) => s.route_code === code && s.year === pToday.year && s.month === pToday.month && s.day === pToday.day
     );
@@ -170,18 +174,48 @@ export async function fetchRegionalMonitoringData(
       (s) => s.route_code === code && s.year === pLast.year && s.month === pLast.month && s.day === pLast.day
     );
 
-    // Hitung akumulasi penumpang & KM
-    const todayPassengers = todaySums.reduce((acc, cur) => acc + (Number(cur.total_passengers) || 0), 0);
-    const yesterdayPassengers = yestSums.reduce((acc, cur) => acc + (Number(cur.total_passengers) || 0), 0);
-    const lastWeekPassengers = lastSums.reduce((acc, cur) => acc + (Number(cur.total_passengers) || 0), 0);
+    // Akumulasi fallback dari unit summaries
+    const sumTodayPassengers = todaySums.reduce((acc, cur) => acc + (Number(cur.total_passengers) || 0), 0);
+    const sumYesterdayPassengers = yestSums.reduce((acc, cur) => acc + (Number(cur.total_passengers) || 0), 0);
+    const sumLastWeekPassengers = lastSums.reduce((acc, cur) => acc + (Number(cur.total_passengers) || 0), 0);
 
-    const totalKm = todaySums.reduce((acc, cur) => acc + (Number(cur.total_km) || 0), 0);
-    const toaShift1 = todaySums.reduce((acc, cur) => acc + (Number(cur.toa_shift1) || 0), 0);
-    const manualShift1 = todaySums.reduce((acc, cur) => acc + (Number(cur.manual_shift1) || 0), 0);
+    const sumTotalKm = todaySums.reduce((acc, cur) => acc + (Number(cur.total_km) || 0), 0);
+    const sumToaShift1 = todaySums.reduce((acc, cur) => acc + (Number(cur.toa_shift1) || 0), 0);
+    const sumManualShift1 = todaySums.reduce((acc, cur) => acc + (Number(cur.manual_shift1) || 0), 0);
+    const sumToaShift2 = todaySums.reduce((acc, cur) => acc + (Number(cur.toa_shift2) || 0), 0);
+    const sumManualShift2 = todaySums.reduce((acc, cur) => acc + (Number(cur.manual_shift2) || 0), 0);
+
+    // Prioritaskan nilai capaian dari daily_route_reports jika tersedia
+    const todayPassengers = (todayReport?.total_passengers !== undefined && todayReport.total_passengers !== null && Number(todayReport.total_passengers) > 0)
+      ? Number(todayReport.total_passengers)
+      : sumTodayPassengers;
+
+    const yesterdayPassengers = (yesterdayReport?.total_passengers !== undefined && yesterdayReport.total_passengers !== null && Number(yesterdayReport.total_passengers) > 0)
+      ? Number(yesterdayReport.total_passengers)
+      : sumYesterdayPassengers;
+
+    const lastWeekPassengers = (lastWeekReport?.total_passengers !== undefined && lastWeekReport.total_passengers !== null && Number(lastWeekReport.total_passengers) > 0)
+      ? Number(lastWeekReport.total_passengers)
+      : sumLastWeekPassengers;
+
+    const totalKm = (todayReport?.total_km !== undefined && todayReport.total_km !== null && Number(todayReport.total_km) > 0)
+      ? Number(todayReport.total_km)
+      : sumTotalKm;
+
+    const toaShift1 = (todayReport?.toa_shift1 !== undefined && todayReport.toa_shift1 !== null)
+      ? Number(todayReport.toa_shift1)
+      : sumToaShift1;
+    const manualShift1 = (todayReport?.manual_shift1 !== undefined && todayReport.manual_shift1 !== null)
+      ? Number(todayReport.manual_shift1)
+      : sumManualShift1;
     const totalShift1 = toaShift1 + manualShift1;
 
-    const toaShift2 = todaySums.reduce((acc, cur) => acc + (Number(cur.toa_shift2) || 0), 0);
-    const manualShift2 = todaySums.reduce((acc, cur) => acc + (Number(cur.manual_shift2) || 0), 0);
+    const toaShift2 = (todayReport?.toa_shift2 !== undefined && todayReport.toa_shift2 !== null)
+      ? Number(todayReport.toa_shift2)
+      : sumToaShift2;
+    const manualShift2 = (todayReport?.manual_shift2 !== undefined && todayReport.manual_shift2 !== null)
+      ? Number(todayReport.manual_shift2)
+      : sumManualShift2;
     const totalShift2 = toaShift2 + manualShift2;
 
     const renopsS1 = todayReport?.renops_shift1 ?? (r.default_renops || 0);
@@ -192,13 +226,15 @@ export async function fetchRegionalMonitoringData(
     const totalRenops = renopsS1 || renopsS2 ? Math.max(renopsS1, renopsS2) : (r.default_renops || 0);
     const totalRealops = realopsS1 || realopsS2 ? Math.max(realopsS1, realopsS2) : 0;
 
-    const achievementKm = totalRealops > 0 ? totalKm / totalRealops : 0;
+    const achievementKm = (todayReport?.achievement_km !== undefined && todayReport.achievement_km !== null && Number(todayReport.achievement_km) > 0)
+      ? Number(todayReport.achievement_km)
+      : (totalRealops > 0 ? totalKm / totalRealops : 0);
 
     // Tentukan status kelengkapan
     let status: 'draft' | 'submitted' | 'verified' | 'empty' = 'empty';
     if (todayReport) {
       status = todayReport.status || 'draft';
-    } else if (todaySums.length > 0 && todayPassengers > 0) {
+    } else if (todayPassengers > 0) {
       status = 'draft';
     }
 
@@ -246,7 +282,7 @@ export async function fetchRegionalMonitoringData(
   });
 
   // 5. Hitung Agregat Wilayah
-  const totals = calculateRegionalTotals(routeItems, summaries, pYest, pLast);
+  const totals = calculateRegionalTotals(routeItems, summaries, pYest, pLast, reports, yesterdayDate, lastWeekDate);
 
   return {
     date: dateStr,
@@ -264,7 +300,10 @@ export function calculateRegionalTotals(
   routes: RegionalRouteItem[],
   summaries: DailyUnitSummary[],
   pYest: { year: number; month: number; day: number },
-  pLast: { year: number; month: number; day: number }
+  pLast: { year: number; month: number; day: number },
+  reports?: DailyRouteReport[],
+  yesterdayDate?: string,
+  lastWeekDate?: string
 ) {
   const totalRenops = routes.reduce((acc, r) => acc + r.totalRenops, 0);
   const totalRealops = routes.reduce((acc, r) => acc + r.totalRealops, 0);
@@ -283,7 +322,10 @@ export function calculateRegionalTotals(
   const manualShift2 = routes.reduce((acc, r) => acc + r.manualShift2, 0);
   const totalShift2 = tomShift2 + manualShift2;
 
-  // Riwayat Shift Kemarin & Minggu Lalu
+  // Riwayat Shift Kemarin & Minggu Lalu (prioritaskan laporan harian jika ada, fallback ke summaries)
+  const yestReports = reports?.filter(r => r.date === yesterdayDate) || [];
+  const lastReports = reports?.filter(r => r.date === lastWeekDate) || [];
+
   const yestSums = summaries.filter(
     (s) => s.year === pYest.year && s.month === pYest.month && s.day === pYest.day
   );
@@ -291,23 +333,21 @@ export function calculateRegionalTotals(
     (s) => s.year === pLast.year && s.month === pLast.month && s.day === pLast.day
   );
 
-  const yesterdayShift1 = yestSums.reduce(
-    (acc, s) => acc + (Number(s.toa_shift1) || 0) + (Number(s.manual_shift1) || 0),
-    0
-  );
-  const yesterdayShift2 = yestSums.reduce(
-    (acc, s) => acc + (Number(s.toa_shift2) || 0) + (Number(s.manual_shift2) || 0),
-    0
-  );
+  const yestRepS1 = yestReports.reduce((acc, r) => acc + (Number(r.toa_shift1) || 0) + (Number(r.manual_shift1) || 0), 0);
+  const yestSumS1 = yestSums.reduce((acc, s) => acc + (Number(s.toa_shift1) || 0) + (Number(s.manual_shift1) || 0), 0);
+  const yesterdayShift1 = yestRepS1 > 0 ? yestRepS1 : yestSumS1;
 
-  const lastWeekShift1 = lastSums.reduce(
-    (acc, s) => acc + (Number(s.toa_shift1) || 0) + (Number(s.manual_shift1) || 0),
-    0
-  );
-  const lastWeekShift2 = lastSums.reduce(
-    (acc, s) => acc + (Number(s.toa_shift2) || 0) + (Number(s.manual_shift2) || 0),
-    0
-  );
+  const yestRepS2 = yestReports.reduce((acc, r) => acc + (Number(r.toa_shift2) || 0) + (Number(r.manual_shift2) || 0), 0);
+  const yestSumS2 = yestSums.reduce((acc, s) => acc + (Number(s.toa_shift2) || 0) + (Number(s.manual_shift2) || 0), 0);
+  const yesterdayShift2 = yestRepS2 > 0 ? yestRepS2 : yestSumS2;
+
+  const lastRepS1 = lastReports.reduce((acc, r) => acc + (Number(r.toa_shift1) || 0) + (Number(r.manual_shift1) || 0), 0);
+  const lastSumS1 = lastSums.reduce((acc, s) => acc + (Number(s.toa_shift1) || 0) + (Number(s.manual_shift1) || 0), 0);
+  const lastWeekShift1 = lastRepS1 > 0 ? lastRepS1 : lastSumS1;
+
+  const lastRepS2 = lastReports.reduce((acc, r) => acc + (Number(r.toa_shift2) || 0) + (Number(r.manual_shift2) || 0), 0);
+  const lastSumS2 = lastSums.reduce((acc, s) => acc + (Number(s.toa_shift2) || 0) + (Number(s.manual_shift2) || 0), 0);
+  const lastWeekShift2 = lastRepS2 > 0 ? lastRepS2 : lastSumS2;
 
   const submittedCount = routes.filter((r) => r.status === 'submitted' || r.status === 'verified').length;
   const verifiedCount = routes.filter((r) => r.status === 'verified').length;
@@ -339,4 +379,90 @@ export function calculateRegionalTotals(
     emptyCount,
     totalRoutesCount: routes.length
   };
+}
+
+/**
+ * Melakukan sinkronisasi massal data capaian 18 rute dari Spreadsheet Global Wilayah ke database.
+ * Menyimpan data ke tabel `daily_route_reports` (1 rute = 1 baris per tanggal).
+ */
+export async function syncRegionalDailyFromGlobalSheet(
+  dateStr: string,
+  spreadsheetIdOrUrl: string,
+  sheetName: string
+): Promise<{ success: boolean; syncedCount: number; errors: string[] }> {
+  const errors: string[] = [];
+  try {
+    const parts = dateStr.split('-').map(Number);
+    const targetDay = parts[2];
+    const spreadsheetId = extractSpreadsheetId(spreadsheetIdOrUrl) || spreadsheetIdOrUrl;
+
+    const metricsMap = await fetchGlobalReportDailyMetrics(
+      spreadsheetId,
+      sheetName,
+      targetDay
+    );
+
+    if (metricsMap.size === 0) {
+      return {
+        success: false,
+        syncedCount: 0,
+        errors: [`Tidak ditemukan blok data untuk tanggal ${targetDay} pada lembar ${sheetName}`],
+      };
+    }
+
+    const routes = await fetchRouteMasterList();
+    let syncedCount = 0;
+
+    for (const route of routes) {
+      const metric = metricsMap.get(route.route_code);
+      if (!metric) continue;
+
+      try {
+        const payload = {
+          route_id: route.id,
+          route_code: route.route_code,
+          date: dateStr,
+          renops_shift1: metric.renops,
+          realops_shift1: metric.realops,
+          renops_shift2: metric.renops,
+          realops_shift2: metric.realops,
+          toa_shift1: metric.toaShift1,
+          manual_shift1: metric.manualShift1,
+          toa_shift2: metric.toaShift2,
+          manual_shift2: metric.manualShift2,
+          total_passengers: metric.totalPassengers,
+          total_km: metric.kmTempuh,
+          achievement_km: metric.kmPerBus,
+          total_trip: metric.totalRitase,
+          last_synced_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        const { error } = await supabase
+          .from('daily_route_reports')
+          .upsert(payload, { onConflict: 'route_id,date' });
+
+        if (error) {
+          errors.push(`Gagal menyimpan rute ${route.route_code}: ${error.message}`);
+        } else {
+          syncedCount++;
+        }
+      } catch (err: any) {
+        errors.push(`Error rute ${route.route_code}: ${err?.message || String(err)}`);
+      }
+    }
+
+    return {
+      success: syncedCount > 0,
+      syncedCount,
+      errors,
+    };
+  } catch (err: any) {
+    console.warn('[allRouteMonitoringService] Exception syncRegionalDailyFromGlobalSheet:', err);
+    return {
+      success: false,
+      syncedCount: 0,
+      errors: [err?.message || 'Terjadi kesalahan saat menyinkronkan data spreadsheet global'],
+    };
+  }
 }

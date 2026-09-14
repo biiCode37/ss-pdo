@@ -207,3 +207,36 @@ export async function fetchFleetStatusAuditLogs(
   }
 }
 
+/**
+ * Memperbarui metrik capaian operasional (TOA, Manual, KM, Ritase) pada laporan harian rute.
+ */
+export async function syncRouteMetricsToReport(
+  routeId: number,
+  date: string,
+  metrics: Partial<DailyRouteReport>
+): Promise<boolean> {
+  try {
+    const payload = {
+      ...metrics,
+      last_synced_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('daily_route_reports')
+      .update(payload)
+      .eq('route_id', routeId)
+      .eq('date', date);
+
+    if (error) {
+      console.warn(`[dailyRouteReportService] Gagal syncRouteMetricsToReport route ${routeId} date ${date}:`, error);
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception syncRouteMetricsToReport:', err);
+    return false;
+  }
+}
+
