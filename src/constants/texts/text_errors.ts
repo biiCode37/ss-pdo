@@ -6,6 +6,7 @@ export const TEXT_ERRORS = {
   GENERIC_ISSUE: 'Terjadi kendala sistem. Silakan coba beberapa saat lagi atau hubungi admin.',
   NETWORK_FAILURE: 'Koneksi internet Anda terputus. Silakan periksa jaringan dan coba beberapa saat lagi.',
   LOAD_REGIONAL_FAILED: 'Gagal memuat data monitoring wilayah. Silakan periksa koneksi internet Anda dan coba lagi.',
+  SCHEMA_MIGRATION_REQUIRED: 'Struktur database memerlukan pembaruan kolom metrik operasional. Silakan terapkan migrasi database terbaru pada Supabase SQL Editor.',
   VERIFY_FAILED: 'Terjadi kesalahan saat memverifikasi laporan rute.',
   SAVE_REPORT_FAILED: 'Terjadi kesalahan saat menyimpan laporan operasional rute.',
   LOAD_DATA_FAILED: 'Gagal memuat data operasional spreadsheet.',

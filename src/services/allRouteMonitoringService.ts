@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 import { fetchRouteMasterList } from './dailyRouteReportService';
 import { fetchGlobalReportDailyMetrics } from './googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
+import { TEXT_ERRORS } from '../constants/texts';
 import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail } from '../types/supabase';
 
 export const SUPERVISORS = [
@@ -443,12 +444,18 @@ export async function syncRegionalDailyFromGlobalSheet(
           .upsert(payload, { onConflict: 'route_id,date' });
 
         if (error) {
+          console.warn(`[allRouteMonitoringService] Gagal menyimpan rute ${route.route_code}:`, error);
+          if (error.message?.includes('schema cache') || error.message?.includes('Could not find')) {
+            errors.push(TEXT_ERRORS.SCHEMA_MIGRATION_REQUIRED);
+            break; // Hindari request gagal berulang jika kolom database belum dimigrasi
+          }
           errors.push(`Gagal menyimpan rute ${route.route_code}: ${error.message}`);
         } else {
           syncedCount++;
         }
       } catch (err: any) {
-        errors.push(`Error rute ${route.route_code}: ${err?.message || String(err)}`);
+        console.warn(`[allRouteMonitoringService] Exception rute ${route.route_code}:`, err);
+        errors.push(`Gagal memproses rute ${route.route_code}`);
       }
     }
 
