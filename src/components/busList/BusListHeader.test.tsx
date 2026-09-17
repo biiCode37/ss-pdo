@@ -84,29 +84,23 @@ describe("BusListHeader Component", () => {
     expect(onExitMock).toHaveBeenCalledTimes(1);
   });
 
-  it("renders shift lock banner when isShiftConfirmed is false", async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
+  it("renders daily progress bar even when isShiftConfirmed is false", async () => {
     await act(async () => {
       root.render(
         <BusListHeader
           {...defaultProps}
           isShiftConfirmed={false}
           activeShift={2}
-          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
 
+    // Progress bar tetap tampil untuk memberikan visibilitas progres input
+    const progressContainer = container.querySelector('[data-testid="daily-progress-container"]');
+    expect(progressContainer).not.toBeNull();
+    // Banner shift-lock duplikat tidak dirender di header list (sudah ditangani oleh ShiftConfirmationAlertBar)
     const shiftLockBanner = container.querySelector(".shift-lock-banner");
-    expect(shiftLockBanner).not.toBeNull();
-    expect(container.textContent).toContain("Status armada Shift 2 belum dikonfirmasi");
-
-    const btn = shiftLockBanner?.querySelector("button");
-    await act(async () => {
-      btn?.click();
-    });
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
+    expect(shiftLockBanner).toBeNull();
   });
 
   it("calls onSearchChange and onToggleUnfinished when user interacts with controls", async () => {

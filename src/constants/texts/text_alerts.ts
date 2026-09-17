@@ -160,6 +160,9 @@ export const TEXT_ALERTS = {
     SATSET_TOOLTIP: 'Mode Satset: Otomatis buka bus berikutnya setelah simpan',
     TAB_RITASE: 'Ritase',
     TAB_KET: 'Ket',
+    SWITCH_TO_FULL_FORM: 'Semua Kolom',
+    SWITCH_TO_SINGLE_FOCUS: 'Mode Fokus',
+    REF_KM_AWAL: (km: string | number) => `Acuan KM Awal: ${km}`,
   },
   MODAL_COMMON: {
     UNDERSTAND: 'Mengerti',

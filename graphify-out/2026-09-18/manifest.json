@@ -1239,11 +1239,6 @@
     "ast_hash": "1f37596b182bbd9bcc00f10bdd16d9a8",
     "semantic_hash": ""
   },
-  "supabase/.temp/linked-project.json": {
-    "mtime": 1788676457.0351346,
-    "ast_hash": "0e61174a04a2ec364361448332fd62ee",
-    "semantic_hash": ""
-  },
   "supabase/functions/deno.json": {
     "mtime": 1788676457.0356617,
     "ast_hash": "aec82e3c8b909d4978c9c5781abc79c7",
@@ -1325,8 +1320,8 @@
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.ts": {
-    "mtime": 1789386967.5457635,
-    "ast_hash": "fb7dce13fac2d913308d4f99e3d88791",
+    "mtime": 1789388551.1398826,
+    "ast_hash": "38e160d093363ea0f09d9484f9beb62c",
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.test.ts": {
@@ -1400,8 +1395,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1789302031.9710917,
-    "ast_hash": "c8ecf1ff8f5db3d97293718e4b99ef66",
+    "mtime": 1789686898.259892,
+    "ast_hash": "9fb3fdf5631bdb96e8ed15665948f010",
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
@@ -1415,13 +1410,13 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_dashboard.ts": {
-    "mtime": 1789287950.3423204,
-    "ast_hash": "dfd65c132adb76d68437678b647e2a31",
+    "mtime": 1789675036.7479277,
+    "ast_hash": "704f6583d4d1be9f52f2a3bb22280b7a",
     "semantic_hash": ""
   },
   "src/constants/texts/text_errors.ts": {
-    "mtime": 1788966205.4584901,
-    "ast_hash": "15bbe426512069da85b7123a515af2ed",
+    "mtime": 1789388529.4011717,
+    "ast_hash": "934fa8386402a664501654107fae9336",
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
@@ -1440,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789387143.8359227,
-    "ast_hash": "628d7396a7660de54d34a3218bc83d73",
+    "mtime": 1789686906.279173,
+    "ast_hash": "7ae293230d993a62b019c14bbd9d83f9",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1660,8 +1655,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_fleet_status.ts": {
-    "mtime": 1789288704.8920288,
-    "ast_hash": "511c31884df0082c484a342a621b58da",
+    "mtime": 1789675032.7994125,
+    "ast_hash": "4542c345c11e5f25e9e6962018dca3f9",
     "semantic_hash": ""
   },
   "src/constants/texts/text_unit_detail.ts": {
@@ -2050,8 +2045,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/BusListHeader.tsx": {
-    "mtime": 1789289348.489568,
-    "ast_hash": "8203eb05804ad61ed40e05bd035cd63e",
+    "mtime": 1789687303.889884,
+    "ast_hash": "f22faf8e52ea39501ced27f6953254b2",
     "semantic_hash": ""
   },
   "src/components/busList/busListUtils.ts": {
@@ -2065,8 +2060,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/useBulkOperations.ts": {
-    "mtime": 1789285427.11905,
-    "ast_hash": "915da198aea6d2acbe4e5c9fedd48345",
+    "mtime": 1789675287.9631834,
+    "ast_hash": "64e94abee8b22b7fd4fda9ff858cc0aa",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_43/AUDIT_BUGS.md": {
@@ -2290,8 +2285,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.ts": {
-    "mtime": 1789302297.058481,
-    "ast_hash": "ce1bb50c7e874e9f4ba3015d647d842f",
+    "mtime": 1789675284.8311117,
+    "ast_hash": "2c32ffabd46ad5a45782b8139b79eb96",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardSave.ts": {
@@ -2440,8 +2435,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/BusListHeader.test.tsx": {
-    "mtime": 1789289358.4420142,
-    "ast_hash": "8ada2d2b4eb0e77ea1f48ab485a454f9",
+    "mtime": 1789686931.2440972,
+    "ast_hash": "5229ba332534200751c781baaf0f516a",
     "semantic_hash": ""
   },
   "src/components/busList/BusListProgressBar.tsx": {
@@ -2610,18 +2605,18 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.test.tsx": {
-    "mtime": 1789302173.9382536,
-    "ast_hash": "f232a67eadc1d3822b2c9e06f212c898",
+    "mtime": 1789675141.1282866,
+    "ast_hash": "0eadfd8ec79e0f9137aedf4f798a7e2b",
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.tsx": {
-    "mtime": 1789302189.9103525,
-    "ast_hash": "39794277aeaa2ca1d983b72765a16b62",
+    "mtime": 1789675130.0091846,
+    "ast_hash": "6d4bad4d3ae7f7064ac3af63f6c57672",
     "semantic_hash": ""
   },
   "src/components/busList/BusList.test.tsx": {
-    "mtime": 1789301769.726655,
-    "ast_hash": "10de03bd61808556d3b1a699bbe20b43",
+    "mtime": 1789687229.0938616,
+    "ast_hash": "79fb6b296de77a26589130c13988ff2f",
     "semantic_hash": ""
   },
   "src/components/busList/BusList.tsx": {
@@ -2750,18 +2745,18 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.test.tsx": {
-    "mtime": 1789302210.7836006,
-    "ast_hash": "7426b1f0c30d978a19407dd0a8e6f015",
+    "mtime": 1789687199.8996363,
+    "ast_hash": "fc0dfa4941135ad46d01cb0eefcc3398",
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.tsx": {
-    "mtime": 1789302291.8470943,
-    "ast_hash": "79c485fbecc4c63e053febd260f66582",
+    "mtime": 1789687542.4371722,
+    "ast_hash": "45aefeb0805376b989139042f2bae47a",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.test.tsx": {
-    "mtime": 1789302238.4423726,
-    "ast_hash": "f2616952a47275533fcc3594852a4970",
+    "mtime": 1789675276.1644595,
+    "ast_hash": "ec4b4510ad44673a5674ee4709032191",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_59/AUDIT_BUGS.md": {
@@ -2812,6 +2807,81 @@
   "refactor-ss-pdo/refact_60/REPAIR_REPORT.md": {
     "mtime": 1789302362.5233812,
     "ast_hash": "df76c5d7ae03684128409b2d9b682359",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_61/AUDIT_BUGS.md": {
+    "mtime": 1789387463.3459668,
+    "ast_hash": "9202cacd626db2c2f0c31f6fd2e75af7",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_61/REPAIR_REPORT.md": {
+    "mtime": 1789387473.8389769,
+    "ast_hash": "29fabf1ff3f37e74e7bcb94af4a2d214",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_62/AUDIT_BUGS.md": {
+    "mtime": 1789675373.983705,
+    "ast_hash": "7488e82869d65bccbb9709d114a605ff",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_62/REPAIR_REPORT.md": {
+    "mtime": 1789675382.1106093,
+    "ast_hash": "2506a534d1f7e4d9815b6fc64c7c284e",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalFooter.tsx": {
+    "mtime": 1789687531.8765326,
+    "ast_hash": "c92d29cbce6673b18856ef0a59732e8f",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalHeader.tsx": {
+    "mtime": 1789687477.6539016,
+    "ast_hash": "367c9aec534692634418b7d7cf107414",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalNotes.tsx": {
+    "mtime": 1789687526.2881618,
+    "ast_hash": "f661b69a4c0ad6db62b1fed3bec259a5",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalShift1.tsx": {
+    "mtime": 1789687506.306294,
+    "ast_hash": "2b718d982e27266de620aaac27b9d2ce",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalShift2.tsx": {
+    "mtime": 1789687514.0155158,
+    "ast_hash": "2e9d60c608d0d8ee99fe271d9caf5713",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalSingleFocus.tsx": {
+    "mtime": 1789687499.5925536,
+    "ast_hash": "e4717994da8844136de52edabfe8d4ba",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalTabs.tsx": {
+    "mtime": 1789687482.5317678,
+    "ast_hash": "6d0d9c6f9765793b519033a329e90519",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/BusInputModalTrip.tsx": {
+    "mtime": 1789687520.1078951,
+    "ast_hash": "85e6af04625ee1d607fb15e83783c4c9",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/modal/useBusInputForm.ts": {
+    "mtime": 1789687470.4550233,
+    "ast_hash": "09b12e3417e4b8633392562c23200642",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_63/AUDIT_BUGS.md": {
+    "mtime": 1789687355.876443,
+    "ast_hash": "bf97962a8110b35ccca8277e65439ba9",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_63/REPAIR_REPORT.md": {
+    "mtime": 1789687366.0766656,
+    "ast_hash": "f50ffa53ef9ae9f8e28a2ff3fd1afa12",
     "semantic_hash": ""
   }
 }

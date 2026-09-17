@@ -67,30 +67,18 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     container.remove();
   });
 
-  it('renders shift lock banner when isShiftConfirmed is false', async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
+  it('does not render duplicate shift lock banner inside BusList (handled centrally in DashboardStatusBanners)', async () => {
     await act(async () => {
       root.render(
         <BusList
           {...defaultProps}
           isShiftConfirmed={false}
           activeShift={1}
-          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
 
-    expect(container.textContent).toContain('Status armada Shift 1 belum dikonfirmasi');
-
-    const bannerBtn = container.querySelector('.shift-lock-banner button') as HTMLButtonElement;
-    expect(bannerBtn).toBeDefined();
-
-    await act(async () => {
-      bannerBtn?.click();
-    });
-
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('.shift-lock-banner')).toBeNull();
   });
 
   it('does not render shift lock banner when isShiftConfirmed is true', async () => {
@@ -150,7 +138,7 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     expect(container.textContent).not.toContain('/2 Unit');
   });
 
-  it('hides progress bar when isShiftConfirmed is false', async () => {
+  it('renders progress bar consistently even when isShiftConfirmed is false for input visibility', async () => {
     await act(async () => {
       root.render(
         <BusList
@@ -161,8 +149,8 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
       );
     });
 
-    expect(container.querySelector('[data-testid="daily-progress-container"]')).toBeNull();
-    expect(container.textContent).not.toContain('Progres Harian');
+    expect(container.querySelector('[data-testid="daily-progress-container"]')).not.toBeNull();
+    expect(container.textContent).toContain('Progres Harian');
   });
 
   it('shows progress bar when isShiftConfirmed is true', async () => {

@@ -287,4 +287,178 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(1),
     );
   });
+
+  it("renders Single-Column Focus Speed-Run mode when activeCategory is toaShift1", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({ toaShift1: "150" })}
+          activeCategory="toaShift1"
+          onSave={vi.fn()}
+        />,
+      );
+    });
+
+    // Single input field should exist
+    const singleInput = document.body.querySelector<HTMLInputElement>(
+      "#single-input-toaShift1",
+    );
+    expect(singleInput).not.toBeNull();
+    expect(singleInput?.value).toBe("150");
+
+    // Segmented tab buttons (Shift 1, Shift 2, etc.) should be hidden in single mode
+    expect(document.body.querySelector("#input-toa-s1")).toBeNull();
+
+    // Toggle button should show 'Semua Kolom'
+    const toggleBtn = Array.from(document.body.querySelectorAll("button")).find(
+      (b) => b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_FULL_FORM),
+    );
+    expect(toggleBtn).toBeDefined();
+
+    // Clicking 'Semua Kolom' switches to full tabbed view
+    await act(async () => {
+      toggleBtn?.click();
+    });
+
+    expect(document.body.querySelector("#input-toa-s1")).not.toBeNull();
+    expect(document.body.textContent).toContain(
+      TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_SINGLE_FOCUS,
+    );
+  });
+
+  it("toggles progressive disclosure chips (+ Manual S1 and + Catatan) in Single-Column mode", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({ manualShift1: "", keterangan: "" })}
+          activeCategory="toaShift1"
+          onSave={vi.fn()}
+        />,
+      );
+    });
+
+    // Initially manual and note fields are not shown
+    expect(document.body.querySelector("#single-input-manualShift1")).toBeNull();
+    expect(document.body.querySelector("#single-input-keterangan")).toBeNull();
+
+    // Click '+ Manual S1'
+    const manualChip = Array.from(document.body.querySelectorAll("button")).find(
+      (b) => b.textContent?.includes("+ Manual S1"),
+    );
+    expect(manualChip).toBeDefined();
+
+    await act(async () => {
+      manualChip?.click();
+    });
+
+    expect(document.body.querySelector("#single-input-manualShift1")).not.toBeNull();
+
+    // Click '+ Catatan'
+    const noteChip = Array.from(document.body.querySelectorAll("button")).find(
+      (b) => b.textContent?.includes("+ Catatan"),
+    );
+    expect(noteChip).toBeDefined();
+
+    await act(async () => {
+      noteChip?.click();
+    });
+
+    expect(document.body.querySelector("#single-input-keterangan")).not.toBeNull();
+  });
+
+  it("submits form on Enter keydown directly (Enter-to-Save)", async () => {
+    const onSaveMock = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({ toaShift1: "175" })}
+          activeCategory="toaShift1"
+          onSave={onSaveMock}
+        />,
+      );
+    });
+
+    const singleInput = document.body.querySelector<HTMLInputElement>(
+      "#single-input-toaShift1",
+    );
+    expect(singleInput).not.toBeNull();
+
+    await act(async () => {
+      singleInput?.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }),
+      );
+    });
+
+    expect(onSaveMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        toaShift1: "175",
+      }),
+    );
+  });
+
+  it("blocks submission if validateToaPair fails (Total TOA < TOA S1)", async () => {
+    const onSaveMock = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            toaShift1: "200",
+            totalToa: "150", // Invalid: Total TOA cannot be less than TOA S1
+          })}
+          activeCategory="totalToa"
+          onSave={onSaveMock}
+        />,
+      );
+    });
+
+    const form = document.body.querySelector("form");
+    await act(async () => {
+      form?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    });
+
+    expect(onSaveMock).not.toHaveBeenCalled();
+    expect(document.body.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER);
+    expect(document.body.textContent).toContain("tidak boleh lebih kecil dari TOA Shift 1");
+  });
+
+  it("allows copying KM Akhir S1 to KM Awal S2 via quick copy button in single mode", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            kmAkhir1: "12345.6",
+            kmAwal2: "",
+          })}
+          activeCategory="kmAwal2"
+          onSave={vi.fn()}
+        />,
+      );
+    });
+
+    const copyBtn = Array.from(document.body.querySelectorAll("button")).find((b) =>
+      b.textContent?.includes("Salin KM Akhir S1"),
+    );
+    expect(copyBtn).toBeDefined();
+
+    await act(async () => {
+      copyBtn?.click();
+    });
+
+    const inputKmAwal2 = document.body.querySelector<HTMLInputElement>(
+      "#single-input-kmAwal2",
+    );
+    expect(inputKmAwal2?.value).toBe("12345.6");
+  });
 });

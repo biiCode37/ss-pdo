@@ -101,6 +101,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.TOAST.SUCCESS_REPORT_SAVED).toContain('berhasil disimpan');
     expect(TEXT_ALERTS.TOAST.SUCCESS_VERIFIED).toContain('berhasil diverifikasi');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.CLEAR_NOTE).toBe('✕ Hapus');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_FULL_FORM).toBe('Semua Kolom');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_SINGLE_FOCUS).toBe('Mode Fokus');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL(1000)).toContain('1000');
     expect(TEXT_ALERTS.BULK_TRIP.VALIDATION_POSITIVE).toBe('Nilai trip harus berupa angka positif!');
   });
 

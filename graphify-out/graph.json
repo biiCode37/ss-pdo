@@ -1820,7 +1820,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "ref_react",
-      "community": 272,
+      "community": 338,
       "community_name": "react",
       "norm_label": "react"
     },
@@ -2458,7 +2458,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_analyticsdashboard",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "analyticsdashboard.tsx"
     },
@@ -2469,7 +2469,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_components_analyticsdashboard_props",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "props"
     },
@@ -2480,7 +2480,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_components_analyticsdashboard_analyticsdashboardcomponent",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "analyticsdashboardcomponent()"
     },
@@ -2491,7 +2491,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "src_components_analyticsdashboard_analyticsdashboard",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "analyticsdashboard"
     },
@@ -2579,8 +2579,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_completionstatuscard",
-      "community": 267,
-      "community_name": "keteranganUtils.ts",
+      "community": 250,
+      "community_name": "utils/analytics.ts",
       "norm_label": "completionstatuscard.tsx"
     },
     {
@@ -2590,7 +2590,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_completionstatuscard_props",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "props"
     },
@@ -2601,8 +2601,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_completionstatuscard_completionstatuscardcomponent",
-      "community": 267,
-      "community_name": "keteranganUtils.ts",
+      "community": 250,
+      "community_name": "utils/analytics.ts",
       "norm_label": "completionstatuscardcomponent()"
     },
     {
@@ -2612,8 +2612,8 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "src_components_completionstatuscard_completionstatuscard",
-      "community": 267,
-      "community_name": "keteranganUtils.ts",
+      "community": 250,
+      "community_name": "utils/analytics.ts",
       "norm_label": "completionstatuscard"
     },
     {
@@ -2623,8 +2623,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dailytoatrendcard",
-      "community": 274,
-      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
+      "community": 250,
+      "community_name": "utils/analytics.ts",
       "norm_label": "components/dailytoatrendcard.tsx"
     },
     {
@@ -2635,7 +2635,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboard.tsx"
     },
     {
@@ -2646,7 +2646,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usermanagementpage",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usermanagementpage"
     },
     {
@@ -2657,7 +2657,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_props",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "props"
     },
     {
@@ -2668,7 +2668,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboard",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboard()"
     },
     {
@@ -2700,7 +2700,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_kpicard",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "kpicard.tsx"
     },
@@ -2711,7 +2711,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_kpicard_props",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "props"
     },
@@ -2722,7 +2722,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_kpicard_kpicardcomponent",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "kpicardcomponent()"
     },
@@ -2733,7 +2733,7 @@
       "source_location": "L156",
       "_origin": "ast",
       "id": "src_components_kpicard_kpicard",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "kpicard"
     },
@@ -2766,8 +2766,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_queuemodal",
-      "community": 321,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "components/queuemodal.tsx"
     },
     {
@@ -2777,8 +2777,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_rolebadge",
-      "community": 327,
-      "community_name": "userManagement/RoleBadge.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "components/rolebadge.tsx"
     },
     {
@@ -2810,7 +2810,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_shiftcomparisoncard",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "shiftcomparisoncard.tsx"
     },
@@ -2821,7 +2821,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_shiftcomparisoncard_props",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "props"
     },
@@ -2832,7 +2832,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_shiftcomparisoncard_shiftcomparisoncardcomponent",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "shiftcomparisoncardcomponent()"
     },
@@ -2843,7 +2843,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "src_components_shiftcomparisoncard_shiftcomparisoncard",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "shiftcomparisoncard"
     },
@@ -2942,7 +2942,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer",
-      "community": 272,
+      "community": 338,
       "community_name": "react",
       "norm_label": "swipeablecontainer.tsx"
     },
@@ -2953,7 +2953,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainerprops",
-      "community": 272,
+      "community": 338,
       "community_name": "react",
       "norm_label": "swipeablecontainerprops"
     },
@@ -2964,7 +2964,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_swipeablecontainer_swipeablecontainer",
-      "community": 272,
+      "community": 338,
       "community_name": "react",
       "norm_label": "swipeablecontainer()"
     },
@@ -2976,7 +2976,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitcard.tsx"
     },
     {
@@ -2987,7 +2987,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_props",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "props"
     },
     {
@@ -2998,7 +2998,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_renderstatusbadge",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "renderstatusbadge()"
     },
     {
@@ -3009,7 +3009,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_unitcardcomponent",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitcardcomponent()"
     },
     {
@@ -3020,7 +3020,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_unitcard",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitcard"
     },
     {
@@ -3031,7 +3031,7 @@
       "_origin": "ast",
       "id": "src_components_unitdetailmodal",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitdetailmodal.tsx"
     },
     {
@@ -3042,7 +3042,7 @@
       "_origin": "ast",
       "id": "src_components_unitdetailmodal_props",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "props"
     },
     {
@@ -3053,7 +3053,7 @@
       "_origin": "ast",
       "id": "src_components_unitdetailmodal_unitdetailmodal",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitdetailmodal()"
     },
     {
@@ -3064,7 +3064,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitsummarydashboard.tsx"
     },
     {
@@ -3075,7 +3075,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_props",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "props"
     },
     {
@@ -3086,7 +3086,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_unitsummarydashboardcomponent",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitsummarydashboardcomponent()"
     },
     {
@@ -3097,7 +3097,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_unitsummarydashboard",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitsummarydashboard"
     },
     {
@@ -3118,8 +3118,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_userprofileheader",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "components/userprofileheader.tsx"
     },
     {
@@ -3140,7 +3140,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_tests_swipeablecontainer_test",
-      "community": 272,
+      "community": 338,
       "community_name": "react",
       "norm_label": "swipeablecontainer.test.tsx"
     },
@@ -3481,8 +3481,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buscard_businputmodal_test",
-      "community": 281,
-      "community_name": "busCard/BusCard.tsx",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
       "norm_label": "businputmodal.test.tsx"
     },
     {
@@ -3492,8 +3492,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_buscard_businputmodal_test_createmockbus",
-      "community": 281,
-      "community_name": "busCard/BusCard.tsx",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
       "norm_label": "createmockbus()"
     },
     {
@@ -3503,52 +3503,30 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_buscard_businputmodal",
-      "community": 281,
-      "community_name": "busCard/BusCard.tsx",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
       "norm_label": "businputmodal.tsx"
     },
     {
       "label": "BusInputModalProps",
       "file_type": "code",
       "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L27",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "src_components_buscard_businputmodal_businputmodalprops",
-      "community": 281,
-      "community_name": "busCard/BusCard.tsx",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
       "norm_label": "businputmodalprops"
-    },
-    {
-      "label": "ModalTab",
-      "file_type": "code",
-      "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L39",
-      "_origin": "ast",
-      "id": "src_components_buscard_businputmodal_modaltab",
-      "community": 281,
-      "community_name": "busCard/BusCard.tsx",
-      "norm_label": "modaltab"
-    },
-    {
-      "label": "KETERANGAN_OPTIONS",
-      "file_type": "code",
-      "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "src_components_buscard_businputmodal_keterangan_options",
-      "community": 281,
-      "community_name": "busCard/BusCard.tsx",
-      "norm_label": "keterangan_options"
     },
     {
       "label": "BusInputModal()",
       "file_type": "code",
       "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L49",
+      "source_location": "L28",
       "_origin": "ast",
       "id": "src_components_buscard_businputmodal_businputmodal",
-      "community": 281,
-      "community_name": "busCard/BusCard.tsx",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
       "norm_label": "businputmodal()"
     },
     {
@@ -3594,6 +3572,336 @@
       "community": 281,
       "community_name": "busCard/BusCard.tsx",
       "norm_label": "buscard/index.ts"
+    },
+    {
+      "label": "BusInputModalFooter.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalFooter.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalfooter",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalfooter.tsx"
+    },
+    {
+      "label": "BusInputModalFooterProps",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalFooter.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalfooter_businputmodalfooterprops",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalfooterprops"
+    },
+    {
+      "label": "BusInputModalFooter()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalFooter.tsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalfooter_businputmodalfooter",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalfooter()"
+    },
+    {
+      "label": "BusInputModalHeader.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalHeader.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalheader",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalheader.tsx"
+    },
+    {
+      "label": "BusInputModalHeaderProps",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalHeader.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalheader_businputmodalheaderprops",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalheaderprops"
+    },
+    {
+      "label": "BusInputModalHeader()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalHeader.tsx",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalheader_businputmodalheader",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalheader()"
+    },
+    {
+      "label": "BusInputModalNotes.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalnotes",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalnotes.tsx"
+    },
+    {
+      "label": "KETERANGAN_OPTIONS",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalnotes_keterangan_options",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "keterangan_options"
+    },
+    {
+      "label": "BusInputModalNotesProps",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalnotes_businputmodalnotesprops",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalnotesprops"
+    },
+    {
+      "label": "BusInputModalNotes()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalnotes_businputmodalnotes",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalnotes()"
+    },
+    {
+      "label": "BusInputModalShift1.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalshift1",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalshift1.tsx"
+    },
+    {
+      "label": "BusInputModalShift1Props",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalshift1_businputmodalshift1props",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalshift1props"
+    },
+    {
+      "label": "BusInputModalShift1()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalshift1_businputmodalshift1",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalshift1()"
+    },
+    {
+      "label": "BusInputModalShift2.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalshift2",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalshift2.tsx"
+    },
+    {
+      "label": "BusInputModalShift2Props",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalshift2_businputmodalshift2props",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalshift2props"
+    },
+    {
+      "label": "BusInputModalShift2()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalshift2_businputmodalshift2",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalshift2()"
+    },
+    {
+      "label": "BusInputModalSingleFocus.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalsinglefocus",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalsinglefocus.tsx"
+    },
+    {
+      "label": "BusInputModalSingleFocusProps",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalsinglefocus_businputmodalsinglefocusprops",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalsinglefocusprops"
+    },
+    {
+      "label": "BusInputModalSingleFocus()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodalsinglefocus_businputmodalsinglefocus",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodalsinglefocus()"
+    },
+    {
+      "label": "BusInputModalTabs.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodaltabs",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodaltabs.tsx"
+    },
+    {
+      "label": "BusInputModalTabsProps",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodaltabs_businputmodaltabsprops",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodaltabsprops"
+    },
+    {
+      "label": "BusInputModalTabs()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodaltabs_businputmodaltabs",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodaltabs()"
+    },
+    {
+      "label": "BusInputModalTrip.tsx",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodaltrip",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodaltrip.tsx"
+    },
+    {
+      "label": "BusInputModalTripProps",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodaltrip_businputmodaltripprops",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodaltripprops"
+    },
+    {
+      "label": "BusInputModalTrip()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_businputmodaltrip_businputmodaltrip",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputmodaltrip()"
+    },
+    {
+      "label": "useBusInputForm.ts",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_usebusinputform",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "usebusinputform.ts"
+    },
+    {
+      "label": "ModalTab",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_usebusinputform_modaltab",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "modaltab"
+    },
+    {
+      "label": "UseBusInputFormProps",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_usebusinputform_usebusinputformprops",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "usebusinputformprops"
+    },
+    {
+      "label": "useBusInputForm()",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_usebusinputform_usebusinputform",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "usebusinputform()"
+    },
+    {
+      "label": "BusInputFormReturn",
+      "file_type": "code",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L388",
+      "_origin": "ast",
+      "id": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "community": 327,
+      "community_name": "BusInputModal.tsx",
+      "norm_label": "businputformreturn"
     },
     {
       "label": "busCard/types.ts",
@@ -3874,7 +4182,7 @@
       "label": "BusListHeaderProps",
       "file_type": "code",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L7",
+      "source_location": "L6",
       "_origin": "ast",
       "id": "src_components_buslist_buslistheader_buslistheaderprops",
       "community": 312,
@@ -3885,7 +4193,7 @@
       "label": "BusListHeader()",
       "file_type": "code",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L39",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "src_components_buslist_buslistheader_buslistheader",
       "community": 312,
@@ -4053,8 +4361,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dailytoatrend_dailytoatrendcard_test",
-      "community": 274,
-      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "dailytoatrendcard.test.tsx"
     },
     {
@@ -4086,8 +4394,8 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "src_components_dailytoatrend_dailytoatrendcard_dailytoatrendcard",
-      "community": 274,
-      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
+      "community": 250,
+      "community_name": "utils/analytics.ts",
       "norm_label": "dailytoatrendcard"
     },
     {
@@ -4384,7 +4692,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardcontenttabs",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardcontenttabs.tsx"
     },
     {
@@ -4395,7 +4703,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardcontenttabs_dashboardcontenttabsprops",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardcontenttabsprops"
     },
     {
@@ -4406,7 +4714,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardcontenttabs_dashboardcontenttabs",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardcontenttabs()"
     },
     {
@@ -4417,7 +4725,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardheader",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardheader.tsx"
     },
     {
@@ -4428,7 +4736,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardheader_dashboardheaderprops",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardheaderprops"
     },
     {
@@ -4439,7 +4747,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardheader_dashboardheader",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardheader()"
     },
     {
@@ -4450,7 +4758,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardmodals",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardmodals.tsx"
     },
     {
@@ -4461,7 +4769,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardmodals_dashboardmodalsprops",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardmodalsprops"
     },
     {
@@ -4472,7 +4780,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardmodals_dashboardmodals",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardmodals()"
     },
     {
@@ -4483,7 +4791,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardstatusbanners",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardstatusbanners.tsx"
     },
     {
@@ -4494,7 +4802,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardstatusbanners_dashboardstatusbannersprops",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardstatusbannersprops"
     },
     {
@@ -4505,7 +4813,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_dashboardstatusbanners_dashboardstatusbanners",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardstatusbanners()"
     },
     {
@@ -4515,8 +4823,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dashboard_queuemodal",
-      "community": 321,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "dashboard/queuemodal.tsx"
     },
     {
@@ -4526,8 +4834,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_dashboard_queuemodal_queuemodalprops",
-      "community": 321,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "queuemodalprops"
     },
     {
@@ -4537,8 +4845,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_dashboard_queuemodal_queuemodal",
-      "community": 321,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "queuemodal()"
     },
     {
@@ -4549,7 +4857,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_index",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboard/index.ts"
     },
     {
@@ -4560,7 +4868,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarddata",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboarddata.ts"
     },
     {
@@ -4571,7 +4879,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarddata_usedashboarddata",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboarddata()"
     },
     {
@@ -4582,7 +4890,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardfleet",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboardfleet.ts"
     },
     {
@@ -4593,7 +4901,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardfleet_usedashboardfleetprops",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboardfleetprops"
     },
     {
@@ -4604,7 +4912,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardfleet_usedashboardfleet",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboardfleet()"
     },
     {
@@ -4615,7 +4923,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardsynchandlers_test",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboardsynchandlers.test.tsx"
     },
     {
@@ -4626,7 +4934,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardsynchandlers_test_testhookcomponent",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "testhookcomponent()"
     },
     {
@@ -4637,7 +4945,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardsynchandlers",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboardsynchandlers.ts"
     },
     {
@@ -4648,7 +4956,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardsynchandlers_usedashboardsynchandlersoptions",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboardsynchandlersoptions"
     },
     {
@@ -4659,7 +4967,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboardsynchandlers_usedashboardsynchandlers",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboardsynchandlers()"
     },
     {
@@ -4670,7 +4978,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarduistate_test",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboarduistate.test.tsx"
     },
     {
@@ -4681,7 +4989,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarduistate_test_testhookcomponent",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "testhookcomponent()"
     },
     {
@@ -4692,7 +5000,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarduistate",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboarduistate.ts"
     },
     {
@@ -4703,7 +5011,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarduistate_dashboardview",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardview"
     },
     {
@@ -4714,7 +5022,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarduistate_dashboardmaintab",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "dashboardmaintab"
     },
     {
@@ -4725,7 +5033,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarduistate_usedashboarduistateoptions",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboarduistateoptions"
     },
     {
@@ -4736,7 +5044,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usedashboarduistate_usedashboarduistate",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usedashboarduistate()"
     },
     {
@@ -4747,7 +5055,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usepulltorefresh",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usepulltorefresh.ts"
     },
     {
@@ -4758,7 +5066,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usepulltorefresh_usepulltorefreshoptions",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usepulltorefreshoptions"
     },
     {
@@ -4769,7 +5077,7 @@
       "_origin": "ast",
       "id": "src_components_dashboard_usepulltorefresh_usepulltorefresh",
       "community": 272,
-      "community_name": "react",
+      "community_name": "Dashboard.tsx",
       "norm_label": "usepulltorefresh()"
     },
     {
@@ -4966,8 +5274,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_test",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbar.test.tsx"
     },
     {
@@ -4977,8 +5285,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbar.tsx"
     },
     {
@@ -4988,8 +5296,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbarprops",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbarprops"
     },
     {
@@ -4999,8 +5307,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbarcomponent",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbarcomponent()"
     },
     {
@@ -5010,8 +5318,8 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbar",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "shiftconfirmationalertbar"
     },
     {
@@ -5406,8 +5714,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 319,
+      "community_name": "LoginScreen.test.tsx",
       "norm_label": "loginscreen.test.tsx"
     },
     {
@@ -5417,8 +5725,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mocksignin",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 319,
+      "community_name": "LoginScreen.test.tsx",
       "norm_label": "mocksignin"
     },
     {
@@ -5428,8 +5736,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mocksignout",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 319,
+      "community_name": "LoginScreen.test.tsx",
       "norm_label": "mocksignout"
     },
     {
@@ -5439,8 +5747,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mockverifyuserprofile",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 319,
+      "community_name": "LoginScreen.test.tsx",
       "norm_label": "mockverifyuserprofile"
     },
     {
@@ -5450,8 +5758,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mockupsertuserprofile",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 319,
+      "community_name": "LoginScreen.test.tsx",
       "norm_label": "mockupsertuserprofile"
     },
     {
@@ -5483,8 +5791,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_loginscreen",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 277,
+      "community_name": "App.tsx",
       "norm_label": "loginscreen()"
     },
     {
@@ -6297,8 +6605,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_test",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "userprofileheader.test.tsx"
     },
     {
@@ -6308,8 +6616,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "profilemenu/userprofileheader.tsx"
     },
     {
@@ -6319,8 +6627,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_userprofileheaderprops",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "userprofileheaderprops"
     },
     {
@@ -6330,8 +6638,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_role_display_config",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "role_display_config"
     },
     {
@@ -6341,8 +6649,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_userprofileheadercomponent",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "userprofileheadercomponent()"
     },
     {
@@ -6352,8 +6660,8 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_userprofileheader",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "userprofileheader"
     },
     {
@@ -6462,8 +6770,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "addroutemodal.tsx"
     },
     {
@@ -6473,8 +6781,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal_addroutemodalprops",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "addroutemodalprops"
     },
     {
@@ -6484,8 +6792,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal_addroutemodal",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 282,
+      "community_name": "routeSelector/RouteSelectorCard.tsx",
       "norm_label": "addroutemodal()"
     },
     {
@@ -6759,8 +7067,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_usermanagement_rolebadge_test",
-      "community": 327,
-      "community_name": "userManagement/RoleBadge.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "rolebadge.test.tsx"
     },
     {
@@ -6770,8 +7078,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_usermanagement_rolebadge",
-      "community": 327,
-      "community_name": "userManagement/RoleBadge.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "usermanagement/rolebadge.tsx"
     },
     {
@@ -6781,8 +7089,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_components_usermanagement_rolebadge_rolebadgeprops",
-      "community": 327,
-      "community_name": "userManagement/RoleBadge.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "rolebadgeprops"
     },
     {
@@ -6792,8 +7100,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_usermanagement_rolebadge_rolebadge",
-      "community": 327,
-      "community_name": "userManagement/RoleBadge.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "rolebadge()"
     },
     {
@@ -7474,8 +7782,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_texts_text_auth",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "text_auth.ts"
     },
     {
@@ -7705,7 +8013,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_tests_useofflinesync_test",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "useofflinesync.test.tsx"
     },
@@ -7716,7 +8024,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_hooks_tests_useofflinesync_test_testhookcomponent",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "testhookcomponent()"
     },
@@ -7782,7 +8090,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "useofflinesync.ts"
     },
@@ -7793,8 +8101,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_syncitem",
-      "community": 307,
-      "community_name": "useOfflineSync.ts",
+      "community": 287,
+      "community_name": "core.ts",
       "norm_label": "syncitem"
     },
     {
@@ -7804,7 +8112,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_readqueuefromstorage",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "readqueuefromstorage()"
     },
@@ -7815,7 +8123,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_writequeuetostorage",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "writequeuetostorage()"
     },
@@ -7826,7 +8134,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_detectcollision",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "detectcollision()"
     },
@@ -7838,7 +8146,7 @@
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesyncoptions",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "useofflinesyncoptions"
     },
     {
@@ -7848,7 +8156,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesync",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "useofflinesync()"
     },
@@ -7892,7 +8200,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_test",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "allroutemonitoringservice.test.ts"
     },
@@ -7903,7 +8211,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "allroutemonitoringservice.ts"
     },
@@ -7914,7 +8222,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_supervisors",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "supervisors"
     },
@@ -7925,8 +8233,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_regionalrouteitem",
-      "community": 315,
-      "community_name": "waReportGenerator.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "regionalrouteitem"
     },
     {
@@ -7936,7 +8244,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_regionalmonitoringresult",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "regionalmonitoringresult"
     },
@@ -7947,7 +8255,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_getrelativedate",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "getrelativedate()"
     },
@@ -7958,7 +8266,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_parsedateparts",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "parsedateparts()"
     },
@@ -7969,7 +8277,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_fetchregionalmonitoringdata",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "fetchregionalmonitoringdata()"
     },
@@ -7980,7 +8288,7 @@
       "source_location": "L300",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_calculateregionaltotals",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "calculateregionaltotals()"
     },
@@ -7991,7 +8299,7 @@
       "source_location": "L389",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_syncregionaldailyfromglobalsheet",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "syncregionaldailyfromglobalsheet()"
     },
@@ -8002,7 +8310,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_test",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "dailyroutereportservice.test.ts"
     },
@@ -8013,7 +8321,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "dailyroutereportservice.ts"
     },
@@ -8024,7 +8332,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_fetchroutemasterlist",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "fetchroutemasterlist()"
     },
@@ -8035,7 +8343,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_fetchdailyroutereport",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "fetchdailyroutereport()"
     },
@@ -8046,7 +8354,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_fetchdailyroutereportsbydate",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "fetchdailyroutereportsbydate()"
     },
@@ -8057,7 +8365,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_upsertdailyroutereport",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "upsertdailyroutereport()"
     },
@@ -8068,7 +8376,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_verifydailyroutereport",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "verifydailyroutereport()"
     },
@@ -8079,7 +8387,7 @@
       "source_location": "L156",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_recordfleetstatusauditlog",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "recordfleetstatusauditlog()"
     },
@@ -8090,7 +8398,7 @@
       "source_location": "L186",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_fetchfleetstatusauditlogs",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "fetchfleetstatusauditlogs()"
     },
@@ -8101,7 +8409,7 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "src_services_dailyroutereportservice_syncroutemetricstoreport",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "syncroutemetricstoreport()"
     },
@@ -8113,7 +8421,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "googlesheets.ts"
     },
     {
@@ -8190,7 +8498,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_auth_test",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "auth.test.ts"
     },
     {
@@ -8201,7 +8509,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_auth",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "auth.ts"
     },
     {
@@ -8212,7 +8520,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "authgis.ts"
     },
     {
@@ -8223,7 +8531,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_getgapi",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "getgapi()"
     },
     {
@@ -8234,7 +8542,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_getgooglecreds",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "getgooglecreds()"
     },
     {
@@ -8245,7 +8553,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_hasgooglecreds",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "hasgooglecreds()"
     },
     {
@@ -8256,7 +8564,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_gettokenclient",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "gettokenclient()"
     },
     {
@@ -8267,7 +8575,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_settokenclient",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "settokenclient()"
     },
     {
@@ -8278,7 +8586,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_initgoogleapi",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "initgoogleapi()"
     },
     {
@@ -8288,8 +8596,8 @@
       "source_location": "L229",
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_signin",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "signin()"
     },
     {
@@ -8311,7 +8619,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "authsession.ts"
     },
     {
@@ -8322,7 +8630,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_stoptokenrefreshtimer",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "stoptokenrefreshtimer()"
     },
     {
@@ -8333,7 +8641,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_starttokenrefreshtimer",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "starttokenrefreshtimer()"
     },
     {
@@ -8344,7 +8652,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_refreshtokeninteractiveorsilent",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "refreshtokeninteractiveorsilent()"
     },
     {
@@ -8355,7 +8663,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_ensurevalidtoken",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "ensurevalidtoken()"
     },
     {
@@ -8366,7 +8674,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_reauthenticatesession",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "reauthenticatesession()"
     },
     {
@@ -8376,8 +8684,8 @@
       "source_location": "L195",
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_withauthretry",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "withauthretry()"
     },
     {
@@ -8388,7 +8696,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_fetchgoogleuserprofile",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "fetchgoogleuserprofile()"
     },
     {
@@ -8399,7 +8707,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_checksignedinasync",
       "community": 291,
-      "community_name": "auth.ts",
+      "community_name": "transport.ts",
       "norm_label": "checksignedinasync()"
     },
     {
@@ -8530,8 +8838,8 @@
       "source_location": "L414",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_getbusrowdata",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 276,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "getbusrowdata()"
     },
     {
@@ -8541,7 +8849,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_test",
-      "community": 263,
+      "community": 307,
       "community_name": "globalReportReader.ts",
       "norm_label": "globalreportreader.test.ts"
     },
@@ -8552,7 +8860,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader",
-      "community": 263,
+      "community": 307,
       "community_name": "globalReportReader.ts",
       "norm_label": "globalreportreader.ts"
     },
@@ -8563,7 +8871,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_globalroutedailymetrics",
-      "community": 263,
+      "community": 307,
       "community_name": "globalReportReader.ts",
       "norm_label": "globalroutedailymetrics"
     },
@@ -8574,7 +8882,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_normalizeroutecode",
-      "community": 263,
+      "community": 307,
       "community_name": "globalReportReader.ts",
       "norm_label": "normalizeroutecode()"
     },
@@ -8585,7 +8893,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_parseglobalsheetdateblock",
-      "community": 263,
+      "community": 307,
       "community_name": "globalReportReader.ts",
       "norm_label": "parseglobalsheetdateblock()"
     },
@@ -8596,7 +8904,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_fetchglobalreportdailymetrics",
-      "community": 263,
+      "community": 307,
       "community_name": "globalReportReader.ts",
       "norm_label": "fetchglobalreportdailymetrics()"
     },
@@ -8640,7 +8948,7 @@
       "source_location": "L154",
       "_origin": "ast",
       "id": "src_services_googlesheets_mutations_updatebusdata",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "updatebusdata()"
     },
@@ -8695,8 +9003,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_transport",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "transport.ts"
     },
     {
@@ -8717,8 +9025,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_transportmode",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "transportmode"
     },
     {
@@ -8728,8 +9036,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_cachedproxystatus",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "cachedproxystatus"
     },
     {
@@ -8739,8 +9047,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_settransportmode",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "settransportmode()"
     },
     {
@@ -8750,8 +9058,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_gettransportmode",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "gettransportmode()"
     },
     {
@@ -8772,8 +9080,8 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_isusingserviceaccount",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 291,
+      "community_name": "transport.ts",
       "norm_label": "isusingserviceaccount()"
     },
     {
@@ -8849,8 +9157,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_headermap",
-      "community": 307,
-      "community_name": "useOfflineSync.ts",
+      "community": 287,
+      "community_name": "core.ts",
       "norm_label": "headermap"
     },
     {
@@ -8861,7 +9169,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_types_busdata",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "busdata"
     },
     {
@@ -8871,8 +9179,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_authresult",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 277,
+      "community_name": "App.tsx",
       "norm_label": "authresult"
     },
     {
@@ -8905,7 +9213,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_test",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "routeservice.test.ts"
     },
     {
@@ -8916,7 +9224,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_test_localstoragemock",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "localstoragemock"
     },
     {
@@ -8938,7 +9246,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "audit.ts"
     },
     {
@@ -8949,7 +9257,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_readpendingactivitylogs",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "readpendingactivitylogs()"
     },
     {
@@ -8960,7 +9268,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_writependingactivitylogs",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "writependingactivitylogs()"
     },
     {
@@ -8971,7 +9279,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_logactivity",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "logactivity()"
     },
     {
@@ -8981,7 +9289,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_services_routes_audit_backupsyncqueue",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "backupsyncqueue()"
     },
@@ -8993,7 +9301,7 @@
       "_origin": "ast",
       "id": "src_services_routes_index",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "routes/index.ts"
     },
     {
@@ -9003,7 +9311,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_routes_routes",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "routes.ts"
     },
@@ -9014,7 +9322,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_services_routes_routes_fetchrouteswithsheets",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "fetchrouteswithsheets()"
     },
@@ -9025,7 +9333,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_services_routes_routes_createroutewithsheet",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "createroutewithsheet()"
     },
@@ -9036,7 +9344,7 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "src_services_routes_routes_deleteroutesheet",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "deleteroutesheet()"
     },
@@ -9047,8 +9355,8 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "src_services_routes_routes_upsertdailyunitsummaries",
-      "community": 319,
-      "community_name": "routes.ts",
+      "community": 287,
+      "community_name": "core.ts",
       "norm_label": "upsertdailyunitsummaries()"
     },
     {
@@ -9058,8 +9366,8 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "src_services_routes_routes_getcrossperiodaccumulation",
-      "community": 276,
-      "community_name": "utils/analytics.ts",
+      "community": 283,
+      "community_name": "routes.ts",
       "norm_label": "getcrossperiodaccumulation()"
     },
     {
@@ -9070,7 +9378,7 @@
       "_origin": "ast",
       "id": "src_services_routes_sync",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "sync.ts"
     },
     {
@@ -9081,7 +9389,7 @@
       "_origin": "ast",
       "id": "src_services_routes_sync_flushpendinglocalsync",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "flushpendinglocalsync()"
     },
     {
@@ -9092,7 +9400,7 @@
       "_origin": "ast",
       "id": "src_services_routes_types",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "routes/types.ts"
     },
     {
@@ -9103,7 +9411,7 @@
       "_origin": "ast",
       "id": "src_services_routes_types_crossperiodsummaryresult",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "crossperiodsummaryresult"
     },
     {
@@ -9114,7 +9422,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "users.ts"
     },
     {
@@ -9125,7 +9433,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_role_code_to_id",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "role_code_to_id"
     },
     {
@@ -9136,7 +9444,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_role_id_to_code",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "role_id_to_code"
     },
     {
@@ -9146,8 +9454,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_services_routes_users_tryofflineprofilefallback",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 283,
+      "community_name": "routes.ts",
       "norm_label": "tryofflineprofilefallback()"
     },
     {
@@ -9157,8 +9465,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_services_routes_users_verifyuserprofile",
-      "community": 242,
-      "community_name": "login/LoginScreen.tsx",
+      "community": 277,
+      "community_name": "App.tsx",
       "norm_label": "verifyuserprofile()"
     },
     {
@@ -9169,7 +9477,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_upsertuserprofile",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "upsertuserprofile()"
     },
     {
@@ -9191,7 +9499,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_fetchalluserprofiles",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "fetchalluserprofiles()"
     },
     {
@@ -9202,7 +9510,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_fetchmasterroles",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "fetchmasterroles()"
     },
     {
@@ -9213,7 +9521,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_adduserprofile",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "adduserprofile()"
     },
     {
@@ -9224,7 +9532,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_updateuserprofilerole",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "updateuserprofilerole()"
     },
     {
@@ -9235,7 +9543,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_toggleuserprofilestatus",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "toggleuserprofilestatus()"
     },
     {
@@ -9246,7 +9554,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_revokeuserprofile",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "revokeuserprofile()"
     },
     {
@@ -9257,7 +9565,7 @@
       "_origin": "ast",
       "id": "src_services_supabase",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "services/supabase.ts"
     },
     {
@@ -9268,7 +9576,7 @@
       "_origin": "ast",
       "id": "src_services_supabase_issupabaseconfigured",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "issupabaseconfigured"
     },
     {
@@ -9279,7 +9587,7 @@
       "_origin": "ast",
       "id": "src_services_supabase_supabase",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "supabase"
     },
     {
@@ -9289,7 +9597,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_types_supabase",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "types/supabase.ts"
     },
@@ -9300,7 +9608,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_types_supabase_operator",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "operator"
     },
@@ -9311,8 +9619,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_types_supabase_route",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "route"
     },
     {
@@ -9322,8 +9630,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_types_supabase_fleetunitstatusdetail",
-      "community": 315,
-      "community_name": "waReportGenerator.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "fleetunitstatusdetail"
     },
     {
@@ -9333,7 +9641,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_types_supabase_dailyroutereport",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "dailyroutereport"
     },
@@ -9344,7 +9652,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_types_supabase_routesheet",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "routesheet"
     },
@@ -9356,7 +9664,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_userrole",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "userrole"
     },
     {
@@ -9367,7 +9675,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_role",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "role"
     },
     {
@@ -9378,7 +9686,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_userprofile",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "userprofile"
     },
     {
@@ -9389,7 +9697,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_activitylog",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "activitylog"
     },
     {
@@ -9400,7 +9708,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_syncqueuebackup",
       "community": 283,
-      "community_name": "types/supabase.ts",
+      "community_name": "routes.ts",
       "norm_label": "syncqueuebackup"
     },
     {
@@ -9410,7 +9718,7 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "src_types_supabase_dailyunitsummary",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "dailyunitsummary"
     },
@@ -9421,7 +9729,7 @@
       "source_location": "L166",
       "_origin": "ast",
       "id": "src_types_supabase_fleetstatuslog",
-      "community": 283,
+      "community": 263,
       "community_name": "types/supabase.ts",
       "norm_label": "fleetstatuslog"
     },
@@ -9575,7 +9883,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_analytics_test",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "analytics.test.ts"
     },
@@ -9586,7 +9894,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_utils_analytics_test_mockbusdata",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "mockbusdata"
     },
@@ -9597,7 +9905,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_analytics",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "utils/analytics.ts"
     },
@@ -9608,7 +9916,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_utils_analytics_busnote",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "busnote"
     },
@@ -9619,7 +9927,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_utils_analytics_analyticssummary",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "analyticssummary"
     },
@@ -9631,7 +9939,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_slugifyunitid",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "slugifyunitid()"
     },
     {
@@ -9641,7 +9949,7 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_utils_analytics_getvalidnumber",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "getvalidnumber()"
     },
@@ -9652,7 +9960,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_utils_analytics_calculateanalytics",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "calculateanalytics()"
     },
@@ -9674,7 +9982,7 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "src_utils_analytics_calculateaccumulatedanalytics",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "calculateaccumulatedanalytics()"
     },
@@ -9685,7 +9993,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "src_utils_analytics_getformatteddatebadge",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "getformatteddatebadge()"
     },
@@ -9696,8 +10004,8 @@
       "source_location": "L308",
       "_origin": "ast",
       "id": "src_utils_analytics_formataccumulatednotes",
-      "community": 276,
-      "community_name": "utils/analytics.ts",
+      "community": 283,
+      "community_name": "routes.ts",
       "norm_label": "formataccumulatednotes()"
     },
     {
@@ -9873,7 +10181,7 @@
       "_origin": "ast",
       "id": "src_utils_conflictmerge_test",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "conflictmerge.test.ts"
     },
     {
@@ -9884,7 +10192,7 @@
       "_origin": "ast",
       "id": "src_utils_conflictmerge",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "conflictmerge.ts"
     },
     {
@@ -9895,7 +10203,7 @@
       "_origin": "ast",
       "id": "src_utils_conflictmerge_editable_bus_fields",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "editable_bus_fields"
     },
     {
@@ -9906,7 +10214,7 @@
       "_origin": "ast",
       "id": "src_utils_conflictmerge_mergeremotebusdatawithlocalupdates",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "mergeremotebusdatawithlocalupdates()"
     },
     {
@@ -9916,8 +10224,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorclassifier_test",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 276,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "errorclassifier.test.ts"
     },
     {
@@ -9927,8 +10235,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_errorclassifier",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 276,
+      "community_name": "useOfflineSync.ts",
       "norm_label": "errorclassifier.ts"
     },
     {
@@ -9949,7 +10257,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "src_utils_errorclassifier_isnetworkerror",
-      "community": 307,
+      "community": 276,
       "community_name": "useOfflineSync.ts",
       "norm_label": "isnetworkerror()"
     },
@@ -10092,8 +10400,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_holidayutils_test",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "holidayutils.test.ts"
     },
     {
@@ -10103,8 +10411,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_holidayutils",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "holidayutils.ts"
     },
     {
@@ -10114,8 +10422,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_utils_holidayutils_indonesia_holidays_2026",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "indonesia_holidays_2026"
     },
     {
@@ -10125,8 +10433,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_utils_holidayutils_annual_fixed_holidays",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "annual_fixed_holidays"
     },
     {
@@ -10136,8 +10444,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_utils_holidayutils_isnationalholiday",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "isnationalholiday()"
     },
     {
@@ -10147,8 +10455,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_utils_holidayutils_daytype",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "daytype"
     },
     {
@@ -10158,8 +10466,8 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "src_utils_holidayutils_dynamicrenopsresult",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "dynamicrenopsresult"
     },
     {
@@ -10169,8 +10477,8 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_utils_holidayutils_getrenopsfordate",
-      "community": 256,
-      "community_name": "cacheUtils.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "getrenopsfordate()"
     },
     {
@@ -10851,7 +11159,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_numberutils_test",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "numberutils.test.ts"
     },
@@ -10862,7 +11170,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_numberutils",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "numberutils.ts"
     },
@@ -10873,7 +11181,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_numberutils_parseindonesiannumber",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "parseindonesiannumber()"
     },
@@ -10884,7 +11192,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_utils_numberutils_safeformatnumber",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "safeformatnumber()"
     },
@@ -10895,7 +11203,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_utils_numberutils_normalizefieldvalue",
-      "community": 276,
+      "community": 250,
       "community_name": "utils/analytics.ts",
       "norm_label": "normalizefieldvalue()"
     },
@@ -10906,8 +11214,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_rolestorage_test",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "rolestorage.test.ts"
     },
     {
@@ -10917,8 +11225,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_rolestorage",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "rolestorage.ts"
     },
     {
@@ -10928,8 +11236,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_rolestorage_userrole",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "userrole"
     },
     {
@@ -10939,8 +11247,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_utils_rolestorage_valid_roles",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "valid_roles"
     },
     {
@@ -10950,8 +11258,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_utils_rolestorage_getstoreduserrole",
-      "community": 328,
-      "community_name": "profileMenu/UserProfileHeader.tsx",
+      "community": 6,
+      "community_name": "profileMenu/ProfileMenuSheet.tsx",
       "norm_label": "getstoreduserrole()"
     },
     {
@@ -10961,7 +11269,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_routevalidation_test",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "routevalidation.test.ts"
     },
@@ -10972,7 +11280,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_routevalidation",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "routevalidation.ts"
     },
@@ -10983,7 +11291,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_utils_routevalidation_formatroutecode",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "formatroutecode()"
     },
@@ -10994,7 +11302,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_utils_routevalidation_validateroutecode",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "validateroutecode()"
     },
@@ -11005,7 +11313,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_utils_routevalidation_validategooglesheetsurl",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "validategooglesheetsurl()"
     },
@@ -11016,7 +11324,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_utils_routevalidation_extractroutenamefromheaders",
-      "community": 319,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "extractroutenamefromheaders()"
     },
@@ -11082,8 +11390,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_sheetidentity_test",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "sheetidentity.test.ts"
     },
     {
@@ -11093,8 +11401,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_sheetidentity",
-      "community": 287,
-      "community_name": "core.ts",
+      "community": 263,
+      "community_name": "types/supabase.ts",
       "norm_label": "sheetidentity.ts"
     },
     {
@@ -11171,7 +11479,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_test",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitanalytics.test.ts"
     },
     {
@@ -11182,7 +11490,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_test_mockbusdata",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "mockbusdata"
     },
     {
@@ -11193,7 +11501,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitanalytics.ts"
     },
     {
@@ -11204,7 +11512,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitshiftstatus",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitshiftstatus"
     },
     {
@@ -11215,7 +11523,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitsummaryitem",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitsummaryitem"
     },
     {
@@ -11226,7 +11534,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitsummarymetrics",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "unitsummarymetrics"
     },
     {
@@ -11237,7 +11545,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_getunitshiftstatus",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "getunitshiftstatus()"
     },
     {
@@ -11248,7 +11556,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_extractunitlist",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "extractunitlist()"
     },
     {
@@ -11259,7 +11567,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_calculateunitmetricsfromrow",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "calculateunitmetricsfromrow()"
     },
     {
@@ -11270,7 +11578,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_calculateunitmetrics",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "calculateunitmetrics()"
     },
     {
@@ -11281,7 +11589,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_extractaccumulatedunitlist",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "extractaccumulatedunitlist()"
     },
     {
@@ -11292,7 +11600,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_detecttargettrip",
       "community": 250,
-      "community_name": "BusData",
+      "community_name": "utils/analytics.ts",
       "norm_label": "detecttargettrip()"
     },
     {
@@ -18485,7 +18793,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "agents_skills_design_taste_frontend_skill_1_the_three_dials_core_configuration",
-      "community": 332,
+      "community": 321,
       "community_name": "1. THE THREE DIALS (Core Configuration)",
       "norm_label": "1. the three dials (core configuration)"
     },
@@ -18496,7 +18804,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "agents_skills_design_taste_frontend_skill_1_a_dial_inference_design_read_dial_values",
-      "community": 332,
+      "community": 321,
       "community_name": "1. THE THREE DIALS (Core Configuration)",
       "norm_label": "1.a dial inference (design read \u2192 dial values)"
     },
@@ -18507,7 +18815,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "agents_skills_design_taste_frontend_skill_1_b_use_case_presets",
-      "community": 332,
+      "community": 321,
       "community_name": "1. THE THREE DIALS (Core Configuration)",
       "norm_label": "1.b use-case presets"
     },
@@ -18518,7 +18826,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "agents_skills_design_taste_frontend_skill_1_c_how_the_dials_drive_output",
-      "community": 332,
+      "community": 321,
       "community_name": "1. THE THREE DIALS (Core Configuration)",
       "norm_label": "1.c how the dials drive output"
     },
@@ -37344,6 +37652,380 @@
       "norm_label": "skenario 2: ketiadaan koneksi langsung ke spreadsheet global (mode fallback)"
     },
     {
+      "label": "refact_62/AUDIT_BUGS.md",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_audit_bugs",
+      "community": 335,
+      "community_name": "Audit Bugs Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "refact_62/audit_bugs.md"
+    },
+    {
+      "label": "Audit Bugs Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_audit_bugs_audit_bugs_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "community": 335,
+      "community_name": "Audit Bugs Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "audit bugs report - refactor 62 (transformasi pemblokir status armada menjadi soft reminder)"
+    },
+    {
+      "label": "Daftar Temuan Masalah & Analisis Risiko",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/AUDIT_BUGS.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_audit_bugs_daftar_temuan_masalah_analisis_risiko",
+      "community": 335,
+      "community_name": "Audit Bugs Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "daftar temuan masalah & analisis risiko"
+    },
+    {
+      "label": "refact_62/REPAIR_REPORT.md",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "refact_62/repair_report.md"
+    },
+    {
+      "label": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_repair_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "repair report - refactor 62 (transformasi pemblokir status armada menjadi soft reminder)"
+    },
+    {
+      "label": "1. Implementasi Teknis",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_1_implementasi_teknis",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "1. implementasi teknis"
+    },
+    {
+      "label": "A. Pelepasan Pemblokir Hard-Block (`useBusCardModal.ts` & `useBulkOperations.ts`)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_a_pelepasan_pemblokir_hard_block_usebuscardmodal_ts_usebulkoperations_ts",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "a. pelepasan pemblokir hard-block (`usebuscardmodal.ts` & `usebulkoperations.ts`)"
+    },
+    {
+      "label": "B. Indikator Visual Pengingat Ramah (*Soft Reminder*)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_b_indikator_visual_pengingat_ramah_soft_reminder",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "b. indikator visual pengingat ramah (*soft reminder*)"
+    },
+    {
+      "label": "C. Standardisasi Kamus Teks Sentral (`src/constants/texts/`)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_c_standardisasi_kamus_teks_sentral_src_constants_texts",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "c. standardisasi kamus teks sentral (`src/constants/texts/`)"
+    },
+    {
+      "label": "2. Before vs After",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_2_before_vs_after",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "2. before vs after"
+    },
+    {
+      "label": "BUG-62-01: Interaksi Kartu Bus & Modal Input",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_bug_62_01_interaksi_kartu_bus_modal_input",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "bug-62-01: interaksi kartu bus & modal input"
+    },
+    {
+      "label": "BUG-62-02: Operasi Massal (Bulk Trip & Copy KM S1)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_bug_62_02_operasi_massal_bulk_trip_copy_km_s1",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "bug-62-02: operasi massal (bulk trip & copy km s1)"
+    },
+    {
+      "label": "BUG-62-03: Tampilan Visual Kartu Armada",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_bug_62_03_tampilan_visual_kartu_armada",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "bug-62-03: tampilan visual kartu armada"
+    },
+    {
+      "label": "3. Case: Skenario Lapangan",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_3_case_skenario_lapangan",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "3. case: skenario lapangan"
+    },
+    {
+      "label": "Skenario Lapangan 1: Petugas Pos Lapangan Saat Pergantian Shift Sibuk",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L81",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_skenario_lapangan_1_petugas_pos_lapangan_saat_pergantian_shift_sibuk",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "skenario lapangan 1: petugas pos lapangan saat pergantian shift sibuk"
+    },
+    {
+      "label": "Skenario Lapangan 2: Pengawas Menyiapkan Target Ritase Massal Pagi Hari",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L86",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_skenario_lapangan_2_pengawas_menyiapkan_target_ritase_massal_pagi_hari",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "skenario lapangan 2: pengawas menyiapkan target ritase massal pagi hari"
+    },
+    {
+      "label": "4. Status Verifikasi Quality Gates",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L93",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_62_repair_report_4_status_verifikasi_quality_gates",
+      "community": 332,
+      "community_name": "Repair Report - Refactor 62 (Transformasi Pemblokir Status Armada Menjadi Soft Reminder)",
+      "norm_label": "4. status verifikasi quality gates"
+    },
+    {
+      "label": "refact_63/AUDIT_BUGS.md",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "refact_63/audit_bugs.md"
+    },
+    {
+      "label": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "audit bugs \u2014 refactor 63: restorasi fitur speed-run input ss, validasi relasional, & ergonomi mobile"
+    },
+    {
+      "label": "BUG-63-01: Kehilangan Mode Single-Column Focus Speed-Run saat Filter Kategori Aktif",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_01_kehilangan_mode_single_column_focus_speed_run_saat_filter_kategori_aktif",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "bug-63-01: kehilangan mode single-column focus speed-run saat filter kategori aktif"
+    },
+    {
+      "label": "BUG-63-02: Tidak Adanya Autofocus & Autoselect pada Input Aktif",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_02_tidak_adanya_autofocus_autoselect_pada_input_aktif",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "bug-63-02: tidak adanya autofocus & autoselect pada input aktif"
+    },
+    {
+      "label": "BUG-63-03: Hilangnya Fitur Enter-to-Save pada Input Form",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_03_hilangnya_fitur_enter_to_save_pada_input_form",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "bug-63-03: hilangnya fitur enter-to-save pada input form"
+    },
+    {
+      "label": "BUG-63-04: Hilangnya Smart Viewport Auto-Scroll saat Input Berfokus",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_04_hilangnya_smart_viewport_auto_scroll_saat_input_berfokus",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "bug-63-04: hilangnya smart viewport auto-scroll saat input berfokus"
+    },
+    {
+      "label": "BUG-63-05: Validasi Relasional `validateToaPair` (Total TOA vs TOA S1) & Acuan KM Hilang",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_05_validasi_relasional_validatetoapair_total_toa_vs_toa_s1_acuan_km_hilang",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "bug-63-05: validasi relasional `validatetoapair` (total toa vs toa s1) & acuan km hilang"
+    },
+    {
+      "label": "BUG-63-06: Duplikasi Banner Shift Lock di Header Bus List & Tersembunyinya Progress Bar",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_06_duplikasi_banner_shift_lock_di_header_bus_list_tersembunyinya_progress_bar",
+      "community": 336,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "bug-63-06: duplikasi banner shift lock di header bus list & tersembunyinya progress bar"
+    },
+    {
+      "label": "refact_63/REPAIR_REPORT.md",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "refact_63/repair_report.md"
+    },
+    {
+      "label": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_repair_report_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "repair report \u2014 refactor 63: restorasi fitur speed-run input ss, validasi relasional, & ergonomi mobile"
+    },
+    {
+      "label": "\ud83d\udccb Ringkasan Implementasi",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_ringkasan_implementasi",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "\ud83d\udccb ringkasan implementasi"
+    },
+    {
+      "label": "\ud83d\udd04 Perbandingan Before vs After",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_perbandingan_before_vs_after",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "\ud83d\udd04 perbandingan before vs after"
+    },
+    {
+      "label": "\ud83c\udfaf Case: Skenario Lapangan",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_case_skenario_lapangan",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "\ud83c\udfaf case: skenario lapangan"
+    },
+    {
+      "label": "Skenario 1: Operator Melakukan Speed-Run Pengisian TOA Shift 1 untuk 20 Bus",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_skenario_1_operator_melakukan_speed_run_pengisian_toa_shift_1_untuk_20_bus",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "skenario 1: operator melakukan speed-run pengisian toa shift 1 untuk 20 bus"
+    },
+    {
+      "label": "Skenario 2: Operator Memasukkan Unit yang Memiliki Tiket Manual atau Catatan",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L57",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_skenario_2_operator_memasukkan_unit_yang_memiliki_tiket_manual_atau_catatan",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "skenario 2: operator memasukkan unit yang memiliki tiket manual atau catatan"
+    },
+    {
+      "label": "Skenario 3: Pencegahan Salah Input Angka TOA",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_skenario_3_pencegahan_salah_input_angka_toa",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "skenario 3: pencegahan salah input angka toa"
+    },
+    {
+      "label": "\ud83d\udee1\ufe0f Status Verifikasi & Quality Gates",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_63_repair_report_status_verifikasi_quality_gates",
+      "community": 334,
+      "community_name": "REPAIR REPORT \u2014 REFACTOR 63: RESTORASI FITUR SPEED-RUN INPUT SS, VALIDASI RELASIONAL, & ERGONOMI MOBILE",
+      "norm_label": "\ud83d\udee1\ufe0f status verifikasi & quality gates"
+    },
+    {
       "label": "01_daftar_masalah_ss_pdo_refactor6.md",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_6/01_daftar_masalah_ss_pdo_refactor6.md",
@@ -44180,6 +44862,114 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalFooter.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalfooter",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalHeader.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalheader",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalnotes",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift1",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift2",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalsinglefocus",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltabs",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltrip",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_usebusinputform",
+      "target": "ref_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/components/busCard/useBusCardModal.ts",
       "source_location": "L1",
       "weight": 1.0,
@@ -49512,7 +50302,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L49",
+      "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_businputmodal",
@@ -49523,7 +50313,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L27",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_businputmodal",
@@ -49531,25 +50321,231 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L41",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_businputmodal",
-      "target": "src_components_buscard_businputmodal_keterangan_options",
+      "target": "src_components_buscard_modal_businputmodalfooter",
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busCard/BusInputModal.tsx",
-      "source_location": "L39",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buscard_businputmodal",
-      "target": "src_components_buscard_businputmodal_modaltab",
+      "target": "src_components_buscard_modal_businputmodalfooter_businputmodalfooter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalheader_businputmodalheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalnotes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalnotes_businputmodalnotes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalshift1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalshift1_businputmodalshift1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalshift2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalshift2_businputmodalshift2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalsinglefocus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodalsinglefocus_businputmodalsinglefocus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodaltabs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodaltabs_businputmodaltabs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodaltrip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_businputmodaltrip_businputmodaltrip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_usebusinputform_modaltab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal",
+      "target": "src_components_buscard_modal_usebusinputform_usebusinputform",
       "confidence_score": 1.0
     },
     {
@@ -49563,6 +50559,30 @@
       "source": "src_components_buscard_index",
       "target": "src_components_buscard_businputmodal",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal_businputmodalprops",
+      "target": "src_components_buscard_modal_usebusinputform_modaltab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/busCard/BusInputModal.tsx",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_businputmodal_businputmodal",
+      "target": "src_components_buscard_modal_usebusinputform_usebusinputform"
     },
     {
       "relation": "contains",
@@ -49632,6 +50652,453 @@
       "_origin": "ast",
       "source": "src_components_buscard_index",
       "target": "src_components_buscard_usebuscardsave",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalFooter.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalfooter",
+      "target": "src_components_buscard_modal_businputmodalfooter_businputmodalfooter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalFooter.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalfooter",
+      "target": "src_components_buscard_modal_businputmodalfooter_businputmodalfooterprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalHeader.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalheader",
+      "target": "src_components_buscard_modal_businputmodalheader_businputmodalheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalHeader.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalheader",
+      "target": "src_components_buscard_modal_businputmodalheader_businputmodalheaderprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalnotes",
+      "target": "src_components_buscard_modal_businputmodalnotes_businputmodalnotes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalnotes",
+      "target": "src_components_buscard_modal_businputmodalnotes_businputmodalnotesprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalnotes",
+      "target": "src_components_buscard_modal_businputmodalnotes_keterangan_options",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalnotes",
+      "target": "src_components_buscard_modal_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalnotes",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalNotes.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalnotes_businputmodalnotesprops",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift1",
+      "target": "src_components_buscard_modal_businputmodalshift1_businputmodalshift1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift1",
+      "target": "src_components_buscard_modal_businputmodalshift1_businputmodalshift1props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift1",
+      "target": "src_components_buscard_modal_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift1",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift1.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift1_businputmodalshift1props",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift2",
+      "target": "src_components_buscard_modal_businputmodalshift2_businputmodalshift2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift2",
+      "target": "src_components_buscard_modal_businputmodalshift2_businputmodalshift2props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift2",
+      "target": "src_components_buscard_modal_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift2",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalShift2.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalshift2_businputmodalshift2props",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalsinglefocus",
+      "target": "src_components_buscard_modal_businputmodalsinglefocus_businputmodalsinglefocus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalsinglefocus",
+      "target": "src_components_buscard_modal_businputmodalsinglefocus_businputmodalsinglefocusprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalsinglefocus",
+      "target": "src_components_buscard_modal_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalsinglefocus",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalSingleFocus.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodalsinglefocus_businputmodalsinglefocusprops",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltabs",
+      "target": "src_components_buscard_modal_businputmodaltabs_businputmodaltabs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltabs",
+      "target": "src_components_buscard_modal_businputmodaltabs_businputmodaltabsprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltabs",
+      "target": "src_components_buscard_modal_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltabs",
+      "target": "src_components_buscard_modal_usebusinputform_modaltab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTabs.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltabs_businputmodaltabsprops",
+      "target": "src_components_buscard_modal_usebusinputform_modaltab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltrip",
+      "target": "src_components_buscard_modal_businputmodaltrip_businputmodaltrip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltrip",
+      "target": "src_components_buscard_modal_businputmodaltrip_businputmodaltripprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltrip",
+      "target": "src_components_buscard_modal_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltrip",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/BusInputModalTrip.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_businputmodaltrip_businputmodaltripprops",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L388",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_usebusinputform",
+      "target": "src_components_buscard_modal_usebusinputform_businputformreturn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_usebusinputform",
+      "target": "src_components_buscard_modal_usebusinputform_modaltab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_usebusinputform",
+      "target": "src_components_buscard_modal_usebusinputform_usebusinputform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/busCard/modal/useBusInputForm.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_buscard_modal_usebusinputform",
+      "target": "src_components_buscard_modal_usebusinputform_usebusinputformprops",
       "confidence_score": 1.0
     },
     {
@@ -50057,7 +51524,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L5",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buslist_buslistheader",
@@ -50081,7 +51548,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L5",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buslist_buslistheader",
@@ -50128,7 +51595,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L39",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buslist_buslistheader",
@@ -50139,7 +51606,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L7",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buslist_buslistheader",
@@ -50151,7 +51618,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buslist_buslistheader",
@@ -50163,35 +51630,11 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_buslist_buslistheader",
       "target": "src_components_buslist_buslistprogressbar_buslistprogressbar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_buslist_buslistheader",
-      "target": "src_components_buslist_buslistshiftlockbanner",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/busList/BusListHeader.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_buslist_buslistheader",
-      "target": "src_components_buslist_buslistshiftlockbanner_buslistshiftlockbanner",
       "confidence_score": 1.0
     },
     {
@@ -92817,6 +94260,336 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_audit_bugs",
+      "target": "refactor_ss_pdo_refact_62_audit_bugs_audit_bugs_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/AUDIT_BUGS.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_audit_bugs_audit_bugs_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "target": "refactor_ss_pdo_refact_62_audit_bugs_daftar_temuan_masalah_analisis_risiko",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report",
+      "target": "refactor_ss_pdo_refact_62_repair_report_repair_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_repair_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "target": "refactor_ss_pdo_refact_62_repair_report_1_implementasi_teknis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_repair_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "target": "refactor_ss_pdo_refact_62_repair_report_2_before_vs_after",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_repair_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "target": "refactor_ss_pdo_refact_62_repair_report_3_case_skenario_lapangan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_repair_report_refactor_62_transformasi_pemblokir_status_armada_menjadi_soft_reminder",
+      "target": "refactor_ss_pdo_refact_62_repair_report_4_status_verifikasi_quality_gates",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_1_implementasi_teknis",
+      "target": "refactor_ss_pdo_refact_62_repair_report_a_pelepasan_pemblokir_hard_block_usebuscardmodal_ts_usebulkoperations_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_1_implementasi_teknis",
+      "target": "refactor_ss_pdo_refact_62_repair_report_b_indikator_visual_pengingat_ramah_soft_reminder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_1_implementasi_teknis",
+      "target": "refactor_ss_pdo_refact_62_repair_report_c_standardisasi_kamus_teks_sentral_src_constants_texts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_2_before_vs_after",
+      "target": "refactor_ss_pdo_refact_62_repair_report_bug_62_01_interaksi_kartu_bus_modal_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_2_before_vs_after",
+      "target": "refactor_ss_pdo_refact_62_repair_report_bug_62_02_operasi_massal_bulk_trip_copy_km_s1",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_2_before_vs_after",
+      "target": "refactor_ss_pdo_refact_62_repair_report_bug_62_03_tampilan_visual_kartu_armada",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_3_case_skenario_lapangan",
+      "target": "refactor_ss_pdo_refact_62_repair_report_skenario_lapangan_1_petugas_pos_lapangan_saat_pergantian_shift_sibuk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_62/REPAIR_REPORT.md",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_62_repair_report_3_case_skenario_lapangan",
+      "target": "refactor_ss_pdo_refact_62_repair_report_skenario_lapangan_2_pengawas_menyiapkan_target_ritase_massal_pagi_hari",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_audit_bugs",
+      "target": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_01_kehilangan_mode_single_column_focus_speed_run_saat_filter_kategori_aktif",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_02_tidak_adanya_autofocus_autoselect_pada_input_aktif",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_03_hilangnya_fitur_enter_to_save_pada_input_form",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_04_hilangnya_smart_viewport_auto_scroll_saat_input_berfokus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_05_validasi_relasional_validatetoapair_total_toa_vs_toa_s1_acuan_km_hilang",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/AUDIT_BUGS.md",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_audit_bugs_audit_bugs_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_audit_bugs_bug_63_06_duplikasi_banner_shift_lock_di_header_bus_list_tersembunyinya_progress_bar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report",
+      "target": "refactor_ss_pdo_refact_63_repair_report_repair_report_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report_repair_report_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_repair_report_case_skenario_lapangan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report_repair_report_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_repair_report_perbandingan_before_vs_after",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report_repair_report_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_repair_report_ringkasan_implementasi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report_repair_report_refactor_63_restorasi_fitur_speed_run_input_ss_validasi_relasional_ergonomi_mobile",
+      "target": "refactor_ss_pdo_refact_63_repair_report_status_verifikasi_quality_gates",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report_case_skenario_lapangan",
+      "target": "refactor_ss_pdo_refact_63_repair_report_skenario_1_operator_melakukan_speed_run_pengisian_toa_shift_1_untuk_20_bus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report_case_skenario_lapangan",
+      "target": "refactor_ss_pdo_refact_63_repair_report_skenario_2_operator_memasukkan_unit_yang_memiliki_tiket_manual_atau_catatan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_63/REPAIR_REPORT.md",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_63_repair_report_case_skenario_lapangan",
+      "target": "refactor_ss_pdo_refact_63_repair_report_skenario_3_pencegahan_salah_input_angka_toa",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_6/01_daftar_masalah_ss_pdo_refactor6.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -96545,5 +98318,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "edf099faa4978019c77ca297f2c17447ed6f8ef6"
+  "built_at_commit": "00ca6b81e1da0388513ca374121e9f72048b6800"
 }

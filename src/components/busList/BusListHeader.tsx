@@ -1,6 +1,5 @@
 import React from "react";
 import { BusListAccumulationBanner } from "./BusListAccumulationBanner";
-import { BusListShiftLockBanner } from "./BusListShiftLockBanner";
 import { BusListProgressBar } from "./BusListProgressBar";
 import { BusListControlBar } from "./BusListControlBar";
 
@@ -40,9 +39,6 @@ export const BusListHeader: React.FC<BusListHeaderProps> = ({
   tabName,
   accRange,
   onExitAccumulation,
-  isShiftConfirmed,
-  activeShift = 1,
-  onOpenFleetStatus,
   activeCategory,
   onCategoryChange,
   filledCount,
@@ -71,22 +67,12 @@ export const BusListHeader: React.FC<BusListHeaderProps> = ({
       )}
 
       {/* 2. Hairline Progress Indicator */}
-      {(isShiftConfirmed || tabName === "AKUMULASI") && (
-        <BusListProgressBar
-          activeCategory={activeCategory}
-          filledCount={filledCount}
-          totalCount={totalCount}
-          progressPercent={progressPercent}
-        />
-      )}
-
-      {/* 3. Banner Peringatan Status Armada Belum Dikonfirmasi */}
-      {!isShiftConfirmed && tabName !== "AKUMULASI" && (
-        <BusListShiftLockBanner
-          activeShift={activeShift}
-          onOpenFleetStatus={onOpenFleetStatus}
-        />
-      )}
+      <BusListProgressBar
+        activeCategory={activeCategory}
+        filledCount={filledCount}
+        totalCount={totalCount}
+        progressPercent={progressPercent}
+      />
 
       {/* 4. Controls Container: Row 1 & Row 2 */}
       <BusListControlBar
