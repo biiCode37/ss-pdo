@@ -11,7 +11,7 @@ import {
   showBulkTripModal,
   showBulkCopyKmModal,
 } from "@/utils/alertUtils";
-import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "@/constants/texts";
+import { TEXT_DASHBOARD } from "@/constants/texts";
 import type { SyncItem } from "@/hooks/useOfflineSync";
 
 interface UseBulkOperationsProps {
@@ -32,8 +32,6 @@ export function useBulkOperations({
   headerMap,
   addToQueue,
   onUpdateBus,
-  isShiftConfirmed,
-  onOpenFleetStatus,
 }: UseBulkOperationsProps) {
   const [bulkPergi, setBulkPergi] = useState("");
   const [bulkPulang, setBulkPulang] = useState("");
@@ -80,11 +78,7 @@ export function useBulkOperations({
       showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
       return;
     }
-    if (isShiftConfirmed === false) {
-      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
-      if (onOpenFleetStatus) onOpenFleetStatus();
-      return;
-    }
+    // ponytail: [bulk trip diizinkan saat status armada belum dikonfirmasi]
 
     const result = await showBulkTripModal({
       currentPergi: bulkPergi,
@@ -164,11 +158,7 @@ export function useBulkOperations({
       showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
       return;
     }
-    if (isShiftConfirmed === false) {
-      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
-      if (onOpenFleetStatus) onOpenFleetStatus();
-      return;
-    }
+    // ponytail: [bulk copy KM S1 diizinkan saat status armada belum dikonfirmasi]
 
     if (availableKmS1Buses.length === 0) {
       if (skippedWithNotesCount > 0) {

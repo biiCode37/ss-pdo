@@ -19,8 +19,11 @@ export const TEXT_FLEET_STATUS = {
     APPLY_STATUS_TITLE: (brush: string) => `Klik untuk menerapkan status ${brush}`,
     SGO_FULL_LABEL: 'Siap Guna Operasi',
     LOCK_BANNER_MESSAGE: (shift: number) =>
-      `Status armada Shift ${shift} belum dikonfirmasi. Tentukan status armada terlebih dahulu untuk mulai mengisi data operasional.`,
-    LOCK_CARD_TOOLTIP: 'Status armada belum dikonfirmasi. Klik untuk menentukan status.',
+      `Pengingat: Status armada Shift ${shift} belum dikonfirmasi. Anda tetap dapat mengisi data, namun disarankan untuk segera mengonfirmasi status armada.`,
+    LOCK_CARD_TOOLTIP:
+      'Pengingat: Status armada belum dikonfirmasi. Disarankan untuk segera mengonfirmasi status armada.',
+    MODAL_REMINDER: (shift: number) =>
+      `Pengingat: Status armada Shift ${shift} belum dikonfirmasi. Disarankan untuk segera mengonfirmasi status armada.`,
     NON_SGO_ALERT_TITLE: (unit: string) => `Unit ${unit} Tidak Beroperasi`,
     NON_SGO_ALERT_HTML: (unit: string, status: string) =>
       `Unit <b>${unit}</b> saat ini berstatus <b>${status}</b> sehingga pengisian data operasional dikunci.<br/><br/>Apakah Anda ingin membuka <b>Status Armada</b> untuk mengubah status unit ini?`,

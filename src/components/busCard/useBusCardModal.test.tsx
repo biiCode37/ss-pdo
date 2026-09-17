@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { useBusCardModal } from "./useBusCardModal";
 import type { BusData } from "@/services/googleSheets";
 import * as alertUtils from "@/utils/alertUtils";
-import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "@/constants/texts";
+import { TEXT_DASHBOARD } from "@/constants/texts";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -110,7 +110,7 @@ describe("useBusCardModal Hook", () => {
     expect(latestHookResult.isModalOpen).toBe(false);
   });
 
-  it("blocks modal opening and triggers onOpenFleetStatus when isShiftConfirmed is false", async () => {
+  it("allows modal opening even when isShiftConfirmed is false", async () => {
     const onOpenFleetStatusMock = vi.fn();
     await act(async () => {
       root.render(
@@ -128,11 +128,9 @@ describe("useBusCardModal Hook", () => {
       await latestHookResult.handleOpenModal();
     });
 
-    expect(alertUtils.showWarningToast).toHaveBeenCalledWith(
-      TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP,
-    );
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
-    expect(latestHookResult.isModalOpen).toBe(false);
+    expect(alertUtils.showWarningToast).not.toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
+    expect(latestHookResult.isModalOpen).toBe(true);
   });
 
   it("shows non-SGO confirmation alert when unit has OFF/TO status", async () => {

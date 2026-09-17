@@ -2000,9 +2000,8 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   transform: scale(0.97);
 }
 
-/* Bus Card Locked & Non-SGO Statuses */
+/* Bus Card Unconfirmed & Non-SGO Statuses */
 .bus-card.bus-card-locked {
-  opacity: 0.72;
   border-left-color: var(--warning-color, #f59e0b) !important;
 }
 

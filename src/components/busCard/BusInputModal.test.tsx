@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { BusInputModal } from "./BusInputModal";
 import type { BusData } from "@/services/googleSheets";
 import { getSatsetMode, setSatsetMode } from "@/utils/modals/busInput/busModalTypes";
-import { TEXT_ALERTS } from "@/constants/texts";
+import { TEXT_ALERTS, TEXT_FLEET_STATUS } from "@/constants/texts";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -266,6 +266,25 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
         tripPergi: "2",
         tripPulang: "2",
       }),
+    );
+  });
+
+  it("renders unconfirmed shift reminder banner when isShiftConfirmed is false", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus()}
+          onSave={vi.fn()}
+          isShiftConfirmed={false}
+          activeShift={1}
+        />,
+      );
+    });
+
+    expect(document.body.textContent).toContain(
+      TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(1),
     );
   });
 });

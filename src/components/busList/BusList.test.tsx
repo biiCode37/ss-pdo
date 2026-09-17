@@ -107,7 +107,7 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     expect(container.querySelector('.shift-lock-banner')).toBeNull();
   });
 
-  it('blocks bulk trip modal when isShiftConfirmed is false', async () => {
+  it('allows bulk trip modal even when isShiftConfirmed is false', async () => {
     const onOpenFleetStatusMock = vi.fn();
 
     await act(async () => {
@@ -129,9 +129,8 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
       setTripBtn?.click();
     });
 
-    expect(alertUtils.showWarningToast).toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
-    expect(alertUtils.showBulkTripModal).not.toHaveBeenCalled();
+    expect(alertUtils.showBulkTripModal).toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
   });
 
   it('calculates progress bar total count based only on units allowed for input (excluding OFF/non-SGO)', async () => {

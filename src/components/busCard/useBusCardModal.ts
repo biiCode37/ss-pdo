@@ -26,7 +26,6 @@ export function useBusCardModal({
   tabName,
   activeCategory,
   activeShift = 1,
-  isShiftConfirmed,
   onOpenFleetStatus,
   handleSaveUpdates,
 }: UseBusCardModalOptions) {
@@ -55,14 +54,7 @@ export function useBusCardModal({
       return;
     }
 
-    // 1. Jika shift belum dikonfirmasi status armadanya, blokir input dan minta konfirmasi status armada
-    if (isShiftConfirmed === false) {
-      showWarningToast(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP);
-      if (onOpenFleetStatus) {
-        onOpenFleetStatus();
-      }
-      return;
-    }
+    // ponytail: [hapus pemblokir status armada, biarkan input dapat diisi, status armada menjadi soft reminder]
 
     // 2. Jika unit berstatus non-SGO (OFF, TO EVDAL, BA), blokir pengisian data operasional
     if (isNonSgo) {

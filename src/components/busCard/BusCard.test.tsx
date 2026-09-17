@@ -153,7 +153,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
   });
 
-  it('blocks editing and triggers onOpenFleetStatus when isShiftConfirmed is false', async () => {
+  it('allows opening modal and renders unconfirmed warning badge when isShiftConfirmed is false', async () => {
     const onOpenFleetStatusMock = vi.fn();
 
     await act(async () => {
@@ -166,14 +166,16 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       );
     });
 
+    expect(container.textContent).toContain('Belum Konfirmasi');
+
     const card = container.querySelector('.bus-card') as HTMLDivElement;
     await act(async () => {
       card?.click();
     });
 
-    expect(alertUtils.showWarningToast).toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
-    expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
+    expect(alertUtils.showWarningToast).not.toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
+    expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
   it('does not render blue BA badge in card header when unit has BA note', async () => {

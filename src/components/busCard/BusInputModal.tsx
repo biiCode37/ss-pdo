@@ -22,7 +22,7 @@ import {
   validateToaValue,
   validateTripCount,
 } from "@/utils/modals/busInput/busModalValidation";
-import { TEXT_ALERTS, TEXT_COMMON } from "@/constants/texts";
+import { TEXT_ALERTS, TEXT_COMMON, TEXT_FLEET_STATUS } from "@/constants/texts";
 
 export interface BusInputModalProps {
   isOpen: boolean;
@@ -32,6 +32,8 @@ export interface BusInputModalProps {
   activeCategory?: string;
   initialTab?: "shift1" | "shift2" | "trip" | "notes";
   onSave: (updates: Partial<BusData>) => void | Promise<void>;
+  isShiftConfirmed?: boolean;
+  activeShift?: 1 | 2;
 }
 
 type ModalTab = "shift1" | "shift2" | "trip" | "notes";
@@ -52,6 +54,8 @@ export function BusInputModal({
   activeCategory = "all",
   initialTab = "shift1",
   onSave,
+  isShiftConfirmed,
+  activeShift = 1,
 }: BusInputModalProps) {
   // Tentukan tab awal berdasarkan initialTab atau activeCategory
   const resolvedInitialTab: ModalTab = useMemo(() => {
@@ -484,6 +488,29 @@ export function BusInputModal({
             <span>{TEXT_ALERTS.BUS_INPUT_MODAL.TAB_KET}</span>
           </button>
         </div>
+
+        {/* 2b. Unconfirmed Shift Warning Reminder Banner */}
+        {isShiftConfirmed === false && (
+          <div
+            style={{
+              margin: "10px 0 0 0",
+              padding: "8px 12px",
+              borderRadius: "8px",
+              background: "rgba(245, 158, 11, 0.12)",
+              border: "1px solid rgba(245, 158, 11, 0.35)",
+              color: "var(--warning-text, #f59e0b)",
+              fontSize: "0.8rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <AlertCircle size={15} style={{ flexShrink: 0 }} />
+            <span style={{ lineHeight: 1.35, fontWeight: 500 }}>
+              {TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(activeShift || 1)}
+            </span>
+          </div>
+        )}
 
         {/* 3. Validation Errors Alert Bar */}
         {validationErrors.length > 0 && (

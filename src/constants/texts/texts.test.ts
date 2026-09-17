@@ -54,7 +54,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX('TOA')).toBe('Kolom: TOA');
     expect(TEXT_DASHBOARD.BUS_LIST.CATEGORIES.MANUAL_S1).toBe('Manual S1');
     expect(TEXT_DASHBOARD.BUS_LIST.CATEGORIES.MANUAL_S2).toBe('Manual S2');
-    expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNCONFIRMED_BADGE).toBe('🔒 Belum Konfirmasi');
+    expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNCONFIRMED_BADGE).toBe('⚠️ Belum Konfirmasi');
     expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP('OFF')).toBe('Status unit: OFF');
   });
 
@@ -118,6 +118,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_FLEET_STATUS.STATUS_CODES.SGO).toBe('SGO');
     expect(TEXT_FLEET_STATUS.MODAL.CONFIRM_APPLY_SHIFT(1)).toContain('Shift 1');
     expect(TEXT_FLEET_STATUS.MODAL.LOCK_BANNER_MESSAGE(1)).toContain('Shift 1');
+    expect(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP).toContain('Pengingat');
+    expect(TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(1)).toContain('Shift 1');
     expect(TEXT_FLEET_STATUS.MODAL.NON_SGO_ALERT_TITLE('01')).toContain('01');
   });
 

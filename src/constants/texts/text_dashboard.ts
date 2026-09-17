@@ -227,7 +227,7 @@ export const TEXT_DASHBOARD = {
     },
   },
   BUS_CARD_ACTIONS: {
-    UNCONFIRMED_BADGE: '🔒 Belum Konfirmasi',
+    UNCONFIRMED_BADGE: '⚠️ Belum Konfirmasi',
     UNIT_STATUS_TOOLTIP: (status: string) => `Status unit: ${status}`,
     SGO_CONFIRM_TITLE: 'Konfirmasi Operasional Bus',
     SGO_CONFIRM_HTML: (unit: string, ket: string) =>

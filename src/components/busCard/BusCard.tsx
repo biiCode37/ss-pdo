@@ -182,6 +182,8 @@ function BusCardComponent({
           activeCategory={activeCategory}
           initialTab={modalInitialTab}
           onSave={handleSaveModalUpdates}
+          isShiftConfirmed={isShiftConfirmed}
+          activeShift={activeShift}
         />
       )}
     </>
