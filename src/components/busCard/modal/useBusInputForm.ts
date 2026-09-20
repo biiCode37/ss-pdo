@@ -9,6 +9,8 @@ import {
 import {
   validateKmPair,
   validateKmCrossShift,
+  validateKmCrossDay,
+  detectSmartRollover,
   validateToaPair,
   validateToaValue,
   validateTripCount,
@@ -347,6 +349,7 @@ export function useBusInputForm({
   );
 
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [bypassOdometerReset, setBypassOdometerReset] = useState<boolean>(false);
   const formId = useId();
 
   // Input refs for autofocus & autoselect
@@ -499,6 +502,62 @@ export function useBusInputForm({
     }
   };
 
+  // Deteksi Smart Rollover (Skenario 6: Pergantian Kepala Ribuan Lintas Hari)
+  const targetKmAwalForRollover = useMemo(() => {
+    if (isSingleMode) {
+      if (effectiveCategory === "kmAwal2" || effectiveCategory === "kmAkhir2") {
+        const hasShift1 =
+          (bus.kmAwal1 && bus.kmAwal1.trim() !== "") ||
+          (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3);
+        if (!hasShift1) return kmAwal2;
+        return "";
+      }
+      return kmAwal1;
+    }
+    if (activeTab === "shift2") {
+      const hasShift1 =
+        (bus.kmAwal1 && bus.kmAwal1.trim() !== "") ||
+        (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3);
+      if (!hasShift1) return kmAwal2;
+      return "";
+    }
+    return kmAwal1;
+  }, [
+    isSingleMode,
+    effectiveCategory,
+    activeTab,
+    bus.kmAwal1,
+    kmAwal1,
+    kmAwal2,
+  ]);
+
+  const smartRolloverSuggestion = useMemo(() => {
+    if (!targetKmAwalForRollover || !previousDayKmAkhir2) return null;
+    return detectSmartRollover(targetKmAwalForRollover, previousDayKmAkhir2);
+  }, [targetKmAwalForRollover, previousDayKmAkhir2]);
+
+  const handleApplyRollover = () => {
+    if (!smartRolloverSuggestion) return;
+    if (targetKmAwalForRollover === kmAwal2) {
+      setKmAwal2(smartRolloverSuggestion.suggestedKm);
+      if (!kmAkhir2 || kmAkhir2.trim().length <= 3) {
+        setKmAkhir2(extractLeading3Digits(smartRolloverSuggestion.suggestedKm));
+      }
+    } else {
+      setKmAwal1(smartRolloverSuggestion.suggestedKm);
+      if (!kmAkhir1 || kmAkhir1.trim().length <= 3) {
+        setKmAkhir1(extractLeading3Digits(smartRolloverSuggestion.suggestedKm));
+      }
+    }
+    setValidationErrors((prev) =>
+      prev.filter(
+        (err) =>
+          !err.includes("tidak boleh lebih kecil dari") &&
+          !err.includes("Periksa kemungkinan kepala angka"),
+      ),
+    );
+  };
+
   // Toggle Mode Satset
   const handleToggleSatset = () => {
     const next = !isSatset;
@@ -587,6 +646,15 @@ export function useBusInputForm({
         effectiveCategory === "kmAwal1" ||
         effectiveCategory === "kmAkhir1"
       ) {
+        const errCrossDay = validateKmCrossDay(
+          kmAwal1,
+          previousDayKmAkhir2,
+          "Shift 1",
+          previousDayDateLabel || "Kemarin",
+          bypassOdometerReset,
+        );
+        if (errCrossDay) errors.push(errCrossDay);
+
         const err = validateKmPair(kmAwal1, kmAkhir1, "Shift 1");
         if (err) errors.push(err);
         const errCross = validateKmCrossShift(
@@ -600,6 +668,21 @@ export function useBusInputForm({
         effectiveCategory === "kmAwal2" ||
         effectiveCategory === "kmAkhir2"
       ) {
+        // Skenario B: Jika Shift 1 kosong murni, validasi kmAwal2 terhadap hari kemarin
+        const hasShift1 =
+          (bus.kmAwal1 && bus.kmAwal1.trim() !== "") ||
+          (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3);
+        if (!hasShift1) {
+          const errCrossDay = validateKmCrossDay(
+            kmAwal2,
+            previousDayKmAkhir2,
+            "Shift 2",
+            previousDayDateLabel || "Kemarin",
+            bypassOdometerReset,
+          );
+          if (errCrossDay) errors.push(errCrossDay);
+        }
+
         const errCross = validateKmCrossShift(
           kmAwal1,
           kmAkhir1,
@@ -635,8 +718,33 @@ export function useBusInputForm({
         if (errManS1) errors.push(errManS1);
       }
 
+      const errCrossDay1 = validateKmCrossDay(
+        kmAwal1,
+        previousDayKmAkhir2,
+        "Shift 1",
+        previousDayDateLabel || "Kemarin",
+        bypassOdometerReset,
+      );
+      if (errCrossDay1) errors.push(errCrossDay1);
+
       const errKmS1 = validateKmPair(kmAwal1, kmAkhir1, "Shift 1");
       if (errKmS1) errors.push(errKmS1);
+
+      // Skenario B di Mode All: Jika Shift 1 kosong murni tapi Shift 2 terisi
+      const hasS1 =
+        (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3) ||
+        (kmAkhir1 && kmAkhir1.trim() !== "" && kmAkhir1.trim().length > 3) ||
+        (bus.kmAwal1 && bus.kmAwal1.trim() !== "");
+      if (!hasS1 && kmAwal2 && kmAwal2.trim().length > 3) {
+        const errCrossDay2 = validateKmCrossDay(
+          kmAwal2,
+          previousDayKmAkhir2,
+          "Shift 2",
+          previousDayDateLabel || "Kemarin",
+          bypassOdometerReset,
+        );
+        if (errCrossDay2) errors.push(errCrossDay2);
+      }
 
       const errCross = validateKmCrossShift(
         kmAwal1,
@@ -840,6 +948,11 @@ export function useBusInputForm({
     bus,
     previousDayKmAkhir2,
     previousDayDateLabel: previousDayDateLabel || "Kemarin",
+    // Smart Rollover & Cross-Day Validation (Skenario 6)
+    bypassOdometerReset,
+    setBypassOdometerReset,
+    smartRolloverSuggestion,
+    handleApplyRollover,
     // Cascading & Single Mode Redirection Flags (SSOT)
     effectiveCategory,
     guideMessage,

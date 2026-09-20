@@ -85,6 +85,22 @@ Sebelumnya, sistem menerapkan auto-prefill 3 digit awal ke seluruh kolom KM seca
   - Ketika `KM Akhir S1` telah terisi valid (misal `300180`), kotak `KM Awal S2` terbuka.
   - Tombol aksi cepat **"Salin KM Akhir S1"** (`Copy`) aktif di samping label `KM Awal S2`. Sekali ketuk, nilai `300180` langsung disalin ke `KM Awal S2`, dan seketika membuka kotak `KM Akhir S2`.
 
+### Skenario 6: Pergantian Kepala Ribuan Lintas Hari (Overnight Deadhead / Depo Trip) & Cross-Day Validation Guard
+- **Kasus:** KM Akhir hari sebelumnya (kemarin malam) = `292990` (kepala `292`). Bus menempuh perjalanan luar dinas malam hari ke depo/bengkel/SPBU (+13 KM), sehingga pada pagi hari odometer fisik bus bernilai `293003` (kepala berganti menjadi `293`).
+- **Masalah:** Jika prefill tetap menyodorkan `292` dan petugas hanya mengetik sisa `003`, terbentuk nilai salah `292003` yang lebih kecil dari kemarin (`292003 < 292990` = mundur -987 KM).
+- **Aturan Solusi Berlapis:**
+  1. **Cross-Day Validation Guard:**
+     - Sistem membandingkan `KM Awal Hari Ini` terhadap `KM Hari Sebelumnya` (`previousDayKmAkhir2` / fallback `kmAkhir1` kemarin).
+     - Jika $\text{KM Awal Hari Ini} < \text{KM Kemarin}$, sistem **MENOLAK PENYIMPANAN** dengan pesan validasi edukatif:
+       *"KM Awal Shift 1 ({awal}) tidak boleh lebih kecil dari KM hari sebelumnya ({kemarin}). Selisih minus {diff} KM. Periksa kemungkinan kepala angka odometer telah berganti."*
+  2. **Smart Rollover Suggestion (Koreksi Cepat 1-Klik):**
+     - Jika terdeteksi $\text{KM Awal} < \text{KM Kemarin}$, tetapi dengan menaikkan kepala angka +1 menghasilkan selisih positif wajar ($0 < \text{diff} \le 100\text{ KM}$, misal `293003 - 292990 = +13 KM`):
+     - Sistem memunculkan saran interaktif tepat di bawah kotak input:
+       `💡 Rollover Terdeteksi: Maksud Anda 293.003? (+13 KM dari kemarin) [Gunakan 293.003]`
+     - Mengklik tombol tersebut seketika mengoreksi teks input menjadi `293003` tanpa perlu menghapus manual.
+  3. **Bypass Darurat Ganti Odometer:**
+     - Jika unit bus benar-benar mengalami pergantian speedometer/odometer baru dari bengkel sehingga angka kembali ke 0, sistem menyediakan opsi konfirmasi bypass darurat agar penginputan tidak terblokir total.
+
 ---
 
 ## 5. Perilaku Antarmuka Pengguna (UI/UX Behavior)

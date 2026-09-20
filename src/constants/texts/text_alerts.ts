@@ -100,6 +100,13 @@ export const TEXT_ALERTS = {
     LABEL_KM_AKHIR_S2: 'KM Akhir Shift 2',
     KM_AKHIR_LESS_THAN_AWAL: (shift: string, akhir: string, awal: string) =>
       `KM Akhir ${shift} (${akhir}) tidak boleh lebih kecil dari KM Awal (${awal})!`,
+    KM_AWAL_LESS_THAN_PREVIOUS_DAY: (shift: string, awal: string, prevKm: string, dateLabel: string, diff: number) =>
+      `KM Awal ${shift} (${awal}) tidak boleh lebih kecil dari ${dateLabel} (${prevKm}). Selisih minus ${diff} KM. Periksa kemungkinan kepala angka odometer telah berganti.`,
+    ROLLOVER_DETECTED_TITLE: 'Rollover Terdeteksi',
+    ROLLOVER_SUGGESTION_TEXT: (suggestedKm: string, diff: number) =>
+      `Maksud Anda ${suggestedKm}? (+${diff} KM dari kemarin)`,
+    ROLLOVER_APPLY_BTN: (suggestedKm: string) => `Gunakan ${suggestedKm}`,
+    BYPASS_ODOMETER_RESET_LABEL: 'Abaikan: Odometer di-reset / ganti speedometer',
     VALIDATION_KM_S2_REQUIRES_S1_CLOSED:
       'KM Akhir Shift 1 wajib diisi sebelum mengisi data Shift 2!',
     KM_DIFF_EXCEEDS_MAX: (shift: string, diff: number, max: number) =>

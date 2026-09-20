@@ -4,6 +4,7 @@ import {
   MAX_SHIFT_DISTANCE_KM,
   MAX_TOA_VALUE,
   MAX_TRIP_COUNT,
+  MAX_ROLLOVER_FORWARD_DIFF_KM,
 } from "./busModalTypes";
 
 /**
@@ -82,6 +83,89 @@ export function validateKmCrossShift(
 
   if (isS1Started && !isS1Closed && isS2Attempted) {
     return TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_KM_S2_REQUIRES_S1_CLOSED;
+  }
+
+  return null;
+}
+
+/**
+ * Memvalidasi konsistensi KM Awal hari ini terhadap KM hari sebelumnya (Cross-Day Validation Guard):
+ * Mencegah data mundur jika terjadi pergantian kepala angka ribuan (rollover).
+ * Mengembalikan pesan error edukatif jika KM Awal < KM Hari Sebelumnya, atau null jika valid.
+ */
+export function validateKmCrossDay(
+  kmAwalTodayRaw?: string,
+  kmPreviousDayRaw?: string,
+  shiftLabel: string = "Shift 1",
+  dateLabel: string = "hari sebelumnya",
+  bypassReset: boolean = false,
+): string | null {
+  if (bypassReset) return null;
+  const awal = kmAwalTodayRaw ? kmAwalTodayRaw.trim() : "";
+  const prev = kmPreviousDayRaw ? kmPreviousDayRaw.trim() : "";
+
+  // Jika salah satu kosong atau belum selesai diisi (> 3 digit), jangan blokir
+  if (!awal || !prev || awal.length <= 3 || prev.length <= 3) return null;
+
+  const numAwal = parseIndonesianNumber(awal, NaN);
+  const numPrev = parseIndonesianNumber(prev, NaN);
+  if (isNaN(numAwal) || isNaN(numPrev)) return null;
+
+  if (numAwal < numPrev) {
+    const diff = numPrev - numAwal;
+    return TEXT_ALERTS.BUS_INPUT_MODAL.KM_AWAL_LESS_THAN_PREVIOUS_DAY(
+      shiftLabel,
+      awal,
+      prev,
+      dateLabel,
+      diff,
+    );
+  }
+
+  return null;
+}
+
+/**
+ * Deteksi Rollover Cerdas (Smart Rollover Suggestion):
+ * Jika angka input KM Awal hari ini lebih kecil dari KM hari sebelumnya,
+ * tetapi menaikkan 3 digit prefix + 1 menghasilkan selisih positif wajar (<= 100 KM):
+ * Mengembalikan saran angka koreksi beserta selisih majunya, atau null jika tidak terdeteksi rollover.
+ */
+export function detectSmartRollover(
+  kmAwalTodayRaw?: string,
+  kmPreviousDayRaw?: string,
+): { suggestedKm: string; diff: number } | null {
+  const awal = kmAwalTodayRaw ? kmAwalTodayRaw.trim() : "";
+  const prev = kmPreviousDayRaw ? kmPreviousDayRaw.trim() : "";
+
+  // Butuh input minimal 4 digit agar prefix dan suffix terdefinisi
+  if (!awal || !prev || awal.length <= 3 || prev.length <= 3) return null;
+
+  const numAwal = parseIndonesianNumber(awal, NaN);
+  const numPrev = parseIndonesianNumber(prev, NaN);
+  if (isNaN(numAwal) || isNaN(numPrev)) return null;
+
+  // Hanya periksa jika nilai saat ini lebih kecil dari kemarin (mengalami kemunduran semu)
+  if (numAwal >= numPrev) return null;
+
+  // Analisis 3 digit prefix
+  const prefixStr = awal.slice(0, 3);
+  const prefixNum = parseInt(prefixStr, 10);
+  if (isNaN(prefixNum)) return null;
+
+  const suffix = awal.slice(3);
+  const nextPrefixStr = String(prefixNum + 1);
+  const candidateKmStr = nextPrefixStr + suffix;
+  const candidateKmNum = parseIndonesianNumber(candidateKmStr, NaN);
+
+  if (isNaN(candidateKmNum)) return null;
+
+  const forwardDiff = candidateKmNum - numPrev;
+  if (forwardDiff > 0 && forwardDiff <= MAX_ROLLOVER_FORWARD_DIFF_KM) {
+    return {
+      suggestedKm: candidateKmStr,
+      diff: forwardDiff,
+    };
   }
 
   return null;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Copy, Info } from "lucide-react";
+import { Copy, Info, Sparkles } from "lucide-react";
 import { MAX_TOA_VALUE } from "@/utils/modals/busInput/busModalTypes";
 import { TEXT_ALERTS } from "@/constants/texts";
 import type { BusInputFormReturn } from "./useBusInputForm";
@@ -305,6 +305,63 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_1}
               style={primaryInputStyle}
             />
+
+            {form.smartRolloverSuggestion && (
+              <div
+                style={{
+                  marginTop: "8px",
+                  padding: "10px 12px",
+                  borderRadius: "10px",
+                  background: "rgba(245, 158, 11, 0.12)",
+                  border: "1px solid rgba(245, 158, 11, 0.35)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "6px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "#f59e0b",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontWeight: 700,
+                  }}
+                >
+                  <Sparkles size={14} />
+                  <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_DETECTED_TITLE}</span>
+                </div>
+                <div style={{ fontSize: "0.76rem", color: "var(--text-secondary, #cbd5e1)", lineHeight: 1.4 }}>
+                  {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_SUGGESTION_TEXT(
+                    form.smartRolloverSuggestion.suggestedKm,
+                    form.smartRolloverSuggestion.diff,
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={form.handleApplyRollover}
+                  style={{
+                    alignSelf: "flex-start",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    padding: "4px 10px",
+                    borderRadius: "6px",
+                    background: "#f59e0b",
+                    color: "#000",
+                    fontWeight: 700,
+                    fontSize: "0.78rem",
+                    border: "none",
+                    cursor: "pointer",
+                    marginTop: "2px",
+                  }}
+                >
+                  <Sparkles size={13} />
+                  <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(form.smartRolloverSuggestion.suggestedKm)}</span>
+                </button>
+              </div>
+            )}
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
@@ -510,6 +567,63 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
                   : primaryInputStyle.background,
               }}
             />
+
+            {form.smartRolloverSuggestion && (
+              <div
+                style={{
+                  marginTop: "8px",
+                  padding: "10px 12px",
+                  borderRadius: "10px",
+                  background: "rgba(245, 158, 11, 0.12)",
+                  border: "1px solid rgba(245, 158, 11, 0.35)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "6px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "#f59e0b",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontWeight: 700,
+                  }}
+                >
+                  <Sparkles size={14} />
+                  <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_DETECTED_TITLE}</span>
+                </div>
+                <div style={{ fontSize: "0.76rem", color: "var(--text-secondary, #cbd5e1)", lineHeight: 1.4 }}>
+                  {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_SUGGESTION_TEXT(
+                    form.smartRolloverSuggestion.suggestedKm,
+                    form.smartRolloverSuggestion.diff,
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={form.handleApplyRollover}
+                  style={{
+                    alignSelf: "flex-start",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    padding: "4px 10px",
+                    borderRadius: "6px",
+                    background: "#f59e0b",
+                    color: "#000",
+                    fontWeight: 700,
+                    fontSize: "0.78rem",
+                    border: "none",
+                    cursor: "pointer",
+                    marginTop: "2px",
+                  }}
+                >
+                  <Sparkles size={13} />
+                  <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(form.smartRolloverSuggestion.suggestedKm)}</span>
+                </button>
+              </div>
+            )}
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>

@@ -42,6 +42,9 @@ export const MAX_TOA_VALUE = 999;
 /** Batas maksimal ritase trip per hari */
 export const MAX_TRIP_COUNT = 20;
 
+/** Batas maksimal toleransi selisih maju (KM) untuk deteksi rollover pergantian kepala angka malam hari */
+export const MAX_ROLLOVER_FORWARD_DIFF_KM = 100;
+
 export const SINGLE_COLUMN_META: Record<
   string,
   { label: string; placeholder: string; key: keyof BusData }

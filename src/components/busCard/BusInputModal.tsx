@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Sparkles } from "lucide-react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { TEXT_ALERTS, TEXT_FLEET_STATUS } from "@/constants/texts";
 import { useBusInputForm, type ModalTab } from "./modal/useBusInputForm";
@@ -220,6 +220,69 @@ export function BusInputModal({
                 <li key={i}>{err}</li>
               ))}
             </ul>
+
+            {/* Rekomendasi Cerdas 1-Klik Jika Terdeteksi Rollover Lintas Hari */}
+            {form.smartRolloverSuggestion && (
+              <div style={{ marginTop: "10px", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  onClick={form.handleApplyRollover}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    padding: "5px 12px",
+                    borderRadius: "6px",
+                    background: "#f59e0b",
+                    color: "#000",
+                    fontWeight: 700,
+                    fontSize: "0.78rem",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Sparkles size={13} />
+                  <span>
+                    {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(
+                      form.smartRolloverSuggestion.suggestedKm,
+                    )}
+                  </span>
+                </button>
+              </div>
+            )}
+
+            {/* Checkbox Bypass Reset Odometer jika ada error mundur lintas hari */}
+            {form.validationErrors.some((e) =>
+              e.includes("tidak boleh lebih kecil dari"),
+            ) && (
+              <label
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  fontSize: "0.78rem",
+                  color: "var(--text-secondary, #cbd5e1)",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={form.bypassOdometerReset}
+                  onChange={(e) => {
+                    form.setBypassOdometerReset(e.target.checked);
+                    if (e.target.checked) {
+                      // Hapus error cross-day saat dicentang
+                      form.validationErrors.length = 0;
+                    }
+                  }}
+                  style={{ accentColor: "var(--accent-color, #38bdf8)" }}
+                />
+                <span>
+                  {TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL}
+                </span>
+              </label>
+            )}
           </div>
         )}
 

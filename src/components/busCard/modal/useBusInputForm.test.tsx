@@ -200,6 +200,7 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
     const onSave = vi.fn();
     renderForm({
       bus: { ...mockBus, kmAwal1: "299980", kmAkhir1: "" },
+      previousDayKmAkhir2: "299900",
       onSave,
     });
 
@@ -271,5 +272,81 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
     expect(submittedPayload.tripPergi).toBeUndefined();
     expect(submittedPayload.tripPulang).toBeUndefined();
     expect(submittedPayload.keterangan).toBeUndefined();
+  });
+
+  describe("Skenario 6: Cross-Day Validation Guard & Smart Rollover", () => {
+    it("detects smart rollover and prevents submit when kmAwal1 is smaller than previous day", () => {
+      const onSave = vi.fn();
+      renderForm({
+        ...defaultProps,
+        previousDayKmAkhir2: "292990",
+        activeCategory: "kmAwal1",
+        onSave,
+      });
+
+      // User mengetik 3 digit akhiran "003" setelah prefill "292" -> "292003"
+      act(() => {
+        latestForm?.setKmAwal1("292003");
+      });
+
+      // Harus terdeteksi smart rollover (+13 KM ke 293003)
+      expect(latestForm?.smartRolloverSuggestion).toEqual({
+        suggestedKm: "293003",
+        diff: 13,
+      });
+
+      // Coba submit tanpa rollover
+      act(() => {
+        const dummyEvent = { preventDefault: vi.fn() } as unknown as React.FormEvent;
+        latestForm?.handleFormSubmit(dummyEvent);
+      });
+
+      // Form ditolak karena 292003 < 292990
+      expect(latestForm?.validationErrors.length).toBeGreaterThan(0);
+      expect(latestForm?.validationErrors[0]).toContain("tidak boleh lebih kecil dari Kemarin");
+      expect(onSave).not.toHaveBeenCalled();
+
+      // Klik 1-klik terapkan saran rollover
+      act(() => {
+        latestForm?.handleApplyRollover();
+      });
+
+      expect(latestForm?.kmAwal1).toBe("293003");
+
+      // Submit kembali setelah saran diterapkan
+      act(() => {
+        const dummyEvent = { preventDefault: vi.fn() } as unknown as React.FormEvent;
+        latestForm?.handleFormSubmit(dummyEvent);
+      });
+
+      expect(latestForm?.validationErrors).toEqual([]);
+      expect(onSave).toHaveBeenCalledTimes(1);
+      expect(onSave.mock.calls[0][0].kmAwal1).toBe("293003");
+    });
+
+    it("allows submit when kmAwal1 is smaller than previous day if bypassOdometerReset is true", () => {
+      const onSave = vi.fn();
+      renderForm({
+        ...defaultProps,
+        previousDayKmAkhir2: "292990",
+        activeCategory: "kmAwal1",
+        onSave,
+      });
+
+      // Odometer diganti baru di bengkel (misal angka 001200)
+      act(() => {
+        latestForm?.setKmAwal1("001200");
+        latestForm?.setBypassOdometerReset(true);
+      });
+
+      act(() => {
+        const dummyEvent = { preventDefault: vi.fn() } as unknown as React.FormEvent;
+        latestForm?.handleFormSubmit(dummyEvent);
+      });
+
+      expect(latestForm?.validationErrors).toEqual([]);
+      expect(onSave).toHaveBeenCalledTimes(1);
+      expect(onSave.mock.calls[0][0].kmAwal1).toBe("001200");
+    });
   });
 });
