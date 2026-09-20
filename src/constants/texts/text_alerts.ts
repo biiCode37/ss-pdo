@@ -90,6 +90,8 @@ export const TEXT_ALERTS = {
     LABEL_KM_AKHIR_S2: 'KM Akhir Shift 2',
     KM_AKHIR_LESS_THAN_AWAL: (shift: string, akhir: string, awal: string) =>
       `KM Akhir ${shift} (${akhir}) tidak boleh lebih kecil dari KM Awal (${awal})!`,
+    VALIDATION_KM_S2_REQUIRES_S1_CLOSED:
+      'KM Akhir Shift 1 wajib diisi sebelum mengisi data Shift 2!',
     KM_DIFF_EXCEEDS_MAX: (shift: string, diff: number, max: number) =>
       `Jarak tempuh ${shift} (+${diff} KM) melebihi batas maksimal wajar (${max} KM). Periksa kembali angka yang dimasukkan!`,
     TOA_MUST_BE_POSITIVE: (field: string) => `Nilai ${field} harus berupa angka positif!`,
@@ -103,6 +105,10 @@ export const TEXT_ALERTS = {
     BA02_SELECT_DEFAULT: '-- Pilih Keterangan BA.02 --',
     BA02_CUSTOM_OPTION: 'Lainnya... (ketik manual)',
     PLACEHOLDER_FIXED: 'Nilai tetap terkunci',
+    PLACEHOLDER_KM_LOCKED: 'Isi KM Awal terlebih dahulu',
+    PLACEHOLDER_KM_S2_LOCKED: 'Isi KM Akhir Shift 1 terlebih dahulu',
+    GUIDE_FILL_KM_AWAL_FIRST:
+      'Silakan isi KM Awal Shift 1 terlebih dahulu sebelum mengisi KM Akhir.',
     PLACEHOLDER_BA02: 'Ketik alasan/kendala...',
     PLACEHOLDER_PREFIX: 'Ketik detail kendala/alasan...',
     PLACEHOLDER_DEFAULT: 'Catatan unit...',

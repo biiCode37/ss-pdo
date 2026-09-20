@@ -501,7 +501,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     expect(inputKmAkhir2?.value).toBe("146");
   });
 
-  it("auto-prefills 3 leading digits of KM Awal S1 and Akhir S1 from previousDayKmAkhir2 when empty", async () => {
+  it("auto-prefills 3 leading digits of KM Awal S1 and locks Akhir S1 when empty (Zero Phantom Value)", async () => {
     await act(async () => {
       root.render(
         <BusInputModal
@@ -522,7 +522,9 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     expect(inputKmAwal1?.value).toBe("152");
 
     const inputKmAkhir1 = document.body.querySelector<HTMLInputElement>("#input-km-akhir-1");
-    expect(inputKmAkhir1?.value).toBe("152");
+    // Sesuai SSOT Zero Phantom Value: KM Akhir 1 terkunci dan bernilai "" saat KM Awal 1 belum lengkap
+    expect(inputKmAkhir1?.value).toBe("");
+    expect(inputKmAkhir1?.disabled).toBe(true);
   });
 
   it("positions cursor at the end of 3-digit prefill instead of selecting all text", async () => {

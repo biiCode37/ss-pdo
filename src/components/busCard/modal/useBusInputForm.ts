@@ -8,8 +8,9 @@ import {
 } from "@/utils/modals/busInput/busModalTypes";
 import {
   validateKmPair,
-  validateToaValue,
+  validateKmCrossShift,
   validateToaPair,
+  validateToaValue,
   validateTripCount,
 } from "@/utils/modals/busInput/busModalValidation";
 import {
@@ -89,7 +90,7 @@ export function useBusInputForm({
     ),
   );
 
-  // Auto-Prefill 3 Leading Digits for KM
+  // Auto-Prefill 3 Leading Digits for KM (Zero Phantom Value)
   const initialKmAwal1 = useMemo(() => {
     if (bus.kmAwal1 && bus.kmAwal1.trim() !== "") return bus.kmAwal1;
     if (previousDayKmAkhir2) return extractLeading3Digits(previousDayKmAkhir2);
@@ -98,11 +99,11 @@ export function useBusInputForm({
 
   const [kmAwal1, setKmAwal1] = useState(initialKmAwal1);
 
+  // KM Akhir S1 WAJIB diawali string kosong "" jika belum ada di bus (Zero Phantom Value)
   const initialKmAkhir1 = useMemo(() => {
     if (bus.kmAkhir1 && bus.kmAkhir1.trim() !== "") return bus.kmAkhir1;
-    if (initialKmAwal1) return extractLeading3Digits(initialKmAwal1);
     return "";
-  }, [bus.kmAkhir1, initialKmAwal1]);
+  }, [bus.kmAkhir1]);
 
   const [kmAkhir1, setKmAkhir1] = useState(initialKmAkhir1);
 
@@ -119,19 +120,151 @@ export function useBusInputForm({
 
   const initialKmAwal2 = useMemo(() => {
     if (bus.kmAwal2 && bus.kmAwal2.trim() !== "") return bus.kmAwal2;
-    if (initialKmAkhir1) return extractLeading3Digits(initialKmAkhir1);
+    // Skenario B: Bus dinas siang saja (S1 kosong murni)
+    const isS1Empty =
+      (!bus.kmAwal1 || bus.kmAwal1.trim() === "") &&
+      (!bus.kmAkhir1 || bus.kmAkhir1.trim() === "");
+    if (isS1Empty && previousDayKmAkhir2) {
+      return extractLeading3Digits(previousDayKmAkhir2);
+    }
     return "";
-  }, [bus.kmAwal2, initialKmAkhir1]);
+  }, [bus.kmAwal2, bus.kmAwal1, bus.kmAkhir1, previousDayKmAkhir2]);
 
   const [kmAwal2, setKmAwal2] = useState(initialKmAwal2);
 
+  // KM Akhir S2 WAJIB diawali string kosong "" jika belum ada di bus (Zero Phantom Value)
   const initialKmAkhir2 = useMemo(() => {
     if (bus.kmAkhir2 && bus.kmAkhir2.trim() !== "") return bus.kmAkhir2;
-    if (initialKmAwal2) return extractLeading3Digits(initialKmAwal2);
     return "";
-  }, [bus.kmAkhir2, initialKmAwal2]);
+  }, [bus.kmAkhir2]);
 
   const [kmAkhir2, setKmAkhir2] = useState(initialKmAkhir2);
+
+  // Evaluasi Semantik: Apakah field masih berupa draft prefill yang belum dilengkapi user?
+  const isKmAwal1PrefillOnly = Boolean(
+    previousDayKmAkhir2 &&
+      !bus.kmAwal1 &&
+      kmAwal1.trim() === extractLeading3Digits(previousDayKmAkhir2) &&
+      kmAwal1.trim().length <= 3,
+  );
+
+  // Status Validitas Angka Odometer: field ada nilainya, bukan draft prefill,
+  // dan memenuhi Full Value Guard (>3 digit atau merupakan data eksisting bus)
+  const isKmAwal1Valid = Boolean(
+    kmAwal1 &&
+      kmAwal1.trim() !== "" &&
+      (kmAwal1.trim().length > 3 ||
+        Boolean(bus.kmAwal1 && bus.kmAwal1.trim() === kmAwal1.trim())) &&
+      !isKmAwal1PrefillOnly,
+  );
+
+  const isKmAkhir1PrefillOnly = Boolean(
+    isKmAwal1Valid &&
+      !bus.kmAkhir1 &&
+      kmAkhir1.trim() === extractLeading3Digits(kmAwal1) &&
+      kmAkhir1.trim().length <= 3 &&
+      kmAwal1.trim().length > kmAkhir1.trim().length,
+  );
+
+  const isKmAkhir1Valid = Boolean(
+    kmAkhir1 &&
+      kmAkhir1.trim() !== "" &&
+      (kmAkhir1.trim().length > 3 ||
+        Boolean(bus.kmAkhir1 && bus.kmAkhir1.trim() === kmAkhir1.trim())) &&
+      !isKmAkhir1PrefillOnly,
+  );
+
+  // Status Kunci Berantai (Cascading Lock)
+  // 1. KM Akhir S1 terkunci sampai KM Awal S1 terisi valid
+  const isKmAkhir1Locked = !isKmAwal1Valid;
+
+  // 2. KM Awal S2:
+  // - Skenario A (Bus dinas pagi): Ada aktivitas S1 -> Terkunci sampai KM Akhir S1 valid.
+  // - Skenario B (Bus dinas siang saja): S1 kosong murni -> Terbuka langsung.
+  const isS1Started = Boolean(
+    (kmAwal1 && kmAwal1.trim().length > 0 && !isKmAwal1PrefillOnly) ||
+      (bus.kmAwal1 && bus.kmAwal1.trim().length > 0),
+  );
+  const isKmAwal2Locked = isS1Started && !isKmAkhir1Valid;
+
+  const isKmAwal2PrefillOnly = Boolean(
+    !isS1Started &&
+      previousDayKmAkhir2 &&
+      !bus.kmAwal2 &&
+      kmAwal2.trim() === extractLeading3Digits(previousDayKmAkhir2) &&
+      kmAwal2.trim().length <= 3,
+  );
+
+  const isKmAwal2Valid = Boolean(
+    kmAwal2 &&
+      kmAwal2.trim() !== "" &&
+      (kmAwal2.trim().length > 3 ||
+        Boolean(bus.kmAwal2 && bus.kmAwal2.trim() === kmAwal2.trim())) &&
+      !isKmAwal2PrefillOnly,
+  );
+
+  const isKmAkhir2PrefillOnly = Boolean(
+    isKmAwal2Valid &&
+      !bus.kmAkhir2 &&
+      kmAkhir2.trim() === extractLeading3Digits(kmAwal2) &&
+      kmAkhir2.trim().length <= 3 &&
+      kmAwal2.trim().length > kmAkhir2.trim().length,
+  );
+
+  const isKmAkhir2Valid = Boolean(
+    kmAkhir2 &&
+      kmAkhir2.trim() !== "" &&
+      (kmAkhir2.trim().length > 3 ||
+        Boolean(bus.kmAkhir2 && bus.kmAkhir2.trim() === kmAkhir2.trim())) &&
+      !isKmAkhir2PrefillOnly,
+  );
+
+  // 3. KM Akhir S2 terkunci sampai KM Awal S2 terisi valid
+  const isKmAkhir2Locked = !isKmAwal2Valid;
+
+  // Mode Fokus Tunggal: Redirection Cerdas & Pesan Panduan (SSOT Bab 5.A)
+  const { effectiveCategory, guideMessage } = useMemo(() => {
+    if (!isSingleMode) {
+      return { effectiveCategory: activeCategory, guideMessage: null };
+    }
+
+    if (activeCategory === "kmAkhir1" && isKmAkhir1Locked) {
+      return {
+        effectiveCategory: "kmAwal1",
+        guideMessage: TEXT_ALERTS.BUS_INPUT_MODAL.GUIDE_FILL_KM_AWAL_FIRST,
+      };
+    }
+
+    if (activeCategory === "kmAwal2" && isKmAwal2Locked) {
+      return {
+        effectiveCategory: "kmAkhir1",
+        guideMessage:
+          TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_KM_S2_REQUIRES_S1_CLOSED,
+      };
+    }
+
+    if (activeCategory === "kmAkhir2" && isKmAkhir2Locked) {
+      if (isKmAwal2Locked) {
+        return {
+          effectiveCategory: "kmAkhir1",
+          guideMessage:
+            TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_KM_S2_REQUIRES_S1_CLOSED,
+        };
+      }
+      return {
+        effectiveCategory: "kmAwal2",
+        guideMessage: TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED,
+      };
+    }
+
+    return { effectiveCategory: activeCategory, guideMessage: null };
+  }, [
+    isSingleMode,
+    activeCategory,
+    isKmAkhir1Locked,
+    isKmAwal2Locked,
+    isKmAkhir2Locked,
+  ]);
 
   // Prefill reaktif KM Awal S1 saat previousDayKmAkhir2 tiba dan field masih kosong
   useEffect(() => {
@@ -143,40 +276,58 @@ export function useBusInputForm({
       const prefill = extractLeading3Digits(previousDayKmAkhir2);
       if (prefill) {
         setKmAwal1(prefill);
-        if (!kmAkhir1 || kmAkhir1.trim() === "") {
-          setKmAkhir1(prefill);
-        }
       }
     }
   }, [previousDayKmAkhir2, bus.kmAwal1]);
 
-  // Prefill KM Akhir S1 dari KM Awal S1 jika KM Akhir S1 masih kosong
+  // Reactivity KM Awal 1 -> KM Akhir 1 (Unlock & Auto-Reset)
   useEffect(() => {
-    if (
-      (!kmAkhir1 || kmAkhir1.trim() === "") &&
-      (!bus.kmAkhir1 || bus.kmAkhir1.trim() === "") &&
-      kmAwal1
-    ) {
-      const prefill = extractLeading3Digits(kmAwal1);
-      if (prefill) {
-        setKmAkhir1(prefill);
+    if (isKmAwal1Valid) {
+      if (!kmAkhir1 || kmAkhir1.trim() === "") {
+        const prefill = extractLeading3Digits(kmAwal1);
+        if (prefill) {
+          setKmAkhir1(prefill);
+        }
+      }
+    } else {
+      // Skenario 4: Jika KM Awal S1 dihapus / tidak valid, auto-reset KM Akhir S1
+      if (kmAkhir1 && (!bus.kmAkhir1 || kmAkhir1.trim().length <= 3)) {
+        setKmAkhir1("");
       }
     }
-  }, [kmAwal1, bus.kmAkhir1]);
+  }, [isKmAwal1Valid, kmAwal1, bus.kmAkhir1]);
 
-  // Prefill KM Akhir S2 dari KM Awal S2 jika KM Akhir S2 masih kosong
+  // Reactivity KM Awal 2 -> KM Akhir 2 (Unlock & Auto-Reset)
   useEffect(() => {
-    if (
-      (!kmAkhir2 || kmAkhir2.trim() === "") &&
-      (!bus.kmAkhir2 || bus.kmAkhir2.trim() === "") &&
-      kmAwal2
-    ) {
-      const prefill = extractLeading3Digits(kmAwal2);
-      if (prefill) {
-        setKmAkhir2(prefill);
+    if (isKmAwal2Valid) {
+      if (!kmAkhir2 || kmAkhir2.trim() === "") {
+        const prefill = extractLeading3Digits(kmAwal2);
+        if (prefill) {
+          setKmAkhir2(prefill);
+        }
+      }
+    } else {
+      // Skenario 4: Jika KM Awal S2 dihapus / tidak valid, auto-reset KM Akhir S2
+      if (kmAkhir2 && (!bus.kmAkhir2 || kmAkhir2.trim().length <= 3)) {
+        setKmAkhir2("");
       }
     }
-  }, [kmAwal2, bus.kmAkhir2]);
+  }, [isKmAwal2Valid, kmAwal2, bus.kmAkhir2]);
+
+  // Prefill reaktif KM Awal S2 untuk Skenario B (Bus Dinas Siang Saja)
+  useEffect(() => {
+    if (
+      !isS1Started &&
+      (!kmAwal2 || kmAwal2.trim() === "") &&
+      (!bus.kmAwal2 || bus.kmAwal2.trim() === "") &&
+      previousDayKmAkhir2
+    ) {
+      const prefill = extractLeading3Digits(previousDayKmAkhir2);
+      if (prefill) {
+        setKmAwal2(prefill);
+      }
+    }
+  }, [isS1Started, previousDayKmAkhir2, bus.kmAwal2]);
 
   const [keterangan, setKeterangan] = useState(bus.keterangan || "");
   const [showKeterangan, setShowKeterangan] = useState(
@@ -218,7 +369,7 @@ export function useBusInputForm({
         targetElement.focus();
         const val = targetElement.value || "";
         const isKmInput =
-          (isSingleMode && activeCategory.toLowerCase().includes("km")) ||
+          (isSingleMode && effectiveCategory.toLowerCase().includes("km")) ||
           Boolean(targetElement.id && targetElement.id.toLowerCase().includes("km"));
         const isPrefillOnly = isKmInput && val.length > 0 && val.length <= 3;
 
@@ -245,11 +396,11 @@ export function useBusInputForm({
     }, 60);
 
     return () => clearTimeout(timer);
-  }, [isOpen, isMounted, isSingleMode, activeTab, activeCategory]);
+  }, [isOpen, isMounted, isSingleMode, activeTab, effectiveCategory]);
 
   // Jika input KM yang sedang aktif terisi 3 digit prefill, pastikan kursor diletakkan di akhir teks (bukan di-select)
   useEffect(() => {
-    if (isSingleMode && activeCategory.toLowerCase().includes("km")) {
+    if (isSingleMode && effectiveCategory.toLowerCase().includes("km")) {
       const el = singlePrimaryInputRef.current;
       if (el && document.activeElement === el) {
         const val = el.value || "";
@@ -262,7 +413,7 @@ export function useBusInputForm({
         }
       }
     }
-  }, [kmAwal1, kmAkhir1, kmAwal2, kmAkhir2, isSingleMode, activeCategory]);
+  }, [kmAwal1, kmAkhir1, kmAwal2, kmAkhir2, isSingleMode, effectiveCategory]);
 
   // Smart Viewport Auto-Scroll on focus & kursor di akhir untuk prefill
   const handleInputFocus = (
@@ -329,9 +480,16 @@ export function useBusInputForm({
     return null;
   }, [kmLiveS2]);
 
+  // Skenario 5: Salin KM Akhir S1 ke KM Awal S2
   const handleCopyKmAkhir1ToAwal2 = () => {
-    if (kmAkhir1 && kmAkhir1.trim() !== "") {
-      setKmAwal2(kmAkhir1.trim());
+    if (kmAkhir1 && kmAkhir1.trim().length > 3) {
+      const copiedVal = kmAkhir1.trim();
+      setKmAwal2(copiedVal);
+      // Buka dan prefill KM Akhir S2 jika masih kosong
+      const prefill = extractLeading3Digits(copiedVal);
+      if (prefill && (!kmAkhir2 || kmAkhir2.trim() === "")) {
+        setKmAkhir2(prefill);
+      }
     }
   };
 
@@ -342,13 +500,52 @@ export function useBusInputForm({
     setSatsetMode(next);
   };
 
+  // Sanitasi KM Payload (SSOT Bab 2.4): hilangkan angka draf prefill siluman
+  const sanitizeKmAwal = (
+    val: string,
+    existingVal?: string,
+    prevDayVal?: string,
+  ): string => {
+    const trimmed = val ? val.trim() : "";
+    if (!trimmed) return "";
+    if (existingVal && existingVal.trim() === trimmed) return trimmed;
+    if (
+      prevDayVal &&
+      trimmed.length <= 3 &&
+      trimmed === extractLeading3Digits(prevDayVal)
+    ) {
+      return "";
+    }
+    return trimmed;
+  };
+
+  const sanitizeKmAkhir = (
+    akhir: string,
+    awal: string,
+    existingAkhir?: string,
+  ): string => {
+    const trimmedAkhir = akhir ? akhir.trim() : "";
+    const trimmedAwal = awal ? awal.trim() : "";
+    if (!trimmedAkhir) return "";
+    if (existingAkhir && existingAkhir.trim() === trimmedAkhir)
+      return trimmedAkhir;
+    if (
+      trimmedAkhir.length <= 3 &&
+      trimmedAwal.length > trimmedAkhir.length &&
+      trimmedAwal.startsWith(trimmedAkhir)
+    ) {
+      return "";
+    }
+    return trimmedAkhir;
+  };
+
   // Form Submit handler
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const errors: string[] = [];
 
     if (isSingleMode) {
-      if (activeCategory === "toaShift1") {
+      if (effectiveCategory === "toaShift1") {
         const err = validateToaValue(
           toaShift1,
           TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S1,
@@ -365,7 +562,7 @@ export function useBusInputForm({
           const errPair = validateToaPair(toaShift1, totalToa);
           if (errPair) errors.push(errPair);
         }
-      } else if (activeCategory === "totalToa") {
+      } else if (effectiveCategory === "totalToa") {
         const err = validateToaValue(
           totalToa,
           TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA,
@@ -380,10 +577,30 @@ export function useBusInputForm({
         }
         const errPair = validateToaPair(toaShift1, totalToa);
         if (errPair) errors.push(errPair);
-      } else if (activeCategory === "kmAwal1" || activeCategory === "kmAkhir1") {
+      } else if (
+        effectiveCategory === "kmAwal1" ||
+        effectiveCategory === "kmAkhir1"
+      ) {
         const err = validateKmPair(kmAwal1, kmAkhir1, "Shift 1");
         if (err) errors.push(err);
-      } else if (activeCategory === "kmAwal2" || activeCategory === "kmAkhir2") {
+        const errCross = validateKmCrossShift(
+          kmAwal1,
+          kmAkhir1,
+          kmAwal2,
+          kmAkhir2,
+        );
+        if (errCross) errors.push(errCross);
+      } else if (
+        effectiveCategory === "kmAwal2" ||
+        effectiveCategory === "kmAkhir2"
+      ) {
+        const errCross = validateKmCrossShift(
+          kmAwal1,
+          kmAkhir1,
+          kmAwal2,
+          kmAkhir2,
+        );
+        if (errCross) errors.push(errCross);
         const err = validateKmPair(kmAwal2, kmAkhir2, "Shift 2");
         if (err) errors.push(err);
       }
@@ -414,6 +631,14 @@ export function useBusInputForm({
 
       const errKmS1 = validateKmPair(kmAwal1, kmAkhir1, "Shift 1");
       if (errKmS1) errors.push(errKmS1);
+
+      const errCross = validateKmCrossShift(
+        kmAwal1,
+        kmAkhir1,
+        kmAwal2,
+        kmAkhir2,
+      );
+      if (errCross) errors.push(errCross);
 
       const errToaS2 = validateToaValue(toaShift2, "TOA Shift 2");
       if (errToaS2) errors.push(errToaS2);
@@ -447,7 +672,7 @@ export function useBusInputForm({
     }
 
     let effectiveTotalToa = "";
-    if (isSingleMode && activeCategory === "totalToa") {
+    if (isSingleMode && effectiveCategory === "totalToa") {
       effectiveTotalToa = totalToa.trim();
     } else {
       const toaS1Num = parseIndonesianNumber(toaShift1);
@@ -459,17 +684,24 @@ export function useBusInputForm({
         computedTotal > 0 ? String(computedTotal) : totalToa.trim();
     }
 
+    // Sanitasi payload: field yang masih draf prefill atau belum berhak diisi tidak terkirim
     const updates: Partial<BusData> = {
       tripPergi: tripPergi.trim(),
       tripPulang: tripPulang.trim(),
       toaShift1: toaShift1.trim(),
       manualShift1: showManual1 ? manualShift1.trim() : "",
-      kmAwal1: kmAwal1.trim(),
-      kmAkhir1: kmAkhir1.trim(),
+      kmAwal1: sanitizeKmAwal(kmAwal1, bus.kmAwal1, previousDayKmAkhir2),
+      kmAkhir1: isKmAwal1Valid
+        ? sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1)
+        : "",
       toaShift2: toaShift2.trim(),
       manualShift2: showManual2 ? manualShift2.trim() : "",
-      kmAwal2: kmAwal2.trim(),
-      kmAkhir2: kmAkhir2.trim(),
+      kmAwal2: !isKmAwal2Locked
+        ? sanitizeKmAwal(kmAwal2, bus.kmAwal2, previousDayKmAkhir2)
+        : "",
+      kmAkhir2: isKmAwal2Valid
+        ? sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2)
+        : "",
       totalToa: effectiveTotalToa,
       keterangan: keterangan.trim(),
     };
@@ -541,6 +773,16 @@ export function useBusInputForm({
     bus,
     previousDayKmAkhir2,
     previousDayDateLabel: previousDayDateLabel || "Kemarin",
+    // Cascading & Single Mode Redirection Flags (SSOT)
+    effectiveCategory,
+    guideMessage,
+    isKmAwal1Valid,
+    isKmAkhir1Valid,
+    isKmAwal2Valid,
+    isKmAkhir2Valid,
+    isKmAkhir1Locked,
+    isKmAwal2Locked,
+    isKmAkhir2Locked,
   };
 }
 

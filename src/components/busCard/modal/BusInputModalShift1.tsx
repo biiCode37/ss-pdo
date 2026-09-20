@@ -141,12 +141,24 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
+            disabled={form.isKmAkhir1Locked}
             value={kmAkhir1}
             onChange={(e) => setKmAkhir1(e.target.value)}
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
-            placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_1}
-            style={heroInputStyle}
+            placeholder={
+              form.isKmAkhir1Locked
+                ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_1
+            }
+            style={{
+              ...heroInputStyle,
+              opacity: form.isKmAkhir1Locked ? 0.45 : 1,
+              cursor: form.isKmAkhir1Locked ? "not-allowed" : "text",
+              background: form.isKmAkhir1Locked
+                ? "rgba(255, 255, 255, 0.03)"
+                : heroInputStyle.background,
+            }}
           />
         </div>
       </div>

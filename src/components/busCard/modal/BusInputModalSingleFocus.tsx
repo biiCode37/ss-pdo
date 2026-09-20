@@ -1,5 +1,5 @@
 import React from "react";
-import { Copy } from "lucide-react";
+import { Copy, Info } from "lucide-react";
 import { MAX_TOA_VALUE } from "@/utils/modals/busInput/busModalTypes";
 import { TEXT_ALERTS } from "@/constants/texts";
 import type { BusInputFormReturn } from "./useBusInputForm";
@@ -15,6 +15,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
   activeCategory,
   busKmAwal1,
 }) => {
+  const currentCategory = form.effectiveCategory || activeCategory;
+
   const {
     singlePrimaryInputRef,
     handleInputFocus,
@@ -77,8 +79,29 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+      {/* Banner Panduan Ramah Redirection / Locking */}
+      {form.guideMessage && (
+        <div
+          style={{
+            padding: "10px 14px",
+            borderRadius: "10px",
+            background: "rgba(56, 189, 248, 0.12)",
+            border: "1px solid rgba(56, 189, 248, 0.3)",
+            color: "var(--color-primary, #38bdf8)",
+            fontSize: "0.82rem",
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <Info size={16} style={{ flexShrink: 0 }} />
+          <span>{form.guideMessage}</span>
+        </div>
+      )}
+
       {/* TOA SHIFT 1 */}
-      {activeCategory === "toaShift1" && (
+      {currentCategory === "toaShift1" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div>
             <label
@@ -164,7 +187,7 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
       )}
 
       {/* TOTAL TOA */}
-      {activeCategory === "totalToa" && (
+      {currentCategory === "totalToa" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div>
             <label
@@ -250,7 +273,7 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
       )}
 
       {/* KM AWAL 1 */}
-      {activeCategory === "kmAwal1" && (
+      {currentCategory === "kmAwal1" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
@@ -287,8 +310,22 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             <button
               type="button"
-              onClick={() => setShowKmAkhir1InSingle((prev) => !prev)}
-              style={getChipStyle(showKmAkhir1InSingle)}
+              disabled={form.isKmAkhir1Locked}
+              onClick={() => {
+                if (!form.isKmAkhir1Locked) {
+                  setShowKmAkhir1InSingle((prev) => !prev);
+                }
+              }}
+              title={
+                form.isKmAkhir1Locked
+                  ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                  : undefined
+              }
+              style={{
+                ...getChipStyle(showKmAkhir1InSingle),
+                opacity: form.isKmAkhir1Locked ? 0.45 : 1,
+                cursor: form.isKmAkhir1Locked ? "not-allowed" : "pointer",
+              }}
             >
               {showKmAkhir1InSingle ? "✓ KM Akhir 1" : "+ KM Akhir 1"}
             </button>
@@ -314,20 +351,29 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
+                disabled={form.isKmAkhir1Locked}
                 value={kmAkhir1}
                 onChange={(e) => setKmAkhir1(e.target.value)}
                 onFocus={handleInputFocus}
                 onKeyDown={handleInputKeyDown}
-                placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_1}
+                placeholder={
+                  form.isKmAkhir1Locked
+                    ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                    : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_1
+                }
                 style={{
                   width: "100%",
                   padding: "10px 12px",
                   borderRadius: "10px",
                   border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
-                  background: "rgba(0, 0, 0, 0.25)",
+                  background: form.isKmAkhir1Locked
+                    ? "rgba(255, 255, 255, 0.03)"
+                    : "rgba(0, 0, 0, 0.25)",
                   color: "var(--text-main, #f8fafc)",
                   fontSize: "0.95rem",
                   boxSizing: "border-box",
+                  opacity: form.isKmAkhir1Locked ? 0.45 : 1,
+                  cursor: form.isKmAkhir1Locked ? "not-allowed" : "text",
                 }}
               />
             </div>
@@ -343,7 +389,7 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
       )}
 
       {/* KM AKHIR 1 */}
-      {activeCategory === "kmAkhir1" && (
+      {currentCategory === "kmAkhir1" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
@@ -365,12 +411,24 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
+              disabled={form.isKmAkhir1Locked}
               value={kmAkhir1}
               onChange={(e) => setKmAkhir1(e.target.value)}
               onFocus={handleInputFocus}
               onKeyDown={handleInputKeyDown}
-              placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_1}
-              style={primaryInputStyle}
+              placeholder={
+                form.isKmAkhir1Locked
+                  ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                  : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_1
+              }
+              style={{
+                ...primaryInputStyle,
+                opacity: form.isKmAkhir1Locked ? 0.45 : 1,
+                cursor: form.isKmAkhir1Locked ? "not-allowed" : "text",
+                background: form.isKmAkhir1Locked
+                  ? "rgba(255, 255, 255, 0.03)"
+                  : primaryInputStyle.background,
+              }}
             />
           </div>
 
@@ -394,7 +452,7 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
       )}
 
       {/* KM AWAL 2 */}
-      {activeCategory === "kmAwal2" && (
+      {currentCategory === "kmAwal2" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
@@ -404,10 +462,10 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               >
                 {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S2}
               </label>
-              {kmAkhir1 && (
+              {form.isKmAkhir1Valid && kmAkhir1 && (
                 <button
                   type="button"
-                  onClick={() => setKmAwal2(kmAkhir1)}
+                  onClick={form.handleCopyKmAkhir1ToAwal2}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -433,20 +491,46 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
+              disabled={form.isKmAwal2Locked}
               value={kmAwal2}
               onChange={(e) => setKmAwal2(e.target.value)}
               onFocus={handleInputFocus}
               onKeyDown={handleInputKeyDown}
-              placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_2}
-              style={primaryInputStyle}
+              placeholder={
+                form.isKmAwal2Locked
+                  ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_S2_LOCKED
+                  : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_2
+              }
+              style={{
+                ...primaryInputStyle,
+                opacity: form.isKmAwal2Locked ? 0.45 : 1,
+                cursor: form.isKmAwal2Locked ? "not-allowed" : "text",
+                background: form.isKmAwal2Locked
+                  ? "rgba(255, 255, 255, 0.03)"
+                  : primaryInputStyle.background,
+              }}
             />
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             <button
               type="button"
-              onClick={() => setShowKmAkhir2InSingle((prev) => !prev)}
-              style={getChipStyle(showKmAkhir2InSingle)}
+              disabled={form.isKmAkhir2Locked}
+              onClick={() => {
+                if (!form.isKmAkhir2Locked) {
+                  setShowKmAkhir2InSingle((prev) => !prev);
+                }
+              }}
+              title={
+                form.isKmAkhir2Locked
+                  ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                  : undefined
+              }
+              style={{
+                ...getChipStyle(showKmAkhir2InSingle),
+                opacity: form.isKmAkhir2Locked ? 0.45 : 1,
+                cursor: form.isKmAkhir2Locked ? "not-allowed" : "pointer",
+              }}
             >
               {showKmAkhir2InSingle ? "✓ KM Akhir 2" : "+ KM Akhir 2"}
             </button>
@@ -472,20 +556,29 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
+                disabled={form.isKmAkhir2Locked}
                 value={kmAkhir2}
                 onChange={(e) => setKmAkhir2(e.target.value)}
                 onFocus={handleInputFocus}
                 onKeyDown={handleInputKeyDown}
-                placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2}
+                placeholder={
+                  form.isKmAkhir2Locked
+                    ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                    : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2
+                }
                 style={{
                   width: "100%",
                   padding: "10px 12px",
                   borderRadius: "10px",
                   border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
-                  background: "rgba(0, 0, 0, 0.25)",
+                  background: form.isKmAkhir2Locked
+                    ? "rgba(255, 255, 255, 0.03)"
+                    : "rgba(0, 0, 0, 0.25)",
                   color: "var(--text-main, #f8fafc)",
                   fontSize: "0.95rem",
                   boxSizing: "border-box",
+                  opacity: form.isKmAkhir2Locked ? 0.45 : 1,
+                  cursor: form.isKmAkhir2Locked ? "not-allowed" : "text",
                 }}
               />
             </div>
@@ -501,7 +594,7 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
       )}
 
       {/* KM AKHIR 2 */}
-      {activeCategory === "kmAkhir2" && (
+      {currentCategory === "kmAkhir2" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
@@ -523,12 +616,24 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
+              disabled={form.isKmAkhir2Locked}
               value={kmAkhir2}
               onChange={(e) => setKmAkhir2(e.target.value)}
               onFocus={handleInputFocus}
               onKeyDown={handleInputKeyDown}
-              placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2}
-              style={primaryInputStyle}
+              placeholder={
+                form.isKmAkhir2Locked
+                  ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                  : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2
+              }
+              style={{
+                ...primaryInputStyle,
+                opacity: form.isKmAkhir2Locked ? 0.45 : 1,
+                cursor: form.isKmAkhir2Locked ? "not-allowed" : "text",
+                background: form.isKmAkhir2Locked
+                  ? "rgba(255, 255, 255, 0.03)"
+                  : primaryInputStyle.background,
+              }}
             />
           </div>
 

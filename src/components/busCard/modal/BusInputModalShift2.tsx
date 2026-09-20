@@ -23,7 +23,6 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
     setManualShift2,
     kmAwal2,
     setKmAwal2,
-    kmAkhir1,
     kmAkhir2,
     setKmAkhir2,
     kmDistanceS2,
@@ -148,12 +147,24 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
+            disabled={form.isKmAkhir2Locked}
             value={kmAkhir2}
             onChange={(e) => setKmAkhir2(e.target.value)}
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
-            placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2}
-            style={heroInputStyle}
+            placeholder={
+              form.isKmAkhir2Locked
+                ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+                : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2
+            }
+            style={{
+              ...heroInputStyle,
+              opacity: form.isKmAkhir2Locked ? 0.45 : 1,
+              cursor: form.isKmAkhir2Locked ? "not-allowed" : "text",
+              background: form.isKmAkhir2Locked
+                ? "rgba(255, 255, 255, 0.03)"
+                : heroInputStyle.background,
+            }}
           />
         </div>
       </div>
@@ -229,8 +240,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               {kmAwal2 || TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}
             </span>
 
-            {/* Tombol Salin KM Akhir S1 (Full Digits) */}
-            {kmAkhir1 && (
+            {/* Tombol Salin KM Akhir S1 (Full Digits) - Hanya jika KM Akhir S1 valid */}
+            {form.isKmAkhir1Valid && (
               <button
                 type="button"
                 onClick={handleCopyKmAkhir1ToAwal2}
@@ -332,12 +343,24 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
+              disabled={form.isKmAwal2Locked}
               value={kmAwal2}
               onChange={(e) => setKmAwal2(e.target.value)}
               onFocus={handleInputFocus}
               onKeyDown={handleInputKeyDown}
-              placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_2}
-              style={secondaryInputStyle}
+              placeholder={
+                form.isKmAwal2Locked
+                  ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_S2_LOCKED
+                  : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_2
+              }
+              style={{
+                ...secondaryInputStyle,
+                opacity: form.isKmAwal2Locked ? 0.45 : 1,
+                cursor: form.isKmAwal2Locked ? "not-allowed" : "text",
+                background: form.isKmAwal2Locked
+                  ? "rgba(255, 255, 255, 0.03)"
+                  : secondaryInputStyle.background,
+              }}
             />
           </div>
         )}
