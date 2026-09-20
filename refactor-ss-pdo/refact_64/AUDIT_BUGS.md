@@ -73,4 +73,14 @@ Dokumentasi audit UX, ergonomi operasional, dan integritas data pada komponen an
 - **Tingkat Keparahan:** MEDIUM (Standar Kualitas Kode & I18n)
 - **Deskripsi:** Penambahan fitur baru seperti badge selisih KM, status validasi real-time, tombol salin KM, dan indikator breakdown TOA berisiko memunculkan string teks bahasa antarmuka yang di-hardcode langsung di dalam file komponen `.tsx`.
 - **Dampak:** Melanggar Golden Rules proyek SS_PDO yang mewajibkan seluruh teks antarmuka tersentralisasi di `src/constants/texts/`.
-- **Mitigasi:** Mendaftarkan seluruh token teks baru ke `src/constants/texts/text_alerts.ts` (`KM_DIFF_POSITIVE`, `KM_DIFF_NEGATIVE`, `KM_DIFF_EXTREME`, `TOA_S2_BREAKDOWN`, `COPY_KM_AKHIR_1`, `ODOMETER_AUTO_HINT`) dan menyertakan pengujian otomatis pada `src/constants/texts/texts.test.ts`.
+- **Mitigasi:** Mendaftarkan seluruh token teks baru ke `src/constants/texts/text_alerts.ts` (`KM_DIFF_POSITIVE`, `KM_DIFF_NEGATIVE`, `KM_DIFF_EXTREME`, `TOA_S2_BREAKDOWN`, `COPY_KM_AKHIR_1`, `ODOMETER_AUTO_HINT`, `PREFILL_FROM_YESTERDAY`) dan menyertakan pengujian otomatis pada `src/constants/texts/texts.test.ts`.
+
+---
+
+### BUG-64-08: Terputusnya Alur Prefill Odometer KM Awal S1 Akibat Ketiadaan Prefetch Data Hari Sebelumnya
+- **Lokasi Kode:** `src/components/Dashboard.tsx`, `src/components/dashboard/DashboardContentTabs.tsx`, `src/components/busList/BusList.tsx`, `src/components/busCard/BusCard.tsx`, `src/components/busCard/modal/useBusInputForm.ts`
+- **Tingkat Keparahan:** HIGH (Fungsionalitas Fitur Prefill Odometer)
+- **Deskripsi:** Meskipun utilitas ekstraksi 3 digit `extractLeading3Digits` telah dibuat pada siklus awal, data KM Akhir S2 dari hari sebelumnya tidak pernah di-fetch dari Google Sheets dan prop `previousDayKmAkhir2` tidak diteruskan oleh komponen rantai `BusCard.tsx` ke dalam `BusInputModal`. Selain itu, `useBusInputForm.ts` hanya menginisialisasi prefill pada render awal tanpa efek reaktif saat data asinkron tiba.
+- **Dampak User:** Form KM Awal S1 tetap kosong dan tidak menampilkan 3 digit awal odometer bus kemarin, sehingga petugas masih harus mengetik seluruh 5–6 digit secara manual.
+- **Mitigasi:** Membuat hook khusus `usePreviousDayOdometer` yang secara otomatis memuat tab hari sebelumnya (baik di spreadsheet yang sama maupun spreadsheet bulan lalu jika tanggal 1) dengan in-memory cache, mengalirkan prop `previousDayKmMap` ke `BusList` dan `BusCard`, serta menambahkan `useEffect` reaktif di `useBusInputForm.ts` dan visual badge `PREFILL_FROM_YESTERDAY` di `BusInputModalShift1.tsx`.
+

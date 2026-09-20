@@ -32,6 +32,7 @@ export interface BusListProps {
   isShiftConfirmed?: boolean;
   activeShift?: 1 | 2;
   onOpenFleetStatus?: () => void;
+  previousDayKmMap?: Record<string, string>;
 }
 
 function BusListComponent({
@@ -48,6 +49,7 @@ function BusListComponent({
   isShiftConfirmed,
   activeShift = 1,
   onOpenFleetStatus,
+  previousDayKmMap,
 }: BusListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
@@ -190,33 +192,40 @@ function BusListComponent({
       ) : (
         <div className="bus-list">
           {filteredData.length > 0 ? (
-            filteredData.map((bus) => (
-              <BusCard
-                key={bus.rowIndex}
-                bus={bus}
-                sheetId={sheetId}
-                tabName={tabName}
-                headerMap={headerMap}
-                isQueued={syncQueue.some(
-                  (q) =>
-                    q.rowIndex === bus.rowIndex &&
-                    q.sheetId === sheetId &&
-                    q.tabName === tabName,
-                )}
-                addToQueue={addToQueue}
-                activeCategory={activeCategory}
-                targetTrip={targetTrip}
-                onUpdateBus={
-                  onUpdateBus
-                    ? (updates) => onUpdateBus(bus.rowIndex, updates)
-                    : undefined
-                }
-                onSaveAndNext={handleSaveAndNext}
-                isShiftConfirmed={isShiftConfirmed}
-                activeShift={activeShift}
-                onOpenFleetStatus={onOpenFleetStatus}
-              />
-            ))
+            filteredData.map((bus) => {
+              const prevKm =
+                previousDayKmMap?.[bus.unit?.trim().toUpperCase()] ||
+                previousDayKmMap?.[bus.unit?.trim()] ||
+                "";
+              return (
+                <BusCard
+                  key={bus.rowIndex}
+                  bus={bus}
+                  sheetId={sheetId}
+                  tabName={tabName}
+                  headerMap={headerMap}
+                  isQueued={syncQueue.some(
+                    (q) =>
+                      q.rowIndex === bus.rowIndex &&
+                      q.sheetId === sheetId &&
+                      q.tabName === tabName,
+                  )}
+                  addToQueue={addToQueue}
+                  activeCategory={activeCategory}
+                  targetTrip={targetTrip}
+                  onUpdateBus={
+                    onUpdateBus
+                      ? (updates) => onUpdateBus(bus.rowIndex, updates)
+                      : undefined
+                  }
+                  onSaveAndNext={handleSaveAndNext}
+                  isShiftConfirmed={isShiftConfirmed}
+                  activeShift={activeShift}
+                  onOpenFleetStatus={onOpenFleetStatus}
+                  previousDayKmAkhir2={prevKm}
+                />
+              );
+            })
           ) : (
             <div className="empty-state">
               <p>{TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)}</p>

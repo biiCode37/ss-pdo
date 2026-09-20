@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1789057805.6664038,
-    "ast_hash": "2a6e52775956f7b15e647930393ed00a",
+    "mtime": 1789870752.7556841,
+    "ast_hash": "b612e353c5075ed753598ff8b9cc9fbd",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1395,8 +1395,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1789686898.259892,
-    "ast_hash": "9fb3fdf5631bdb96e8ed15665948f010",
+    "mtime": 1789870791.5050533,
+    "ast_hash": "86ab7cd63254aadbe7d41f6b280b187a",
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789686906.279173,
-    "ast_hash": "7ae293230d993a62b019c14bbd9d83f9",
+    "mtime": 1789870775.5714977,
+    "ast_hash": "5f54e6c48c5a3559dee288e3a33212af",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -2745,13 +2745,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.test.tsx": {
-    "mtime": 1789687199.8996363,
-    "ast_hash": "fc0dfa4941135ad46d01cb0eefcc3398",
+    "mtime": 1789870933.0459385,
+    "ast_hash": "bb09d354549d489ed35d5cd3305d61f3",
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.tsx": {
-    "mtime": 1789687682.5358887,
-    "ast_hash": "e0663735d73e2daa6b4e4fa93b3eca9c",
+    "mtime": 1789871176.2851634,
+    "ast_hash": "43ab6a35de1b57ed790328431179d2ac",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.test.tsx": {
@@ -2830,13 +2830,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalFooter.tsx": {
-    "mtime": 1789687531.8765326,
-    "ast_hash": "c92d29cbce6673b18856ef0a59732e8f",
+    "mtime": 1789871045.539671,
+    "ast_hash": "aea0259a682787f90b2b05648707e38a",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalHeader.tsx": {
-    "mtime": 1789687477.6539016,
-    "ast_hash": "367c9aec534692634418b7d7cf107414",
+    "mtime": 1789871188.348292,
+    "ast_hash": "83023349f0ae0e7d246e4d8aa017599d",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalNotes.tsx": {
@@ -2845,13 +2845,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalShift1.tsx": {
-    "mtime": 1789687657.0178812,
-    "ast_hash": "9690f1628801e56d1d0961cebb26a37a",
+    "mtime": 1789871266.5713243,
+    "ast_hash": "fbe42bbee8d6b22eb8f2e76854cc14d3",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalShift2.tsx": {
-    "mtime": 1789687662.9743798,
-    "ast_hash": "a65e38766e33f867afb0e9078cb19db5",
+    "mtime": 1789871125.509769,
+    "ast_hash": "abdc6355b5ff48b05cfe217840fe552a",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalSingleFocus.tsx": {
@@ -2870,18 +2870,53 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/useBusInputForm.ts": {
-    "mtime": 1789687634.353845,
-    "ast_hash": "fa070adf0cbc9238cf856f536b5f412e",
+    "mtime": 1789871294.9454484,
+    "ast_hash": "001720d75cb8bd1637b0ac3b391cfccf",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_63/AUDIT_BUGS.md": {
-    "mtime": 1789687355.876443,
-    "ast_hash": "bf97962a8110b35ccca8277e65439ba9",
+    "mtime": 1789687736.4960122,
+    "ast_hash": "e517a0187ce9c26134d1ba7eaf0f3ca6",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_63/REPAIR_REPORT.md": {
-    "mtime": 1789687366.0766656,
-    "ast_hash": "f50ffa53ef9ae9f8e28a2ff3fd1afa12",
+    "mtime": 1789687748.5634334,
+    "ast_hash": "d75cdc158d402ca2c12af161240b68f4",
+    "semantic_hash": ""
+  },
+  "src/hooks/__tests__/useVisualViewport.test.tsx": {
+    "mtime": 1789870901.6719196,
+    "ast_hash": "e3be1d3f97257e879a09663da6311352",
+    "semantic_hash": ""
+  },
+  "src/hooks/useVisualViewport.ts": {
+    "mtime": 1789870875.1558032,
+    "ast_hash": "b6153b0c27bc907936a9cc89fc5e5f0f",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/busModalOdometer.test.ts": {
+    "mtime": 1789870836.0180514,
+    "ast_hash": "763627670348360db47c984333728a03",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/busModalOdometer.ts": {
+    "mtime": 1789870822.3496504,
+    "ast_hash": "bed7be52e706e38c0fdd8a188f0461d4",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-20-bus-input-modal-redesign.md": {
+    "mtime": 1789870703.3218937,
+    "ast_hash": "cded3166ffbfc131c7b725bc6be4c778",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-19-ss-pdo-android-migration-design.md": {
+    "mtime": 1789784631.427619,
+    "ast_hash": "665ceef4a8912068b3318d67850f6d05",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-20-bus-input-modal-redesign-design.md": {
+    "mtime": 1789870588.386178,
+    "ast_hash": "183751467390b20c96e09c5456f433ac",
     "semantic_hash": ""
   }
 }

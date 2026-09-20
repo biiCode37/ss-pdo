@@ -14,4 +14,5 @@ export interface BusCardProps {
   isShiftConfirmed?: boolean;
   activeShift?: 1 | 2;
   onOpenFleetStatus?: () => void;
+  previousDayKmAkhir2?: string;
 }

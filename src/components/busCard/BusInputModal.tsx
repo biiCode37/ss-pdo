@@ -243,7 +243,7 @@ export function BusInputModal({
             <BusInputModalSingleFocus
               form={form}
               activeCategory={activeCategory}
-              busKmAwal1={bus.kmAwal1}
+              busKmAwal1={bus.kmAwal1 || previousDayKmAkhir2}
             />
           )}
 

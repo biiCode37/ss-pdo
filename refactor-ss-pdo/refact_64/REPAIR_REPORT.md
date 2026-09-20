@@ -93,19 +93,31 @@ Dokumen implementasi perbaikan komprehensif untuk antarmuka modal entri data arm
   2. Form melakukan penyesuaian scroll otomatis ke elemen input yang sedang aktif.
   3. Sticky footer tetap terpancang kokoh tepat di atas bilah keyboard virtual, memungkinkan petugas menyimpan data dalam satu sentuhan tanpa perlu memencet tombol "Back" untuk menyembunyikan keyboard terlebih dahulu.
 
+### Skenario 4: Petugas Mengisi KM Awal S1 Pagi Hari dengan Prefill Otomatis Odometer Kemarin
+- **Kondisi:** Pagi hari sebelum bus berangkat berdinas Shift 1, petugas membuka form untuk mengisi KM Awal S1.
+- **Alur Kerja Baru:**
+  1. Saat dashboard memuat data rute hari ini (misal tanggal 15), hook `usePreviousDayOdometer` secara background mengambil data tab kemarin (tanggal 14) atau spreadsheet bulan sebelumnya jika tanggal 1.
+  2. Petugas melakukan tap pada bus pertama.
+  3. Form terbuka dengan bagian KM Awal S1 langsung terbuka (karena belum tersimpan di sheet).
+  4. Kotak input KM Awal S1 sudah otomatis terisi 3 digit awal (misal `125` dari KM Akhir S2 kemarin `125430`), lengkap dengan badge visual `Kemarin: 125430`.
+  5. Petugas cukup mengetik 3 digit terakhir dari odometer fisik bus di dashboard pengemudi, lalu menekan Enter.
+
 ---
 
 ## 🛡️ Status Verifikasi & Quality Gates
 
 1. **Unit Test Suite:**
    - Perintah: `pnpm vitest run src/`
-   - Hasil: **56 test files passed, 420 tests passed (100% lulus)**
+   - Hasil: **57 test files passed, 424 tests passed (100% lulus)**
+     - Termasuk `usePreviousDayOdometer.test.tsx` (3 passed)
      - Termasuk `busModalOdometer.test.ts` (10 passed)
      - Termasuk `useVisualViewport.test.tsx` (2 passed)
      - Termasuk `texts.test.ts` (15 passed)
 2. **Typecheck & Production Build:**
    - Perintah: `pnpm run build` (`tsc -b && vite build`)
-   - Hasil: **Lulus 0 error (Vite build 2.53s, PWA bundle terverifikasi)**
+   - Hasil: **Lulus 0 error (Vite build 1.89s, PWA bundle terverifikasi)**
 3. **Graf Pengetahuan (Knowledge Graph):**
    - Perintah: `graphify update .`
+   - Hasil: **Rebuilt: 3890 nodes, 5050 edges, 344 communities terbarukan**
+
    - Hasil: **Graf pengetahuan arsitektur proyek terbarukan**

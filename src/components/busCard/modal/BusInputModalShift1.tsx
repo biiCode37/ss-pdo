@@ -33,7 +33,12 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
     handleInputKeyDown,
   } = form;
 
-  const [showKmAwalEdit, setShowKmAwalEdit] = useState(!kmAwal1);
+  // Jika KM Awal S1 belum tersimpan di sheet (masih kosong atau hanya berisi 3 digit prefill),
+  // buka form input KM Awal S1 secara default agar petugas langsung melihat dan melengkapi angka.
+  const isKmAwalSaved = Boolean(
+    form.bus?.kmAwal1 && form.bus.kmAwal1.trim().length >= 4,
+  );
+  const [showKmAwalEdit, setShowKmAwalEdit] = useState(!isKmAwalSaved);
 
   const heroInputStyle: React.CSSProperties = {
     width: "100%",
@@ -182,6 +187,20 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             <span style={{ fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
               {kmAwal1 || TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}
             </span>
+            {form.previousDayKmAkhir2 && !isKmAwalSaved && (
+              <span
+                style={{
+                  fontSize: "0.72rem",
+                  padding: "1px 6px",
+                  borderRadius: "6px",
+                  background: "rgba(245, 158, 11, 0.15)",
+                  color: "#f59e0b",
+                  fontWeight: 600,
+                }}
+              >
+                {TEXT_ALERTS.BUS_INPUT_MODAL.PREFILL_FROM_YESTERDAY(form.previousDayKmAkhir2)}
+              </span>
+            )}
             <button
               type="button"
               onClick={() => setShowKmAwalEdit((prev) => !prev)}

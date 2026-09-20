@@ -172,6 +172,7 @@ export const TEXT_ALERTS = {
     SWITCH_TO_FULL_FORM: 'Semua Kolom',
     SWITCH_TO_SINGLE_FOCUS: 'Mode Fokus',
     REF_KM_AWAL: (km: string | number) => `Acuan KM Awal: ${km}`,
+    PREFILL_FROM_YESTERDAY: (km: string | number) => `Kemarin: ${km}`,
   },
   MODAL_COMMON: {
     UNDERSTAND: 'Mengerti',

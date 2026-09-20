@@ -3,6 +3,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { UserManagementSkeleton } from "@/components/Skeletons";
 import { AllRouteMonitoringPage } from "@/components/AllRouteMonitoringPage";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
+import { usePreviousDayOdometer } from "@/hooks/usePreviousDayOdometer";
 import { getStoredUserRole } from "@/utils/roleStorage";
 import { showAuthExpiredAlert, showSuccessToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
@@ -137,6 +138,15 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       setIsAuthExpired(true);
       showAuthExpiredAlert(handleReauthenticate);
     },
+  });
+
+  // 5. Previous Day Odometer Prefill Hook
+  const { previousDayKmMap } = usePreviousDayOdometer({
+    sheetId: currentSheetId,
+    currentTabName,
+    activeMonth,
+    activeYear,
+    routeCode: activeRouteCode,
   });
 
   // 5. Sync, Reauthentication, & Sheet Action Handlers
@@ -291,6 +301,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           onSelectTab={handleSelectTab}
           onSelectUnit={handleSelectUnit}
           missingColumns={missingColumns}
+          previousDayKmMap={previousDayKmMap}
         />
       )}
 

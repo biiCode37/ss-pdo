@@ -42,6 +42,7 @@ interface DashboardContentTabsProps {
   onSelectTab: (newTab: string) => Promise<void>;
   onSelectUnit: (unit: string) => void;
   missingColumns: string[];
+  previousDayKmMap?: Record<string, string>;
 }
 
 export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
@@ -70,6 +71,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
   onSelectTab,
   onSelectUnit,
   missingColumns,
+  previousDayKmMap,
 }) => {
   return (
     <SwipeableContainer
@@ -127,6 +129,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
           isShiftConfirmed={isShiftConfirmed}
           activeShift={activeShift}
           onOpenFleetStatus={onOpenFleetStatus}
+          previousDayKmMap={previousDayKmMap}
         />
       </div>
 

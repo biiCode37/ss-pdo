@@ -131,6 +131,51 @@ export function useBusInputForm({
 
   const [kmAkhir2, setKmAkhir2] = useState(initialKmAkhir2);
 
+  // Prefill reaktif KM Awal S1 saat previousDayKmAkhir2 tiba dan field masih kosong
+  useEffect(() => {
+    if (
+      (!kmAwal1 || kmAwal1.trim() === "") &&
+      (!bus.kmAwal1 || bus.kmAwal1.trim() === "") &&
+      previousDayKmAkhir2
+    ) {
+      const prefill = extractLeading3Digits(previousDayKmAkhir2);
+      if (prefill) {
+        setKmAwal1(prefill);
+        if (!kmAkhir1 || kmAkhir1.trim() === "") {
+          setKmAkhir1(prefill);
+        }
+      }
+    }
+  }, [previousDayKmAkhir2, bus.kmAwal1]);
+
+  // Prefill KM Akhir S1 dari KM Awal S1 jika KM Akhir S1 masih kosong
+  useEffect(() => {
+    if (
+      (!kmAkhir1 || kmAkhir1.trim() === "") &&
+      (!bus.kmAkhir1 || bus.kmAkhir1.trim() === "") &&
+      kmAwal1
+    ) {
+      const prefill = extractLeading3Digits(kmAwal1);
+      if (prefill) {
+        setKmAkhir1(prefill);
+      }
+    }
+  }, [kmAwal1, bus.kmAkhir1]);
+
+  // Prefill KM Akhir S2 dari KM Awal S2 jika KM Akhir S2 masih kosong
+  useEffect(() => {
+    if (
+      (!kmAkhir2 || kmAkhir2.trim() === "") &&
+      (!bus.kmAkhir2 || bus.kmAkhir2.trim() === "") &&
+      kmAwal2
+    ) {
+      const prefill = extractLeading3Digits(kmAwal2);
+      if (prefill) {
+        setKmAkhir2(prefill);
+      }
+    }
+  }, [kmAwal2, bus.kmAkhir2]);
+
   const [keterangan, setKeterangan] = useState(bus.keterangan || "");
   const [showKeterangan, setShowKeterangan] = useState(
     Boolean(bus.keterangan && bus.keterangan.trim() !== ""),
@@ -440,6 +485,8 @@ export function useBusInputForm({
     kmLiveS2,
     toaLiveS2,
     handleCopyKmAkhir1ToAwal2,
+    bus,
+    previousDayKmAkhir2,
   };
 }
 

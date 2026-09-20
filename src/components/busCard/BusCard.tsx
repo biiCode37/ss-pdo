@@ -26,6 +26,7 @@ function BusCardComponent({
   isShiftConfirmed,
   activeShift = 1,
   onOpenFleetStatus,
+  previousDayKmAkhir2,
 }: BusCardProps) {
   const { formData, isLoading, saveStatus, handleSaveUpdates } = useBusCardSave({
     bus,
@@ -184,6 +185,7 @@ function BusCardComponent({
           onSave={handleSaveModalUpdates}
           isShiftConfirmed={isShiftConfirmed}
           activeShift={activeShift}
+          previousDayKmAkhir2={previousDayKmAkhir2}
         />
       )}
     </>
