@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1789289542.7522159,
-    "ast_hash": "d1065f59fdbe13a680af63ae5948d456",
+    "mtime": 1789872528.211349,
+    "ast_hash": "0b4a70855ecf6622f295cd6bdeaed317",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1789870752.7556841,
-    "ast_hash": "b612e353c5075ed753598ff8b9cc9fbd",
+    "mtime": 1789871411.0892172,
+    "ast_hash": "e321b3972ab32a7dc765f4df6338ead8",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1395,8 +1395,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1789870791.5050533,
-    "ast_hash": "86ab7cd63254aadbe7d41f6b280b187a",
+    "mtime": 1789872587.4411073,
+    "ast_hash": "8a382f56764b4ec7b33b269f0be1d2d7",
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789870775.5714977,
-    "ast_hash": "5f54e6c48c5a3559dee288e3a33212af",
+    "mtime": 1789872592.4806259,
+    "ast_hash": "40ad299b68b8e27d4e1b226e2f988ff3",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1835,8 +1835,8 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardContentTabs.tsx": {
-    "mtime": 1789283540.440897,
-    "ast_hash": "51416d163ade193ca5b8cc03961de9b2",
+    "mtime": 1789872497.869579,
+    "ast_hash": "d897790345c5537bfef4c2a35f6cc8cb",
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardHeader.tsx": {
@@ -2280,8 +2280,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/types.ts": {
-    "mtime": 1789287844.6209161,
-    "ast_hash": "7c3e2f0b0e045378643125afdd994efa",
+    "mtime": 1789872452.04912,
+    "ast_hash": "49f57c7ce61b7dfe6aff36356292c896",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.ts": {
@@ -2610,8 +2610,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.tsx": {
-    "mtime": 1789675130.0091846,
-    "ast_hash": "6d4bad4d3ae7f7064ac3af63f6c57672",
+    "mtime": 1789872462.358238,
+    "ast_hash": "b4d53d49262f93f157a5cadbe1d715f6",
     "semantic_hash": ""
   },
   "src/components/busList/BusList.test.tsx": {
@@ -2620,8 +2620,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/BusList.tsx": {
-    "mtime": 1789301757.516924,
-    "ast_hash": "c9f13e8ba3b304508286825970a8721f",
+    "mtime": 1789872477.4989254,
+    "ast_hash": "42d29fb9121e6d2fae52843e85b1444c",
     "semantic_hash": ""
   },
   "src/components/dailyToaTrend/DailyToaTrendCard.test.tsx": {
@@ -2745,13 +2745,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.test.tsx": {
-    "mtime": 1789870933.0459385,
-    "ast_hash": "bb09d354549d489ed35d5cd3305d61f3",
+    "mtime": 1789872611.0630994,
+    "ast_hash": "6bd1791f73ac887bc4f8b93da0cfcd9b",
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.tsx": {
-    "mtime": 1789871176.2851634,
-    "ast_hash": "43ab6a35de1b57ed790328431179d2ac",
+    "mtime": 1789872563.4532678,
+    "ast_hash": "a45e78faddce2ba842daab3cbab832f4",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.test.tsx": {
@@ -2845,8 +2845,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalShift1.tsx": {
-    "mtime": 1789871266.5713243,
-    "ast_hash": "fbe42bbee8d6b22eb8f2e76854cc14d3",
+    "mtime": 1789872602.1105614,
+    "ast_hash": "a1529c19742908d78a306ac8874d15da",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalShift2.tsx": {
@@ -2870,8 +2870,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/useBusInputForm.ts": {
-    "mtime": 1789871294.9454484,
-    "ast_hash": "001720d75cb8bd1637b0ac3b391cfccf",
+    "mtime": 1789872544.263726,
+    "ast_hash": "7611b68bd80275ab86c7c0bf5932caee",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_63/AUDIT_BUGS.md": {
@@ -2917,6 +2917,26 @@
   "docs/superpowers/specs/2026-09-20-bus-input-modal-redesign-design.md": {
     "mtime": 1789870588.386178,
     "ast_hash": "183751467390b20c96e09c5456f433ac",
+    "semantic_hash": ""
+  },
+  "src/hooks/__tests__/usePreviousDayOdometer.test.tsx": {
+    "mtime": 1789872389.1170156,
+    "ast_hash": "12dfb1e3bb21069df4ddd16f5c25001a",
+    "semantic_hash": ""
+  },
+  "src/hooks/usePreviousDayOdometer.ts": {
+    "mtime": 1789872381.1923287,
+    "ast_hash": "4b09815cdbc25b3f8770c49246ef014b",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_64/AUDIT_BUGS.md": {
+    "mtime": 1789871390.0576036,
+    "ast_hash": "f209820bc3f85613041e4cd38fc7c342",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_64/REPAIR_REPORT.md": {
+    "mtime": 1789871402.7280297,
+    "ast_hash": "5c765163d147473f3db5b0ad47989308",
     "semantic_hash": ""
   }
 }

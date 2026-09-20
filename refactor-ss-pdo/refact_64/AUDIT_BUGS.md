@@ -84,3 +84,13 @@ Dokumentasi audit UX, ergonomi operasional, dan integritas data pada komponen an
 - **Dampak User:** Form KM Awal S1 tetap kosong dan tidak menampilkan 3 digit awal odometer bus kemarin, sehingga petugas masih harus mengetik seluruh 5–6 digit secara manual.
 - **Mitigasi:** Membuat hook khusus `usePreviousDayOdometer` yang secara otomatis memuat tab hari sebelumnya (baik di spreadsheet yang sama maupun spreadsheet bulan lalu jika tanggal 1) dengan in-memory cache, mengalirkan prop `previousDayKmMap` ke `BusList` dan `BusCard`, serta menambahkan `useEffect` reaktif di `useBusInputForm.ts` dan visual badge `PREFILL_FROM_YESTERDAY` di `BusInputModalShift1.tsx`.
 
+---
+
+### BUG-64-09: Autofocus Melakukan Text Blocking/Selection pada 3 Digit Prefill Odometer KM
+- **Lokasi Kode:** `src/components/busCard/modal/useBusInputForm.ts`
+- **Tingkat Keparahan:** HIGH (Ergonomi & UX Lapangan)
+- **Deskripsi:** Pada saat modal input armada terbuka, handler auto-focus memanggil `targetElement.select()` secara global untuk semua input. Ketika field KM otomatis terisi 3 digit prefill (misal: `289`), seluruh teks `289` terblok/terseleksi biru penuh. Akibatnya, saat petugas lapangan langsung mengetik angka lanjutan di keyboard ponsel tanpa mengetuk ulang field, teks 3 digit prefill tersebut seketika terhapus/tertimpa (*replaced*) oleh angka baru yang diketik. Petugas terpaksa melakukan 1 langkah ekstra (tap manual ke sisi paling kanan kotak input).
+- **Dampak User:** Mengurangi kenyamanan UX, memperlambat kecepatan entri data, dan berisiko salah rekam angka odometer jika petugas tidak menyadari 3 digit awal telah terhapus.
+- **Mitigasi:** Memperbaiki logika autofocus dan focus listener di `useBusInputForm.ts`: mendeteksi jika field merupakan input odometer KM dengan nilai 1–3 digit (`isPrefillOnly`), posisikan kursor di akhir teks (`setSelectionRange(len, len)`) alih-alih `select()`, sehingga petugas dapat langsung melanjutkan mengetik 3 digit akhir tanpa takut 3 digit awal terhapus.
+
+

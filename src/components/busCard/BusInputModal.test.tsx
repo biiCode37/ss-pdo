@@ -525,5 +525,38 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     const inputKmAkhir1 = document.body.querySelector<HTMLInputElement>("#input-km-akhir-1");
     expect(inputKmAkhir1?.value).toBe("152");
   });
+
+  it("positions cursor at the end of 3-digit prefill instead of selecting all text", async () => {
+    vi.useFakeTimers();
+
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            kmAwal1: "",
+          })}
+          activeCategory="kmAwal1"
+          onSave={vi.fn()}
+          previousDayKmAkhir2="289514"
+        />,
+      );
+    });
+
+    const input = document.body.querySelector<HTMLInputElement>("#single-input-kmAwal1");
+    expect(input?.value).toBe("289");
+
+    // Fast-forward timer autofocus 60ms
+    await act(async () => {
+      vi.advanceTimersByTime(70);
+    });
+
+    // Kursor harus berada di indeks 3 (akhir teks), bukan memblok teks 0 s/d 3
+    expect(input?.selectionStart).toBe(3);
+    expect(input?.selectionEnd).toBe(3);
+
+    vi.useRealTimers();
+  });
 });
 

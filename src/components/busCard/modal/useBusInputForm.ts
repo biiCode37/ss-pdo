@@ -214,16 +214,55 @@ export function useBusInputForm({
 
       if (targetElement) {
         targetElement.focus();
-        if ("select" in targetElement && typeof targetElement.select === "function") {
-          targetElement.select();
+        const val = targetElement.value || "";
+        const isKmInput =
+          (isSingleMode && activeCategory.toLowerCase().includes("km")) ||
+          Boolean(targetElement.id && targetElement.id.toLowerCase().includes("km"));
+        const isPrefillOnly = isKmInput && val.length > 0 && val.length <= 3;
+
+        if (isPrefillOnly) {
+          // Jangan block/select 3 digit prefill! Letakkan kursor di paling kanan (akhir teks)
+          // agar user dapat langsung mengetik kelanjutan digit tanpa menimpa prefill.
+          try {
+            if (typeof targetElement.setSelectionRange === "function") {
+              targetElement.setSelectionRange(val.length, val.length);
+            }
+          } catch {
+            // safe fallback
+          }
+        } else {
+          try {
+            if ("select" in targetElement && typeof targetElement.select === "function") {
+              targetElement.select();
+            }
+          } catch {
+            // safe fallback
+          }
         }
       }
     }, 60);
 
     return () => clearTimeout(timer);
-  }, [isOpen, isMounted, isSingleMode, activeTab]);
+  }, [isOpen, isMounted, isSingleMode, activeTab, activeCategory]);
 
-  // Smart Viewport Auto-Scroll on focus
+  // Jika input KM yang sedang aktif terisi 3 digit prefill, pastikan kursor diletakkan di akhir teks (bukan di-select)
+  useEffect(() => {
+    if (isSingleMode && activeCategory.toLowerCase().includes("km")) {
+      const el = singlePrimaryInputRef.current;
+      if (el && document.activeElement === el) {
+        const val = el.value || "";
+        if (val.length > 0 && val.length <= 3) {
+          try {
+            if (typeof el.setSelectionRange === "function") {
+              el.setSelectionRange(val.length, val.length);
+            }
+          } catch {}
+        }
+      }
+    }
+  }, [kmAwal1, kmAkhir1, kmAwal2, kmAkhir2, isSingleMode, activeCategory]);
+
+  // Smart Viewport Auto-Scroll on focus & kursor di akhir untuk prefill
   const handleInputFocus = (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -231,6 +270,18 @@ export function useBusInputForm({
       e.target.scrollIntoView({ behavior: "smooth", block: "center" });
     } catch {
       // safe fallback
+    }
+
+    const val = e.target.value || "";
+    const isKmInput = Boolean(e.target.id && e.target.id.toLowerCase().includes("km"));
+    if (isKmInput && val.length > 0 && val.length <= 3) {
+      try {
+        if (typeof (e.target as HTMLInputElement).setSelectionRange === "function") {
+          (e.target as HTMLInputElement).setSelectionRange(val.length, val.length);
+        }
+      } catch {
+        // safe fallback
+      }
     }
   };
 
