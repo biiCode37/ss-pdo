@@ -44,7 +44,7 @@ export function BusInputModal({
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const isClosingRef = useRef(false);
-  const { viewportHeight, isKeyboardOpen } = useVisualViewport();
+  const { viewportHeight, isKeyboardOpen, keyboardHeight } = useVisualViewport();
 
   const handleDismiss = () => {
     if (isClosingRef.current) return;
@@ -101,7 +101,7 @@ export function BusInputModal({
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: isKeyboardOpen ? `${keyboardHeight}px` : 0,
         zIndex: 99999,
         display: "flex",
         justifyContent: "center",
@@ -111,8 +111,8 @@ export function BusInputModal({
         WebkitBackdropFilter: "blur(6px)",
         opacity: isClosing ? 0 : isMounted ? 1 : 0,
         transition:
-          "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
-        willChange: "opacity, background-color",
+          "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+        willChange: "opacity, background-color, bottom",
       }}
       onClick={handleDismiss}
     >
@@ -123,14 +123,15 @@ export function BusInputModal({
           width: "100%",
           maxWidth: "560px",
           maxHeight: isKeyboardOpen
-            ? `${Math.min(viewportHeight - 12, 780)}px`
+            ? `${Math.min(viewportHeight - 10, 680)}px`
             : "min(92dvh, 780px)",
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
           borderTopLeftRadius: "24px",
           borderTopRightRadius: "24px",
-          padding:
-            "20px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px",
+          padding: isKeyboardOpen
+            ? "12px 16px 8px 16px"
+            : "18px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px",
           background: "var(--card-bg, #171717)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
           borderBottom: "none",
@@ -139,7 +140,8 @@ export function BusInputModal({
             isClosing || !isMounted
               ? "translateY(100%) scale(0.95)"
               : "translateY(0px) scale(1)",
-          transition: "transform 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
+          transition:
+            "transform 0.22s cubic-bezier(0.32, 0.72, 0, 1), max-height 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
@@ -291,46 +293,60 @@ export function BusInputModal({
           onSubmit={form.handleFormSubmit}
           style={{
             flex: 1,
-            overflowY: "auto",
-            padding: "16px 0",
+            minHeight: 0,
             display: "flex",
             flexDirection: "column",
-            gap: "14px",
+            overflow: "hidden",
           }}
         >
-          {form.isSingleMode && (
-            <BusInputModalSingleFocus
-              form={form}
-              activeCategory={activeCategory}
-              busKmAwal1={bus.kmAwal1 || previousDayKmAkhir2}
-            />
-          )}
+          {/* Scrollable Container untuk Form Inputs */}
+          <div
+            className="no-scrollbar"
+            style={{
+              flex: 1,
+              overflowY: "auto",
+              minHeight: 0,
+              padding: isKeyboardOpen ? "4px 0" : "8px 0",
+              display: "flex",
+              flexDirection: "column",
+              gap: isKeyboardOpen ? "8px" : "12px",
+            }}
+          >
+            {form.isSingleMode && (
+              <BusInputModalSingleFocus
+                form={form}
+                activeCategory={activeCategory}
+                busKmAwal1={bus.kmAwal1 || previousDayKmAkhir2}
+              />
+            )}
 
-          {!form.isSingleMode && form.activeTab === "shift1" && (
-            <BusInputModalShift1 form={form} />
-          )}
+            {!form.isSingleMode && form.activeTab === "shift1" && (
+              <BusInputModalShift1 form={form} />
+            )}
 
-          {!form.isSingleMode && form.activeTab === "shift2" && (
-            <BusInputModalShift2 form={form} />
-          )}
+            {!form.isSingleMode && form.activeTab === "shift2" && (
+              <BusInputModalShift2 form={form} />
+            )}
 
-          {!form.isSingleMode && form.activeTab === "trip" && (
-            <BusInputModalTrip
-              form={form}
-              tripPergiLabel={headerMap?.tripPergiLabel || "Trip Pergi"}
-              tripPulangLabel={headerMap?.tripPulangLabel || "Trip Pulang"}
-            />
-          )}
+            {!form.isSingleMode && form.activeTab === "trip" && (
+              <BusInputModalTrip
+                form={form}
+                tripPergiLabel={headerMap?.tripPergiLabel || "Trip Pergi"}
+                tripPulangLabel={headerMap?.tripPulangLabel || "Trip Pulang"}
+              />
+            )}
 
-          {!form.isSingleMode && form.activeTab === "notes" && (
-            <BusInputModalNotes form={form} />
-          )}
+            {!form.isSingleMode && form.activeTab === "notes" && (
+              <BusInputModalNotes form={form} />
+            )}
+          </div>
 
-          {/* 5. Footer Buttons */}
+          {/* 5. Fixed / Pinned Footer Buttons (Selalu di atas keyboard) */}
           <BusInputModalFooter
             formId={form.formId}
             onDismiss={handleDismiss}
             isDisabled={form.validationErrors.length > 0}
+            isKeyboardOpen={isKeyboardOpen}
           />
         </form>
       </div>

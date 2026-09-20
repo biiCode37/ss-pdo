@@ -42,12 +42,12 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
 
   const heroInputStyle: React.CSSProperties = {
     width: "100%",
-    padding: "12px 14px",
-    borderRadius: "14px",
+    padding: "10px 12px",
+    borderRadius: "12px",
     border: "1.5px solid var(--card-border, rgba(255, 255, 255, 0.12))",
     background: "rgba(0, 0, 0, 0.35)",
     color: "var(--text-primary, #ededed)",
-    fontSize: "1.25rem",
+    fontSize: "1.15rem",
     fontWeight: 800,
     boxSizing: "border-box",
     textAlign: "left",
@@ -183,9 +183,10 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
           }`,
           display: "flex",
           flexDirection: "column",
-          gap: "6px",
+          gap: "8px",
         }}
       >
+        {/* Baris 1: Info Acuan KM Awal S1 & Tombol Ubah */}
         <div
           style={{
             display: "flex",
@@ -194,7 +195,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             fontSize: "0.82rem",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
             <span style={{ color: "var(--text-secondary, #8b8b8b)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S1}
             </span>
@@ -218,57 +219,86 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                 )}
               </span>
             )}
-            <button
-              type="button"
-              onClick={() => setShowKmAwalEdit((prev) => !prev)}
-              style={{
-                background: "none",
-                border: "none",
-                color: "var(--accent-color, #38bdf8)",
-                fontSize: "0.75rem",
-                cursor: "pointer",
-                padding: "2px 4px",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "2px",
-              }}
-            >
-              {showKmAwalEdit ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-              <span>{showKmAwalEdit ? "Tutup" : "Ubah"}</span>
-            </button>
           </div>
 
-          {kmDistanceS1 !== null && (
-            <div style={{ fontSize: "0.85rem", fontWeight: 800 }}>
-              <span style={{ color: "var(--text-secondary, #8b8b8b)", marginRight: "4px" }}>
-                {TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S1}
-              </span>
-              <span
-                style={{
-                  color:
-                    kmLiveS1.status === "negative"
-                      ? "#f87171"
-                      : kmLiveS1.status === "extreme"
-                        ? "#f59e0b"
-                        : "#38bdf8",
-                }}
-              >
-                {kmDistanceS1} KM
-              </span>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => setShowKmAwalEdit((prev) => !prev)}
+            style={{
+              background: "rgba(56, 189, 248, 0.12)",
+              border: "1px solid rgba(56, 189, 248, 0.25)",
+              borderRadius: "6px",
+              color: "var(--accent-color, #38bdf8)",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              padding: "3px 8px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "3px",
+              flexShrink: 0,
+            }}
+          >
+            {showKmAwalEdit ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            <span>{showKmAwalEdit ? "Tutup" : "Ubah"}</span>
+          </button>
         </div>
+
+        {/* Baris 2: Badge Jarak Tempuh yang Proporsional (Anti-Tabrakan) */}
+        {kmDistanceS1 !== null && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingTop: "6px",
+              borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.08))",
+              fontSize: "0.8rem",
+            }}
+          >
+            <span style={{ color: "var(--text-secondary, #8b8b8b)" }}>
+              {TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S1}
+            </span>
+            <span
+              style={{
+                fontWeight: 800,
+                padding: "2px 8px",
+                borderRadius: "6px",
+                background:
+                  kmLiveS1.status === "negative"
+                    ? "rgba(239, 68, 68, 0.2)"
+                    : kmLiveS1.status === "extreme"
+                      ? "rgba(245, 158, 11, 0.2)"
+                      : "rgba(56, 189, 248, 0.15)",
+                color:
+                  kmLiveS1.status === "negative"
+                    ? "#f87171"
+                    : kmLiveS1.status === "extreme"
+                      ? "#f59e0b"
+                      : "#38bdf8",
+              }}
+            >
+              {kmDistanceS1} KM
+            </span>
+          </div>
+        )}
 
         {/* Status Pesan Selisih Real-time */}
         {kmLiveS1.formattedText && kmLiveS1.status !== "normal" && (
           <div
             style={{
-              fontSize: "0.8rem",
+              fontSize: "0.78rem",
               fontWeight: 600,
               color: kmLiveS1.status === "negative" ? "#f87171" : "#f59e0b",
               display: "flex",
               alignItems: "center",
               gap: "6px",
+              padding: "5px 8px",
+              borderRadius: "6px",
+              background:
+                kmLiveS1.status === "negative"
+                  ? "rgba(239, 68, 68, 0.1)"
+                  : "rgba(245, 158, 11, 0.1)",
             }}
           >
             <AlertTriangle size={14} style={{ flexShrink: 0 }} />
