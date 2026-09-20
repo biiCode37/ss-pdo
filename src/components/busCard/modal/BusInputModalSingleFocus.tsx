@@ -97,6 +97,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               ref={singlePrimaryInputRef}
               id="single-input-toaShift1"
               type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
               min="0"
               max={MAX_TOA_VALUE}
               value={toaShift1}
@@ -136,6 +138,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               <input
                 id="single-input-manualShift1"
                 type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 min="0"
                 max={MAX_TOA_VALUE}
                 value={manualShift1}
@@ -179,6 +183,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               ref={singlePrimaryInputRef}
               id="single-input-totalToa"
               type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
               min="0"
               max={MAX_TOA_VALUE}
               value={totalToa}
@@ -218,6 +224,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               <input
                 id="single-input-manualShift2"
                 type="number"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 min="0"
                 max={MAX_TOA_VALUE}
                 value={manualShift2}
@@ -265,6 +273,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               ref={singlePrimaryInputRef}
               id="single-input-kmAwal1"
               type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={kmAwal1}
               onChange={(e) => setKmAwal1(e.target.value)}
               onFocus={handleInputFocus}
@@ -302,6 +312,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               <input
                 id="single-input-kmAkhir1-sub"
                 type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={kmAkhir1}
                 onChange={(e) => setKmAkhir1(e.target.value)}
                 onFocus={handleInputFocus}
@@ -351,6 +363,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               ref={singlePrimaryInputRef}
               id="single-input-kmAkhir1"
               type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={kmAkhir1}
               onChange={(e) => setKmAkhir1(e.target.value)}
               onFocus={handleInputFocus}
@@ -417,6 +431,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               ref={singlePrimaryInputRef}
               id="single-input-kmAwal2"
               type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={kmAwal2}
               onChange={(e) => setKmAwal2(e.target.value)}
               onFocus={handleInputFocus}
@@ -454,6 +470,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               <input
                 id="single-input-kmAkhir2-sub"
                 type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={kmAkhir2}
                 onChange={(e) => setKmAkhir2(e.target.value)}
                 onFocus={handleInputFocus}
@@ -503,6 +521,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               ref={singlePrimaryInputRef}
               id="single-input-kmAkhir2"
               type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={kmAkhir2}
               onChange={(e) => setKmAkhir2(e.target.value)}
               onFocus={handleInputFocus}

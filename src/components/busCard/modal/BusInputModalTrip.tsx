@@ -54,6 +54,8 @@ export const BusInputModalTrip: React.FC<BusInputModalTripProps> = ({
             ref={tripPergiInputRef}
             id="input-trip-pergi"
             type="number"
+            inputMode="numeric"
+            pattern="[0-9]*"
             min="0"
             max={MAX_TRIP_COUNT}
             value={tripPergi}
@@ -74,6 +76,8 @@ export const BusInputModalTrip: React.FC<BusInputModalTripProps> = ({
           <input
             id="input-trip-pulang"
             type="number"
+            inputMode="numeric"
+            pattern="[0-9]*"
             min="0"
             max={MAX_TRIP_COUNT}
             value={tripPulang}

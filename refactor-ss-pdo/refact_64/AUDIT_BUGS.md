@@ -121,6 +121,16 @@ Dokumentasi audit UX, ergonomi operasional, dan integritas data pada komponen an
   2. **Local Storage Odometer Registry (Offline Fallback - Prioritas 2):** Modul baru `odometerRegistry.ts` mencatat riwayat pembacaan KM terakhir per armada secara lokal di perangkat pengguna. Berfungsi sebagai fallback instan (0ms latency, 0 quota Google API) ketika armada libur panjang atau koneksi internet tidak stabil.
   3. **Label Tanggal Transparan:** Menyajikan tanggal acuan asal pembacaan KM secara eksplisit pada badge form UI (`TEXT_ALERTS.PREFILL_DYNAMIC(dateLabel, prevKm)` dan `REF_KM_AWAL_DYNAMIC(dateLabel, prevKm)`), misalnya: `"Acuan KM (Tgl 18): 289514"` jika berasal dari H-2, atau `"Acuan KM Kemarin: 289514"` jika berasal dari H-1.
 
+---
+
+### BUG-64-12: Keyboard Virtual Menampilkan Layout Huruf/Full QWERTY pada Kolom Angka Odometer dan TOA di Peranti Mobile
+- **Lokasi Kode:** `src/components/busCard/modal/BusInputModalSingleFocus.tsx`, `src/components/busCard/modal/BusInputModalShift1.tsx`, `src/components/busCard/modal/BusInputModalShift2.tsx`, `src/components/busCard/modal/BusInputModalTrip.tsx`
+- **Tingkat Keparahan:** HIGH (Ergonomi & Efisiensi Input Lapangan Mobile-First)
+- **Deskripsi:** Sebagian besar kotak input angka (KM Awal S1/S2, KM Akhir S1/S2, TOA S1/S2, Manual S1/S2, dan Trip Pergi/Pulang) hanya menggunakan atribut `type="text"` atau `type="number"` tanpa menyertakan `inputMode="numeric"` dan `pattern="[0-9]*"`. Pada peranti seluler (khususnya iOS Safari dan beberapa browser Android), ketiadaan atribut ini menyebabkan keyboard virtual yang muncul berupa keyboard alfabetik (QWERTY penuh) atau keyboard numerik dengan baris huruf, mewajibkan operator melakukan tap tombol switch keyboard manual `[123]` setiap kali berpindah field.
+- **Dampak User:** Sangat memperlambat proses input data operasional di lapangan, memicu kelelahan operator akibat tap berulang kali untuk mengganti mode keyboard, dan berisiko input tidak sengaja berupa karakter non-angka.
+- **Mitigasi:** Menerapkan standar HTML5 mobile-first dengan menambahkan atribut `inputMode="numeric"` dan `pattern="[0-9]*"` pada seluruh field formulir angka (KM Awal, KM Akhir, TOA, Manual TOA, dan Trip) di semua mode (Mode Fokus Tunggal, Shift 1, Shift 2, dan Trip), serta mempertahankan `<textarea>` untuk kolom Keterangan/Catatan agar tetap memunculkan keyboard teks normal.
+
+
 
 
 
