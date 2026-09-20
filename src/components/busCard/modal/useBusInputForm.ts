@@ -16,8 +16,6 @@ import {
   extractLeading3Digits,
   computeRealtimeDistance,
   computeLiveToaShift2,
-  type KmDistanceResult,
-  type ToaLiveResult,
 } from "@/utils/modals/busInput/busModalOdometer";
 import { TEXT_ALERTS } from "@/constants/texts";
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MAX_TOA_VALUE } from "@/utils/modals/busInput/busModalTypes";
 import { TEXT_ALERTS } from "@/constants/texts";
 import type { BusInputFormReturn } from "./useBusInputForm";
-import { Gauge, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 
 interface BusInputModalShift1Props {
   form: BusInputFormReturn;

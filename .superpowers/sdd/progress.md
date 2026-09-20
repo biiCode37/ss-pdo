@@ -1,9 +1,10 @@
 # Subagent-Driven Development Progress Ledger
-Plan: docs/superpowers/plans/2026-09-10-fleet-status-wa-report.md
+Plan: docs/superpowers/plans/2026-09-20-bus-input-modal-redesign.md
 
-- [x] Task 1: Supabase Database Migration & Types (commit d909fd7)
-- [x] Task 2: Persistensi Snapshot Status Armada di Dashboard & Service (commit 0fb0270)
-- [x] Task 3: Kamus Teks Sentral WhatsApp Report (text_wa_report.ts) (commit a85d9ee)
-- [x] Task 4: Logika Generator Laporan WA Format 3 (waReportGenerator.ts) (commit 64d4cff)
-- [x] Task 5: Integrasi UI & Validasi Pemblokiran di WaReportModal.tsx (commit bdd68f3)
-- [x] Task 6: Quality Gates & Verifikasi Menyeluruh (All Gates Passed)
+- [x] Task 1: Kamus Teks Sentral untuk Indikator & Badge Modal (commit a7ce972)
+- [x] Task 2: Utilitas Odometer: Auto-Prefill 3 Digit & Kalkulasi Real-Time (commit a27e208)
+- [x] Task 3: Hook Keyboard-Aware & Visual Viewport (`useVisualViewport`) (commit 8991a49)
+- [x] Task 4: Pembaruan Logika Form `useBusInputForm.ts` (commit 77fd01d)
+- [x] Task 5: Redesign Komponen Header & Sticky Footer (commit ab1eac3)
+- [x] Task 6: Redesign Tampilan Form Input Berdampingan & Indikator Live (commit 27f5bc2)
+- [x] Task 7: Verifikasi Menyeluruh & Quality Gates (Refactor 64 Documentation & All Gates Passed)
