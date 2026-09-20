@@ -461,4 +461,45 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     );
     expect(inputKmAwal2?.value).toBe("12345.6");
   });
+
+  it("auto-prefills 3 leading digits of KM Akhir S1 when empty and KM Awal S1 exists", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            kmAwal1: "145800",
+            kmAkhir1: "",
+          })}
+          initialTab="shift1"
+          onSave={vi.fn()}
+        />,
+      );
+    });
+
+    const inputKmAkhir1 = document.body.querySelector<HTMLInputElement>("#input-km-akhir-1");
+    expect(inputKmAkhir1?.value).toBe("145");
+  });
+
+  it("auto-prefills 3 leading digits of KM Akhir S2 when empty and KM Awal S2 exists", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            kmAwal2: "146050",
+            kmAkhir2: "",
+          })}
+          initialTab="shift2"
+          onSave={vi.fn()}
+        />,
+      );
+    });
+
+    const inputKmAkhir2 = document.body.querySelector<HTMLInputElement>("#input-km-akhir-2");
+    expect(inputKmAkhir2?.value).toBe("146");
+  });
 });
+

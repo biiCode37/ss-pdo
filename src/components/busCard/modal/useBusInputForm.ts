@@ -12,6 +12,13 @@ import {
   validateToaPair,
   validateTripCount,
 } from "@/utils/modals/busInput/busModalValidation";
+import {
+  extractLeading3Digits,
+  computeRealtimeDistance,
+  computeLiveToaShift2,
+  type KmDistanceResult,
+  type ToaLiveResult,
+} from "@/utils/modals/busInput/busModalOdometer";
 import { TEXT_ALERTS } from "@/constants/texts";
 
 export type ModalTab = "shift1" | "shift2" | "trip" | "notes";
@@ -25,6 +32,7 @@ export interface UseBusInputFormProps {
   onDismiss: () => void;
   isOpen: boolean;
   isMounted: boolean;
+  previousDayKmAkhir2?: string;
 }
 
 export function useBusInputForm({
@@ -36,6 +44,7 @@ export function useBusInputForm({
   onDismiss,
   isOpen,
   isMounted,
+  previousDayKmAkhir2,
 }: UseBusInputFormProps) {
   // Evaluasi mode Single-Column Focus
   const isSingleColumnEligible = Boolean(
@@ -79,8 +88,23 @@ export function useBusInputForm({
         bus.manualShift1.trim() !== "",
     ),
   );
-  const [kmAwal1, setKmAwal1] = useState(bus.kmAwal1 || "");
-  const [kmAkhir1, setKmAkhir1] = useState(bus.kmAkhir1 || "");
+
+  // Auto-Prefill 3 Leading Digits for KM
+  const initialKmAwal1 = useMemo(() => {
+    if (bus.kmAwal1 && bus.kmAwal1.trim() !== "") return bus.kmAwal1;
+    if (previousDayKmAkhir2) return extractLeading3Digits(previousDayKmAkhir2);
+    return "";
+  }, [bus.kmAwal1, previousDayKmAkhir2]);
+
+  const [kmAwal1, setKmAwal1] = useState(initialKmAwal1);
+
+  const initialKmAkhir1 = useMemo(() => {
+    if (bus.kmAkhir1 && bus.kmAkhir1.trim() !== "") return bus.kmAkhir1;
+    if (initialKmAwal1) return extractLeading3Digits(initialKmAwal1);
+    return "";
+  }, [bus.kmAkhir1, initialKmAwal1]);
+
+  const [kmAkhir1, setKmAkhir1] = useState(initialKmAkhir1);
 
   const [toaShift2, setToaShift2] = useState(bus.toaShift2 || "");
   const [totalToa, setTotalToa] = useState(bus.totalToa || "");
@@ -92,8 +116,22 @@ export function useBusInputForm({
         bus.manualShift2.trim() !== "",
     ),
   );
-  const [kmAwal2, setKmAwal2] = useState(bus.kmAwal2 || "");
-  const [kmAkhir2, setKmAkhir2] = useState(bus.kmAkhir2 || "");
+
+  const initialKmAwal2 = useMemo(() => {
+    if (bus.kmAwal2 && bus.kmAwal2.trim() !== "") return bus.kmAwal2;
+    if (initialKmAkhir1) return extractLeading3Digits(initialKmAkhir1);
+    return "";
+  }, [bus.kmAwal2, initialKmAkhir1]);
+
+  const [kmAwal2, setKmAwal2] = useState(initialKmAwal2);
+
+  const initialKmAkhir2 = useMemo(() => {
+    if (bus.kmAkhir2 && bus.kmAkhir2.trim() !== "") return bus.kmAkhir2;
+    if (initialKmAwal2) return extractLeading3Digits(initialKmAwal2);
+    return "";
+  }, [bus.kmAkhir2, initialKmAwal2]);
+
+  const [kmAkhir2, setKmAkhir2] = useState(initialKmAkhir2);
 
   const [keterangan, setKeterangan] = useState(bus.keterangan || "");
   const [showKeterangan, setShowKeterangan] = useState(
@@ -164,24 +202,42 @@ export function useBusInputForm({
     }
   };
 
-  // Live distance calculation
+  // Live calculations for distance and TOA Shift 2
+  const kmLiveS1 = useMemo(
+    () => computeRealtimeDistance(kmAwal1, kmAkhir1),
+    [kmAwal1, kmAkhir1],
+  );
+
+  const kmLiveS2 = useMemo(
+    () => computeRealtimeDistance(kmAwal2, kmAkhir2),
+    [kmAwal2, kmAkhir2],
+  );
+
+  const toaLiveS2 = useMemo(
+    () => computeLiveToaShift2(totalToa, toaShift1),
+    [totalToa, toaShift1],
+  );
+
+  // Backward-compatible string distance (e.g. "45.0")
   const kmDistanceS1 = useMemo(() => {
-    const awal = parseIndonesianNumber(kmAwal1);
-    const akhir = parseIndonesianNumber(kmAkhir1);
-    if (!isNaN(awal) && !isNaN(akhir) && akhir >= awal) {
-      return (akhir - awal).toFixed(1);
+    if (kmLiveS1.diff !== null && kmLiveS1.status !== "negative") {
+      return kmLiveS1.diff.toFixed(1);
     }
     return null;
-  }, [kmAwal1, kmAkhir1]);
+  }, [kmLiveS1]);
 
   const kmDistanceS2 = useMemo(() => {
-    const awal = parseIndonesianNumber(kmAwal2);
-    const akhir = parseIndonesianNumber(kmAkhir2);
-    if (!isNaN(awal) && !isNaN(akhir) && akhir >= awal) {
-      return (akhir - awal).toFixed(1);
+    if (kmLiveS2.diff !== null && kmLiveS2.status !== "negative") {
+      return kmLiveS2.diff.toFixed(1);
     }
     return null;
-  }, [kmAwal2, kmAkhir2]);
+  }, [kmLiveS2]);
+
+  const handleCopyKmAkhir1ToAwal2 = () => {
+    if (kmAkhir1 && kmAkhir1.trim() !== "") {
+      setKmAwal2(kmAkhir1.trim());
+    }
+  };
 
   // Toggle Mode Satset
   const handleToggleSatset = () => {
@@ -382,6 +438,10 @@ export function useBusInputForm({
     setShowKmAkhir2InSingle,
     kmDistanceS1,
     kmDistanceS2,
+    kmLiveS1,
+    kmLiveS2,
+    toaLiveS2,
+    handleCopyKmAkhir1ToAwal2,
   };
 }
 

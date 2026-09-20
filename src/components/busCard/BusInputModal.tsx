@@ -23,6 +23,7 @@ export interface BusInputModalProps {
   onSave: (updates: Partial<BusData>) => void | Promise<void>;
   isShiftConfirmed?: boolean;
   activeShift?: 1 | 2;
+  previousDayKmAkhir2?: string;
 }
 
 export function BusInputModal({
@@ -35,6 +36,7 @@ export function BusInputModal({
   onSave,
   isShiftConfirmed,
   activeShift = 1,
+  previousDayKmAkhir2,
 }: BusInputModalProps) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -81,6 +83,7 @@ export function BusInputModal({
     onDismiss: handleDismiss,
     isOpen,
     isMounted,
+    previousDayKmAkhir2,
   });
 
   if (!isOpen) return null;
