@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   usePreviousDayOdometer,
+  clearMemoryKmCache,
   type UsePreviousDayOdometerProps,
   type UsePreviousDayOdometerReturn,
 } from "../usePreviousDayOdometer";
@@ -31,6 +32,8 @@ describe("usePreviousDayOdometer", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    clearMemoryKmCache();
+    localStorage.clear();
     latestHookResult = null;
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -171,5 +174,85 @@ describe("usePreviousDayOdometer", () => {
     // Bulan 8 (Agustus) memiliki 31 hari
     expect(core.getBusData).toHaveBeenCalledWith("sheet-august", "31");
     expect(latestHookResult?.previousDayKmMap["MYS-17001"]).toBe("124990");
+    expect(latestHookResult?.previousDayRefMap["MYS-17001"]?.dateLabel).toBe("Tgl 31/8");
+  });
+
+  it("performs smart lookback to H-2 when an active unit was OFF in H-1", async () => {
+    // Day 14 (H-1): Unit MYS-17001 ada KM, tapi MYS-17002 OFF / kosong
+    const mockDay14 = {
+      data: [
+        { rowIndex: 2, unit: "MYS-17001", kmAkhir2: "125450" },
+        { rowIndex: 3, unit: "MYS-17002", kmAkhir1: "", kmAkhir2: "" }, // OFF kemarin
+      ],
+    };
+
+    // Day 13 (H-2): Unit MYS-17002 terakhir kali dinas di sini
+    const mockDay13 = {
+      data: [
+        { rowIndex: 2, unit: "MYS-17001", kmAkhir2: "125300" },
+        { rowIndex: 3, unit: "MYS-17002", kmAkhir2: "140100" },
+      ],
+    };
+
+    vi.mocked(core.getBusData)
+      .mockResolvedValueOnce(mockDay14 as any)
+      .mockResolvedValueOnce(mockDay13 as any);
+
+    await act(async () => {
+      root.render(
+        <OdometerTestComponent
+          sheetId="sheet-1"
+          currentTabName="15"
+          activeMonth={9}
+          activeYear={2026}
+          activeUnits={["MYS-17001", "MYS-17002"]}
+        />,
+      );
+    });
+
+    // Harus fetch Day 14 (H-1) lalu Day 13 (H-2)
+    expect(core.getBusData).toHaveBeenCalledWith("sheet-1", "14");
+    expect(core.getBusData).toHaveBeenCalledWith("sheet-1", "13");
+
+    // MYS-17001 dari Kemarin (Day 14)
+    expect(latestHookResult?.previousDayKmMap["MYS-17001"]).toBe("125450");
+    expect(latestHookResult?.previousDayRefMap["MYS-17001"]?.dateLabel).toBe("Kemarin");
+
+    // MYS-17002 dari Tgl 13 (Day 13)
+    expect(latestHookResult?.previousDayKmMap["MYS-17002"]).toBe("140100");
+    expect(latestHookResult?.previousDayRefMap["MYS-17002"]?.dateLabel).toBe("Tgl 13");
+  });
+
+  it("falls back to local storage registry if unit is not found in sheets lookback", async () => {
+    localStorage.setItem(
+      "pdo_last_known_odometers",
+      JSON.stringify({
+        "MYS-17003": { km: "119800", dateLabel: "Tgl 10", timestamp: Date.now() },
+      }),
+    );
+
+    const mockDay14 = {
+      data: [
+        { rowIndex: 2, unit: "MYS-17001", kmAkhir2: "125450" },
+      ],
+    };
+
+    vi.mocked(core.getBusData).mockResolvedValue(mockDay14 as any);
+
+    await act(async () => {
+      root.render(
+        <OdometerTestComponent
+          sheetId="sheet-1"
+          currentTabName="15"
+          activeMonth={9}
+          activeYear={2026}
+          activeUnits={["MYS-17001", "MYS-17003"]}
+          maxLookbackDays={2}
+        />,
+      );
+    });
+
+    expect(latestHookResult?.previousDayKmMap["MYS-17003"]).toBe("119800");
+    expect(latestHookResult?.previousDayRefMap["MYS-17003"]?.dateLabel).toBe("Tgl 10");
   });
 });

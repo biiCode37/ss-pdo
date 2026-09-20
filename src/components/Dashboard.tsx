@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { UserManagementSkeleton } from "@/components/Skeletons";
 import { AllRouteMonitoringPage } from "@/components/AllRouteMonitoringPage";
@@ -141,12 +141,18 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   });
 
   // 5. Previous Day Odometer Prefill Hook
-  const { previousDayKmMap } = usePreviousDayOdometer({
+  const activeUnits = useMemo(
+    () => busData?.map((b) => b.unit),
+    [busData],
+  );
+
+  const { previousDayKmMap, previousDayRefMap } = usePreviousDayOdometer({
     sheetId: currentSheetId,
     currentTabName,
     activeMonth,
     activeYear,
     routeCode: activeRouteCode,
+    activeUnits,
   });
 
   // 5. Sync, Reauthentication, & Sheet Action Handlers
@@ -302,6 +308,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           onSelectUnit={handleSelectUnit}
           missingColumns={missingColumns}
           previousDayKmMap={previousDayKmMap}
+          previousDayRefMap={previousDayRefMap}
         />
       )}
 

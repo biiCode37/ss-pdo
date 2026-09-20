@@ -25,6 +25,7 @@ export interface BusInputModalProps {
   isShiftConfirmed?: boolean;
   activeShift?: 1 | 2;
   previousDayKmAkhir2?: string;
+  previousDayDateLabel?: string;
 }
 
 export function BusInputModal({
@@ -38,6 +39,7 @@ export function BusInputModal({
   isShiftConfirmed,
   activeShift = 1,
   previousDayKmAkhir2,
+  previousDayDateLabel,
 }: BusInputModalProps) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -86,6 +88,7 @@ export function BusInputModal({
     isOpen,
     isMounted,
     previousDayKmAkhir2,
+    previousDayDateLabel,
   });
 
   if (!isOpen) return null;

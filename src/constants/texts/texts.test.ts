@@ -104,7 +104,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_FULL_FORM).toBe('Semua Kolom');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_SINGLE_FOCUS).toBe('Mode Fokus');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL(1000)).toContain('1000');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL_DYNAMIC(1000, 'Tgl 18')).toBe('Acuan KM (Tgl 18): 1000');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.PREFILL_FROM_YESTERDAY(125430)).toContain('125430');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.PREFILL_DYNAMIC(125430, 'Tgl 18')).toBe('Tgl 18: 125430');
     expect(TEXT_ALERTS.BULK_TRIP.VALIDATION_POSITIVE).toBe('Nilai trip harus berupa angka positif!');
   });
 

@@ -6,6 +6,7 @@ import { getSatsetMode } from "@/utils/modals/busInputModal";
 import { showSuccessToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import type { SyncItem } from "@/hooks/useOfflineSync";
+import type { OdometerRefInfo } from "@/hooks/usePreviousDayOdometer";
 
 import { isUnitAllowedForInput, isBusFilled } from "./busListUtils";
 import { useBulkOperations } from "./useBulkOperations";
@@ -33,6 +34,7 @@ export interface BusListProps {
   activeShift?: 1 | 2;
   onOpenFleetStatus?: () => void;
   previousDayKmMap?: Record<string, string>;
+  previousDayRefMap?: Record<string, OdometerRefInfo>;
 }
 
 function BusListComponent({
@@ -50,6 +52,7 @@ function BusListComponent({
   activeShift = 1,
   onOpenFleetStatus,
   previousDayKmMap,
+  previousDayRefMap,
 }: BusListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
@@ -193,10 +196,17 @@ function BusListComponent({
         <div className="bus-list">
           {filteredData.length > 0 ? (
             filteredData.map((bus) => {
+              const normUnit = bus.unit?.trim().toUpperCase();
+              const prevRef =
+                previousDayRefMap?.[normUnit] ||
+                previousDayRefMap?.[bus.unit?.trim()];
               const prevKm =
-                previousDayKmMap?.[bus.unit?.trim().toUpperCase()] ||
+                prevRef?.km ||
+                previousDayKmMap?.[normUnit] ||
                 previousDayKmMap?.[bus.unit?.trim()] ||
                 "";
+              const prevDateLabel = prevRef?.dateLabel || "Kemarin";
+
               return (
                 <BusCard
                   key={bus.rowIndex}
@@ -223,6 +233,7 @@ function BusListComponent({
                   activeShift={activeShift}
                   onOpenFleetStatus={onOpenFleetStatus}
                   previousDayKmAkhir2={prevKm}
+                  previousDayDateLabel={prevDateLabel}
                 />
               );
             })

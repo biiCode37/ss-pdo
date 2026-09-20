@@ -31,6 +31,7 @@ export interface UseBusInputFormProps {
   isOpen: boolean;
   isMounted: boolean;
   previousDayKmAkhir2?: string;
+  previousDayDateLabel?: string;
 }
 
 export function useBusInputForm({
@@ -43,6 +44,7 @@ export function useBusInputForm({
   isOpen,
   isMounted,
   previousDayKmAkhir2,
+  previousDayDateLabel,
 }: UseBusInputFormProps) {
   // Evaluasi mode Single-Column Focus
   const isSingleColumnEligible = Boolean(
@@ -538,6 +540,7 @@ export function useBusInputForm({
     handleCopyKmAkhir1ToAwal2,
     bus,
     previousDayKmAkhir2,
+    previousDayDateLabel: previousDayDateLabel || "Kemarin",
   };
 }
 

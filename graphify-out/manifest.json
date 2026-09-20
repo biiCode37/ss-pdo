@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1789872528.211349,
-    "ast_hash": "0b4a70855ecf6622f295cd6bdeaed317",
+    "mtime": 1789875295.9510775,
+    "ast_hash": "ade37cc3dbb6d8690da6df657623c52f",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -1395,8 +1395,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1789872587.4411073,
-    "ast_hash": "8a382f56764b4ec7b33b269f0be1d2d7",
+    "mtime": 1789874855.9256961,
+    "ast_hash": "41a1a50b1714bb30256d64ab4702e26c",
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789872592.4806259,
-    "ast_hash": "40ad299b68b8e27d4e1b226e2f988ff3",
+    "mtime": 1789874872.5809386,
+    "ast_hash": "83880273dac823705b7263635722d586",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1835,8 +1835,8 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardContentTabs.tsx": {
-    "mtime": 1789872497.869579,
-    "ast_hash": "d897790345c5537bfef4c2a35f6cc8cb",
+    "mtime": 1789875172.7019625,
+    "ast_hash": "a04cfdbfd46b95f1b4bdaaf7b6b2e493",
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardHeader.tsx": {
@@ -2280,8 +2280,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/types.ts": {
-    "mtime": 1789872452.04912,
-    "ast_hash": "49f57c7ce61b7dfe6aff36356292c896",
+    "mtime": 1789875074.0396833,
+    "ast_hash": "95db1e8df5ec0e6653b36dfb9354fb3d",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.ts": {
@@ -2610,8 +2610,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.tsx": {
-    "mtime": 1789872462.358238,
-    "ast_hash": "b4d53d49262f93f157a5cadbe1d715f6",
+    "mtime": 1789875100.5666475,
+    "ast_hash": "97bb805ea8bd15db1f2823a0ddb08576",
     "semantic_hash": ""
   },
   "src/components/busList/BusList.test.tsx": {
@@ -2620,8 +2620,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/BusList.tsx": {
-    "mtime": 1789872477.4989254,
-    "ast_hash": "42d29fb9121e6d2fae52843e85b1444c",
+    "mtime": 1789875131.7974133,
+    "ast_hash": "a9ef5f3b2580c255e5d5226917cc2ded",
     "semantic_hash": ""
   },
   "src/components/dailyToaTrend/DailyToaTrendCard.test.tsx": {
@@ -2745,13 +2745,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.test.tsx": {
-    "mtime": 1789873804.1376395,
-    "ast_hash": "fc1221854b48286da4222a6321a0dce9",
+    "mtime": 1789875223.918648,
+    "ast_hash": "cc5251451f4285efde2639fc5fa26f53",
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.tsx": {
-    "mtime": 1789873785.6895473,
-    "ast_hash": "050572a6b04e0914cc832cf7b3858aa9",
+    "mtime": 1789875067.102985,
+    "ast_hash": "6c7b4969b03679bac440f6db4fc9bd8b",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.test.tsx": {
@@ -2845,8 +2845,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalShift1.tsx": {
-    "mtime": 1789872602.1105614,
-    "ast_hash": "a1529c19742908d78a306ac8874d15da",
+    "mtime": 1789875042.49276,
+    "ast_hash": "b1671b0906278a9deea78c2e9dc04c0e",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalShift2.tsx": {
@@ -2855,8 +2855,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalSingleFocus.tsx": {
-    "mtime": 1789687650.782531,
-    "ast_hash": "8a932ef834d8bcc30bfe92f3cbd37a14",
+    "mtime": 1789875051.6059816,
+    "ast_hash": "0ed487094d66dba25a4ee3efee2185cf",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalTabs.tsx": {
@@ -2870,8 +2870,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/useBusInputForm.ts": {
-    "mtime": 1789872976.9465709,
-    "ast_hash": "9c13876009c4d2ae2db1c7ab6e592b96",
+    "mtime": 1789875033.5565968,
+    "ast_hash": "0bface635bd4b479575d00d800022177",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_63/AUDIT_BUGS.md": {
@@ -2920,23 +2920,33 @@
     "semantic_hash": ""
   },
   "src/hooks/__tests__/usePreviousDayOdometer.test.tsx": {
-    "mtime": 1789872389.1170156,
-    "ast_hash": "12dfb1e3bb21069df4ddd16f5c25001a",
+    "mtime": 1789874981.0273635,
+    "ast_hash": "0f64b466965e95bcfeb40c687e707059",
     "semantic_hash": ""
   },
   "src/hooks/usePreviousDayOdometer.ts": {
-    "mtime": 1789872381.1923287,
-    "ast_hash": "4b09815cdbc25b3f8770c49246ef014b",
+    "mtime": 1789874970.824084,
+    "ast_hash": "c5f1da90debe3b492534bff3a5c58b08",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_64/AUDIT_BUGS.md": {
-    "mtime": 1789873109.6629314,
-    "ast_hash": "a4bb4989c7f453197112452352e3341c",
+    "mtime": 1789875351.919372,
+    "ast_hash": "063ac70fb6210cd87dc1bbfb77206bf9",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_64/REPAIR_REPORT.md": {
-    "mtime": 1789873127.322666,
-    "ast_hash": "aef57c31d087a712ab01168e90478c3f",
+    "mtime": 1789873913.2708287,
+    "ast_hash": "caa5028b788dc063509267e918607ac4",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/odometerRegistry.test.ts": {
+    "mtime": 1789874910.5219803,
+    "ast_hash": "fc0ab98c538c12b29f6d54e8c357dde5",
+    "semantic_hash": ""
+  },
+  "src/utils/modals/busInput/odometerRegistry.ts": {
+    "mtime": 1789874895.3970273,
+    "ast_hash": "ce8ad4063ff15b065aec76f04f3dc71a",
     "semantic_hash": ""
   }
 }

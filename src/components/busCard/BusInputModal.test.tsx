@@ -557,5 +557,24 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
 
     vi.useRealTimers();
   });
+
+  it("displays transparent date label in prefill reference badge when bus was OFF yesterday", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({ kmAwal1: "" })}
+          activeCategory="kmAwal1"
+          onSave={vi.fn()}
+          previousDayKmAkhir2="289514"
+          previousDayDateLabel="Tgl 18"
+        />,
+      );
+    });
+
+    // Badge acuan harus menampilkan tanggal asal: "Acuan KM (Tgl 18): 289514"
+    expect(document.body.textContent).toContain("Acuan KM (Tgl 18): 289514");
+  });
 });
 

@@ -130,23 +130,47 @@ Dokumen implementasi perbaikan komprehensif untuk antarmuka modal entri data arm
   2. Di sisi kanan, tombol mode Satset hadir dalam bentuk icon petir `Zap` bulat (`34x34px`), serasi berdampingan dengan tombol tutup bulat `X`.
   3. Area pandang vertikal formulir menjadi lebih lega sebesar ~20px, memberikan kenyamanan visual ekstra terutama saat keyboard virtual aktif.
 
+### Skenario 7: Prefill 3 Digit Tetap Hadir Ketika Armada Libur/Tidak Beroperasi Kemarin (Smart Lookback + Offline Registry)
+- **Kondisi:** Bus `KWK 222154` libur kemarin (H-1 / tanggal 19), namun beroperasi pada H-2 (tanggal 18) dengan KM Akhir S2 `289514`. Hari ini adalah tanggal 20.
+- **Alur Kerja Baru:**
+  1. Dashboard memuat rute tanggal 20. Hook `usePreviousDayOdometer` memeriksa tab tanggal 19 (H-1).
+  2. Ditemukan bahwa baris bus `KWK 222154` kosong / tidak beroperasi di tanggal 19.
+  3. Sistem secara otomatis melakukan *Smart Lookback* ke tab tanggal 18 (H-2).
+  4. Data KM Akhir S2 `289514` ditemukan di tanggal 18. Sistem menghentikan pencarian (*early termination*) dan memperbarui local registry `odometerRegistry`.
+  5. Saat petugas membuka form `KM Awal Shift 1`, kotak input langsung terisi 3 digit prefill `289` dengan kursor di sebelah kanan angka `9`.
+  6. Di bawah kotak input, muncul badge transparan: `"Acuan KM (Tgl 18): 289514"`.
+  7. Jika koneksi Google Sheets terputus total, sistem secara instan menggunakan fallback dari `odometerRegistry` di local storage perangkat.
+  8. Petugas terhindar dari keharusan mengetik ulang 6 digit odometer secara manual.
+
+---
+
+## 🔄 Perbandingan Sebelum vs Sesudah (Before vs After)
+
+| Aspek | Sebelum Perbaikan (BUG-64-11) | Sesudah Perbaikan (Hybrid Approach) |
+|---|---|---|
+| **Armada Libur di H-1** | Prefill 3 digit kosong total; kotak input kosong dan mewajibkan ketik 6 digit. | Cerdas menelusuri mundur 3–5 hari ke belakang hingga menemukan rekam KM terakhir. |
+| **Koneksi Jaringan Offline** | Prefill gagal memuat jika Google Sheets tidak dapat dijangkau. | Local Storage Odometer Registry menyimpan riwayat KM terakhir (0ms latency, 0 API quota). |
+| **Efisiensi Kuota Google API** | - | *Early termination*: Berhenti seketika saat seluruh armada telah terpenuhi; meminimalkan panggilan fetch tab. |
+| **Transparansi Sumber Tanggal** | Teks statis `"Acuan KM Kemarin"`, membingungkan jika data berasal dari hari lain. | Tanggal dinamis: `"Acuan KM Kemarin: ..."` vs `"Acuan KM (Tgl 18): ..."` via kamus sentral `text_alerts.ts`. |
+
 ---
 
 ## 🛡️ Status Verifikasi & Quality Gates
 
 1. **Unit Test Suite:**
    - Perintah: `pnpm vitest run src/`
-   - Hasil: **57 test files passed, 425 tests passed (100% lulus)**
-     - Termasuk `BusInputModal.test.tsx` (17 passed, pengujian header bersih & satset icon-only terverifikasi)
-     - Termasuk `usePreviousDayOdometer.test.tsx` (3 passed)
-     - Termasuk `busModalOdometer.test.ts` (10 passed)
-     - Termasuk `useVisualViewport.test.tsx` (2 passed)
-     - Termasuk `texts.test.ts` (15 passed)
+   - Hasil: **58 test files passed, 432 tests passed (100% lulus)**
+     - `usePreviousDayOdometer.test.tsx` (5 passed, lookback H-2 & offline registry fallback teruji)
+     - `odometerRegistry.test.ts` (4 passed, penyimpanan & pembacaan registry teruji)
+     - `BusInputModal.test.tsx` (18 passed, render badge tanggal acuan dinamis teruji)
+     - `texts.test.ts` (15 passed, validasi teks kamus sentral teruji)
+     - `busModalOdometer.test.ts` (10 passed)
 2. **Typecheck & Production Build:**
    - Perintah: `pnpm run build` (`tsc -b && vite build`)
-   - Hasil: **Lulus 0 error (Vite build 1.04s, PWA bundle terverifikasi)**
+   - Hasil: **Lulus 0 error (TypeScript strict mode & Vite build 3.45s, PWA bundle valid)**
 3. **Graf Pengetahuan (Knowledge Graph):**
    - Perintah: `graphify update .`
-   - Hasil: **Rebuilt: 3894 nodes, 5054 edges, 343 communities terbarukan**
+   - Hasil: **Rebuilt: 3907 nodes, 5074 edges, 346 communities terbarukan**
+
 
 

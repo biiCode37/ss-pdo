@@ -198,7 +198,10 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   fontWeight: 600,
                 }}
               >
-                {TEXT_ALERTS.BUS_INPUT_MODAL.PREFILL_FROM_YESTERDAY(form.previousDayKmAkhir2)}
+                {TEXT_ALERTS.BUS_INPUT_MODAL.PREFILL_DYNAMIC(
+                  form.previousDayKmAkhir2,
+                  form.previousDayDateLabel || "Kemarin",
+                )}
               </span>
             )}
             <button

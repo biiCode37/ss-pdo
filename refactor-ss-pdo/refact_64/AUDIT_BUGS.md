@@ -109,5 +109,18 @@ Dokumentasi audit UX, ergonomi operasional, dan integritas data pada komponen an
   2. Menghilangkan elemen text helper/subtitle di bawah judul armada.
   3. Mengubah tombol mode Satset menjadi icon button bulat bersih (`34x34px`) yang hanya menampilkan icon `Zap` dengan warna indikator aktif emas, serasi dengan tombol dismiss `X`.
 
+---
+
+### BUG-64-11: Kegagalan Prefill Odometer KM Awal S1 pada Armada yang Libur/OFF/Tidak Beroperasi di H-1
+- **Lokasi Kode:** `src/hooks/usePreviousDayOdometer.ts`, `src/components/busCard/modal/useBusInputForm.ts`, `src/components/busCard/modal/BusInputModalShift1.tsx`, `src/components/busCard/modal/BusInputModalSingleFocus.tsx`, `src/constants/texts/text_alerts.ts`
+- **Tingkat Keparahan:** HIGH (Integritas Data Operasional & Efisiensi Input Armada)
+- **Deskripsi:** Logika prefill 3 digit KM Awal Shift 1 sebelumnya hanya memeriksa 1 hari persis ke belakang (H-1). Jika suatu armada bus libur (*OFF*), perbaikan (*AP*), atau tidak beroperasi pada hari kemarin, baris data bus tersebut di tab H-1 kosong atau tidak memiliki entri KM Akhir S2/S1. Akibatnya, prefill 3 digit gagal terisi dan kotak input menjadi kosong total, mengembalikan beban pengetikan 5–6 digit secara manual kepada petugas.
+- **Dampak User:** Petugas kehilangan benefit prefill otomatis untuk armada yang baru selesai libur atau baru keluar dari bengkel. Petugas harus mencari catatan fisik odometer atau mengetik seluruh angka secara manual, yang meningkatkan risiko kesalahan input (*typo*).
+- **Mitigasi:** Mengimplementasikan **Pendekatan Hibrida (Hybrid Approach)**:
+  1. **Smart Bounded Lookback (Google Sheets SSOT - Prioritas 1):** `usePreviousDayOdometer` menelusuri mundur secara bertahap hingga 3–5 hari ke belakang (`maxLookbackDays = 5`). Menjalankan *early termination* seketika saat seluruh armada aktif telah terisi, dan hanya mengambil tab tambahan jika masih ada bus dengan KM kosong.
+  2. **Local Storage Odometer Registry (Offline Fallback - Prioritas 2):** Modul baru `odometerRegistry.ts` mencatat riwayat pembacaan KM terakhir per armada secara lokal di perangkat pengguna. Berfungsi sebagai fallback instan (0ms latency, 0 quota Google API) ketika armada libur panjang atau koneksi internet tidak stabil.
+  3. **Label Tanggal Transparan:** Menyajikan tanggal acuan asal pembacaan KM secara eksplisit pada badge form UI (`TEXT_ALERTS.PREFILL_DYNAMIC(dateLabel, prevKm)` dan `REF_KM_AWAL_DYNAMIC(dateLabel, prevKm)`), misalnya: `"Acuan KM (Tgl 18): 289514"` jika berasal dari H-2, atau `"Acuan KM Kemarin: 289514"` jika berasal dari H-1.
+
+
 
 

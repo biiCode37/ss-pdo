@@ -254,7 +254,10 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
               </label>
               {busKmAwal1 && (
                 <span style={{ fontSize: "0.75rem", color: "#38bdf8", background: "rgba(56, 189, 248, 0.12)", padding: "2px 8px", borderRadius: "6px" }}>
-                  {TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL(busKmAwal1)}
+                  {TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL_DYNAMIC(
+                    busKmAwal1,
+                    form.previousDayDateLabel || "Kemarin",
+                  )}
                 </span>
               )}
             </div>

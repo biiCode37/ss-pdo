@@ -43,6 +43,7 @@ interface DashboardContentTabsProps {
   onSelectUnit: (unit: string) => void;
   missingColumns: string[];
   previousDayKmMap?: Record<string, string>;
+  previousDayRefMap?: Record<string, import("@/hooks/usePreviousDayOdometer").OdometerRefInfo>;
 }
 
 export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
@@ -72,6 +73,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
   onSelectUnit,
   missingColumns,
   previousDayKmMap,
+  previousDayRefMap,
 }) => {
   return (
     <SwipeableContainer
@@ -130,6 +132,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
           activeShift={activeShift}
           onOpenFleetStatus={onOpenFleetStatus}
           previousDayKmMap={previousDayKmMap}
+          previousDayRefMap={previousDayRefMap}
         />
       </div>
 
