@@ -53,6 +53,11 @@ Dokumen implementasi perbaikan komprehensif untuk antarmuka modal entri data arm
    - Menyematkan auto-positioning kursor ke ujung kanan saat field KM menerima pembaruan prefill asinkron atau saat di-fokuskan kembali oleh petugas.
    - Hasil: Petugas tidak perlu lagi melakukan tap manual ke sisi kanan field; angka yang diketik langsung menyambung setelah 3 digit prefill tanpa risiko tertimpa.
 
+9. **Pembersihan & Kompaksi Visual Header Modal (`BusInputModalHeader.tsx`):**
+   - Menghilangkan kata redundant `"Unit "` pada elemen judul `<h2>`, langsung menyajikan kode/nomor body bus (misal: `"KWK 222154"`).
+   - Menghapus text helper / subtitle di bawah nama bus (`"Input Data Operasional Armada • Input Shift..."`) untuk membebaskan ruang vertikal vital pada layar smartphone.
+   - Mengubah tombol toggle mode Satset menjadi icon button bulat (`34x34px`) dengan icon `Zap` saja (tanpa label teks `"Satset"`), simetris dengan tombol dismiss `X`.
+
 ---
 
 ## 🔄 Perbandingan Before vs After
@@ -60,6 +65,8 @@ Dokumen implementasi perbaikan komprehensif untuk antarmuka modal entri data arm
 | Aspek | Sebelum Perbaikan (Before) | Sesudah Perbaikan (After) |
 |---|---|---|
 | **Alur Input Shift** | Seluruh kolom ditumpuk vertikal satu per satu; TOA dan KM Akhir terpisah jauh. | Kolom yang biasa diisi berbarengan (`[TOA S1 + KM Akhir S1]` dan `[TOTAL TOA + KM Akhir S2]`) ditata berdampingan dalam 1 paket visual. |
+| **Judul Header Modal** | Tertulis `"Unit KWK 222154"` dengan subtitle panjang di bawahnya yang memakan ruang vertikal. | Bersih & padat: hanya menampilkan nomor body armada (misal `"KWK 222154"`) tanpa kata `"Unit"` dan tanpa text helper. |
+| **Tombol Mode Satset** | Berupa pill memanjang dengan icon dan teks `"Satset"`. | Icon button bulat minimalis (`34x34px`) ber-icon `Zap` (aktif: gold, nonaktif: subtle), serasi dengan tombol `X`. |
 | **Pengisian Angka Odometer** | Kolom input KM kosong; petugas harus mengetik manual 5–6 digit angka berulang-ulang untuk setiap bus. | Otomatis ter-prefill 3 digit awal odometer (mengurangi beban input 3 digit per entri secara akurat). |
 | **Fokus pada 3 Digit Prefill** | Autofocus memblokir/menyeleksi seluruh teks (`select()`); jika langsung diketik, 3 digit prefill terhapus/tertimpa. | Autofocus menempatkan kursor di posisi paling kanan (`setSelectionRange(len, len)`); petugas langsung mengetik sisa digit tanpa takut terhapus. |
 | **Salin KM Antar Shift** | Pengawas harus menghafal atau bolak-balik melihat KM Akhir S1 untuk dimasukkan ke KM Awal S2. | Tersedia tombol instan `[Salin KM Akhir S1]` yang langsung menyalin 100% digit nilai dalam 1 kali tap. |
@@ -116,6 +123,13 @@ Dokumen implementasi perbaikan komprehensif untuk antarmuka modal entri data arm
   5. Nilai input menjadi `289514` secara mulus tanpa terhapus dan tanpa perlu melakukan tap manual ke sisi kanan kotak input.
   6. Operator menghemat waktu dan terhindar dari frustrasi salah timpa teks.
 
+### Skenario 6: Tampilan Header Bersih dan Ringkas di Semua Mode Formulir
+- **Kondisi:** Petugas berpindah antara mode Single Focus (fokus 1 kolom) dan mode Semua Kolom.
+- **Alur Kerja Baru:**
+  1. Modal terbuka dengan header yang ramping dan elegan: hanya icon armada dan nomor bus `"KWK 222154"` tanpa prefix kata `"Unit"` dan tanpa text helper yang berdesakan di bawahnya.
+  2. Di sisi kanan, tombol mode Satset hadir dalam bentuk icon petir `Zap` bulat (`34x34px`), serasi berdampingan dengan tombol tutup bulat `X`.
+  3. Area pandang vertikal formulir menjadi lebih lega sebesar ~20px, memberikan kenyamanan visual ekstra terutama saat keyboard virtual aktif.
+
 ---
 
 ## 🛡️ Status Verifikasi & Quality Gates
@@ -123,15 +137,16 @@ Dokumen implementasi perbaikan komprehensif untuk antarmuka modal entri data arm
 1. **Unit Test Suite:**
    - Perintah: `pnpm vitest run src/`
    - Hasil: **57 test files passed, 425 tests passed (100% lulus)**
-     - Termasuk `BusInputModal.test.tsx` (17 passed, pengujian kursor di akhir prefill terverifikasi)
+     - Termasuk `BusInputModal.test.tsx` (17 passed, pengujian header bersih & satset icon-only terverifikasi)
      - Termasuk `usePreviousDayOdometer.test.tsx` (3 passed)
      - Termasuk `busModalOdometer.test.ts` (10 passed)
      - Termasuk `useVisualViewport.test.tsx` (2 passed)
      - Termasuk `texts.test.ts` (15 passed)
 2. **Typecheck & Production Build:**
    - Perintah: `pnpm run build` (`tsc -b && vite build`)
-   - Hasil: **Lulus 0 error (Vite build 1.39s, PWA bundle terverifikasi)**
+   - Hasil: **Lulus 0 error (Vite build 1.04s, PWA bundle terverifikasi)**
 3. **Graf Pengetahuan (Knowledge Graph):**
    - Perintah: `graphify update .`
-   - Hasil: **Rebuilt: 3892 nodes, 5052 edges, 342 communities terbarukan**
+   - Hasil: **Rebuilt: 3894 nodes, 5054 edges, 343 communities terbarukan**
+
 

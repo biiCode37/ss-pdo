@@ -80,8 +80,9 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
 
     const modal = document.body.querySelector(".bus-input-modal-overlay");
     expect(modal).not.toBeNull();
-    expect(document.body.textContent).toContain("Unit JAK.15-99");
-    expect(document.body.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE);
+    expect(document.body.textContent).toContain("JAK.15-99");
+    expect(document.body.textContent).not.toContain("Unit JAK.15-99");
+    expect(document.body.textContent).not.toContain(TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE);
   });
 
   it("navigates between Shift 1, Shift 2, Ritase, and Ket tabs correctly", async () => {
@@ -213,10 +214,8 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       );
     });
 
-    const satsetBtn = Array.from(document.body.querySelectorAll("button")).find((b) =>
-      b.textContent?.includes("Satset"),
-    );
-    expect(satsetBtn).toBeDefined();
+    const satsetBtn = document.body.querySelector<HTMLButtonElement>("#btn-toggle-satset");
+    expect(satsetBtn).not.toBeNull();
 
     await act(async () => {
       satsetBtn?.click();

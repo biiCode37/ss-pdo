@@ -2579,8 +2579,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_completionstatuscard",
-      "community": 267,
-      "community_name": "mutations.ts",
+      "community": 307,
+      "community_name": "utils/analytics.ts",
       "norm_label": "completionstatuscard.tsx"
     },
     {
@@ -2601,8 +2601,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_completionstatuscard_completionstatuscardcomponent",
-      "community": 267,
-      "community_name": "mutations.ts",
+      "community": 307,
+      "community_name": "utils/analytics.ts",
       "norm_label": "completionstatuscardcomponent()"
     },
     {
@@ -2612,8 +2612,8 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "src_components_completionstatuscard_completionstatuscard",
-      "community": 267,
-      "community_name": "mutations.ts",
+      "community": 307,
+      "community_name": "utils/analytics.ts",
       "norm_label": "completionstatuscard"
     },
     {
@@ -2678,8 +2678,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_formattednotetext",
-      "community": 267,
-      "community_name": "mutations.ts",
+      "community": 307,
+      "community_name": "utils/analytics.ts",
       "norm_label": "formattednotetext.tsx"
     },
     {
@@ -2689,8 +2689,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_formattednotetext_formattednotetext",
-      "community": 267,
-      "community_name": "mutations.ts",
+      "community": 307,
+      "community_name": "utils/analytics.ts",
       "norm_label": "formattednotetext()"
     },
     {
@@ -2744,8 +2744,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_loginscreen",
-      "community": 277,
-      "community_name": "App.tsx",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "components/loginscreen.tsx"
     },
     {
@@ -2766,8 +2766,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_queuemodal",
-      "community": 339,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "components/queuemodal.tsx"
     },
     {
@@ -2854,8 +2854,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_skeletons",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "skeletons.tsx"
     },
     {
@@ -2865,8 +2865,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonboxprops",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "skeletonboxprops"
     },
     {
@@ -2876,8 +2876,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_skeletons_skeletonbox",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "skeletonbox()"
     },
     {
@@ -2887,8 +2887,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_components_skeletons_buscardskeleton",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "buscardskeleton()"
     },
     {
@@ -2898,8 +2898,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_components_skeletons_dailytoatrendskeleton",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "dailytoatrendskeleton()"
     },
     {
@@ -2909,8 +2909,8 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "src_components_skeletons_unitcardskeleton",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "unitcardskeleton()"
     },
     {
@@ -2920,8 +2920,8 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "src_components_skeletons_auditlogskeleton",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "auditlogskeleton()"
     },
     {
@@ -2931,8 +2931,8 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "src_components_skeletons_usermanagementskeleton",
-      "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community": 274,
+      "community_name": "dailyToaTrend/DailyToaTrendCard.tsx",
       "norm_label": "usermanagementskeleton()"
     },
     {
@@ -2976,7 +2976,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitcard.tsx"
     },
     {
@@ -2987,7 +2987,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_props",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "props"
     },
     {
@@ -2998,7 +2998,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_renderstatusbadge",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "renderstatusbadge()"
     },
     {
@@ -3009,7 +3009,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_unitcardcomponent",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitcardcomponent()"
     },
     {
@@ -3020,7 +3020,7 @@
       "_origin": "ast",
       "id": "src_components_unitcard_unitcard",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitcard"
     },
     {
@@ -3030,8 +3030,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_unitdetailmodal",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "unitdetailmodal.tsx"
     },
     {
@@ -3041,8 +3041,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_unitdetailmodal_props",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "props"
     },
     {
@@ -3052,8 +3052,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_components_unitdetailmodal_unitdetailmodal",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "unitdetailmodal()"
     },
     {
@@ -3064,7 +3064,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitsummarydashboard.tsx"
     },
     {
@@ -3075,7 +3075,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_props",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "props"
     },
     {
@@ -3086,7 +3086,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_unitsummarydashboardcomponent",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitsummarydashboardcomponent()"
     },
     {
@@ -3097,7 +3097,7 @@
       "_origin": "ast",
       "id": "src_components_unitsummarydashboard_unitsummarydashboard",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitsummarydashboard"
     },
     {
@@ -3118,8 +3118,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_userprofileheader",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "components/userprofileheader.tsx"
     },
     {
@@ -4823,8 +4823,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_dashboard_queuemodal",
-      "community": 339,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "dashboard/queuemodal.tsx"
     },
     {
@@ -4834,8 +4834,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_dashboard_queuemodal_queuemodalprops",
-      "community": 339,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "queuemodalprops"
     },
     {
@@ -4845,8 +4845,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_dashboard_queuemodal_queuemodal",
-      "community": 339,
-      "community_name": "dashboard/QueueModal.tsx",
+      "community": 338,
+      "community_name": "react",
       "norm_label": "queuemodal()"
     },
     {
@@ -5274,8 +5274,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_test",
-      "community": 338,
-      "community_name": "react",
+      "community": 341,
+      "community_name": "ShiftConfirmationAlertBar.tsx",
       "norm_label": "shiftconfirmationalertbar.test.tsx"
     },
     {
@@ -5285,8 +5285,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar",
-      "community": 338,
-      "community_name": "react",
+      "community": 341,
+      "community_name": "ShiftConfirmationAlertBar.tsx",
       "norm_label": "shiftconfirmationalertbar.tsx"
     },
     {
@@ -5296,8 +5296,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbarprops",
-      "community": 338,
-      "community_name": "react",
+      "community": 341,
+      "community_name": "ShiftConfirmationAlertBar.tsx",
       "norm_label": "shiftconfirmationalertbarprops"
     },
     {
@@ -5307,8 +5307,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbarcomponent",
-      "community": 338,
-      "community_name": "react",
+      "community": 341,
+      "community_name": "ShiftConfirmationAlertBar.tsx",
       "norm_label": "shiftconfirmationalertbarcomponent()"
     },
     {
@@ -5318,8 +5318,8 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "src_components_fleetstatus_shiftconfirmationalertbar_shiftconfirmationalertbar",
-      "community": 338,
-      "community_name": "react",
+      "community": 341,
+      "community_name": "ShiftConfirmationAlertBar.tsx",
       "norm_label": "shiftconfirmationalertbar"
     },
     {
@@ -5714,8 +5714,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "loginscreen.test.tsx"
     },
     {
@@ -5725,8 +5725,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mocksignin",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "mocksignin"
     },
     {
@@ -5736,8 +5736,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mocksignout",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "mocksignout"
     },
     {
@@ -5747,8 +5747,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mockverifyuserprofile",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "mockverifyuserprofile"
     },
     {
@@ -5758,8 +5758,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_test_mockupsertuserprofile",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "mockupsertuserprofile"
     },
     {
@@ -5780,8 +5780,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_loginscreenprops",
-      "community": 277,
-      "community_name": "App.tsx",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "loginscreenprops"
     },
     {
@@ -5791,8 +5791,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_components_login_loginscreen_loginscreen",
-      "community": 277,
-      "community_name": "App.tsx",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "loginscreen()"
     },
     {
@@ -6605,8 +6605,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_test",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "userprofileheader.test.tsx"
     },
     {
@@ -6616,8 +6616,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "profilemenu/userprofileheader.tsx"
     },
     {
@@ -6627,8 +6627,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_userprofileheaderprops",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "userprofileheaderprops"
     },
     {
@@ -6638,8 +6638,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_role_display_config",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "role_display_config"
     },
     {
@@ -6649,8 +6649,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_userprofileheadercomponent",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "userprofileheadercomponent()"
     },
     {
@@ -6660,8 +6660,8 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_components_profilemenu_userprofileheader_userprofileheader",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "userprofileheader"
     },
     {
@@ -6770,8 +6770,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "addroutemodal.tsx"
     },
     {
@@ -6781,8 +6781,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal_addroutemodalprops",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "addroutemodalprops"
     },
     {
@@ -6792,8 +6792,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_components_routeselector_addroutemodal_addroutemodal",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 282,
+      "community_name": "routeSelector/RouteSelectorCard.tsx",
       "norm_label": "addroutemodal()"
     },
     {
@@ -6847,8 +6847,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_routeselector_routeselectorsheet",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "routeselectorsheet.tsx"
     },
     {
@@ -6858,8 +6858,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_routeselector_routeselectorsheet_routeselectorsheetprops",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "routeselectorsheetprops"
     },
     {
@@ -6869,8 +6869,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_components_routeselector_routeselectorsheet_routeselectorsheet",
-      "community": 254,
-      "community_name": "historyNavigation.ts",
+      "community": 282,
+      "community_name": "routeSelector/RouteSelectorCard.tsx",
       "norm_label": "routeselectorsheet()"
     },
     {
@@ -6957,8 +6957,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_routeselector_index",
-      "community": 282,
-      "community_name": "routeSelector/RouteSelectorCard.tsx",
+      "community": 269,
+      "community_name": "texts/index.ts",
       "norm_label": "routeselector/index.ts"
     },
     {
@@ -7782,8 +7782,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_texts_text_auth",
-      "community": 269,
-      "community_name": "texts/index.ts",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "text_auth.ts"
     },
     {
@@ -7936,8 +7936,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_texts_text_unit_detail",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "text_unit_detail.ts"
     },
     {
@@ -7947,8 +7947,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_constants_texts_text_unit_detail_text_unit_detail",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "text_unit_detail"
     },
     {
@@ -8145,8 +8145,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_syncitem",
-      "community": 276,
-      "community_name": "useOfflineSync.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "syncitem"
     },
     {
@@ -8189,8 +8189,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_hooks_useofflinesync_useofflinesyncoptions",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "useofflinesyncoptions"
     },
     {
@@ -8365,8 +8365,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_services_allroutemonitoringservice_regionalrouteitem",
-      "community": 315,
-      "community_name": "waReportGenerator.ts",
+      "community": 263,
+      "community_name": "allRouteMonitoringService.ts",
       "norm_label": "regionalrouteitem"
     },
     {
@@ -8552,8 +8552,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "googlesheets.ts"
     },
     {
@@ -8564,7 +8564,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "googlesheets/analytics.ts"
     },
     {
@@ -8575,7 +8575,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_monthlytoatrendcache",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "monthlytoatrendcache"
     },
     {
@@ -8586,7 +8586,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_clearmonthlytoatrendcache",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "clearmonthlytoatrendcache()"
     },
     {
@@ -8597,7 +8597,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_getmonthlytoatrend",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "getmonthlytoatrend()"
     },
     {
@@ -8608,7 +8608,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_getaccumulatedbusdata",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "getaccumulatedbusdata()"
     },
     {
@@ -8619,7 +8619,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_analytics_inspectspreadsheetheader",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "inspectspreadsheetheader()"
     },
     {
@@ -8728,8 +8728,8 @@
       "source_location": "L229",
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_signin",
-      "community": 291,
-      "community_name": "auth.ts",
+      "community": 242,
+      "community_name": "login/LoginScreen.tsx",
       "norm_label": "signin()"
     },
     {
@@ -8739,8 +8739,8 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "src_services_googlesheets_authgis_signout",
-      "community": 277,
-      "community_name": "App.tsx",
+      "community": 291,
+      "community_name": "auth.ts",
       "norm_label": "signout()"
     },
     {
@@ -8817,7 +8817,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_authsession_withauthretry",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "withauthretry()"
     },
     {
@@ -8849,7 +8849,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_core",
-      "community": 256,
+      "community": 287,
       "community_name": "core.ts",
       "norm_label": "core.ts"
     },
@@ -8860,7 +8860,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_normalizestring",
-      "community": 256,
+      "community": 287,
       "community_name": "core.ts",
       "norm_label": "normalizestring()"
     },
@@ -8871,7 +8871,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_header_keywords",
-      "community": 256,
+      "community": 287,
       "community_name": "core.ts",
       "norm_label": "header_keywords"
     },
@@ -8883,7 +8883,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_core_findcolumnindex",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "findcolumnindex()"
     },
     {
@@ -8894,7 +8894,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_core_detectheaderrowandbuildcomposite",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "detectheaderrowandbuildcomposite()"
     },
     {
@@ -8915,7 +8915,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_tabgidcache",
-      "community": 256,
+      "community": 287,
       "community_name": "core.ts",
       "norm_label": "tabgidcache"
     },
@@ -8926,7 +8926,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "src_services_googlesheets_core_cleartabgidcache",
-      "community": 256,
+      "community": 287,
       "community_name": "core.ts",
       "norm_label": "cleartabgidcache()"
     },
@@ -8949,7 +8949,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_core_extractsheetid",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "extractsheetid()"
     },
     {
@@ -8960,7 +8960,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_core_getbusdata",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "getbusdata()"
     },
     {
@@ -8981,8 +8981,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_test",
-      "community": 263,
-      "community_name": "allRouteMonitoringService.ts",
+      "community": 339,
+      "community_name": "globalReportReader.ts",
       "norm_label": "globalreportreader.test.ts"
     },
     {
@@ -8992,8 +8992,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader",
-      "community": 263,
-      "community_name": "allRouteMonitoringService.ts",
+      "community": 339,
+      "community_name": "globalReportReader.ts",
       "norm_label": "globalreportreader.ts"
     },
     {
@@ -9003,8 +9003,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_globalroutedailymetrics",
-      "community": 263,
-      "community_name": "allRouteMonitoringService.ts",
+      "community": 339,
+      "community_name": "globalReportReader.ts",
       "norm_label": "globalroutedailymetrics"
     },
     {
@@ -9014,8 +9014,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_normalizeroutecode",
-      "community": 263,
-      "community_name": "allRouteMonitoringService.ts",
+      "community": 339,
+      "community_name": "globalReportReader.ts",
       "norm_label": "normalizeroutecode()"
     },
     {
@@ -9025,8 +9025,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_parseglobalsheetdateblock",
-      "community": 263,
-      "community_name": "allRouteMonitoringService.ts",
+      "community": 339,
+      "community_name": "globalReportReader.ts",
       "norm_label": "parseglobalsheetdateblock()"
     },
     {
@@ -9036,8 +9036,8 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "src_services_googlesheets_globalreportreader_fetchglobalreportdailymetrics",
-      "community": 263,
-      "community_name": "allRouteMonitoringService.ts",
+      "community": 339,
+      "community_name": "globalReportReader.ts",
       "norm_label": "fetchglobalreportdailymetrics()"
     },
     {
@@ -9080,8 +9080,8 @@
       "source_location": "L154",
       "_origin": "ast",
       "id": "src_services_googlesheets_mutations_updatebusdata",
-      "community": 276,
-      "community_name": "useOfflineSync.ts",
+      "community": 267,
+      "community_name": "mutations.ts",
       "norm_label": "updatebusdata()"
     },
     {
@@ -9103,7 +9103,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_test",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "transport.test.ts"
     },
     {
@@ -9114,7 +9114,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_test_mockspreadsheets",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "mockspreadsheets"
     },
     {
@@ -9125,7 +9125,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_test_mockgapi",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "mockgapi"
     },
     {
@@ -9136,7 +9136,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "transport.ts"
     },
     {
@@ -9147,7 +9147,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_getgapisheets",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "getgapisheets()"
     },
     {
@@ -9158,7 +9158,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_transportmode",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "transportmode"
     },
     {
@@ -9169,7 +9169,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_cachedproxystatus",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "cachedproxystatus"
     },
     {
@@ -9180,7 +9180,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_settransportmode",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "settransportmode()"
     },
     {
@@ -9191,7 +9191,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_gettransportmode",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "gettransportmode()"
     },
     {
@@ -9202,7 +9202,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_checkproxyhealth",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "checkproxyhealth()"
     },
     {
@@ -9213,7 +9213,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_isusingserviceaccount",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "isusingserviceaccount()"
     },
     {
@@ -9224,7 +9224,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_fetchspreadsheetmeta",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "fetchspreadsheetmeta()"
     },
     {
@@ -9235,7 +9235,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_fetchsheetvalues",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "fetchsheetvalues()"
     },
     {
@@ -9246,7 +9246,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_fetchsheetvaluesbatch",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "fetchsheetvaluesbatch()"
     },
     {
@@ -9257,7 +9257,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_updatesheetvaluesbatch",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "updatesheetvaluesbatch()"
     },
     {
@@ -9268,7 +9268,7 @@
       "_origin": "ast",
       "id": "src_services_googlesheets_transport_batchupdatespreadsheet",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "batchupdatespreadsheet()"
     },
     {
@@ -9289,8 +9289,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_headermap",
-      "community": 276,
-      "community_name": "useOfflineSync.ts",
+      "community": 287,
+      "community_name": "core.ts",
       "norm_label": "headermap"
     },
     {
@@ -9300,8 +9300,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_services_googlesheets_types_busdata",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "busdata"
     },
     {
@@ -9345,7 +9345,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_test",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "routeservice.test.ts"
     },
     {
@@ -9356,7 +9356,7 @@
       "_origin": "ast",
       "id": "src_services_routeservice_test_localstoragemock",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "localstoragemock"
     },
     {
@@ -9378,7 +9378,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "audit.ts"
     },
     {
@@ -9389,7 +9389,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_readpendingactivitylogs",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "readpendingactivitylogs()"
     },
     {
@@ -9400,7 +9400,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_writependingactivitylogs",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "writependingactivitylogs()"
     },
     {
@@ -9411,7 +9411,7 @@
       "_origin": "ast",
       "id": "src_services_routes_audit_logactivity",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "logactivity()"
     },
     {
@@ -9433,7 +9433,7 @@
       "_origin": "ast",
       "id": "src_services_routes_index",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "routes/index.ts"
     },
     {
@@ -9443,7 +9443,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_routes_routes",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "routes.ts"
     },
@@ -9454,7 +9454,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_services_routes_routes_fetchrouteswithsheets",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "fetchrouteswithsheets()"
     },
@@ -9465,7 +9465,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_services_routes_routes_createroutewithsheet",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "createroutewithsheet()"
     },
@@ -9476,7 +9476,7 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "src_services_routes_routes_deleteroutesheet",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "deleteroutesheet()"
     },
@@ -9487,8 +9487,8 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "src_services_routes_routes_upsertdailyunitsummaries",
-      "community": 328,
-      "community_name": "routes.ts",
+      "community": 287,
+      "community_name": "core.ts",
       "norm_label": "upsertdailyunitsummaries()"
     },
     {
@@ -9498,8 +9498,8 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "src_services_routes_routes_getcrossperiodaccumulation",
-      "community": 328,
-      "community_name": "routes.ts",
+      "community": 307,
+      "community_name": "utils/analytics.ts",
       "norm_label": "getcrossperiodaccumulation()"
     },
     {
@@ -9510,7 +9510,7 @@
       "_origin": "ast",
       "id": "src_services_routes_sync",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "sync.ts"
     },
     {
@@ -9521,7 +9521,7 @@
       "_origin": "ast",
       "id": "src_services_routes_sync_flushpendinglocalsync",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "flushpendinglocalsync()"
     },
     {
@@ -9531,8 +9531,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_routes_types",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "routes/types.ts"
     },
     {
@@ -9542,8 +9542,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_services_routes_types_crossperiodsummaryresult",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "crossperiodsummaryresult"
     },
     {
@@ -9554,7 +9554,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "users.ts"
     },
     {
@@ -9565,7 +9565,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_role_code_to_id",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "role_code_to_id"
     },
     {
@@ -9576,7 +9576,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_role_id_to_code",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "role_id_to_code"
     },
     {
@@ -9587,7 +9587,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_tryofflineprofilefallback",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "tryofflineprofilefallback()"
     },
     {
@@ -9609,7 +9609,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_upsertuserprofile",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "upsertuserprofile()"
     },
     {
@@ -9631,7 +9631,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_fetchalluserprofiles",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "fetchalluserprofiles()"
     },
     {
@@ -9642,7 +9642,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_fetchmasterroles",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "fetchmasterroles()"
     },
     {
@@ -9653,7 +9653,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_adduserprofile",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "adduserprofile()"
     },
     {
@@ -9664,7 +9664,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_updateuserprofilerole",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "updateuserprofilerole()"
     },
     {
@@ -9675,7 +9675,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_toggleuserprofilestatus",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "toggleuserprofilestatus()"
     },
     {
@@ -9686,7 +9686,7 @@
       "_origin": "ast",
       "id": "src_services_routes_users_revokeuserprofile",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "revokeuserprofile()"
     },
     {
@@ -9696,8 +9696,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_supabase",
-      "community": 283,
-      "community_name": "users.ts",
+      "community": 263,
+      "community_name": "allRouteMonitoringService.ts",
       "norm_label": "services/supabase.ts"
     },
     {
@@ -9708,7 +9708,7 @@
       "_origin": "ast",
       "id": "src_services_supabase_issupabaseconfigured",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "issupabaseconfigured"
     },
     {
@@ -9718,8 +9718,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_services_supabase_supabase",
-      "community": 283,
-      "community_name": "users.ts",
+      "community": 263,
+      "community_name": "allRouteMonitoringService.ts",
       "norm_label": "supabase"
     },
     {
@@ -9730,7 +9730,7 @@
       "_origin": "ast",
       "id": "src_types_supabase",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "types/supabase.ts"
     },
     {
@@ -9741,7 +9741,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_operator",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "operator"
     },
     {
@@ -9752,7 +9752,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_route",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "route"
     },
     {
@@ -9762,8 +9762,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_types_supabase_fleetunitstatusdetail",
-      "community": 315,
-      "community_name": "waReportGenerator.ts",
+      "community": 263,
+      "community_name": "allRouteMonitoringService.ts",
       "norm_label": "fleetunitstatusdetail"
     },
     {
@@ -9785,7 +9785,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_routesheet",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "routesheet"
     },
     {
@@ -9796,7 +9796,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_userrole",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "userrole"
     },
     {
@@ -9807,7 +9807,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_role",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "role"
     },
     {
@@ -9818,7 +9818,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_userprofile",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "userprofile"
     },
     {
@@ -9829,7 +9829,7 @@
       "_origin": "ast",
       "id": "src_types_supabase_activitylog",
       "community": 283,
-      "community_name": "users.ts",
+      "community_name": "routes.ts",
       "norm_label": "activitylog"
     },
     {
@@ -9839,8 +9839,8 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "src_types_supabase_syncqueuebackup",
-      "community": 256,
-      "community_name": "core.ts",
+      "community": 283,
+      "community_name": "routes.ts",
       "norm_label": "syncqueuebackup"
     },
     {
@@ -9850,8 +9850,8 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "src_types_supabase_dailyunitsummary",
-      "community": 256,
-      "community_name": "core.ts",
+      "community": 263,
+      "community_name": "allRouteMonitoringService.ts",
       "norm_label": "dailyunitsummary"
     },
     {
@@ -9982,8 +9982,8 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "src_utils_alertutils_showerroralert",
-      "community": 218,
-      "community_name": "alertUtils.ts",
+      "community": 277,
+      "community_name": "App.tsx",
       "norm_label": "showerroralert()"
     },
     {
@@ -10071,7 +10071,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_slugifyunitid",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "slugifyunitid()"
     },
     {
@@ -10104,7 +10104,7 @@
       "_origin": "ast",
       "id": "src_utils_analytics_extractmonthyearlabel",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "extractmonthyearlabel()"
     },
     {
@@ -10136,8 +10136,8 @@
       "source_location": "L308",
       "_origin": "ast",
       "id": "src_utils_analytics_formataccumulatednotes",
-      "community": 328,
-      "community_name": "routes.ts",
+      "community": 307,
+      "community_name": "utils/analytics.ts",
       "norm_label": "formataccumulatednotes()"
     },
     {
@@ -10148,7 +10148,7 @@
       "_origin": "ast",
       "id": "src_utils_auditlogcontext_test",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "auditlogcontext.test.ts"
     },
     {
@@ -10159,7 +10159,7 @@
       "_origin": "ast",
       "id": "src_utils_auditlogcontext",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "auditlogcontext.ts"
     },
     {
@@ -10170,7 +10170,7 @@
       "_origin": "ast",
       "id": "src_utils_auditlogcontext_routecontext",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "routecontext"
     },
     {
@@ -10181,7 +10181,7 @@
       "_origin": "ast",
       "id": "src_utils_auditlogcontext_parsenumerictab",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "parsenumerictab()"
     },
     {
@@ -10191,8 +10191,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_utils_auditlogcontext_resolveroutecontext",
-      "community": 256,
-      "community_name": "core.ts",
+      "community": 267,
+      "community_name": "mutations.ts",
       "norm_label": "resolveroutecontext()"
     },
     {
@@ -10203,7 +10203,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_test",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "cacheutils.test.ts"
     },
     {
@@ -10214,7 +10214,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_test_localstoragemock",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "localstoragemock"
     },
     {
@@ -10225,7 +10225,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "cacheutils.ts"
     },
     {
@@ -10236,7 +10236,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_current_cache_version",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "current_cache_version"
     },
     {
@@ -10247,7 +10247,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_checkandmigratecache",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "checkandmigratecache()"
     },
     {
@@ -10258,7 +10258,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_getroutesfromcache",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "getroutesfromcache()"
     },
     {
@@ -10269,7 +10269,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_sheetmatchresult",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "sheetmatchresult"
     },
     {
@@ -10280,7 +10280,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_findsheetinroutes",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "findsheetinroutes"
     },
     {
@@ -10291,7 +10291,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_getroutecodeforsheet",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "getroutecodeforsheet()"
     },
     {
@@ -10302,7 +10302,7 @@
       "_origin": "ast",
       "id": "src_utils_cacheutils_getmonthyearforsheet",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "getmonthyearforsheet()"
     },
     {
@@ -10312,8 +10312,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_conflictmerge_test",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "conflictmerge.test.ts"
     },
     {
@@ -10323,8 +10323,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_conflictmerge",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "conflictmerge.ts"
     },
     {
@@ -10334,8 +10334,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_utils_conflictmerge_editable_bus_fields",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "editable_bus_fields"
     },
     {
@@ -10345,8 +10345,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_utils_conflictmerge_mergeremotebusdatawithlocalupdates",
-      "community": 307,
-      "community_name": "utils/analytics.ts",
+      "community": 250,
+      "community_name": "BusData",
       "norm_label": "mergeremotebusdatawithlocalupdates()"
     },
     {
@@ -10379,7 +10379,7 @@
       "_origin": "ast",
       "id": "src_utils_errorclassifier_isautherror",
       "community": 287,
-      "community_name": "googleSheets/analytics.ts",
+      "community_name": "core.ts",
       "norm_label": "isautherror()"
     },
     {
@@ -10533,7 +10533,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils_test",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "holidayutils.test.ts"
     },
     {
@@ -10544,7 +10544,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "holidayutils.ts"
     },
     {
@@ -10555,7 +10555,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils_indonesia_holidays_2026",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "indonesia_holidays_2026"
     },
     {
@@ -10566,7 +10566,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils_annual_fixed_holidays",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "annual_fixed_holidays"
     },
     {
@@ -10577,7 +10577,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils_isnationalholiday",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "isnationalholiday()"
     },
     {
@@ -10588,7 +10588,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils_daytype",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "daytype"
     },
     {
@@ -10599,7 +10599,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils_dynamicrenopsresult",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "dynamicrenopsresult"
     },
     {
@@ -10610,7 +10610,7 @@
       "_origin": "ast",
       "id": "src_utils_holidayutils_getrenopsfordate",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "getrenopsfordate()"
     },
     {
@@ -11423,8 +11423,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_rolestorage_test",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "rolestorage.test.ts"
     },
     {
@@ -11434,8 +11434,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_rolestorage",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "rolestorage.ts"
     },
     {
@@ -11445,8 +11445,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_rolestorage_userrole",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "userrole"
     },
     {
@@ -11456,8 +11456,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_utils_rolestorage_valid_roles",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "valid_roles"
     },
     {
@@ -11467,8 +11467,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_utils_rolestorage_getstoreduserrole",
-      "community": 6,
-      "community_name": "profileMenu/ProfileMenuSheet.tsx",
+      "community": 328,
+      "community_name": "profileMenu/UserProfileHeader.tsx",
       "norm_label": "getstoreduserrole()"
     },
     {
@@ -11478,7 +11478,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_routevalidation_test",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "routevalidation.test.ts"
     },
@@ -11489,7 +11489,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_routevalidation",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "routevalidation.ts"
     },
@@ -11500,7 +11500,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_utils_routevalidation_formatroutecode",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "formatroutecode()"
     },
@@ -11511,7 +11511,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_utils_routevalidation_validateroutecode",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "validateroutecode()"
     },
@@ -11522,7 +11522,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_utils_routevalidation_validategooglesheetsurl",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "validategooglesheetsurl()"
     },
@@ -11533,7 +11533,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_utils_routevalidation_extractroutenamefromheaders",
-      "community": 328,
+      "community": 283,
       "community_name": "routes.ts",
       "norm_label": "extractroutenamefromheaders()"
     },
@@ -11600,7 +11600,7 @@
       "_origin": "ast",
       "id": "src_utils_sheetidentity_test",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "sheetidentity.test.ts"
     },
     {
@@ -11611,7 +11611,7 @@
       "_origin": "ast",
       "id": "src_utils_sheetidentity",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "sheetidentity.ts"
     },
     {
@@ -11622,7 +11622,7 @@
       "_origin": "ast",
       "id": "src_utils_sheetidentity_extractspreadsheetid",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "extractspreadsheetid()"
     },
     {
@@ -11633,7 +11633,7 @@
       "_origin": "ast",
       "id": "src_utils_sheetidentity_matchroutesheetbyid",
       "community": 256,
-      "community_name": "core.ts",
+      "community_name": "types/supabase.ts",
       "norm_label": "matchroutesheetbyid()"
     },
     {
@@ -11688,7 +11688,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_test",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitanalytics.test.ts"
     },
     {
@@ -11699,7 +11699,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_test_mockbusdata",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "mockbusdata"
     },
     {
@@ -11710,7 +11710,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitanalytics.ts"
     },
     {
@@ -11721,7 +11721,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitshiftstatus",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitshiftstatus"
     },
     {
@@ -11732,7 +11732,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitsummaryitem",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitsummaryitem"
     },
     {
@@ -11743,7 +11743,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_unitsummarymetrics",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "unitsummarymetrics"
     },
     {
@@ -11754,7 +11754,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_getunitshiftstatus",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "getunitshiftstatus()"
     },
     {
@@ -11765,7 +11765,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_extractunitlist",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "extractunitlist()"
     },
     {
@@ -11776,7 +11776,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_calculateunitmetricsfromrow",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "calculateunitmetricsfromrow()"
     },
     {
@@ -11787,7 +11787,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_calculateunitmetrics",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "calculateunitmetrics()"
     },
     {
@@ -11798,7 +11798,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_extractaccumulatedunitlist",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "extractaccumulatedunitlist()"
     },
     {
@@ -11809,7 +11809,7 @@
       "_origin": "ast",
       "id": "src_utils_unitanalytics_detecttargettrip",
       "community": 250,
-      "community_name": "UnitSummaryDashboard.tsx",
+      "community_name": "BusData",
       "norm_label": "detecttargettrip()"
     },
     {
@@ -38818,6 +38818,17 @@
       "norm_label": "bug-64-08: terputusnya alur prefill odometer km awal s1 akibat ketiadaan prefetch data hari sebelumnya"
     },
     {
+      "label": "BUG-64-09: Autofocus Melakukan Text Blocking/Selection pada 3 Digit Prefill Odometer KM",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_64/AUDIT_BUGS.md",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_64_audit_bugs_bug_64_09_autofocus_melakukan_text_blocking_selection_pada_3_digit_prefill_odometer_km",
+      "community": 321,
+      "community_name": "AUDIT BUGS \u2014 REFACTOR 64: REDESIGN ERGONOMI MODAL INPUT BUS (TOUCH SATSET & ANTI-KEYBOARD VIRTUAL)",
+      "norm_label": "bug-64-09: autofocus melakukan text blocking/selection pada 3 digit prefill odometer km"
+    },
+    {
       "label": "refact_64/REPAIR_REPORT.md",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
@@ -38854,7 +38865,7 @@
       "label": "\ud83d\udd04 Perbandingan Before vs After",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L55",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "refactor_ss_pdo_refact_64_repair_report_perbandingan_before_vs_after",
       "community": 340,
@@ -38865,7 +38876,7 @@
       "label": "\ud83c\udfaf Case: Skenario Lapangan",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L69",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "refactor_ss_pdo_refact_64_repair_report_case_skenario_lapangan",
       "community": 340,
@@ -38876,7 +38887,7 @@
       "label": "Skenario 1: Petugas Pengawas Melakukan Penutupan Shift 1 (TOA S1 + KM Akhir S1)",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L71",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "refactor_ss_pdo_refact_64_repair_report_skenario_1_petugas_pengawas_melakukan_penutupan_shift_1_toa_s1_km_akhir_s1",
       "community": 340,
@@ -38887,7 +38898,7 @@
       "label": "Skenario 2: Petugas Memasukkan KM Awal Shift 2 & Total TOA Malam Hari",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L81",
+      "source_location": "L85",
       "_origin": "ast",
       "id": "refactor_ss_pdo_refact_64_repair_report_skenario_2_petugas_memasukkan_km_awal_shift_2_total_toa_malam_hari",
       "community": 340,
@@ -38898,7 +38909,7 @@
       "label": "Skenario 3: Penggunaan Smartphone Layar 360px dengan Gboard Virtual Keyboard Aktif",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L89",
+      "source_location": "L93",
       "_origin": "ast",
       "id": "refactor_ss_pdo_refact_64_repair_report_skenario_3_penggunaan_smartphone_layar_360px_dengan_gboard_virtual_keyboard_aktif",
       "community": 340,
@@ -38909,7 +38920,7 @@
       "label": "Skenario 4: Petugas Mengisi KM Awal S1 Pagi Hari dengan Prefill Otomatis Odometer Kemarin",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L96",
+      "source_location": "L100",
       "_origin": "ast",
       "id": "refactor_ss_pdo_refact_64_repair_report_skenario_4_petugas_mengisi_km_awal_s1_pagi_hari_dengan_prefill_otomatis_odometer_kemarin",
       "community": 340,
@@ -38917,10 +38928,21 @@
       "norm_label": "skenario 4: petugas mengisi km awal s1 pagi hari dengan prefill otomatis odometer kemarin"
     },
     {
+      "label": "Skenario 5: Petugas Membuka Form Input KM Awal S1 Tanpa Perlu Tap Ulang Kotak Input (Langsung Ketik Sisa Digit)",
+      "file_type": "document",
+      "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
+      "source_location": "L109",
+      "_origin": "ast",
+      "id": "refactor_ss_pdo_refact_64_repair_report_skenario_5_petugas_membuka_form_input_km_awal_s1_tanpa_perlu_tap_ulang_kotak_input_langsung_ketik_sisa_digit",
+      "community": 340,
+      "community_name": "\ud83c\udfaf Case: Skenario Lapangan",
+      "norm_label": "skenario 5: petugas membuka form input km awal s1 tanpa perlu tap ulang kotak input (langsung ketik sisa digit)"
+    },
+    {
       "label": "\ud83d\udee1\ufe0f Status Verifikasi & Quality Gates",
       "file_type": "document",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L107",
+      "source_location": "L121",
       "_origin": "ast",
       "id": "refactor_ss_pdo_refact_64_repair_report_status_verifikasi_quality_gates",
       "community": 340,
@@ -96402,6 +96424,17 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_64/AUDIT_BUGS.md",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_64_audit_bugs_audit_bugs_refactor_64_redesign_ergonomi_modal_input_bus_touch_satset_anti_keyboard_virtual",
+      "target": "refactor_ss_pdo_refact_64_audit_bugs_bug_64_09_autofocus_melakukan_text_blocking_selection_pada_3_digit_prefill_odometer_km",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -96414,7 +96447,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L69",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast",
       "source": "refactor_ss_pdo_refact_64_repair_report_repair_report_refactor_64_redesign_ergonomi_modal_input_bus_touch_satset_anti_keyboard_virtual",
@@ -96425,7 +96458,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L55",
+      "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
       "source": "refactor_ss_pdo_refact_64_repair_report_repair_report_refactor_64_redesign_ergonomi_modal_input_bus_touch_satset_anti_keyboard_virtual",
@@ -96447,7 +96480,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L107",
+      "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast",
       "source": "refactor_ss_pdo_refact_64_repair_report_repair_report_refactor_64_redesign_ergonomi_modal_input_bus_touch_satset_anti_keyboard_virtual",
@@ -96458,7 +96491,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L71",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast",
       "source": "refactor_ss_pdo_refact_64_repair_report_case_skenario_lapangan",
@@ -96469,7 +96502,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L81",
+      "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
       "source": "refactor_ss_pdo_refact_64_repair_report_case_skenario_lapangan",
@@ -96480,7 +96513,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L89",
+      "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
       "source": "refactor_ss_pdo_refact_64_repair_report_case_skenario_lapangan",
@@ -96491,11 +96524,22 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
-      "source_location": "L96",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "refactor_ss_pdo_refact_64_repair_report_case_skenario_lapangan",
       "target": "refactor_ss_pdo_refact_64_repair_report_skenario_4_petugas_mengisi_km_awal_s1_pagi_hari_dengan_prefill_otomatis_odometer_kemarin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "refactor-ss-pdo/refact_64/REPAIR_REPORT.md",
+      "source_location": "L109",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "refactor_ss_pdo_refact_64_repair_report_case_skenario_lapangan",
+      "target": "refactor_ss_pdo_refact_64_repair_report_skenario_5_petugas_membuka_form_input_km_awal_s1_tanpa_perlu_tap_ulang_kotak_input_langsung_ketik_sisa_digit",
       "confidence_score": 1.0
     },
     {
@@ -100229,5 +100273,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b68ac0c70925f2154e082169b65f0945ad4ebc89"
+  "built_at_commit": "b56feade33b5b71f3342e9e27a9e95ab2ff85154"
 }

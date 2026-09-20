@@ -155,13 +155,6 @@ export function BusInputModal({
           isSatset={form.isSatset}
           onToggleSatset={form.handleToggleSatset}
           onDismiss={handleDismiss}
-          modeLabel={
-            form.activeTab === "shift1"
-              ? TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT1
-              : form.activeTab === "shift2"
-                ? TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT2
-                : undefined
-          }
         />
 
         {/* 2. Navigation Tabs */}

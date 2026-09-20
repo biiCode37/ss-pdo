@@ -93,4 +93,21 @@ Dokumentasi audit UX, ergonomi operasional, dan integritas data pada komponen an
 - **Dampak User:** Mengurangi kenyamanan UX, memperlambat kecepatan entri data, dan berisiko salah rekam angka odometer jika petugas tidak menyadari 3 digit awal telah terhapus.
 - **Mitigasi:** Memperbaiki logika autofocus dan focus listener di `useBusInputForm.ts`: mendeteksi jika field merupakan input odometer KM dengan nilai 1–3 digit (`isPrefillOnly`), posisikan kursor di akhir teks (`setSelectionRange(len, len)`) alih-alih `select()`, sehingga petugas dapat langsung melanjutkan mengetik 3 digit akhir tanpa takut 3 digit awal terhapus.
 
+---
+
+### BUG-64-10: Kepadatan Visual Header Modal Akibat Prefix "Unit", Subtitle Helper, dan Teks "Satset"
+- **Lokasi Kode:** `src/components/busCard/modal/BusInputModalHeader.tsx`, `src/components/busCard/BusInputModal.tsx`
+- **Tingkat Keparahan:** MEDIUM (Ergonomi Visual & Efisiensi Layar Mobile)
+- **Deskripsi:** Header modal input bus memuat teks berulang dan teks pembantu yang memakan ruang vertikal:
+  1. Penulisan prefix kata `"Unit "` sebelum nomor armada (misal: `"Unit KWK 222154"`).
+  2. Teks helper/subtitle panjang di bawah judul (`"Input Data Operasional Armada • Input Shift 1 (Closing Siang)"`).
+  3. Teks label `"Satset"` pada tombol toggle mode beruntun di sisi kanan.
+  Pada layar ponsel berdimensi kecil atau saat keyboard virtual terbuka, header yang terlalu tinggi ini menyita vertikal viewport secara signifikan dan mempersempit area formulir aktif.
+- **Dampak User:** Layar terasa penuh dan sesak (*cluttered*), operator terganggu oleh teks subtitle yang tidak esensial di setiap kali membuka bus, dan tombol Satset memakan lebar horizontal berlebih.
+- **Mitigasi:**
+  1. Menghapus kata `"Unit "` sehingga menyisakan nomor body armada secara ringkas dan tegas (misal: `"KWK 222154"`).
+  2. Menghilangkan elemen text helper/subtitle di bawah judul armada.
+  3. Mengubah tombol mode Satset menjadi icon button bulat bersih (`34x34px`) yang hanya menampilkan icon `Zap` dengan warna indikator aktif emas, serasi dengan tombol dismiss `X`.
+
+
 
