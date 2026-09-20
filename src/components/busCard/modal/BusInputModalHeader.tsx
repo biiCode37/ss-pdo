@@ -11,6 +11,7 @@ interface BusInputModalHeaderProps {
   isSatset: boolean;
   onToggleSatset: () => void;
   onDismiss: () => void;
+  modeLabel?: string;
 }
 
 export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
@@ -22,6 +23,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
   isSatset,
   onToggleSatset,
   onDismiss,
+  modeLabel,
 }) => {
   return (
     <div
@@ -29,45 +31,52 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingBottom: "14px",
-        borderBottom: "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
+        paddingBottom: "12px",
+        borderBottom: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <div
           style={{
-            width: "36px",
-            height: "36px",
-            borderRadius: "10px",
-            background: "var(--color-primary-bg, rgba(59, 130, 246, 0.15))",
-            color: "var(--color-primary, #38bdf8)",
+            width: "38px",
+            height: "38px",
+            borderRadius: "12px",
+            background: "linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.1))",
+            color: "var(--accent-color, #38bdf8)",
+            border: "1px solid rgba(56, 189, 248, 0.3)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            flexShrink: 0,
           }}
         >
           <Bus size={20} />
         </div>
         <div>
-          <h2
-            id={`bus-modal-title-${formId}`}
-            style={{
-              fontSize: "1.1rem",
-              fontWeight: 700,
-              margin: 0,
-              color: "var(--text-main, #f8fafc)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Unit {unit}
-          </h2>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <h2
+              id={`bus-modal-title-${formId}`}
+              style={{
+                fontSize: "1.15rem",
+                fontWeight: 800,
+                margin: 0,
+                color: "var(--text-primary, #ededed)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Unit {unit}
+            </h2>
+          </div>
           <span
             style={{
               fontSize: "0.75rem",
-              color: "var(--text-secondary, #94a3b8)",
+              fontWeight: 500,
+              color: "var(--text-secondary, #8b8b8b)",
+              display: "block",
+              marginTop: "1px",
             }}
           >
-            {TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE}
+            {modeLabel || TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE}
           </span>
         </div>
       </div>
@@ -81,19 +90,19 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
               display: "flex",
               alignItems: "center",
               gap: "5px",
-              padding: "5px 10px",
+              padding: "6px 10px",
               borderRadius: "9999px",
               fontSize: "0.75rem",
               fontWeight: 600,
-              border: "1px solid rgba(255, 255, 255, 0.15)",
+              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
               background: isExpandedAll
                 ? "rgba(56, 189, 248, 0.15)"
-                : "rgba(255, 255, 255, 0.04)",
+                : "rgba(255, 255, 255, 0.05)",
               color: isExpandedAll
                 ? "var(--accent-color, #38bdf8)"
-                : "var(--text-secondary, #94a3b8)",
+                : "var(--text-secondary, #8b8b8b)",
               cursor: "pointer",
-              transition: "all 0.15s ease",
+              transition: "all 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
           >
             <Columns size={13} />
@@ -113,25 +122,22 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
             display: "flex",
             alignItems: "center",
             gap: "5px",
-            padding: "5px 10px",
+            padding: "6px 10px",
             borderRadius: "9999px",
             fontSize: "0.75rem",
-            fontWeight: 600,
-            border: "1px solid",
-            borderColor: isSatset
-              ? "var(--accent-color, #38bdf8)"
-              : "rgba(255, 255, 255, 0.1)",
+            fontWeight: 700,
+            border: isSatset
+              ? "1px solid rgba(245, 158, 11, 0.5)"
+              : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
             background: isSatset
-              ? "rgba(56, 189, 248, 0.15)"
-              : "rgba(255, 255, 255, 0.04)",
-            color: isSatset
-              ? "var(--accent-color, #38bdf8)"
-              : "var(--text-secondary, #94a3b8)",
+              ? "rgba(245, 158, 11, 0.15)"
+              : "rgba(255, 255, 255, 0.05)",
+            color: isSatset ? "#f59e0b" : "var(--text-secondary, #8b8b8b)",
             cursor: "pointer",
-            transition: "all 0.15s ease",
+            transition: "all 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
         >
-          <Zap size={13} fill={isSatset ? "currentColor" : "none"} />
+          <Zap size={13} fill={isSatset ? "#f59e0b" : "none"} />
           <span>Satset</span>
         </button>
 
@@ -140,16 +146,17 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
           onClick={onDismiss}
           aria-label={TEXT_ALERTS.BUS_INPUT_MODAL.MODAL_CLOSE_ARIA}
           style={{
-            width: "32px",
-            height: "32px",
+            width: "34px",
+            height: "34px",
             borderRadius: "50%",
-            background: "rgba(255, 255, 255, 0.06)",
-            border: "none",
-            color: "var(--text-secondary, #94a3b8)",
+            background: "rgba(255, 255, 255, 0.08)",
+            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
+            color: "var(--text-secondary, #8b8b8b)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
+            transition: "background 0.15s ease",
           }}
         >
           <X size={18} />
