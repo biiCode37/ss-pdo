@@ -98,16 +98,28 @@ export function useBusCardSave({
           headerMap,
         );
 
-        // BUG-12 (revisied): Compare ONLY the fields the user is actually updating.
-        const fieldsToCheck = Object.keys(updates) as (keyof BusData)[];
-
-        let hasCollision = false;
-        for (const field of fieldsToCheck) {
-          const remoteNorm = normalizeFieldValue(remoteData[field]);
+        // OCC Murni (SSOT Refact 66): Ekstraksi dirty fields yang benar-benar diubah user
+        const candidateFields = Object.keys(updates) as (keyof BusData)[];
+        const dirtyFields = candidateFields.filter((field) => {
+          const updateNorm = normalizeFieldValue(updates[field]);
           const localBaseNorm = normalizeFieldValue(bus[field]);
-          if (remoteNorm !== localBaseNorm) {
-            hasCollision = true;
-            break;
+          return updateNorm !== localBaseNorm;
+        });
+
+        // Tiga Syarat Mutlak Tabrakan Data (Three-Way Collision Rule):
+        // Konflik HANYA terjadi jika user mengubah data (dirty field) DAN server juga berubah dari baseline
+        // DAN nilai server berbeda dari apa yang ingin disimpan user.
+        let hasCollision = false;
+        if (dirtyFields.length > 0) {
+          for (const field of dirtyFields) {
+            const remoteNorm = normalizeFieldValue(remoteData[field]);
+            const localBaseNorm = normalizeFieldValue(bus[field]);
+            const updateNorm = normalizeFieldValue(updates[field]);
+
+            if (remoteNorm !== localBaseNorm && remoteNorm !== updateNorm) {
+              hasCollision = true;
+              break;
+            }
           }
         }
 
@@ -115,6 +127,7 @@ export function useBusCardSave({
           setIsLoading(false);
           showQueueConflictDialog({
             unitName: bus.unit,
+            isOnline: true,
             onUseServer: () => {
               const mergedUpdates = mergeRemoteBusDataWithLocalUpdates(
                 remoteData,

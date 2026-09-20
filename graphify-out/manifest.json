@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useOfflineSync.ts": {
-    "mtime": 1787938556.760375,
-    "ast_hash": "502a38ece228a1be73d33bc589984ae5",
+    "mtime": 1789881318.2693617,
+    "ast_hash": "e23f836d6abd1d78aa16b0f91e7a1b78",
     "semantic_hash": ""
   },
   "src/main.tsx": {
@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1789879728.1695435,
-    "ast_hash": "123326cdc05fba9e7ea8393a9ff151c1",
+    "mtime": 1789881095.1783135,
+    "ast_hash": "c190c3e4f1a6fe22096c8737d37c36a1",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -830,8 +830,8 @@
     "semantic_hash": ""
   },
   "src/utils/alertUtils.ts": {
-    "mtime": 1789387163.3841555,
-    "ast_hash": "605ed6448e3e32ab6fe500e3440a61b9",
+    "mtime": 1789881299.3978777,
+    "ast_hash": "37432028d8d53426b8a5f63ab35c95a9",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-08-15-progressive-disclosure-input-modal-design.md": {
@@ -945,8 +945,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/core.ts": {
-    "mtime": 1788676457.0242352,
-    "ast_hash": "f7b833c996eb62cb348f6a8c13d36a47",
+    "mtime": 1789881126.2592468,
+    "ast_hash": "a2ac3dde7fe3722bd2fbc65e6abbf3ac",
     "semantic_hash": ""
   },
   "src/services/googleSheets/index.ts": {
@@ -955,8 +955,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/mutations.ts": {
-    "mtime": 1788857657.5235405,
-    "ast_hash": "a2f729a452663378b7c3ac24fa097dd6",
+    "mtime": 1789881135.1852472,
+    "ast_hash": "0cffcaddcdcc0ae82de2d0f08f74c7aa",
     "semantic_hash": ""
   },
   "src/services/googleSheets/types.ts": {
@@ -1395,8 +1395,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1789879118.072664,
-    "ast_hash": "67cc5087235c7b61045b2a9b1690222f",
+    "mtime": 1789881107.1671178,
+    "ast_hash": "e4de2d106b9292cbf5d708aab6a99039",
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1789879127.1818247,
-    "ast_hash": "6d08412336bfeaeb33cc6e466d5ede3c",
+    "mtime": 1789881115.0814216,
+    "ast_hash": "5062e38d2303c2f77cf763840109b3e3",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -2290,8 +2290,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardSave.ts": {
-    "mtime": 1789287924.1551263,
-    "ast_hash": "c9371dde426613a26459866b1187aee6",
+    "mtime": 1789881310.0096672,
+    "ast_hash": "787abc607990736957a2bb31b792b2ad",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_48/AUDIT_BUGS.md": {
@@ -2870,8 +2870,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/useBusInputForm.ts": {
-    "mtime": 1789879679.2586951,
-    "ast_hash": "e89898d5b484fde95bbb2dc79e427b82",
+    "mtime": 1789881266.040048,
+    "ast_hash": "776ddd2012f0d3665ae8e1ff4620c4fd",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_63/AUDIT_BUGS.md": {
@@ -2950,8 +2950,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/useBusInputForm.test.tsx": {
-    "mtime": 1789879780.029489,
-    "ast_hash": "c83af624f1424378d7f98f08cb93d7bc",
+    "mtime": 1789881219.6913016,
+    "ast_hash": "61447b5732762862732b07207c14be79",
     "semantic_hash": ""
   },
   "src/utils/modals/busInput/busModalValidation.test.ts": {
@@ -2962,6 +2962,36 @@
   "docs/ODOMETER_INPUT_CHAIN_LOGIC.md": {
     "mtime": 1789878563.1691084,
     "ast_hash": "714e87c44e8fc9f4abc0c8161654fe9e",
+    "semantic_hash": ""
+  },
+  "src/components/busCard/useBusCardSave.test.tsx": {
+    "mtime": 1789881431.1953804,
+    "ast_hash": "fe536e0ac83693002447453dad17a98d",
+    "semantic_hash": ""
+  },
+  "src/services/googleSheets/core.test.ts": {
+    "mtime": 1789881148.5555642,
+    "ast_hash": "d4ae1a0c998d0daa70d5fce2ead4e4e0",
+    "semantic_hash": ""
+  },
+  "docs/DATA_INTEGRITY_AND_CONFLICT_RESOLUTION.md": {
+    "mtime": 1789881027.4217896,
+    "ast_hash": "1a887e76f2f1ce494a788da8dba69b38",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_65/AUDIT_BUGS.md": {
+    "mtime": 1789879836.847644,
+    "ast_hash": "aed377c12e4cec50936d98e924169e11",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_65/REPAIR_REPORT.md": {
+    "mtime": 1789879845.9701858,
+    "ast_hash": "20eabe0c4e57af0ebee01cfe9792f25b",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_66/AUDIT_BUGS.md": {
+    "mtime": 1789881035.4694266,
+    "ast_hash": "b136c5ecb873accf77159487163ed230",
     "semantic_hash": ""
   }
 }

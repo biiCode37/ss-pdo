@@ -30,6 +30,16 @@ export const TEXT_ALERTS = {
     DENY_BTN: 'Gunakan & Gabung Data Server',
     CANCEL_BTN: 'Batal',
   },
+  CONFLICT_ONLINE: {
+    TITLE: 'Data Spreadsheet Telah Berubah',
+    UNIT_TEXT: (unit: string) =>
+      `Data unit ${unit} di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data server?`,
+    GENERAL_TEXT:
+      'Data di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data server?',
+    CONFIRM_BTN: 'Force Save (Timpa)',
+    DENY_BTN: 'Gunakan & Gabung Server',
+    CANCEL_BTN: 'Batal',
+  },
   FORMAT_SHEET: {
     TITLE: 'Rapikan & Format Spreadsheet?',
     TEXT: 'Proses ini akan merapikan tata letak dan penomoran Google Sheets secara otomatis.',

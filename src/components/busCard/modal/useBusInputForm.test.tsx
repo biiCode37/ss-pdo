@@ -232,4 +232,44 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
     expect(latestForm?.effectiveCategory).toBe("kmAwal1");
     expect(latestForm?.guideMessage).toBeTruthy();
   });
+
+  it("Test Case 11: Scoped Updates - Mode Fokus kmAwal1 hanya mengirim kmAwal1 dan tidak mengirim kolom yang tidak aktif", () => {
+    const onSave = vi.fn();
+    renderForm({
+      activeCategory: "kmAwal1",
+      bus: {
+        ...mockBus,
+        kmAwal1: "",
+        kmAkhir1: "",
+        toaShift1: "150",
+        toaShift2: "100",
+        keterangan: "BA.01",
+      },
+      onSave,
+    });
+
+    expect(latestForm?.isSingleMode).toBe(true);
+
+    act(() => {
+      latestForm?.setKmAwal1("300100");
+    });
+
+    act(() => {
+      const dummyEvent = { preventDefault: vi.fn() } as unknown as React.FormEvent;
+      latestForm?.handleFormSubmit(dummyEvent);
+    });
+
+    expect(latestForm?.validationErrors).toEqual([]);
+    expect(onSave).toHaveBeenCalledTimes(1);
+    const submittedPayload = onSave.mock.calls[0][0];
+
+    // Kolom fokus harus ada
+    expect(submittedPayload.kmAwal1).toBe("300100");
+    // Kolom lain yang tidak disentuh di mode single TIDAK boleh ada di payload
+    expect(submittedPayload.toaShift1).toBeUndefined();
+    expect(submittedPayload.toaShift2).toBeUndefined();
+    expect(submittedPayload.tripPergi).toBeUndefined();
+    expect(submittedPayload.tripPulang).toBeUndefined();
+    expect(submittedPayload.keterangan).toBeUndefined();
+  });
 });

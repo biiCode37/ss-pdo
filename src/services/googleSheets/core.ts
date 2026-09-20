@@ -436,13 +436,24 @@ export const getBusRowData = async (
       return val !== undefined && val !== null ? String(val) : '';
     };
 
+    const toaShift1Val = getValue(headerMap.toaShift1);
+    let toaShift2Val = getValue(headerMap.toaShift2);
+    const totalToaVal = getValue(headerMap.totalToa);
+
+    if (!toaShift2Val && totalToaVal && toaShift1Val) {
+      const tot = parseIndonesianNumber(totalToaVal);
+      const t1 = parseIndonesianNumber(toaShift1Val);
+      toaShift2Val = Math.max(0, tot - t1).toString();
+    }
+
     return {
       tripPergi: getValue(headerMap.tripPergi),
       tripPulang: getValue(headerMap.tripPulang),
-      toaShift1: getValue(headerMap.toaShift1),
+      toaShift1: toaShift1Val,
+      toaShift2: toaShift2Val || '0',
       manualShift1: getValue(headerMap.manualShift1),
       manualShift2: getValue(headerMap.manualShift2),
-      totalToa: getValue(headerMap.totalToa),
+      totalToa: totalToaVal,
       kmAwal1: getValue(headerMap.kmAwal1),
       kmAkhir1: getValue(headerMap.kmAkhir1),
       kmAwal2: getValue(headerMap.kmAwal2),

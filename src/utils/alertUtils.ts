@@ -199,20 +199,26 @@ export async function showAuthExpiredAlert(
  */
 export async function showQueueConflictDialog(options: {
   unitName?: string;
+  isOnline?: boolean;
   onUseServer: () => void;
   onForceSave: () => void;
 }) {
+  const isOnline = options.isOnline ?? false;
+  const alertTextDict = isOnline
+    ? TEXT_ALERTS.CONFLICT_ONLINE
+    : TEXT_ALERTS.CONFLICT;
+
   const result = await pdoSwal.fire({
-    title: TEXT_ALERTS.CONFLICT.TITLE,
+    title: alertTextDict.TITLE,
     text: options.unitName
-      ? TEXT_ALERTS.CONFLICT.UNIT_TEXT(options.unitName)
-      : TEXT_ALERTS.CONFLICT.GENERAL_TEXT,
+      ? alertTextDict.UNIT_TEXT(escapeHtml(options.unitName))
+      : alertTextDict.GENERAL_TEXT,
     icon: "warning",
     showCancelButton: true,
     showDenyButton: true,
-    confirmButtonText: TEXT_ALERTS.CONFLICT.CONFIRM_BTN,
-    denyButtonText: TEXT_ALERTS.CONFLICT.DENY_BTN,
-    cancelButtonText: TEXT_ALERTS.CONFLICT.CANCEL_BTN,
+    confirmButtonText: alertTextDict.CONFIRM_BTN,
+    denyButtonText: alertTextDict.DENY_BTN,
+    cancelButtonText: alertTextDict.CANCEL_BTN,
     customClass: {
       container: "pdo-swal-container",
       popup: "pdo-swal-popup",

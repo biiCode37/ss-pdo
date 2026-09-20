@@ -112,6 +112,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.GUIDE_FILL_KM_AWAL_FIRST).toContain('KM Awal Shift 1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_KM_S2_REQUIRES_S1_CLOSED).toContain('KM Akhir Shift 1 wajib diisi');
     expect(TEXT_ALERTS.BULK_TRIP.VALIDATION_POSITIVE).toBe('Nilai trip harus berupa angka positif!');
+    expect(TEXT_ALERTS.CONFLICT_ONLINE.TITLE).toContain('Berubah');
+    expect(TEXT_ALERTS.CONFLICT_ONLINE.UNIT_TEXT('KWK 222171')).toContain('KWK 222171');
   });
 
   it('exports TEXT_ERRORS with friendly error messages and route validation', () => {

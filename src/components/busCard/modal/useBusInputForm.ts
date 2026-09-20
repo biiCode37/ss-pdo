@@ -331,13 +331,19 @@ export function useBusInputForm({
 
   const [keterangan, setKeterangan] = useState(bus.keterangan || "");
   const [showKeterangan, setShowKeterangan] = useState(
-    Boolean(bus.keterangan && bus.keterangan.trim() !== ""),
+    isSingleMode
+      ? activeCategory === "keterangan"
+      : Boolean(bus.keterangan && bus.keterangan.trim() !== ""),
   );
   const [showKmAkhir1InSingle, setShowKmAkhir1InSingle] = useState(
-    Boolean(bus.kmAkhir1 && bus.kmAkhir1.trim() !== ""),
+    isSingleMode
+      ? activeCategory === "kmAkhir1"
+      : Boolean(bus.kmAkhir1 && bus.kmAkhir1.trim() !== ""),
   );
   const [showKmAkhir2InSingle, setShowKmAkhir2InSingle] = useState(
-    Boolean(bus.kmAkhir2 && bus.kmAkhir2.trim() !== ""),
+    isSingleMode
+      ? activeCategory === "kmAkhir2"
+      : Boolean(bus.kmAkhir2 && bus.kmAkhir2.trim() !== ""),
   );
 
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -684,27 +690,88 @@ export function useBusInputForm({
         computedTotal > 0 ? String(computedTotal) : totalToa.trim();
     }
 
-    // Sanitasi payload: field yang masih draf prefill atau belum berhak diisi tidak terkirim
-    const updates: Partial<BusData> = {
-      tripPergi: tripPergi.trim(),
-      tripPulang: tripPulang.trim(),
-      toaShift1: toaShift1.trim(),
-      manualShift1: showManual1 ? manualShift1.trim() : "",
-      kmAwal1: sanitizeKmAwal(kmAwal1, bus.kmAwal1, previousDayKmAkhir2),
-      kmAkhir1: isKmAwal1Valid
+    // Scoped Updates (SSOT Bab 2.1): Hanya kirim field relevan sesuai mode formulir
+    const updates: Partial<BusData> = {};
+
+    if (isSingleMode) {
+      if (
+        effectiveCategory === "trip" ||
+        effectiveCategory === "tripPergi" ||
+        effectiveCategory === "tripPulang"
+      ) {
+        updates.tripPergi = tripPergi.trim();
+        updates.tripPulang = tripPulang.trim();
+      } else if (effectiveCategory === "toaShift1") {
+        updates.toaShift1 = toaShift1.trim();
+        if (showManual1) {
+          updates.manualShift1 = manualShift1.trim();
+        }
+      } else if (effectiveCategory === "totalToa") {
+        updates.totalToa = effectiveTotalToa;
+        if (showManual2) {
+          updates.manualShift2 = manualShift2.trim();
+        }
+      } else if (effectiveCategory === "kmAwal1") {
+        updates.kmAwal1 = sanitizeKmAwal(
+          kmAwal1,
+          bus.kmAwal1,
+          previousDayKmAkhir2,
+        );
+        if (showKmAkhir1InSingle && isKmAwal1Valid) {
+          updates.kmAkhir1 = sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1);
+        }
+      } else if (effectiveCategory === "kmAkhir1") {
+        if (isKmAwal1Valid) {
+          updates.kmAkhir1 = sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1);
+        }
+      } else if (effectiveCategory === "kmAwal2") {
+        if (!isKmAwal2Locked) {
+          updates.kmAwal2 = sanitizeKmAwal(
+            kmAwal2,
+            bus.kmAwal2,
+            previousDayKmAkhir2,
+          );
+        }
+        if (showKmAkhir2InSingle && isKmAwal2Valid) {
+          updates.kmAkhir2 = sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2);
+        }
+      } else if (effectiveCategory === "kmAkhir2") {
+        if (isKmAwal2Valid) {
+          updates.kmAkhir2 = sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2);
+        }
+      } else if (effectiveCategory === "keterangan") {
+        updates.keterangan = keterangan.trim();
+      }
+
+      // Jika chip keterangan dibuka pada mode single focus, sertakan keterangan
+      if (showKeterangan) {
+        updates.keterangan = keterangan.trim();
+      }
+    } else {
+      // Full modal (Semua Kolom): kirim seluruh kolom yang berhak diisi
+      updates.tripPergi = tripPergi.trim();
+      updates.tripPulang = tripPulang.trim();
+      updates.toaShift1 = toaShift1.trim();
+      updates.manualShift1 = showManual1 ? manualShift1.trim() : "";
+      updates.kmAwal1 = sanitizeKmAwal(
+        kmAwal1,
+        bus.kmAwal1,
+        previousDayKmAkhir2,
+      );
+      updates.kmAkhir1 = isKmAwal1Valid
         ? sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1)
-        : "",
-      toaShift2: toaShift2.trim(),
-      manualShift2: showManual2 ? manualShift2.trim() : "",
-      kmAwal2: !isKmAwal2Locked
+        : "";
+      updates.toaShift2 = toaShift2.trim();
+      updates.manualShift2 = showManual2 ? manualShift2.trim() : "";
+      updates.kmAwal2 = !isKmAwal2Locked
         ? sanitizeKmAwal(kmAwal2, bus.kmAwal2, previousDayKmAkhir2)
-        : "",
-      kmAkhir2: isKmAwal2Valid
+        : "";
+      updates.kmAkhir2 = isKmAwal2Valid
         ? sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2)
-        : "",
-      totalToa: effectiveTotalToa,
-      keterangan: keterangan.trim(),
-    };
+        : "";
+      updates.totalToa = effectiveTotalToa;
+      updates.keterangan = keterangan.trim();
+    }
 
     onSave(updates);
     onDismiss();
