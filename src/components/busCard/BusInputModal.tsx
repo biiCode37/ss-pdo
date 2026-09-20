@@ -4,6 +4,7 @@ import { AlertCircle } from "lucide-react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { TEXT_ALERTS, TEXT_FLEET_STATUS } from "@/constants/texts";
 import { useBusInputForm, type ModalTab } from "./modal/useBusInputForm";
+import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { BusInputModalHeader } from "./modal/BusInputModalHeader";
 import { BusInputModalTabs } from "./modal/BusInputModalTabs";
 import { BusInputModalSingleFocus } from "./modal/BusInputModalSingleFocus";
@@ -41,6 +42,7 @@ export function BusInputModal({
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const isClosingRef = useRef(false);
+  const { viewportHeight, isKeyboardOpen } = useVisualViewport();
 
   const handleDismiss = () => {
     if (isClosingRef.current) return;
@@ -117,14 +119,16 @@ export function BusInputModal({
         style={{
           width: "100%",
           maxWidth: "560px",
-          maxHeight: "min(92dvh, 780px)",
+          maxHeight: isKeyboardOpen
+            ? `${Math.min(viewportHeight - 12, 780)}px`
+            : "min(92dvh, 780px)",
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
           borderTopLeftRadius: "24px",
           borderTopRightRadius: "24px",
           padding:
             "20px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px",
-          background: "var(--card-bg, #1e293b)",
+          background: "var(--card-bg, #171717)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
           borderBottom: "none",
           boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
@@ -151,6 +155,13 @@ export function BusInputModal({
           isSatset={form.isSatset}
           onToggleSatset={form.handleToggleSatset}
           onDismiss={handleDismiss}
+          modeLabel={
+            form.activeTab === "shift1"
+              ? TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT1
+              : form.activeTab === "shift2"
+                ? TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT2
+                : undefined
+          }
         />
 
         {/* 2. Navigation Tabs */}
@@ -260,6 +271,7 @@ export function BusInputModal({
           <BusInputModalFooter
             formId={form.formId}
             onDismiss={handleDismiss}
+            isDisabled={form.validationErrors.length > 0}
           />
         </form>
       </div>

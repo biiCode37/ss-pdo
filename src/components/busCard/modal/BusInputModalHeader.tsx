@@ -76,7 +76,9 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
               marginTop: "1px",
             }}
           >
-            {modeLabel || TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE}
+            {modeLabel
+              ? `${TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE} • ${modeLabel}`
+              : TEXT_ALERTS.BUS_INPUT_MODAL.SUBTITLE}
           </span>
         </div>
       </div>
