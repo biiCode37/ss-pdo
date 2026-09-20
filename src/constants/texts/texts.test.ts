@@ -166,6 +166,15 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_HAS_MANUAL_S1).toBe('Ada Tiket Manual Shift 1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S1).toBe('Jarak Tempuh S1:');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TRIP_LABEL).toBe('Total Ritase:');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NORMAL(120)).toContain('+120 KM');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-30)).toContain('lebih kecil');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_EXTREME(500, 400)).toContain('sangat besar');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LIVE_TOA_S2_RESULT(250, 150, 100)).toContain('100 Penumpang');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LIVE_TOA_S2_INVALID(120, 150)).toContain('lebih kecil dari Shift 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_AKHIR_S1_BTN).toBe('📋 Salin KM Akhir S1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT1).toBe('Input Shift 1 (Closing Siang)');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT2).toBe('Input Shift 2 (Closing Malam)');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_KM_AWAL).toBe('Input KM Awal');
   });
 
   it('exports BULK_TRIP and FORMAT_SHEET with dynamic template functions', () => {
