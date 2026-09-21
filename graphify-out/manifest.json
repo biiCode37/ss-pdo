@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1790004343.3080318,
-    "ast_hash": "3eeba6067c3d2b8b5e23eb1328128140",
+    "mtime": 1790004497.4140713,
+    "ast_hash": "7c6328e9dd1b42505bd15800581136b8",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1875,8 +1875,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.tsx": {
-    "mtime": 1790004211.422951,
-    "ast_hash": "f033e6016b05c52e5fc287bba6476102",
+    "mtime": 1790005497.7742555,
+    "ast_hash": "306cc1bf565148f3b45f7236f47a5de7",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringKpiCards.tsx": {
@@ -3217,6 +3217,21 @@
   "refactor-ss-pdo/refact_72/REPAIR_REPORT.md": {
     "mtime": 1789973256.2380304,
     "ast_hash": "9d12a12ecd3ffeffee4db0f5141141f4",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260921000003_add_data_source_to_daily_route_reports.sql": {
+    "mtime": 1790004667.918635,
+    "ast_hash": "fc41e730877166aef069ce85964bc33f",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_73/AUDIT_BUGS.md": {
+    "mtime": 1790004530.2001686,
+    "ast_hash": "e1aa00489ab47cc40070953ee2c00b75",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_73/REPAIR_REPORT.md": {
+    "mtime": 1790004540.631879,
+    "ast_hash": "53bc06c5b96159bec808b4b0b51d35d1",
     "semantic_hash": ""
   }
 }
