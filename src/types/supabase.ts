@@ -178,3 +178,50 @@ export interface FleetStatusLog {
   created_at?: string;
 }
 
+export interface FleetStatusMaster {
+  id: number;
+  code: string;
+  name: string;
+  default_note: string;
+  is_operational: boolean;
+  is_editable_note: boolean;
+  sort_order: number;
+  is_active: boolean;
+  created_at?: string;
+}
+
+export interface DailyFleetShift {
+  id?: number;
+  route_id: number;
+  route_code: string;
+  date: string; // YYYY-MM-DD
+  shift: 1 | 2;
+  target_renops: number;
+  realops: number;
+  total_units: number;
+  sgo_count: number;
+  to_count: number;
+  off_count: number;
+  so_count: number;
+  other_count: number;
+  is_confirmed: boolean;
+  confirmed_by?: string;
+  confirmed_at?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface DailyFleetNonSgoUnit {
+  id?: number;
+  fleet_shift_id?: number;
+  unit_body: string;
+  status_id: number;
+  status_code: string;
+  note: string;
+  created_at?: string;
+}
+
+export interface DailyFleetShiftWithUnits extends DailyFleetShift {
+  non_sgo_units: DailyFleetNonSgoUnit[];
+}
+

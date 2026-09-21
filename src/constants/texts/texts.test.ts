@@ -216,6 +216,11 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_FLEET_STATUS.STATUS_CODES.SGO).toBe('SGO');
     expect(TEXT_FLEET_STATUS.STATUS_CODES.OFF).toBe('OFF');
     expect(TEXT_FLEET_STATUS.STATUS_CODES.TO).toBe('T.O');
+    expect(TEXT_FLEET_STATUS.STATUS_CODES.SO).toBe('SO');
+    expect(TEXT_FLEET_STATUS.LOCK.LOCKED_BADGE('07:30', 'Ahmad')).toContain('Terkonfirmasi');
+    expect(TEXT_FLEET_STATUS.LOCK.LOCKED_BANNER(1)).toContain('Shift 1');
+    expect(TEXT_FLEET_STATUS.LOCK.LOCKED_TOOLTIP).toBeDefined();
+    expect(TEXT_FLEET_STATUS.TARGET_RENOPS_INPUT.LABEL).toBe('Target Renops:');
   });
 });
 

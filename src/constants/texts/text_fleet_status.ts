@@ -34,6 +34,19 @@ export const TEXT_FLEET_STATUS = {
     SGO: 'SGO',
     OFF: 'OFF',
     TO: 'T.O',
+    SO: 'SO',
+  },
+  LOCK: {
+    LOCKED_BADGE: (time: string, by: string) => `Terkonfirmasi pada ${time} oleh ${by}`,
+    LOCKED_BANNER: (shift: number) => `Status armada Shift ${shift} telah dikonfirmasi dan terkunci.`,
+    LOCKED_TOOLTIP: 'Status armada shift ini telah dikonfirmasi dan terkunci (read-only).',
+    LOCKED_BTN_LABEL: 'Terkunci',
+  },
+  TARGET_RENOPS_INPUT: {
+    LABEL: 'Target Renops:',
+    EDIT_TITLE: 'Klik untuk menyesuaikan target renops',
+    SAVE_TITLE: 'Simpan target renops',
+    UNIT_SUFFIX: 'Unit',
   },
   ALERT_BAR: {
     SHIFT_1_UNCONFIRMED: 'Status Armada Shift 1 belum dikonfirmasi',
