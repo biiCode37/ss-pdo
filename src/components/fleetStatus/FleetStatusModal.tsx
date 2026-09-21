@@ -26,6 +26,12 @@ function FleetStatusModalComponent({
   dayLabel,
   buses,
   initialShift = 1,
+  isConfirmedS1 = false,
+  isConfirmedS2 = false,
+  confirmedByS1,
+  confirmedByS2,
+  confirmedAtS1,
+  confirmedAtS2,
   onConfirmStatus,
 }: FleetStatusModalProps) {
   useMobileBackHandler({
@@ -50,6 +56,11 @@ function FleetStatusModalComponent({
     activeBrush,
     setActiveBrush,
     isSaving,
+    targetRenops,
+    setTargetRenops,
+    isLocked,
+    confirmedBy,
+    confirmedAt,
     unitMap,
     handleCardTap,
     handleSgoAll,
@@ -58,6 +69,13 @@ function FleetStatusModalComponent({
   } = useFleetStatusData({
     buses,
     initialShift,
+    renopsTarget,
+    isConfirmedS1,
+    isConfirmedS2,
+    confirmedByS1,
+    confirmedByS2,
+    confirmedAtS1,
+    confirmedAtS2,
     onConfirmStatus,
     onClose,
   });
@@ -112,8 +130,13 @@ function FleetStatusModalComponent({
         <FleetStatusHeader
           routeCode={routeCode}
           renopsTarget={renopsTarget}
+          targetRenops={targetRenops}
+          onTargetRenopsChange={setTargetRenops}
           selectedDate={selectedDate}
           dayLabel={dayLabel}
+          isLocked={isLocked}
+          confirmedBy={confirmedBy}
+          confirmedAt={confirmedAt}
           onClose={onClose}
         />
 
@@ -123,6 +146,7 @@ function FleetStatusModalComponent({
           activeBrush={activeBrush}
           onSelectBrush={setActiveBrush}
           onSgoAll={handleSgoAll}
+          isLocked={isLocked}
         />
 
         <FleetStatusGrid
@@ -130,6 +154,7 @@ function FleetStatusModalComponent({
           unitMap={unitMap}
           currentShift={currentShift}
           activeBrush={activeBrush}
+          isLocked={isLocked}
           onCardTap={handleCardTap}
         />
 
@@ -137,6 +162,7 @@ function FleetStatusModalComponent({
           currentShift={currentShift}
           summaryCounts={summaryCounts}
           isSaving={isSaving}
+          isLocked={isLocked}
           onConfirm={handleConfirm}
         />
       </div>

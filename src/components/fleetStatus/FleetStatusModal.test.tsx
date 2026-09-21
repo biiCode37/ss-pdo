@@ -78,7 +78,9 @@ describe('FleetStatusModal Component', () => {
     });
 
     expect(container.textContent).toContain('JAK.15');
-    expect(container.textContent).toContain('Target Renops: 60 Unit');
+    expect(container.textContent).toContain('Target Renops:');
+    const renopsInput = container.querySelector('input[type="number"]') as HTMLInputElement;
+    expect(renopsInput?.value).toBe('60');
     expect(container.textContent).toContain('JAK.15-01');
     expect(container.textContent).toContain('JAK.15-02');
     expect(container.textContent).toContain('JAK.15-03');
@@ -163,7 +165,13 @@ describe('FleetStatusModal Component', () => {
     });
 
     expect(onConfirmMock).toHaveBeenCalledTimes(1);
-    expect(onConfirmMock).toHaveBeenCalledWith(1, expect.any(Map));
+    expect(onConfirmMock).toHaveBeenCalledWith(1, expect.any(Map), expect.objectContaining({
+      targetRenops: 60,
+      realops: 1,
+      sgoCount: 1,
+      offCount: 1,
+      toCount: 1,
+    }));
   });
 
   it('acts as independent modal and closes modal on confirm', async () => {
@@ -203,5 +211,76 @@ describe('FleetStatusModal Component', () => {
 
     expect(onConfirmMock).toHaveBeenCalledTimes(1);
     expect(onCloseMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('supports SO (Stop Operasi) brush and renders SO in summary', async () => {
+    await act(async () => {
+      root.render(
+        <FleetStatusModal
+          isOpen={true}
+          onClose={vi.fn()}
+          routeCode="JAK.15"
+          selectedDate="2026-09-09"
+          renopsTarget={60}
+          buses={mockBuses}
+          initialShift={1}
+          onConfirmStatus={vi.fn()}
+        />
+      );
+    });
+
+    // Tap SO brush button
+    const soBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.textContent?.trim() === 'SO'
+    );
+    expect(soBtn).toBeDefined();
+
+    await act(async () => {
+      soBtn?.click();
+    });
+
+    // Tap on the first bus (JAK.15-01) which is currently SGO
+    const firstBusCard = container.querySelector<HTMLDivElement>('[data-unit="JAK.15-01"]');
+    expect(firstBusCard).toBeDefined();
+
+    await act(async () => {
+      firstBusCard?.click();
+    });
+
+    expect(container.textContent).toContain('SO: 1');
+  });
+
+  it('renders locked view when shift is confirmed and prevents card clicks', async () => {
+    const onConfirmMock = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <FleetStatusModal
+          isOpen={true}
+          onClose={vi.fn()}
+          routeCode="JAK.15"
+          selectedDate="2026-09-09"
+          renopsTarget={60}
+          buses={mockBuses}
+          initialShift={1}
+          isConfirmedS1={true}
+          confirmedByS1="pengawas@mikrotrans.id"
+          confirmedAtS1="2026-09-21T06:00:00Z"
+          onConfirmStatus={onConfirmMock}
+        />
+      );
+    });
+
+    // Check lock banner and locked badge
+    expect(container.textContent).toContain('Terkonfirmasi');
+    expect(container.textContent).toContain('pengawas@mikrotrans.id');
+    expect(container.textContent).toContain('Terkunci');
+
+    // Confirm button should be locked and disabled
+    const lockedBtn = Array.from(container.querySelectorAll('button')).find(
+      b => b.textContent?.includes('Terkunci')
+    );
+    expect(lockedBtn).toBeDefined();
+    expect(lockedBtn?.getAttribute('disabled')).not.toBeNull();
   });
 });

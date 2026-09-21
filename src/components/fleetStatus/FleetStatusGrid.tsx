@@ -8,6 +8,7 @@ interface FleetStatusGridProps {
   unitMap: StatusMap;
   currentShift: 1 | 2;
   activeBrush: BrushMode;
+  isLocked?: boolean;
   onCardTap: (rowIndex: number) => void;
 }
 
@@ -16,6 +17,7 @@ export function FleetStatusGrid({
   unitMap,
   currentShift,
   activeBrush,
+  isLocked = false,
   onCardTap,
 }: FleetStatusGridProps) {
   return (
@@ -42,8 +44,9 @@ export function FleetStatusGrid({
 
           const isSgo = !upper;
           const isOff = upper.includes("OFF");
+          const isSo = upper.includes("SO");
           const isTo = upper.includes("TO");
-          const isBa = !isSgo && !isOff && !isTo;
+          const isOther = !isSgo && !isOff && !isSo && !isTo;
 
           let cardBg = "var(--input-bg, rgba(255, 255, 255, 0.03))";
           let cardBorder = "1px solid var(--border-color, rgba(255, 255, 255, 0.08))";
@@ -57,13 +60,19 @@ export function FleetStatusGrid({
             badgeBg = "rgba(245, 158, 11, 0.2)";
             badgeColor = "#f59e0b";
             badgeText = "OFF";
+          } else if (isSo) {
+            cardBg = "rgba(168, 85, 247, 0.08)";
+            cardBorder = "1px solid rgba(168, 85, 247, 0.35)";
+            badgeBg = "rgba(168, 85, 247, 0.2)";
+            badgeColor = "#c084fc";
+            badgeText = "SO";
           } else if (isTo) {
             cardBg = "rgba(239, 68, 68, 0.08)";
             cardBorder = "1px solid rgba(239, 68, 68, 0.35)";
             badgeBg = "rgba(239, 68, 68, 0.2)";
             badgeColor = "#ef4444";
             badgeText = "T.O";
-          } else if (isBa) {
+          } else if (isOther) {
             cardBg = "rgba(14, 165, 233, 0.08)";
             cardBorder = "1px solid rgba(14, 165, 233, 0.35)";
             badgeBg = "rgba(14, 165, 233, 0.2)";
@@ -74,21 +83,24 @@ export function FleetStatusGrid({
           return (
             <div
               key={bus.rowIndex}
+              data-unit={bus.unit}
+              className="fleet-status-bus-card"
               onClick={() => onCardTap(bus.rowIndex)}
               style={{
                 background: cardBg,
                 border: cardBorder,
                 borderRadius: "12px",
                 padding: "10px 12px",
-                cursor: "pointer",
+                cursor: isLocked ? "default" : "pointer",
                 userSelect: "none",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 minHeight: "72px",
                 transition: "all 0.15s ease",
+                opacity: isLocked ? 0.85 : 1,
               }}
-              title={TEXT_FLEET_STATUS.MODAL.APPLY_STATUS_TITLE(activeBrush)}
+              title={isLocked ? TEXT_FLEET_STATUS.LOCK.LOCKED_TOOLTIP : TEXT_FLEET_STATUS.MODAL.APPLY_STATUS_TITLE(activeBrush)}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span
@@ -101,35 +113,48 @@ export function FleetStatusGrid({
                 >
                   {bus.unit}
                 </span>
+
                 <span
                   style={{
-                    fontSize: "10px",
-                    fontWeight: 700,
+                    fontSize: "10.5px",
+                    fontWeight: 800,
                     padding: "2px 6px",
                     borderRadius: "6px",
                     background: badgeBg,
                     color: badgeColor,
-                    whiteSpace: "nowrap",
                   }}
                 >
                   {badgeText}
                 </span>
               </div>
 
-              <div style={{ marginTop: "6px" }}>
+              {/* Sub-note */}
+              {note ? (
                 <span
                   style={{
-                    fontSize: "10.5px",
+                    fontSize: "11px",
                     color: "var(--text-secondary)",
-                    whiteSpace: "nowrap",
+                    marginTop: "6px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    display: "block",
+                    whiteSpace: "nowrap",
+                    fontWeight: 500,
                   }}
                 >
-                  {isSgo ? TEXT_FLEET_STATUS.MODAL.SGO_FULL_LABEL : note}
+                  {note}
                 </span>
-              </div>
+              ) : (
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "rgba(255, 255, 255, 0.25)",
+                    marginTop: "6px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {TEXT_FLEET_STATUS.MODAL.SGO_FULL_LABEL}
+                </span>
+              )}
             </div>
           );
         })}

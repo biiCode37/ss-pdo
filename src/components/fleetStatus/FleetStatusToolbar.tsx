@@ -1,3 +1,4 @@
+import { Lock } from "lucide-react";
 import { TEXT_FLEET_STATUS } from "@/constants/texts";
 import type { BrushMode } from "./types";
 
@@ -7,6 +8,7 @@ interface FleetStatusToolbarProps {
   activeBrush: BrushMode;
   onSelectBrush: (brush: BrushMode) => void;
   onSgoAll: () => void;
+  isLocked?: boolean;
 }
 
 export function FleetStatusToolbar({
@@ -15,6 +17,7 @@ export function FleetStatusToolbar({
   activeBrush,
   onSelectBrush,
   onSgoAll,
+  isLocked = false,
 }: FleetStatusToolbarProps) {
   return (
     <div
@@ -75,6 +78,27 @@ export function FleetStatusToolbar({
         </button>
       </div>
 
+      {/* Lock Banner if locked */}
+      {isLocked && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 12px",
+            borderRadius: "8px",
+            background: "rgba(239, 68, 68, 0.1)",
+            border: "1px solid rgba(239, 68, 68, 0.25)",
+            color: "#f87171",
+            fontSize: "12px",
+            fontWeight: 600,
+          }}
+        >
+          <Lock size={14} />
+          <span>{TEXT_FLEET_STATUS.LOCK.LOCKED_BANNER(currentShift)}</span>
+        </div>
+      )}
+
       {/* Mode Pemilih Status */}
       <div
         style={{
@@ -83,6 +107,8 @@ export function FleetStatusToolbar({
           justifyContent: "space-between",
           gap: "8px",
           flexWrap: "wrap",
+          opacity: isLocked ? 0.45 : 1,
+          pointerEvents: isLocked ? "none" : "auto",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
@@ -90,6 +116,7 @@ export function FleetStatusToolbar({
           <button
             type="button"
             onClick={() => onSelectBrush("SGO")}
+            disabled={isLocked}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -101,7 +128,7 @@ export function FleetStatusToolbar({
               color: "#10b981",
               fontSize: "11.5px",
               fontWeight: 700,
-              cursor: "pointer",
+              cursor: isLocked ? "not-allowed" : "pointer",
             }}
           >
             {TEXT_FLEET_STATUS.STATUS_CODES.SGO}
@@ -111,6 +138,7 @@ export function FleetStatusToolbar({
           <button
             type="button"
             onClick={() => onSelectBrush("OFF")}
+            disabled={isLocked}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -122,7 +150,7 @@ export function FleetStatusToolbar({
               color: "#f59e0b",
               fontSize: "11.5px",
               fontWeight: 700,
-              cursor: "pointer",
+              cursor: isLocked ? "not-allowed" : "pointer",
             }}
           >
             {TEXT_FLEET_STATUS.STATUS_CODES.OFF}
@@ -132,6 +160,7 @@ export function FleetStatusToolbar({
           <button
             type="button"
             onClick={() => onSelectBrush("TO")}
+            disabled={isLocked}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -143,10 +172,32 @@ export function FleetStatusToolbar({
               color: "#ef4444",
               fontSize: "11.5px",
               fontWeight: 700,
-              cursor: "pointer",
+              cursor: isLocked ? "not-allowed" : "pointer",
             }}
           >
             {TEXT_FLEET_STATUS.STATUS_CODES.TO}
+          </button>
+
+          {/* Status SO */}
+          <button
+            type="button"
+            onClick={() => onSelectBrush("SO")}
+            disabled={isLocked}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "5px 10px",
+              borderRadius: "8px",
+              border: activeBrush === "SO" ? "1.5px solid #a855f7" : "1px solid var(--border-color)",
+              background: activeBrush === "SO" ? "rgba(168, 85, 247, 0.2)" : "transparent",
+              color: "#c084fc",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              cursor: isLocked ? "not-allowed" : "pointer",
+            }}
+          >
+            {TEXT_FLEET_STATUS.STATUS_CODES.SO}
           </button>
         </div>
 
@@ -154,6 +205,7 @@ export function FleetStatusToolbar({
         <button
           type="button"
           onClick={onSgoAll}
+          disabled={isLocked}
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -165,7 +217,7 @@ export function FleetStatusToolbar({
             color: "var(--success-color, #10b981)",
             fontSize: "11.5px",
             fontWeight: 700,
-            cursor: "pointer",
+            cursor: isLocked ? "not-allowed" : "pointer",
             whiteSpace: "nowrap",
           }}
         >
