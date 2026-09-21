@@ -79,7 +79,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
     for (const shift of relevantShifts) {
       const units = shift.non_sgo_units || [];
       for (const u of units) {
-        if (statusFilter !== "all" && u.status_type !== statusFilter) {
+        if (statusFilter !== "all" && u.status_code !== statusFilter) {
           continue;
         }
 
@@ -599,9 +599,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 }}
               >
                 {group.units.map((unit, idx) => {
-                  const isTo = unit.status_type === "TO";
-                  const isOff = unit.status_type === "OFF";
-                  const isSo = unit.status_type === "SO";
+                  const isTo = unit.status_code === "TO";
+                  const isOff = unit.status_code === "OFF";
+                  const isSo = unit.status_code === "SO";
 
                   const badgeBg = isTo
                     ? "rgba(245, 158, 11, 0.15)"
@@ -658,7 +658,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                               borderRadius: "6px",
                             }}
                           >
-                            {unit.status_type}
+                            {unit.status_code}
                           </span>
                           <span
                             style={{
@@ -683,7 +683,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>
                           {TEXT_MONITORING.FLEET_TAB.NOTES_PREFIX}{" "}
                         </span>
-                        {unit.notes || "-"}
+                        {unit.note || "-"}
                       </div>
                     </div>
                   );

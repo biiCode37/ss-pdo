@@ -1,13 +1,15 @@
-# Progress Ledger - Overnight Rollover & Cross-Day Validation (Refactor 67)
+# Progress Ledger - Redesign Halaman Monitoring Wilayah 18 Rute (Refactor 70)
 
-Reference Spec: docs/ODOMETER_INPUT_CHAIN_LOGIC.md (Skenario 6)
-Audit Bugs: refactor-ss-pdo/refact_67/AUDIT_BUGS.md
-Repair Report: refactor-ss-pdo/refact_67/REPAIR_REPORT.md
-Branch: devmode
+Plan: `docs/superpowers/plans/2026-09-21-regional-monitoring-redesign.md`
+Spec: `docs/superpowers/specs/2026-09-21-regional-monitoring-redesign.md`
+Branch: `devmode`
 
 ## Tasks
-- [x] Task 1: Kamus Teks Sentral (`text_alerts.ts` & `texts.test.ts`) untuk Validasi Lintas Hari & Saran Rollover
-- [x] Task 2: Logika Validasi Lintas Hari & Kalkulasi Rollover di `busModalValidation.ts` & unit test
-- [x] Task 3: Integrasi Hook `useBusInputForm.ts` (Validasi Lintas Hari, State Saran Rollover, & 1-Klik Terapkan)
-- [x] Task 4: UI Tombol Saran Rollover Cerdas di `BusInputModalShift1.tsx` & `BusInputModalSingleFocus.tsx`
-- [x] Task 5: Quality Gates (Vitest 100%, Build 0 error, Graphify update, Docs Refact 67, Git Commit devmode)
+- [x] Task 1: Kamus Teks Sentral (`text_monitoring.ts`, `text_wa_report.ts`, `texts.test.ts`)
+- [x] Task 2: Integrasi Pintu Navigasi di Menu Profil (`ProfileFeaturesSection.tsx` & `Dashboard.tsx`) [commit 446b30d]
+- [x] Task 3: Komponen Bottom Navigation Independen (`MonitoringBottomNav.tsx`) [commit f932d23]
+- [x] Task 4: Tab 1 — Dashboard View (`MonitoringDashboardTab.tsx` & subcomponents) [commit da6ebab]
+- [x] Task 5: Tab 2 — Rute View dengan Bulk Verify (`MonitoringRoutesTab.tsx` & subcomponents) [commit 05554cb]
+- [x] Task 6: Tab 3 — Status Armada Non-SGO Grouped by Route (`MonitoringFleetStatusTab.tsx`) [commit 5a5dfdf]
+- [x] Task 7: Tab 4 — Laporan WA Studio & Redesain Format Teks (`MonitoringWaReportTab.tsx` & `waReportGenerator.ts`) [commit a4b9968]
+- [x] Task 8: Integrasi Orkestrator `AllRouteMonitoringPage.tsx` & Quality Gates

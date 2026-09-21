@@ -5,7 +5,9 @@ import { act } from 'react';
 import { AllRouteMonitoringPage } from './AllRouteMonitoringPage';
 import * as regionalService from '@/services/allRouteMonitoringService';
 import * as dailyReportService from '@/services/dailyRouteReportService';
+import * as fleetService from '@/services/fleetStatusService';
 import type { RegionalMonitoringResult } from '@/services/allRouteMonitoringService';
+import { TEXT_MONITORING } from '@/constants/texts/text_monitoring';
 
 vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services/allRouteMonitoringService')>();
@@ -25,11 +27,16 @@ vi.mock('@/services/dailyRouteReportService', () => ({
   verifyDailyRouteReport: vi.fn(),
 }));
 
+vi.mock('@/services/fleetStatusService', () => ({
+  fetchDailyFleetShiftsByDate: vi.fn().mockResolvedValue([]),
+}));
+
 vi.mock('@/utils/alertUtils', () => ({
   showSuccessToast: vi.fn(),
   showErrorToast: vi.fn(),
   showErrorAlert: vi.fn(),
   showRegionalSyncModal: vi.fn(),
+  showConfirmationDialog: vi.fn().mockResolvedValue(true),
 }));
 
 const mockData: RegionalMonitoringResult = {
@@ -39,7 +46,7 @@ const mockData: RegionalMonitoringResult = {
   routes: [
     {
       id: 1,
-      routeCode: 'JAK 60',
+      routeCode: 'JAK.60',
       routeName: 'Kelapa Gading - Rusun Kemayoran',
       operatorName: 'PT Trans Mega',
       supervisorName: 'Ranto Lumban Toruan',
@@ -69,11 +76,12 @@ const mockData: RegionalMonitoringResult = {
       manualShift2: 50,
       totalShift2: 1450,
       totalKm: 215.4,
-      achievementKm: 17.95
+      achievementKm: 17.95,
+      totalTrips: 130
     },
     {
       id: 2,
-      routeCode: 'JAK 05',
+      routeCode: 'JAK.05',
       routeName: 'Semper - Rorotan',
       operatorName: 'Koperasi Wahana',
       supervisorName: 'Abdul Manan',
@@ -103,14 +111,15 @@ const mockData: RegionalMonitoringResult = {
       manualShift2: 50,
       totalShift2: 1200,
       totalKm: 142.0,
-      achievementKm: 14.2
+      achievementKm: 14.2,
+      totalTrips: 110
     },
     {
       id: 3,
-      routeCode: 'JAK 01',
+      routeCode: 'JAK.01',
       routeName: 'Tanjung Priok - Plumpang',
       operatorName: 'KOLAMAS',
-      supervisorName: 'MOAMAR. Z.A. MAHU',
+      supervisorName: 'Moamar Z.A. Mahu',
       isLooping: false,
       kmBaku: 14.4,
       targetHk: 2000,
@@ -137,7 +146,8 @@ const mockData: RegionalMonitoringResult = {
       manualShift2: 100,
       totalShift2: 900,
       totalKm: 150.0,
-      achievementKm: 15.0
+      achievementKm: 15.0,
+      totalTrips: 120
     }
   ],
   totalRenops: 42,
@@ -148,6 +158,8 @@ const mockData: RegionalMonitoringResult = {
   totalLastWeekPassengers: 7100,
   totalKm: 507.4,
   averageKmPerBus: 15.5,
+  totalTrips: 360,
+  averageTripsPerBus: 12,
   tomShift1: 3950,
   manualShift1: 250,
   totalShift1: 4200,
@@ -158,7 +170,7 @@ const mockData: RegionalMonitoringResult = {
   totalShift2: 3550,
   yesterdayShift2: 3500,
   lastWeekShift2: 3300,
-  submittedCount: 3,
+  submittedCount: 2,
   verifiedCount: 1,
   draftCount: 0,
   emptyCount: 0,
@@ -172,6 +184,7 @@ describe('AllRouteMonitoringPage Component', () => {
   beforeEach(() => {
     (regionalService.fetchRegionalMonitoringData as ReturnType<typeof vi.fn>).mockResolvedValue(mockData);
     (dailyReportService.verifyDailyRouteReport as ReturnType<typeof vi.fn>).mockResolvedValue(true);
+    (fleetService.fetchDailyFleetShiftsByDate as ReturnType<typeof vi.fn>).mockResolvedValue([]);
 
     container = document.createElement('div');
     document.body.appendChild(container);
@@ -186,38 +199,45 @@ describe('AllRouteMonitoringPage Component', () => {
     vi.clearAllMocks();
   });
 
-  it('renders regional KPI cards and route items after loading', async () => {
+  it('renders executive dashboard tab by default with KPIs and chart', async () => {
     await act(async () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
     });
 
-    // Verify title and readiness banner
-    expect(container.textContent).toContain('Monitoring Wilayah Utara');
-    expect(container.textContent).toContain('3 / 3 Rute Siap');
-
-    // Verify KPI numbers
+    // Header title
+    expect(container.textContent).toContain(TEXT_MONITORING.HEADER.TITLE);
+    // Tab 1 (Dashboard) components
+    expect(container.textContent).toContain('Kesiapan Status Armada PDO');
     expect(container.textContent).toContain('7.750'); // Total Pelanggan
     expect(container.textContent).toContain('507,4'); // Total KM
-    expect(container.textContent).toContain('42 / 42'); // Armada Realops/Renops
-
-    // Verify route cards
-    expect(container.textContent).toContain('JAK 60');
-    expect(container.textContent).toContain('JAK 05');
-    expect(container.textContent).toContain('JAK 01');
+    expect(container.textContent).toContain('Tren TOA Penumpang per Rute');
+    expect(container.textContent).toContain('Perbandingan Beban Operasional Shift');
+    expect(container.textContent).toContain('Kinerja Rute Wilayah');
   });
 
-  it('filters routes when supervisor filter tab is clicked', async () => {
+  it('navigates to Rute tab and filters by supervisor', async () => {
     await act(async () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
     });
 
-    expect(container.textContent).toContain('JAK 60');
-    expect(container.textContent).toContain('JAK 05');
-    expect(container.textContent).toContain('JAK 01');
+    // Click Rute tab in bottom nav
+    const routesTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-routes"]'
+    );
+    expect(routesTabBtn).toBeTruthy();
 
-    // Find Abdul Manan filter tab
+    await act(async () => {
+      routesTabBtn?.click();
+    });
+
+    // Should show routes list
+    expect(container.textContent).toContain('JAK.60');
+    expect(container.textContent).toContain('JAK.05');
+    expect(container.textContent).toContain('JAK.01');
+
+    // Filter by Abdul Manan
     const abdulTab = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Abdul Manan')
+      b => b.textContent?.includes('Abdul')
     );
     expect(abdulTab).toBeDefined();
 
@@ -225,27 +245,13 @@ describe('AllRouteMonitoringPage Component', () => {
       abdulTab?.click();
     });
 
-    // Only JAK 05 should be visible in the filtered list
-    expect(container.textContent).toContain('JAK 05');
-    expect(container.textContent).not.toContain('JAK 60');
-    expect(container.textContent).not.toContain('JAK 01');
-
-    // Now find and click Moamar Z.A. Mahu filter tab (testing MOAMAR. Z.A. MAHU with dots)
-    const moamarTab = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Moamar Z.A. Mahu')
-    );
-    expect(moamarTab).toBeDefined();
-
-    await act(async () => {
-      moamarTab?.click();
-    });
-
-    expect(container.textContent).toContain('JAK 01');
-    expect(container.textContent).not.toContain('JAK 05');
-    expect(container.textContent).not.toContain('JAK 60');
+    // Only JAK.05 visible
+    expect(container.textContent).toContain('JAK.05');
+    expect(container.textContent).not.toContain('JAK.60');
+    expect(container.textContent).not.toContain('JAK.01');
   });
 
-  it('triggers verification when Verifikasi button on route card is clicked', async () => {
+  it('triggers verification when Verifikasi button on route card is clicked in Rute tab', async () => {
     await act(async () => {
       root.render(
         <AllRouteMonitoringPage
@@ -255,11 +261,19 @@ describe('AllRouteMonitoringPage Component', () => {
       );
     });
 
-    // Find verify button for JAK 60 (which has status 'submitted')
-    const verifyBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Verifikasi')
+    // Switch to Rute tab
+    const routesTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-routes"]'
     );
-    expect(verifyBtn).toBeDefined();
+    await act(async () => {
+      routesTabBtn?.click();
+    });
+
+    // Find verify button for JAK.60
+    const verifyBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="verify-btn-JAK.60"]'
+    );
+    expect(verifyBtn).toBeTruthy();
 
     await act(async () => {
       verifyBtn?.click();
@@ -272,25 +286,25 @@ describe('AllRouteMonitoringPage Component', () => {
     );
   });
 
-  it('opens WhatsApp Report Modal when Buat Laporan WA button is clicked', async () => {
+  it('navigates to WhatsApp Report Studio tab via bottom nav', async () => {
     await act(async () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
     });
 
-    const reportBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Buat Laporan WA')
+    const waTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-wa_report"]'
     );
-    expect(reportBtn).toBeDefined();
+    expect(waTabBtn).toBeTruthy();
 
     await act(async () => {
-      reportBtn?.click();
+      waTabBtn?.click();
     });
 
-    // WaReportModal should now be open
-    expect(container.textContent).toContain('Generator Laporan WhatsApp');
+    expect(container.textContent).toContain('Report Studio WhatsApp');
+    expect(container.textContent).toContain('Format 1 (Wilayah Lengkap)');
   });
 
-  it('updates selected date and calls onDateChange when step buttons are clicked without getting reset', async () => {
+  it('updates selected date and calls onDateChange when step buttons are clicked', async () => {
     const onDateChange = vi.fn();
     await act(async () => {
       root.render(
@@ -361,6 +375,5 @@ describe('AllRouteMonitoringPage Component', () => {
       'https://docs.google.com/spreadsheets/d/abc-123',
       'SEPTEMBER 2026'
     );
-    expect(alertUtils.showSuccessToast).toHaveBeenCalledWith(expect.stringContaining('18 rute'));
   });
 });

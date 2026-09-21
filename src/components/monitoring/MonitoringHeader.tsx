@@ -1,41 +1,39 @@
 import React from "react";
 import {
   Bus,
-  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   Calendar,
   RefreshCw,
-  FileSpreadsheet,
   Download,
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
+import { UserProfileHeader } from "@/components/UserProfileHeader";
 
-interface MonitoringHeaderProps {
+export interface MonitoringHeaderProps {
   onBackToRouteView?: () => void;
+  onOpenProfile?: () => void;
   selectedDate: string;
   onStepDate: (days: number) => void;
   onDateInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRefresh: () => void;
   refreshing: boolean;
   loading: boolean;
-  onOpenWaModal: () => void;
-  hasData: boolean;
+  onOpenWaModal?: () => void;
+  hasData?: boolean;
   onSyncGlobal?: () => void;
   syncingGlobal?: boolean;
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
-  onBackToRouteView,
+  onOpenProfile,
   selectedDate,
   onStepDate,
   onDateInputChange,
   onRefresh,
   refreshing,
   loading,
-  onOpenWaModal,
-  hasData,
   onSyncGlobal,
   syncingGlobal,
 }) => {
@@ -64,33 +62,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           gap: "12px",
         }}
       >
-        {/* Pojok Kiri: Tombol Kembali & Judul */}
+        {/* Pojok Kiri: Judul & Subtitle */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          {onBackToRouteView && (
-            <button
-              type="button"
-              onClick={onBackToRouteView}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "7px 12px",
-                borderRadius: "10px",
-                fontSize: "13px",
-                fontWeight: 600,
-                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
-                color: "var(--text-primary, #ededed)",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              title={TEXT_MONITORING.HEADER.BTN_BACK_TITLE}
-            >
-              <ArrowLeft size={16} />
-              <span>{TEXT_MONITORING.HEADER.BTN_BACK}</span>
-            </button>
-          )}
-
           <div>
             <h1
               style={{
@@ -124,7 +97,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           </div>
         </div>
 
-        {/* Pojok Kanan: Date Navigator, Refresh, & Tombol WA */}
+        {/* Pojok Kanan: Date Navigator, Refresh, Sync Global, Profile Avatar */}
         <div
           style={{
             display: "flex",
@@ -277,33 +250,16 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
             </button>
           )}
 
-          {/* Buat Laporan WA Button */}
-          <button
-            type="button"
-            onClick={onOpenWaModal}
-            disabled={!hasData || loading}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "8px 14px",
-              borderRadius: "12px",
-              background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
-              color: "#ffffff",
-              border: "none",
-              fontSize: "12.5px",
-              fontWeight: 700,
-              cursor: !hasData || loading ? "not-allowed" : "pointer",
-              opacity: !hasData || loading ? 0.5 : 1,
-              boxShadow: "0 4px 12px rgba(37, 211, 102, 0.3)",
-              transition: "all 0.2s ease",
-            }}
-          >
-            <FileSpreadsheet size={16} />
-            <span>{TEXT_MONITORING.HEADER.BTN_WA_REPORT}</span>
-          </button>
+          {/* User Profile Trigger Button */}
+          {onOpenProfile && (
+            <div style={{ marginLeft: "4px" }}>
+              <UserProfileHeader onOpenProfile={onOpenProfile} />
+            </div>
+          )}
         </div>
       </div>
     </header>
   );
 };
+
+export default MonitoringHeader;

@@ -4,7 +4,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
 import { MonitoringRoutesTab } from "./MonitoringRoutesTab";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
-import { TEXT_MONITORING } from "@/constants/texts";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -14,7 +13,7 @@ vi.mock("@/utils/alertUtils", () => ({
   showSuccessToast: vi.fn(),
   showWarningToast: vi.fn(),
   showErrorAlert: vi.fn(),
-  showConfirmationDialog: vi.fn().mockResolvedValue(true),
+  showConfirmDialog: vi.fn().mockResolvedValue(true),
 }));
 
 const mockRouteItems: RegionalRouteItem[] = [

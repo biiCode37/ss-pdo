@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
-import { BarChart3, Users } from "lucide-react";
+import { BarChart3 } from "lucide-react";
 
 interface MonitoringToaBarChartProps {
   routes: RegionalRouteItem[];

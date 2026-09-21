@@ -90,8 +90,8 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
       const nonSgoUnits =
         matchingShift?.non_sgo_units?.map((u) => ({
           unit: u.unit_body,
-          note: u.notes || u.status_type,
-          isOff: u.status_type === "OFF",
+          note: u.note || u.status_code,
+          isOff: u.status_code === "OFF",
         })) || [];
 
       return {

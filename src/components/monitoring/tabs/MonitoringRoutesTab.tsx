@@ -3,7 +3,7 @@ import { Search, CheckCheck, X, Filter } from "lucide-react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { SUPERVISORS } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
-import { showConfirmationDialog } from "@/utils/alertUtils";
+import { showConfirmDialog } from "@/utils/alertUtils";
 import { MonitoringRouteCardModern } from "./MonitoringRouteCardModern";
 
 export interface MonitoringRoutesTabProps {
@@ -83,7 +83,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
   const handleBulkVerifyClick = async () => {
     if (submittedRoutes.length === 0) return;
 
-    const confirmed = await showConfirmationDialog({
+    const confirmed = await showConfirmDialog({
       title: TEXT_MONITORING.BULK_VERIFY.CONFIRM_TITLE,
       text: TEXT_MONITORING.BULK_VERIFY.CONFIRM_TEXT(submittedRoutes.length),
       confirmButtonText: TEXT_MONITORING.BULK_VERIFY.CONFIRM_BUTTON,
