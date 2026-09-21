@@ -107,6 +107,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     isFleetModalOpen,
     setIsFleetModalOpen,
     confirmedShifts,
+    confirmedInfo,
     isShiftConfirmed,
     handleConfirmFleetStatus,
   } = useDashboardFleet({
@@ -325,6 +326,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         isFleetModalOpen={isFleetModalOpen}
         onCloseFleetModal={() => setIsFleetModalOpen(false)}
         activeShift={activeShift}
+        confirmedShifts={confirmedShifts}
+        confirmedInfo={confirmedInfo}
         onConfirmFleetStatus={handleConfirmFleetStatus}
         isQueueModalOpen={isQueueModalOpen}
         onCloseQueueModal={() => setIsQueueModalOpen(false)}

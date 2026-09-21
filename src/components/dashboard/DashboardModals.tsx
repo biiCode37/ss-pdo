@@ -57,6 +57,11 @@ interface DashboardModalsProps {
   isOnline: boolean;
   onLogout: () => void;
   onFormatWholeSheet: () => Promise<void>;
+  confirmedShifts?: { 1: boolean; 2: boolean };
+  confirmedInfo?: {
+    s1: { by?: string; at?: string };
+    s2: { by?: string; at?: string };
+  };
   currentTabName: string;
   hasActiveData: boolean;
 }
@@ -73,6 +78,8 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   isFleetModalOpen,
   onCloseFleetModal,
   activeShift,
+  confirmedShifts,
+  confirmedInfo,
   onConfirmFleetStatus,
   isQueueModalOpen,
   onCloseQueueModal,
@@ -130,6 +137,12 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
           dayLabel={dynamicRenops.label}
           buses={busData}
           initialShift={activeShift}
+          isConfirmedS1={confirmedShifts?.[1]}
+          isConfirmedS2={confirmedShifts?.[2]}
+          confirmedByS1={confirmedInfo?.s1?.by}
+          confirmedByS2={confirmedInfo?.s2?.by}
+          confirmedAtS1={confirmedInfo?.s1?.at}
+          confirmedAtS2={confirmedInfo?.s2?.at}
           onConfirmStatus={onConfirmFleetStatus}
         />
       )}

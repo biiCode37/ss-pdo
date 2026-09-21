@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
-import { updateBulkBusData } from "@/services/googleSheets";
 import { getRenopsForDate } from "@/utils/holidayUtils";
 import { combineShiftKeterangan, cleanShiftNote } from "@/utils/keteranganUtils";
 import {
@@ -8,7 +7,11 @@ import {
   upsertDailyRouteReport,
   recordFleetStatusAuditLog,
 } from "@/services/dailyRouteReportService";
-import type { FleetUnitStatusDetail } from "@/types/supabase";
+import {
+  fetchDailyFleetShift,
+  upsertDailyFleetShift,
+} from "@/services/fleetStatusService";
+import type { FleetStatusConfirmationPayload } from "@/components/fleetStatus/types";
 import { formatUserError } from "@/utils/errorFormatter";
 import { showSuccessToast, showErrorToast } from "@/utils/alertUtils";
 import { TEXT_FLEET_STATUS } from "@/constants/texts";
@@ -29,9 +32,9 @@ export function useDashboardFleet({
   operationalReportDate,
   selectedTab,
   busData,
-  currentSheetId,
-  currentTabName,
-  headerMap,
+  currentSheetId: _currentSheetId,
+  currentTabName: _currentTabName,
+  headerMap: _headerMap,
   setBusData,
 }: UseDashboardFleetProps) {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -52,29 +55,52 @@ export function useDashboardFleet({
     1: false,
     2: false,
   });
+  const [confirmedInfo, setConfirmedInfo] = useState<{
+    s1: { by?: string; at?: string };
+    s2: { by?: string; at?: string };
+  }>({
+    s1: {},
+    s2: {},
+  });
 
   useEffect(() => {
     let isMounted = true;
     if (matchedRoute?.id && operationalReportDate) {
-      fetchDailyRouteReport(matchedRoute.id, operationalReportDate)
-        .then((report) => {
+      Promise.all([
+        fetchDailyFleetShift(matchedRoute.id, operationalReportDate, 1),
+        fetchDailyFleetShift(matchedRoute.id, operationalReportDate, 2),
+        fetchDailyRouteReport(matchedRoute.id, operationalReportDate),
+      ])
+        .then(([fleetS1, fleetS2, report]) => {
           if (isMounted) {
             setOperationalReportStatus(report?.status || "draft");
             setConfirmedShifts({
               1: Boolean(
-                report?.is_fleet_confirmed_s1 ??
+                fleetS1?.is_confirmed ??
+                  report?.is_fleet_confirmed_s1 ??
                   (report &&
                     (report.realops_shift1 > 0 ||
                       report.status === "submitted" ||
                       report.status === "verified")),
               ),
               2: Boolean(
-                report?.is_fleet_confirmed_s2 ??
+                fleetS2?.is_confirmed ??
+                  report?.is_fleet_confirmed_s2 ??
                   (report &&
                     (report.realops_shift2 > 0 ||
                       report.status === "submitted" ||
                       report.status === "verified")),
               ),
+            });
+            setConfirmedInfo({
+              s1: {
+                by: fleetS1?.confirmed_by,
+                at: fleetS1?.confirmed_at || report?.fleet_confirmed_s1_at,
+              },
+              s2: {
+                by: fleetS2?.confirmed_by,
+                at: fleetS2?.confirmed_at || report?.fleet_confirmed_s2_at,
+              },
             });
           }
         })
@@ -82,11 +108,13 @@ export function useDashboardFleet({
           if (isMounted) {
             setOperationalReportStatus("draft");
             setConfirmedShifts({ 1: false, 2: false });
+            setConfirmedInfo({ s1: {}, s2: {} });
           }
         });
     } else {
       setOperationalReportStatus("draft");
       setConfirmedShifts({ 1: false, 2: false });
+      setConfirmedInfo({ s1: {}, s2: {} });
     }
     return () => {
       isMounted = false;
@@ -120,33 +148,26 @@ export function useDashboardFleet({
   const handleConfirmFleetStatus = async (
     shift: 1 | 2,
     statusMap: Map<number, { s1: string; s2: string }>,
+    payload?: FleetStatusConfirmationPayload,
   ) => {
-    if (!currentSheetId || !currentTabName || !headerMap) return;
-
-    let realopsS1 = 0;
-    let realopsS2 = 0;
-    const updatesList: { rowIndex: number; updates: Partial<BusData> }[] = [];
-
-    for (const [rowIndex, val] of statusMap.entries()) {
-      const cleanS1 = cleanShiftNote(val.s1);
-      const cleanS2 = cleanShiftNote(val.s2);
-      if (!cleanS1) realopsS1++;
-      if (!cleanS2) realopsS2++;
-
-      const combinedKeterangan = combineShiftKeterangan(val.s1, val.s2);
-      updatesList.push({
-        rowIndex,
-        updates: { keterangan: combinedKeterangan },
-      });
-    }
-
     try {
-      await updateBulkBusData(
-        currentSheetId,
-        currentTabName,
-        updatesList,
-        headerMap,
-      );
+      // 1. Perbarui state lokal busData di antarmuka tanpa menulis ke Google Sheets
+      const updatesList: { rowIndex: number; updates: Partial<BusData> }[] = [];
+      let calculatedRealopsS1 = 0;
+      let calculatedRealopsS2 = 0;
+
+      for (const [rowIndex, val] of statusMap.entries()) {
+        const cleanS1 = cleanShiftNote(val.s1);
+        const cleanS2 = cleanShiftNote(val.s2);
+        if (!cleanS1) calculatedRealopsS1++;
+        if (!cleanS2) calculatedRealopsS2++;
+
+        const combinedKeterangan = combineShiftKeterangan(val.s1, val.s2);
+        updatesList.push({
+          rowIndex,
+          updates: { keterangan: combinedKeterangan },
+        });
+      }
 
       setBusData((prev) =>
         prev
@@ -157,55 +178,66 @@ export function useDashboardFleet({
           : null,
       );
 
+      // 2. Simpan 100% ke Supabase (daily_fleet_shifts & daily_fleet_non_sgo_units)
       if (matchedRoute?.id && operationalReportDate) {
-        const nonSgoUnits: FleetUnitStatusDetail[] = [];
-        let offCount = 0;
-        let toCount = 0;
+        const userEmail = localStorage.getItem("PDO_USER_EMAIL") || undefined;
+        const nowIso = new Date().toISOString();
 
-        for (const bus of busData || []) {
-          const unitVal = statusMap.get(bus.rowIndex);
-          const note = cleanShiftNote(shift === 1 ? unitVal?.s1 : unitVal?.s2);
-          if (note) {
-            const isOff = note.toUpperCase().includes("OFF");
-            if (isOff) offCount++;
-            else toCount++;
+        const targetRenops = payload?.targetRenops ?? dynamicRenops.renops;
+        const realops = payload?.realops ?? (shift === 1 ? calculatedRealopsS1 : calculatedRealopsS2);
+        const sgoCount = payload?.sgoCount ?? realops;
+        const toCount = payload?.toCount ?? 0;
+        const offCount = payload?.offCount ?? 0;
+        const soCount = payload?.soCount ?? 0;
+        const otherCount = payload?.otherCount ?? 0;
+        const nonSgoUnits = payload?.nonSgoUnits ?? [];
 
-            nonSgoUnits.push({
-              unit: bus.unit,
-              note,
-              isOff,
-            });
-          }
-        }
+        await upsertDailyFleetShift(
+          {
+            route_id: matchedRoute.id,
+            route_code: matchedRoute.route_code,
+            date: operationalReportDate,
+            shift,
+            target_renops: targetRenops,
+            realops,
+            total_units: busData?.length || 0,
+            sgo_count: sgoCount,
+            to_count: toCount,
+            off_count: offCount,
+            so_count: soCount,
+            other_count: otherCount,
+            is_confirmed: true,
+            confirmed_by: userEmail,
+            confirmed_at: nowIso,
+          },
+          nonSgoUnits,
+        );
 
-        const totalUnits = busData?.length || 0;
-        const sgoCount = Math.max(0, totalUnits - nonSgoUnits.length);
-
+        // 3. Sinkronkan realops & status konfirmasi ke daily_route_reports untuk backward-compatibility
         await upsertDailyRouteReport({
           route_id: matchedRoute.id,
           route_code: matchedRoute.route_code,
           date: operationalReportDate,
           renops_shift1: dynamicRenops.renops,
-          realops_shift1: realopsS1,
+          realops_shift1: shift === 1 ? realops : calculatedRealopsS1,
           renops_shift2: dynamicRenops.renops,
-          realops_shift2: realopsS2,
+          realops_shift2: shift === 2 ? realops : calculatedRealopsS2,
           headway_fastest: 3,
           headway_slowest: 10,
           traffic_jam_spots: matchedRoute.default_traffic_jam_spots || [],
           status: operationalReportStatus || "draft",
           ...(shift === 1
             ? {
-                fleet_status_shift1: nonSgoUnits,
                 is_fleet_confirmed_s1: true,
-                fleet_confirmed_s1_at: new Date().toISOString(),
+                fleet_confirmed_s1_at: nowIso,
               }
             : {
-                fleet_status_shift2: nonSgoUnits,
                 is_fleet_confirmed_s2: true,
-                fleet_confirmed_s2_at: new Date().toISOString(),
+                fleet_confirmed_s2_at: nowIso,
               }),
         });
 
+        // 4. Catat riwayat jejak audit ke fleet_status_logs
         await recordFleetStatusAuditLog({
           route_id: matchedRoute.id,
           route_code: matchedRoute.route_code,
@@ -214,10 +246,19 @@ export function useDashboardFleet({
           sgo_count: sgoCount,
           to_count: toCount,
           off_count: offCount,
-          total_units: totalUnits,
-          fleet_status: nonSgoUnits,
-          confirmed_by: localStorage.getItem("PDO_USER_EMAIL") || undefined,
+          total_units: busData?.length || 0,
+          fleet_status: nonSgoUnits.map((u) => ({
+            unit: u.unit_body,
+            note: u.note,
+            isOff: u.status_code === "OFF",
+          })),
+          confirmed_by: userEmail,
         });
+
+        setConfirmedInfo((prev) => ({
+          ...prev,
+          [shift === 1 ? "s1" : "s2"]: { by: userEmail, at: nowIso },
+        }));
       }
 
       setConfirmedShifts((prev) => ({ ...prev, [shift]: true }));
@@ -245,6 +286,7 @@ export function useDashboardFleet({
     isFleetModalOpen,
     setIsFleetModalOpen,
     confirmedShifts,
+    confirmedInfo,
     setConfirmedShifts,
     isShiftConfirmed,
     handleConfirmFleetStatus,
