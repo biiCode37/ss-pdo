@@ -144,7 +144,7 @@ describe('fleetStatusService', () => {
 
       const savedShift = { id: 200, ...shiftInput };
 
-      (supabase.from as any).mockImplementation((table: string) => {
+      (supabase.from as any).mockImplementation((_table: string) => {
         const chain: any = {};
         chain.upsert = vi.fn().mockReturnValue(chain);
         chain.select = vi.fn().mockReturnValue(chain);
@@ -173,7 +173,7 @@ describe('fleetStatusService', () => {
         { id: 1, fleet_shift_id: 101, unit_body: 'KWK 222177', status_id: 2, status_code: 'TO', note: 'EVDAL' },
       ];
 
-      (supabase.from as any).mockImplementation((table: string) => {
+      (supabase.from as any).mockImplementation((_table: string) => {
         const chain: any = {};
         chain.select = vi.fn().mockReturnValue(chain);
         chain.eq = vi.fn().mockImplementation(() => chain);

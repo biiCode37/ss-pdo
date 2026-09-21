@@ -230,10 +230,20 @@ export function useDashboardFleet({
             ? {
                 is_fleet_confirmed_s1: true,
                 fleet_confirmed_s1_at: nowIso,
+                fleet_status_shift1: nonSgoUnits.map((u) => ({
+                  unit: u.unit_body,
+                  note: u.note,
+                  isOff: u.status_code === "OFF",
+                })),
               }
             : {
                 is_fleet_confirmed_s2: true,
                 fleet_confirmed_s2_at: nowIso,
+                fleet_status_shift2: nonSgoUnits.map((u) => ({
+                  unit: u.unit_body,
+                  note: u.note,
+                  isOff: u.status_code === "OFF",
+                })),
               }),
         });
 
