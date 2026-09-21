@@ -135,7 +135,81 @@ Tab ketiga ini berfungsi memantau unit bus yang mengalami kendala operasional (T
 
 ---
 
-## 6. Tab Selanjutnya (Dalam Pembahasan)
-- **Tab 4: Laporan WA (Generator Format WhatsApp Wilayah)**
+## 6. Tab 4: Laporan WA (Generator Format WhatsApp Wilayah) [TERKUNCI]
+
+Tab keempat ini berfungsi sebagai *Dedicated Report Studio* untuk menghasilkan format teks laporan resmi siap kirim ke grup WhatsApp Pimpinan dan Manajemen Operasional, tanpa lagi menggunakan modal popup sempit.
+
+### 6.1. Pemilih Format Laporan (Segmented Tabs)
+1. **Format 1 (Laporan Wilayah Lengkap):**
+   - Rekapitulasi operasional harian komprehensif di akhir hari.
+   - Menyajikan 18 rute lengkap: Realisasi Penumpang vs Target HK, Pencapaian KM vs KM Baku, Renops vs Realops, Kendala Operasional, Titik Kemacetan, dan Headway (Tercepat & Terlama).
+2. **Format 2 (Laporan Penumpang Rincian Shift):**
+   - Rekapitulasi penumpang per shift: `[TOA] + [MANUAL] = JUMLAH`.
+   - Menampilkan perbandingan beban kerja Shift 1 dan Shift 2 per rute serta total wilayah (dibandingkan dengan data kemarin & minggu lalu).
+3. **Format 3 (Laporan Status Kesiapan Armada):**
+   - Apel kesiapan awal shift (Shift 1 pukul 05.00 WIB atau Shift 2 pukul 13.00 WIB).
+   - Rangkuman wilayah: Target SGO, Realisasi Ops, Tidak Ops, dan Ketercapaian.
+   - Rincian unit non-SGO (TO, OFF, SO) bersumber dari tabel database `daily_fleet_shifts`.
+
+### 6.2. Standar Redesain Format Teks WA (Opsi A - Rapi, Elegan, Tanpa Teks Terpotong)
+- **Header Korporat:** Judul resmi wilayah, hari & tanggal Indonesia lengkap, dan perihal laporan.
+- **Rangkuman Eksekutif:** Menampilkan metrik makro di bagian atas sebelum masuk ke rincian rute.
+- **Struktur Rute Teratur:** Menggunakan bullet titik (`•`), penomoran 2 digit (`01. JAK.01`), dan eliminasi blok monospace yang terlalu lebar guna mencegah *text-wrapping* acak pada layar ponsel pengguna.
+- **Pemisah Garis Elegan:** Garis pemisah konsisten (`━━━━━━━━━━━━━━━━━━━`) yang rapi di semua peranti.
+
+### 6.3. Live Text Preview Box & Action Bar
+- **Pratinjau Monospace Responsif:** Kotak pratinjau teks bertema WhatsApp dengan font monospace yang nyaman dibaca dan mendukung tema Terang / Gelap.
+- **Sticky Action Bar:**
+  - 📋 **Tombol [Salin Teks]:** Menyalin teks laporan ke clipboard dengan umpan balik visual toast.
+  - 🚀 **Tombol [Kirim ke WhatsApp]:** Membuka aplikasi WhatsApp langsung dengan parameter teks terisi otomatis (`https://wa.me/?text=...` atau Web Share API).
+
+---
+
+## 7. Arsitektur Bottom Navigation Monitoring Wilayah
+
+Bottom Navigation bar dibuat mandiri dan independen, hanya aktif di dalam ruang lingkup halaman Monitoring Wilayah:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 MONITORING WILAYAH BOTTOM NAV               │
+├─────────────┬─────────────┬──────────────────┬──────────────┤
+│ 📊 Dashboard│   🚍 Rute    │ ⚠️ Status Armada │ 📱 Laporan WA│
+└─────────────┴─────────────┴──────────────────┴──────────────┘
+```
+
+1. **Desain Mobile-First & Touch Targets:**
+   - Tinggi bar: `64px` dengan `padding-bottom: env(safe-area-inset-bottom)`.
+   - Ukuran touch target tab: minimal `48px x 48px` untuk kenyamanan jempol.
+   - Indikator tab aktif: Efek *pill backdrop* dengan warna aksen emerald (`#10b981`) dan label tebal.
+   - Animasi transisi tab: Menggunakan kurva pegas iOS `cubic-bezier(0.32, 0.72, 0, 1)`.
+2. **State Management:**
+   - State aktif: `activeTab: 'dashboard' | 'routes' | 'fleet_status' | 'wa_report'`.
+   - Navigasi tanggal dipertahankan konsisten antar seluruh tab (mengubah tanggal di tab Dashboard akan otomatis menyinkronkan data di tab Rute, Status Armada, dan Laporan WA).
+
+---
+
+## 8. Integrasi Navigasi Global di Menu Profil
+
+Menghilangkan tombol kembali fisik di header dan memindahkan pintu masuk/keluar ke Menu Profil (`UserProfileModal` / `ProfileMenu`):
+- **Saat di Halaman Rute Individu:**
+  - Menu Profil menampilkan opsi: **"Monitoring Wilayah"** (khusus role `korlap`, `korwil`, `admin`, `superadmin`).
+- **Saat di Halaman Monitoring Wilayah:**
+  - Menu Profil secara otomatis berganti menampilkan opsi: **"Kembali ke Rute Individu"**.
+- Header Monitoring Wilayah murni memuat: *Badge Wilayah, Stepper Tanggal, Kalender Picker, dan Tombol Refresh*.
+
+---
+
+## 9. Quality Gates & Verifikasi
+
+1. **Kamus Teks Sentral:**
+   - Seluruh teks UI baru wajib didefinisikan di `src/constants/texts/text_monitoring.ts` dan `src/constants/texts/text_wa_report.ts`.
+   - Diuji via `src/constants/texts/texts.test.ts`.
+2. **Unit Testing:**
+   - Pengujian komponen tab baru dan verifikasi `pnpm vitest run src/` lulus 100%.
+3. **Build & Typecheck:**
+   - `pnpm run build` (`tsc -b && vite build`) lulus 0 error.
+4. **Knowledge Graph:**
+   - `graphify update .` dijalankan setelah seluruh kode rampung.
+
 
 
