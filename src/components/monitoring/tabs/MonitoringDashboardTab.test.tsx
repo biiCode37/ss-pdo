@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MonitoringDashboardTab } from "./MonitoringDashboardTab";
+import { MonitoringDashboardTab } from "@/components/monitoring/tabs/MonitoringDashboardTab";
 import type { RegionalMonitoringResult, RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 

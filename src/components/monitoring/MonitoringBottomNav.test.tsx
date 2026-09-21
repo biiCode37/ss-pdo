@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MonitoringBottomNav } from "./MonitoringBottomNav";
+import { MonitoringBottomNav } from "@/components/monitoring/MonitoringBottomNav";
 import { TEXT_MONITORING } from "@/constants/texts";
 
 // @ts-ignore

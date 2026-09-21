@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MonitoringFleetStatusTab } from "./MonitoringFleetStatusTab";
+import { MonitoringFleetStatusTab } from "@/components/monitoring/tabs/MonitoringFleetStatusTab";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 import { TEXT_MONITORING } from "@/constants/texts";
 
