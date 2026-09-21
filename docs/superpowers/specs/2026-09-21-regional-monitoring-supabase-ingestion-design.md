@@ -1,7 +1,7 @@
 # 📋 Spesifikasi Desain: Migrasi Sumber Data Monitoring Wilayah dari SS Global ke Supabase Ingestion Engine
 
 **Tanggal Pembuatan:** 2026-09-21  
-**Status:** Terkunci & Disetujui (Bagian 1, 2, dan 3)  
+**Status:** Terkunci & Disetujui Penuh (Bagian 1, 2, 3, dan 4)  
 **Branch Wajib:** `devmode`  
 
 ---
@@ -36,7 +36,7 @@ Pengawas isi Form di App ──> Simpan ke Sheet Rute
 [ Jalur B: Staf Mengisi Manual di Spreadsheet Rute ]
 Staf ketik di Sheet Rute 
         │
-        ▼ (Korwil klik tombol [🔄 Tarik Data 18 Rute])
+        ▼ (Korwil klik tombol [🔄 Tarik 18 Rute])
 Aplikasi baca Sheet Rute Individu ──> Upsert ke Supabase `daily_route_reports` (Status: 'draft')
                                                     │
                                                     ▼
@@ -47,7 +47,7 @@ Aplikasi baca Sheet Rute Individu ──> Upsert ke Supabase `daily_route_report
 1. **Jalur A (Input Langsung via App):**
    - Pengawas yang input via aplikasi langsung meng-update tabel `daily_route_reports` dan `daily_unit_summaries`. Status rute = `submitted` atau `verified`.
 2. **Jalur B (Tarik Data Sheet Rute Individu - Ingestion Engine):**
-   - Korlap/Korwil menekan tombol **`[🔄 Tarik Data 18 Rute]`** pada tanggal aktif di halaman Monitoring Wilayah.
+   - Korlap/Korwil menekan tombol **`[🔄 Tarik 18 Rute]`** pada tanggal aktif di halaman Monitoring Wilayah.
    - Sistem memeriksa rute mana yang belum diinput via aplikasi, membaca ringkasan dari spreadsheet rute masing-masing, lalu menyimpannya ke Supabase.
 
 ---
@@ -114,7 +114,7 @@ Tabel penampung di Supabase mencakup seluruh metrik operasional harian:
 ## 4. Bagian 3: Cara Kerja Engine Penarikan Data (Ingestion Engine) [TERKUNCI]
 
 ### 4.1. Alur Eksekusi
-1. **Trigger Pengguna:** User menekan tombol `[🔄 Tarik Data 18 Rute]` di halaman Monitoring Wilayah untuk tanggal aktif (`selectedDate`).
+1. **Trigger Pengguna:** User menekan tombol `[🔄 Tarik 18 Rute]` di halaman Monitoring Wilayah untuk tanggal aktif (`selectedDate`).
 2. **Proteksi Status Tombol (Lifecycle State):**
    - Tombol seketika berstatus **`disabled`** dan menampilkan indikator proses (*spinner / loading animation*).
    - Tombol **tetap disabled** selama proses penarikan data berlangsung.
@@ -137,9 +137,64 @@ Tabel penampung di Supabase mencakup seluruh metrik operasional harian:
 
 ---
 
-## 5. Langkah Selanjutnya
+## 5. Bagian 4: Penyesuaian Antarmuka (UI/UX Halaman Monitoring Wilayah) [TERKUNCI]
 
-* Melanjutkan ke **Bagian 4: Penyesuaian Antarmuka (UI/UX Halaman Monitoring Wilayah)** yang mencakup:
-  * Penempatan tombol `[🔄 Tarik Data 18 Rute]` di toolbar header.
-  * Tampilan status sumber data pada masing-masing kartu rute (badge *"Input App"* vs *"Tarik Sheet"*).
-  * Desain modal/toast progress sinkronisasi yang ramah pengguna.
+### 5.1. Tombol Sinkronisasi Utama di Header (Direct Action, Zero-Input Modal)
+* **Pembersihan Modal Lama:** Modal input teks manual URL spreadsheet global (`showRegionalSyncModal`) dihapus sepenuhnya. Tidak ada lagi dialog popup yang meminta input URL.
+* **Penempatan Tombol:** Di header toolbar utama monitoring, bersanding dengan stepper tanggal dan kalender:
+  ```
+  [ < 21 Sep 2026 > ]    [ 🔄 Tarik 18 Rute ]
+  ```
+* **Interaksi & Status Tombol:**
+  * **Normal State:** Tombol aktif dengan aksen hijau emerald lembut, ikon SVG `RotateCw` 16px, dan label teks `"Tarik 18 Rute"`.
+  * **Loading State:** Tombol *disabled*, ikon berganti spinner `Loader2` berputar halus, teks berubah dinamis menjadi `"Menyinkronkan..."`.
+  * **Success / Error State:** Tombol kembali *enabled* segera setelah proses tuntas, diiringi toast umpan balik visual yang informatif.
+
+### 5.2. Badge Asal Data (Data Provenance) pada Kartu Rute
+Pada setiap kartu rute di tab Dashboard dan tab Rute, disematkan *pill badge* ergonomis untuk transparansi asal data:
+* 📱 **`Input App`** *(Aksen Emerald / Hijau Halus)*:
+  - Rute diinput langsung oleh petugas pengawas melalui aplikasi SS_PDO (status `submitted` / `verified`).
+* 📊 **`Tarik Sheet`** *(Aksen Blue / Sky Halus)*:
+  - Rute ditarik otomatis dari Google Sheet individu yang diisi manual di luar aplikasi.
+* ⚪ **`Belum Ada Data`** *(Muted Zinc)*:
+  - Rute belum diisi baik di aplikasi maupun di Google Sheet pada tanggal tersebut.
+
+### 5.3. Banner Kesiapan Wilayah (At-a-Glance Readiness Bar)
+Komponen ringkas di bawah header tanggal yang merangkum kesehatan data 18 rute secara instan:
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 🟢 14/18 Rute Terisi  •  10 Input App  •  4 Tarik Sheet  •  4 Menunggu  │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+Pimpinan wilayah dapat langsung mengetahui disiplin penggunaan aplikasi oleh para pengawas tanpa harus menghitung satu per satu.
+
+### 5.4. Toleransi Kegagalan Parsial (Graceful Resilience)
+* Jika ada 1 atau 2 spreadsheet rute yang gagal diakses (misal link rusak atau izin akses terbatas):
+  * **Tidak Boleh Gagal Total:** Rute lainnya yang berhasil tetap disimpan dan ditampilkan secara utuh ke layar.
+  * Sistem memberikan peringatan ramah non-teknis pada kartu rute yang terkendala:
+    > *"Lembar spreadsheet JAK 120 tidak dapat diakses (17 rute lainnya berhasil)."*
+
+---
+
+## 6. Standar Kamus Teks Sentral (`src/constants/texts/`)
+
+Sesuai aturan emas proyek, dilarang keras menuliskan teks antarmuka (*hardcoded UI strings*) langsung di komponen. Seluruh teks antarmuka baru wajib didefinisikan di:
+* `src/constants/texts/text_monitoring.ts`:
+  * `SYNC_BUTTON`: Label normal (`"Tarik 18 Rute"`), loading (`"Menyinkronkan..."`).
+  * `PROVENANCE_BADGES`: `"Input App"`, `"Tarik Sheet"`, `"Belum Ada Data"`.
+  * `READINESS_SUMMARY`: Template format ringkasan kesiapan rute.
+* `src/constants/texts/text_errors.ts`:
+  * Pesan error ramah pengguna saat penarikan data sheet gagal/parsial.
+* Diverifikasi dengan unit test integritas pada `src/constants/texts/texts.test.ts`.
+
+---
+
+## 7. Quality Gates & Rencana Pengujian
+
+1. **Unit Testing:**
+   - Pengujian service ingestion: batching, smart skip, parsing ringkasan rute, dan toleransi error parsial.
+   - `pnpm vitest run src/` lulus 100% tanpa kegagalan.
+2. **Build & Typecheck:**
+   - `pnpm run build` (`tsc -b && vite build`) lulus 0 error.
+3. **Knowledge Graph:**
+   - Menjalankan `graphify update .` setelah pengerjaan selesai untuk memperbarui graf arsitektur proyek.
