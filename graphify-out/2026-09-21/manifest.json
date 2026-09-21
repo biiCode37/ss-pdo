@@ -2780,8 +2780,8 @@
     "semantic_hash": ""
   },
   "src/utils/modals/regionalSyncModal.ts": {
-    "mtime": 1789387154.862252,
-    "ast_hash": "3bfa3a9c142a98ad0b7e7b1d40a13b72",
+    "mtime": 1789972981.1926324,
+    "ast_hash": "5d4b53b5c6ff75b9d2f5596ba1a18352",
     "semantic_hash": ""
   },
   "supabase/migrations/20260914000001_add_daily_route_reports_metrics.sql": {
@@ -3162,6 +3162,31 @@
   "src/components/monitoring/tabs/MonitoringToaBarChart.test.tsx": {
     "mtime": 1789970789.0390275,
     "ast_hash": "e90ef148d3cd691cee97662e20a5e848",
+    "semantic_hash": ""
+  },
+  "src/services/appSettingsService.test.ts": {
+    "mtime": 1789973161.7623048,
+    "ast_hash": "81f399b6f0e60b19231b0b6d91fb5785",
+    "semantic_hash": ""
+  },
+  "src/services/appSettingsService.ts": {
+    "mtime": 1789972950.168288,
+    "ast_hash": "d1e33c7501c7da457e307ed05ea19914",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260921000002_alter_daily_route_reports_total_trip_and_app_settings.sql": {
+    "mtime": 1789972938.853923,
+    "ast_hash": "8959d842976aeb18d20642c46867cd22",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_71/AUDIT_BUGS.md": {
+    "mtime": 1789970966.9996743,
+    "ast_hash": "1701dbe29c75c7c776623d9ba18a4d6c",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_71/REPAIR_REPORT.md": {
+    "mtime": 1789970980.5190122,
+    "ast_hash": "8c10908407ca47336ddf32cd7b4e7f56",
     "semantic_hash": ""
   }
 }

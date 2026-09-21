@@ -57,12 +57,12 @@ export interface RegionalRouteItem {
   totalShift2: number;
   // 21 Metrik Operasional & Provenance
   dataSource?: 'app_input' | 'sheet_ingestion' | 'empty';
-  targetPercentage: number;
-  targetPassengersPerKm: number;
-  passengersPerKm: number;
-  passengersPerKmPercentage: number;
-  tripsPerBus: number;
-  passengersPerBus: number;
+  targetPercentage?: number;
+  targetPassengersPerKm?: number;
+  passengersPerKm?: number;
+  passengersPerKmPercentage?: number;
+  tripsPerBus?: number;
+  passengersPerBus?: number;
 }
 
 export interface RegionalMonitoringResult {
@@ -99,9 +99,9 @@ export interface RegionalMonitoringResult {
   emptyCount: number;
   totalRoutesCount: number;
   // Provenance counts
-  appInputCount: number;
-  sheetSyncCount: number;
-  emptySourceCount: number;
+  appInputCount?: number;
+  sheetSyncCount?: number;
+  emptySourceCount?: number;
 }
 
 /**

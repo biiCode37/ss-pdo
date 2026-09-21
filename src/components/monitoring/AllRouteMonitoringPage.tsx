@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo, useRef, memo } from "react";
 import {
   fetchRegionalMonitoringData,
   getRelativeDate,
-  syncRegionalDailyFromGlobalSheet,
   type RegionalMonitoringResult,
 } from "@/services/allRouteMonitoringService";
 import { fetchDailyFleetShiftsByDate } from "@/services/fleetStatusService";
