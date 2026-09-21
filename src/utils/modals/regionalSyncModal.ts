@@ -1,6 +1,10 @@
 import { pdoSwal } from "@/utils/swalBase";
 import { escapeHtml } from "./busInput/busModalValidation";
 import { TEXT_MONITORING } from "@/constants/texts";
+import {
+  getRegionalGlobalSheetUrl,
+  setRegionalGlobalSheetUrl,
+} from "@/services/appSettingsService";
 
 export interface RegionalSyncModalOptions {
   dateStr: string;
@@ -31,11 +35,12 @@ export async function showRegionalSyncModal(
       ? `${INDONESIAN_MONTH_NAMES[parts[1] - 1]} ${parts[0]}`
       : "SEPTEMBER 2026";
 
+  const storedDbUrl = await getRegionalGlobalSheetUrl();
   const savedUrl =
     typeof window !== "undefined"
       ? localStorage.getItem("pdo_regional_global_sheet_url") || ""
       : "";
-  const initialUrl = options.defaultUrl || savedUrl || "";
+  const initialUrl = options.defaultUrl || storedDbUrl || savedUrl || "";
   const initialSheetName = options.defaultSheetName || computedSheetName;
 
   const formHtml = `
@@ -119,5 +124,11 @@ export async function showRegionalSyncModal(
     return null;
   }
 
-  return result.value as RegionalSyncModalResult;
+  // Simpan secara terpusat ke database Supabase agar semua perangkat otomatis tersinkron
+  const confirmedValue = result.value as RegionalSyncModalResult;
+  if (confirmedValue.spreadsheetUrl) {
+    void setRegionalGlobalSheetUrl(confirmedValue.spreadsheetUrl);
+  }
+
+  return confirmedValue;
 }
