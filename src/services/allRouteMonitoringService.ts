@@ -55,6 +55,14 @@ export interface RegionalRouteItem {
   toaShift2: number;
   manualShift2: number;
   totalShift2: number;
+  // 21 Metrik Operasional & Provenance
+  dataSource?: 'app_input' | 'sheet_ingestion' | 'empty';
+  targetPercentage: number;
+  targetPassengersPerKm: number;
+  passengersPerKm: number;
+  passengersPerKmPercentage: number;
+  tripsPerBus: number;
+  passengersPerBus: number;
 }
 
 export interface RegionalMonitoringResult {
@@ -90,6 +98,10 @@ export interface RegionalMonitoringResult {
   draftCount: number;
   emptyCount: number;
   totalRoutesCount: number;
+  // Provenance counts
+  appInputCount: number;
+  sheetSyncCount: number;
+  emptySourceCount: number;
 }
 
 /**
@@ -242,6 +254,26 @@ export async function fetchRegionalMonitoringData(
       status = 'draft';
     }
 
+    // Hitung 21 Kolom & Rasio Murni
+    const targetHk = Number(r.target_hk) || 0;
+    const targetPercentage = targetHk > 0 ? (todayPassengers / targetHk) * 100 : 0;
+    const targetPassengersPerKm = 1.5;
+    const passengersPerKm = totalKm > 0 ? todayPassengers / totalKm : 0;
+    const passengersPerKmPercentage = totalKm > 0 ? (passengersPerKm / 1.5) * 100 : 0;
+    const totalTrips = todayReport?.total_trip || 0;
+    const tripsPerBus = totalRealops > 0 ? totalTrips / totalRealops : 0;
+    const passengersPerBus = totalRealops > 0 ? todayPassengers / totalRealops : 0;
+
+    // Tentukan asal data (provenance)
+    let dataSource: 'app_input' | 'sheet_ingestion' | 'empty' = 'empty';
+    if (todayReport?.data_source) {
+      dataSource = todayReport.data_source;
+    } else if (todayReport?.status === 'submitted' || todayReport?.status === 'verified') {
+      dataSource = 'app_input';
+    } else if (todayPassengers > 0) {
+      dataSource = 'app_input';
+    }
+
     return {
       id: r.id,
       reportId: todayReport?.id,
@@ -250,7 +282,7 @@ export async function fetchRegionalMonitoringData(
       operatorName: r.operator_name || 'Mikrotrans',
       isLooping: !!r.is_looping,
       kmBaku: Number(r.km_baku) || 0,
-      targetHk: Number(r.target_hk) || 0,
+      targetHk,
       bestRecord: Number(r.best_record) || 0,
       supervisorName: r.supervisor_name || 'Pengawas Wilayah',
       defaultRenops: Number(r.default_renops) || 0,
@@ -276,13 +308,20 @@ export async function fetchRegionalMonitoringData(
       lastWeekPassengers,
       totalKm,
       achievementKm,
-      totalTrips: todayReport?.total_trip || 0,
+      totalTrips,
       toaShift1,
       manualShift1,
       totalShift1,
       toaShift2,
       manualShift2,
-      totalShift2
+      totalShift2,
+      dataSource,
+      targetPercentage,
+      targetPassengersPerKm,
+      passengersPerKm,
+      passengersPerKmPercentage,
+      tripsPerBus,
+      passengersPerBus
     };
   });
 
@@ -361,6 +400,10 @@ export function calculateRegionalTotals(
   const draftCount = routes.filter((r) => r.status === 'draft').length;
   const emptyCount = routes.filter((r) => r.status === 'empty').length;
 
+  const appInputCount = routes.filter((r) => r.dataSource === 'app_input').length;
+  const sheetSyncCount = routes.filter((r) => r.dataSource === 'sheet_ingestion').length;
+  const emptySourceCount = routes.filter((r) => !r.dataSource || r.dataSource === 'empty').length;
+
   return {
     totalRenops,
     totalRealops,
@@ -386,7 +429,10 @@ export function calculateRegionalTotals(
     verifiedCount,
     draftCount,
     emptyCount,
-    totalRoutesCount: routes.length
+    totalRoutesCount: routes.length,
+    appInputCount,
+    sheetSyncCount,
+    emptySourceCount
   };
 }
 

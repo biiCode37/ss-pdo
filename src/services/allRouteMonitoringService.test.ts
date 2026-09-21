@@ -280,4 +280,93 @@ describe('allRouteMonitoringService', () => {
       { onConflict: 'route_id,date' }
     );
   });
+
+  it('maps 21 metric columns including pure computation ratios and dataSource provenance', async () => {
+    const mockRoutes = [
+      {
+        id: 1,
+        route_code: 'JAK.01',
+        route_name: 'TG. PRIOK - PLUMPANG',
+        operator_name: 'KOLAMAS',
+        target_hk: 5000,
+        km_baku: 14.5,
+        default_renops: 20,
+      },
+      {
+        id: 2,
+        route_code: 'JAK.15',
+        route_name: 'TG. PRIOK - RUSUN MARUNDA',
+        operator_name: 'KWK',
+        target_hk: 10000,
+        km_baku: 29.6,
+        default_renops: 60,
+      }
+    ];
+
+    (dailyReportService.fetchRouteMasterList as any).mockResolvedValue(mockRoutes);
+
+    const mockReports = [
+      {
+        route_id: 1,
+        route_code: 'JAK.01',
+        date: '2026-09-02',
+        renops_shift1: 20,
+        realops_shift1: 20,
+        renops_shift2: 20,
+        realops_shift2: 20,
+        total_passengers: 5000,
+        total_km: 2500,
+        total_trip: 200,
+        data_source: 'sheet_ingestion',
+        status: 'draft',
+      },
+      {
+        route_id: 2,
+        route_code: 'JAK.15',
+        date: '2026-09-02',
+        renops_shift1: 50,
+        realops_shift1: 50,
+        renops_shift2: 50,
+        realops_shift2: 50,
+        total_passengers: 8000,
+        total_km: 4000,
+        total_trip: 400,
+        status: 'submitted', // no explicit data_source -> defaults to 'app_input'
+      }
+    ];
+
+    (supabase.from as any).mockImplementation((table: string) => {
+      if (table === 'daily_route_reports') {
+        return {
+          select: vi.fn().mockReturnThis(),
+          in: vi.fn().mockResolvedValue({ data: mockReports, error: null }),
+        };
+      }
+      return {
+        select: vi.fn().mockReturnThis(),
+        or: vi.fn().mockResolvedValue({ data: [], error: null }),
+      };
+    });
+
+    const result = await fetchRegionalMonitoringData('2026-09-02');
+    const jak01 = result.routes.find((r) => r.routeCode === 'JAK.01')!;
+    const jak15 = result.routes.find((r) => r.routeCode === 'JAK.15')!;
+
+    // Provenance
+    expect(jak01.dataSource).toBe('sheet_ingestion');
+    expect(jak15.dataSource).toBe('app_input');
+
+    // 21 columns / pure computation ratios:
+    expect(jak01.targetPercentage).toBe(100);
+    expect(jak01.targetPassengersPerKm).toBe(1.5);
+    expect(jak01.passengersPerKm).toBe(2);
+    expect(jak01.passengersPerKmPercentage).toBeCloseTo(133.33, 1);
+    expect(jak01.totalTrips).toBe(200);
+    expect(jak01.tripsPerBus).toBe(10);
+    expect(jak01.passengersPerBus).toBe(250);
+
+    // Aggregates
+    expect(result.sheetSyncCount).toBe(1);
+    expect(result.appInputCount).toBe(1);
+  });
 });

@@ -69,6 +69,7 @@ export interface DailyRouteReport {
   total_km?: number;
   achievement_km?: number;
   total_trip?: number;
+  data_source?: 'app_input' | 'sheet_ingestion';
   last_synced_at?: string;
   created_at?: string;
   updated_at?: string;
