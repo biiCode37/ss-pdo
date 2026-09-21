@@ -48,6 +48,7 @@ export interface RegionalRouteItem {
   lastWeekPassengers: number;
   totalKm: number;
   achievementKm: number; // KM/Bus
+  totalTrips?: number;
   toaShift1: number;
   manualShift1: number;
   totalShift1: number;
@@ -70,6 +71,8 @@ export interface RegionalMonitoringResult {
   totalLastWeekPassengers: number;
   totalKm: number;
   averageKmPerBus: number;
+  totalTrips?: number;
+  averageTripsPerBus?: number;
   // Shift Totals
   tomShift1: number;
   manualShift1: number;
@@ -273,6 +276,7 @@ export async function fetchRegionalMonitoringData(
       lastWeekPassengers,
       totalKm,
       achievementKm,
+      totalTrips: todayReport?.total_trip || 0,
       toaShift1,
       manualShift1,
       totalShift1,
@@ -314,6 +318,8 @@ export function calculateRegionalTotals(
   const totalLastWeekPassengers = routes.reduce((acc, r) => acc + r.lastWeekPassengers, 0);
   const totalKm = routes.reduce((acc, r) => acc + r.totalKm, 0);
   const averageKmPerBus = totalRealops > 0 ? totalKm / totalRealops : 0;
+  const totalTrips = routes.reduce((acc, r) => acc + (r.totalTrips || 0), 0);
+  const averageTripsPerBus = totalRealops > 0 ? totalTrips / totalRealops : 0;
 
   const tomShift1 = routes.reduce((acc, r) => acc + r.toaShift1, 0);
   const manualShift1 = routes.reduce((acc, r) => acc + r.manualShift1, 0);
@@ -364,6 +370,8 @@ export function calculateRegionalTotals(
     totalLastWeekPassengers,
     totalKm,
     averageKmPerBus,
+    totalTrips,
+    averageTripsPerBus,
     tomShift1,
     manualShift1,
     totalShift1,
