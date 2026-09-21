@@ -80,6 +80,17 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.SYNC_MODAL.SUCCESS_DESC(18)).toContain('18 rute');
   });
 
+  it('exports TEXT_MONITORING new tokens for bottom nav, bulk verify, dashboard, and fleet tab', () => {
+    expect((TEXT_MONITORING as any).NAV.DASHBOARD).toBe('Dashboard');
+    expect((TEXT_MONITORING as any).NAV.ROUTES).toBe('Rute');
+    expect((TEXT_MONITORING as any).NAV.FLEET_STATUS).toBe('Status Armada');
+    expect((TEXT_MONITORING as any).NAV.WA_REPORT).toBe('Laporan WA');
+    expect((TEXT_MONITORING as any).BULK_VERIFY.BUTTON_LABEL(5)).toBe('Verifikasi Semua (5)');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Tren TOA Penumpang per Rute');
+    expect((TEXT_MONITORING as any).FLEET_TAB.TITLE).toBe('Status Armada Wilayah (Non-SGO)');
+    expect(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE).toBe('Kembali ke Operasi Rute');
+  });
+
   it('exports TEXT_WA_REPORT with modal titles and format labels', () => {
     expect(TEXT_WA_REPORT.MODAL_TITLE).toBe('Generator Laporan WhatsApp');
     expect(TEXT_WA_REPORT.FORMAT_1_BTN).toContain('Format 1 (Komprehensif)');

@@ -76,4 +76,65 @@ export const TEXT_MONITORING = {
     BADGE_DRAFT: 'Draft',
     BADGE_EMPTY: 'Belum Diisi',
   },
+  NAV: {
+    DASHBOARD: 'Dashboard',
+    ROUTES: 'Rute',
+    FLEET_STATUS: 'Status Armada',
+    WA_REPORT: 'Laporan WA',
+  },
+  BULK_VERIFY: {
+    BUTTON_LABEL: (count: number) => `Verifikasi Semua (${count})`,
+    CONFIRM_TITLE: 'Verifikasi Massal Laporan',
+    CONFIRM_TEXT: (count: number) =>
+      `Apakah Anda yakin ingin memverifikasi ${count} rute yang telah disubmit sekaligus?`,
+    CONFIRM_BUTTON: 'Ya, Verifikasi Semua',
+    CANCEL_BUTTON: 'Batal',
+    SUCCESS_TOAST: (count: number) =>
+      `Berhasil memverifikasi ${count} rute sekaligus!`,
+    NO_ROUTES_TO_VERIFY: 'Tidak ada rute berstatus submitted yang siap diverifikasi.',
+  },
+  DASHBOARD: {
+    PROGRESS_TITLE: 'Kesiapan Status Armada PDO',
+    PROGRESS_RATIO: (confirmed: number, total: number) =>
+      `${confirmed} / ${total} Rute Terkonfirmasi`,
+    PROGRESS_ALL_CONFIRMED: 'Seluruh rute telah mengonfirmasi status armada.',
+    CHART_TITLE: 'Tren TOA Penumpang per Rute',
+    CHART_SUBTITLE: 'Perbandingan total pelanggan 18 rute hari ini',
+    MACRO_KPIS: {
+      PASSENGERS: 'Total Pelanggan',
+      TRIPS: 'Total Ritase',
+      DISTANCE: 'Total Jarak Tempuh',
+      PRODUCTIVITY: 'Produktivitas',
+      TARGET_PCT: (pct: string) => `Capaian Target: ${pct}%`,
+      PER_BUS: 'per Bus',
+      PER_KM: 'per KM',
+    },
+    SHIFT_SPLIT: {
+      TITLE: 'Perbandingan Beban Operasional Shift',
+      SHIFT_1: 'Shift 1 (Pagi)',
+      SHIFT_2: 'Shift 2 (Siang)',
+      DETAIL_PASSENGERS: (toa: number, manual: number) =>
+        `TOA: ${toa.toLocaleString('id-ID')} | Manual: ${manual.toLocaleString('id-ID')}`,
+    },
+    LEADERBOARD: {
+      TITLE: 'Kinerja Rute Wilayah',
+      TOP_3: '3 Rute Tertinggi',
+      BOTTOM_3: '3 Rute Butuh Perhatian',
+      PASSENGERS_COUNT: (count: number) => `${count.toLocaleString('id-ID')} Pelanggan`,
+      TARGET_PCT_BADGE: (pct: string) => `${pct}% Target`,
+    },
+  },
+  FLEET_TAB: {
+    TITLE: 'Status Armada Wilayah (Non-SGO)',
+    TOTAL_FLEET: 'Total Armada',
+    SGO_LABEL: 'Siap Guna (SGO)',
+    NON_SGO_LABEL: 'Kendala (Non-SGO)',
+    ALL_SHIFTS: 'Semua Shift',
+    ALL_NON_SGO: 'Semua Kendala',
+    EMPTY_TITLE: 'Seluruh Armada Beroperasi Normal',
+    EMPTY_DESC: 'Luar biasa! Seluruh armada 18 rute berstatus SGO (Siap Guna Operasi) tanpa kendala.',
+    ROUTE_ISSUES_COUNT: (count: number) => `${count} Bus Kendala`,
+    NOTES_PREFIX: 'Kendala:',
+    SHIFT_PREFIX: 'Shift:',
+  },
 } as const;

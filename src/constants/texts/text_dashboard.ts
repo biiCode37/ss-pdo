@@ -98,6 +98,8 @@ export const TEXT_DASHBOARD = {
     FEATURES_SECTION: 'FITUR & UTILITAS',
     REGIONAL_MONITORING: 'Monitoring Wilayah & Laporan WA',
     REGIONAL_MONITORING_DESC: 'Rekap 18 rute & generator pesan WA',
+    RETURN_TO_ROUTE: 'Kembali ke Operasi Rute',
+    RETURN_TO_ROUTE_DESC: 'Buka dashboard operasi dan entri ritase bus per rute',
     CROSS_PERIOD: 'Rekap Akumulasi Lintas Periode',
     FORMAT_SHEET: 'Rapikan & Format Spreadsheet',
     FORMAT_SHEET_DESC: 'Terapkan perataan & warna baris ke Google Sheets',
