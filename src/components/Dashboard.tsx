@@ -2,6 +2,7 @@ import { lazy, Suspense, useMemo } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { UserManagementSkeleton } from "@/components/Skeletons";
 import { AllRouteMonitoringPage } from "@/components/AllRouteMonitoringPage";
+import { ProfileMenuSheet } from "@/components/ProfileMenuSheet";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { usePreviousDayOdometer } from "@/hooks/usePreviousDayOdometer";
 import { getStoredUserRole } from "@/utils/roleStorage";
@@ -209,13 +210,43 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   if (currentView === "regional_monitoring") {
     return (
-      <AllRouteMonitoringPage
-        onBackToRouteView={() => setCurrentView("dashboard")}
-        currentDate={monitoringDate || operationalReportDate}
-        onDateChange={(date) => setMonitoringDate(date)}
-        currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
-        onSelectRoute={handleSelectMonitoringRoute}
-      />
+      <>
+        <AllRouteMonitoringPage
+          onBackToRouteView={() => setCurrentView("dashboard")}
+          onOpenProfile={() => setIsProfileMenuOpen(true)}
+          currentDate={monitoringDate || operationalReportDate}
+          onDateChange={(date) => setMonitoringDate(date)}
+          currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
+          onSelectRoute={handleSelectMonitoringRoute}
+        />
+        <ProfileMenuSheet
+          isOpen={isProfileMenuOpen}
+          onClose={() => setIsProfileMenuOpen(false)}
+          isInMonitoringView={true}
+          onReturnToRouteView={() => {
+            setIsProfileMenuOpen(false);
+            setCurrentView("dashboard");
+          }}
+          onOpenAccumulation={() => {
+            setIsProfileMenuOpen(false);
+            setCurrentView("dashboard");
+            setIsAccSheetOpen(true);
+          }}
+          onOpenUserManagement={() => {
+            setIsProfileMenuOpen(false);
+            setCurrentView("user_management");
+          }}
+          isDarkMode={theme === "dark"}
+          onToggleTheme={toggleTheme}
+          offlineQueueCount={
+            queue.filter(
+              (q) => q.status === "pending" || q.status === "failed",
+            ).length
+          }
+          isOnline={isOnline}
+          onLogout={onLogout}
+        />
+      </>
     );
   }
 
@@ -350,6 +381,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           setIsProfileMenuOpen(false);
           setCurrentView("regional_monitoring");
         }}
+        isInMonitoringView={false}
         onOpenUserManagement={() => {
           setIsProfileMenuOpen(false);
           setCurrentView("user_management");

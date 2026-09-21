@@ -7,6 +7,7 @@ import {
   Moon,
   CloudOff,
   ChevronRight,
+  RotateCcw,
 } from "lucide-react";
 import {
   showFormatSheetConfirm,
@@ -21,6 +22,8 @@ import { TEXT_DASHBOARD } from "@/constants/texts";
 interface ProfileFeaturesSectionProps {
   onDismiss: () => void;
   onOpenRegionalMonitoring?: () => void;
+  onReturnToRouteView?: () => void;
+  isInMonitoringView?: boolean;
   onOpenAccumulation?: () => void;
   onFormatWholeSheet?: () => Promise<void>;
   currentTabName?: string;
@@ -34,6 +37,8 @@ interface ProfileFeaturesSectionProps {
 export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
   onDismiss,
   onOpenRegionalMonitoring,
+  onReturnToRouteView,
+  isInMonitoringView,
   onOpenAccumulation,
   onFormatWholeSheet,
   currentTabName,
@@ -92,44 +97,84 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
         {TEXT_DASHBOARD.PROFILE_MENU.FEATURES_SECTION}
       </span>
       <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-        {/* Monitoring Wilayah & Laporan WA */}
-        <button
-          type="button"
-          onClick={() => {
-            onDismiss();
-            onOpenRegionalMonitoring?.();
-          }}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "12px 14px",
-            borderRadius: "12px",
-            background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-            border: "1px solid var(--card-border)",
-            color: "var(--text-primary)",
-            fontWeight: 500,
-            fontSize: "13.5px",
-            cursor: "pointer",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Globe size={18} style={{ color: "var(--accent-color)" }} />
-            <div style={{ textAlign: "left" }}>
-              <div>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</div>
-              <div
-                style={{
-                  fontSize: "11px",
-                  color: "var(--text-secondary)",
-                  marginTop: "1px",
-                }}
-              >
-                {TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING_DESC}
+        {/* Monitoring Wilayah & Laporan WA OR Kembali ke Operasi Rute */}
+        {isInMonitoringView ? (
+          <button
+            type="button"
+            onClick={() => {
+              onDismiss();
+              onReturnToRouteView?.();
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 14px",
+              borderRadius: "12px",
+              background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+              border: "1px solid var(--card-border)",
+              color: "var(--text-primary)",
+              fontWeight: 500,
+              fontSize: "13.5px",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <RotateCcw size={18} style={{ color: "var(--accent-color)" }} />
+              <div style={{ textAlign: "left" }}>
+                <div>{TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE}</div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--text-secondary)",
+                    marginTop: "1px",
+                  }}
+                >
+                  {TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE_DESC}
+                </div>
               </div>
             </div>
-          </div>
-          <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
-        </button>
+            <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              onDismiss();
+              onOpenRegionalMonitoring?.();
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 14px",
+              borderRadius: "12px",
+              background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+              border: "1px solid var(--card-border)",
+              color: "var(--text-primary)",
+              fontWeight: 500,
+              fontSize: "13.5px",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <Globe size={18} style={{ color: "var(--accent-color)" }} />
+              <div style={{ textAlign: "left" }}>
+                <div>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--text-secondary)",
+                    marginTop: "1px",
+                  }}
+                >
+                  {TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING_DESC}
+                </div>
+              </div>
+            </div>
+            <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+          </button>
+        )}
 
         {/* Rekap Akumulasi Lintas Periode */}
         {/* BUG-59: Fitur sebelumnya hard-coded disabled "Coming Soon"
