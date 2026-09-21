@@ -8,7 +8,7 @@ Dokumen ini mencatat detail teknis perbaikan, perbandingan Sebelum vs Sesudah (*
 
 1. **Migrasi Supabase (`supabase/migrations/20260921000001_create_fleet_status_tables.sql`):**
    - Tabel `fleet_statuses`: Master tipe status armada (SGO, TO, OFF, SO, DPO, dll) dengan flag `is_sgo`, warna badge, urutan sortir, dan audit status.
-   - Tabel `daily_fleet_shifts`: Header status harian per tanggal, rute, dan shift (`1` atau `2`). Menyimpan `target_renops`, `realops`, `sgo_count`, `to_count`, `off_count`, `so_count`, `other_count`, serta status konfirmasi kunci (`is_confirmed`, `confirmed_by`, `confirmed_at`).
+   - Tabel `daily_fleet_shifts`: Header status harian per tanggal, rute, dan shift (`1` atau `2`). Menyimpan `target_renops`, `realops`, `sgo_count`, `to_count`, `off_count`, `so_count`, `other_count`, serta status konfirmasi kunci (`is_confirmed`, `user_id`, `confirmed_at`).
    - Tabel `daily_fleet_non_sgo_units`: Detail unit armada khusus yang berstatus non-SGO. Mencatat `unit_body`, relasi ke `status_id`, dan `note` (alasan mogok, perbaikan bengkel, perbantuan, dll).
    - RLS Policies: Viewable oleh semua authenticated user, insert/update/delete hanya oleh role berwenang.
 

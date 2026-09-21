@@ -76,7 +76,7 @@ describe('fleetStatusService', () => {
         so_count: 0,
         other_count: 0,
         is_confirmed: true,
-        confirmed_by: 'pengawas@example.com',
+        user_id: 2,
         confirmed_at: '2026-09-21T06:30:00Z',
       };
 
@@ -134,7 +134,7 @@ describe('fleetStatusService', () => {
         so_count: 0,
         other_count: 0,
         is_confirmed: true,
-        confirmed_by: 'pengawas@example.com',
+        user_id: 2,
         confirmed_at: '2026-09-21T07:00:00Z',
       };
 

@@ -464,3 +464,29 @@ export async function revokeUserProfile(
     return { success: false, message: err?.message || 'Terjadi kesalahan.' };
   }
 }
+
+/**
+ * Mengambil ID pengguna saat ini dari localStorage atau cache profil user.
+ */
+export function getCurrentUserId(): number | null {
+  const cachedId = localStorage.getItem('PDO_USER_ID');
+  if (cachedId) {
+    const parsed = parseInt(cachedId, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+  }
+  const email = localStorage.getItem('PDO_USER_EMAIL');
+  if (email) {
+    try {
+      const cached = localStorage.getItem(`PDO_LAST_VERIFIED_PROFILE_${email.trim().toLowerCase()}`);
+      if (cached) {
+        const { profile } = JSON.parse(cached);
+        if (profile?.id) {
+          localStorage.setItem('PDO_USER_ID', String(profile.id));
+          return Number(profile.id);
+        }
+      }
+    } catch {}
+  }
+  return null;
+}
+

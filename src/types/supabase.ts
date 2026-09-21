@@ -205,7 +205,7 @@ export interface DailyFleetShift {
   so_count: number;
   other_count: number;
   is_confirmed: boolean;
-  confirmed_by?: string;
+  user_id?: number | null;
   confirmed_at?: string;
   created_at?: string;
   updated_at?: string;

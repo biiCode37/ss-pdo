@@ -55,6 +55,9 @@ export default function App() {
             setIsSignedIn(false);
             return;
           }
+          if (verify.profile?.id) {
+            localStorage.setItem('PDO_USER_ID', String(verify.profile.id));
+          }
           if (verify.profile?.role) {
             localStorage.setItem('PDO_USER_ROLE', verify.profile.role);
           }

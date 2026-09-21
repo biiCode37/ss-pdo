@@ -29,4 +29,4 @@ Dokumen audit ini mendokumentasikan temuan arsitektural dan keterbatasan sistem 
 - **Keparahan:** 🟡 Sedang (Medium / Audit Trail Risk).
 - **Deskripsi:** Status armada dapat diubah kapan saja tanpa penanda apakah shift tersebut telah resmi dikonfirmasi/dikunci oleh pengawas piket. Hal ini berpotensi mengubah data status historis saat shift sudah selesai.
 - **Dampak User:** Laporan PDO dan pemantauan 18 rute menjadi inkonsisten antara waktu operasional pagi/malam dengan rekap akhir.
-- **Mitigasi:** Tambahkan flag `is_confirmed`, `confirmed_by`, dan `confirmed_at` pada header shift. Setelah pengawas mengonfirmasi status armada di awal shift, modal terkunci (*read-only*) dengan badge gembok terkunci, dan hanya bisa dibuka jika ada hak supervisi khusus.
+- **Mitigasi:** Tambahkan flag `is_confirmed`, `user_id` (foreign key ke `user_profiles.id`), dan `confirmed_at` pada header shift. Setelah pengawas mengonfirmasi status armada di awal shift, modal terkunci (*read-only*) dengan badge gembok terkunci, dan hanya bisa dibuka jika ada hak supervisi khusus.

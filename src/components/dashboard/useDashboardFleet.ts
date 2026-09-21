@@ -15,6 +15,7 @@ import type { FleetStatusConfirmationPayload } from "@/components/fleetStatus/ty
 import { formatUserError } from "@/utils/errorFormatter";
 import { showSuccessToast, showErrorToast } from "@/utils/alertUtils";
 import { TEXT_FLEET_STATUS } from "@/constants/texts";
+import { getCurrentUserId } from "@/services/routes/users";
 
 interface UseDashboardFleetProps {
   matchedRoute: any;
@@ -94,11 +95,11 @@ export function useDashboardFleet({
             });
             setConfirmedInfo({
               s1: {
-                by: fleetS1?.confirmed_by,
+                by: fleetS1?.user_id ? `User #${fleetS1.user_id}` : undefined,
                 at: fleetS1?.confirmed_at || report?.fleet_confirmed_s1_at,
               },
               s2: {
-                by: fleetS2?.confirmed_by,
+                by: fleetS2?.user_id ? `User #${fleetS2.user_id}` : undefined,
                 at: fleetS2?.confirmed_at || report?.fleet_confirmed_s2_at,
               },
             });
@@ -180,9 +181,6 @@ export function useDashboardFleet({
 
       // 2. Simpan 100% ke Supabase (daily_fleet_shifts & daily_fleet_non_sgo_units)
       if (matchedRoute?.id && operationalReportDate) {
-        const userEmail = localStorage.getItem("PDO_USER_EMAIL") || undefined;
-        const nowIso = new Date().toISOString();
-
         const targetRenops = payload?.targetRenops ?? dynamicRenops.renops;
         const realops = payload?.realops ?? (shift === 1 ? calculatedRealopsS1 : calculatedRealopsS2);
         const sgoCount = payload?.sgoCount ?? realops;
@@ -191,7 +189,11 @@ export function useDashboardFleet({
         const soCount = payload?.soCount ?? 0;
         const otherCount = payload?.otherCount ?? 0;
         const nonSgoUnits = payload?.nonSgoUnits ?? [];
+        const userEmail = localStorage.getItem("PDO_USER_EMAIL") || undefined;
+        const currentUserId = getCurrentUserId();
+        const nowIso = new Date().toISOString();
 
+        // 2. Simpan status armada harian per shift ke Supabase (Single Source of Truth)
         await upsertDailyFleetShift(
           {
             route_id: matchedRoute.id,
@@ -207,7 +209,7 @@ export function useDashboardFleet({
             so_count: soCount,
             other_count: otherCount,
             is_confirmed: true,
-            confirmed_by: userEmail,
+            user_id: currentUserId,
             confirmed_at: nowIso,
           },
           nonSgoUnits,
@@ -267,7 +269,7 @@ export function useDashboardFleet({
 
         setConfirmedInfo((prev) => ({
           ...prev,
-          [shift === 1 ? "s1" : "s2"]: { by: userEmail, at: nowIso },
+          [shift === 1 ? "s1" : "s2"]: { by: currentUserId ? `User #${currentUserId}` : userEmail, at: nowIso },
         }));
       }
 

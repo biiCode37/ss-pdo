@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS public.daily_fleet_shifts (
   so_count integer DEFAULT 0,
   other_count integer DEFAULT 0,
   is_confirmed boolean DEFAULT false,
-  confirmed_by text,
+  user_id bigint REFERENCES public.user_profiles(id) ON DELETE SET NULL,
   confirmed_at timestamptz,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now(),

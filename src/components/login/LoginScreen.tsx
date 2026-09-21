@@ -97,6 +97,8 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: LoginScreenProps) {
         }
 
         if (verify.profile) {
+          if (verify.profile.id)
+            localStorage.setItem("PDO_USER_ID", String(verify.profile.id));
           if (verify.profile.full_name)
             localStorage.setItem("PDO_USER_NAME", verify.profile.full_name);
           if (verify.profile.email)
