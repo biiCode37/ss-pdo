@@ -92,8 +92,47 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           </div>
         </div>
 
-        {/* Status Badge */}
-        <div>
+        {/* Badges: Provenance & Status */}
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", justifyContent: "flex-end" }}>
+          {/* Provenance Badge */}
+          {route.dataSource === "app_input" ? (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "3px",
+                padding: "2px 6px",
+                borderRadius: "6px",
+                fontSize: "10.5px",
+                fontWeight: 700,
+                background: "rgba(16, 185, 129, 0.12)",
+                color: "#10b981",
+                border: "1px solid rgba(16, 185, 129, 0.25)",
+              }}
+              title="Data dikirim melalui input aplikasi"
+            >
+              {TEXT_MONITORING.PROVENANCE.APP_INPUT}
+            </span>
+          ) : route.dataSource === "sheet_ingestion" ? (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "3px",
+                padding: "2px 6px",
+                borderRadius: "6px",
+                fontSize: "10.5px",
+                fontWeight: 700,
+                background: "rgba(56, 189, 248, 0.12)",
+                color: "#38bdf8",
+                border: "1px solid rgba(56, 189, 248, 0.25)",
+              }}
+              title="Data ditarik langsung dari Google Sheet rute"
+            >
+              {TEXT_MONITORING.PROVENANCE.SHEET_SYNC}
+            </span>
+          ) : null}
+
           {isVerified && (
             <span
               style={{

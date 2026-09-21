@@ -22,6 +22,8 @@ export interface MonitoringHeaderProps {
   loading: boolean;
   onOpenWaModal?: () => void;
   hasData?: boolean;
+  onSync18Routes?: () => void;
+  syncing18Routes?: boolean;
   onSyncGlobal?: () => void;
   syncingGlobal?: boolean;
 }
@@ -34,6 +36,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   onRefresh,
   refreshing,
   loading,
+  onSync18Routes,
+  syncing18Routes,
   onSyncGlobal,
   syncingGlobal,
 }) => {
@@ -217,8 +221,42 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
             />
           </button>
 
-          {/* Tarik Data Global Button */}
-          {onSyncGlobal && (
+          {/* Tarik 18 Rute Button (Direct Action) */}
+          {onSync18Routes ? (
+            <button
+              type="button"
+              onClick={onSync18Routes}
+              disabled={syncing18Routes || loading}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 12px",
+                borderRadius: "12px",
+                background: "rgba(62, 207, 142, 0.12)",
+                border: "1px solid rgba(62, 207, 142, 0.25)",
+                color: "var(--accent-color, #3ECF8E)",
+                fontSize: "12.5px",
+                fontWeight: 700,
+                cursor: syncing18Routes || loading ? "not-allowed" : "pointer",
+                opacity: syncing18Routes || loading ? 0.6 : 1,
+                transition: "all 0.2s ease",
+              }}
+              title={TEXT_MONITORING.INGESTION.TOOLTIP}
+            >
+              <RefreshCw
+                size={16}
+                style={{
+                  animation: syncing18Routes ? "spin 1s linear infinite" : "none",
+                }}
+              />
+              <span>
+                {syncing18Routes
+                  ? TEXT_MONITORING.INGESTION.BUTTON_LOADING
+                  : TEXT_MONITORING.INGESTION.BUTTON_LABEL}
+              </span>
+            </button>
+          ) : onSyncGlobal ? (
             <button
               type="button"
               onClick={onSyncGlobal}
@@ -248,7 +286,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               />
               <span>{TEXT_MONITORING.HEADER.BTN_SYNC_GLOBAL}</span>
             </button>
-          )}
+          ) : null}
 
           {/* User Profile Trigger Button */}
           {onOpenProfile && (

@@ -4,10 +4,15 @@ import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react';
 import { AllRouteMonitoringPage } from './AllRouteMonitoringPage';
 import * as regionalService from '@/services/allRouteMonitoringService';
+import * as regionalIngestionService from '@/services/regionalIngestionService';
 import * as dailyReportService from '@/services/dailyRouteReportService';
 import * as fleetService from '@/services/fleetStatusService';
 import type { RegionalMonitoringResult } from '@/services/allRouteMonitoringService';
 import { TEXT_MONITORING } from '@/constants/texts/text_monitoring';
+
+vi.mock('@/services/regionalIngestionService', () => ({
+  ingestRegionalRouteSummaries: vi.fn(),
+}));
 
 vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services/allRouteMonitoringService')>();
@@ -77,7 +82,14 @@ const mockData: RegionalMonitoringResult = {
       totalShift2: 1450,
       totalKm: 215.4,
       achievementKm: 17.95,
-      totalTrips: 130
+      totalTrips: 130,
+      dataSource: 'app_input',
+      targetPercentage: 105,
+      targetPassengersPerKm: 1.5,
+      passengersPerKm: 14.6,
+      passengersPerKmPercentage: 97.3,
+      tripsPerBus: 10.8,
+      passengersPerBus: 262.5,
     },
     {
       id: 2,
@@ -112,7 +124,14 @@ const mockData: RegionalMonitoringResult = {
       totalShift2: 1200,
       totalKm: 142.0,
       achievementKm: 14.2,
-      totalTrips: 110
+      totalTrips: 110,
+      dataSource: 'sheet_ingestion',
+      targetPercentage: 104,
+      targetPassengersPerKm: 1.5,
+      passengersPerKm: 18.3,
+      passengersPerKmPercentage: 122,
+      tripsPerBus: 11,
+      passengersPerBus: 260,
     },
     {
       id: 3,
@@ -147,7 +166,14 @@ const mockData: RegionalMonitoringResult = {
       totalShift2: 900,
       totalKm: 150.0,
       achievementKm: 15.0,
-      totalTrips: 120
+      totalTrips: 120,
+      dataSource: 'empty',
+      targetPercentage: 100,
+      targetPassengersPerKm: 1.5,
+      passengersPerKm: 13.3,
+      passengersPerKmPercentage: 88.6,
+      tripsPerBus: 6,
+      passengersPerBus: 100,
     }
   ],
   totalRenops: 42,
@@ -174,7 +200,10 @@ const mockData: RegionalMonitoringResult = {
   verifiedCount: 1,
   draftCount: 0,
   emptyCount: 0,
-  totalRoutesCount: 3
+  totalRoutesCount: 3,
+  appInputCount: 1,
+  sheetSyncCount: 1,
+  emptySourceCount: 1
 };
 
 describe('AllRouteMonitoringPage Component', () => {
@@ -344,15 +373,11 @@ describe('AllRouteMonitoringPage Component', () => {
     expect(onDateChange).toHaveBeenCalledWith('2026-09-02');
   });
 
-  it('triggers global sync modal and calls syncRegionalDailyFromGlobalSheet', async () => {
-    const alertUtils = await import('@/utils/alertUtils');
-    (alertUtils.showRegionalSyncModal as any).mockResolvedValue({
-      spreadsheetUrl: 'https://docs.google.com/spreadsheets/d/abc-123',
-      sheetName: 'SEPTEMBER 2026',
-    });
-    (regionalService.syncRegionalDailyFromGlobalSheet as any).mockResolvedValue({
+  it('triggers 18 routes direct ingestion when Tarik 18 Rute button is clicked', async () => {
+    (regionalIngestionService.ingestRegionalRouteSummaries as any).mockResolvedValue({
       success: true,
-      syncedCount: 18,
+      syncedFromSheet: 10,
+      skippedFromApp: 8,
       errors: [],
     });
 
@@ -361,7 +386,7 @@ describe('AllRouteMonitoringPage Component', () => {
     });
 
     const syncBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes('Tarik Data Global')
+      b => b.textContent?.includes(TEXT_MONITORING.INGESTION.BUTTON_LABEL)
     );
     expect(syncBtn).toBeDefined();
 
@@ -369,11 +394,22 @@ describe('AllRouteMonitoringPage Component', () => {
       syncBtn?.click();
     });
 
-    expect(alertUtils.showRegionalSyncModal).toHaveBeenCalledWith({ dateStr: '2026-09-02' });
-    expect(regionalService.syncRegionalDailyFromGlobalSheet).toHaveBeenCalledWith(
-      '2026-09-02',
-      'https://docs.google.com/spreadsheets/d/abc-123',
-      'SEPTEMBER 2026'
+    expect(regionalIngestionService.ingestRegionalRouteSummaries).toHaveBeenCalledWith('2026-09-02');
+  });
+
+  it('displays data provenance badges (Input App vs Tarik Sheet) on route cards', async () => {
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+
+    const routesTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-routes"]'
     );
+    await act(async () => {
+      routesTabBtn?.click();
+    });
+
+    expect(container.textContent).toContain(TEXT_MONITORING.PROVENANCE.APP_INPUT);
+    expect(container.textContent).toContain(TEXT_MONITORING.PROVENANCE.SHEET_SYNC);
   });
 });

@@ -7,8 +7,9 @@ import {
 } from "@/services/allRouteMonitoringService";
 import { fetchDailyFleetShiftsByDate } from "@/services/fleetStatusService";
 import { verifyDailyRouteReport } from "@/services/dailyRouteReportService";
+import { ingestRegionalRouteSummaries } from "@/services/regionalIngestionService";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
-import { showSuccessToast, showErrorAlert, showRegionalSyncModal } from "@/utils/alertUtils";
+import { showSuccessToast, showErrorAlert } from "@/utils/alertUtils";
 import { TEXT_ERRORS, TEXT_ALERTS, TEXT_MONITORING } from "@/constants/texts";
 
 import { MonitoringHeader } from "./MonitoringHeader";
@@ -63,7 +64,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [data, setData] = useState<RegionalMonitoringResult | null>(null);
   const [fleetShifts, setFleetShifts] = useState<DailyFleetShiftWithUnits[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [syncingGlobal, setSyncingGlobal] = useState<boolean>(false);
+  const [syncing18Routes, setSyncing18Routes] = useState<boolean>(false);
   const [isBulking, setIsBulking] = useState<boolean>(false);
   const [verifyingRouteId, setVerifyingRouteId] = useState<number | null>(null);
 
@@ -191,40 +192,39 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     }
   };
 
-  // 9. Global Spreadsheet Sync Handler
-  const handleSyncGlobal = async () => {
+  // 9. Direct Ingestion 18 Rute Handler
+  const handleSync18Routes = async () => {
     try {
-      const modalResult = await showRegionalSyncModal({
-        dateStr: selectedDate,
-      });
-      if (!modalResult) return;
-
-      setSyncingGlobal(true);
-      const res = await syncRegionalDailyFromGlobalSheet(
-        selectedDate,
-        modalResult.spreadsheetUrl,
-        modalResult.sheetName,
-      );
+      setSyncing18Routes(true);
+      const res = await ingestRegionalRouteSummaries(selectedDate);
 
       if (res.success) {
         showSuccessToast(
-          TEXT_MONITORING.SYNC_MODAL.SUCCESS_DESC(res.syncedCount),
+          TEXT_MONITORING.INGESTION.SUCCESS_TOAST(
+            res.skippedFromApp,
+            res.syncedFromSheet
+          )
         );
+        if (res.errors && res.errors.length > 0) {
+          showSuccessToast(
+            TEXT_MONITORING.INGESTION.PARTIAL_WARN(res.errors.length)
+          );
+        }
         await loadData(true);
       } else {
         showErrorAlert(
-          TEXT_MONITORING.SYNC_MODAL.FAILED_TITLE,
-          res.errors.join("\n") || "Gagal menyinkronkan data spreadsheet global",
+          TEXT_MONITORING.INGESTION.FAILED_TITLE,
+          res.errors.join("\n") || "Gagal menyinkronkan data rute wilayah"
         );
       }
     } catch (err: unknown) {
-      console.warn("[AllRouteMonitoringPage] Gagal sync global:", err);
+      console.warn("[AllRouteMonitoringPage] Gagal tarik 18 rute:", err);
       showErrorAlert(
-        TEXT_MONITORING.SYNC_MODAL.FAILED_TITLE,
-        TEXT_ERRORS.LOAD_DATA_FAILED,
+        TEXT_MONITORING.INGESTION.FAILED_TITLE,
+        TEXT_ERRORS.LOAD_DATA_FAILED
       );
     } finally {
-      setSyncingGlobal(false);
+      setSyncing18Routes(false);
     }
   };
 
@@ -247,8 +247,8 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         onRefresh={() => loadData(true)}
         refreshing={refreshing}
         loading={loading}
-        onSyncGlobal={handleSyncGlobal}
-        syncingGlobal={syncingGlobal}
+        onSync18Routes={handleSync18Routes}
+        syncing18Routes={syncing18Routes}
       />
 
       {/* Main Content Area: States or Active Tab */}

@@ -7,6 +7,8 @@ interface MonitoringReadinessBannerProps {
   verifiedCount: number;
   draftCount: number;
   emptyCount: number;
+  appInputCount?: number;
+  sheetSyncCount?: number;
 }
 
 export const MonitoringReadinessBanner: React.FC<
@@ -17,6 +19,8 @@ export const MonitoringReadinessBanner: React.FC<
   verifiedCount,
   draftCount,
   emptyCount,
+  appInputCount,
+  sheetSyncCount,
 }) => {
   const pct = Math.round(
     (submittedCount / (totalRoutesCount || 1)) * 100,
@@ -39,8 +43,9 @@ export const MonitoringReadinessBanner: React.FC<
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: "flex-start",
           fontSize: "13px",
+          gap: "8px",
         }}
       >
         <span
@@ -51,18 +56,38 @@ export const MonitoringReadinessBanner: React.FC<
         >
           {TEXT_MONITORING.READINESS.LABEL}
         </span>
-        <span
-          style={{
-            fontWeight: 800,
-            color: "var(--text-primary, #ededed)",
-          }}
-        >
-          {TEXT_MONITORING.READINESS.SUMMARY(
-            submittedCount,
-            totalRoutesCount,
-            pct,
+        <div style={{ textAlign: "right" }}>
+          <span
+            style={{
+              fontWeight: 800,
+              color: "var(--text-primary, #ededed)",
+              display: "block",
+            }}
+          >
+            {TEXT_MONITORING.READINESS.SUMMARY(
+              submittedCount,
+              totalRoutesCount,
+              pct,
+            )}
+          </span>
+          {appInputCount !== undefined && sheetSyncCount !== undefined && (
+            <span
+              style={{
+                fontSize: "11px",
+                color: "var(--text-secondary, #8b8b8b)",
+                display: "block",
+                marginTop: "2px",
+              }}
+            >
+              {TEXT_MONITORING.READINESS.SUMMARY_DETAILED(
+                appInputCount + sheetSyncCount,
+                totalRoutesCount,
+                appInputCount,
+                sheetSyncCount
+              )}
+            </span>
           )}
-        </span>
+        </div>
       </div>
 
       {/* Progress Track */}
