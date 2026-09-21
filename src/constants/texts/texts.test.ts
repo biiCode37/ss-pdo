@@ -87,6 +87,11 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).NAV.WA_REPORT).toBe('Laporan WA');
     expect((TEXT_MONITORING as any).BULK_VERIFY.BUTTON_LABEL(5)).toBe('Verifikasi Semua (5)');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Tren TOA Penumpang per Rute');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOA_UNIT).toBe('TOA');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOOLTIP_SHIFT(100, 200)).toContain('TOA Shift 1: 100 • Shift 2: 200');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_PCT('85.5')).toBe('85.5% dari Target');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_ZERO).toBe('Target 0');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_BAR_TITLE('JAK.01', '1.200')).toBe('JAK.01: 1.200 TOA');
     expect((TEXT_MONITORING as any).FLEET_TAB.TITLE).toBe('Status Armada Wilayah (Non-SGO)');
     expect(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE).toBe('Kembali ke Operasi Rute');
   });

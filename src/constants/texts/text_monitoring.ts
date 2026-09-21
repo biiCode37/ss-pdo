@@ -100,6 +100,12 @@ export const TEXT_MONITORING = {
     PROGRESS_ALL_CONFIRMED: 'Seluruh rute telah mengonfirmasi status armada.',
     CHART_TITLE: 'Tren TOA Penumpang per Rute',
     CHART_SUBTITLE: 'Perbandingan total pelanggan 18 rute hari ini',
+    CHART_TOOLTIP_SHIFT: (s1: number, s2: number) =>
+      `TOA Shift 1: ${s1.toLocaleString('id-ID')} • Shift 2: ${s2.toLocaleString('id-ID')}`,
+    CHART_TOA_UNIT: 'TOA',
+    CHART_TARGET_PCT: (pct: string) => `${pct}% dari Target`,
+    CHART_TARGET_ZERO: 'Target 0',
+    CHART_BAR_TITLE: (route: string, val: string) => `${route}: ${val} TOA`,
     MACRO_KPIS: {
       PASSENGERS: 'Total Pelanggan',
       TRIPS: 'Total Ritase',

@@ -15,7 +15,13 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
   );
 
   const maxPassengers = useMemo(() => {
-    const max = Math.max(...routes.map((r) => r.todayPassengers), 0);
+    const max = Math.max(
+      ...routes.map((r) => {
+        const toa = (r.toaShift1 || 0) + (r.toaShift2 || 0);
+        return toa > 0 ? toa : r.todayPassengers;
+      }),
+      0,
+    );
     return max > 0 ? max : 1;
   }, [routes]);
 
@@ -26,7 +32,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
         background: "var(--card-bg, rgba(23, 23, 23, 0.7))",
         borderRadius: "16px",
         border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-        padding: "16px",
+        padding: "14px 12px",
         marginBottom: "16px",
       }}
     >
@@ -112,8 +118,10 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 marginTop: "2px",
               }}
             >
-              Shift 1: {selectedRoute.totalShift1.toLocaleString("id-ID")} •
-              Shift 2: {selectedRoute.totalShift2.toLocaleString("id-ID")}
+              {TEXT_MONITORING.DASHBOARD.CHART_TOOLTIP_SHIFT(
+                selectedRoute.toaShift1 || 0,
+                selectedRoute.toaShift2 || 0,
+              )}
             </div>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -124,9 +132,9 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 color: "var(--text-primary)",
               }}
             >
-              {selectedRoute.todayPassengers.toLocaleString("id-ID")}{" "}
+              {((selectedRoute.toaShift1 || 0) + (selectedRoute.toaShift2 || 0) || selectedRoute.todayPassengers).toLocaleString("id-ID")}{" "}
               <span style={{ fontSize: "11px", fontWeight: 500 }}>
-                Pelanggan
+                {TEXT_MONITORING.DASHBOARD.CHART_TOA_UNIT}
               </span>
             </div>
             <div
@@ -141,32 +149,41 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               }}
             >
               {selectedRoute.targetHk > 0
-                ? `${((selectedRoute.todayPassengers / selectedRoute.targetHk) * 100).toFixed(1)}% dari Target`
-                : "Target 0"}
+                ? TEXT_MONITORING.DASHBOARD.CHART_TARGET_PCT(
+                    ((selectedRoute.todayPassengers / selectedRoute.targetHk) * 100).toFixed(1),
+                  )
+                : TEXT_MONITORING.DASHBOARD.CHART_TARGET_ZERO}
             </div>
           </div>
         </div>
       )}
 
-      {/* Bar Chart Container */}
+      {/* Bar Chart Container - 1 Frame Zero Horizontal Scroll */}
       <div
         className="no-scrollbar"
         style={{
           display: "flex",
           alignItems: "flex-end",
-          gap: "6px",
-          height: "160px",
-          overflowX: "auto",
-          paddingBottom: "8px",
+          justifyContent: "space-between",
+          gap: "2px",
+          height: "165px",
+          width: "100%",
+          overflow: "hidden",
+          paddingBottom: "4px",
           paddingTop: "14px",
+          boxSizing: "border-box",
         }}
       >
         {routes.map((route) => {
+          const totalToa = (route.toaShift1 || 0) + (route.toaShift2 || 0);
+          const displayVal = totalToa > 0 ? totalToa : route.todayPassengers;
           const heightPct = Math.max(
-            8,
-            Math.round((route.todayPassengers / maxPassengers) * 100),
+            6,
+            Math.round((displayVal / maxPassengers) * 100),
           );
           const isSelected = selectedRoute?.routeCode === route.routeCode;
+          // Hapus inisial "JAK." dan "J." dari kode rute
+          const cleanRouteCode = route.routeCode.replace(/^(JAK|J)\.?/i, "").trim();
 
           return (
             <div
@@ -178,9 +195,8 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 )
               }
               style={{
-                flex: "1 0 32px",
-                minWidth: "28px",
-                maxWidth: "46px",
+                flex: "1 1 0",
+                minWidth: 0,
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
@@ -189,54 +205,66 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 cursor: "pointer",
                 position: "relative",
               }}
-              title={`${route.routeCode}: ${route.todayPassengers.toLocaleString("id-ID")} Pelanggan`}
+              title={TEXT_MONITORING.DASHBOARD.CHART_BAR_TITLE(
+                route.routeCode,
+                displayVal.toLocaleString("id-ID"),
+              )}
             >
               {/* Value indicator above bar */}
               <span
                 style={{
-                  fontSize: "9px",
+                  fontSize: "7.5px",
                   fontWeight: 700,
+                  letterSpacing: "-0.4px",
                   color: isSelected
                     ? "var(--accent-color, #3ECF8E)"
                     : "var(--text-secondary)",
-                  marginBottom: "4px",
+                  marginBottom: "3px",
                   whiteSpace: "nowrap",
+                  lineHeight: 1,
+                  textAlign: "center",
                 }}
               >
-                {route.todayPassengers >= 1000
-                  ? `${(route.todayPassengers / 1000).toFixed(1)}k`
-                  : route.todayPassengers}
+                {displayVal >= 1000
+                  ? `${(displayVal / 1000).toFixed(1)}k`
+                  : displayVal > 0 ? `${displayVal}` : "-"}
               </span>
 
               {/* Bar Fill */}
               <div
                 style={{
                   width: "100%",
+                  maxWidth: "18px",
                   height: `${heightPct}%`,
-                  borderRadius: "6px 6px 2px 2px",
+                  borderRadius: "4px 4px 1px 1px",
                   background: isSelected
                     ? "linear-gradient(180deg, #3ECF8E 0%, #10B981 100%)"
-                    : "linear-gradient(180deg, rgba(62, 207, 142, 0.75) 0%, rgba(16, 185, 129, 0.4) 100%)",
+                    : displayVal > 0
+                      ? "linear-gradient(180deg, rgba(62, 207, 142, 0.8) 0%, rgba(16, 185, 129, 0.45) 100%)"
+                      : "rgba(255, 255, 255, 0.08)",
                   boxShadow: isSelected
-                    ? "0 0 12px rgba(62, 207, 142, 0.5)"
+                    ? "0 0 10px rgba(62, 207, 142, 0.6)"
                     : "none",
-                  transition: "all 0.2s ease",
+                  transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
                 }}
               />
 
-              {/* Route Code Label */}
+              {/* Route Code Label (Tanpa 'JAK.' / 'J.') */}
               <span
                 style={{
-                  fontSize: "9.5px",
-                  fontWeight: isSelected ? 800 : 600,
+                  fontSize: cleanRouteCode.length > 3 ? "7px" : "8px",
+                  fontWeight: isSelected ? 800 : 700,
+                  letterSpacing: "-0.3px",
                   color: isSelected
                     ? "var(--accent-color, #3ECF8E)"
                     : "var(--text-primary)",
-                  marginTop: "6px",
+                  marginTop: "5px",
                   whiteSpace: "nowrap",
+                  lineHeight: 1.1,
+                  textAlign: "center",
                 }}
               >
-                {route.routeCode.replace("JAK.", "J.")}
+                {cleanRouteCode}
               </span>
             </div>
           );

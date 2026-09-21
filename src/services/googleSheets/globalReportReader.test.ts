@@ -120,5 +120,23 @@ describe("Global Spreadsheet Reader (globalReportReader)", () => {
       const resultMap = parseGlobalSheetDateBlock(mockRows, 25);
       expect(resultMap.size).toBe(0);
     });
+
+    it("handles shifted column index when leading empty cells are stripped", () => {
+      const rows: any[][] = [];
+      for (let i = 0; i < 40; i++) rows.push([]);
+
+      // Day 1: Baris 0 adalah Header, Baris 4 adalah Data tanpa leading cell (Kolom B jadi index 0, RUTE jadi index 1)
+      rows[1] = ["2026-09-01", "NO", "RUTE", "RENOPS", "REALOPS", "KM", "TOA1", "MAN1", "TOT1", "TOA2", "MAN2", "TOT2", "TOTAL"];
+      rows[5] = ["1", "JAK 110A", "30", "30", "6034.9", "1876", "79", "1955", "2967", "116", "3083", "5062"];
+
+      const resultMap = parseGlobalSheetDateBlock(rows, 1);
+      expect(resultMap.size).toBe(1);
+      const jak110a = resultMap.get("JAK.110A");
+      expect(jak110a).toBeDefined();
+      expect(jak110a?.renops).toBe(30);
+      expect(jak110a?.toaShift1).toBe(1876);
+      expect(jak110a?.toaShift2).toBe(2967);
+      expect(jak110a?.totalPassengers).toBe(5062);
+    });
   });
 });
