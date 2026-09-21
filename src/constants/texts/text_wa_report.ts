@@ -7,6 +7,16 @@ export const TEXT_WA_REPORT = {
   FORMAT_1_BTN: 'Format 1 (Komprehensif)',
   FORMAT_2_BTN: 'Format 2 (Rincian Shift)',
   FORMAT_3_BTN: 'Format 3 (Status Armada)',
+  FORMAT_LABELS: {
+    FORMAT_1: 'Format 1 (Wilayah Lengkap)',
+    FORMAT_2: 'Format 2 (Rincian Shift)',
+    FORMAT_3: 'Format 3 (Kesiapan Armada)',
+  },
+  ACTIONS: {
+    COPY: 'Salin Teks',
+    SHARE: 'Kirim ke WhatsApp',
+    COPY_SUCCESS: 'Teks laporan berhasil disalin ke clipboard!',
+  },
   FORMAT_TABS: {
     FORMAT_1: 'Format 1',
     FORMAT_1_SUB: 'Pelanggan',
