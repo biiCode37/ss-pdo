@@ -96,6 +96,17 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE).toBe('Kembali ke Operasi Rute');
   });
 
+  it('exports TEXT_MONITORING ingestion, provenance, and detailed readiness tokens', () => {
+    expect((TEXT_MONITORING as any).INGESTION.BUTTON_LABEL).toBe('Tarik 18 Rute');
+    expect((TEXT_MONITORING as any).INGESTION.BUTTON_LOADING).toBe('Menyinkronkan...');
+    expect((TEXT_MONITORING as any).INGESTION.SUCCESS_TOAST(11, 7)).toContain('11 rute dari App, 7 rute dari Sheet');
+    expect((TEXT_MONITORING as any).INGESTION.PARTIAL_WARN(2)).toContain('2 rute terkendala');
+    expect((TEXT_MONITORING as any).PROVENANCE.APP_INPUT).toBe('Input App');
+    expect((TEXT_MONITORING as any).PROVENANCE.SHEET_SYNC).toBe('Tarik Sheet');
+    expect((TEXT_MONITORING as any).PROVENANCE.EMPTY).toBe('Belum Ada Data');
+    expect((TEXT_MONITORING as any).READINESS.SUMMARY_DETAILED(14, 18, 10, 4)).toContain('14/18 Rute Terisi');
+  });
+
   it('exports TEXT_WA_REPORT with modal titles and format labels', () => {
     expect(TEXT_WA_REPORT.MODAL_TITLE).toBe('Generator Laporan WhatsApp');
     expect(TEXT_WA_REPORT.FORMAT_1_BTN).toContain('Format 1 (Komprehensif)');

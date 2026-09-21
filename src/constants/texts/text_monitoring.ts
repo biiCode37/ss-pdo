@@ -34,6 +34,8 @@ export const TEXT_MONITORING = {
     LABEL: 'Status Kelengkapan Laporan PDO Wilayah:',
     SUMMARY: (submitted: number, total: number, pct: number) =>
       `${submitted} / ${total} Rute Siap (${pct}%)`,
+    SUMMARY_DETAILED: (filled: number, total: number, app: number, sheet: number) =>
+      `${filled}/${total} Rute Terisi • ${app} Input App • ${sheet} Tarik Sheet`,
     LEGEND_VERIFIED: 'Terverifikasi:',
     LEGEND_SUBMITTED: 'Submitted:',
     LEGEND_DRAFT: 'Draft:',
@@ -142,5 +144,20 @@ export const TEXT_MONITORING = {
     ROUTE_ISSUES_COUNT: (count: number) => `${count} Bus Kendala`,
     NOTES_PREFIX: 'Kendala:',
     SHIFT_PREFIX: 'Shift:',
+  },
+  INGESTION: {
+    BUTTON_LABEL: 'Tarik 18 Rute',
+    BUTTON_LOADING: 'Menyinkronkan...',
+    TOOLTIP: 'Tarik capaian dari 18 sheet rute individu ke database',
+    SUCCESS_TOAST: (appCount: number, sheetCount: number) =>
+      `Berhasil menyinkronkan: ${appCount} rute dari App, ${sheetCount} rute dari Sheet.`,
+    PARTIAL_WARN: (errorCount: number) =>
+      `Sinkronisasi selesai dengan ${errorCount} rute terkendala.`,
+    FAILED_TITLE: 'Gagal Menarik Data Rute',
+  },
+  PROVENANCE: {
+    APP_INPUT: 'Input App',
+    SHEET_SYNC: 'Tarik Sheet',
+    EMPTY: 'Belum Ada Data',
   },
 } as const;
