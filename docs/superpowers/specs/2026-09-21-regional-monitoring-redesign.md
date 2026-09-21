@@ -72,7 +72,40 @@ Bersumber dari data agregat spreadsheet global laporan operasi wilayah (`LAPORAN
 
 ---
 
-## 4. Tab Selanjutnya (Dalam Pembahasan)
-- **Tab 2: Rute (Daftar 18 Rute & Verifikasi Laporan)**
+## 4. Tab 2: Rute (Daftar 18 Rute & Verifikasi Laporan) [TERKUNCI]
+
+Tab kedua ini merupakan ruang kerja harian bagi Korwil dan Korlap untuk memeriksa kesiapan masing-masing rute, memverifikasi laporan operasional, dan mengakses rute individu.
+
+### 4.1. Toolbar Pencarian & Filter Cepat
+- **Input Pencarian:** Real-time filter untuk mencari kode rute (`JAK.XX`), nama lintasan, atau operator.
+- **Filter Status Laporan (Segmented Chips):**
+  - `Semua (18)`
+  - `Perlu Verifikasi` *(Status `submitted`, menunggu tindakan Korwil)*
+  - `Belum Lengkap` *(Status `draft` atau `empty`)*
+  - `Terverifikasi` *(Status `verified`)*
+- **Filter Korlap:** Tab filter nama pengawas Korlap (Ranto Lumban Toruan, Abdul Manan, dll).
+- **Tombol Bulk Verify:**
+  - Terletak di sisi kanan toolbar.
+  - Aktif secara dinamis jika terdapat rute berstatus `submitted`.
+  - Dilengkapi dialog konfirmasi SweetAlert2: *"Verifikasi X rute yang telah disubmit sekaligus?"*.
+
+### 4.2. Kartu Rute Modern Ringkas (Modern Card View)
+Mengadopsi format Opsi A (Kartu Modern Ringkas) dengan ergonomi sentuh mobile:
+- **Header Kartu:**
+  - Badge kode rute (`JAK.XX`) dengan aksen warna rute.
+  - Nama operator dan nama Korlap penanggung jawab.
+  - Status Badge resmi: `Draft` (Amber), `Submitted` (Sky Blue), `Verified` (Emerald Green), `Belum Ada Data` (Muted Zinc).
+- **Metrik Inti 3 Kolom:**
+  - *Armada:* Realops / Target Renops (rincian S1 & S2).
+  - *Pelanggan:* Total penumpang hari ini (TOA + Tiket Manual).
+  - *Ritase:* Total ritase operasional terselesaikan.
+- **Action Bar Kartu:**
+  - Tombol `[Verifikasi Laporan]`: Muncul aktif saat status `submitted`.
+  - Tombol `[Buka Rute]`: Navigasi instan ke dashboard rute individu.
+
+---
+
+## 5. Tab Selanjutnya (Dalam Pembahasan)
 - **Tab 3: Status Armada (Monitoring Unit Non-SGO 18 Rute)**
 - **Tab 4: Laporan WA (Generator Format WhatsApp Wilayah)**
+
