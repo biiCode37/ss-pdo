@@ -105,7 +105,37 @@ Mengadopsi format Opsi A (Kartu Modern Ringkas) dengan ergonomi sentuh mobile:
 
 ---
 
-## 5. Tab Selanjutnya (Dalam Pembahasan)
-- **Tab 3: Status Armada (Monitoring Unit Non-SGO 18 Rute)**
+## 5. Tab 3: Status Armada (Monitoring Unit Non-SGO 18 Rute) [TERKUNCI]
+
+Tab ketiga ini berfungsi memantau unit bus yang mengalami kendala operasional (TO, OFF, SO, dll) di seluruh 18 rute, terintegrasi langsung dengan database Supabase (`daily_fleet_shifts` & `daily_fleet_non_sgo_units`).
+
+### 5.1. Ringkasan Makro Armada Wilayah (Top Stats Bar)
+- **Total Armada Wilayah:** Akumulasi total unit yang terdaftar di wilayah.
+- 🟢 **SGO (Siap Guna Operasi):** Total unit siap jalan & persentase ketercapaian.
+- ⚠️ **Non-SGO (Kendala Operasional):** Total unit non-SGO dengan breakdown angka instan: `TO: X` • `OFF: Y` • `SO: Z`.
+
+### 5.2. Kontrol Filter Shift & Status
+- **Segmented Shift:** `Shift 1` • `Shift 2` • `Gabungan (Semua Shift)`.
+- **Filter Tipe Status:** `Semua Non-SGO` • `TO (Tukar Operasi)` • `OFF (Libur)` • `SO (Stop Operasi)`.
+
+### 5.3. Format Tampilan Daftar Bus Kendala (Opsi A - Grouped by Route)
+- **Penyaringan Cerdas:** Hanya rute yang memiliki unit non-SGO yang ditampilkan dalam daftar. Rute yang 100% SGO secara otomatis disembunyikan agar layar tetap bersih dan fokus pada mitigasi kendala.
+- **Header Grup Rute:**
+  - Badge kode rute (`JAK.XX`) & nama operator.
+  - Total unit kendala pada rute tersebut (contoh: `JAK.15 (2 Bus Kendala)`).
+- **Kartu Unit Bus Non-SGO:**
+  - Nomor Body Bus berukuran jelas dan kontras (contoh: `KWK 222177`).
+  - Badge tipe status dengan warna standar: `TO` (Amber/Oranye), `OFF` (Rose/Merah), `SO` (Purple/Ungu).
+  - Alasan / catatan kendala dari pengawas (contoh: *"Perbaikan Radiator di Bengkel"*, *"Kurang Pramudi"*, dll).
+  - Shift operasional (`Shift 1` atau `Shift 2`).
+
+### 5.4. Empty State (Saat Operasional Lancar)
+- Jika seluruh rute 100% beroperasi tanpa satu pun bus non-SGO, tampilkan visual elegan bernuansa hijau emerald:
+  *"Seluruh armada 18 rute berstatus SGO (Siap Guna Operasi) tanpa kendala."*
+
+---
+
+## 6. Tab Selanjutnya (Dalam Pembahasan)
 - **Tab 4: Laporan WA (Generator Format WhatsApp Wilayah)**
+
 
