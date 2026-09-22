@@ -18,11 +18,6 @@ interface NavItemConfig {
 
 const NAV_ITEMS: NavItemConfig[] = [
   {
-    id: "dashboard",
-    label: TEXT_MONITORING.NAV.DASHBOARD,
-    icon: LayoutDashboard,
-  },
-  {
     id: "routes",
     label: TEXT_MONITORING.NAV.ROUTES,
     icon: Route,
@@ -31,6 +26,11 @@ const NAV_ITEMS: NavItemConfig[] = [
     id: "fleet_status",
     label: TEXT_MONITORING.NAV.FLEET_STATUS,
     icon: Bus,
+  },
+  {
+    id: "dashboard",
+    label: TEXT_MONITORING.NAV.DASHBOARD,
+    icon: LayoutDashboard,
   },
   {
     id: "wa_report",

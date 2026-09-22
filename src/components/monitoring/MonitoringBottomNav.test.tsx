@@ -26,14 +26,16 @@ describe("MonitoringBottomNav Component", () => {
     vi.clearAllMocks();
   });
 
-  it("renders all 4 tabs with correct labels", async () => {
+  it("renders all tabs with correct labels and places Dashboard in the center position", async () => {
     const onSelectTab = vi.fn();
+    const onOpenProfile = vi.fn();
 
     await act(async () => {
       root.render(
         <MonitoringBottomNav
           activeTab="dashboard"
           onSelectTab={onSelectTab}
+          onOpenProfile={onOpenProfile}
         />
       );
     });
@@ -42,6 +44,16 @@ describe("MonitoringBottomNav Component", () => {
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.ROUTES);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.FLEET_STATUS);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.WA_REPORT);
+    expect(container.textContent).toContain(TEXT_MONITORING.NAV.PROFILE);
+
+    // Verify ordering: [Routes, Fleet Status, Dashboard (Center), WA Report, Profile]
+    const buttons = container.querySelectorAll<HTMLButtonElement>(".monitoring-tab-btn");
+    expect(buttons.length).toBe(5);
+    expect(buttons[0].getAttribute("data-testid")).toBe("monitoring-tab-routes");
+    expect(buttons[1].getAttribute("data-testid")).toBe("monitoring-tab-fleet_status");
+    expect(buttons[2].getAttribute("data-testid")).toBe("monitoring-tab-dashboard"); // CENTER!
+    expect(buttons[3].getAttribute("data-testid")).toBe("monitoring-tab-wa_report");
+    expect(buttons[4].getAttribute("data-testid")).toBe("monitoring-tab-profile");
   });
 
   it("indicates the active tab via aria-selected or active class", async () => {
