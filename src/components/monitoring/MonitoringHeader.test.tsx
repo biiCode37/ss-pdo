@@ -152,4 +152,17 @@ describe('MonitoringHeader Component', () => {
     expect(loadAllBtn?.disabled).toBe(true);
     expect(loadAllBtn?.getAttribute('aria-label')).toBe(TEXT_MONITORING.INGESTION.BUTTON_LABEL);
   });
+
+  it('renders control bar holding datepicker, refresh, and load all in a unified single row block', async () => {
+    await renderHeader({
+      selectedDate: '2026-09-02',
+      onSync18Routes: vi.fn(),
+    });
+
+    const controlBar = container.querySelector<HTMLDivElement>('[data-testid="monitoring-control-bar"]');
+    expect(controlBar).toBeTruthy();
+    expect(controlBar?.querySelector('[data-testid="monitoring-date-picker-trigger"]')).toBeTruthy();
+    expect(controlBar?.querySelector('[data-testid="monitoring-refresh-btn"]')).toBeTruthy();
+    expect(controlBar?.querySelector('[data-testid="monitoring-load-all-btn"]')).toBeTruthy();
+  });
 });

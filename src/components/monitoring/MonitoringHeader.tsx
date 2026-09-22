@@ -137,24 +137,32 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           </div>
         </div>
 
-        {/* Pojok Kanan: Date Navigator & Action Controls (Always 1 Row) */}
+        {/* 1 Blok Baris Komponen: Datepicker + Refresh + Load All (Responsive & No Blank Space) */}
         <div
+          data-testid="monitoring-control-bar"
           style={{
             display: "flex",
             alignItems: "center",
             gap: "8px",
             flexWrap: "nowrap",
+            flex: "1 1 320px",
+            maxWidth: "520px",
+            width: "100%",
           }}
         >
-          {/* Date Navigator Box (Interactive Date Picker) */}
+          {/* Date Navigator Box (Interactive Date Picker - Mengisi ruang fleksibel) */}
           <div
             style={{
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
+              justifyContent: "space-between",
+              flex: 1,
+              minWidth: 0,
+              height: "36px",
               background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
               borderRadius: "12px",
-              padding: "2px",
+              padding: "2px 4px",
             }}
           >
             <button
@@ -164,11 +172,14 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 background: "transparent",
                 border: "none",
                 color: "var(--text-primary, #ededed)",
-                padding: "6px 8px",
+                width: "30px",
+                height: "30px",
                 borderRadius: "8px",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
               }}
               title={TEXT_COMMON.NAV.PREV_DAY}
               aria-label={TEXT_COMMON.NAV.PREV_DAY}
@@ -192,8 +203,11 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 position: "relative",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
+                flex: 1,
+                minWidth: 0,
                 gap: "6px",
-                padding: "4px 8px",
+                padding: "4px 6px",
                 cursor: "pointer",
                 fontSize: "12px",
                 fontWeight: 700,
@@ -209,7 +223,9 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 size={14}
                 style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
               />
-              <span>{formatIndonesianDateLabel(selectedDate)}</span>
+              <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {formatIndonesianDateLabel(selectedDate)}
+              </span>
               <ChevronDown
                 size={12}
                 style={{
@@ -246,11 +262,14 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 background: "transparent",
                 border: "none",
                 color: "var(--text-primary, #ededed)",
-                padding: "6px 8px",
+                width: "30px",
+                height: "30px",
                 borderRadius: "8px",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
               }}
               title={TEXT_COMMON.NAV.NEXT_DAY}
               aria-label={TEXT_COMMON.NAV.NEXT_DAY}
@@ -259,12 +278,12 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
             </button>
           </div>
 
-          {/* Action Group: Refresh Button & Load All Button in the same row */}
+          {/* Action Group: Refresh Button & Load All Button in the same row with clean gap */}
           <div
             style={{
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
-              gap: "6px",
+              gap: "8px",
               flexShrink: 0,
             }}
           >
@@ -287,6 +306,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 cursor: refreshing || loading || syncing18Routes ? "wait" : "pointer",
                 opacity: refreshing || loading || syncing18Routes ? 0.6 : 1,
                 transition: "all 0.2s ease",
+                flexShrink: 0,
               }}
               title={TEXT_MONITORING.HEADER.REFRESH_TITLE}
               aria-label={TEXT_MONITORING.HEADER.REFRESH_TITLE}
