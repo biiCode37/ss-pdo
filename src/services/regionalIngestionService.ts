@@ -11,6 +11,14 @@ export interface IngestionResult {
   errors: string[];
 }
 
+export interface IngestionProgress {
+  currentRouteCode?: string;
+  processedCount: number;
+  totalToSync: number;
+  percent: number;
+  stepMessage: string;
+}
+
 /**
  * Membagi array menjadi beberapa chunk dengan ukuran tertentu untuk pembatasan konkurensi
  */
@@ -34,7 +42,10 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * 2. Controlled Concurrency: Memproses dalam batch 4 rute secara bergantian dengan jeda 250ms.
  * 3. Partial Tolerance: Jika 1 rute gagal, rute lainnya tetap berhasil diproses.
  */
-export async function ingestRegionalRouteSummaries(dateStr: string): Promise<IngestionResult> {
+export async function ingestRegionalRouteSummaries(
+  dateStr: string,
+  onProgress?: (progress: IngestionProgress) => void
+): Promise<IngestionResult> {
   const errors: string[] = [];
   let syncedFromSheet = 0;
   let skippedFromApp = 0;
@@ -88,14 +99,38 @@ export async function ingestRegionalRouteSummaries(dateStr: string): Promise<Ing
     }
 
     if (routesToSync.length === 0) {
+      onProgress?.({
+        processedCount: 0,
+        totalToSync: 0,
+        percent: 100,
+        stepMessage: 'Seluruh rute telah terisi melalui aplikasi.',
+      });
       return { success: true, syncedFromSheet: 0, skippedFromApp, errors: [] };
     }
+
+    onProgress?.({
+      processedCount: 0,
+      totalToSync: routesToSync.length,
+      percent: 5,
+      stepMessage: `Menyiapkan sinkronisasi ${routesToSync.length} rute...`,
+    });
+
+    let processedCount = 0;
 
     // 5. Eksekusi batching dengan ukuran chunk = 4 rute per putaran
     const chunks = chunkArray(routesToSync, 4);
 
     for (let c = 0; c < chunks.length; c++) {
       const currentChunk = chunks[c];
+      const chunkNames = currentChunk.map((r) => r.route_code).join(', ');
+
+      onProgress?.({
+        currentRouteCode: currentChunk[0]?.route_code,
+        processedCount,
+        totalToSync: routesToSync.length,
+        percent: Math.min(95, Math.round(5 + (processedCount / routesToSync.length) * 90)),
+        stepMessage: `Mengambil data rute: ${chunkNames}...`,
+      });
 
       await Promise.all(
         currentChunk.map(async (route) => {
@@ -209,15 +244,31 @@ export async function ingestRegionalRouteSummaries(dateStr: string): Promise<Ing
             }
           } catch (fetchErr: any) {
             errors.push(`${route.route_code}: ${fetchErr?.message || 'Gagal membaca sheet'}`);
+          } finally {
+            processedCount++;
           }
         })
       );
+
+      onProgress?.({
+        processedCount,
+        totalToSync: routesToSync.length,
+        percent: Math.min(95, Math.round(5 + (processedCount / routesToSync.length) * 90)),
+        stepMessage: `Telah memproses ${processedCount} dari ${routesToSync.length} rute...`,
+      });
 
       // Jeda halus antar batch untuk keselamatan rate limit Google API
       if (c < chunks.length - 1) {
         await sleep(250);
       }
     }
+
+    onProgress?.({
+      processedCount: routesToSync.length,
+      totalToSync: routesToSync.length,
+      percent: 100,
+      stepMessage: `Sinkronisasi selesai! ${syncedFromSheet} rute berhasil ditarik.`,
+    });
 
     return {
       success: true,

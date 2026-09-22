@@ -373,7 +373,7 @@ describe('AllRouteMonitoringPage Component', () => {
     expect(onDateChange).toHaveBeenCalledWith('2026-09-02');
   });
 
-  it('triggers 18 routes direct ingestion when Tarik 18 Rute button is clicked', async () => {
+  it('triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked', async () => {
     (regionalIngestionService.ingestRegionalRouteSummaries as any).mockResolvedValue({
       success: true,
       syncedFromSheet: 10,
@@ -394,7 +394,10 @@ describe('AllRouteMonitoringPage Component', () => {
       syncBtn?.click();
     });
 
-    expect(regionalIngestionService.ingestRegionalRouteSummaries).toHaveBeenCalledWith('2026-09-02');
+    expect(regionalIngestionService.ingestRegionalRouteSummaries).toHaveBeenCalledWith(
+      '2026-09-02',
+      expect.any(Function)
+    );
   });
 
   it('displays data provenance badges (Input App vs Tarik Sheet) on route cards', async () => {

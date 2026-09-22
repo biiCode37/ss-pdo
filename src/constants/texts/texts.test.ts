@@ -98,8 +98,10 @@ describe('Centralized UI Text Dictionary', () => {
   });
 
   it('exports TEXT_MONITORING ingestion, provenance, and detailed readiness tokens', () => {
-    expect((TEXT_MONITORING as any).INGESTION.BUTTON_LABEL).toBe('Tarik 18 Rute');
-    expect((TEXT_MONITORING as any).INGESTION.BUTTON_LOADING).toBe('Menyinkronkan...');
+    expect((TEXT_MONITORING as any).INGESTION.BUTTON_LABEL).toBe('Load All');
+    expect((TEXT_MONITORING as any).INGESTION.BUTTON_LOADING).toBe('Loading...');
+    expect((TEXT_MONITORING as any).INGESTION.MODAL_TITLE).toContain('Load All');
+    expect((TEXT_MONITORING as any).INGESTION.PROGRESS_FETCHING('JAK.01', 1, 18)).toContain('JAK.01');
     expect((TEXT_MONITORING as any).INGESTION.SUCCESS_TOAST(11, 7)).toContain('11 rute dari App, 7 rute dari Sheet');
     expect((TEXT_MONITORING as any).INGESTION.PARTIAL_WARN(2)).toContain('2 rute terkendala');
     expect((TEXT_MONITORING as any).PROVENANCE.APP_INPUT).toBe('Input App');

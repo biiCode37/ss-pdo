@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Bus,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Calendar,
   RefreshCw,
+  CloudDownload,
+  ArrowLeft,
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
@@ -24,6 +27,7 @@ export interface MonitoringHeaderProps {
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
+  onBackToRouteView,
   selectedDate,
   onStepDate,
   onDateInputChange,
@@ -33,6 +37,22 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   onSync18Routes,
   syncing18Routes,
 }) => {
+  const dateInputRef = useRef<HTMLInputElement>(null);
+
+  const handleOpenDatePicker = () => {
+    if (!dateInputRef.current) return;
+    try {
+      if (typeof dateInputRef.current.showPicker === "function") {
+        dateInputRef.current.showPicker();
+      } else {
+        dateInputRef.current.focus();
+        dateInputRef.current.click();
+      }
+    } catch {
+      dateInputRef.current?.click();
+    }
+  };
+
   return (
     <header
       style={{
@@ -60,6 +80,30 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
       >
         {/* Pojok Kiri: Judul & Subtitle */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          {onBackToRouteView && (
+            <button
+              type="button"
+              onClick={onBackToRouteView}
+              data-testid="monitoring-back-btn"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "36px",
+                height: "36px",
+                borderRadius: "10px",
+                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+                color: "var(--text-primary, #ededed)",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+              title={TEXT_COMMON.BUTTONS.BACK}
+              aria-label={TEXT_COMMON.BUTTONS.BACK}
+            >
+              <ArrowLeft size={18} />
+            </button>
+          )}
           <div>
             <h1
               style={{
@@ -93,7 +137,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           </div>
         </div>
 
-        {/* Pojok Kanan: Date Navigator, Refresh, Sync Global, Profile Avatar */}
+        {/* Pojok Kanan: Date Navigator & Action Controls */}
         <div
           style={{
             display: "flex",
@@ -102,7 +146,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
             flexWrap: "wrap",
           }}
         >
-          {/* Date Navigator Box */}
+          {/* Date Navigator Box (Interactive Date Picker) */}
           <div
             style={{
               display: "inline-flex",
@@ -127,11 +171,23 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 alignItems: "center",
               }}
               title={TEXT_COMMON.NAV.PREV_DAY}
+              aria-label={TEXT_COMMON.NAV.PREV_DAY}
             >
               <ChevronLeft size={16} />
             </button>
 
-            <label
+            {/* Interactive Date Picker Trigger */}
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={handleOpenDatePicker}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleOpenDatePicker();
+                }
+              }}
+              data-testid="monitoring-date-picker-trigger"
               style={{
                 position: "relative",
                 display: "flex",
@@ -143,27 +199,45 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 fontWeight: 700,
                 color: "var(--text-primary, #ededed)",
                 userSelect: "none",
+                borderRadius: "8px",
+                transition: "background-color 0.15s ease",
               }}
+              title={TEXT_COMMON.NAV.CHOOSE_DATE}
+              aria-label={TEXT_COMMON.NAV.CHOOSE_DATE}
             >
               <Calendar
                 size={14}
-                style={{ color: "var(--accent-color, #3ECF8E)" }}
+                style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
               />
               <span>{formatIndonesianDateLabel(selectedDate)}</span>
+              <ChevronDown
+                size={12}
+                style={{
+                  color: "var(--text-secondary, #8b8b8b)",
+                  opacity: 0.7,
+                  flexShrink: 0,
+                  marginLeft: "1px",
+                }}
+              />
               <input
+                ref={dateInputRef}
                 type="date"
                 value={selectedDate}
                 onChange={onDateInputChange}
+                tabIndex={-1}
+                aria-hidden="true"
+                data-testid="monitoring-native-date-input"
                 style={{
                   position: "absolute",
                   inset: 0,
                   opacity: 0,
-                  cursor: "pointer",
                   width: "100%",
                   height: "100%",
+                  cursor: "pointer",
+                  pointerEvents: "none",
                 }}
               />
-            </label>
+            </div>
 
             <button
               type="button"
@@ -179,76 +253,93 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 alignItems: "center",
               }}
               title={TEXT_COMMON.NAV.NEXT_DAY}
+              aria-label={TEXT_COMMON.NAV.NEXT_DAY}
             >
               <ChevronRight size={16} />
             </button>
           </div>
 
-          {/* Refresh Button */}
-          <button
-            type="button"
-            onClick={onRefresh}
-            disabled={refreshing || loading}
+          {/* Action Group: Refresh Button & Load All Button in the same row */}
+          <div
             style={{
               display: "inline-flex",
               alignItems: "center",
-              justifyContent: "center",
-              width: "36px",
-              height: "36px",
-              borderRadius: "12px",
-              background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
-              color: "var(--text-primary, #ededed)",
-              cursor: refreshing || loading ? "wait" : "pointer",
-              opacity: refreshing || loading ? 0.6 : 1,
-              transition: "all 0.2s ease",
+              gap: "6px",
+              flexShrink: 0,
             }}
-            title={TEXT_MONITORING.HEADER.REFRESH_TITLE}
           >
-            <RefreshCw
-              size={16}
-              style={{
-                animation: refreshing ? "spin 1s linear infinite" : "none",
-              }}
-            />
-          </button>
-
-          {/* Tarik 18 Rute Button (Direct Action) */}
-          {onSync18Routes && (
+            {/* Refresh Button */}
             <button
               type="button"
-              onClick={onSync18Routes}
-              disabled={syncing18Routes || loading}
+              onClick={onRefresh}
+              disabled={refreshing || loading || syncing18Routes}
+              data-testid="monitoring-refresh-btn"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "6px",
-                padding: "8px 12px",
+                justifyContent: "center",
+                width: "36px",
+                height: "36px",
                 borderRadius: "12px",
-                background: "rgba(62, 207, 142, 0.12)",
-                border: "1px solid rgba(62, 207, 142, 0.25)",
-                color: "var(--accent-color, #3ECF8E)",
-                fontSize: "12.5px",
-                fontWeight: 700,
-                cursor: syncing18Routes || loading ? "not-allowed" : "pointer",
-                opacity: syncing18Routes || loading ? 0.6 : 1,
+                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+                color: "var(--text-primary, #ededed)",
+                cursor: refreshing || loading || syncing18Routes ? "wait" : "pointer",
+                opacity: refreshing || loading || syncing18Routes ? 0.6 : 1,
                 transition: "all 0.2s ease",
               }}
-              title={TEXT_MONITORING.INGESTION.TOOLTIP}
+              title={TEXT_MONITORING.HEADER.REFRESH_TITLE}
+              aria-label={TEXT_MONITORING.HEADER.REFRESH_TITLE}
             >
               <RefreshCw
                 size={16}
                 style={{
-                  animation: syncing18Routes ? "spin 1s linear infinite" : "none",
+                  animation: refreshing ? "spin 1s linear infinite" : "none",
                 }}
               />
-              <span>
-                {syncing18Routes
-                  ? TEXT_MONITORING.INGESTION.BUTTON_LOADING
-                  : TEXT_MONITORING.INGESTION.BUTTON_LABEL}
-              </span>
             </button>
-          )}
+
+            {/* Load All Button (Direct Action) */}
+            {onSync18Routes && (
+              <button
+                type="button"
+                onClick={onSync18Routes}
+                disabled={syncing18Routes || loading || refreshing}
+                data-testid="monitoring-load-all-btn"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  height: "36px",
+                  padding: "0 12px",
+                  borderRadius: "12px",
+                  background: "rgba(62, 207, 142, 0.14)",
+                  border: "1px solid rgba(62, 207, 142, 0.3)",
+                  color: "var(--accent-color, #3ECF8E)",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  cursor: syncing18Routes || loading || refreshing ? "not-allowed" : "pointer",
+                  opacity: syncing18Routes || loading || refreshing ? 0.6 : 1,
+                  transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                  whiteSpace: "nowrap",
+                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+                }}
+                title={TEXT_MONITORING.INGESTION.TOOLTIP}
+              >
+                <CloudDownload
+                  size={16}
+                  style={{
+                    animation: syncing18Routes ? "bounce 1s infinite ease-in-out" : "none",
+                  }}
+                />
+                <span>
+                  {syncing18Routes
+                    ? TEXT_MONITORING.INGESTION.BUTTON_LOADING
+                    : TEXT_MONITORING.INGESTION.BUTTON_LABEL}
+                </span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </header>

@@ -3060,13 +3060,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringBottomNav.test.tsx": {
-    "mtime": 1790035736.9855285,
-    "ast_hash": "021d1cf80716b410b0a4f9a8e8d265d9",
+    "mtime": 1790036573.6852112,
+    "ast_hash": "9e6caca64e7d9d1863383a681356c83c",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringBottomNav.tsx": {
-    "mtime": 1790035685.0488937,
-    "ast_hash": "c296335d3778898bff8de292eacbb631",
+    "mtime": 1790036561.3152337,
+    "ast_hash": "9601db6a37d1e0428276a979dce56a7f",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringDashboardTab.test.tsx": {
@@ -3242,6 +3242,16 @@
   "refactor-ss-pdo/refact_74/REPAIR_REPORT.md": {
     "mtime": 1790035922.2233815,
     "ast_hash": "cae78d670d6cf520afc71eee348283ee",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_75/AUDIT_BUGS.md": {
+    "mtime": 1790036611.003624,
+    "ast_hash": "b695ac7ff1e41af9eb220d00ce04eea0",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_75/REPAIR_REPORT.md": {
+    "mtime": 1790036618.6277745,
+    "ast_hash": "ce28124641d6b32298de28aeaebf68d5",
     "semantic_hash": ""
   }
 }

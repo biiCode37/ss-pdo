@@ -6,12 +6,16 @@ import {
 } from "@/services/allRouteMonitoringService";
 import { fetchDailyFleetShiftsByDate } from "@/services/fleetStatusService";
 import { verifyDailyRouteReport } from "@/services/dailyRouteReportService";
-import { ingestRegionalRouteSummaries } from "@/services/regionalIngestionService";
+import {
+  ingestRegionalRouteSummaries,
+  type IngestionProgress,
+} from "@/services/regionalIngestionService";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 import { showSuccessToast, showErrorAlert } from "@/utils/alertUtils";
 import { TEXT_ERRORS, TEXT_ALERTS, TEXT_MONITORING } from "@/constants/texts";
 
 import { MonitoringHeader } from "./MonitoringHeader";
+import { IngestionProgressModal } from "./IngestionProgressModal";
 import { MonitoringStates } from "./MonitoringStates";
 import { MonitoringBottomNav, type MonitoringTab } from "./MonitoringBottomNav";
 import { MonitoringDashboardTab } from "./tabs/MonitoringDashboardTab";
@@ -64,6 +68,8 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [fleetShifts, setFleetShifts] = useState<DailyFleetShiftWithUnits[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [syncing18Routes, setSyncing18Routes] = useState<boolean>(false);
+  const [ingestionProgress, setIngestionProgress] = useState<IngestionProgress | null>(null);
+  const [showProgressModal, setShowProgressModal] = useState<boolean>(false);
   const [isBulking, setIsBulking] = useState<boolean>(false);
   const [verifyingRouteId, setVerifyingRouteId] = useState<number | null>(null);
 
@@ -195,9 +201,19 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const handleSync18Routes = async () => {
     try {
       setSyncing18Routes(true);
-      const res = await ingestRegionalRouteSummaries(selectedDate);
+      setIngestionProgress(null);
+      setShowProgressModal(true);
+
+      const res = await ingestRegionalRouteSummaries(selectedDate, (prog) => {
+        setIngestionProgress(prog);
+      });
 
       if (res.success) {
+        // Tampilkan 100% dan sukses sejenak sebelum modal ditutup
+        setTimeout(() => {
+          setShowProgressModal(false);
+        }, 900);
+
         showSuccessToast(
           TEXT_MONITORING.INGESTION.SUCCESS_TOAST(
             res.skippedFromApp,
@@ -211,12 +227,14 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         }
         await loadData(true);
       } else {
+        setShowProgressModal(false);
         showErrorAlert(
           TEXT_MONITORING.INGESTION.FAILED_TITLE,
           res.errors.join("\n") || "Gagal menyinkronkan data rute wilayah"
         );
       }
     } catch (err: unknown) {
+      setShowProgressModal(false);
       console.warn("[AllRouteMonitoringPage] Gagal tarik 18 rute:", err);
       showErrorAlert(
         TEXT_MONITORING.INGESTION.FAILED_TITLE,
@@ -310,6 +328,13 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         onOpenProfile={onOpenProfile}
+      />
+
+      {/* Ingestion Progress Modal */}
+      <IngestionProgressModal
+        isOpen={showProgressModal}
+        progress={ingestionProgress}
+        onClose={() => setShowProgressModal(false)}
       />
     </div>
   );

@@ -147,9 +147,18 @@ export const TEXT_MONITORING = {
     SHIFT_PREFIX: 'Shift:',
   },
   INGESTION: {
-    BUTTON_LABEL: 'Tarik 18 Rute',
-    BUTTON_LOADING: 'Menyinkronkan...',
-    TOOLTIP: 'Tarik capaian dari 18 sheet rute individu ke database',
+    BUTTON_LABEL: 'Load All',
+    BUTTON_LOADING: 'Loading...',
+    TOOLTIP: 'Tarik otomatis data 18 sheet rute individu ke database',
+    MODAL_TITLE: 'Sinkronisasi 18 Rute (Load All)',
+    MODAL_SUBTITLE: 'Menarik ringkasan capaian langsung dari Google Sheets rute',
+    PROGRESS_INIT: 'Menghubungi konfigurasi spreadsheet rute...',
+    PROGRESS_FETCHING: (route: string, current: number, total: number) =>
+      `Menarik rute ${route} (${current} dari ${total})...`,
+    PROGRESS_SAVING: (route: string) => `Menyimpan rekapitulasi ${route}...`,
+    PROGRESS_COMPLETE: 'Seluruh rute berhasil disinkronkan!',
+    PROGRESS_PROCESSED_LABEL: 'Rute Terproses',
+    PROGRESS_SKIPPED_LABEL: 'Dilewati (Input App)',
     SUCCESS_TOAST: (appCount: number, sheetCount: number) =>
       `Berhasil menyinkronkan: ${appCount} rute dari App, ${sheetCount} rute dari Sheet.`,
     PARTIAL_WARN: (errorCount: number) =>
