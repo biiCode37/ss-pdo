@@ -33,16 +33,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
   }, [routes]);
 
   return (
-    <div
-      className="monitoring-card"
-      style={{
-        background: "var(--card-bg, rgba(23, 23, 23, 0.7))",
-        borderRadius: "16px",
-        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-        padding: "14px 12px",
-        marginBottom: "16px",
-      }}
-    >
+    <div className="monitoring-card">
       <div
         style={{
           display: "flex",

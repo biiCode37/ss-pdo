@@ -1420,8 +1420,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1790052132.5243196,
-    "ast_hash": "1f44c246eeba6bd9bc61c037e355b679",
+    "mtime": 1790057432.2411723,
+    "ast_hash": "7f3faf53890ada0fe59e867b9f7c0c6b",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1790051705.2361624,
-    "ast_hash": "8238b5c52a1249f5eaca6058a68bcc39",
+    "mtime": 1790057443.8001406,
+    "ast_hash": "11c32670dddea5f711939eb84daf61df",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -3090,8 +3090,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringLeaderboard.tsx": {
-    "mtime": 1790054882.833802,
-    "ast_hash": "209ec9885aa2f29cba801428d1a68634",
+    "mtime": 1790057505.310928,
+    "ast_hash": "b1dac5787ab6f15324012a1b8c0920a3",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringMacroKpiGrid.tsx": {
@@ -3115,13 +3115,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringShiftSplitBar.tsx": {
-    "mtime": 1790046269.4860456,
-    "ast_hash": "13715896ac3631c8851fdafcedbbe71d",
+    "mtime": 1790057518.5402756,
+    "ast_hash": "7036968bd6665d0c2f04cdbc9eb38fda",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringToaBarChart.tsx": {
-    "mtime": 1790051652.5281522,
-    "ast_hash": "792922133a241dd37d30ccaf2c768059",
+    "mtime": 1790057564.0251553,
+    "ast_hash": "2e0a886d6899b6263836280c7aed386e",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringWaReportTab.test.tsx": {
@@ -3297,6 +3297,51 @@
   "refactor-ss-pdo/refact_78/REPAIR_REPORT.md": {
     "mtime": 1790039481.172997,
     "ast_hash": "f434d6f141182d8e38bec909154f7e57",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-09-22T05-59-40-998Z.yml": {
+    "mtime": 1790056780.999363,
+    "ast_hash": "f67f045f74c7983a576d5faa20ad0805",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-09-22T06-12-54-923Z.yml": {
+    "mtime": 1790057574.93687,
+    "ast_hash": "133e4d6ed48a825c2c642c66ab956316",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-09-22T06-18-24-425Z.yml": {
+    "mtime": 1790057904.4256532,
+    "ast_hash": "b92e9e8ad8c623be000527d905a1613e",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-09-22T06-30-19-428Z.yml": {
+    "mtime": 1790058619.4303792,
+    "ast_hash": "b92e9e8ad8c623be000527d905a1613e",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-09-22T06-31-26-116Z.yml": {
+    "mtime": 1790058686.1199,
+    "ast_hash": "962e5c0ad2c2b47b40fe072ddc5e9538",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-09-22T06-31-32-013Z.yml": {
+    "mtime": 1790058692.006441,
+    "ast_hash": "705fdb1937b9e99c1df24c8eb726c210",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-09-22T06-31-36-494Z.yml": {
+    "mtime": 1790058696.4929736,
+    "ast_hash": "705fdb1937b9e99c1df24c8eb726c210",
+    "semantic_hash": ""
+  },
+  "leaderboard_mobile.png": {
+    "mtime": 1790057045.4580903,
+    "ast_hash": "2f496c5fc690716e876bfd3513747610",
+    "semantic_hash": ""
+  },
+  "leaderboard_mobile_perfect.png": {
+    "mtime": 1790058711.3529055,
+    "ast_hash": "9c41416cca92fa0e81add9c39dba8b3b",
     "semantic_hash": ""
   }
 }

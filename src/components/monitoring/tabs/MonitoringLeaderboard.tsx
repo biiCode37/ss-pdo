@@ -69,7 +69,6 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
           gap: "8px",
           minWidth: 0,
           flex: 1,
-          marginRight: "6px",
         }}
       >
         <span

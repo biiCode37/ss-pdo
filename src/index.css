@@ -2059,7 +2059,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 
 @media (max-width: 640px) {
   .monitoring-dashboard-tab {
-    padding: 12px 10px 84px 10px;
+    padding: 12px 12px 84px 12px;
   }
 }
 
@@ -2073,7 +2073,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 
 @media (max-width: 640px) {
   .monitoring-card {
-    padding: 14px 12px;
+    padding: 14px 14px;
     margin-bottom: 12px;
   }
 }
@@ -2095,14 +2095,16 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 10px;
+  gap: 10px;
+  padding: 9px 12px;
   border-radius: 10px;
   transition: transform 0.15s ease, background 0.15s ease;
 }
 
 @media (min-width: 640px) {
   .leaderboard-item {
-    padding: 9px 12px;
+    gap: 12px;
+    padding: 10px 14px;
   }
 }
 

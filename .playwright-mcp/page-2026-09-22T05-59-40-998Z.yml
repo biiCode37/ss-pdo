@@ -1,0 +1,32 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - img "Logo PUSM" [ref=e5]
+    - heading "PUSM - PDO Utara Spreadsheet Mobile" [level=1] [ref=e6]:
+      - text: PUSM
+      - generic [ref=e7]: PDO Utara Spreadsheet Mobile
+    - generic [ref=e8]: Operasional Mikrotrans Transjakarta
+    - paragraph [ref=e9]: Aplikasi pencatatan dan pemantauan tugas operasional harian armada Transjakarta Mikrotrans Wilayah Utara yang terhubung langsung ke Google Spreadsheet internal.
+    - button "Masuk dengan Akun Google" [disabled] [ref=e10]
+    - paragraph [ref=e15]: Gunakan akun Google yang sudah didaftarkan oleh admin atau pengawas.
+    - button "Pelajari Aplikasi & Izin Akses" [ref=e16] [cursor=pointer]
+  - generic [ref=e20]:
+    - heading "Fitur Utama Aplikasi" [level=2] [ref=e21]
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e24]: Dashboard Capaian Rute
+        - paragraph [ref=e29]: Rekap capaian ritase, kilometer, dan pelanggan per armada secara real-time.
+      - generic [ref=e30]:
+        - generic [ref=e31]: Pencarian Unit & Catatan
+        - paragraph [ref=e38]: Cari nomor bodi unit cepat, catat kondisi siap jalan atau kendala lapangan.
+      - generic [ref=e39]:
+        - generic [ref=e40]: Form Cepat & Presisi
+        - paragraph [ref=e46]: Input data terarah yang langsung tersimpan rapi ke spreadsheet resmi pengawas.
+  - contentinfo [ref=e47]:
+    - generic [ref=e48]:
+      - link "Kebijakan Privasi" [ref=e49] [cursor=pointer]:
+        - /url: "#privacy"
+      - link "Syarat & Ketentuan" [ref=e54] [cursor=pointer]:
+        - /url: "#terms"
+      - link "Kontak Pengembang" [ref=e59] [cursor=pointer]:
+        - /url: "#developer"
+    - paragraph [ref=e64]: © 2026 PUSM — PDO Utara Spreadsheet Mobile. Hak cipta dilindungi.

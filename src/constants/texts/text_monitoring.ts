@@ -147,8 +147,7 @@ export const TEXT_MONITORING = {
       TOP_3: "Top 3 Pelanggan Terbanyak",
       TOP_ACHIEVEMENT: "Top 3 Capaian Tertinggi",
       BOTTOM_3: "3 Rute Butuh Evaluasi",
-      PASSENGERS_COUNT: (count: number) =>
-        `${count.toLocaleString("id-ID")} Pelanggan`,
+      PASSENGERS_COUNT: (count: number) => count.toLocaleString("id-ID"),
       TARGET_LABEL: (target: number) =>
         target > 0 ? `Target: ${target.toLocaleString("id-ID")}` : "Target: -",
       TARGET_PCT_BADGE: (pct: string) => `${pct}% Target`,

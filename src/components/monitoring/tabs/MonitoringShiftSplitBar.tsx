@@ -15,16 +15,7 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
   const s2Pct = 100 - s1Pct;
 
   return (
-    <div
-      className="monitoring-card"
-      style={{
-        background: "var(--card-bg, rgba(23, 23, 23, 0.7))",
-        borderRadius: "16px",
-        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-        padding: "16px",
-        marginBottom: "16px",
-      }}
-    >
+    <div className="monitoring-card">
       <h3
         style={{
           fontSize: "13.5px",
