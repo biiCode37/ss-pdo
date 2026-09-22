@@ -2,17 +2,24 @@ import React, { useState, useMemo } from "react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { BarChart3 } from "lucide-react";
+import { formatIndonesianDaySlashDate } from "../monitoringUtils";
 
 interface MonitoringToaBarChartProps {
   routes: RegionalRouteItem[];
+  date?: string;
 }
 
 export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
   routes,
+  date,
 }) => {
   const [selectedRoute, setSelectedRoute] = useState<RegionalRouteItem | null>(
     null,
   );
+
+  const formattedDate = useMemo(() => {
+    return date ? formatIndonesianDaySlashDate(date) : undefined;
+  }, [date]);
 
   const maxPassengers = useMemo(() => {
     const max = Math.max(
@@ -67,7 +74,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 margin: 0,
               }}
             >
-              {TEXT_MONITORING.DASHBOARD.CHART_SUBTITLE}
+              {TEXT_MONITORING.DASHBOARD.CHART_SUBTITLE(formattedDate)}
             </p>
           </div>
         </div>

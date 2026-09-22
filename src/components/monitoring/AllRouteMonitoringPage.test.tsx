@@ -236,12 +236,12 @@ describe('AllRouteMonitoringPage Component', () => {
     // Header title
     expect(container.textContent).toContain(TEXT_MONITORING.HEADER.TITLE);
     // Tab 1 (Dashboard) components
-    expect(container.textContent).toContain('Kesiapan Status Armada PDO');
+    expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.PROGRESS_TITLE);
     expect(container.textContent).toContain('7.750'); // Total Pelanggan
     expect(container.textContent).toContain('507,4'); // Total KM
-    expect(container.textContent).toContain('Tren TOA Penumpang per Rute');
-    expect(container.textContent).toContain('Perbandingan Beban Operasional Shift');
-    expect(container.textContent).toContain('Kinerja Rute Wilayah');
+    expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.CHART_TITLE);
+    expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.TITLE);
+    expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TITLE);
   });
 
   it('navigates to Rute tab and filters by supervisor', async () => {

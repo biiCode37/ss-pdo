@@ -211,6 +211,13 @@ export async function ingestRegionalRouteSummaries(
               ? sheetSummary.kmPerBus
               : (realops > 0 ? totalKm / realops : 0);
 
+            // ponytail: 1 Ritase = 2 Trip (PP / Pulang-Pergi).
+            // Hitung Ritase PP menggunakan km_baku (totalKm / km_baku). Fallback: calcTrips / 2.
+            const kmBaku = Number(route.km_baku) || 0;
+            const totalRitase = kmBaku > 0 && totalKm > 0
+              ? Number((totalKm / kmBaku).toFixed(1))
+              : Number((calcTrips / 2).toFixed(1));
+
             const payload = {
               route_id: route.id,
               route_code: route.route_code,
@@ -226,7 +233,7 @@ export async function ingestRegionalRouteSummaries(
               total_passengers: totalPassengers,
               total_km: totalKm,
               achievement_km: achievementKm,
-              total_trip: calcTrips,
+              total_trip: totalRitase,
               status: 'draft',
               data_source: 'sheet_ingestion',
               last_synced_at: new Date().toISOString(),

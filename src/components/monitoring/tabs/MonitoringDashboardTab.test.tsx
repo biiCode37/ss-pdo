@@ -193,6 +193,7 @@ describe("MonitoringDashboardTab Component", () => {
 
     expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TITLE);
     expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TOP_3);
+    expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TOP_ACHIEVEMENT);
     expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.LEADERBOARD.BOTTOM_3);
   });
 });

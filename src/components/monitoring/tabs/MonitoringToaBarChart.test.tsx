@@ -154,4 +154,15 @@ describe("MonitoringToaBarChart Component", () => {
     });
     expect(container.querySelector("[data-testid='toa-chart-tooltip']")).toBeNull();
   });
+
+  it("renders subtitle with formatted day and slash date when date prop is provided", async () => {
+    const mockRoutes = [createMockRoute("JAK.01", 600, 500)];
+    await act(async () => {
+      root.render(<MonitoringToaBarChart routes={mockRoutes} date="2026-09-01" />);
+    });
+
+    expect(container.textContent).toContain(
+      TEXT_MONITORING.DASHBOARD.CHART_SUBTITLE("Selasa, 01/09/2026"),
+    );
+  });
 });

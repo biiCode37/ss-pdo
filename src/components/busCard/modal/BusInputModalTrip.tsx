@@ -36,9 +36,14 @@ export const BusInputModalTrip: React.FC<BusInputModalTripProps> = ({
     boxSizing: "border-box",
   };
 
-  const totalTrip =
-    (parseIndonesianNumber(tripPergi) || 0) +
-    (parseIndonesianNumber(tripPulang) || 0);
+  // ponytail: 1 Ritase = 2 Trip (PP / Pulang-Pergi)
+  const totalRitasePP = Number(
+    (
+      ((parseIndonesianNumber(tripPergi) || 0) +
+        (parseIndonesianNumber(tripPulang) || 0)) /
+      2
+    ).toFixed(1),
+  );
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -105,7 +110,7 @@ export const BusInputModalTrip: React.FC<BusInputModalTripProps> = ({
           {TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TRIP_LABEL}
         </span>
         <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#38bdf8" }}>
-          {totalTrip} {TEXT_ALERTS.BUS_INPUT_MODAL.TRIP_UNIT}
+          {totalRitasePP} {TEXT_ALERTS.BUS_INPUT_MODAL.TRIP_UNIT}
         </span>
       </div>
     </div>

@@ -68,7 +68,7 @@ describe('Centralized UI Text Dictionary', () => {
   });
 
   it('exports TEXT_MONITORING with interpolation functions and KPI titles', () => {
-    expect(TEXT_MONITORING.HEADER.TITLE).toBe('Monitoring Wilayah Utara');
+    expect(TEXT_MONITORING.HEADER.TITLE).toBe('Monitoring Wilayah');
     expect(TEXT_MONITORING.READINESS.LABEL).toContain('Status Kelengkapan Laporan');
     expect(TEXT_MONITORING.READINESS.SUMMARY(16, 18, 89)).toBe('16 / 18 Rute Siap (89%)');
     expect(TEXT_MONITORING.KPI.FLEET_LABEL).toBe('Armada Wilayah');
@@ -86,8 +86,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).NAV.FLEET_STATUS).toBe('Status Armada');
     expect((TEXT_MONITORING as any).NAV.WA_REPORT).toBe('Laporan WA');
     expect((TEXT_MONITORING as any).NAV.PROFILE).toBe('Profil');
-    expect((TEXT_MONITORING as any).BULK_VERIFY.BUTTON_LABEL(5)).toBe('Verifikasi Semua (5)');
-    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Tren TOA Penumpang per Rute');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Grafik Jumlah Pelanggan Per Rute');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE('Selasa, 01/09/2026')).toBe('Komparasi total pelanggan pada hari Selasa, 01/09/2026');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE()).toBe('Komparasi total pelanggan dari 18 rute hari ini');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOA_UNIT).toBe('TOA');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOOLTIP_SHIFT(100, 200)).toContain('TOA Shift 1: 100 • Shift 2: 200');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_PCT('85.5')).toBe('85.5% dari Target');
@@ -95,6 +96,18 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_BAR_TITLE('JAK.01', '1.200')).toBe('JAK.01: 1.200 TOA');
     expect((TEXT_MONITORING as any).FLEET_TAB.TITLE).toBe('Status Armada Wilayah (Non-SGO)');
     expect(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE).toBe('Kembali ke Operasi Rute');
+    expect(TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PASSENGERS_SUFFIX).toBe('Org');
+    expect(TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PRODUCTIVITY_SUFFIX).toBe('Org/Bus');
+    expect(TEXT_MONITORING.DASHBOARD.MACRO_KPIS.SUBTEXT_PER_KM('0.91')).toBe('0.91 Org per KM');
+    expect(TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.UNIT_LABEL).toBe('Org');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TITLE).toBe('Capaian Pelanggan');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TOP_3).toBe('Top 3 Pelanggan Terbanyak');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TOP_ACHIEVEMENT).toBe('Top 3 Capaian Tertinggi');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.BOTTOM_3).toBe('3 Rute Butuh Evaluasi');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.PASSENGERS_COUNT(1500)).toBe('1.500 Pelanggan');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(2000)).toBe('Target: 2.000');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(0)).toBe('Target: -');
+    expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_PCT_ONLY('75')).toBe('75%');
   });
 
   it('exports TEXT_MONITORING ingestion, provenance, and detailed readiness tokens', () => {

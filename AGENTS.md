@@ -23,3 +23,12 @@ Setiap audit kode atau refactor SS_PDO wajib didokumentasikan di `refactor-ss-pd
 3. Teks dinamis dengan variabel wajib dibuat dalam bentuk fungsi template murni (misal: `(unit: string) => \`...\``).
 4. Setiap penambahan teks kamus baru wajib disertai uji integritas pada `src/constants/texts/texts.test.ts`.
 
+## Standar Terminologi Domain (Ritase vs Trip & `km_baku`)
+
+1. **1 Ritase / Rit** = 1 Putaran Penuh (PP / Pulang-Pergi) = **2 Trip**.
+2. **Trip** = 1 Arah (Pergi saja ATAU Pulang saja).
+3. **`km_baku`** = Total jarak tempuh untuk **1 ritase (PP)**.
+4. Setiap penyebutan kata *"ritase"* atau *"rit"* dalam instruksi dan tampilan UI selalu berarti **PP**.
+5. Kalkulasi total ritase dari data trip bus adalah $\frac{\text{tripPergi} + \text{tripPulang}}{2}$ atau $\frac{\text{Total KM Tempuh}}{\text{km\_baku}}$. Dilarang menyimpan atau menampilkan akumulasi trip satu arah mentah sebagai "ritase" tanpa dinormalisasi ke ritase PP.
+
+

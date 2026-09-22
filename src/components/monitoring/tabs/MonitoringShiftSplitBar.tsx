@@ -122,7 +122,9 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             }}
           >
             {data.totalShift1.toLocaleString("id-ID")}{" "}
-            <span style={{ fontSize: "11px", fontWeight: 500 }}>Pax</span>
+            <span style={{ fontSize: "11px", fontWeight: 500 }}>
+              {TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.UNIT_LABEL}
+            </span>
           </div>
           <div
             style={{
@@ -186,7 +188,9 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             }}
           >
             {data.totalShift2.toLocaleString("id-ID")}{" "}
-            <span style={{ fontSize: "11px", fontWeight: 500 }}>Pax</span>
+            <span style={{ fontSize: "11px", fontWeight: 500 }}>
+              {TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.UNIT_LABEL}
+            </span>
           </div>
           <div
             style={{

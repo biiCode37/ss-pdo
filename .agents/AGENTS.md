@@ -18,6 +18,12 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 - Nilai rangkuman dan statistik yang ditampilkan pada dashboard **HARUS MURNI** sesuai dengan nilai hasil rumus dari file sumbernya.
 - **Dilarang memotong atau membulatkan angka desimal** secara sepihak (tampilkan presisi murni hingga 10 desimal jika ada).
 - **Parsing Angka Spreadsheet:** Semua parsing angka dari data `BusData` / spreadsheet **WAJIB** menggunakan `parseIndonesianNumber()` dari `utils/numberUtils.ts`. Dilarang menggunakan `parseInt` atau `parseFloat` langsung pada field data spreadsheet untuk mencegah kesalahan parsing format desimal/ribuan Indonesia (`"."` dan `","`).
+- **Terminologi Domain Operasional (Ritase vs Trip & `km_baku`):**
+  - **1 Ritase / Rit** = 1 Putaran Penuh (PP / Pulang-Pergi) = **2 Trip**.
+  - **Trip** = 1 Arah (Pergi saja ATAU Pulang saja).
+  - **`km_baku`** = Total jarak tempuh untuk **1 ritase (PP)**.
+  - Setiap penyebutan kata *"ritase"* atau *"rit"* dalam instruksi selalu berarti **PP**.
+  - Kalkulasi total ritase dari data trip bus adalah $\frac{\text{tripPergi} + \text{tripPulang}}{2}$ atau $\frac{\text{Total KM Tempuh}}{\text{km\_baku}}$. Dilarang menyimpan atau menampilkan akumulasi trip satu arah mentah sebagai "ritase" tanpa dinormalisasi ke ritase PP.
 
 ---
 

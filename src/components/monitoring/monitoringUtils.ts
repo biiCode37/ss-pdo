@@ -52,6 +52,32 @@ export function formatIndonesianDateLabel(dateStr: string): string {
   }
 }
 
+/**
+ * Memformat tanggal YYYY-MM-DD menjadi format Hari, DD/MM/YYYY
+ * Contoh: "2026-09-01" -> "Selasa, 01/09/2026"
+ */
+export function formatIndonesianDaySlashDate(dateStr: string): string {
+  try {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+    const days = [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+    ];
+    const dayName = days[date.getDay()] || "";
+    const dd = String(d).padStart(2, "0");
+    const mm = String(m).padStart(2, "0");
+    return `${dayName}, ${dd}/${mm}/${y}`;
+  } catch {
+    return dateStr;
+  }
+}
+
 export function formatNumber(num: number): string {
   return Math.round(num).toLocaleString("id-ID");
 }

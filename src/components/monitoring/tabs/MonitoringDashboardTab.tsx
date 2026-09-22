@@ -130,7 +130,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
       </div>
 
       {/* 2. 18-bar TOA Trend Chart */}
-      <MonitoringToaBarChart routes={data.routes} />
+      <MonitoringToaBarChart routes={data.routes} date={data.date} />
 
       {/* 3. 4 Hero Macro KPI Cards */}
       <MonitoringMacroKpiGrid data={data} />
