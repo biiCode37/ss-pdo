@@ -8,6 +8,180 @@ interface MonitoringLeaderboardProps {
   onSelectRoute?: (routeCode: string) => void;
 }
 
+interface LeaderboardItemRowProps {
+  route: RegionalRouteItem;
+  rank: number;
+  variant: "gold" | "emerald" | "red";
+  onSelectRoute?: (routeCode: string) => void;
+}
+
+const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
+  route,
+  rank,
+  variant,
+  onSelectRoute,
+}) => {
+  const pct =
+    route.targetHk > 0
+      ? ((route.todayPassengers / route.targetHk) * 100).toFixed(0)
+      : "0";
+
+  const medalColors = ["#F59E0B", "#94A3B8", "#B45309"];
+
+  const isRed = variant === "red";
+  const isEmerald = variant === "emerald";
+
+  const rankBg = isRed
+    ? "rgba(239, 68, 68, 0.15)"
+    : medalColors[rank - 1] || "var(--card-border)";
+  const rankColor = isRed ? "#EF4444" : "#000";
+
+  const cardBg = isRed
+    ? "rgba(239, 68, 68, 0.04)"
+    : isEmerald
+    ? "rgba(16, 185, 129, 0.04)"
+    : "var(--input-bg, rgba(255, 255, 255, 0.03))";
+
+  const cardBorder = isRed
+    ? "1px solid rgba(239, 68, 68, 0.15)"
+    : isEmerald
+    ? "1px solid rgba(16, 185, 129, 0.15)"
+    : "1px solid var(--card-border, rgba(255, 255, 255, 0.06))";
+
+  const pctColor = isRed ? "#EF4444" : "#10B981";
+  const pctBg = isRed ? "rgba(239, 68, 68, 0.12)" : "rgba(16, 185, 129, 0.12)";
+
+  return (
+    <div
+      className="leaderboard-item"
+      onClick={() => onSelectRoute?.(route.routeCode)}
+      style={{
+        background: cardBg,
+        border: cardBorder,
+        cursor: onSelectRoute ? "pointer" : "default",
+      }}
+    >
+      {/* Sisi Kiri: Rank + Kode Rute + Badge Persentase + Nama Rute */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          minWidth: 0,
+          flex: 1,
+          marginRight: "6px",
+        }}
+      >
+        <span
+          style={{
+            width: "20px",
+            height: "20px",
+            borderRadius: "50%",
+            background: rankBg,
+            color: rankColor,
+            fontSize: "10.5px",
+            fontWeight: 800,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          {rank}
+        </span>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minWidth: 0,
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "12.5px",
+                fontWeight: 700,
+                color: "var(--text-primary)",
+                lineHeight: 1.25,
+                minWidth: "48px",
+                flexShrink: 0,
+              }}
+            >
+              {route.routeCode}
+            </span>
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                color: pctColor,
+                background: pctBg,
+                padding: "1.5px 5px",
+                borderRadius: "5px",
+                display: "inline-flex",
+                alignItems: "center",
+                lineHeight: 1.2,
+                flexShrink: 0,
+              }}
+            >
+              {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_PCT_ONLY(pct)}
+            </span>
+          </div>
+          <span
+            style={{
+              fontSize: "10px",
+              color: "var(--text-secondary)",
+              lineHeight: 1.25,
+              marginTop: "1.5px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {route.routeName}
+          </span>
+        </div>
+      </div>
+
+      {/* Sisi Kanan: Realisasi Pelanggan + Target Pelanggan */}
+      <div style={{ textAlign: "right", flexShrink: 0 }}>
+        <div
+          style={{
+            fontSize: "12px",
+            fontWeight: 700,
+            color: "var(--text-primary)",
+            lineHeight: 1.25,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {TEXT_MONITORING.DASHBOARD.LEADERBOARD.PASSENGERS_COUNT(
+            route.todayPassengers,
+          )}
+        </div>
+        <div
+          style={{
+            fontSize: "10px",
+            color: "var(--text-secondary)",
+            lineHeight: 1.25,
+            marginTop: "1.5px",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(
+            route.targetHk,
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
   routes,
   onSelectRoute,
@@ -45,19 +219,10 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
   }, [routes]);
 
   return (
-    <div
-      className="monitoring-card"
-      style={{
-        background: "var(--card-bg, rgba(23, 23, 23, 0.7))",
-        borderRadius: "16px",
-        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-        padding: "16px",
-        marginBottom: "16px",
-      }}
-    >
+    <div className="monitoring-card">
       <h3
         style={{
-          fontSize: "13.5px",
+          fontSize: "14px",
           fontWeight: 700,
           margin: "0 0 14px 0",
           color: "var(--text-primary)",
@@ -66,14 +231,8 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
         {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TITLE}
       </h3>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: "16px",
-        }}
-      >
-        {/* Top 3 Highest Ridership */}
+      <div className="monitoring-leaderboard-grid">
+        {/* 1. Top 3 Pelanggan Terbanyak */}
         <div>
           <div
             style={{
@@ -96,150 +255,19 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {topRoutes.map((route, idx) => {
-              const pct =
-                route.targetHk > 0
-                  ? ((route.todayPassengers / route.targetHk) * 100).toFixed(0)
-                  : "0";
-              const medalColors = ["#F59E0B", "#94A3B8", "#B45309"];
-
-              return (
-                <div
-                  key={route.routeCode}
-                  onClick={() => onSelectRoute?.(route.routeCode)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "9px 12px",
-                    borderRadius: "10px",
-                    background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
-                    border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
-                    cursor: onSelectRoute ? "pointer" : "default",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      minWidth: 0,
-                      flex: 1,
-                      marginRight: "8px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: "22px",
-                        height: "22px",
-                        borderRadius: "50%",
-                        background: medalColors[idx] || "var(--card-border)",
-                        color: "#000",
-                        fontSize: "11px",
-                        fontWeight: 800,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {idx + 1}
-                    </span>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        minWidth: 0,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "6px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: "13px",
-                            fontWeight: 700,
-                            color: "var(--text-primary)",
-                            lineHeight: 1.25,
-                            minWidth: "62px",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {route.routeCode}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: "10.5px",
-                            fontWeight: 700,
-                            color: "#10B981",
-                            background: "rgba(16, 185, 129, 0.12)",
-                            padding: "2px 7px",
-                            borderRadius: "6px",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            lineHeight: 1.2,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_PCT_ONLY(
-                            pct,
-                          )}
-                        </span>
-                      </div>
-                      <span
-                        style={{
-                          fontSize: "10.5px",
-                          color: "var(--text-secondary)",
-                          lineHeight: 1.25,
-                          marginTop: "2px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {route.routeName}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div
-                      style={{
-                        fontSize: "12.5px",
-                        fontWeight: 700,
-                        color: "var(--text-primary)",
-                        lineHeight: 1.25,
-                      }}
-                    >
-                      {TEXT_MONITORING.DASHBOARD.LEADERBOARD.PASSENGERS_COUNT(
-                        route.todayPassengers,
-                      )}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "10.5px",
-                        color: "var(--text-secondary)",
-                        lineHeight: 1.25,
-                        marginTop: "2px",
-                      }}
-                    >
-                      {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(
-                        route.targetHk,
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {topRoutes.map((route, idx) => (
+              <LeaderboardItemRow
+                key={route.routeCode}
+                route={route}
+                rank={idx + 1}
+                variant="gold"
+                onSelectRoute={onSelectRoute}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Top 3 Highest Target Achievement */}
+        {/* 2. Top 3 Capaian Tertinggi */}
         <div>
           <div
             style={{
@@ -262,150 +290,19 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {topAchievementRoutes.map((route, idx) => {
-              const pct =
-                route.targetHk > 0
-                  ? ((route.todayPassengers / route.targetHk) * 100).toFixed(0)
-                  : "0";
-              const medalColors = ["#F59E0B", "#94A3B8", "#B45309"];
-
-              return (
-                <div
-                  key={`achieve-${route.routeCode}`}
-                  onClick={() => onSelectRoute?.(route.routeCode)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "9px 12px",
-                    borderRadius: "10px",
-                    background: "rgba(16, 185, 129, 0.04)",
-                    border: "1px solid rgba(16, 185, 129, 0.15)",
-                    cursor: onSelectRoute ? "pointer" : "default",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      minWidth: 0,
-                      flex: 1,
-                      marginRight: "8px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: "22px",
-                        height: "22px",
-                        borderRadius: "50%",
-                        background: medalColors[idx] || "var(--card-border)",
-                        color: "#000",
-                        fontSize: "11px",
-                        fontWeight: 800,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {idx + 1}
-                    </span>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        minWidth: 0,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "6px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: "13px",
-                            fontWeight: 700,
-                            color: "var(--text-primary)",
-                            lineHeight: 1.25,
-                            minWidth: "62px",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {route.routeCode}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: "10.5px",
-                            fontWeight: 700,
-                            color: "#10B981",
-                            background: "rgba(16, 185, 129, 0.12)",
-                            padding: "2px 7px",
-                            borderRadius: "6px",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            lineHeight: 1.2,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_PCT_ONLY(
-                            pct,
-                          )}
-                        </span>
-                      </div>
-                      <span
-                        style={{
-                          fontSize: "10.5px",
-                          color: "var(--text-secondary)",
-                          lineHeight: 1.25,
-                          marginTop: "2px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {route.routeName}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div
-                      style={{
-                        fontSize: "12.5px",
-                        fontWeight: 700,
-                        color: "var(--text-primary)",
-                        lineHeight: 1.25,
-                      }}
-                    >
-                      {TEXT_MONITORING.DASHBOARD.LEADERBOARD.PASSENGERS_COUNT(
-                        route.todayPassengers,
-                      )}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "10.5px",
-                        color: "var(--text-secondary)",
-                        lineHeight: 1.25,
-                        marginTop: "2px",
-                      }}
-                    >
-                      {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(
-                        route.targetHk,
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {topAchievementRoutes.map((route, idx) => (
+              <LeaderboardItemRow
+                key={`achieve-${route.routeCode}`}
+                route={route}
+                rank={idx + 1}
+                variant="emerald"
+                onSelectRoute={onSelectRoute}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Bottom 3 Need Attention */}
+        {/* 3. 3 Rute Butuh Evaluasi */}
         <div>
           <div
             style={{
@@ -428,145 +325,15 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            {bottomRoutes.map((route, idx) => {
-              const pct =
-                route.targetHk > 0
-                  ? ((route.todayPassengers / route.targetHk) * 100).toFixed(0)
-                  : "0";
-
-              return (
-                <div
-                  key={route.routeCode}
-                  onClick={() => onSelectRoute?.(route.routeCode)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "9px 12px",
-                    borderRadius: "10px",
-                    background: "rgba(239, 68, 68, 0.04)",
-                    border: "1px solid rgba(239, 68, 68, 0.15)",
-                    cursor: onSelectRoute ? "pointer" : "default",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      minWidth: 0,
-                      flex: 1,
-                      marginRight: "8px",
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: "22px",
-                        height: "22px",
-                        borderRadius: "50%",
-                        background: "rgba(239, 68, 68, 0.15)",
-                        color: "#EF4444",
-                        fontSize: "11px",
-                        fontWeight: 800,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {idx + 1}
-                    </span>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        minWidth: 0,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "6px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: "13px",
-                            fontWeight: 700,
-                            color: "var(--text-primary)",
-                            lineHeight: 1.25,
-                            minWidth: "62px",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {route.routeCode}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: "10.5px",
-                            fontWeight: 700,
-                            color: "#EF4444",
-                            background: "rgba(239, 68, 68, 0.12)",
-                            padding: "2px 7px",
-                            borderRadius: "6px",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            lineHeight: 1.2,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_PCT_ONLY(
-                            pct,
-                          )}
-                        </span>
-                      </div>
-                      <span
-                        style={{
-                          fontSize: "10.5px",
-                          color: "var(--text-secondary)",
-                          lineHeight: 1.25,
-                          marginTop: "2px",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {route.routeName}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div
-                      style={{
-                        fontSize: "12.5px",
-                        fontWeight: 700,
-                        color: "var(--text-primary)",
-                        lineHeight: 1.25,
-                      }}
-                    >
-                      {TEXT_MONITORING.DASHBOARD.LEADERBOARD.PASSENGERS_COUNT(
-                        route.todayPassengers,
-                      )}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "10.5px",
-                        color: "var(--text-secondary)",
-                        lineHeight: 1.25,
-                        marginTop: "2px",
-                      }}
-                    >
-                      {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(
-                        route.targetHk,
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {bottomRoutes.map((route, idx) => (
+              <LeaderboardItemRow
+                key={`bottom-${route.routeCode}`}
+                route={route}
+                rank={idx + 1}
+                variant="red"
+                onSelectRoute={onSelectRoute}
+              />
+            ))}
           </div>
         </div>
       </div>

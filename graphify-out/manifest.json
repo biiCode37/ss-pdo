@@ -1420,8 +1420,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1790049513.7993343,
-    "ast_hash": "c6839853ee05a5825b44c516bbdb93ab",
+    "mtime": 1790052132.5243196,
+    "ast_hash": "1f44c246eeba6bd9bc61c037e355b679",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1790049729.0659828,
-    "ast_hash": "a939b2e90b6201f8d74363e1015fa283",
+    "mtime": 1790051705.2361624,
+    "ast_hash": "8238b5c52a1249f5eaca6058a68bcc39",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1905,8 +1905,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/monitoringUtils.ts": {
-    "mtime": 1789284115.017673,
-    "ast_hash": "885fadd2b049404bfeb283335c7a6d7a",
+    "mtime": 1790051594.5920455,
+    "ast_hash": "af4b6d306cbd5f7c5b1ab3f209029c1e",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_39/AUDIT_BUGS.md": {
@@ -2655,8 +2655,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.test.tsx": {
-    "mtime": 1790039240.6065538,
-    "ast_hash": "2036ce176e9caed65b6ed1b9e429a160",
+    "mtime": 1790051964.0489411,
+    "ast_hash": "c7a3b3c646ae95ca1710da635f6c4dce",
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.tsx": {
@@ -3075,8 +3075,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringDashboardTab.tsx": {
-    "mtime": 1789968539.7349434,
-    "ast_hash": "9751f75abbac03b7a8b8ddc12736e104",
+    "mtime": 1790054848.6496596,
+    "ast_hash": "a9d01d1a766aa4574709c8eba984baae",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringFleetStatusTab.test.tsx": {
@@ -3090,8 +3090,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringLeaderboard.tsx": {
-    "mtime": 1790049780.8448274,
-    "ast_hash": "e9958f8177381d9813221d3ec596806a",
+    "mtime": 1790054882.833802,
+    "ast_hash": "209ec9885aa2f29cba801428d1a68634",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringMacroKpiGrid.tsx": {
@@ -3120,8 +3120,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringToaBarChart.tsx": {
-    "mtime": 1789970777.4371657,
-    "ast_hash": "b77554c22315299f1fc314fa0c6aad3c",
+    "mtime": 1790051652.5281522,
+    "ast_hash": "792922133a241dd37d30ccaf2c768059",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringWaReportTab.test.tsx": {
@@ -3160,8 +3160,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringToaBarChart.test.tsx": {
-    "mtime": 1789970789.0390275,
-    "ast_hash": "e90ef148d3cd691cee97662e20a5e848",
+    "mtime": 1790051932.4311523,
+    "ast_hash": "efe6c58fc4f64bb02aae5ee445c0236e",
     "semantic_hash": ""
   },
   "src/services/appSettingsService.test.ts": {

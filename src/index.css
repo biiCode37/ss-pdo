@@ -2049,3 +2049,61 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border-color: rgba(245, 158, 11, 0.3);
 }
 
+/* Monitoring Regional & Leaderboard Responsive System */
+.monitoring-dashboard-tab {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 84px;
+}
+
+@media (max-width: 640px) {
+  .monitoring-dashboard-tab {
+    padding: 12px 10px 84px 10px;
+  }
+}
+
+.monitoring-card {
+  background: var(--card-bg, rgba(23, 23, 23, 0.7));
+  border-radius: 16px;
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 640px) {
+  .monitoring-card {
+    padding: 14px 12px;
+    margin-bottom: 12px;
+  }
+}
+
+.monitoring-leaderboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .monitoring-leaderboard-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+@media (min-width: 640px) {
+  .leaderboard-item {
+    padding: 9px 12px;
+  }
+}
+
+

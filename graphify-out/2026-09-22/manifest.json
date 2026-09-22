@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   ".agents/AGENTS.md": {
-    "mtime": 1788967228.982953,
-    "ast_hash": "54ce315c0ecd28ddd72d01f49f8ce659",
+    "mtime": 1790045015.458219,
+    "ast_hash": "6f9d11b848bb8ff4f811ebb2cf0f1a71",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -1160,8 +1160,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1788967212.3233347,
-    "ast_hash": "fd7b1aec7c901b4649327fb8f552e373",
+    "mtime": 1790045028.1553013,
+    "ast_hash": "c01ead498de9e4b7d23c3a72b85afe41",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_7/AUDIT_BUGS.md": {
@@ -1420,8 +1420,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1790037652.8146477,
-    "ast_hash": "26b00d5e75e94bfa64eadbecb135c3b6",
+    "mtime": 1790049513.7993343,
+    "ast_hash": "c6839853ee05a5825b44c516bbdb93ab",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1790037664.3701866,
-    "ast_hash": "aff40771854b18cc944d07326a6c77b2",
+    "mtime": 1790049729.0659828,
+    "ast_hash": "a939b2e90b6201f8d74363e1015fa283",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -2865,8 +2865,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalTrip.tsx": {
-    "mtime": 1789876005.0441568,
-    "ast_hash": "329e8ed7f5ee9d24b14ca8690d45615c",
+    "mtime": 1790045405.459034,
+    "ast_hash": "aba2f05ebb68259d18430cbbe71f254f",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/useBusInputForm.ts": {
@@ -3070,8 +3070,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringDashboardTab.test.tsx": {
-    "mtime": 1789969414.1356642,
-    "ast_hash": "87f2111e8385cd2396f37e722069b860",
+    "mtime": 1790050060.222836,
+    "ast_hash": "2d5c307b0064a677f420a754a7b4aecd",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringDashboardTab.tsx": {
@@ -3090,13 +3090,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringLeaderboard.tsx": {
-    "mtime": 1789968532.4529445,
-    "ast_hash": "cb5b2f848ec9ac0d28a39cb86e0e9213",
+    "mtime": 1790049780.8448274,
+    "ast_hash": "e9958f8177381d9813221d3ec596806a",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringMacroKpiGrid.tsx": {
-    "mtime": 1789968515.0428524,
-    "ast_hash": "96abd233a2d52e20cbd904067af6ab22",
+    "mtime": 1790046249.0488956,
+    "ast_hash": "162a4dc515a430a77c683ee93ece5be5",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRouteCardModern.tsx": {
@@ -3115,8 +3115,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringShiftSplitBar.tsx": {
-    "mtime": 1789968523.056452,
-    "ast_hash": "611a9fda0514b66a24f74f52f7c97b02",
+    "mtime": 1790046269.4860456,
+    "ast_hash": "13715896ac3631c8851fdafcedbbe71d",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringToaBarChart.tsx": {
@@ -3195,8 +3195,8 @@
     "semantic_hash": ""
   },
   "src/services/regionalIngestionService.ts": {
-    "mtime": 1790037747.537972,
-    "ast_hash": "f53b78ff73b7249fda710e5b1901dec9",
+    "mtime": 1790045335.148791,
+    "ast_hash": "3809bf2de97225a4af0c7275b52e31c2",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-21-regional-monitoring-supabase-ingestion.md": {

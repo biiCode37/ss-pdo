@@ -28,63 +28,66 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
   const isAllConfirmed = confirmedRoutesCount >= totalRoutes;
 
   return (
-    <div
-      className="monitoring-dashboard-tab"
-      style={{
-        padding: "16px",
-        maxWidth: "1200px",
-        margin: "0 auto",
-        paddingBottom: "84px", // Safe space for 64px bottom nav
-      }}
-    >
+    <div className="monitoring-dashboard-tab">
       {/* 1. PDO Fleet Status Confirmation Progress Bar */}
-      <div
-        className="monitoring-card"
-        style={{
-          background: "var(--card-bg, rgba(23, 23, 23, 0.7))",
-          borderRadius: "16px",
-          border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-          padding: "16px",
-          marginBottom: "16px",
-        }}
-      >
+      <div className="monitoring-card">
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "10px",
+            alignItems: "flex-start",
+            gap: "10px",
+            marginBottom: "12px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div
+            style={{
+              marginTop: "2px",
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {isAllConfirmed ? (
-              <CheckCircle2 size={18} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={19} style={{ color: "#10B981" }} />
             ) : (
-              <ShieldAlert size={18} style={{ color: "#F59E0B" }} />
+              <ShieldAlert size={19} style={{ color: "#F59E0B" }} />
             )}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "3px",
+              minWidth: 0,
+              flex: 1,
+            }}
+          >
             <h3
               style={{
                 fontSize: "14px",
                 fontWeight: 700,
                 margin: 0,
                 color: "var(--text-primary)",
+                lineHeight: 1.25,
               }}
             >
               {TEXT_MONITORING.DASHBOARD.PROGRESS_TITLE}
             </h3>
+            <span
+              style={{
+                fontSize: "12.5px",
+                fontWeight: 700,
+                color: isAllConfirmed ? "#10B981" : "var(--accent-color, #3ECF8E)",
+                lineHeight: 1.25,
+              }}
+            >
+              {TEXT_MONITORING.DASHBOARD.PROGRESS_RATIO(
+                confirmedRoutesCount,
+                totalRoutes,
+              )}
+            </span>
           </div>
-          <span
-            style={{
-              fontSize: "13px",
-              fontWeight: 800,
-              color: isAllConfirmed ? "#10B981" : "var(--accent-color, #3ECF8E)",
-            }}
-          >
-            {TEXT_MONITORING.DASHBOARD.PROGRESS_RATIO(
-              confirmedRoutesCount,
-              totalRoutes,
-            )}
-          </span>
         </div>
 
         {/* Progress bar line */}
