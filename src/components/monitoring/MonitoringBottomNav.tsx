@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { LayoutDashboard, Route, Bus, FileSpreadsheet } from "lucide-react";
+import { memo, useState, useEffect } from "react";
+import { LayoutDashboard, Route, Bus, FileSpreadsheet, User } from "lucide-react";
 import { TEXT_MONITORING } from "@/constants/texts";
 
 export type MonitoringTab = "dashboard" | "routes" | "fleet_status" | "wa_report";
@@ -7,6 +7,7 @@ export type MonitoringTab = "dashboard" | "routes" | "fleet_status" | "wa_report
 export interface MonitoringBottomNavProps {
   activeTab: MonitoringTab;
   onSelectTab: (tab: MonitoringTab) => void;
+  onOpenProfile?: () => void;
 }
 
 interface NavItemConfig {
@@ -41,7 +42,23 @@ const NAV_ITEMS: NavItemConfig[] = [
 export const MonitoringBottomNav = memo(function MonitoringBottomNav({
   activeTab,
   onSelectTab,
+  onOpenProfile,
 }: MonitoringBottomNavProps) {
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    () => localStorage.getItem("PDO_USER_AVATAR") || undefined
+  );
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setAvatarUrl(localStorage.getItem("PDO_USER_AVATAR") || undefined);
+      setAvatarFailed(false);
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   return (
     <div
       className="monitoring-bottom-nav-wrapper"
@@ -67,7 +84,7 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
           height: "64px",
           maxWidth: "768px",
           margin: "0 auto",
-          padding: "0 8px",
+          padding: "0 6px",
         }}
         role="tablist"
         aria-label={TEXT_MONITORING.HEADER.TITLE}
@@ -87,13 +104,13 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
               onClick={() => onSelectTab(item.id)}
               style={{
                 flex: 1,
+                minWidth: 0,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "3px",
                 height: "52px",
-                minWidth: "48px",
                 borderRadius: "12px",
                 border: "none",
                 background: isActive
@@ -104,7 +121,7 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
                   : "var(--text-secondary, #8b8b8b)",
                 cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                padding: "4px 6px",
+                padding: "4px 2px",
                 outline: "none",
               }}
             >
@@ -118,10 +135,13 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
               />
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "10.5px",
                   fontWeight: isActive ? 700 : 500,
                   letterSpacing: "-0.2px",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100%",
                 }}
               >
                 {item.label}
@@ -129,6 +149,88 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
             </button>
           );
         })}
+
+        {/* User Profile Menu Item */}
+        {onOpenProfile && (
+          <button
+            type="button"
+            role="button"
+            data-testid="monitoring-tab-profile"
+            aria-label={TEXT_MONITORING.NAV.PROFILE}
+            title={TEXT_MONITORING.NAV.PROFILE}
+            className="monitoring-tab-btn"
+            onClick={onOpenProfile}
+            style={{
+              flex: 1,
+              minWidth: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "3px",
+              height: "52px",
+              borderRadius: "12px",
+              border: "none",
+              background: "transparent",
+              color: "var(--text-secondary, #8b8b8b)",
+              cursor: "pointer",
+              transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+              padding: "4px 2px",
+              outline: "none",
+            }}
+          >
+            {avatarUrl && !avatarFailed ? (
+              <div
+                style={{
+                  width: "22px",
+                  height: "22px",
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  border: "1.5px solid var(--text-secondary, #8b8b8b)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.2)",
+                  transition: "border-color 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                }}
+              >
+                <img
+                  src={avatarUrl}
+                  alt={TEXT_MONITORING.NAV.PROFILE}
+                  referrerPolicy="no-referrer"
+                  onError={() => setAvatarFailed(true)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
+            ) : (
+              <User
+                size={20}
+                style={{
+                  strokeWidth: 1.8,
+                  transition: "transform 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                }}
+              />
+            )}
+            <span
+              style={{
+                fontSize: "10.5px",
+                fontWeight: 500,
+                letterSpacing: "-0.2px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+              }}
+            >
+              {TEXT_MONITORING.NAV.PROFILE}
+            </span>
+          </button>
+        )}
       </nav>
     </div>
   );

@@ -85,6 +85,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).NAV.ROUTES).toBe('Rute');
     expect((TEXT_MONITORING as any).NAV.FLEET_STATUS).toBe('Status Armada');
     expect((TEXT_MONITORING as any).NAV.WA_REPORT).toBe('Laporan WA');
+    expect((TEXT_MONITORING as any).NAV.PROFILE).toBe('Profil');
     expect((TEXT_MONITORING as any).BULK_VERIFY.BUTTON_LABEL(5)).toBe('Verifikasi Semua (5)');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Tren TOA Penumpang per Rute');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOA_UNIT).toBe('TOA');

@@ -83,6 +83,7 @@ export const TEXT_MONITORING = {
     ROUTES: 'Rute',
     FLEET_STATUS: 'Status Armada',
     WA_REPORT: 'Laporan WA',
+    PROFILE: 'Profil',
   },
   BULK_VERIFY: {
     BUTTON_LABEL: (count: number) => `Verifikasi Semua (${count})`,

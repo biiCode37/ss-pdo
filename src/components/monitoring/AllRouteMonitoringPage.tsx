@@ -239,7 +239,6 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       {/* Top Header */}
       <MonitoringHeader
         onBackToRouteView={onBackToRouteView}
-        onOpenProfile={onOpenProfile}
         selectedDate={selectedDate}
         onStepDate={handleStepDate}
         onDateInputChange={handleDateInputChange}
@@ -310,6 +309,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       <MonitoringBottomNav
         activeTab={activeTab}
         onSelectTab={setActiveTab}
+        onOpenProfile={onOpenProfile}
       />
     </div>
   );

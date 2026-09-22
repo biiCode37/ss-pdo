@@ -8,11 +8,9 @@ import {
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
-import { UserProfileHeader } from "@/components/UserProfileHeader";
 
 export interface MonitoringHeaderProps {
   onBackToRouteView?: () => void;
-  onOpenProfile?: () => void;
   selectedDate: string;
   onStepDate: (days: number) => void;
   onDateInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +24,6 @@ export interface MonitoringHeaderProps {
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
-  onOpenProfile,
   selectedDate,
   onStepDate,
   onDateInputChange,
@@ -251,13 +248,6 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                   : TEXT_MONITORING.INGESTION.BUTTON_LABEL}
               </span>
             </button>
-          )}
-
-          {/* User Profile Trigger Button */}
-          {onOpenProfile && (
-            <div style={{ marginLeft: "4px" }}>
-              <UserProfileHeader onOpenProfile={onOpenProfile} />
-            </div>
           )}
         </div>
       </div>

@@ -89,4 +89,48 @@ describe("MonitoringBottomNav Component", () => {
 
     expect(onSelectTab).toHaveBeenCalledWith("fleet_status");
   });
+
+  it("renders profile button when onOpenProfile is provided and handles click", async () => {
+    const onSelectTab = vi.fn();
+    const onOpenProfile = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <MonitoringBottomNav
+          activeTab="dashboard"
+          onSelectTab={onSelectTab}
+          onOpenProfile={onOpenProfile}
+        />
+      );
+    });
+
+    const profileBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-profile"]'
+    );
+    expect(profileBtn).toBeTruthy();
+    expect(profileBtn?.textContent).toContain(TEXT_MONITORING.NAV.PROFILE);
+
+    act(() => {
+      profileBtn?.click();
+    });
+
+    expect(onOpenProfile).toHaveBeenCalledTimes(1);
+    expect(onSelectTab).not.toHaveBeenCalled();
+  });
+
+  it("does not render profile button when onOpenProfile is undefined", async () => {
+    const onSelectTab = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <MonitoringBottomNav
+          activeTab="dashboard"
+          onSelectTab={onSelectTab}
+        />
+      );
+    });
+
+    const profileBtn = container.querySelector('[data-testid="monitoring-tab-profile"]');
+    expect(profileBtn).toBeNull();
+  });
 });
