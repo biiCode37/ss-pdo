@@ -137,13 +137,13 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           </div>
         </div>
 
-        {/* Pojok Kanan: Date Navigator & Action Controls */}
+        {/* Pojok Kanan: Date Navigator & Action Controls (Always 1 Row) */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "8px",
-            flexWrap: "wrap",
+            flexWrap: "nowrap",
           }}
         >
           {/* Date Navigator Box (Interactive Date Picker) */}
@@ -299,7 +299,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               />
             </button>
 
-            {/* Load All Button (Direct Action) */}
+            {/* Load All Button (Icon Only for Compact Row) */}
             {onSync18Routes && (
               <button
                 type="button"
@@ -309,22 +309,21 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "6px",
+                  justifyContent: "center",
+                  width: "36px",
                   height: "36px",
-                  padding: "0 12px",
                   borderRadius: "12px",
                   background: "rgba(62, 207, 142, 0.14)",
                   border: "1px solid rgba(62, 207, 142, 0.3)",
                   color: "var(--accent-color, #3ECF8E)",
-                  fontSize: "12px",
-                  fontWeight: 700,
                   cursor: syncing18Routes || loading || refreshing ? "not-allowed" : "pointer",
                   opacity: syncing18Routes || loading || refreshing ? 0.6 : 1,
                   transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                  whiteSpace: "nowrap",
                   boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+                  flexShrink: 0,
                 }}
                 title={TEXT_MONITORING.INGESTION.TOOLTIP}
+                aria-label={TEXT_MONITORING.INGESTION.BUTTON_LABEL}
               >
                 <CloudDownload
                   size={16}
@@ -332,11 +331,6 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                     animation: syncing18Routes ? "bounce 1s infinite ease-in-out" : "none",
                   }}
                 />
-                <span>
-                  {syncing18Routes
-                    ? TEXT_MONITORING.INGESTION.BUTTON_LOADING
-                    : TEXT_MONITORING.INGESTION.BUTTON_LABEL}
-                </span>
               </button>
             )}
           </div>

@@ -74,7 +74,8 @@ describe('MonitoringHeader Component', () => {
 
     expect(refreshBtn).toBeTruthy();
     expect(loadAllBtn).toBeTruthy();
-    expect(loadAllBtn?.textContent).toContain(TEXT_MONITORING.INGESTION.BUTTON_LABEL);
+    expect(loadAllBtn?.getAttribute('aria-label')).toBe(TEXT_MONITORING.INGESTION.BUTTON_LABEL);
+    expect(loadAllBtn?.getAttribute('title')).toBe(TEXT_MONITORING.INGESTION.TOOLTIP);
 
     // Click refresh
     await act(async () => {
@@ -149,6 +150,6 @@ describe('MonitoringHeader Component', () => {
 
     expect(refreshBtn?.disabled).toBe(true);
     expect(loadAllBtn?.disabled).toBe(true);
-    expect(loadAllBtn?.textContent).toContain(TEXT_MONITORING.INGESTION.BUTTON_LOADING);
+    expect(loadAllBtn?.getAttribute('aria-label')).toBe(TEXT_MONITORING.INGESTION.BUTTON_LABEL);
   });
 });

@@ -385,10 +385,10 @@ describe('AllRouteMonitoringPage Component', () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
     });
 
-    const syncBtn = Array.from(container.querySelectorAll('button')).find(
-      b => b.textContent?.includes(TEXT_MONITORING.INGESTION.BUTTON_LABEL)
+    const syncBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-load-all-btn"]'
     );
-    expect(syncBtn).toBeDefined();
+    expect(syncBtn).toBeTruthy();
 
     await act(async () => {
       syncBtn?.click();
