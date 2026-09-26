@@ -5,6 +5,7 @@ import { SUPERVISORS } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { showConfirmDialog } from "@/utils/alertUtils";
 import { MonitoringRouteCardModern } from "./MonitoringRouteCardModern";
+import { MonitoringRouteDetailModal } from "../modals/MonitoringRouteDetailModal";
 
 export interface MonitoringRoutesTabProps {
   routes: RegionalRouteItem[];
@@ -28,6 +29,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilterType>("all");
   const [selectedSupervisor, setSelectedSupervisor] = useState<string>("all");
+  const [selectedRouteForModal, setSelectedRouteForModal] = useState<RegionalRouteItem | null>(null);
 
   // Submitted routes ready for bulk verification
   const submittedRoutes = useMemo(() => {
@@ -432,6 +434,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             <MonitoringRouteCardModern
               key={route.routeCode}
               route={route}
+              onCardClick={(r) => setSelectedRouteForModal(r)}
               onVerify={onVerifyRoute}
               onSelectRoute={onSelectRoute}
               isVerifying={verifyingRouteId === route.id}
@@ -439,6 +442,21 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
           ))}
         </div>
       )}
+
+      {/* Modal Detail 21 Metrik */}
+      <MonitoringRouteDetailModal
+        route={selectedRouteForModal}
+        isOpen={!!selectedRouteForModal}
+        onClose={() => setSelectedRouteForModal(null)}
+        onSelectRoute={(code) => {
+          setSelectedRouteForModal(null);
+          onSelectRoute?.(code);
+        }}
+        onVerifyRoute={(id, status) => {
+          onVerifyRoute(id, status);
+        }}
+        isVerifying={verifyingRouteId === selectedRouteForModal?.id}
+      />
     </div>
   );
 };

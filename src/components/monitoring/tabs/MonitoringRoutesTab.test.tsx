@@ -221,30 +221,80 @@ describe("MonitoringRoutesTab Component", () => {
     expect(onVerifyRoute).toHaveBeenCalledWith(1, "verified");
   });
 
-  it("triggers onSelectRoute when open route button is clicked", async () => {
+  it("opens MonitoringRouteDetailModal when route card is clicked, and triggers onSelectRoute from modal", async () => {
     const onSelectRoute = vi.fn();
+    const onVerifyRoute = vi.fn();
 
     await act(async () => {
       root.render(
         <MonitoringRoutesTab
           routes={mockRouteItems}
-          onVerifyRoute={vi.fn()}
+          onVerifyRoute={onVerifyRoute}
           onBulkVerify={vi.fn()}
           onSelectRoute={onSelectRoute}
         />
       );
     });
 
-    const openRouteBtn = container.querySelector<HTMLButtonElement>(
-      '[data-testid="open-route-JAK.01"]'
-    );
-    expect(openRouteBtn).toBeTruthy();
+    // Modal should not be open initially
+    expect(container.querySelector('[data-testid="modal-btn-open-sheet"]')).toBeNull();
 
-    act(() => {
-      openRouteBtn?.click();
+    // Click on JAK.01 route card
+    const card = container.querySelector<HTMLDivElement>(
+      '[data-testid="route-card-JAK.01"]'
+    );
+    expect(card).toBeTruthy();
+
+    await act(async () => {
+      card?.click();
     });
 
+    // Modal should be open now
+    expect(container.textContent).toContain("Detail Operasional Rute JAK.01");
+    const openSheetBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="modal-btn-open-sheet"]'
+    );
+    expect(openSheetBtn).toBeTruthy();
+
+    act(() => {
+      openSheetBtn?.click();
+    });
     expect(onSelectRoute).toHaveBeenCalledWith("JAK.01");
+  });
+
+  it("closes MonitoringRouteDetailModal when close button is clicked", async () => {
+    await act(async () => {
+      root.render(
+        <MonitoringRoutesTab
+          routes={mockRouteItems}
+          onVerifyRoute={vi.fn()}
+          onBulkVerify={vi.fn()}
+          onSelectRoute={vi.fn()}
+        />
+      );
+    });
+
+    // Click on JAK.01 route card to open modal
+    const card = container.querySelector<HTMLDivElement>(
+      '[data-testid="route-card-JAK.01"]'
+    );
+    await act(async () => {
+      card?.click();
+    });
+
+    expect(container.textContent).toContain("Detail Operasional Rute JAK.01");
+
+    // Click close button inside modal
+    const closeBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="modal-btn-close"]'
+    );
+    expect(closeBtn).toBeTruthy();
+
+    await act(async () => {
+      closeBtn?.click();
+    });
+
+    expect(container.querySelector('[data-testid="modal-btn-open-sheet"]')).toBeNull();
   });
 
   it("triggers bulk verify when bulk verify button is clicked", async () => {
