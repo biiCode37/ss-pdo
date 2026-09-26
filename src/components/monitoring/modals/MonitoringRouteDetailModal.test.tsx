@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import { MonitoringRouteDetailModal } from "@/components/monitoring/modals/MonitoringRouteDetailModal";
+import { MonitoringRouteDetailModal } from "./MonitoringRouteDetailModal";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 
 // @ts-ignore
