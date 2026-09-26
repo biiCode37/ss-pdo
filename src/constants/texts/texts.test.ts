@@ -94,6 +94,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_PCT('85.5')).toBe('85.5% dari Target');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_ZERO).toBe('Target 0');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_BAR_TITLE('JAK.01', '1.200')).toBe('JAK.01: 1.200 TOA');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_EXPAND_BTN(18)).toBe('Lihat Semua (18 Rute)');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_COLLAPSE_BTN).toBe('Tampilkan Top 5 Saja');
     expect((TEXT_MONITORING as any).FLEET_TAB.TITLE).toBe('Status Armada Wilayah (Non-SGO)');
     expect(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE).toBe('Kembali ke Operasi Rute');
     expect(TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PASSENGERS_SUFFIX).toBe('Org');
@@ -264,6 +266,37 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_FLEET_STATUS.LOCK.LOCKED_BANNER(1)).toContain('Shift 1');
     expect(TEXT_FLEET_STATUS.LOCK.LOCKED_TOOLTIP).toBeDefined();
     expect(TEXT_FLEET_STATUS.TARGET_RENOPS_INPUT.LABEL).toBe('Target Renops:');
+  });
+
+  it('exports TEXT_MONITORING new tokens for route card redesign and 21-metric detail modal', () => {
+    // ROUTE_CARD
+    expect(TEXT_MONITORING.ROUTE_CARD.LBL_CORE_FLEET).toBe('Armada');
+    expect(TEXT_MONITORING.ROUTE_CARD.LBL_CORE_PASSENGERS).toBe('Pelanggan');
+    expect(TEXT_MONITORING.ROUTE_CARD.LBL_CORE_KM).toBe('KM Tempuh');
+    expect(TEXT_MONITORING.ROUTE_CARD.RENOPS_PREFIX).toBe('Ren:');
+    expect(TEXT_MONITORING.ROUTE_CARD.REALOPS_PREFIX).toBe('Real:');
+    expect(TEXT_MONITORING.ROUTE_CARD.PAX_TOTAL_PREFIX).toBe('Total:');
+    expect(TEXT_MONITORING.ROUTE_CARD.PAX_TOA_PREFIX).toBe('TOA:');
+    expect(TEXT_MONITORING.ROUTE_CARD.PAX_MANUAL_PREFIX).toBe('Man:');
+    expect(TEXT_MONITORING.ROUTE_CARD.KM_PER_BUS_PREFIX).toBe('KM/Bus:');
+    expect(TEXT_MONITORING.ROUTE_CARD.PCT_PAX_PREFIX).toBe('Cap:');
+    expect(TEXT_MONITORING.ROUTE_CARD.PAX_YESTERDAY_PREFIX).toBe('H-1:');
+    expect(TEXT_MONITORING.ROUTE_CARD.PAX_LAST_WEEK_PREFIX).toBe('H-7:');
+    expect(TEXT_MONITORING.ROUTE_CARD.ARIA_CARD_CLICK('JAK.01')).toContain('JAK.01');
+
+    // ROUTE_DETAIL_MODAL
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TITLE('JAK.01')).toContain('JAK.01');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.SUBTITLE('Rute A', 'Korlap B')).toContain('Rute A');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TABS.OPERASIONAL).toBe('Operasional');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TABS.SHIFT).toBe('Pelanggan & Shift');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TABS.PRODUKTIVITAS).toBe('Produktivitas & Rit');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.RENOPS).toBe('Rencana Operasi (Renops)');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.REALOPS).toBe('Realisasi Operasi (Realops)');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_PELANGGAN).toBe('Total Pelanggan');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP).toBe('Total Ritase (PP)');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_OPEN_SHEET).toBe('Buka Lembar Kerja Rute');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_VERIFY).toBe('Verifikasi Rute');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_CLOSE).toBe('Tutup');
   });
 });
 
