@@ -1,10 +1,10 @@
-# Progress Ledger: Regional Monitoring Supabase Ingestion
+# Progress Ledger: Redesign Kartu Rute & Modal Detail 21 Metrik SS Global
 
-Plan: `docs/superpowers/plans/2026-09-21-regional-monitoring-supabase-ingestion.md`
+Plan: `docs/superpowers/plans/2026-09-26-monitoring-routes-card-modal-plan.md`
 Branch: `devmode`
 
-- [x] Task 1: Kamus Teks Sentral untuk Ingestion & Data Provenance
-- [x] Task 2: Service Ingestion Rute Individu (`regionalIngestionService`)
-- [x] Task 3: Penyesuaian Pemetaan Model & 21 Kolom pada `allRouteMonitoringService`
-- [x] Task 4: Pembaruan Komponen UI (MonitoringHeader, RouteCard, ReadinessBanner, AllRouteMonitoringPage)
-- [x] Task 5: Quality Gates & Verifikasi Akhir
+- [x] Task 1: Kamus Teks Sentral (`text_monitoring.ts` & `texts.test.ts`)
+- [x] Task 2: Komponen Modal Detail 21 Metrik (`MonitoringRouteDetailModal.tsx`)
+- [x] Task 3: Refactor Kartu Rute Modern (`MonitoringRouteCardModern.tsx`)
+- [x] Task 4: Integrasi State Modal di Tab Rute (`MonitoringRoutesTab.tsx`)
+- [x] Task 5: Quality Gates, Regresi, & Knowledge Graph Update

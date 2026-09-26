@@ -27,11 +27,14 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
   const totalManual = route.manualShift1 + route.manualShift2;
   const renops = route.totalRenops || route.defaultRenops || 0;
   const realops = route.totalRealops || 0;
-  const kmPerBus = route.kmPerBus ?? (realops > 0 ? (route.totalKm / realops).toFixed(0) : route.achievementKm?.toFixed(0) ?? 0);
-  const paxPct = route.paxPercentage
-    ? `${route.paxPercentage.toFixed(1)}%`
-    : route.targetPax > 0
-    ? `${((route.todayPassengers / route.targetPax) * 100).toFixed(1)}%`
+  const kmPerBus = route.kmPerBus ?? route.achievementKm ?? (realops > 0 ? (route.totalKm / realops).toFixed(0) : 0);
+  const targetPax = route.targetPax ?? route.targetHk ?? 0;
+  const paxPct = route.paxPercentage !== undefined
+    ? `${Number(route.paxPercentage).toFixed(1)}%`
+    : route.targetPercentage !== undefined
+    ? `${Number(route.targetPercentage).toFixed(1)}%`
+    : targetPax > 0
+    ? `${((route.todayPassengers / targetPax) * 100).toFixed(1)}%`
     : "0.0%";
 
   const handleCardClick = () => {

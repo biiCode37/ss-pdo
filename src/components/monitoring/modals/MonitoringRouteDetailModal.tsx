@@ -36,17 +36,57 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
   const realops = route.totalRealops || 0;
   const fleetRatio = renops > 0 ? ((realops / renops) * 100).toFixed(1) : "0.0";
   const totalPax = route.todayPassengers || 0;
-  const targetPax = route.targetPax || 0;
-  const paxPct = route.paxPercentage ? route.paxPercentage.toFixed(1) : (targetPax > 0 ? ((totalPax / targetPax) * 100).toFixed(1) : "0.0");
+  const targetPax = route.targetPax ?? route.targetHk ?? 0;
+  const paxPct = route.paxPercentage !== undefined
+    ? Number(route.paxPercentage).toFixed(1)
+    : route.targetPercentage !== undefined
+    ? Number(route.targetPercentage).toFixed(1)
+    : targetPax > 0
+    ? ((totalPax / targetPax) * 100).toFixed(1)
+    : "0.0";
   const kmTempuh = route.totalKm || 0;
-  const kmPerBus = route.kmPerBus ?? (realops > 0 ? (kmTempuh / realops).toFixed(1) : 0);
-  const targetPaxPerKm = route.targetPaxPerKm ? Number(route.targetPaxPerKm).toFixed(2) : "-";
-  const paxPerKm = route.paxPerKm ? Number(route.paxPerKm).toFixed(2) : "-";
-  const paxPerKmPct = route.paxPerKmPercentage ? Number(route.paxPerKmPercentage).toFixed(1) : "-";
-  const totalRitasePp = route.totalRitasePp ?? (route.totalTrips ? Math.round(route.totalTrips / 2) : 0);
+  const kmPerBus = route.kmPerBus !== undefined
+    ? route.kmPerBus
+    : route.achievementKm !== undefined
+    ? route.achievementKm
+    : realops > 0
+    ? (kmTempuh / realops).toFixed(1)
+    : 0;
+  const targetPaxPerKm = route.targetPaxPerKm !== undefined
+    ? Number(route.targetPaxPerKm).toFixed(2)
+    : route.targetPassengersPerKm !== undefined
+    ? Number(route.targetPassengersPerKm).toFixed(2)
+    : "-";
+  const paxPerKm = route.paxPerKm !== undefined
+    ? Number(route.paxPerKm).toFixed(2)
+    : route.passengersPerKm !== undefined
+    ? Number(route.passengersPerKm).toFixed(2)
+    : "-";
+  const paxPerKmPct = route.paxPerKmPercentage !== undefined
+    ? Number(route.paxPerKmPercentage).toFixed(1)
+    : route.passengersPerKmPercentage !== undefined
+    ? Number(route.passengersPerKmPercentage).toFixed(1)
+    : "-";
+  const totalRitasePp = route.totalRitasePp !== undefined
+    ? route.totalRitasePp
+    : route.totalTrips
+    ? Math.round(route.totalTrips / 2)
+    : 0;
   const kmBaku = route.kmBaku || 0;
-  const ritasePerBus = route.ritasePerBus ?? (realops > 0 ? (totalRitasePp / realops).toFixed(1) : 0);
-  const paxPerBus = route.paxPerBus ?? (realops > 0 ? Math.round(totalPax / realops) : 0);
+  const ritasePerBus = route.ritasePerBus !== undefined
+    ? Number(route.ritasePerBus).toFixed(1)
+    : route.tripsPerBus !== undefined
+    ? Number((route.tripsPerBus / 2).toFixed(1))
+    : realops > 0
+    ? (totalRitasePp / realops).toFixed(1)
+    : 0;
+  const paxPerBus = route.paxPerBus !== undefined
+    ? Math.round(route.paxPerBus)
+    : route.passengersPerBus !== undefined
+    ? Math.round(route.passengersPerBus)
+    : realops > 0
+    ? Math.round(totalPax / realops)
+    : 0;
 
   const tMetrics = TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS;
 

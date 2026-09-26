@@ -63,6 +63,16 @@ export interface RegionalRouteItem {
   passengersPerKmPercentage?: number;
   tripsPerBus?: number;
   passengersPerBus?: number;
+  // Aliases & PP metrics
+  targetPax?: number;
+  paxPercentage?: number;
+  kmPerBus?: number;
+  targetPaxPerKm?: number;
+  paxPerKm?: number;
+  paxPerKmPercentage?: number;
+  totalRitasePp?: number;
+  ritasePerBus?: number;
+  paxPerBus?: number;
 }
 
 export interface RegionalMonitoringResult {
