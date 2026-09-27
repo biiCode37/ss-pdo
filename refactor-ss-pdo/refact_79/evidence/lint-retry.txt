@@ -1,0 +1,76 @@
+
+> pusm-pdo-app@0.0.0 lint D:\MINE\SS_PDO
+> oxlint
+
+src/utils/historyNavigation.ts:79:12: warning eslint(no-unused-vars): Catch parameter '_err' is caught but never used. help: Consider handling this error.
+src/utils/historyNavigation.ts:94:12: warning eslint(no-unused-vars): Catch parameter '_err' is caught but never used. help: Consider handling this error.
+src/utils/historyNavigation.ts:113:12: warning eslint(no-unused-vars): Catch parameter '_err' is caught but never used. help: Consider handling this error.
+src/utils/historyNavigation.ts:129:16: warning eslint(no-unused-vars): Catch parameter '_err' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/authGis.ts:129:30: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/RouteOperationalReportCard.tsx:7:3: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/RoleBadge.tsx:5:21: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/QueueModal.tsx:5:22: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/ProfileMenuSheet.tsx:5:28: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/AllRouteMonitoringPage.tsx:7:3: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/AllRouteMonitoringPage.tsx:9:3: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/WaReportModal.tsx:5:25: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/AccumulationSheet.tsx:5:29: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/BusList.tsx:5:19: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/accumulation/useAccumulationRange.ts:111:16: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/utils/analytics.test.ts:50:17: warning eslint(no-loss-of-precision): This number literal will lose precision at runtime. help: Use a number literal representable by a 64-bit floating-point number, or use a `BigInt` literal (for example, `9007199254740993n`) for exact large integers.
+src/utils/analytics.test.ts:55:39: warning eslint(no-loss-of-precision): This number literal will lose precision at runtime. help: Use a number literal representable by a 64-bit floating-point number, or use a `BigInt` literal (for example, `9007199254740993n`) for exact large integers.
+src/components/UserProfileHeader.tsx:5:29: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/UserManagementPage.tsx:7:3: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/BusCard.tsx:5:19: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/userManagement/UserManagementPage.tsx:81:22: warning react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'currentUserEmail', and 'loadUsers' help: Either include it or remove the dependency array.
+src/hooks/usePreviousDayOdometer.ts:148:10: warning react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'activeUnits' help: Either include it or remove the dependency array.
+src/services/routes/users.ts:40:12: warning eslint(no-unused-vars): Catch parameter '_cacheErr' is caught but never used. help: Consider handling this error.
+src/services/routes/users.ts:107:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/routes/users.ts:163:16: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/routes/users.ts:177:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/routes/users.ts:201:12: warning eslint(no-unused-vars): Catch parameter '_err' is caught but never used. help: Consider handling this error.
+src/services/routes/sync.ts:17:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/routes/sync.ts:27:16: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/routes/audit.ts:19:12: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/dashboard/useDashboardUiState.ts:72:7: warning react-hooks(exhaustive-deps): React hook useCallback depends on `mainTabs`, which changes every render help: Try memoizing this variable with `useRef` or `useCallback`.
+src/components/dashboard/useDashboardUiState.ts:80:7: warning react-hooks(exhaustive-deps): React hook useCallback depends on `mainTabs`, which changes every render help: Try memoizing this variable with `useRef` or `useCallback`.
+src/components/monitoring/AllRouteMonitoringPage.tsx:28:27: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/LoginScreen.tsx:5:23: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/dashboard/useDashboardData.ts:25:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/dashboard/useDashboardData.ts:36:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/RouteSelectorCard.tsx:5:29: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/components/busCard/modal/useBusInputForm.ts:274:9: warning react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAwal1' help: Either include it or remove the dependency array.
+src/components/busCard/modal/useBusInputForm.ts:288:12: warning react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAkhir1' help: Either include it or remove the dependency array.
+src/components/busCard/modal/useBusInputForm.ts:305:12: warning react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAkhir2' help: Either include it or remove the dependency array.
+src/components/busCard/modal/useBusInputForm.ts:323:9: warning react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAwal2' help: Either include it or remove the dependency array.
+src/components/routeSelector/useRouteCascade.ts:179:18: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/routeSelector/useRouteCascade.ts:235:16: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/routeSelector/useRouteCascade.ts:191:14: warning react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'isAccumulation', 'sheetUrl', 'setSelectedTab', 'currentTabName', 'setSheetUrl', 'selectedTab', and 'isDataLoaded' help: Either include it or remove the dependency array.
+src/components/routeSelector/useRouteCascade.ts:207:60: warning react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'selectedRouteCode' help: Either include it or remove the dependency array.
+src/components/routeSelector/useAddRouteForm.ts:105:16: warning eslint(no-unused-vars): Catch parameter '_err' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/core.ts:391:24: warning eslint(no-unused-vars): Catch parameter 'upsertErr' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/core.ts:401:18: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/DailyToaTrendCard.tsx:5:29: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+src/services/googleSheets/authSession.ts:132:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/authSession.ts:189:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/authSession.ts:239:16: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/authSession.ts:304:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/authSession.ts:348:14: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/services/googleSheets/authSession.ts:353:12: warning eslint(no-unused-vars): Catch parameter '_e' is caught but never used. help: Consider handling this error.
+src/components/routeSelector/RouteSelectorCard.tsx:117:18: warning react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'currentTabName', 'setFormTab', and 'selectedTab' help: Either include it or remove the dependency array.
+src/components/busCard/modal/BusInputModalNotes.tsx:5:14: warning react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+.agent/skills/brainstorming/scripts/server.cjs:95:14: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:129:45: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:143:14: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:219:14: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:313:12: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:467:16: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:522:41: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:540:100: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:547:70: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:629:40: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:673:65: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/server.cjs:678:18: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/helper.js:28:14: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/helper.js:99:51: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.
+.agent/skills/brainstorming/scripts/helper.js:117:53: warning eslint(no-unused-vars): Catch parameter 'e' is caught but never used. help: Consider handling this error.

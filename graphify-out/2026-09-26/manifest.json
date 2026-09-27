@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1790424349.8953607,
-    "ast_hash": "d47dc6ade050f1a5b1766b7d62399ae1",
+    "mtime": 1790004497.4140713,
+    "ast_hash": "7c6328e9dd1b42505bd15800581136b8",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1320,8 +1320,8 @@
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.ts": {
-    "mtime": 1790424467.9303212,
-    "ast_hash": "2d4fe75721e4ba5cb754e70f4a5e0533",
+    "mtime": 1790004410.78767,
+    "ast_hash": "bb42017b2986b695bead28c720e49fb2",
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.test.ts": {
@@ -1420,8 +1420,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1790424063.2047143,
-    "ast_hash": "9842a249e832a9e3149bce31690eb135",
+    "mtime": 1790391365.3270285,
+    "ast_hash": "7d0f7ed8765c7765cd2c8aa508250a7d",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1790424009.1553109,
-    "ast_hash": "5879d75591e10cbb1ef07218715407b8",
+    "mtime": 1790391378.4603672,
+    "ast_hash": "f0404e08d38990740fa94b9ee889e606",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -3100,18 +3100,18 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRouteCardModern.tsx": {
-    "mtime": 1790424435.788004,
-    "ast_hash": "60abb9376870883e58b5e8714eeb771a",
+    "mtime": 1790004225.82916,
+    "ast_hash": "6b8a794fb085c933c2b39b5366deea7d",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRoutesTab.test.tsx": {
-    "mtime": 1790424320.09319,
-    "ast_hash": "e21c4425f03a3a69e0ab698b097dc1e1",
+    "mtime": 1789969424.938838,
+    "ast_hash": "02c87b338f2c0c1b5759b6f651c08885",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRoutesTab.tsx": {
-    "mtime": 1790424284.2309988,
-    "ast_hash": "ebe8aad3ac44a97dbb2ca311e2e20101",
+    "mtime": 1789969045.0785081,
+    "ast_hash": "422f7c9adcf8779081d913d4f525eb49",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringShiftSplitBar.tsx": {
@@ -3342,31 +3342,6 @@
   "leaderboard_mobile_perfect.png": {
     "mtime": 1790058711.3529055,
     "ast_hash": "9c41416cca92fa0e81add9c39dba8b3b",
-    "semantic_hash": ""
-  },
-  "src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx": {
-    "mtime": 1790424112.430668,
-    "ast_hash": "8ab7d2b9bdc996ac414d115bc04386b2",
-    "semantic_hash": ""
-  },
-  "src/components/monitoring/modals/MonitoringRouteDetailModal.tsx": {
-    "mtime": 1790424425.6989384,
-    "ast_hash": "da9441126478f91c100eab8f62405714",
-    "semantic_hash": ""
-  },
-  "src/components/monitoring/tabs/MonitoringRouteCardModern.test.tsx": {
-    "mtime": 1790424195.6359532,
-    "ast_hash": "a1eabe5ff6915da2b852d2581a0ba8f4",
-    "semantic_hash": ""
-  },
-  "docs/superpowers/plans/2026-09-26-monitoring-routes-card-modal-plan.md": {
-    "mtime": 1790423907.0517979,
-    "ast_hash": "57df05d8406924c3bf443428fbc330f7",
-    "semantic_hash": ""
-  },
-  "docs/superpowers/specs/2026-09-26-monitoring-routes-card-modal-design.md": {
-    "mtime": 1790423701.595954,
-    "ast_hash": "93a4afecd580a3defc34ae78e3fc317a",
     "semantic_hash": ""
   }
 }

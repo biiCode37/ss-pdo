@@ -1,6 +1,8 @@
 # 📑 Spesifikasi Logika Penginputan & Blocking Berantai Odometer (SS_PDO)
 
-Dokumen ini adalah **Single Source of Truth (SSOT)** dan acuan mutlak untuk logika penginputan, auto-prefill, validasi, dan pembatasan berantai (*cascading dependency*) pada nilai odometer armada bus di seluruh mode formulir aplikasi SS_PDO.
+Dokumen ini adalah **Single Source of Truth (SSOT)** dan acuan mutlak untuk logika penginputan, auto-prefill, validasi, dan pembatasan berantai (*cascading dependency*) pada nilai odometer armada bus di seluruh mode formulir aplikasi SS_PDO dan migrasi bionex-pusm.
+
+**Keputusan domain Bii, 26 September 2026:** Jarak dinas maksimal **150 KM per shift** dan **230 KM per unit per hari operasional** sebagai jumlah jarak Shift 1 + Shift 2. Keputusan ini menggantikan batas 400 KM yang dahulu tertulis di dokumen ini untuk target migrasi. Kode web saat keputusan dibuat masih membatasi 230 KM per shift dan belum menerapkan batas gabungan 230 KM; perbedaan tersebut dicatat pada paket migrasi dan tidak berarti kode web telah diperbarui. Implementasi Flutter harus mengikuti 150/230.
 
 ---
 
@@ -131,7 +133,8 @@ Aturan perbandingan `validateKmPair(awal, akhir, shift)`:
 2. **Evaluasi Jika Keduanya Terisi:**
    - Hanya dievaluasi jika `kmAwal` DAN `kmAkhir` keduanya berisi angka valid $> 0$.
    - Syarat: `kmAkhir >= kmAwal`.
-   - Syarat jarak wajar: `(kmAkhir - kmAwal) <= 400 KM`.
+   - Syarat jarak wajar per shift: `(kmAkhir - kmAwal) <= 150 KM`.
+   - Bila kedua shift memiliki pasangan odometer lengkap, jumlah `(kmAkhir1 - kmAwal1) + (kmAkhir2 - kmAwal2) <= 230 KM` per unit per hari operasional. Bila hanya satu shift lengkap, jaraknya sendiri harus memenuhi kedua batas. Pasangan yang belum lengkap tidak dianggap bernilai nol definitif untuk menyimpulkan jarak hariannya. Prefill 3 digit dan perpindahan kosong antarshift tidak dihitung sebagai jarak dinas.
 3. **Pemeriksaan Konsistensi Antar-Shift:**
    - Jika `kmAwal1` terisi namun `kmAkhir1` kosong, dan pengguna mencoba mengisi `kmAwal2` $\rightarrow$ Tolak dengan pesan:
      > *"KM Akhir Shift 1 wajib diisi sebelum mengisi data Shift 2!"*

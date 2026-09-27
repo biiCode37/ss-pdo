@@ -69,6 +69,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
           gap: "8px",
           minWidth: 0,
           flex: 1,
+          overflow: "hidden",
         }}
       >
         <span
@@ -93,6 +94,8 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
             display: "flex",
             flexDirection: "column",
             minWidth: 0,
+            flex: 1,
+            overflow: "hidden",
             justifyContent: "center",
           }}
         >
@@ -101,6 +104,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
               display: "flex",
               alignItems: "center",
               gap: "5px",
+              minWidth: 0,
             }}
           >
             <span
@@ -109,7 +113,6 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
                 fontWeight: 700,
                 color: "var(--text-primary)",
                 lineHeight: 1.25,
-                minWidth: "48px",
                 flexShrink: 0,
               }}
             >
@@ -134,6 +137,8 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
           </div>
           <span
             style={{
+              display: "block",
+              maxWidth: "100%",
               fontSize: "10px",
               color: "var(--text-secondary)",
               lineHeight: 1.25,
@@ -142,6 +147,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
               overflow: "hidden",
               textOverflow: "ellipsis",
             }}
+            title={route.routeName}
           >
             {route.routeName}
           </span>
@@ -232,7 +238,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
 
       <div className="monitoring-leaderboard-grid">
         {/* 1. Top 3 Pelanggan Terbanyak */}
-        <div>
+        <div style={{ minWidth: 0, width: "100%" }}>
           <div
             style={{
               display: "flex",
@@ -253,7 +259,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
             </span>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%", minWidth: 0 }}>
             {topRoutes.map((route, idx) => (
               <LeaderboardItemRow
                 key={route.routeCode}
@@ -267,7 +273,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
         </div>
 
         {/* 2. Top 3 Capaian Tertinggi */}
-        <div>
+        <div style={{ minWidth: 0, width: "100%" }}>
           <div
             style={{
               display: "flex",
@@ -288,7 +294,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
             </span>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%", minWidth: 0 }}>
             {topAchievementRoutes.map((route, idx) => (
               <LeaderboardItemRow
                 key={`achieve-${route.routeCode}`}
@@ -302,7 +308,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
         </div>
 
         {/* 3. 3 Rute Butuh Evaluasi */}
-        <div>
+        <div style={{ minWidth: 0, width: "100%" }}>
           <div
             style={{
               display: "flex",
@@ -323,7 +329,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
             </span>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%", minWidth: 0 }}>
             {bottomRoutes.map((route, idx) => (
               <LeaderboardItemRow
                 key={`bottom-${route.routeCode}`}

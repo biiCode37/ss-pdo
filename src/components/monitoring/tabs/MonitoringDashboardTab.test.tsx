@@ -129,22 +129,29 @@ describe("MonitoringDashboardTab Component", () => {
     });
 
     expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.CHART_TITLE);
-    // Should render JAK.01 and JAK.18
-    expect(container.textContent).toContain("JAK.01");
     expect(container.textContent).toContain("JAK.18");
 
-    // Bar click interaction
-    const barEl = container.querySelector('[data-testid="toa-bar-JAK.01"]');
+    // Bar click interaction on visible Top 5 route (JAK.18 is top 1)
+    const barEl = container.querySelector('[data-testid="toa-bar-JAK.18"]');
     expect(barEl).toBeTruthy();
 
     act(() => {
       (barEl as HTMLElement).click();
     });
 
-    // Tooltip or breakdown should appear
+    // Tooltip detail should appear
     const tooltip = container.querySelector('[data-testid="toa-chart-tooltip"]');
     expect(tooltip).toBeTruthy();
-    expect(tooltip?.textContent).toContain("JAK.01");
+    expect(tooltip?.textContent).toContain("JAK.18");
+
+    // Test expand button to reveal all routes including JAK.01
+    const expandBtn = container.querySelector('[data-testid="toa-chart-toggle-expand"]');
+    expect(expandBtn).toBeTruthy();
+    act(() => {
+      (expandBtn as HTMLElement).click();
+    });
+    const expandedBarEl = container.querySelector('[data-testid="toa-bar-JAK.01"]');
+    expect(expandedBarEl).toBeTruthy();
   });
 
   it("renders 4 Hero Macro KPI cards", async () => {

@@ -1251,6 +1251,45 @@ body {
   }
 }
 
+/* Monitoring TOA Bar Chart Accordion Animation (Apple Physical Spring Curve) */
+@keyframes toaAccordionExpand {
+  0% {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  100% {
+    max-height: 800px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toaAccordionCollapse {
+  0% {
+    max-height: 800px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.toa-accordion-enter {
+  animation: toaAccordionExpand 0.32s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  overflow: hidden;
+  will-change: max-height, opacity, transform;
+}
+
+.toa-accordion-exit {
+  animation: toaAccordionCollapse 0.28s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  overflow: hidden;
+  will-change: max-height, opacity, transform;
+}
+
 /* ==========================================================================
    SweetAlert2 Custom Modern Styling (SS_PDO Design System)
    ========================================================================== */
@@ -2055,6 +2094,8 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   max-width: 1200px;
   margin: 0 auto;
   padding-bottom: 84px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 640px) {
@@ -2069,6 +2110,9 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
   padding: 16px;
   margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 @media (max-width: 640px) {
@@ -2080,13 +2124,19 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 
 .monitoring-leaderboard-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
+  width: 100%;
+}
+
+.monitoring-leaderboard-grid > div {
+  min-width: 0;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
   .monitoring-leaderboard-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
 }
@@ -2098,6 +2148,10 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   gap: 10px;
   padding: 9px 12px;
   border-radius: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
   transition: transform 0.15s ease, background 0.15s ease;
 }
 

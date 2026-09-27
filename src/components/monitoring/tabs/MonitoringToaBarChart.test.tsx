@@ -62,7 +62,7 @@ describe("MonitoringToaBarChart Component", () => {
     container.remove();
   });
 
-  it("renders 18 route bars in a single frame without 'JAK.' or 'J.' prefix in labels", async () => {
+  it("renders 18 horizontal route bars with full route code and full passenger count", async () => {
     const mock18Routes: RegionalRouteItem[] = [
       createMockRoute("JAK.01", 600, 500),
       createMockRoute("JAK 02", 400, 300),
@@ -91,34 +91,60 @@ describe("MonitoringToaBarChart Component", () => {
     // Periksa judul grafik
     expect(container.textContent).toContain(TEXT_MONITORING.DASHBOARD.CHART_TITLE);
 
-    // Periksa ke-18 batang rute ter-render
+    // Kondisi default (collapsed): Hanya menampilkan Top 5
+    const initialBars = container.querySelectorAll("[data-testid^='toa-bar-']");
+    expect(initialBars.length).toBe(5);
+
+    // Rute tertinggi (JAK 110A dengan 2.300) harus ada di Top 5
+    const bar110A = container.querySelector("[data-testid='toa-bar-JAK 110A']");
+    expect(bar110A).not.toBeNull();
+    expect(bar110A?.textContent).toContain("JAK 110A");
+    expect(bar110A?.textContent).toContain("2.300");
+
+    // Tombol expand ada
+    const expandBtn = container.querySelector("[data-testid='toa-chart-toggle-expand']") as HTMLButtonElement;
+    expect(expandBtn).not.toBeNull();
+    expect(expandBtn.textContent).toContain(TEXT_MONITORING.DASHBOARD.CHART_EXPAND_BTN(18));
+
+    // Klik tombol expand untuk menampilkan semua 18 rute
+    await act(async () => {
+      expandBtn.click();
+    });
+
     const allBars = container.querySelectorAll("[data-testid^='toa-bar-']");
     expect(allBars.length).toBe(18);
 
-    // Periksa label rute: Tidak boleh ada 'JAK.' ataupun awalan 'J.'
-    // Contoh 'JAK.01' -> '01', 'JAK 02' -> '02', 'JAK 110A' -> '110A', 'J.10' -> '10'
+    // Setelah expand, rute lainnya (seperti JAK.01 dan JAK 112) muncul
     const bar01 = container.querySelector("[data-testid='toa-bar-JAK.01']");
     expect(bar01).not.toBeNull();
-    expect(bar01?.textContent).toContain("01");
-    expect(bar01?.textContent).not.toContain("JAK.01");
+    expect(bar01?.textContent).toContain("JAK.01");
+    expect(bar01?.textContent).toContain("1.100");
 
-    const bar110A = container.querySelector("[data-testid='toa-bar-JAK 110A']");
-    expect(bar110A).not.toBeNull();
-    expect(bar110A?.textContent).toContain("110A");
-    expect(bar110A?.textContent).not.toContain("JAK");
-
-    // Periksa format k untuk nilai >= 1000: 1200 + 1100 = 2300 -> 2.3k
-    expect(bar110A?.textContent).toContain("2.3k");
-
-    // Periksa nilai 0 menampilkan '-'
     const bar112 = container.querySelector("[data-testid='toa-bar-JAK 112']");
-    expect(bar112?.textContent).toContain("-");
+    expect(bar112).not.toBeNull();
+    expect(bar112?.textContent).toContain("JAK 112");
+    expect(bar112?.textContent).toContain("0");
 
-    // Periksa container bar chart memiliki overflow: hidden dan width 100% (zero horizontal scroll)
-    const chartContainer = container.querySelector(".no-scrollbar") as HTMLDivElement;
-    expect(chartContainer).not.toBeNull();
-    expect(chartContainer.style.overflow).toBe("hidden");
-    expect(chartContainer.style.width).toBe("100%");
+    // Tombol berubah menjadi collapse
+    expect(expandBtn.textContent).toContain(TEXT_MONITORING.DASHBOARD.CHART_COLLAPSE_BTN);
+
+    // Klik lagi untuk collapse kembali ke Top 5
+    await act(async () => {
+      expandBtn.click();
+    });
+
+    // Container rute ekstra memainkan animasi collapse (toa-accordion-exit)
+    const extraRoutesContainer = container.querySelector(
+      "[data-testid='toa-chart-extra-routes']",
+    );
+    expect(extraRoutesContainer?.className).toContain("toa-accordion-exit");
+
+    // Tunggu durasi animasi collapse selesai
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 320));
+    });
+
+    expect(container.querySelectorAll("[data-testid^='toa-bar-']").length).toBe(5);
   });
 
   it("toggles route detail tooltip when clicking a bar", async () => {

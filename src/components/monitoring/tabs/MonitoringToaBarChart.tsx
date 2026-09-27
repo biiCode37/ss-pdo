@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, ChevronDown } from "lucide-react";
 import { formatIndonesianDaySlashDate } from "../monitoringUtils";
 
 interface MonitoringToaBarChartProps {
@@ -16,6 +16,27 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
   const [selectedRoute, setSelectedRoute] = useState<RegionalRouteItem | null>(
     null,
   );
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isCollapsing, setIsCollapsing] = useState<boolean>(false);
+  const [isBarsAnimated, setIsBarsAnimated] = useState<boolean>(false);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Animasi masuk untuk bar saat pertama kali grafik ditampilkan
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsBarsAnimated(true);
+    }, 40);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Cleanup timer saat unmount
+  useEffect(() => {
+    return () => {
+      if (collapseTimerRef.current) {
+        clearTimeout(collapseTimerRef.current);
+      }
+    };
+  }, []);
 
   const formattedDate = useMemo(() => {
     return date ? formatIndonesianDaySlashDate(date) : undefined;
@@ -31,6 +52,156 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
     );
     return max > 0 ? max : 1;
   }, [routes]);
+
+  // Urutkan rute dari jumlah penumpang tertinggi ke terendah
+  const sortedRoutes = useMemo(() => {
+    return [...routes].sort((a, b) => {
+      const valA = (a.toaShift1 || 0) + (a.toaShift2 || 0) || a.todayPassengers;
+      const valB = (b.toaShift1 || 0) + (b.toaShift2 || 0) || b.todayPassengers;
+      if (valB !== valA) return valB - valA;
+      return a.routeCode.localeCompare(b.routeCode, undefined, { numeric: true });
+    });
+  }, [routes]);
+
+  const topRoutes = useMemo(() => sortedRoutes.slice(0, 5), [sortedRoutes]);
+  const extraRoutes = useMemo(() => sortedRoutes.slice(5), [sortedRoutes]);
+  const shouldShowExtra = isExpanded || isCollapsing;
+
+  const handleToggleExpand = () => {
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+
+    if (!isExpanded) {
+      setIsExpanded(true);
+      setIsCollapsing(false);
+    } else {
+      setIsExpanded(false);
+      setIsCollapsing(true);
+      collapseTimerRef.current = setTimeout(() => {
+        setIsCollapsing(false);
+      }, 280);
+    }
+  };
+
+  const renderRouteBar = (route: RegionalRouteItem, index: number) => {
+    const totalToa = (route.toaShift1 || 0) + (route.toaShift2 || 0);
+    const displayVal = totalToa > 0 ? totalToa : route.todayPassengers;
+    const widthPct = maxPassengers > 0
+      ? Math.round((displayVal / maxPassengers) * 100)
+      : 0;
+    const isSelected = selectedRoute?.routeCode === route.routeCode;
+    const barWidth = isBarsAnimated ? `${widthPct}%` : "0%";
+    const staggerDelay = isBarsAnimated ? `${Math.min(index * 35, 280)}ms` : "0ms";
+
+    return (
+      <div
+        key={route.routeCode}
+        data-testid={`toa-bar-${route.routeCode}`}
+        onClick={() =>
+          setSelectedRoute(
+            isSelected ? null : route,
+          )
+        }
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "8px",
+          padding: "3px 6px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          background: isSelected
+            ? "var(--input-bg, rgba(62, 207, 142, 0.1))"
+            : "transparent",
+          border: isSelected
+            ? "1px solid var(--accent-color, #3ECF8E)"
+            : "1px solid transparent",
+          transition: "all 0.15s ease",
+        }}
+        title={TEXT_MONITORING.DASHBOARD.CHART_BAR_TITLE(
+          route.routeCode,
+          displayVal.toLocaleString("id-ID"),
+        )}
+      >
+        {/* Route Code Label (Lengkap: JAK.XX) */}
+        <span
+          style={{
+            width: "64px",
+            minWidth: "64px",
+            fontSize: "11.5px",
+            fontWeight: isSelected ? 800 : 700,
+            letterSpacing: "-0.2px",
+            color: isSelected
+              ? "var(--accent-color, #3ECF8E)"
+              : "var(--text-primary)",
+            whiteSpace: "nowrap",
+            lineHeight: 1.2,
+            opacity: isBarsAnimated ? 1 : 0.7,
+            transition: "opacity 0.3s ease",
+          }}
+        >
+          {route.routeCode}
+        </span>
+
+        {/* Slim Horizontal Bar Frame (Track & Fill dengan Stagger Animation) */}
+        <div
+          style={{
+            flex: 1,
+            height: "4px",
+            background: "var(--card-border, rgba(255, 255, 255, 0.08))",
+            borderRadius: "2px",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width: barWidth,
+              minWidth: displayVal > 0 && isBarsAnimated ? "3px" : "0px",
+              borderRadius: "2px",
+              background: isSelected
+                ? "linear-gradient(90deg, #3ECF8E 0%, #10B981 100%)"
+                : displayVal > 0
+                  ? "linear-gradient(90deg, rgba(62, 207, 142, 0.85) 0%, #10B981 100%)"
+                  : "transparent",
+              boxShadow: isSelected
+                ? "0 0 6px rgba(62, 207, 142, 0.5)"
+                : "none",
+              transition: "width 0.65s cubic-bezier(0.32, 0.72, 0, 1)",
+              transitionDelay: staggerDelay,
+              willChange: "width",
+            }}
+          />
+        </div>
+
+        {/* Full Passenger Count (Nilai Lengkap) */}
+        <span
+          style={{
+            width: "54px",
+            minWidth: "54px",
+            textAlign: "right",
+            fontSize: "11.5px",
+            fontWeight: 700,
+            color: isSelected
+              ? "var(--accent-color, #3ECF8E)"
+              : displayVal > 0
+                ? "var(--text-primary)"
+                : "var(--text-secondary)",
+            whiteSpace: "nowrap",
+            lineHeight: 1.2,
+            opacity: isBarsAnimated ? 1 : 0.6,
+            transition: "opacity 0.4s ease",
+            transitionDelay: staggerDelay,
+          }}
+        >
+          {displayVal.toLocaleString("id-ID")}
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div className="monitoring-card">
@@ -156,118 +327,76 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
         </div>
       )}
 
-      {/* Bar Chart Container - 1 Frame Zero Horizontal Scroll */}
+      {/* Horizontal Bar List Container - Compact Density */}
       <div
-        className="no-scrollbar"
         style={{
           display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
+          flexDirection: "column",
           gap: "2px",
-          height: "165px",
           width: "100%",
-          overflow: "hidden",
-          paddingBottom: "4px",
-          paddingTop: "14px",
-          boxSizing: "border-box",
         }}
       >
-        {routes.map((route) => {
-          const totalToa = (route.toaShift1 || 0) + (route.toaShift2 || 0);
-          const displayVal = totalToa > 0 ? totalToa : route.todayPassengers;
-          const heightPct = Math.max(
-            6,
-            Math.round((displayVal / maxPassengers) * 100),
-          );
-          const isSelected = selectedRoute?.routeCode === route.routeCode;
-          // Hapus inisial "JAK." dan "J." dari kode rute
-          const cleanRouteCode = route.routeCode.replace(/^(JAK|J)\.?/i, "").trim();
+        {/* Top 5 Rute (Selalu Tampil) */}
+        {topRoutes.map((route, index) => renderRouteBar(route, index))}
 
-          return (
-            <div
-              key={route.routeCode}
-              data-testid={`toa-bar-${route.routeCode}`}
-              onClick={() =>
-                setSelectedRoute(
-                  isSelected ? null : route,
-                )
-              }
-              style={{
-                flex: "1 1 0",
-                minWidth: 0,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                cursor: "pointer",
-                position: "relative",
-              }}
-              title={TEXT_MONITORING.DASHBOARD.CHART_BAR_TITLE(
-                route.routeCode,
-                displayVal.toLocaleString("id-ID"),
-              )}
-            >
-              {/* Value indicator above bar */}
-              <span
-                style={{
-                  fontSize: "7.5px",
-                  fontWeight: 700,
-                  letterSpacing: "-0.4px",
-                  color: isSelected
-                    ? "var(--accent-color, #3ECF8E)"
-                    : "var(--text-secondary)",
-                  marginBottom: "3px",
-                  whiteSpace: "nowrap",
-                  lineHeight: 1,
-                  textAlign: "center",
-                }}
-              >
-                {displayVal >= 1000
-                  ? `${(displayVal / 1000).toFixed(1)}k`
-                  : displayVal > 0 ? `${displayVal}` : "-"}
-              </span>
-
-              {/* Bar Fill */}
-              <div
-                style={{
-                  width: "100%",
-                  maxWidth: "18px",
-                  height: `${heightPct}%`,
-                  borderRadius: "4px 4px 1px 1px",
-                  background: isSelected
-                    ? "linear-gradient(180deg, #3ECF8E 0%, #10B981 100%)"
-                    : displayVal > 0
-                      ? "linear-gradient(180deg, rgba(62, 207, 142, 0.8) 0%, rgba(16, 185, 129, 0.45) 100%)"
-                      : "rgba(255, 255, 255, 0.08)",
-                  boxShadow: isSelected
-                    ? "0 0 10px rgba(62, 207, 142, 0.6)"
-                    : "none",
-                  transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                }}
-              />
-
-              {/* Route Code Label (Tanpa 'JAK.' / 'J.') */}
-              <span
-                style={{
-                  fontSize: cleanRouteCode.length > 3 ? "7px" : "8px",
-                  fontWeight: isSelected ? 800 : 700,
-                  letterSpacing: "-0.3px",
-                  color: isSelected
-                    ? "var(--accent-color, #3ECF8E)"
-                    : "var(--text-primary)",
-                  marginTop: "5px",
-                  whiteSpace: "nowrap",
-                  lineHeight: 1.1,
-                  textAlign: "center",
-                }}
-              >
-                {cleanRouteCode}
-              </span>
-            </div>
-          );
-        })}
+        {/* Extra Routes (Animasi Accordion Expand/Collapse) */}
+        {shouldShowExtra && extraRoutes.length > 0 && (
+          <div
+            data-testid="toa-chart-extra-routes"
+            className={isCollapsing ? "toa-accordion-exit" : "toa-accordion-enter"}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "2px",
+              width: "100%",
+            }}
+          >
+            {extraRoutes.map((route, extraIdx) =>
+              renderRouteBar(route, 5 + extraIdx),
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Expand / Collapse Button */}
+      {sortedRoutes.length > 5 && (
+        <button
+          type="button"
+          data-testid="toa-chart-toggle-expand"
+          onClick={handleToggleExpand}
+          style={{
+            marginTop: "8px",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "6px",
+            padding: "6px 12px",
+            borderRadius: "8px",
+            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+            background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
+            color: "var(--accent-color, #3ECF8E)",
+            fontSize: "11px",
+            fontWeight: 600,
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          <span>
+            {isExpanded
+              ? TEXT_MONITORING.DASHBOARD.CHART_COLLAPSE_BTN
+              : TEXT_MONITORING.DASHBOARD.CHART_EXPAND_BTN(routes.length)}
+          </span>
+          <ChevronDown
+            size={13}
+            style={{
+              transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
+            }}
+          />
+        </button>
+      )}
     </div>
   );
 };
+
