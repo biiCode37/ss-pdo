@@ -113,3 +113,51 @@ export function computeLiveToaShift2(
     ),
   };
 }
+
+/**
+ * Sanitasi KM Awal Payload (SSOT Bab 2.4):
+ * Menghilangkan draft prefill siluman (<= 3 digit dari H-1).
+ * Nilai tersimpan eksisting dihormati.
+ */
+export function sanitizeKmAwal(
+  val: string,
+  existingVal?: string,
+  prevDayVal?: string,
+): string {
+  const trimmed = val ? val.trim() : "";
+  if (!trimmed) return "";
+  if (existingVal && existingVal.trim() === trimmed) return trimmed;
+  if (
+    prevDayVal &&
+    trimmed.length <= 3 &&
+    trimmed === extractLeading3Digits(prevDayVal)
+  ) {
+    return "";
+  }
+  return trimmed;
+}
+
+/**
+ * Sanitasi KM Akhir Payload (SSOT Bab 2.4):
+ * Menghilangkan draft prefill siluman (<= 3 digit yang merupakan prefix dari KM Awal).
+ * Nilai tersimpan eksisting dihormati.
+ */
+export function sanitizeKmAkhir(
+  akhir: string,
+  awal: string,
+  existingAkhir?: string,
+): string {
+  const trimmedAkhir = akhir ? akhir.trim() : "";
+  const trimmedAwal = awal ? awal.trim() : "";
+  if (!trimmedAkhir) return "";
+  if (existingAkhir && existingAkhir.trim() === trimmedAkhir)
+    return trimmedAkhir;
+  if (
+    trimmedAkhir.length <= 3 &&
+    trimmedAwal.length > trimmedAkhir.length &&
+    trimmedAwal.startsWith(trimmedAkhir)
+  ) {
+    return "";
+  }
+  return trimmedAkhir;
+}

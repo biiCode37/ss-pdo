@@ -1,0 +1,11 @@
+# Paket Gemini — Koreksi akhir Batch 2.3
+
+Codex meninjau `refact_96` dan menemukan R97-01 sampai R97-03 pada `refact_97/AUDIT_BUGS.md`. Kerjakan **Batch 2.3 saja** setelah owner meneruskan instruksi ini. Jangan mulai Fase 3.
+
+1. Pastikan branch `devmode`; baca `AGENTS.md`, `.agents/AGENTS.md`, `refact_95`, `refact_96`, dan probe `refact_97/evidence/stack-order-reproduction.case.tsx`. Jangan ubah arsip yang selesai, `dist_old/`, atau perubahan lokal lain. Jangan reset, stash, clean, commit, atau push.
+2. Buat folder `refactor-ss-pdo/refact_98` atau nomor baru berikutnya. Dokumentasikan audit dan perbaikan lengkap di sana.
+3. Perbaiki **R97-01**: perubahan identitas `onClose` selama modal tetap terbuka tidak boleh unregister/re-register dan memindahkan urutan stack. Handler Escape harus memakai callback terbaru. Sinkronkan visual, Escape, dan Back. Uji alur nyata Queue terbuka pada render pertama; parent merender ulang dengan callback baru; Report terbuka pada render kedua. Tes ini harus memastikan Report di depan dan hanya Report tertutup oleh Escape maupun Back. Uji juga urutan kebalikan.
+4. Perbaiki **R97-02**: hindari membaca/menulis `assignedZIndexRef.current` selama render dan hilangkan peringatan `react(refs)` baru. Jaga solusi sederhana; uji pembukaan serentak, pembukaan bertahap, serta render ulang tanpa perubahan urutan modal. Jangan gunakan tes satu-render untuk mengklaim alur dua-render.
+5. Perbaiki **R97-03**: laporkan lint target yang sebenarnya. Empat peringatan historis di `historyNavigation.ts` harus dipisahkan dari peringatan baru; setelah perbaikan, `ModalShell.tsx` tidak boleh memiliki peringatan `react(refs)`.
+6. Pertahankan perbaikan portal stabil, scroll lock, fokus, kamus teks, dan perilaku dua pilot. Jalankan tes target, seluruh tes `src`, lint terarah, `pnpm run build`, dan `graphify update .` setelah perubahan kode. Simpan bukti; verifikasi visual mobile light/dark bila akses memungkinkan dan nyatakan keterbatasannya dengan jujur.
+7. Buat `AUDIT_BUGS.md` dengan ID/lokasi/keparahan/deskripsi/dampak user/mitigasi serta `REPAIR_REPORT.md` dengan implementasi, **Before vs After**, dan **Case: Skenario Lapangan** tiap perbaikan. Akhiri `READY_FOR_REVIEW` hanya jika gerbang di atas lulus.

@@ -1,8 +1,8 @@
-import { useEffect } from "react";
 import { RotateCw, Trash2 } from "lucide-react";
 import type { SyncItem } from "@/hooks/useOfflineSync";
 import { showInfoToast, showWarningToast } from "@/utils/alertUtils";
 import { TEXT_ALERTS } from "@/constants/texts";
+import { ModalShell } from "@/components/ui/ModalShell";
 
 export interface QueueModalProps {
   isOpen: boolean;
@@ -25,58 +25,32 @@ export function QueueModal({
   onForceConflict,
   onProcessQueue,
 }: QueueModalProps) {
-  // BUG-60: Escape-to-close + body scroll lock + ARIA dialog
-  // (sebelumnya satu-satunya modal tanpa keyboard exit & scroll lock)
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
   return (
-    <div
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={TEXT_ALERTS.QUEUE_MODAL.TITLE}
-      style={{
-        position: "fixed",
-        inset: 0,
+    <ModalShell
+      isOpen={isOpen}
+      onClose={onClose}
+      title={TEXT_ALERTS.QUEUE_MODAL.TITLE}
+      id="queue-modal"
+      backHandlerId="queue_modal"
+      zIndex={100}
+      backdropStyle={{
         background: "rgba(0,0,0,0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 100,
         padding: "16px",
         backdropFilter: "blur(4px)",
       }}
+      contentStyle={{
+        background: "var(--bg-card)",
+        color: "var(--text-primary)",
+        borderRadius: "12px",
+        padding: "20px",
+        width: "100%",
+        maxWidth: "420px",
+        maxHeight: "min(80dvh, 640px)",
+        overflowY: "auto",
+        boxShadow: "var(--shadow)",
+        border: "1px solid var(--border-color)",
+      }}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "var(--bg-card)",
-          color: "var(--text-primary)",
-          borderRadius: "12px",
-          padding: "20px",
-          width: "100%",
-          maxWidth: "420px",
-          maxHeight: "min(80dvh, 640px)",
-          overflowY: "auto",
-          boxShadow: "var(--shadow)",
-          border: "1px solid var(--border-color)",
-        }}
-      >
         <h2 style={{ fontSize: "1.1rem", marginTop: 0, marginBottom: "16px" }}>
           {TEXT_ALERTS.QUEUE_MODAL.TITLE}
         </h2>
@@ -211,8 +185,7 @@ export function QueueModal({
             {TEXT_ALERTS.QUEUE_MODAL.BTN_CLOSE}
           </button>
         </div>
-      </div>
-    </div>
+    </ModalShell>
   );
 }
 

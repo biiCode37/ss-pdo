@@ -155,7 +155,8 @@ describe('RouteOperationalReportCard Component', () => {
 
     expect(document.body.style.overflow).toBe('hidden');
 
-    const closeBtn = container.querySelector('button[title="Tutup"]') as HTMLButtonElement;
+    const closeBtn = (document.body.querySelector('button[title="Tutup"]') ||
+      container.querySelector('button[title="Tutup"]')) as HTMLButtonElement;
     expect(closeBtn).toBeDefined();
 
     await act(async () => {
@@ -178,13 +179,14 @@ describe('RouteOperationalReportCard Component', () => {
       );
     });
 
-    // Verify headway label text does not duplicate (Menit)
-    expect(container.textContent).toContain('Headway Tercepat (Menit)');
-    expect(container.textContent).toContain('Headway Terlama (Menit)');
-    expect(container.textContent).not.toContain('(Menit) (Menit)');
+    // Verify headway label text does not duplicate (Menit) in document.body / container
+    const content = document.body.textContent || container.textContent;
+    expect(content).toContain('Headway Tercepat (Menit)');
+    expect(content).toContain('Headway Terlama (Menit)');
+    expect(content).not.toContain('(Menit) (Menit)');
 
     // Verify modal is independent: does not contain mixed segmented control
-    const fleetTabBtn = Array.from(container.querySelectorAll('button')).find(
+    const fleetTabBtn = Array.from(document.body.querySelectorAll('button')).find(
       b => b.textContent?.trim() === 'Status Armada'
     );
     expect(fleetTabBtn).toBeUndefined();

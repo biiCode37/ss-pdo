@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { BusInputModal } from "./BusInputModal";
 import type { BusData } from "@/services/googleSheets";
 import { getSatsetMode, setSatsetMode } from "@/utils/modals/busInput/busModalTypes";
-import { TEXT_ALERTS, TEXT_FLEET_STATUS } from "@/constants/texts";
+import { TEXT_ALERTS, TEXT_FLEET_STATUS, TEXT_COMMON } from "@/constants/texts";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -578,5 +578,808 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     // Badge acuan harus menampilkan tanggal asal: "Acuan KM (Tgl 18): 289514"
     expect(document.body.textContent).toContain("Acuan KM (Tgl 18): 289514");
   });
+
+  it("renders trip fallback labels from TEXT_ALERTS when headerMap is not provided", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus()}
+          activeCategory="all"
+          initialTab="trip"
+          onSave={vi.fn()}
+        />,
+      );
+    });
+
+    // Verifikasi fallback label trip muncul dari TEXT_ALERTS
+    expect(document.body.textContent).toContain(
+      TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PERGI,
+    );
+    expect(document.body.textContent).toContain(
+      TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG,
+    );
+  });
+
+  it("handles bypass checkbox toggle correctly: keeps checkbox visible after check, removes only cross-day error, and disables save when other errors exist", async () => {
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            kmAwal1: "100000",
+            kmAkhir1: "99000", // error pair
+            toaShift1: "100",
+            totalToa: "200",
+          })}
+          activeCategory="all"
+          initialTab="shift1"
+          onSave={vi.fn()}
+          previousDayKmAkhir2="292990" // error cross-day
+        />,
+      );
+    });
+
+    // Pemicu submit form untuk memunculkan error validasi
+    const formEl = document.body.querySelector("form");
+    expect(formEl).not.toBeNull();
+    await act(async () => {
+      formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    });
+
+    // Checkbox bypass harus muncul
+    const bypassCheckbox = document.body.querySelector<HTMLInputElement>(
+      'input[type="checkbox"]',
+    );
+    expect(bypassCheckbox).not.toBeNull();
+    expect(bypassCheckbox?.checked).toBe(false);
+    expect(document.body.textContent).toContain(
+      TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL,
+    );
+
+    // Centang checkbox bypass
+    await act(async () => {
+      bypassCheckbox?.click();
+    });
+
+    // Checkbox TETAP ADA di DOM dan berstatus checked
+    const updatedCheckbox = document.body.querySelector<HTMLInputElement>(
+      'input[type="checkbox"]',
+    );
+    expect(updatedCheckbox).not.toBeNull();
+    expect(updatedCheckbox?.checked).toBe(true);
+
+    // Tombol simpan tetap disabled karena error pair (KM Akhir < Awal) masih ada!
+    const submitBtn = document.body.querySelector<HTMLButtonElement>(
+      'button[type="submit"]',
+    );
+    expect(submitBtn?.disabled).toBe(true);
+
+    // Error KM Akhir < Awal masih tampil di alert
+    expect(document.body.textContent).toContain(
+      TEXT_ALERTS.BUS_INPUT_MODAL.KM_AKHIR_LESS_THAN_AWAL(
+        TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_1,
+        "99000",
+        "100000",
+      ),
+    );
+  });
+
+  it("R102-02: maintains bypass checkbox visible and checked when cross-day is the ONLY error, and unchecking re-evaluates on submit", async () => {
+    const onSave = vi.fn();
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            kmAwal1: "100000",
+            kmAkhir1: "100050",
+            kmAwal2: "100050",
+            kmAkhir2: "100100",
+            toaShift1: "100",
+            totalToa: "200",
+          })}
+          activeCategory="all"
+          initialTab="shift1"
+          onSave={onSave}
+          previousDayKmAkhir2="120000" // Hanya error lintas hari S1
+        />,
+      );
+    });
+
+    const formEl = document.body.querySelector("form");
+    expect(formEl).not.toBeNull();
+    await act(async () => {
+      formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    });
+
+    // Error lintas hari muncul
+    expect(document.body.textContent).toContain("tidak boleh lebih kecil");
+    const bypassCheckbox = document.body.querySelector<HTMLInputElement>(
+      'input[type="checkbox"]',
+    );
+    expect(bypassCheckbox).not.toBeNull();
+    expect(bypassCheckbox?.checked).toBe(false);
+
+    // Centang bypass
+    await act(async () => {
+      bypassCheckbox?.click();
+    });
+
+    // Checkbox TETAP ADA di DOM dan checked walaupun validationErrors.length === 0
+    const checkboxAfter = document.body.querySelector<HTMLInputElement>(
+      'input[type="checkbox"]',
+    );
+    expect(checkboxAfter).not.toBeNull();
+    expect(checkboxAfter?.checked).toBe(true);
+
+    // List error merah hilang dari antarmuka
+    expect(document.body.textContent).not.toContain(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER);
+
+    // Tombol simpan menjadi enabled
+    const submitBtn = document.body.querySelector<HTMLButtonElement>(
+      'button[type="submit"]',
+    );
+    expect(submitBtn?.disabled).toBe(false);
+
+    // Lepas centang bypass (uncheck)
+    await act(async () => {
+      checkboxAfter?.click();
+    });
+
+    // Submit form lagi setelah dilepas: submit mengevaluasi lintas hari lagi!
+    await act(async () => {
+      formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    });
+
+    // Error lintas hari muncul kembali di DOM dan tombol simpan kembali disabled
+    expect(document.body.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER);
+    expect(document.body.textContent).toContain("tidak boleh lebih kecil");
+    expect(submitBtn?.disabled).toBe(true);
+    expect(onSave).not.toHaveBeenCalled();
+  });
+
+  it("R102-01: renders bypass checkbox on partial Shift 1 in Single Focus mode for kmAwal2", async () => {
+    const onSave = vi.fn();
+    await act(async () => {
+      root.render(
+        <BusInputModal
+          isOpen={true}
+          onClose={vi.fn()}
+          bus={createMockBus({
+            kmAwal1: "",
+            kmAkhir1: "100000",
+            kmAwal2: "90000",
+            kmAkhir2: "",
+          })}
+          activeCategory="kmAwal2"
+          onSave={onSave}
+          previousDayKmAkhir2="120000"
+        />,
+      );
+    });
+
+    const formEl = document.body.querySelector("form");
+    await act(async () => {
+      formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    });
+
+    // Error lintas hari S2 harus tampil
+    expect(document.body.textContent).toContain("tidak boleh lebih kecil");
+
+    // Checkbox bypass HARUS tampil di DOM
+    const bypassCheckbox = document.body.querySelector<HTMLInputElement>(
+      'input[type="checkbox"]',
+    );
+    expect(bypassCheckbox).not.toBeNull();
+    expect(bypassCheckbox?.checked).toBe(false);
+  });
+
+  describe("ModalShell Integration & Shell Dismissal Behaviors (Fase 3 Batch 3.5)", () => {
+    it("membuktikan dismiss idempotent dengan timer 220 ms dan mencegah late callback saat unmount", async () => {
+      vi.useFakeTimers();
+      const onClose = vi.fn();
+
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Cari tombol close header
+      const closeBtn = document.body.querySelector<HTMLButtonElement>(
+        `button[aria-label="${TEXT_ALERTS.BUS_INPUT_MODAL.MODAL_CLOSE_ARIA}"]`,
+      );
+      expect(closeBtn).not.toBeNull();
+
+      // Klik pertama untuk memicu handleDismiss
+      await act(async () => {
+        closeBtn?.click();
+      });
+
+      // Pada t = 0ms dan t = 100ms, onClose BELUM dipanggil karena ada transisi 220ms
+      expect(onClose).not.toHaveBeenCalled();
+
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+      expect(onClose).not.toHaveBeenCalled();
+
+      // Klik kedua pada t = 100ms (uji idempotency: tidak boleh membuat timeout baru atau double call)
+      await act(async () => {
+        closeBtn?.click();
+      });
+
+      // Majukan timer melewati 220ms (total 250ms dari klik pertama)
+      act(() => {
+        vi.advanceTimersByTime(150);
+      });
+
+      // onClose harus dipanggil TEPAT SATU KALI
+      expect(onClose).toHaveBeenCalledTimes(1);
+
+      // Uji pencegahan late callback saat unmount:
+      const onLateClose = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onLateClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const closeBtn2 = document.body.querySelector<HTMLButtonElement>(
+        `button[aria-label="${TEXT_ALERTS.BUS_INPUT_MODAL.MODAL_CLOSE_ARIA}"]`,
+      );
+      await act(async () => {
+        closeBtn2?.click();
+      });
+
+      // Unmount komponen sebelum 220ms selesai
+      await act(async () => {
+        root.unmount();
+      });
+
+      // Majukan timer 500ms
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+
+      // onLateClose TIDAK boleh dipanggil karena timer sudah dibersihkan saat unmount
+      expect(onLateClose).not.toHaveBeenCalled();
+
+      vi.useRealTimers();
+    });
+
+    it("mengintegrasikan coordinated scroll lock reference counting tanpa manipulasi overflow langsung", async () => {
+      const { getActiveScrollLockCount, _resetScrollLockCoordinatorForTest } = await import(
+        "@/utils/scrollLockCoordinator"
+      );
+      _resetScrollLockCoordinatorForTest();
+      document.body.style.overflow = "";
+
+      expect(getActiveScrollLockCount()).toBe(0);
+      expect(document.body.style.overflow).toBe("");
+
+      // 1. Render BusInputModal
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Scroll lock count bertambah menjadi 1 dan overflow terisolasi
+      expect(getActiveScrollLockCount()).toBe(1);
+      expect(document.body.style.overflow).toBe("hidden");
+
+      // 2. Simulasi modal kedua bertumpuk di atasnya
+      const { ModalShell } = await import("@/components/ui/ModalShell");
+      const secondContainer = document.createElement("div");
+      document.body.appendChild(secondContainer);
+      const secondRoot = createRoot(secondContainer);
+
+      await act(async () => {
+        secondRoot.render(
+          <ModalShell isOpen={true} title="Modal Kedua" onClose={vi.fn()}>
+            <div>Modal Bertumpuk</div>
+          </ModalShell>,
+        );
+      });
+
+      // Scroll lock count bertambah menjadi 2
+      expect(getActiveScrollLockCount()).toBe(2);
+      expect(document.body.style.overflow).toBe("hidden");
+
+      // 3. Tutup modal kedua
+      await act(async () => {
+        secondRoot.unmount();
+      });
+      secondContainer.remove();
+
+      // Scroll lock count kembali menjadi 1, overflow body tetap hidden untuk BusInputModal
+      expect(getActiveScrollLockCount()).toBe(1);
+      expect(document.body.style.overflow).toBe("hidden");
+
+      // 4. Tutup BusInputModal
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={false}
+            onClose={vi.fn()}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Semua scroll lock terlepas dan overflow pulih
+      expect(getActiveScrollLockCount()).toBe(0);
+      expect(document.body.style.overflow).toBe("");
+    });
+
+    it("mengintegrasikan modalStackCoordinator untuk Escape hanya menutup dialog teratas (topmost)", async () => {
+      const { _resetModalStackForTest } = await import("@/utils/modalStackCoordinator");
+      const { ModalShell } = await import("@/components/ui/ModalShell");
+      _resetModalStackForTest();
+
+      const onBusModalClose = vi.fn();
+      const onSecondModalClose = vi.fn();
+
+      // 1. Render BusInputModal
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onBusModalClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // 2. Render modal kedua di atas BusInputModal
+      const secondContainer = document.createElement("div");
+      document.body.appendChild(secondContainer);
+      const secondRoot = createRoot(secondContainer);
+
+      await act(async () => {
+        secondRoot.render(
+          <ModalShell
+            isOpen={true}
+            title="Modal Paling Atas"
+            id="modal-topmost"
+            onClose={onSecondModalClose}
+          >
+            <div>Konten Topmost</div>
+          </ModalShell>,
+        );
+      });
+
+      // 3. Tekan Escape saat ada 2 modal bertumpuk
+      await act(async () => {
+        window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      });
+
+      // HANYA modal teratas yang memanggil onClose! BusInputModal TIDAK tertutup
+      expect(onSecondModalClose).toHaveBeenCalledTimes(1);
+      expect(onBusModalClose).not.toHaveBeenCalled();
+
+      // Bersihkan modal kedua
+      await act(async () => {
+        secondRoot.unmount();
+      });
+      secondContainer.remove();
+    });
+
+    it("R126-01 (Kontrak 1): dua modal terdaftar (Bus Input di bawah modal atas) - Back nyata 1 menutup modal atas; Back nyata 2 sebelum atas unmount tidak memanggil callback Bus; setelah atas unmount history.state sesuai Bus; Back nyata 3 menutup Bus", async () => {
+      const { initHistoryNavigation, _resetHistoryNavigationForTest } = await import(
+        "@/utils/historyNavigation"
+      );
+      const { ModalShell } = await import("@/components/ui/ModalShell");
+      _resetHistoryNavigationForTest();
+      initHistoryNavigation();
+      vi.useFakeTimers();
+
+      const onBusClose = vi.fn();
+      const onTopModalClose = vi.fn();
+
+      // 1. Render BusInputModal
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onBusClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const busNavId = window.history.state?.pdoNavId;
+      expect(busNavId).toBeTruthy();
+
+      // 2. Render Modal Atas di atas BusInputModal (modal bertumpuk)
+      const topContainer = document.createElement("div");
+      document.body.appendChild(topContainer);
+      const topRoot = createRoot(topContainer);
+
+      await act(async () => {
+        topRoot.render(
+          <ModalShell
+            isOpen={true}
+            id="modal-atas"
+            title="Modal Atas"
+            onClose={onTopModalClose}
+          >
+            <div>Konten Modal Atas</div>
+          </ModalShell>,
+        );
+      });
+
+      expect(window.history.state?.pdoNavId).toBe("modal-atas");
+
+      // 3. Back pertama nyata (real history.back()): modal atas menutup, Bus tetap terbuka
+      await act(async () => {
+        window.history.back();
+      });
+
+      expect(onTopModalClose).toHaveBeenCalledTimes(1);
+      expect(onBusClose).not.toHaveBeenCalled();
+
+      // 4. Back kedua nyata (real history.back()) sebelum modal atas unmount:
+      // callback Bus tetap TIDAK dipanggil!
+      await act(async () => {
+        window.history.back();
+      });
+
+      expect(onBusClose).not.toHaveBeenCalled();
+      expect(onTopModalClose).toHaveBeenCalledTimes(1);
+
+      // 5. Modal atas selesai menutup dan unmount
+      await act(async () => {
+        topRoot.unmount();
+      });
+      topContainer.remove();
+
+      // Setelah modal atas unmount, history.state.pdoNavId HARUS sesuai modal Bus!
+      expect(window.history.state?.pdoNavId).toBe(busNavId);
+
+      // 6. Back ketiga nyata (real history.back()) menutup modal Bus, bukan keluar/root
+      await act(async () => {
+        window.history.back();
+      });
+
+      // Sebelum timer 220ms selesai, onClose belum dipanggil
+      expect(onBusClose).not.toHaveBeenCalled();
+
+      // Majukan timer 220ms
+      act(() => {
+        vi.advanceTimersByTime(220);
+      });
+
+      expect(onBusClose).toHaveBeenCalledTimes(1);
+
+      // Simulasi parent merespons onClose dengan unmount
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={false}
+            onClose={onBusClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      expect(window.history.state?.pdoRootGuard).toBe(true);
+
+      vi.useRealTimers();
+      _resetHistoryNavigationForTest();
+    });
+
+    it("R126-01 (Kontrak 2): Bus Input sendiri - dua Back nyata dalam <220 ms menghasilkan satu onClose, setelah unmount state kembali ke root guard dan scroll lock pulih", async () => {
+      const { initHistoryNavigation, _resetHistoryNavigationForTest } = await import(
+        "@/utils/historyNavigation"
+      );
+      const { getActiveScrollLockCount, _resetScrollLockCoordinatorForTest } = await import(
+        "@/utils/scrollLockCoordinator"
+      );
+      _resetScrollLockCoordinatorForTest();
+      _resetHistoryNavigationForTest();
+      initHistoryNavigation();
+      vi.useFakeTimers();
+
+      const onClose = vi.fn();
+
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      expect(getActiveScrollLockCount()).toBe(1);
+      expect(document.body.style.overflow).toBe("hidden");
+
+      const alertUtils = await import("@/utils/alertUtils");
+      const toastSpy = vi.spyOn(alertUtils, "showToast");
+
+      // Back 1 nyata pada t = 0ms
+      await act(async () => {
+        window.history.back();
+      });
+
+      expect(onClose).not.toHaveBeenCalled();
+      expect(toastSpy).not.toHaveBeenCalled();
+
+      // Majukan timer 100ms
+      act(() => {
+        vi.advanceTimersByTime(100);
+      });
+
+      // Back 2 nyata pada t = 100ms (<220ms)
+      await act(async () => {
+        window.history.back();
+      });
+
+      expect(onClose).not.toHaveBeenCalled();
+      expect(toastSpy).not.toHaveBeenCalled();
+      expect(getActiveScrollLockCount()).toBe(1);
+
+      // Majukan timer melewati 220ms (total 250ms dari Back 1)
+      act(() => {
+        vi.advanceTimersByTime(150);
+      });
+
+      // Menghasilkan tepat SATU onClose
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(toastSpy).not.toHaveBeenCalled();
+
+      // Unmount modal
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={false}
+            onClose={onClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Scroll lock pulih dan state kembali ke root guard
+      expect(getActiveScrollLockCount()).toBe(0);
+      expect(document.body.style.overflow).toBe("");
+      expect(window.history.state?.pdoRootGuard).toBe(true);
+
+      toastSpy.mockRestore();
+      vi.useRealTimers();
+      _resetHistoryNavigationForTest();
+    });
+
+    it("R126-01 (Kontrak 3): Jalur tutup UI (Batal/X/backdrop) diikuti Back nyata selama animasi memenuhi kontrak riwayat yang sama", async () => {
+      const { initHistoryNavigation, _resetHistoryNavigationForTest } = await import(
+        "@/utils/historyNavigation"
+      );
+      const { getActiveScrollLockCount, _resetScrollLockCoordinatorForTest } = await import(
+        "@/utils/scrollLockCoordinator"
+      );
+      _resetScrollLockCoordinatorForTest();
+      _resetHistoryNavigationForTest();
+      initHistoryNavigation();
+      vi.useFakeTimers();
+
+      const onClose = vi.fn();
+
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const cancelBtn = Array.from(document.body.querySelectorAll("button")).find((b) =>
+        b.textContent?.includes(TEXT_COMMON.BUTTONS.CANCEL),
+      );
+      expect(cancelBtn).toBeDefined();
+
+      // Klik Batal memicu penutupan via UI
+      await act(async () => {
+        cancelBtn?.click();
+      });
+
+      // Selama animasi 220ms, user menekan Back nyata
+      await act(async () => {
+        window.history.back();
+      });
+
+      // Majukan timer 220ms
+      act(() => {
+        vi.advanceTimersByTime(220);
+      });
+
+      expect(onClose).toHaveBeenCalledTimes(1);
+
+      // Unmount modal
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={false}
+            onClose={onClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      expect(getActiveScrollLockCount()).toBe(0);
+      expect(document.body.style.overflow).toBe("");
+      expect(window.history.state?.pdoRootGuard).toBe(true);
+
+      vi.useRealTimers();
+      _resetHistoryNavigationForTest();
+    });
+
+    it("R124-01: idempotensi menyeluruh untuk Escape, backdrop, tombol X/Batal, dan tutup paksa via isOpen=false", async () => {
+      vi.useFakeTimers();
+      const onClose = vi.fn();
+
+      // 1. Uji Tutup Paksa melalui prop isOpen=false saat modal sedang aktif
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Parent langsung set isOpen = false (tutup paksa)
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={false}
+            onClose={onClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Majukan timer 500ms
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+
+      // Karena ditutup paksa via prop, onClose tidak boleh dipanggil terlambat
+      expect(onClose).not.toHaveBeenCalled();
+
+      // 2. Uji tombol Batal (footer)
+      const onCancelClose = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onCancelClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const cancelBtn = Array.from(document.body.querySelectorAll("button")).find((b) =>
+        b.textContent?.includes(TEXT_COMMON.BUTTONS.CANCEL),
+      );
+      expect(cancelBtn).toBeDefined();
+
+      // Klik Batal berkali-kali
+      await act(async () => {
+        cancelBtn?.click();
+        cancelBtn?.click();
+      });
+
+      act(() => {
+        vi.advanceTimersByTime(220);
+      });
+      expect(onCancelClose).toHaveBeenCalledTimes(1);
+
+      // Unmount modal sebelum sub-step 3
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={false}
+            onClose={onCancelClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // 3. Uji Backdrop click ganda
+      const onBackdropClose = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={onBackdropClose}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const backdrop = document.body.querySelector(".bus-input-modal-overlay") as HTMLElement;
+      expect(backdrop).not.toBeNull();
+
+      // Klik backdrop berkali-kali
+      await act(async () => {
+        backdrop.click();
+        backdrop.click();
+      });
+
+      act(() => {
+        vi.advanceTimersByTime(220);
+      });
+      expect(onBackdropClose).toHaveBeenCalledTimes(1);
+
+      vi.useRealTimers();
+    });
+
+    it("memverifikasi struktur dialog bersih (tepat 1 role='dialog' tanpa nested dialog) dan aria-labelledby terhubung ke formId judul", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ unit: "TJ-0456" })}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Tepat 1 elemen role="dialog" di seluruh DOM (tidak bersarang)
+      const dialogElements = document.body.querySelectorAll('[role="dialog"]');
+      expect(dialogElements.length).toBe(1);
+
+      const dialog = dialogElements[0] as HTMLElement;
+      expect(dialog.getAttribute("aria-modal")).toBe("true");
+
+      const labelledBy = dialog.getAttribute("aria-labelledby");
+      expect(labelledBy).toBeTruthy();
+
+      // Elemen yang dirujuk oleh aria-labelledby adalah judul h2 header unit bus
+      const titleHeading = document.body.querySelector(`#${CSS.escape(labelledBy!)}`);
+      expect(titleHeading).not.toBeNull();
+      expect(titleHeading?.tagName.toLowerCase()).toBe("h2");
+      expect(titleHeading?.textContent).toContain("TJ-0456");
+    });
+  });
 });
+
 

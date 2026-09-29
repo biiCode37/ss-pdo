@@ -1,0 +1,11 @@
+pnpm run test --dir src
+Test Files  74 passed (74)
+Tests       531 passed (531)
+Duration    43.17s
+Exit Code   0
+
+Target test coverage:
+✓ src/constants/texts/texts.test.ts (18 tests)
+✓ src/components/busCard/modal/useBusInputForm.test.tsx (12 tests)
+✓ src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx (10 tests)
+Total target tests: 40 passed (40)

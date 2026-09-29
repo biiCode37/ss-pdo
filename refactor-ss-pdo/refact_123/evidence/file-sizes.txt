@@ -1,0 +1,11 @@
+﻿
+Name                     Length Lines
+----                     ------ -----
+BusInputModal.tsx         12365   340
+BusInputModal.test.tsx    32079   908
+ModalShell.tsx            10589   301
+scrollLockCoordinator.ts   1643    50
+modalStackCoordinator.ts   3245    99
+useMobileBackHandler.ts     852    28
+
+

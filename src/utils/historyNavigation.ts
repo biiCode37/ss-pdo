@@ -4,6 +4,7 @@ import { showToast } from './alertUtils';
 export interface BackNavigationEntry {
   id: string;
   onBack: () => void;
+  isDismissing?: boolean;
 }
 
 // Global LIFO Stack for active modals / sheets / sub-views
@@ -49,11 +50,36 @@ function handlePopState(_e?: PopStateEvent) {
 
   // 2. Priority: Custom registered modal/sheet/sub-view in the navigation stack
   if (navigationStack.length > 0) {
-    const topEntry = navigationStack.pop();
-    if (topEntry) {
-      topEntry.onBack();
+    const topEntry = navigationStack[navigationStack.length - 1];
+
+    // MITIGASI R126-01: Jika modal teratas sedang dalam proses penutupan (animasi keluar),
+    // jangan teruskan event Back tambahan ke modal di bawahnya atau ke root navigation.
+    if (topEntry.isDismissing) {
+      const targetId =
+        navigationStack.length > 1
+          ? navigationStack[navigationStack.length - 2].id
+          : null;
+      const isAtTarget = targetId
+        ? history.state?.pdoNavId === targetId
+        : Boolean(history.state?.pdoRootGuard);
+      const isAtTop = history.state?.pdoNavId === topEntry.id;
+
+      // Jika traversal browser bergerak mundur melebihi target yang sah,
+      // pulihkan pointer ke depan (history.forward()) tanpa memicu popstate handler.
+      if (!isAtTarget && !isAtTop) {
+        isProgrammaticPop = true;
+        try {
+          history.forward();
+        } catch {
+          isProgrammaticPop = false;
+        }
+      }
       return;
     }
+
+    topEntry.isDismissing = true;
+    topEntry.onBack();
+    return;
   }
 
   // 3. Priority: Root view reached (No modals / sub-views active)
@@ -76,7 +102,7 @@ function handlePopState(_e?: PopStateEvent) {
   // Re-push root guard entry so the app doesn't exit on the first back tap
   try {
     history.pushState({ pdoRootGuard: true, timestamp: now }, '');
-  } catch (_err) {}
+  } catch {}
 }
 
 /**
@@ -91,7 +117,7 @@ export function initHistoryNavigation() {
     history.replaceState({ pdoRoot: true }, '');
     // Push a root guard entry so mobile back button fires popstate rather than exiting immediately
     history.pushState({ pdoRootGuard: true }, '');
-  } catch (_err) {}
+  } catch {}
 
   window.addEventListener('popstate', handlePopState);
 }
@@ -110,7 +136,7 @@ export function pushBackNavigation(entry: BackNavigationEntry) {
 
   try {
     history.pushState({ pdoNavId: entry.id, depth: navigationStack.length }, '');
-  } catch (_err) {}
+  } catch {}
 }
 
 /**
@@ -126,9 +152,33 @@ export function removeBackNavigation(id: string) {
       isProgrammaticPop = true;
       try {
         history.back();
-      } catch (_err) {
+      } catch {
         isProgrammaticPop = false;
       }
     }
   }
 }
+
+/**
+ * Menandai entri modal tertentu sedang dalam proses penutupan (animasi keluar).
+ * Berguna saat penutupan dipicu via tombol UI (X, Batal, backdrop) agar penekanan tombol
+ * Back selama animasi keluar tidak membobol modal di bawahnya atau navigasi root.
+ */
+export function markBackNavigationDismissing(id: string): void {
+  const entry = navigationStack.find((item) => item.id === id);
+  if (entry) {
+    entry.isDismissing = true;
+  }
+}
+
+/**
+ * Reset history navigation stack for test isolation.
+ * @internal
+ */
+export function _resetHistoryNavigationForTest(): void {
+  navigationStack.length = 0;
+  isInitialized = false;
+  isProgrammaticPop = false;
+  window.removeEventListener('popstate', handlePopState);
+}
+

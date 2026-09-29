@@ -1,25 +1,20 @@
 import { useState, useMemo, useRef, useEffect, useId } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
-import { parseIndonesianNumber } from "@/utils/numberUtils";
 import {
   getSatsetMode,
   setSatsetMode,
   SINGLE_COLUMN_META,
 } from "@/utils/modals/busInput/busModalTypes";
 import {
-  validateKmPair,
-  validateKmCrossShift,
-  validateKmCrossDay,
-  detectSmartRollover,
-  validateToaPair,
-  validateToaValue,
-  validateTripCount,
-} from "@/utils/modals/busInput/busModalValidation";
-import {
-  extractLeading3Digits,
-  computeRealtimeDistance,
   computeLiveToaShift2,
+  extractLeading3Digits,
 } from "@/utils/modals/busInput/busModalOdometer";
+import { useBusModalOdometer } from "./useBusModalOdometer";
+import {
+  validateBusInputForm,
+  getCrossDayValidationErrors,
+} from "./busInputValidation";
+import { buildBusInputPayload } from "./busInputPayload";
 import { TEXT_ALERTS } from "@/constants/texts";
 
 export type ModalTab = "shift1" | "shift2" | "trip" | "notes";
@@ -92,23 +87,6 @@ export function useBusInputForm({
     ),
   );
 
-  // Auto-Prefill 3 Leading Digits for KM (Zero Phantom Value)
-  const initialKmAwal1 = useMemo(() => {
-    if (bus.kmAwal1 && bus.kmAwal1.trim() !== "") return bus.kmAwal1;
-    if (previousDayKmAkhir2) return extractLeading3Digits(previousDayKmAkhir2);
-    return "";
-  }, [bus.kmAwal1, previousDayKmAkhir2]);
-
-  const [kmAwal1, setKmAwal1] = useState(initialKmAwal1);
-
-  // KM Akhir S1 WAJIB diawali string kosong "" jika belum ada di bus (Zero Phantom Value)
-  const initialKmAkhir1 = useMemo(() => {
-    if (bus.kmAkhir1 && bus.kmAkhir1.trim() !== "") return bus.kmAkhir1;
-    return "";
-  }, [bus.kmAkhir1]);
-
-  const [kmAkhir1, setKmAkhir1] = useState(initialKmAkhir1);
-
   const [toaShift2, setToaShift2] = useState(bus.toaShift2 || "");
   const [totalToa, setTotalToa] = useState(bus.totalToa || "");
   const [manualShift2, setManualShift2] = useState(bus.manualShift2 || "");
@@ -120,216 +98,40 @@ export function useBusInputForm({
     ),
   );
 
-  const initialKmAwal2 = useMemo(() => {
-    if (bus.kmAwal2 && bus.kmAwal2.trim() !== "") return bus.kmAwal2;
-    // Skenario B: Bus dinas siang saja (S1 kosong murni)
-    const isS1Empty =
-      (!bus.kmAwal1 || bus.kmAwal1.trim() === "") &&
-      (!bus.kmAkhir1 || bus.kmAkhir1.trim() === "");
-    if (isS1Empty && previousDayKmAkhir2) {
-      return extractLeading3Digits(previousDayKmAkhir2);
-    }
-    return "";
-  }, [bus.kmAwal2, bus.kmAwal1, bus.kmAkhir1, previousDayKmAkhir2]);
-
-  const [kmAwal2, setKmAwal2] = useState(initialKmAwal2);
-
-  // KM Akhir S2 WAJIB diawali string kosong "" jika belum ada di bus (Zero Phantom Value)
-  const initialKmAkhir2 = useMemo(() => {
-    if (bus.kmAkhir2 && bus.kmAkhir2.trim() !== "") return bus.kmAkhir2;
-    return "";
-  }, [bus.kmAkhir2]);
-
-  const [kmAkhir2, setKmAkhir2] = useState(initialKmAkhir2);
-
-  // Evaluasi Semantik: Apakah field masih berupa draft prefill yang belum dilengkapi user?
-  const isKmAwal1PrefillOnly = Boolean(
-    previousDayKmAkhir2 &&
-      !bus.kmAwal1 &&
-      kmAwal1.trim() === extractLeading3Digits(previousDayKmAkhir2) &&
-      kmAwal1.trim().length <= 3,
-  );
-
-  // Status Validitas Angka Odometer: field ada nilainya, bukan draft prefill,
-  // dan memenuhi Full Value Guard (>3 digit atau merupakan data eksisting bus)
-  const isKmAwal1Valid = Boolean(
-    kmAwal1 &&
-      kmAwal1.trim() !== "" &&
-      (kmAwal1.trim().length > 3 ||
-        Boolean(bus.kmAwal1 && bus.kmAwal1.trim() === kmAwal1.trim())) &&
-      !isKmAwal1PrefillOnly,
-  );
-
-  const isKmAkhir1PrefillOnly = Boolean(
-    isKmAwal1Valid &&
-      !bus.kmAkhir1 &&
-      kmAkhir1.trim() === extractLeading3Digits(kmAwal1) &&
-      kmAkhir1.trim().length <= 3 &&
-      kmAwal1.trim().length > kmAkhir1.trim().length,
-  );
-
-  const isKmAkhir1Valid = Boolean(
-    kmAkhir1 &&
-      kmAkhir1.trim() !== "" &&
-      (kmAkhir1.trim().length > 3 ||
-        Boolean(bus.kmAkhir1 && bus.kmAkhir1.trim() === kmAkhir1.trim())) &&
-      !isKmAkhir1PrefillOnly,
-  );
-
-  // Status Kunci Berantai (Cascading Lock)
-  // 1. KM Akhir S1 terkunci sampai KM Awal S1 terisi valid
-  const isKmAkhir1Locked = !isKmAwal1Valid;
-
-  // 2. KM Awal S2:
-  // - Skenario A (Bus dinas pagi): Ada aktivitas S1 -> Terkunci sampai KM Akhir S1 valid.
-  // - Skenario B (Bus dinas siang saja): S1 kosong murni -> Terbuka langsung.
-  const isS1Started = Boolean(
-    (kmAwal1 && kmAwal1.trim().length > 0 && !isKmAwal1PrefillOnly) ||
-      (bus.kmAwal1 && bus.kmAwal1.trim().length > 0),
-  );
-  const isKmAwal2Locked = isS1Started && !isKmAkhir1Valid;
-
-  const isKmAwal2PrefillOnly = Boolean(
-    !isS1Started &&
-      previousDayKmAkhir2 &&
-      !bus.kmAwal2 &&
-      kmAwal2.trim() === extractLeading3Digits(previousDayKmAkhir2) &&
-      kmAwal2.trim().length <= 3,
-  );
-
-  const isKmAwal2Valid = Boolean(
-    kmAwal2 &&
-      kmAwal2.trim() !== "" &&
-      (kmAwal2.trim().length > 3 ||
-        Boolean(bus.kmAwal2 && bus.kmAwal2.trim() === kmAwal2.trim())) &&
-      !isKmAwal2PrefillOnly,
-  );
-
-  const isKmAkhir2PrefillOnly = Boolean(
-    isKmAwal2Valid &&
-      !bus.kmAkhir2 &&
-      kmAkhir2.trim() === extractLeading3Digits(kmAwal2) &&
-      kmAkhir2.trim().length <= 3 &&
-      kmAwal2.trim().length > kmAkhir2.trim().length,
-  );
-
-  const isKmAkhir2Valid = Boolean(
-    kmAkhir2 &&
-      kmAkhir2.trim() !== "" &&
-      (kmAkhir2.trim().length > 3 ||
-        Boolean(bus.kmAkhir2 && bus.kmAkhir2.trim() === kmAkhir2.trim())) &&
-      !isKmAkhir2PrefillOnly,
-  );
-
-  // 3. KM Akhir S2 terkunci sampai KM Awal S2 terisi valid
-  const isKmAkhir2Locked = !isKmAwal2Valid;
-
-  // Mode Fokus Tunggal: Redirection Cerdas & Pesan Panduan (SSOT Bab 5.A)
-  const { effectiveCategory, guideMessage } = useMemo(() => {
-    if (!isSingleMode) {
-      return { effectiveCategory: activeCategory, guideMessage: null };
-    }
-
-    if (activeCategory === "kmAkhir1" && isKmAkhir1Locked) {
-      return {
-        effectiveCategory: "kmAwal1",
-        guideMessage: TEXT_ALERTS.BUS_INPUT_MODAL.GUIDE_FILL_KM_AWAL_FIRST,
-      };
-    }
-
-    if (activeCategory === "kmAwal2" && isKmAwal2Locked) {
-      return {
-        effectiveCategory: "kmAkhir1",
-        guideMessage:
-          TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_KM_S2_REQUIRES_S1_CLOSED,
-      };
-    }
-
-    if (activeCategory === "kmAkhir2" && isKmAkhir2Locked) {
-      if (isKmAwal2Locked) {
-        return {
-          effectiveCategory: "kmAkhir1",
-          guideMessage:
-            TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_KM_S2_REQUIRES_S1_CLOSED,
-        };
-      }
-      return {
-        effectiveCategory: "kmAwal2",
-        guideMessage: TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED,
-      };
-    }
-
-    return { effectiveCategory: activeCategory, guideMessage: null };
-  }, [
+  // Sub-hook Odometer: 4 state KM, prefill, lock berantai, rollover, dan jarak live (Batch 3.2)
+  const odometer = useBusModalOdometer({
+    bus,
+    previousDayKmAkhir2,
     isSingleMode,
     activeCategory,
+    activeTab,
+  });
+
+  const {
+    kmAwal1,
+    setKmAwal1,
+    kmAkhir1,
+    setKmAkhir1,
+    kmAwal2,
+    setKmAwal2,
+    kmAkhir2,
+    setKmAkhir2,
+    isKmAwal1Valid,
+    isKmAkhir1Valid,
+    isKmAwal2Valid,
+    isKmAkhir2Valid,
     isKmAkhir1Locked,
     isKmAwal2Locked,
     isKmAkhir2Locked,
-  ]);
-
-  // Prefill reaktif KM Awal S1 saat previousDayKmAkhir2 tiba dan field masih kosong
-  useEffect(() => {
-    if (
-      (!kmAwal1 || kmAwal1.trim() === "") &&
-      (!bus.kmAwal1 || bus.kmAwal1.trim() === "") &&
-      previousDayKmAkhir2
-    ) {
-      const prefill = extractLeading3Digits(previousDayKmAkhir2);
-      if (prefill) {
-        setKmAwal1(prefill);
-      }
-    }
-  }, [previousDayKmAkhir2, bus.kmAwal1]);
-
-  // Reactivity KM Awal 1 -> KM Akhir 1 (Unlock & Auto-Reset)
-  useEffect(() => {
-    if (isKmAwal1Valid) {
-      if (!kmAkhir1 || kmAkhir1.trim() === "") {
-        const prefill = extractLeading3Digits(kmAwal1);
-        if (prefill) {
-          setKmAkhir1(prefill);
-        }
-      }
-    } else {
-      // Skenario 4: Jika KM Awal S1 dihapus / tidak valid, auto-reset KM Akhir S1
-      if (kmAkhir1 && (!bus.kmAkhir1 || kmAkhir1.trim().length <= 3)) {
-        setKmAkhir1("");
-      }
-    }
-  }, [isKmAwal1Valid, kmAwal1, bus.kmAkhir1]);
-
-  // Reactivity KM Awal 2 -> KM Akhir 2 (Unlock & Auto-Reset)
-  useEffect(() => {
-    if (isKmAwal2Valid) {
-      if (!kmAkhir2 || kmAkhir2.trim() === "") {
-        const prefill = extractLeading3Digits(kmAwal2);
-        if (prefill) {
-          setKmAkhir2(prefill);
-        }
-      }
-    } else {
-      // Skenario 4: Jika KM Awal S2 dihapus / tidak valid, auto-reset KM Akhir S2
-      if (kmAkhir2 && (!bus.kmAkhir2 || kmAkhir2.trim().length <= 3)) {
-        setKmAkhir2("");
-      }
-    }
-  }, [isKmAwal2Valid, kmAwal2, bus.kmAkhir2]);
-
-  // Prefill reaktif KM Awal S2 untuk Skenario B (Bus Dinas Siang Saja)
-  useEffect(() => {
-    if (
-      !isS1Started &&
-      (!kmAwal2 || kmAwal2.trim() === "") &&
-      (!bus.kmAwal2 || bus.kmAwal2.trim() === "") &&
-      previousDayKmAkhir2
-    ) {
-      const prefill = extractLeading3Digits(previousDayKmAkhir2);
-      if (prefill) {
-        setKmAwal2(prefill);
-      }
-    }
-  }, [isS1Started, previousDayKmAkhir2, bus.kmAwal2]);
+    effectiveCategory,
+    guideMessage,
+    kmLiveS1,
+    kmLiveS2,
+    kmDistanceS1,
+    kmDistanceS2,
+    handleCopyKmAkhir1ToAwal2,
+    smartRolloverSuggestion,
+  } = odometer;
 
   const [keterangan, setKeterangan] = useState(bus.keterangan || "");
   const [showKeterangan, setShowKeterangan] = useState(
@@ -378,7 +180,7 @@ export function useBusInputForm({
         targetElement.focus();
         const val = targetElement.value || "";
         const isKmInput =
-          (isSingleMode && effectiveCategory.toLowerCase().includes("km")) ||
+          (isSingleMode && Boolean(effectiveCategory?.toLowerCase().includes("km"))) ||
           Boolean(targetElement.id && targetElement.id.toLowerCase().includes("km"));
         const isPrefillOnly = isKmInput && val.length > 0 && val.length <= 3;
 
@@ -409,7 +211,7 @@ export function useBusInputForm({
 
   // Jika input KM yang sedang aktif terisi 3 digit prefill, pastikan kursor diletakkan di akhir teks (bukan di-select)
   useEffect(() => {
-    if (isSingleMode && effectiveCategory.toLowerCase().includes("km")) {
+    if (isSingleMode && effectiveCategory?.toLowerCase().includes("km")) {
       const el = singlePrimaryInputRef.current;
       if (el && document.activeElement === el) {
         const val = el.value || "";
@@ -458,104 +260,57 @@ export function useBusInputForm({
     }
   };
 
-  // Live calculations for distance and TOA Shift 2
-  const kmLiveS1 = useMemo(
-    () => computeRealtimeDistance(kmAwal1, kmAkhir1),
-    [kmAwal1, kmAkhir1],
-  );
-
-  const kmLiveS2 = useMemo(
-    () => computeRealtimeDistance(kmAwal2, kmAkhir2),
-    [kmAwal2, kmAkhir2],
-  );
-
   const toaLiveS2 = useMemo(
     () => computeLiveToaShift2(totalToa, toaShift1),
     [totalToa, toaShift1],
   );
 
-  // Backward-compatible string distance (e.g. "45.0")
-  const kmDistanceS1 = useMemo(() => {
-    if (kmLiveS1.diff !== null && kmLiveS1.status !== "negative") {
-      return kmLiveS1.diff.toFixed(1);
-    }
-    return null;
-  }, [kmLiveS1]);
-
-  const kmDistanceS2 = useMemo(() => {
-    if (kmLiveS2.diff !== null && kmLiveS2.status !== "negative") {
-      return kmLiveS2.diff.toFixed(1);
-    }
-    return null;
-  }, [kmLiveS2]);
-
-  // Skenario 5: Salin KM Akhir S1 ke KM Awal S2
-  const handleCopyKmAkhir1ToAwal2 = () => {
-    if (kmAkhir1 && kmAkhir1.trim().length > 3) {
-      const copiedVal = kmAkhir1.trim();
-      setKmAwal2(copiedVal);
-      // Buka dan prefill KM Akhir S2 jika masih kosong
-      const prefill = extractLeading3Digits(copiedVal);
-      if (prefill && (!kmAkhir2 || kmAkhir2.trim() === "")) {
-        setKmAkhir2(prefill);
-      }
-    }
-  };
-
-  // Deteksi Smart Rollover (Skenario 6: Pergantian Kepala Ribuan Lintas Hari)
-  const targetKmAwalForRollover = useMemo(() => {
-    if (isSingleMode) {
-      if (effectiveCategory === "kmAwal2" || effectiveCategory === "kmAkhir2") {
-        const hasShift1 =
-          (bus.kmAwal1 && bus.kmAwal1.trim() !== "") ||
-          (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3);
-        if (!hasShift1) return kmAwal2;
-        return "";
-      }
-      return kmAwal1;
-    }
-    if (activeTab === "shift2") {
-      const hasShift1 =
-        (bus.kmAwal1 && bus.kmAwal1.trim() !== "") ||
-        (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3);
-      if (!hasShift1) return kmAwal2;
-      return "";
-    }
-    return kmAwal1;
-  }, [
-    isSingleMode,
-    effectiveCategory,
-    activeTab,
-    bus.kmAwal1,
-    kmAwal1,
-    kmAwal2,
-  ]);
-
-  const smartRolloverSuggestion = useMemo(() => {
-    if (!targetKmAwalForRollover || !previousDayKmAkhir2) return null;
-    return detectSmartRollover(targetKmAwalForRollover, previousDayKmAkhir2);
-  }, [targetKmAwalForRollover, previousDayKmAkhir2]);
-
   const handleApplyRollover = () => {
-    if (!smartRolloverSuggestion) return;
-    if (targetKmAwalForRollover === kmAwal2) {
-      setKmAwal2(smartRolloverSuggestion.suggestedKm);
-      if (!kmAkhir2 || kmAkhir2.trim().length <= 3) {
-        setKmAkhir2(extractLeading3Digits(smartRolloverSuggestion.suggestedKm));
-      }
-    } else {
-      setKmAwal1(smartRolloverSuggestion.suggestedKm);
-      if (!kmAkhir1 || kmAkhir1.trim().length <= 3) {
-        setKmAkhir1(extractLeading3Digits(smartRolloverSuggestion.suggestedKm));
-      }
+    const targetShift = odometer.rolloverTargetShift;
+    const suggestion = odometer.smartRolloverSuggestion;
+    const applied = odometer.applyRollover();
+
+    if (applied && validationErrors.length > 0 && suggestion && targetShift) {
+      // Hitung angka KM terkini setelah rollover diterapkan (R112-01)
+      const nextKmAwal1 =
+        targetShift === "shift1" ? suggestion.suggestedKm : kmAwal1;
+      const nextKmAwal2 =
+        targetShift === "shift2" ? suggestion.suggestedKm : kmAwal2;
+      const nextKmAkhir1 =
+        targetShift === "shift1" && (!kmAkhir1 || kmAkhir1.trim().length <= 3)
+          ? extractLeading3Digits(suggestion.suggestedKm)
+          : kmAkhir1;
+      const nextKmAkhir2 =
+        targetShift === "shift2" && (!kmAkhir2 || kmAkhir2.trim().length <= 3)
+          ? extractLeading3Digits(suggestion.suggestedKm)
+          : kmAkhir2;
+
+      // Segarkan error validasi aktif dengan nilai KM terbaru
+      const refreshedErrors = validateBusInputForm({
+        isSingleMode,
+        effectiveCategory,
+        tripPergi,
+        tripPulang,
+        toaShift1,
+        toaShift2,
+        totalToa,
+        manualShift1,
+        manualShift2,
+        showManual1,
+        showManual2,
+        kmAwal1: nextKmAwal1,
+        kmAkhir1: nextKmAkhir1,
+        kmAwal2: nextKmAwal2,
+        kmAkhir2: nextKmAkhir2,
+        bus,
+        bypassOdometerReset,
+        previousDayKmAkhir2,
+        previousDayDateLabel,
+        headerMap,
+      });
+
+      setValidationErrors(refreshedErrors);
     }
-    setValidationErrors((prev) =>
-      prev.filter(
-        (err) =>
-          !err.includes("tidak boleh lebih kecil dari") &&
-          !err.includes("Periksa kemungkinan kepala angka"),
-      ),
-    );
   };
 
   // Toggle Mode Satset
@@ -565,321 +320,96 @@ export function useBusInputForm({
     setSatsetMode(next);
   };
 
-  // Sanitasi KM Payload (SSOT Bab 2.4): hilangkan angka draf prefill siluman
-  const sanitizeKmAwal = (
-    val: string,
-    existingVal?: string,
-    prevDayVal?: string,
-  ): string => {
-    const trimmed = val ? val.trim() : "";
-    if (!trimmed) return "";
-    if (existingVal && existingVal.trim() === trimmed) return trimmed;
-    if (
-      prevDayVal &&
-      trimmed.length <= 3 &&
-      trimmed === extractLeading3Digits(prevDayVal)
-    ) {
-      return "";
-    }
-    return trimmed;
+  // Helper murni delegasi ke busInputValidation
+  const getActiveCrossDayErrors = (bypass: boolean = false): string[] => {
+    return getCrossDayValidationErrors({
+      isSingleMode,
+      effectiveCategory,
+      kmAwal1,
+      kmAkhir1,
+      kmAwal2,
+      bus,
+      bypassOdometerReset: bypass,
+      previousDayKmAkhir2,
+      previousDayDateLabel,
+    });
   };
 
-  const sanitizeKmAkhir = (
-    akhir: string,
-    awal: string,
-    existingAkhir?: string,
-  ): string => {
-    const trimmedAkhir = akhir ? akhir.trim() : "";
-    const trimmedAwal = awal ? awal.trim() : "";
-    if (!trimmedAkhir) return "";
-    if (existingAkhir && existingAkhir.trim() === trimmedAkhir)
-      return trimmedAkhir;
-    if (
-      trimmedAkhir.length <= 3 &&
-      trimmedAwal.length > trimmedAkhir.length &&
-      trimmedAwal.startsWith(trimmedAkhir)
-    ) {
-      return "";
+  const hasCrossDayError =
+    bypassOdometerReset ||
+    validationErrors.some((err) =>
+      getActiveCrossDayErrors(false).includes(err),
+    );
+
+  const handleToggleBypassOdometerReset = (checked: boolean) => {
+    setBypassOdometerReset(checked);
+    if (checked) {
+      const crossDayErrors = getActiveCrossDayErrors(false);
+      setValidationErrors((prev) =>
+        prev.filter((err) => !crossDayErrors.includes(err)),
+      );
     }
-    return trimmedAkhir;
   };
 
   // Form Submit handler
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const errors: string[] = [];
 
-    if (isSingleMode) {
-      if (effectiveCategory === "toaShift1") {
-        const err = validateToaValue(
-          toaShift1,
-          TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S1,
-        );
-        if (err) errors.push(err);
-        if (showManual1) {
-          const errM = validateToaValue(
-            manualShift1,
-            TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S1,
-          );
-          if (errM) errors.push(errM);
-        }
-        if (totalToa) {
-          const errPair = validateToaPair(toaShift1, totalToa);
-          if (errPair) errors.push(errPair);
-        }
-      } else if (effectiveCategory === "totalToa") {
-        const err = validateToaValue(
-          totalToa,
-          TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA,
-        );
-        if (err) errors.push(err);
-        if (showManual2) {
-          const errM = validateToaValue(
-            manualShift2,
-            TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2,
-          );
-          if (errM) errors.push(errM);
-        }
-        const errPair = validateToaPair(toaShift1, totalToa);
-        if (errPair) errors.push(errPair);
-      } else if (
-        effectiveCategory === "kmAwal1" ||
-        effectiveCategory === "kmAkhir1"
-      ) {
-        const errCrossDay = validateKmCrossDay(
-          kmAwal1,
-          previousDayKmAkhir2,
-          "Shift 1",
-          previousDayDateLabel || "Kemarin",
-          bypassOdometerReset,
-        );
-        if (errCrossDay) errors.push(errCrossDay);
-
-        const err = validateKmPair(kmAwal1, kmAkhir1, "Shift 1");
-        if (err) errors.push(err);
-        const errCross = validateKmCrossShift(
-          kmAwal1,
-          kmAkhir1,
-          kmAwal2,
-          kmAkhir2,
-        );
-        if (errCross) errors.push(errCross);
-      } else if (
-        effectiveCategory === "kmAwal2" ||
-        effectiveCategory === "kmAkhir2"
-      ) {
-        // Skenario B: Jika Shift 1 kosong murni, validasi kmAwal2 terhadap hari kemarin
-        const hasShift1 =
-          (bus.kmAwal1 && bus.kmAwal1.trim() !== "") ||
-          (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3);
-        if (!hasShift1) {
-          const errCrossDay = validateKmCrossDay(
-            kmAwal2,
-            previousDayKmAkhir2,
-            "Shift 2",
-            previousDayDateLabel || "Kemarin",
-            bypassOdometerReset,
-          );
-          if (errCrossDay) errors.push(errCrossDay);
-        }
-
-        const errCross = validateKmCrossShift(
-          kmAwal1,
-          kmAkhir1,
-          kmAwal2,
-          kmAkhir2,
-        );
-        if (errCross) errors.push(errCross);
-        const err = validateKmPair(kmAwal2, kmAkhir2, "Shift 2");
-        if (err) errors.push(err);
-      }
-    } else {
-      const errTp = validateTripCount(
-        tripPergi,
-        headerMap?.tripPergiLabel || "Trip Pergi",
-      );
-      if (errTp) errors.push(errTp);
-      const errTpl = validateTripCount(
-        tripPulang,
-        headerMap?.tripPulangLabel || "Trip Pulang",
-      );
-      if (errTpl) errors.push(errTpl);
-
-      const errToaS1 = validateToaValue(
-        toaShift1,
-        TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S1,
-      );
-      if (errToaS1) errors.push(errToaS1);
-      if (showManual1) {
-        const errManS1 = validateToaValue(
-          manualShift1,
-          TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S1,
-        );
-        if (errManS1) errors.push(errManS1);
-      }
-
-      const errCrossDay1 = validateKmCrossDay(
-        kmAwal1,
-        previousDayKmAkhir2,
-        "Shift 1",
-        previousDayDateLabel || "Kemarin",
-        bypassOdometerReset,
-      );
-      if (errCrossDay1) errors.push(errCrossDay1);
-
-      const errKmS1 = validateKmPair(kmAwal1, kmAkhir1, "Shift 1");
-      if (errKmS1) errors.push(errKmS1);
-
-      // Skenario B di Mode All: Jika Shift 1 kosong murni tapi Shift 2 terisi
-      const hasS1 =
-        (kmAwal1 && kmAwal1.trim() !== "" && kmAwal1.trim().length > 3) ||
-        (kmAkhir1 && kmAkhir1.trim() !== "" && kmAkhir1.trim().length > 3) ||
-        (bus.kmAwal1 && bus.kmAwal1.trim() !== "");
-      if (!hasS1 && kmAwal2 && kmAwal2.trim().length > 3) {
-        const errCrossDay2 = validateKmCrossDay(
-          kmAwal2,
-          previousDayKmAkhir2,
-          "Shift 2",
-          previousDayDateLabel || "Kemarin",
-          bypassOdometerReset,
-        );
-        if (errCrossDay2) errors.push(errCrossDay2);
-      }
-
-      const errCross = validateKmCrossShift(
-        kmAwal1,
-        kmAkhir1,
-        kmAwal2,
-        kmAkhir2,
-      );
-      if (errCross) errors.push(errCross);
-
-      const errToaS2 = validateToaValue(toaShift2, "TOA Shift 2");
-      if (errToaS2) errors.push(errToaS2);
-      if (showManual2) {
-        const errManS2 = validateToaValue(
-          manualShift2,
-          TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2,
-        );
-        if (errManS2) errors.push(errManS2);
-      }
-
-      const errKmS2 = validateKmPair(kmAwal2, kmAkhir2, "Shift 2");
-      if (errKmS2) errors.push(errKmS2);
-
-      const toaS1Num = parseIndonesianNumber(toaShift1);
-      const toaS2Num = parseIndonesianNumber(toaShift2);
-      const finalToaS1 = isNaN(toaS1Num) ? 0 : toaS1Num;
-      const finalToaS2 = isNaN(toaS2Num) ? 0 : toaS2Num;
-      const computedTotal = finalToaS1 + finalToaS2;
-      const prospectiveTotal =
-        computedTotal > 0 ? String(computedTotal) : totalToa;
-      if (prospectiveTotal) {
-        const errPair = validateToaPair(toaShift1, prospectiveTotal);
-        if (errPair) errors.push(errPair);
-      }
-    }
+    const errors = validateBusInputForm({
+      isSingleMode,
+      effectiveCategory,
+      tripPergi,
+      tripPulang,
+      toaShift1,
+      toaShift2,
+      totalToa,
+      manualShift1,
+      manualShift2,
+      showManual1,
+      showManual2,
+      kmAwal1,
+      kmAkhir1,
+      kmAwal2,
+      kmAkhir2,
+      bus,
+      bypassOdometerReset,
+      previousDayKmAkhir2,
+      previousDayDateLabel,
+      headerMap,
+    });
 
     if (errors.length > 0) {
       setValidationErrors(errors);
       return;
     }
+    setValidationErrors([]);
 
-    let effectiveTotalToa = "";
-    if (isSingleMode && effectiveCategory === "totalToa") {
-      effectiveTotalToa = totalToa.trim();
-    } else {
-      const toaS1Num = parseIndonesianNumber(toaShift1);
-      const toaS2Num = parseIndonesianNumber(toaShift2);
-      const finalToaS1 = isNaN(toaS1Num) ? 0 : toaS1Num;
-      const finalToaS2 = isNaN(toaS2Num) ? 0 : toaS2Num;
-      const computedTotal = finalToaS1 + finalToaS2;
-      effectiveTotalToa =
-        computedTotal > 0 ? String(computedTotal) : totalToa.trim();
-    }
-
-    // Scoped Updates (SSOT Bab 2.1): Hanya kirim field relevan sesuai mode formulir
-    const updates: Partial<BusData> = {};
-
-    if (isSingleMode) {
-      if (
-        effectiveCategory === "trip" ||
-        effectiveCategory === "tripPergi" ||
-        effectiveCategory === "tripPulang"
-      ) {
-        updates.tripPergi = tripPergi.trim();
-        updates.tripPulang = tripPulang.trim();
-      } else if (effectiveCategory === "toaShift1") {
-        updates.toaShift1 = toaShift1.trim();
-        if (showManual1) {
-          updates.manualShift1 = manualShift1.trim();
-        }
-      } else if (effectiveCategory === "totalToa") {
-        updates.totalToa = effectiveTotalToa;
-        if (showManual2) {
-          updates.manualShift2 = manualShift2.trim();
-        }
-      } else if (effectiveCategory === "kmAwal1") {
-        updates.kmAwal1 = sanitizeKmAwal(
-          kmAwal1,
-          bus.kmAwal1,
-          previousDayKmAkhir2,
-        );
-        if (showKmAkhir1InSingle && isKmAwal1Valid) {
-          updates.kmAkhir1 = sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1);
-        }
-      } else if (effectiveCategory === "kmAkhir1") {
-        if (isKmAwal1Valid) {
-          updates.kmAkhir1 = sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1);
-        }
-      } else if (effectiveCategory === "kmAwal2") {
-        if (!isKmAwal2Locked) {
-          updates.kmAwal2 = sanitizeKmAwal(
-            kmAwal2,
-            bus.kmAwal2,
-            previousDayKmAkhir2,
-          );
-        }
-        if (showKmAkhir2InSingle && isKmAwal2Valid) {
-          updates.kmAkhir2 = sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2);
-        }
-      } else if (effectiveCategory === "kmAkhir2") {
-        if (isKmAwal2Valid) {
-          updates.kmAkhir2 = sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2);
-        }
-      } else if (effectiveCategory === "keterangan") {
-        updates.keterangan = keterangan.trim();
-      }
-
-      // Jika chip keterangan dibuka pada mode single focus, sertakan keterangan
-      if (showKeterangan) {
-        updates.keterangan = keterangan.trim();
-      }
-    } else {
-      // Full modal (Semua Kolom): kirim seluruh kolom yang berhak diisi
-      updates.tripPergi = tripPergi.trim();
-      updates.tripPulang = tripPulang.trim();
-      updates.toaShift1 = toaShift1.trim();
-      updates.manualShift1 = showManual1 ? manualShift1.trim() : "";
-      updates.kmAwal1 = sanitizeKmAwal(
-        kmAwal1,
-        bus.kmAwal1,
-        previousDayKmAkhir2,
-      );
-      updates.kmAkhir1 = isKmAwal1Valid
-        ? sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1)
-        : "";
-      updates.toaShift2 = toaShift2.trim();
-      updates.manualShift2 = showManual2 ? manualShift2.trim() : "";
-      updates.kmAwal2 = !isKmAwal2Locked
-        ? sanitizeKmAwal(kmAwal2, bus.kmAwal2, previousDayKmAkhir2)
-        : "";
-      updates.kmAkhir2 = isKmAwal2Valid
-        ? sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2)
-        : "";
-      updates.totalToa = effectiveTotalToa;
-      updates.keterangan = keterangan.trim();
-    }
+    const updates = buildBusInputPayload({
+      isSingleMode,
+      effectiveCategory,
+      tripPergi,
+      tripPulang,
+      toaShift1,
+      toaShift2,
+      totalToa,
+      manualShift1,
+      manualShift2,
+      showManual1,
+      showManual2,
+      kmAwal1,
+      kmAkhir1,
+      kmAwal2,
+      kmAkhir2,
+      isKmAwal1Valid,
+      isKmAwal2Valid,
+      isKmAwal2Locked,
+      showKmAkhir1InSingle,
+      showKmAkhir2InSingle,
+      keterangan,
+      showKeterangan,
+      bus,
+      previousDayKmAkhir2,
+    });
 
     onSave(updates);
     onDismiss();
@@ -947,10 +477,13 @@ export function useBusInputForm({
     handleCopyKmAkhir1ToAwal2,
     bus,
     previousDayKmAkhir2,
-    previousDayDateLabel: previousDayDateLabel || "Kemarin",
+    previousDayDateLabel:
+      previousDayDateLabel || TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_PREVIOUS_DAY,
     // Smart Rollover & Cross-Day Validation (Skenario 6)
     bypassOdometerReset,
     setBypassOdometerReset,
+    handleToggleBypassOdometerReset,
+    hasCrossDayError,
     smartRolloverSuggestion,
     handleApplyRollover,
     // Cascading & Single Mode Redirection Flags (SSOT)

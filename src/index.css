@@ -16,6 +16,7 @@
 
   /* Semantic High-Contrast Shift & KPI Tokens (Dark Mode) */
   --shift1-color: #38bdf8;
+  --shift1-action-text: #38bdf8;
   --shift1-bg: rgba(56, 189, 248, 0.12);
   --shift1-border: rgba(56, 189, 248, 0.25);
 
@@ -29,6 +30,9 @@
 
   --warning-text: #fdba74;
   --warning-badge-bg: rgba(249, 115, 22, 0.12);
+  --warning-btn-text: #0f172a;
+  --warning-banner-title: #f59e0b;
+  --warning-banner-text: var(--text-primary);
 
   --danger-text: #fb7185;
   --danger-badge-bg: rgba(244, 63, 94, 0.12);
@@ -61,6 +65,7 @@
 
   /* Semantic High-Contrast Shift & KPI Tokens (Light Mode - High Readability) */
   --shift1-color: #0284c7;
+  --shift1-action-text: #0369a1;
   --shift1-bg: rgba(2, 132, 199, 0.08);
   --shift1-border: rgba(2, 132, 199, 0.2);
 
@@ -74,6 +79,9 @@
 
   --warning-text: #c2410c;
   --warning-badge-bg: rgba(234, 88, 12, 0.1);
+  --warning-btn-text: #0f172a;
+  --warning-banner-title: #9a3412;
+  --warning-banner-text: var(--text-primary);
 
   --danger-text: #be123c;
   --danger-badge-bg: rgba(190, 18, 60, 0.1);

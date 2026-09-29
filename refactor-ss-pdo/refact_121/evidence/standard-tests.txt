@@ -1,0 +1,9 @@
+$ pnpm run test
+
+Test Files  88 passed (88)
+Tests       664 passed (664)
+Start at    18:52:52
+Duration    53.45s (transform 35.84s, setup 0ms, import 100.00s, tests 68.79s, environment 110.15s)
+
+All 88 test files and 664 unit tests passed with 0 failures.
+Exit code: 0

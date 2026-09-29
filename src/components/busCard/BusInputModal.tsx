@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { AlertCircle, Sparkles } from "lucide-react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { TEXT_ALERTS, TEXT_FLEET_STATUS } from "@/constants/texts";
 import { useBusInputForm, type ModalTab } from "./modal/useBusInputForm";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
+import { ModalShell } from "@/components/ui/ModalShell";
+import { markBackNavigationDismissing } from "@/utils/historyNavigation";
 import { BusInputModalHeader } from "./modal/BusInputModalHeader";
 import { BusInputModalTabs } from "./modal/BusInputModalTabs";
 import { BusInputModalSingleFocus } from "./modal/BusInputModalSingleFocus";
@@ -44,20 +45,28 @@ export function BusInputModal({
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const isClosingRef = useRef(false);
+  const formIdRef = useRef<string>("");
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { viewportHeight, isKeyboardOpen, keyboardHeight } = useVisualViewport();
 
-  const handleDismiss = () => {
+  const handleDismiss = useCallback(() => {
     if (isClosingRef.current) return;
     isClosingRef.current = true;
     setIsClosing(true);
-    setTimeout(onClose, 220);
-  };
-
-  const handleDismissRef = useRef(handleDismiss);
-  handleDismissRef.current = handleDismiss;
+    if (formIdRef.current) {
+      markBackNavigationDismissing(`bus_input_modal_${formIdRef.current}`);
+    }
+    closeTimerRef.current = setTimeout(() => {
+      onClose();
+    }, 220);
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
       setIsMounted(false);
       setIsClosing(false);
       isClosingRef.current = false;
@@ -65,16 +74,13 @@ export function BusInputModal({
     }
 
     const frameId = requestAnimationFrame(() => setIsMounted(true));
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleDismissRef.current();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
 
     return () => {
       cancelAnimationFrame(frameId);
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
     };
   }, [isOpen]);
 
@@ -91,21 +97,24 @@ export function BusInputModal({
     previousDayDateLabel,
   });
 
+  formIdRef.current = form.formId;
+
   if (!isOpen) return null;
 
-  return createPortal(
-    <div
-      className="modal-overlay bus-input-modal-overlay"
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: isKeyboardOpen ? `${keyboardHeight}px` : 0,
-        zIndex: 99999,
-        display: "flex",
-        justifyContent: "center",
+  return (
+    <ModalShell
+      isOpen={isOpen}
+      onClose={handleDismiss}
+      id={`bus-input-modal-${form.formId}`}
+      backHandlerId={`bus_input_modal_${form.formId}`}
+      ariaLabelledBy={`bus-modal-title-${form.formId}`}
+      initialFocusRef={form.isSingleMode ? form.singlePrimaryInputRef : undefined}
+      zIndex={99999}
+      backdropClassName="modal-overlay bus-input-modal-overlay"
+      backdropStyle={{
         alignItems: "flex-end",
+        justifyContent: "center",
+        bottom: isKeyboardOpen ? `${keyboardHeight}px` : 0,
         backgroundColor: "rgba(0, 0, 0, 0.65)",
         backdropFilter: "blur(6px)",
         WebkitBackdropFilter: "blur(6px)",
@@ -114,43 +123,36 @@ export function BusInputModal({
           "opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.22s cubic-bezier(0.32, 0.72, 0, 1), bottom 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
         willChange: "opacity, background-color, bottom",
       }}
-      onClick={handleDismiss}
+      contentClassName="glass bus-input-modal-content"
+      contentStyle={{
+        width: "100%",
+        maxWidth: "560px",
+        maxHeight: isKeyboardOpen
+          ? `${Math.min(viewportHeight - 10, 680)}px`
+          : "min(92dvh, 780px)",
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        borderTopLeftRadius: "24px",
+        borderTopRightRadius: "24px",
+        padding: isKeyboardOpen
+          ? "12px 16px 8px 16px"
+          : "18px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px",
+        background: "var(--card-bg, #171717)",
+        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+        borderBottom: "none",
+        boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
+        transform:
+          isClosing || !isMounted
+            ? "translateY(100%) scale(0.95)"
+            : "translateY(0px) scale(1)",
+        transition:
+          "transform 0.22s cubic-bezier(0.32, 0.72, 0, 1), max-height 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="glass bus-input-modal-content"
-        style={{
-          width: "100%",
-          maxWidth: "560px",
-          maxHeight: isKeyboardOpen
-            ? `${Math.min(viewportHeight - 10, 680)}px`
-            : "min(92dvh, 780px)",
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
-          borderTopLeftRadius: "24px",
-          borderTopRightRadius: "24px",
-          padding: isKeyboardOpen
-            ? "12px 16px 8px 16px"
-            : "18px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px",
-          background: "var(--card-bg, #171717)",
-          border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
-          borderBottom: "none",
-          boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
-          transform:
-            isClosing || !isMounted
-              ? "translateY(100%) scale(0.95)"
-              : "translateY(0px) scale(1)",
-          transition:
-            "transform 0.22s cubic-bezier(0.32, 0.72, 0, 1), max-height 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
-        }}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={`bus-modal-title-${form.formId}`}
-      >
-        {/* 1. Header Bar */}
+      {/* 1. Header Bar */}
         <BusInputModalHeader
           unit={bus.unit}
           formId={form.formId}
@@ -193,35 +195,45 @@ export function BusInputModal({
           </div>
         )}
 
-        {/* 3. Validation Errors Alert Bar */}
-        {form.validationErrors.length > 0 && (
+        {/* 3. Validation Errors Alert Bar & Odometer Controls */}
+        {(form.validationErrors.length > 0 || form.hasCrossDayError) && (
           <div
             style={{
               margin: "12px 0 0 0",
               padding: "8px 12px",
               borderRadius: "8px",
-              background: "rgba(239, 68, 68, 0.15)",
-              border: "1px solid rgba(239, 68, 68, 0.35)",
-              color: "#f87171",
+              background:
+                form.validationErrors.length > 0
+                  ? "rgba(239, 68, 68, 0.15)"
+                  : "rgba(56, 189, 248, 0.1)",
+              border:
+                form.validationErrors.length > 0
+                  ? "1px solid rgba(239, 68, 68, 0.35)"
+                  : "1px solid rgba(56, 189, 248, 0.3)",
+              color: form.validationErrors.length > 0 ? "#f87171" : "inherit",
               fontSize: "0.8rem",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                fontWeight: 600,
-              }}
-            >
-              <AlertCircle size={15} />
-              <span>{TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER}</span>
-            </div>
-            <ul style={{ margin: "4px 0 0 16px", padding: 0 }}>
-              {form.validationErrors.map((err, i) => (
-                <li key={i}>{err}</li>
-              ))}
-            </ul>
+            {form.validationErrors.length > 0 && (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontWeight: 600,
+                  }}
+                >
+                  <AlertCircle size={15} />
+                  <span>{TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER}</span>
+                </div>
+                <ul style={{ margin: "4px 0 0 16px", padding: 0 }}>
+                  {form.validationErrors.map((err, i) => (
+                    <li key={i}>{err}</li>
+                  ))}
+                </ul>
+              </>
+            )}
 
             {/* Rekomendasi Cerdas 1-Klik Jika Terdeteksi Rollover Lintas Hari */}
             {form.smartRolloverSuggestion && (
@@ -254,12 +266,10 @@ export function BusInputModal({
             )}
 
             {/* Checkbox Bypass Reset Odometer jika ada error mundur lintas hari */}
-            {form.validationErrors.some((e) =>
-              e.includes("tidak boleh lebih kecil dari"),
-            ) && (
+            {form.hasCrossDayError && (
               <label
                 style={{
-                  marginTop: "10px",
+                  marginTop: form.validationErrors.length > 0 ? "10px" : "0",
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
@@ -272,11 +282,7 @@ export function BusInputModal({
                   type="checkbox"
                   checked={form.bypassOdometerReset}
                   onChange={(e) => {
-                    form.setBypassOdometerReset(e.target.checked);
-                    if (e.target.checked) {
-                      // Hapus error cross-day saat dicentang
-                      form.validationErrors.length = 0;
-                    }
+                    form.handleToggleBypassOdometerReset(e.target.checked);
                   }}
                   style={{ accentColor: "var(--accent-color, #38bdf8)" }}
                 />
@@ -331,8 +337,14 @@ export function BusInputModal({
             {!form.isSingleMode && form.activeTab === "trip" && (
               <BusInputModalTrip
                 form={form}
-                tripPergiLabel={headerMap?.tripPergiLabel || "Trip Pergi"}
-                tripPulangLabel={headerMap?.tripPulangLabel || "Trip Pulang"}
+                tripPergiLabel={
+                  headerMap?.tripPergiLabel ||
+                  TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PERGI
+                }
+                tripPulangLabel={
+                  headerMap?.tripPulangLabel ||
+                  TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG
+                }
               />
             )}
 
@@ -349,9 +361,7 @@ export function BusInputModal({
             isKeyboardOpen={isKeyboardOpen}
           />
         </form>
-      </div>
-    </div>,
-    document.body,
+    </ModalShell>
   );
 }
 

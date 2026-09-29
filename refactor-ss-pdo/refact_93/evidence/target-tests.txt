@@ -1,0 +1,12 @@
+Command: pnpm run test --dir src src/components/busCard/modal/fields/BusFormField.test.tsx src/components/busCard/modal/useBusInputForm.test.tsx src/constants/texts/texts.test.ts
+Working directory: D:\MINE\SS_PDO
+Process TEMP/TMP: D:\MINE\SS_PDO\node_modules\.tmp
+
+Test Files 3 passed (3)
+Tests 41 passed (41)
+Duration 1.73s
+Exit code 0
+
+Preview attempt: Vite dev server started at http://localhost:5173/; browser displayed login page with Google sign-in button disabled. Shift form could not be reached through the app. Dev server and temporary browser tab were closed.
+
+Captured by Codex on 2026-09-27. Full suite/build results are executor evidence from refact_92.

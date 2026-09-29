@@ -213,7 +213,13 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_NOTES).toBe('Catatan Khusus Unit');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_NOTES).toBe('Catatan / Keterangan');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.POSITIVE_NUMBER).toBe('Nilai harus berupa angka positif!');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_PREVIOUS_DAY).toBe('Kemarin');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PERGI).toBe('Trip Pergi');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG).toBe('Trip Pulang');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_1).toBe('Shift 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_2).toBe('Shift 2');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S1).toBe('TOA Shift 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S2).toBe('TOA Shift 2');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA).toBe('Total TOA');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S1).toBe('KM Awal Shift 1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S1).toBe('KM Akhir Shift 1');
@@ -223,6 +229,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER).toBe('Periksa kembali input:');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_HAS_MANUAL_S1).toBe('Ada Tiket Manual Shift 1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S1).toBe('Jarak Tempuh S1:');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.UNIT_KM).toBe('KM');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_VALUE_KM(150)).toBe('150 KM');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_VALUE_KM('150.5')).toBe('150.5 KM');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TRIP_LABEL).toBe('Total Ritase:');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NORMAL(120)).toContain('+120 KM');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-30)).toContain('lebih kecil');
@@ -233,6 +242,18 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT1).toBe('Input Shift 1 (Closing Siang)');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT2).toBe('Input Shift 2 (Closing Malam)');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_KM_AWAL).toBe('Input KM Awal');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_LABEL('Manual Shift 1')).toBe('✓ Manual Shift 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_LABEL('Catatan')).toBe('✓ Catatan');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KM_AKHIR_1).toBe('+ KM Akhir 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KM_AKHIR_2).toBe('+ KM Akhir 2');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_MANUAL_S1).toBe('✓ Manual S1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_MANUAL_S2).toBe('✓ Manual S2');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KM_AKHIR_1).toBe('✓ KM Akhir 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KM_AKHIR_2).toBe('✓ KM Akhir 2');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KETERANGAN).toBe('✓ Catatan');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_AKHIR_S1_ACTION('300200')).toBe('Salin KM Akhir S1 (300200)');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL_S1('300100')).toBe('Acuan KM Awal 1: 300100');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL_S2('300200')).toBe('Acuan KM Awal 2: 300200');
   });
 
   it('exports BULK_TRIP and FORMAT_SHEET with dynamic template functions', () => {
@@ -297,6 +318,14 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_OPEN_SHEET).toBe('Buka Lembar Kerja Rute');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_VERIFY).toBe('Verifikasi Rute');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_CLOSE).toBe('Tutup');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_CLOSE_TITLE).toBe('Tutup Modal');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.DEFAULT_OPERATOR).toBe('Mikrotrans');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.UNIT_RIT_PER_BUS).toBe('Rit/Bus');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.UNIT_PAX_PER_BUS).toBe('Org/Bus');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.UNIT_PAX_PER_KM).toBe('Org/KM');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.REALOPS_SHIFT_SUBTEXT(10, 9)).toBe('S1: 10 • S2: 9');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TARGET_CAP_SUBTEXT('1.11', '107.2')).toBe('Target: 1.11 • Cap: 107.2%');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.ACHIEVEMENT_PCT('107.5')).toBe('Capaian: 107.5%');
   });
 });
 

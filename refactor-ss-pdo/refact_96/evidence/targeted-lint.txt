@@ -1,0 +1,121 @@
+﻿
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+    ,-[src/utils/historyNavigation.ts:79:12]
+ 78 |     history.pushState({ pdoRootGuard: true, timestamp: now }, '');
+ 79 |   } catch (_err) {}
+    :            ^^|^
+    :              `-- '_err' is declared here
+ 80 | }
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+    ,-[src/utils/historyNavigation.ts:94:12]
+ 93 |     history.pushState({ pdoRootGuard: true }, '');
+ 94 |   } catch (_err) {}
+    :            ^^|^
+    :              `-- '_err' is declared here
+ 95 | 
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+     ,-[src/utils/historyNavigation.ts:113:12]
+ 112 |     history.pushState({ pdoNavId: entry.id, depth: navigationStack.length }, '');
+ 113 |   } catch (_err) {}
+     :            ^^|^
+     :              `-- '_err' is declared here
+ 114 | }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+     ,-[src/utils/historyNavigation.ts:129:16]
+ 128 |         history.back();
+ 129 |       } catch (_err) {
+     :                ^^|^
+     :                  `-- '_err' is declared here
+ 130 |         isProgrammaticPop = false;
+     `----
+  help: Consider handling this error.
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:99:17]
+  98 | 
+  99 |   if (isOpen && assignedZIndexRef.current === null) {
+     :                 ^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^
+     :                                  `-- Cannot access ref value during render
+ 100 |     const highestActiveZ = getHighestActiveZIndex();
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:104:22]
+ 103 |   } else if (!isOpen) {
+ 104 |     assignedZIndexRef.current = null;
+     :     ^^^^^^^^|^^^^^^^^^^^^|^^^
+     :             |            `-- Cannot update ref value during render
+     :             `-- This value is a ref
+ 105 |   }
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+Found 11 warnings and 0 errors.
+Finished in 90ms on 12 files with 116 rules using 8 threads.

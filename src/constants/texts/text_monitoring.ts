@@ -208,6 +208,7 @@ export const TEXT_MONITORING = {
     EMPTY: "Belum Ada Data",
   },
   ROUTE_DETAIL_MODAL: {
+    DEFAULT_OPERATOR: "Mikrotrans",
     TITLE: (code: string) => `Detail Operasional Rute ${code}`,
     SUBTITLE: (name: string, spv: string) => `${name} • Korlap: ${spv}`,
     TABS: {
@@ -243,11 +244,20 @@ export const TEXT_MONITORING = {
       UNIT_KM: "KM",
       UNIT_PAX: "Org",
       UNIT_RIT: "Rit",
+      UNIT_RIT_PER_BUS: "Rit/Bus",
+      UNIT_PAX_PER_BUS: "Org/Bus",
+      UNIT_PAX_PER_KM: "Org/KM",
+      REALOPS_SHIFT_SUBTEXT: (s1: string | number, s2: string | number) =>
+        `S1: ${s1} • S2: ${s2}`,
+      TARGET_CAP_SUBTEXT: (target: string | number, cap: string | number) =>
+        `Target: ${target} • Cap: ${cap}%`,
+      ACHIEVEMENT_PCT: (pct: string | number) => `Capaian: ${pct}%`,
     },
     ACTIONS: {
       BTN_OPEN_SHEET: "Buka Lembar Kerja Rute",
       BTN_VERIFY: "Verifikasi Rute",
       BTN_CLOSE: "Tutup",
+      BTN_CLOSE_TITLE: "Tutup Modal",
     },
   },
 } as const;

@@ -4,9 +4,18 @@ import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
 import { MonitoringRouteDetailModal } from "./MonitoringRouteDetailModal";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
+import { TEXT_MONITORING } from "@/constants/texts";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
+function getMetricCardValue(container: HTMLElement, labelText: string): string | undefined {
+  const allDivs = Array.from(container.querySelectorAll("div"));
+  const labelDiv = allDivs.find((el) => el.textContent?.trim() === labelText);
+  if (!labelDiv || !labelDiv.parentElement) return undefined;
+  const valueDiv = labelDiv.nextElementSibling || labelDiv.parentElement.children[1];
+  return valueDiv?.textContent?.trim().replace(/\s+/g, " ");
+}
 
 const mockRoute: RegionalRouteItem = {
   id: 1,
@@ -198,5 +207,250 @@ describe("MonitoringRouteDetailModal", () => {
       closeBtn?.click();
     });
     expect(onClose).toHaveBeenCalled();
+  });
+
+  describe("ritase metrics calculations and precision", () => {
+    it("handles total ritase PP fallback: 101 trips -> 50.5 rit without rounding to 51", async () => {
+      const routeWith101Trips: RegionalRouteItem = {
+        ...mockRoute,
+        totalTrips: 101,
+        totalRitasePp: undefined,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWith101Trips}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const ritaseTabBtn = container.querySelector<HTMLButtonElement>(
+        '[data-testid="tab-produktivitas"]'
+      );
+      await act(async () => {
+        ritaseTabBtn?.click();
+      });
+
+      const cardValue = getMetricCardValue(
+        container,
+        TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP
+      );
+      expect(cardValue).toBe("50.5 Rit");
+    });
+
+    it("handles total ritase PP fallback: 100 trips -> 50 rit, and 0 trips -> 0 rit", async () => {
+      const routeWith100Trips: RegionalRouteItem = {
+        ...mockRoute,
+        totalTrips: 100,
+        totalRitasePp: undefined,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWith100Trips}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const ritaseTabBtn = container.querySelector<HTMLButtonElement>(
+        '[data-testid="tab-produktivitas"]'
+      );
+      await act(async () => {
+        ritaseTabBtn?.click();
+      });
+
+      expect(
+        getMetricCardValue(
+          container,
+          TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP
+        )
+      ).toBe("50 Rit");
+
+      const routeWith0Trips: RegionalRouteItem = {
+        ...mockRoute,
+        totalTrips: 0,
+        totalRitasePp: undefined,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWith0Trips}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const zeroCardVal = getMetricCardValue(
+        container,
+        TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP
+      );
+      // R85-01: Buktikan nilai tepat pada kartu adalah "0 Rit" dan membedakan dari hasil salah "50 Rit"
+      expect(zeroCardVal).toBe("0 Rit");
+      expect(zeroCardVal).not.toBe("50 Rit");
+    });
+
+    it("prioritizes explicit totalRitasePp over trips, including 0", async () => {
+      const routeWithExplicitZero: RegionalRouteItem = {
+        ...mockRoute,
+        totalTrips: 100,
+        totalRitasePp: 0,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithExplicitZero}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const ritaseTabBtn = container.querySelector<HTMLButtonElement>(
+        '[data-testid="tab-produktivitas"]'
+      );
+      await act(async () => {
+        ritaseTabBtn?.click();
+      });
+
+      const explicitZeroCardVal = getMetricCardValue(
+        container,
+        TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP
+      );
+      // R85-01: Nilai tepat kartu adalah "0 Rit", dan tes ini pasti gagal jika bernilai salah "50 Rit"
+      expect(explicitZeroCardVal).toBe("0 Rit");
+      expect(explicitZeroCardVal).not.toBe("50 Rit");
+
+      const routeWithExplicitDecimal: RegionalRouteItem = {
+        ...mockRoute,
+        totalTrips: 100,
+        totalRitasePp: 50.5,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithExplicitDecimal}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(
+        getMetricCardValue(
+          container,
+          TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP
+        )
+      ).toBe("50.5 Rit");
+    });
+
+    it("calculates ritase per bus accurately without .toFixed(1) truncation: 50.5 / 10 bus -> 5.05 rit/Bus", async () => {
+      const routeForCalc: RegionalRouteItem = {
+        ...mockRoute,
+        totalTrips: 101, // fallback totalRitasePp = 50.5
+        totalRitasePp: undefined,
+        totalRealops: 10,
+        ritasePerBus: undefined,
+        tripsPerBus: undefined,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeForCalc}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const ritaseTabBtn = container.querySelector<HTMLButtonElement>(
+        '[data-testid="tab-produktivitas"]'
+      );
+      await act(async () => {
+        ritaseTabBtn?.click();
+      });
+
+      // 50.5 / 10 = 5.05 rit/Bus (tepat pada kartu RITASE_BUS, tidak terpotong menjadi 5.1 atau 5)
+      expect(
+        getMetricCardValue(
+          container,
+          TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.RITASE_BUS
+        )
+      ).toBe("5.05 Rit/Bus");
+    });
+
+    it("prioritizes tripsPerBus / 2 (10.1 -> 5.05 rit/Bus) when ritasePerBus is undefined", async () => {
+      const routeWithTripsPerBus: RegionalRouteItem = {
+        ...mockRoute,
+        ritasePerBus: undefined,
+        tripsPerBus: 10.1,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithTripsPerBus}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const ritaseTabBtn = container.querySelector<HTMLButtonElement>(
+        '[data-testid="tab-produktivitas"]'
+      );
+      await act(async () => {
+        ritaseTabBtn?.click();
+      });
+
+      expect(
+        getMetricCardValue(
+          container,
+          TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.RITASE_BUS
+        )
+      ).toBe("5.05 Rit/Bus");
+    });
+
+    it("prioritizes explicit ritasePerBus 5.05 without truncation", async () => {
+      const routeWithExplicitRitasePerBus: RegionalRouteItem = {
+        ...mockRoute,
+        ritasePerBus: 5.05,
+        tripsPerBus: 20,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithExplicitRitasePerBus}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const ritaseTabBtn = container.querySelector<HTMLButtonElement>(
+        '[data-testid="tab-produktivitas"]'
+      );
+      await act(async () => {
+        ritaseTabBtn?.click();
+      });
+
+      expect(
+        getMetricCardValue(
+          container,
+          TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.RITASE_BUS
+        )
+      ).toBe("5.05 Rit/Bus");
+    });
   });
 });

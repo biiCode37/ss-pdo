@@ -1,0 +1,23 @@
+{
+  "CheckedAt": "2026-09-27T18:16:14.0161980+07:00",
+  "Branch": "devmode",
+  "Head": "1fb52a63db24788af7f87a0a6a02e708f8928e20",
+  "Decision": "PASS_PHASE_1",
+  "InventoryPathCount": 167,
+  "ActualPathCount": 167,
+  "MissingPaths": [],
+  "ExtraPaths": [],
+  "DuplicatePaths": [],
+  "FacadeRows": 14,
+  "FacadeWithLocalImplementation": [],
+  "PagesDescribedAsFacade": [],
+  "SourceFilesCompared": 319,
+  "SourceFilesChanged": [],
+  "PriorGateSource": "refact_80/evidence; source SHA256 matched refact_79",
+  "PriorLintExit": 0,
+  "PriorBuildExit": 0,
+  "PriorTestsExit": 0,
+  "TestsFilesPassed": 74,
+  "TestsPassed": 524,
+  "NextTask": "GEMINI_PHASE_02_BATCH_01.md"
+}

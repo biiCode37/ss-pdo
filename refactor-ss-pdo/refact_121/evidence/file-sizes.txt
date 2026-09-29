@@ -1,0 +1,14 @@
+Physical Line Counts of Single Focus Modules (refact_121):
+------------------------------------------------------------------
+src/components/busCard/modal/BusInputModalSingleFocus.tsx: 73 lines
+src/components/busCard/modal/singleFocus/singleFocusStyles.ts: 89 lines
+src/components/busCard/modal/singleFocus/SingleFocusToa.tsx: 198 lines
+src/components/busCard/modal/singleFocus/SingleFocusKm.tsx: 33 lines
+src/components/busCard/modal/singleFocus/SingleFocusKmShift1.tsx: 259 lines
+src/components/busCard/modal/singleFocus/SingleFocusKmShift2.tsx: 261 lines
+src/components/busCard/modal/singleFocus/SingleFocusKmRolloverBanner.tsx: 84 lines
+src/components/busCard/modal/singleFocus/SingleFocusNotes.tsx: 53 lines
+src/components/busCard/modal/singleFocus/SingleFocusKmRolloverBanner.test.tsx: 77 lines
+
+Status: All modular components are strictly below the 400-500 line god-file limit.
+SingleFocusKmRolloverBanner is only 84 lines.

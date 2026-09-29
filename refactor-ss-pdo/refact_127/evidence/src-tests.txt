@@ -1,0 +1,788 @@
+﻿
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90mD:/MINE/SS_PDO[39m
+
+pnpm : [90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > 
+[22m[2mAllRouteMonitoringPage Component[2m > [22m[2mrenders executive dashboard tab by default with KPIs and chart
+At line:1 char:1
++ pnpm exec vitest run src/ > refactor-ss-pdo/refact_127/evidence/src-t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90mstderr[2m... KPIs and chart:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mrenders executive dashboard tab by default with KPIs and chart
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m src/components/waReport/WaReportModal.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 414[2mms[22m[39m
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mrenders executive dashboard tab by default with KPIs and chart
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to Rute tab and filters by supervisor
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to Rute tab and filters by supervisor
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m src/components/monitoring/tabs/MonitoringDashboardTab.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1242[2mms[22m[39m
+     [33m[2m✓[22m[39m renders PDO fleet confirmation progress bar [33m 316[2mms[22m[39m
+     [33m[2m✓[22m[39m renders 18-bar TOA chart and handles bar interaction [33m 538[2mms[22m[39m
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to Rute tab and filters by supervisor
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m src/components/monitoring/tabs/MonitoringRoutesTab.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1016[2mms[22m[39m
+     [33m[2m✓[22m[39m renders routes list and search toolbar [33m 315[2mms[22m[39m
+ [32m✓[39m src/components/routeSelector/RouteSelectorCard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 692[2mms[22m[39m
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to Rute tab and filters by supervisor
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to Rute tab and filters by supervisor
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers verification when Verifikasi button on route card is clicked in Rute tab
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m src/components/fleetStatus/FleetStatusModal.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 721[2mms[22m[39m
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers verification when Verifikasi button on route card is clicked in Rute tab
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m src/components/pdoReport/RouteOperationalReportCard.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 758[2mms[22m[39m
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers verification when Verifikasi button on route card is clicked in Rute tab
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers verification when Verifikasi button on route card is clicked in Rute tab
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers verification when Verifikasi button on route card is clicked in Rute tab
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers verification when Verifikasi button on route card is clicked in Rute tab
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to WhatsApp Report Studio tab via bottom nav
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to WhatsApp Report Studio tab via bottom nav
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to WhatsApp Report Studio tab via bottom nav
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mnavigates to WhatsApp Report Studio tab via bottom nav
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mupdates selected date and calls onDateChange when step buttons are clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mtriggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mdisplays data provenance badges (Input App vs Tarik Sheet) on route cards
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mdisplays data provenance badges (Input App vs Tarik Sheet) on route cards
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mrenders title, back button, and formatted date label
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mdisplays data provenance badges (Input App vs Tarik Sheet) on route cards
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/AllRouteMonitoringPage.test.tsx[2m > [22m[2mAllRouteMonitoringPage 
+Component[2m > [22m[2mdisplays data provenance badges (Input App vs Tarik Sheet) on route cards
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mrenders title, back button, and formatted date label
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m src/components/monitoring/AllRouteMonitoringPage.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2968[2mms[22m[39m
+     [33m[2m✓[22m[39m renders executive dashboard tab by default with KPIs and chart [33m 457[2mms[22m[39m
+     [33m[2m✓[22m[39m navigates to Rute tab and filters by supervisor [33m 322[2mms[22m[39m
+     [33m[2m✓[22m[39m triggers verification when Verifikasi button on route card is clicked in Rute tab [33m 367[2mms[22m[39m
+     [33m[2m✓[22m[39m updates selected date and calls onDateChange when step buttons are clicked [33m 613[2mms[22m[39m
+     [33m[2m✓[22m[39m triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked [33m 557[2mms[22m[39m
+     [33m[2m✓[22m[39m displays data provenance badges (Input App vs Tarik Sheet) on route cards [33m 452[2mms[22m[39m
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mrenders Refresh and Load All buttons side by side in the action row
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mrenders Refresh and Load All buttons side by side in the action row
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mtriggers showPicker fallback on date container tap
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mtriggers showPicker fallback on date container tap
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mcalls onDateInputChange when native date picker changes value
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mcalls onDateInputChange when native date picker changes value
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mdisables Refresh and Load All buttons when syncing or refreshing
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mdisables Refresh and Load All buttons when syncing or refreshing
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mrenders control bar holding datepicker, refresh, and load all in a unified single row block
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | src/components/monitoring/MonitoringHeader.test.tsx[2m > [22m[2mMonitoringHeader Component[2m > 
+[22m[2mrenders control bar holding datepicker, refresh, and load all in a unified single row block
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m src/components/monitoring/MonitoringHeader.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 803[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringToaBarChart.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1235[2mms[22m[39m
+     [33m[2m✓[22m[39m renders 18 horizontal route bars with full route code and full passenger count [33m 1068[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1426[2mms[22m[39m
+     [33m[2m✓[22m[39m renders route title, korlap, and tab Operasional by default [33m 315[2mms[22m[39m
+ [32m✓[39m src/components/login/LoginScreen.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1116[2mms[22m[39m
+ [32m✓[39m src/components/busCard/BusCard.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 987[2mms[22m[39m
+     [33m[2m✓[22m[39m opens BusInputModal directly if unit is SGO (no notes) [33m 545[2mms[22m[39m
+ [32m✓[39m src/components/busList/BusList.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 957[2mms[22m[39m
+     [33m[2m✓[22m[39m does not render duplicate shift lock banner inside BusList (handled centrally in DashboardStatusBanners) [33m 365[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringWaReportTab.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 567[2mms[22m[39m
+     [33m[2m✓[22m[39m renders format tabs and live preview [33m 339[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringFleetStatusTab.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 858[2mms[22m[39m
+     [33m[2m✓[22m[39m renders top stats bar with SGO and non-SGO totals [33m 372[2mms[22m[39m
+ [32m✓[39m src/components/pdoReport/ReportModalLayout.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 775[2mms[22m[39m
+ [32m✓[39m src/components/profileMenu/ProfileMenuSheet.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1181[2mms[22m[39m
+     [33m[2m✓[22m[39m renders user details and features when isOpen is true [33m 335[2mms[22m[39m
+     [33m[2m✓[22m[39m renders admin section when user role is admin or superadmin [33m 415[2mms[22m[39m
+     [33m[2m✓[22m[39m displays offline indicator when offline or offlineQueueCount > 0 [33m 328[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/MonitoringBottomNav.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 760[2mms[22m[39m
+     [33m[2m✓[22m[39m renders all tabs with correct labels and places Dashboard in the center position [33m 394[2mms[22m[39m
+ [32m✓[39m src/components/login/LoginInfoModal.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 763[2mms[22m[39m
+ [32m✓[39m src/components/busList/BusListHeader.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 367[2mms[22m[39m
+ [32m✓[39m src/components/busCard/BusInputModal.test.tsx [2m([22m[2m30 tests[22m[2m)[22m[33m 5432[2mms[22m[39m
+     [33m[2m✓[22m[39m renders modal header with unit name and close button when isOpen is true [33m 564[2mms[22m[39m
+     [33m[2m✓[22m[39m navigates between Shift 1, Shift 2, Ritase, and Ket tabs correctly [33m 628[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/BusInputModalSingleFocus.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 765[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringRouteCardModern.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 540[2mms[22m[39m
+     [33m[2m✓[22m[39m renders priority metrics: Renops, Realops, Total Pelanggan, TOA, Manual, KM/Bus, %, H-1, H-7 [33m 333[2mms[22m[39m
+ [32m✓[39m src/components/ui/ModalShell.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 417[2mms[22m[39m
+ [32m✓[39m src/components/accumulation/AccumulationSheet.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 530[2mms[22m[39m
+     [33m[2m✓[22m[39m renders period options and controls when isOpen is true [33m 325[2mms[22m[39m
+ [32m✓[39m src/components/profileMenu/UserProfileHeader.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 424[2mms[22m[39m
+ [32m✓[39m src/utils/alertUtils.test.ts [2m([22m[2m45 tests[22m[2m)[22m[33m 440[2mms[22m[39m
+ [32m✓[39m src/components/BottomNav.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 502[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/useBusInputForm.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 599[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/fields/BusFormField.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 632[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/IngestionProgressModal.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 350[2mms[22m[39m
+[90mstderr[2m | src/components/dailyToaTrend/DailyToaTrendCard.test.tsx[2m > [22m[2mDailyToaTrendCard[2m > 
+[22m[2mrenders error state when fetching monthly trend data fails
+[22m[39m[DailyToaTrendCard] Gagal memuat tren: Error: Network Error
+    at D:/MINE/SS_PDO/src/components/dailyToaTrend/DailyToaTrendCard.test.tsx:32:7
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+ [32m✓[39m src/components/profileMenu/ProfileFeaturesSection.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 244[2mms[22m[39m
+ [32m✓[39m src/components/dailyToaTrend/DailyToaTrendCard.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 441[2mms[22m[39m
+ [32m✓[39m src/components/fleetStatus/ShiftConfirmationAlertBar.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m src/components/userManagement/RoleBadge.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 186[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/useOfflineSync.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m src/utils/historyNavigation.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 320[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/useBusModalOdometer.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 280[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/SwipeableContainer.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/QueueModal.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 239[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/QueueReportIntegration.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 749[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/useDashboardUiState.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+DOMException [NotSupportedError]: Failed to load script "https://apis.google.com/js/api.js". JavaScript file loading 
+is disabled.
+    at HTMLScriptElement.#loadScript (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-do
+m/lib/nodes/html-script-element/HTMLScriptElement.js:549:31)
+    at HTMLScriptElement.[connectedToDocument] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_module
+s/happy-dom/lib/nodes/html-script-element/HTMLScriptElement.js:315:33)
+    at HTMLScriptElement.[connectedToNode] 
+(file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:794:53)
+    at HTMLBodyElement.[appendChild] 
+(file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:413:45)
+    at HTMLBodyElement.[appendChild] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-do
+m/lib/nodes/element/Element.js:1072:62)
+    at HTMLBodyElement.appendChild 
+(file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:306:48)
+    at D:/MINE/SS_PDO/src/services/googleSheets/authGis.ts:221:23
+    at new Promise (<anonymous>)
+    at initGoogleApi (D:/MINE/SS_PDO/src/services/googleSheets/authGis.ts:31:10)
+    at D:/MINE/SS_PDO/src/services/googleSheets/auth.test.ts:90:18
+ [32m✓[39m src/services/googleSheets/auth.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 183[2mms[22m[39m
+DOMException [AbortError]: The operation was aborted.
+    at Fetch.onAsyncTaskManagerAbort 
+(file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/fetch/Fetch.js:546:23)
+    at Object.<anonymous> 
+(file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/fetch/Fetch.js:416:101)
+    at AsyncTaskManager.abortAll (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/li
+b/async-task-manager/AsyncTaskManager.js:292:30)
+    at AsyncTaskManager.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/a
+sync-task-manager/AsyncTaskManager.js:52:21)
+    at DetachedBrowserFrame.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/l
+ib/browser/detached-browser/DetachedBrowserFrame.js:112:58)
+    at DetachedWindowAPI.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/
+window/DetachedWindowAPI.js:51:35)
+    at teardownWindow (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b
+5175cf/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:331:22)
+    at Object.teardown (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7
+b5175cf/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:392:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modu
+les/vitest/dist/chunks/base.B6Opl8PE.js:168:65
+    at Traces.$ (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf
+/node_modules/vitest/dist/chunks/traces.DT5aQ62U.js:142:27)
+[90mstderr[2m | fetchGoogleUserProfile (D:\MINE\SS_PDO\src\services\googleSheets\authSession.ts:263:13)
+[22m[39m[Auth] Gagal mengambil profil userinfo dari Google: DOMException [NetworkError]: Failed to execute "fetch()" 
+on "Window" with URL "https://www.googleapis.com/oauth2/v3/userinfo": The operation was aborted.
+    at Fetch.onError [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/happy-dom@20.11.1/node_modules/[4mh
+appy-dom[24m/lib/fetch/Fetch.js:540:21[90m)[39m
+[90m    at ClientRequest.emit (node:events:508:28)[39m
+[90m    at emitErrorEvent (node:_http_client:108:11)[39m
+[90m    at TLSSocket.socketErrorListener (node:_http_client:575:5)[39m
+[90m    at TLSSocket.emit (node:events:508:28)[39m
+[90m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[90m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+
+ [32m✓[39m src/hooks/__tests__/useUserActivityTracking.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 160[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/usePreviousDayOdometer.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 194[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/useDashboardSyncHandlers.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 128[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalKeterangan.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 141[2mms[22m[39m
+ [32m✓[39m src/utils/numberUtils.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+ [32m✓[39m src/constants/texts/texts.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m src/utils/waReportGenerator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 89[2mms[22m[39m
+ [32m✓[39m src/components/busCard/useBusCardModal.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 186[2mms[22m[39m
+ [32m✓[39m src/components/busCard/useBusCardSave.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+[90mstderr[2m | src/utils/cacheUtils.test.ts[2m > [22m[2mcacheUtils[2m > [22m[2mgetRoutesFromCache[2m > 
+[22m[2mreturns empty array when cache is empty or corrupted
+[22m[39m[CacheUtils] Corrupt routes cache found, returning empty array: SyntaxError: Expected property name or '}' 
+in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at getRoutesFromCache (D:/MINE/SS_PDO/src/utils/cacheUtils.ts:34:25)
+    at D:/MINE/SS_PDO/src/utils/cacheUtils.test.ts:123:14
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+
+ [32m✓[39m src/utils/cacheUtils.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+[90mstderr[2m | src/services/routeService.test.ts[2m > [22m[2mrouteService[2m > [22m[2mfetchRoutesWithSheets 
+returns cached data when offline or error occurs
+[22m[39m[RouteService] Offline/Error fetching from Supabase, loading local cache: Error: Network error
+    at D:/MINE/SS_PDO/src/services/routeService.test.ts:71:61
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstdout[2m | src/services/routeService.test.ts[2m > [22m[2mrouteService[2m > [22m[2mverifyUserProfile falls back to cached active profile on network error
+[22m[39m[RouteService] User profile verified via offline cache fallback.
+
+[90mstderr[2m | src/services/routeService.test.ts[2m > [22m[2mrouteService[2m > [22m[2mverifyUserProfile falls 
+back to cached active profile on network error
+[22m[39m[RouteService] Error verifying user profile, checking offline cache fallback: TypeError: Failed to fetch
+    at D:/MINE/SS_PDO/src/services/routeService.test.ts:200:41
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstdout[2m | src/services/routeService.test.ts[2m > [22m[2mrouteService[2m > [22m[2mverifyUserProfile falls back to cached active profile when supabase resolves with non-PGRST116 error
+[22m[39m[RouteService] User profile verified via offline cache fallback.
+
+ [32m✓[39m src/services/routeService.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+[90mstderr[2m | src/services/fleetStatusService.test.ts[2m > [22m[2mfleetStatusService[2m > 
+[22m[2mfetchFleetStatusesMaster[2m > [22m[2mreturns fallback default statuses when query fails or error occurs
+[22m[39m[fleetStatusService] Gagal mengambil master status armada: { message: [32m'DB error'[39m }
+
+ [32m✓[39m src/services/fleetStatusService.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/singleFocus/SingleFocusKmRolloverBanner.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 131[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/useVisualViewport.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+[90mstderr[2m | src/utils/errorFormatter.test.ts[2m > [22m[2mformatUserError[2m > [22m[2mreturns null for null 
+input or user cancelled popups
+[22m[39m[System Error Details]: { type: [32m'popup_closed_by_user'[39m }
+[System Error Details]: Error: Login dibatalkan
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:8:28
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | src/utils/errorFormatter.test.ts[2m > [22m[2mformatUserError[2m > [22m[2msanitizes technical 
+credentials and .env error messages
+[22m[39m[System Error Details]: Error: API Credentials missing in .env file
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:12:20
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | src/utils/errorFormatter.test.ts[2m > [22m[2mformatUserError[2m > [22m[2msanitizes network 
+errors
+[22m[39m[System Error Details]: TypeError: Failed to fetch
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:20:20
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | src/utils/errorFormatter.test.ts[2m > [22m[2mformatUserError[2m > [22m[2msanitizes Google 
+Sheets column header mismatch errors
+[22m[39m[System Error Details]: Error: Tidak bisa menemukan kolom "No Body / Unit".
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:27:23
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | src/utils/errorFormatter.test.ts[2m > [22m[2mformatUserError[2m > [22m[2msanitizes 403 and 
+insufficient scopes auth errors
+[22m[39m[System Error Details]: Error: Request had insufficient authentication scopes.
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:35:22
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | src/utils/errorFormatter.test.ts[2m > [22m[2mformatUserError[2m > [22m[2muses custom fallback 
+message for unknown errors
+[22m[39m[System Error Details]: Error: Random unexpected error
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:42:24
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | src/utils/errorFormatter.test.ts[2m > [22m[2mformatUserError[2m > [22m[2msanitizes database 
+schema cache and postgrest errors
+[22m[39m[System Error Details]: Error: Could not find the 'fleet_confirmed_s2_at' column of 'daily_route_reports' in 
+the schema cache
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:48:19
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+[System Error Details]: Error: Could not find the 'fleet_confirmed_s2_at' column of 'daily_route_reports' in the 
+schema cache
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:48:19
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+ [32m✓[39m src/utils/errorFormatter.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/services/dailyRouteReportService.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 244[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalPreConfirm.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m src/services/allRouteMonitoringService.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m src/utils/scrollLockCoordinator.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+[90mstderr[2m | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts[2m > 
+[22m[2mformatUserError[2m > [22m[2mreturns null for null input or user cancelled popups
+[22m[39m[System Error Details]: { type: [32m'popup_closed_by_user'[39m }
+[System Error Details]: Error: Login dibatalkan
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:8:28
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts[2m > 
+[22m[2mformatUserError[2m > [22m[2msanitizes technical credentials and .env error messages
+[22m[39m[System Error Details]: Error: API Credentials missing in .env file
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:12:20
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts[2m > 
+[22m[2mformatUserError[2m > [22m[2msanitizes network errors
+[22m[39m[System Error Details]: TypeError: Failed to fetch
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:20:20
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts[2m > 
+[22m[2mformatUserError[2m > [22m[2msanitizes Google Sheets column header mismatch errors
+[22m[39m[System Error Details]: Error: Tidak bisa menemukan kolom "No Body / Unit".
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:27:23
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts[2m > 
+[22m[2mformatUserError[2m > [22m[2muses custom fallback message for unknown errors
+[22m[39m[System Error Details]: Error: Random unexpected error
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:35:24
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/
+[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///D:/MINE/SS_PDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.1.10/node_modules/[4m@vitest/runn
+er[24m/dist/chunk-artifact.js:2955:64
+
+ [32m✓[39m .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+[90mstdout[2m | src/services/googleSheets/transport.test.ts[2m > [22m[2mtransport adapter[2m > [22m[2mdetects active proxy when Edge Function reports configured: true
+[22m[39m[Transport] Google Service Account Proxy aktif via Supabase Edge Function: service-bot@example.com
+
+ [32m✓[39m src/services/googleSheets/transport.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/utils/keteranganUtils.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/utils/errorClassifier.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/constants/operators.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/busInputValidation.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/services/regionalIngestionService.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalOdometer.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/utils/sheetColorUtils.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalValidation.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/utils/unitAnalytics.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/busInputPayload.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/utils/routeValidation.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/services/appSettingsService.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/utils/analytics.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/utils/holidayUtils.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/utils/modals/bulkModals.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/utils/sheetIdentity.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/services/googleSheets/globalReportReader.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/services/googleSheets/core.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/utils/auditLogContext.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/utils/conflictMerge.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m .worktrees/feat-supabase-integration/src/utils/analytics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/odometerRegistry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/utils/modalStackCoordinator.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/utils/roleStorage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m88 passed[39m[22m[90m (88)[39m
+[2m      Tests [22m [1m[32m675 passed[39m[22m[90m (675)[39m
+[2m   Start at [22m 20:05:17
+[2m   Duration [22m 39.07s[2m (transform 14.33s, setup 0ms, import 51.88s, tests 36.62s, environment 96.09s)[22m
+

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { MAX_TOA_VALUE } from "@/utils/modals/busInput/busModalTypes";
-import { TEXT_ALERTS } from "@/constants/texts";
+import { TEXT_ALERTS, TEXT_COMMON } from "@/constants/texts";
 import type { BusInputFormReturn } from "./useBusInputForm";
 import { AlertTriangle, Copy, ChevronDown, ChevronUp } from "lucide-react";
+import { BusFormField } from "./fields/BusFormField";
+import { ShiftOptionChip } from "./fields/ShiftOptionChip";
 
 interface BusInputModalShift2Props {
   form: BusInputFormReturn;
@@ -46,49 +48,6 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
     setToaShift2(val);
   };
 
-  const heroInputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "10px 12px",
-    borderRadius: "12px",
-    border: "1.5px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-    background: "rgba(0, 0, 0, 0.35)",
-    color: "var(--text-primary, #ededed)",
-    fontSize: "1.15rem",
-    fontWeight: 800,
-    boxSizing: "border-box",
-    textAlign: "left",
-  };
-
-  const secondaryInputStyle: React.CSSProperties = {
-    width: "100%",
-    padding: "10px 12px",
-    borderRadius: "12px",
-    border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-    background: "rgba(0, 0, 0, 0.25)",
-    color: "var(--text-primary, #ededed)",
-    fontSize: "0.95rem",
-    boxSizing: "border-box",
-  };
-
-  const getChipStyle = (isActive: boolean): React.CSSProperties => ({
-    padding: "6px 12px",
-    borderRadius: "9999px",
-    fontSize: "0.78rem",
-    fontWeight: 600,
-    border: "1px solid",
-    borderColor: isActive
-      ? "var(--accent-color, #38bdf8)"
-      : "var(--card-border, rgba(255, 255, 255, 0.1))",
-    background: isActive
-      ? "rgba(56, 189, 248, 0.15)"
-      : "rgba(255, 255, 255, 0.04)",
-    color: isActive
-      ? "var(--accent-color, #38bdf8)"
-      : "var(--text-secondary, #8b8b8b)",
-    cursor: "pointer",
-    transition: "all 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
-  });
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
       {/* 1. Paket Pasangan Berdampingan: TOTAL TOA & KM Akhir S2 */}
@@ -99,74 +58,36 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           gap: "12px",
         }}
       >
-        <div>
-          <label
-            htmlFor="input-toa-s2"
-            style={{
-              fontSize: "0.82rem",
-              fontWeight: 700,
-              color: "var(--text-secondary, #8b8b8b)",
-              display: "block",
-              marginBottom: "6px",
-            }}
-          >
-            {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA}
-          </label>
-          <input
-            ref={toaS2InputRef}
-            id="input-toa-s2"
-            type="number"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            min="0"
-            max={MAX_TOA_VALUE}
-            value={displayToaValue}
-            onChange={(e) => handleToaChange(e.target.value)}
-            onFocus={handleInputFocus}
-            onKeyDown={handleInputKeyDown}
-            placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.TOTAL_TOA}
-            style={heroInputStyle}
-          />
-        </div>
+        <BusFormField
+          ref={toaS2InputRef}
+          id="input-toa-s2"
+          label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA}
+          variant="hero"
+          type="number"
+          min="0"
+          max={MAX_TOA_VALUE}
+          value={displayToaValue}
+          onChange={(e) => handleToaChange(e.target.value)}
+          onFocus={handleInputFocus}
+          onKeyDown={handleInputKeyDown}
+          placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.TOTAL_TOA}
+        />
 
-        <div>
-          <label
-            htmlFor="input-km-akhir-2"
-            style={{
-              fontSize: "0.82rem",
-              fontWeight: 700,
-              color: "var(--text-secondary, #8b8b8b)",
-              display: "block",
-              marginBottom: "6px",
-            }}
-          >
-            {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S2}
-          </label>
-          <input
-            id="input-km-akhir-2"
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            disabled={form.isKmAkhir2Locked}
-            value={kmAkhir2}
-            onChange={(e) => setKmAkhir2(e.target.value)}
-            onFocus={handleInputFocus}
-            onKeyDown={handleInputKeyDown}
-            placeholder={
-              form.isKmAkhir2Locked
-                ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
-                : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2
-            }
-            style={{
-              ...heroInputStyle,
-              opacity: form.isKmAkhir2Locked ? 0.45 : 1,
-              cursor: form.isKmAkhir2Locked ? "not-allowed" : "text",
-              background: form.isKmAkhir2Locked
-                ? "rgba(255, 255, 255, 0.03)"
-                : heroInputStyle.background,
-            }}
-          />
-        </div>
+        <BusFormField
+          id="input-km-akhir-2"
+          label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S2}
+          variant="hero"
+          disabled={form.isKmAkhir2Locked}
+          value={kmAkhir2}
+          onChange={(e) => setKmAkhir2(e.target.value)}
+          onFocus={handleInputFocus}
+          onKeyDown={handleInputKeyDown}
+          placeholder={
+            form.isKmAkhir2Locked
+              ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
+              : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2
+          }
+        />
       </div>
 
       {/* 2. Live Feedback Box: Kalkulasi TOA S2 */}
@@ -286,7 +207,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             }}
           >
             {showKmAwalEdit ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-            <span>{showKmAwalEdit ? "Tutup" : "Ubah"}</span>
+            <span>{showKmAwalEdit ? TEXT_COMMON.BUTTONS.CLOSE : TEXT_COMMON.BUTTONS.EDIT}</span>
           </button>
         </div>
 
@@ -355,23 +276,10 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
         {/* Collapsible Edit KM Awal S2 */}
         {showKmAwalEdit && (
           <div style={{ marginTop: "6px", paddingTop: "6px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.08))" }}>
-            <label
-              htmlFor="input-km-awal-2"
-              style={{
-                fontSize: "0.78rem",
-                fontWeight: 600,
-                color: "var(--text-secondary, #8b8b8b)",
-                display: "block",
-                marginBottom: "4px",
-              }}
-            >
-              {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S2}
-            </label>
-            <input
+            <BusFormField
               id="input-km-awal-2"
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
+              label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S2}
+              variant="secondary"
               disabled={form.isKmAwal2Locked}
               value={kmAwal2}
               onChange={(e) => setKmAwal2(e.target.value)}
@@ -382,14 +290,6 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                   ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_S2_LOCKED
                   : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_2
               }
-              style={{
-                ...secondaryInputStyle,
-                opacity: form.isKmAwal2Locked ? 0.45 : 1,
-                cursor: form.isKmAwal2Locked ? "not-allowed" : "text",
-                background: form.isKmAwal2Locked
-                  ? "rgba(255, 255, 255, 0.03)"
-                  : secondaryInputStyle.background,
-              }}
             />
           </div>
         )}
@@ -397,25 +297,25 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
 
       {/* 4. Action Chips Bar (Manual S2 & Catatan) */}
       <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-        <button
-          type="button"
-          onClick={() => setShowManual2((prev) => !prev)}
-          style={getChipStyle(showManual2)}
-        >
-          {showManual2
-            ? `✓ ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2}`
-            : TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_MANUAL_S2}
-        </button>
+        <ShiftOptionChip
+          isActive={showManual2}
+          onToggle={() => setShowManual2((prev) => !prev)}
+          label={
+            showManual2
+              ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_LABEL(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2)
+              : TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_MANUAL_S2
+          }
+        />
 
-        <button
-          type="button"
-          onClick={() => setShowKeterangan?.((prev) => !prev)}
-          style={getChipStyle(Boolean(showKeterangan))}
-        >
-          {showKeterangan
-            ? `✓ ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_NOTES}`
-            : TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN}
-        </button>
+        <ShiftOptionChip
+          isActive={Boolean(showKeterangan)}
+          onToggle={() => setShowKeterangan?.((prev) => !prev)}
+          label={
+            showKeterangan
+              ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_LABEL(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_NOTES)
+              : TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN
+          }
+        />
       </div>
 
       {/* 5. Collapsible Field: Manual Shift 2 */}
@@ -428,23 +328,11 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
           }}
         >
-          <label
-            htmlFor="input-manual-s2"
-            style={{
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              color: "var(--text-secondary, #8b8b8b)",
-              display: "block",
-              marginBottom: "4px",
-            }}
-          >
-            {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2}
-          </label>
-          <input
+          <BusFormField
             id="input-manual-s2"
+            label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2}
+            variant="secondary"
             type="number"
-            inputMode="numeric"
-            pattern="[0-9]*"
             min="0"
             max={MAX_TOA_VALUE}
             value={manualShift2}
@@ -452,7 +340,6 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
             placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_MANUAL_S2}
-            style={secondaryInputStyle}
           />
         </div>
       )}
@@ -487,7 +374,14 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             onFocus={handleInputFocus}
             placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_PLACEHOLDER}
             style={{
-              ...secondaryInputStyle,
+              width: "100%",
+              padding: "10px 12px",
+              borderRadius: "12px",
+              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+              background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
+              color: "var(--text-primary, #ededed)",
+              fontSize: "0.95rem",
+              boxSizing: "border-box",
               resize: "none",
               fontFamily: "inherit",
             }}

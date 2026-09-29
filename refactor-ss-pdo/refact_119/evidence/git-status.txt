@@ -1,0 +1,52 @@
+$ git status
+On branch devmode
+Your branch is up to date with 'origin/devmode'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   src/components/busCard/BusInputModal.test.tsx
+	modified:   src/components/busCard/BusInputModal.tsx
+	modified:   src/components/busCard/modal/BusInputModalShift1.tsx
+	modified:   src/components/busCard/modal/BusInputModalShift2.tsx
+	modified:   src/components/busCard/modal/BusInputModalSingleFocus.tsx
+	modified:   src/components/busCard/modal/singleFocus/SingleFocusKm.tsx
+	modified:   src/components/busCard/modal/singleFocus/SingleFocusKmRolloverBanner.tsx
+	modified:   src/components/busCard/modal/singleFocus/SingleFocusKmShift1.tsx
+	modified:   src/components/busCard/modal/singleFocus/SingleFocusKmShift2.tsx
+	modified:   src/components/busCard/modal/singleFocus/SingleFocusNotes.tsx
+	modified:   src/components/busCard/modal/singleFocus/SingleFocusToa.tsx
+	modified:   src/components/busCard/modal/singleFocus/singleFocusStyles.ts
+	modified:   src/components/busCard/modal/useBusInputForm.test.tsx
+	modified:   src/components/busCard/modal/useBusInputForm.ts
+	modified:   src/components/dashboard/QueueModal.tsx
+	modified:   src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx
+	modified:   src/components/monitoring/modals/MonitoringRouteDetailModal.tsx
+	modified:   src/components/pdoReport/ReportModalLayout.tsx
+	modified:   src/components/pdoReport/RouteOperationalReportCard.test.tsx
+	modified:   src/constants/texts/text_alerts.ts
+	modified:   src/constants/texts/text_monitoring.ts
+	modified:   src/constants/texts/texts.test.ts
+	modified:   src/index.css
+	modified:   src/utils/historyNavigation.ts
+	modified:   src/utils/modals/busInput/busModalOdometer.test.ts
+	modified:   src/utils/modals/busInput/busModalOdometer.ts
+	modified:   vite.config.ts
+
+Untracked files:
+	refactor-ss-pdo/refact_119/
+	src/components/busCard/modal/busInputPayload.test.ts
+	src/components/busCard/modal/busInputPayload.ts
+	src/components/busCard/modal/busInputValidation.test.ts
+	src/components/busCard/modal/busInputValidation.ts
+	src/components/busCard/modal/fields/
+	src/components/busCard/modal/useBusModalOdometer.test.tsx
+	src/components/busCard/modal/useBusModalOdometer.ts
+	src/components/dashboard/QueueModal.test.tsx
+	src/components/dashboard/QueueReportIntegration.test.tsx
+	src/components/pdoReport/ReportModalLayout.test.tsx
+	src/components/ui/
+	src/utils/modalStackCoordinator.test.ts
+	src/utils/modalStackCoordinator.ts
+	src/utils/scrollLockCoordinator.test.ts
+	src/utils/scrollLockCoordinator.ts

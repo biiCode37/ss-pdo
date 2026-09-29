@@ -1,0 +1,7 @@
+pnpm run lint
+
+Found 72 warnings and 0 errors.
+Finished in 41ms on 324 files with 103 rules using 8 threads.
+Exit Code: 0
+Baseline: 72 warnings, 0 errors
+Delta: 0 new warnings, 0 errors

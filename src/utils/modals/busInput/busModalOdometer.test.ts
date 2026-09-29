@@ -3,6 +3,8 @@ import {
   extractLeading3Digits,
   computeRealtimeDistance,
   computeLiveToaShift2,
+  sanitizeKmAwal,
+  sanitizeKmAkhir,
 } from "./busModalOdometer";
 import { TEXT_ALERTS } from "@/constants/texts";
 
@@ -76,6 +78,66 @@ describe("busModalOdometer", () => {
     it("returns empty status when either input is missing", () => {
       expect(computeLiveToaShift2("", "150").status).toBe("empty");
       expect(computeLiveToaShift2("250", "").status).toBe("empty");
+    });
+  });
+
+  describe("sanitizeKmAwal", () => {
+    it("returns empty string for empty or whitespace-only inputs (batas kosong)", () => {
+      expect(sanitizeKmAwal("")).toBe("");
+      expect(sanitizeKmAwal("   ")).toBe("");
+      expect(sanitizeKmAwal("", "1000", "292000")).toBe("");
+    });
+
+    it("clears phantom 3-digit draft matching previous day leading digits", () => {
+      // previous day is 292990 -> leading 3 digits is 292
+      expect(sanitizeKmAwal("292", undefined, "292990")).toBe("");
+      expect(sanitizeKmAwal("292", "", "292990")).toBe("");
+      // formatted previous day 292.990
+      expect(sanitizeKmAwal("292", undefined, "292.990")).toBe("");
+    });
+
+    it("retains 3-digit input if it does NOT match previous day draft", () => {
+      expect(sanitizeKmAwal("123", undefined, "292990")).toBe("123");
+    });
+
+    it("respects existing saved value even if it is 3 digits or matches previous day draft", () => {
+      // Kontrak lama: nilai tersimpan eksisting dihormati
+      expect(sanitizeKmAwal("292", "292", "292990")).toBe("292");
+      expect(sanitizeKmAwal("100", "100", "100500")).toBe("100");
+    });
+
+    it("preserves full KM inputs without alteration", () => {
+      expect(sanitizeKmAwal("292003", undefined, "292990")).toBe("292003");
+      expect(sanitizeKmAwal("145.820", "145.800", "145.800")).toBe("145.820");
+      expect(sanitizeKmAwal("  293000  ", undefined, "292990")).toBe("293000");
+    });
+  });
+
+  describe("sanitizeKmAkhir", () => {
+    it("returns empty string for empty or whitespace-only inputs (batas kosong)", () => {
+      expect(sanitizeKmAkhir("", "292000")).toBe("");
+      expect(sanitizeKmAkhir("   ", "292000")).toBe("");
+      expect(sanitizeKmAkhir("", "", "1050")).toBe("");
+    });
+
+    it("clears phantom 3-digit draft prefix of kmAwal", () => {
+      // kmAwal is 292000, draft kmAkhir is "292"
+      expect(sanitizeKmAkhir("292", "292000")).toBe("");
+      expect(sanitizeKmAkhir("145", "145820")).toBe("");
+    });
+
+    it("retains 3-digit input if it is not a prefix of kmAwal", () => {
+      expect(sanitizeKmAkhir("300", "292000")).toBe("300");
+    });
+
+    it("respects existing saved value even if 3 digits and prefix of kmAwal", () => {
+      expect(sanitizeKmAkhir("292", "292000", "292")).toBe("292");
+    });
+
+    it("preserves full KM inputs without alteration", () => {
+      expect(sanitizeKmAkhir("292150", "292000")).toBe("292150");
+      expect(sanitizeKmAkhir("145.920", "145.800")).toBe("145.920");
+      expect(sanitizeKmAkhir("  292100  ", "292000")).toBe("292100");
     });
   });
 });

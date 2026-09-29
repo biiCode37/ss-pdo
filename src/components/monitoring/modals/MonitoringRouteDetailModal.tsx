@@ -70,15 +70,15 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
   const totalRitasePp = route.totalRitasePp !== undefined
     ? route.totalRitasePp
     : route.totalTrips
-    ? Math.round(route.totalTrips / 2)
+    ? route.totalTrips / 2
     : 0;
   const kmBaku = route.kmBaku || 0;
   const ritasePerBus = route.ritasePerBus !== undefined
-    ? Number(route.ritasePerBus).toFixed(1)
+    ? route.ritasePerBus
     : route.tripsPerBus !== undefined
-    ? Number((route.tripsPerBus / 2).toFixed(1))
+    ? route.tripsPerBus / 2
     : realops > 0
-    ? (totalRitasePp / realops).toFixed(1)
+    ? totalRitasePp / realops
     : 0;
   const paxPerBus = route.paxPerBus !== undefined
     ? Math.round(route.paxPerBus)
@@ -190,7 +190,9 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               }}
             >
               {TEXT_MONITORING.ROUTE_DETAIL_MODAL.SUBTITLE(
-                route.routeName || route.operatorName || "Mikrotrans",
+                route.routeName ||
+                  route.operatorName ||
+                  TEXT_MONITORING.ROUTE_DETAIL_MODAL.DEFAULT_OPERATOR,
                 route.supervisorName
               )}
             </div>
@@ -290,7 +292,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                 justifyContent: "center",
                 borderRadius: "6px",
               }}
-              title="Tutup Modal"
+              title={TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_CLOSE_TITLE}
             >
               <X size={18} />
             </button>
@@ -436,7 +438,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                     {realops} <span style={{ fontSize: "11px", fontWeight: 500 }}>{tMetrics.UNIT_BUS}</span>
                   </div>
                   <div style={{ fontSize: "10.5px", color: "var(--text-secondary)", marginTop: "2px" }}>
-                    S1: {route.realopsShift1 ?? "-"} • S2: {route.realopsShift2 ?? "-"}
+                    {tMetrics.REALOPS_SHIFT_SUBTEXT(route.realopsShift1 ?? "-", route.realopsShift2 ?? "-")}
                   </div>
                 </div>
               </div>
@@ -507,10 +509,10 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                     {tMetrics.PELANGGAN_KM}
                   </div>
                   <div style={{ fontSize: "16px", fontWeight: 800, marginTop: "4px" }}>
-                    {paxPerKm} <span style={{ fontSize: "11px" }}>Org/KM</span>
+                    {paxPerKm} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_PAX_PER_KM}</span>
                   </div>
                   <div style={{ fontSize: "10px", color: "var(--text-secondary)", marginTop: "2px" }}>
-                    Target: {targetPaxPerKm} • Cap: {paxPerKmPct}%
+                    {tMetrics.TARGET_CAP_SUBTEXT(targetPaxPerKm, paxPerKmPct)}
                   </div>
                 </div>
               </div>
@@ -551,7 +553,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                     {targetPax > 0 ? targetPax.toLocaleString("id-ID") : "-"}
                   </div>
                   <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--accent-color, #3ECF8E)", marginTop: "1px" }}>
-                    Capaian: {paxPct}%
+                    {tMetrics.ACHIEVEMENT_PCT(paxPct)}
                   </div>
                 </div>
               </div>
@@ -716,7 +718,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                     {tMetrics.RITASE_BUS}
                   </div>
                   <div style={{ fontSize: "16px", fontWeight: 700, marginTop: "4px" }}>
-                    {ritasePerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_RIT}/Bus</span>
+                    {ritasePerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_RIT_PER_BUS}</span>
                   </div>
                 </div>
 
@@ -732,7 +734,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                     {tMetrics.PELANGGAN_BUS}
                   </div>
                   <div style={{ fontSize: "16px", fontWeight: 700, marginTop: "4px" }}>
-                    {paxPerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_PAX}/Bus</span>
+                    {paxPerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_PAX_PER_BUS}</span>
                   </div>
                 </div>
               </div>
