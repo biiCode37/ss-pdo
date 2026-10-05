@@ -80,7 +80,7 @@ export function AddRouteModal({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1050,
+        zIndex: 100000,
         padding: '16px',
         animation: 'fadeIn 0.2s ease-out',
       }}

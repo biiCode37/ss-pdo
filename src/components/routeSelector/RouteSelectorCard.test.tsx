@@ -426,4 +426,43 @@ describe('RouteSelectorCard - Mode Akumulasi Deactivation (ACC-17-01)', () => {
     expect(handleSetSelectedTab).toHaveBeenCalledWith('4');
     expect(handleLoadData).toHaveBeenCalledWith('4', 'https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit');
   });
+
+  it('closes bottom sheet drawer when clicking onOpenAddRoute to open AddRouteModal', async () => {
+    await act(async () => {
+      root.render(
+        <RouteSelectorCard
+          sheetUrl="https://docs.google.com/spreadsheets/d/1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk/edit"
+          setSheetUrl={vi.fn()}
+          selectedTab="1"
+          setSelectedTab={vi.fn()}
+          days={['1', '2', '3']}
+          isLoading={false}
+          isDataLoaded={true}
+          currentSheetId="1z0o91thOT38lgejTE_Bd2p3v_9VCDdQRkUsMIVqpQCk"
+          currentTabName="1"
+          onLoadData={vi.fn()}
+          externalOpenTrigger={1}
+        />
+      );
+    });
+
+    // Bottom sheet is open
+    const addRouteBtn = Array.from(container.querySelectorAll('button')).find((btn) =>
+      btn.textContent?.includes('Tambah Rute')
+    );
+    expect(addRouteBtn).toBeTruthy();
+
+    await act(async () => {
+      addRouteBtn?.click();
+    });
+
+    // AddRouteModal is now open
+    const modalHeader = container.querySelector('h3');
+    expect(modalHeader?.textContent).toContain('Tambah Rute Baru');
+
+    // RouteSelectorSheet drawer overlay is closed (display: none)
+    const sheetOverlay = container.querySelector('.route-selector-modal-overlay') as HTMLElement;
+    expect(sheetOverlay).toBeTruthy();
+    expect(sheetOverlay.style.display).toBe('none');
+  });
 });

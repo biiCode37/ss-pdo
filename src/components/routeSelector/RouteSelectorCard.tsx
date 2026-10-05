@@ -119,6 +119,13 @@ function RouteSelectorCardComponent({
     }
   }, [externalOpenTrigger]);
 
+  // Tutup drawer sheet saat modal tambah rute terbuka
+  useEffect(() => {
+    if (isAddingRoute) {
+      setIsSheetOpen(false);
+    }
+  }, [isAddingRoute]);
+
   const displayDateLabel = useMemo(() => {
     const targetYear = selectedYear ?? new Date().getFullYear();
     const targetMonth = selectedMonth ?? new Date().getMonth() + 1;
@@ -206,7 +213,10 @@ function RouteSelectorCardComponent({
           }
           setIsSheetOpen(false);
         }}
-        onOpenAddRoute={() => setIsAddingRoute(true)}
+        onOpenAddRoute={() => {
+          setIsSheetOpen(false);
+          setIsAddingRoute(true);
+        }}
         warningMessage={warningMessage}
         onExitAccumulation={onExitAccumulation}
       />
