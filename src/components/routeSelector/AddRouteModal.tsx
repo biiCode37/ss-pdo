@@ -1,12 +1,18 @@
+import { useState } from 'react';
 import { X, Loader2, CheckCircle, AlertCircle, Plus } from 'lucide-react';
 import { TEXT_DASHBOARD, TEXT_COMMON } from '../../constants/texts';
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler';
+import { BulkRouteSection } from './BulkRouteSection';
+import { useBulkRouteForm } from './useBulkRouteForm';
+import type { FlatRouteSheet } from './types';
 
 const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
 
 interface AddRouteModalProps {
   isOpen: boolean;
   onClose: () => void;
+  flatSheets?: FlatRouteSheet[];
+  loadRoutes?: () => Promise<any>;
   newRouteCodeSuffix: string;
   onRouteCodeSuffixChange: (val: string) => void;
   newMonth: number;
@@ -27,6 +33,8 @@ interface AddRouteModalProps {
 export function AddRouteModal({
   isOpen,
   onClose,
+  flatSheets = [],
+  loadRoutes = async () => [],
   newRouteCodeSuffix,
   onRouteCodeSuffixChange,
   newMonth,
@@ -43,6 +51,14 @@ export function AddRouteModal({
   isCheckingLink,
   onSaveRoute,
 }: AddRouteModalProps) {
+  const [activeTab, setActiveTab] = useState<'single' | 'bulk'>('single');
+
+  const bulkForm = useBulkRouteForm({
+    flatSheets,
+    loadRoutes,
+    onCloseModal: onClose,
+  });
+
   useMobileBackHandler({
     id: 'add_route_modal',
     isOpen,
@@ -145,8 +161,78 @@ export function AddRouteModal({
           </button>
         </div>
 
-        {/* Input Trayek JAK. */}
-        <div style={{ marginBottom: '12px' }}>
+        {/* Segmented Tab Switcher: Single vs Bulk */}
+        <div
+          style={{
+            display: 'flex',
+            background: 'var(--bg-secondary, rgba(255, 255, 255, 0.05))',
+            padding: '3px',
+            borderRadius: '10px',
+            marginBottom: '16px',
+            border: '1px solid var(--border-color)',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setActiveTab('single')}
+            style={{
+              flex: 1,
+              padding: '6px 10px',
+              fontSize: '12px',
+              fontWeight: activeTab === 'single' ? 600 : 500,
+              borderRadius: '7px',
+              border: 'none',
+              background: activeTab === 'single' ? 'var(--primary-color, #10b981)' : 'transparent',
+              color: activeTab === 'single' ? '#ffffff' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            {TEXT_DASHBOARD.ROUTE_SELECTOR.BULK_ADD.TAB_SINGLE}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('bulk')}
+            style={{
+              flex: 1,
+              padding: '6px 10px',
+              fontSize: '12px',
+              fontWeight: activeTab === 'bulk' ? 600 : 500,
+              borderRadius: '7px',
+              border: 'none',
+              background: activeTab === 'bulk' ? 'var(--primary-color, #10b981)' : 'transparent',
+              color: activeTab === 'bulk' ? '#ffffff' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            {TEXT_DASHBOARD.ROUTE_SELECTOR.BULK_ADD.TAB_BULK}
+          </button>
+        </div>
+
+        {activeTab === 'bulk' ? (
+          <BulkRouteSection
+            fallbackMonth={newMonth}
+            onFallbackMonthChange={onMonthChange}
+            fallbackYear={newYear}
+            onFallbackYearChange={onYearChange}
+            bulkRawText={bulkForm.bulkRawText}
+            onBulkRawTextChange={bulkForm.setBulkRawText}
+            bulkItems={bulkForm.bulkItems}
+            isInspecting={bulkForm.isInspecting}
+            inspectProgress={bulkForm.inspectProgress}
+            isSavingBulk={bulkForm.isSavingBulk}
+            bulkFormError={bulkForm.bulkFormError}
+            bulkSuccessMessage={bulkForm.bulkSuccessMessage}
+            onInspect={() => bulkForm.handleInspectBulk(newMonth, newYear)}
+            onToggleSelect={bulkForm.handleToggleSelect}
+            onToggleSelectAll={bulkForm.handleToggleSelectAll}
+            onSaveBulk={bulkForm.handleSaveBulk}
+          />
+        ) : (
+          <>
+            {/* Input Trayek JAK. */}
+            <div style={{ marginBottom: '12px' }}>
           <label
             style={{
               fontSize: '11.5px',
@@ -355,6 +441,8 @@ export function AddRouteModal({
           {isSaving ? <Loader2 className="spinner" size={18} /> : null}
           <span>{isSaving ? TEXT_DASHBOARD.ROUTE_SELECTOR.SAVING_ROUTE : TEXT_DASHBOARD.ROUTE_SELECTOR.SAVE_ROUTE_BTN}</span>
         </button>
+          </>
+        )}
       </div>
     </div>
   );

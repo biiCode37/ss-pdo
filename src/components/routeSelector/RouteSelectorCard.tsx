@@ -215,6 +215,8 @@ function RouteSelectorCardComponent({
       <AddRouteModal
         isOpen={isAddingRoute}
         onClose={resetForm}
+        flatSheets={flatSheets}
+        loadRoutes={loadRoutes}
         newRouteCodeSuffix={newRouteCodeSuffix}
         onRouteCodeSuffixChange={handleRouteCodeSuffixInput}
         newMonth={newMonth}
