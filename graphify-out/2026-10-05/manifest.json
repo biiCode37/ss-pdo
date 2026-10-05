@@ -185,8 +185,8 @@
     "semantic_hash": "f9cb81ddcea69ffdab672fc8c48dca66"
   },
   "vite.config.ts": {
-    "mtime": 1791164817.5010464,
-    "ast_hash": "7cf48760e63604177c5cfcfb7c00a42a",
+    "mtime": 1790591107.5126963,
+    "ast_hash": "5645b383e343921bd79be5d857dfbdd8",
     "semantic_hash": ""
   },
   "src/utils/numberUtils.ts": {
@@ -1110,8 +1110,8 @@
     "semantic_hash": ""
   },
   "src/services/routes/routes.ts": {
-    "mtime": 1791164317.6620176,
-    "ast_hash": "a7456d362ec46954b5f3be0a15d74ec8",
+    "mtime": 1788577603.843813,
+    "ast_hash": "fabb4b04e141e50b98ab295a2ef38a09",
     "semantic_hash": ""
   },
   "src/services/routes/sync.ts": {
@@ -1410,8 +1410,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_dashboard.ts": {
-    "mtime": 1791164115.5348814,
-    "ast_hash": "77387b2e8d1203862788b4faa4f34101",
+    "mtime": 1789968116.6554697,
+    "ast_hash": "e363fec95a25c007c131abf23d3b6a4d",
     "semantic_hash": ""
   },
   "src/constants/texts/text_errors.ts": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1791164081.1925,
-    "ast_hash": "2739e929e308ccdeaae0e9ea1ddf0ea3",
+    "mtime": 1790679808.230291,
+    "ast_hash": "af8e587943ce7b65f8fd26cbe19d60ec",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1520,8 +1520,8 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/AddRouteModal.tsx": {
-    "mtime": 1791164482.1942909,
-    "ast_hash": "1933642ce61851fef21cf67079c1a25c",
+    "mtime": 1789003499.9536316,
+    "ast_hash": "94c218eaaa9a3e477ba601a431ffa22f",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_22/AUDIT_BUGS.md": {
@@ -2190,8 +2190,8 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/index.ts": {
-    "mtime": 1791164507.912664,
-    "ast_hash": "f86e37a874a2c83c310c1d2da8516bd0",
+    "mtime": 1789301510.1637566,
+    "ast_hash": "ede1acbc85d906ec2cb594dec14716e5",
     "semantic_hash": ""
   },
   "src/components/routeSelector/types.ts": {
@@ -2705,8 +2705,8 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/RouteSelectorCard.tsx": {
-    "mtime": 1791164496.0659835,
-    "ast_hash": "f280336cbce9c99e684b873888e563fe",
+    "mtime": 1789301506.9847782,
+    "ast_hash": "839c4df74ef1ea8ea3bbac31f2457dda",
     "semantic_hash": ""
   },
   "src/components/userManagement/RoleBadge.test.tsx": {
@@ -4987,211 +4987,6 @@
   "refactor-ss-pdo/refact_126/evidence/history-state-repro.txt": {
     "mtime": 1790686483.347854,
     "ast_hash": "e723357c47fd669cba5d18fd6570d868",
-    "semantic_hash": ""
-  },
-  "src/components/routeSelector/BulkRouteSection.tsx": {
-    "mtime": 1791164662.8118894,
-    "ast_hash": "e1c9ba8c7b252f5477e0d3dc78799c37",
-    "semantic_hash": ""
-  },
-  "src/components/routeSelector/useBulkRouteForm.ts": {
-    "mtime": 1791164372.1690516,
-    "ast_hash": "01b859e0db4ee7ffac10824e1b756aaa",
-    "semantic_hash": ""
-  },
-  "src/services/routes/routes.test.ts": {
-    "mtime": 1791164329.0129268,
-    "ast_hash": "12f3ad6092637aa6d09602921f302221",
-    "semantic_hash": ""
-  },
-  "src/utils/bulkRouteInspector.test.ts": {
-    "mtime": 1791164177.6326447,
-    "ast_hash": "ec513b52c19cd4e3b2f421d16e361b53",
-    "semantic_hash": ""
-  },
-  "src/utils/bulkRouteInspector.ts": {
-    "mtime": 1791164196.1587346,
-    "ast_hash": "50c6dcd071bf6b218ed7290d0205a200",
-    "semantic_hash": ""
-  },
-  "src/utils/bulkRouteParser.test.ts": {
-    "mtime": 1791164134.4183855,
-    "ast_hash": "07113a7699292ad11712f6c660715e97",
-    "semantic_hash": ""
-  },
-  "src/utils/bulkRouteParser.ts": {
-    "mtime": 1791164149.265188,
-    "ast_hash": "4aecd65d7e781003aba557b47cb72b22",
-    "semantic_hash": ""
-  },
-  "docs/superpowers/plans/2026-10-05-bulk-add-routes.md": {
-    "mtime": 1791161861.8174467,
-    "ast_hash": "64a082d120751cee0bc436a21a39a384",
-    "semantic_hash": ""
-  },
-  "docs/superpowers/specs/2026-10-05-bulk-add-routes-design.md": {
-    "mtime": 1791161678.3285582,
-    "ast_hash": "1ede5fee04cf2b85958fd01b9c5c4fd3",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/AUDIT_BUGS.md": {
-    "mtime": 1790687246.1245878,
-    "ast_hash": "d81cd891eb346a5116b4dc8761d43a10",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/REPAIR_REPORT.md": {
-    "mtime": 1790687260.7135818,
-    "ast_hash": "817b210f622a85f1dbed9a07020be210",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/evidence/build.txt": {
-    "mtime": 1790687198.140293,
-    "ast_hash": "6908f19b0e66e3a66994e473fca9e173",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/evidence/file-sizes.txt": {
-    "mtime": 1790687198.3000286,
-    "ast_hash": "afa048fcd43fe16a5e4a0c22f65d9f29",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/evidence/git-status.txt": {
-    "mtime": 1790687198.2974262,
-    "ast_hash": "2b28374e244665abc08a11284c74ef63",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/evidence/src-tests.txt": {
-    "mtime": 1790687174.1992662,
-    "ast_hash": "7dc0c379583cb5713a3fafe8d2894c20",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/evidence/targeted-lint.txt": {
-    "mtime": 1790687180.404032,
-    "ast_hash": "8e6589eeca55c56a042293501a4a3b2f",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/evidence/targeted-tests.txt": {
-    "mtime": 1790687174.1992662,
-    "ast_hash": "1fd403117e042b7daa4f05716d11bdde",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_127/evidence/typecheck.txt": {
-    "mtime": 1790687189.6136544,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_128/AUDIT_BUGS.md": {
-    "mtime": 1790687853.789716,
-    "ast_hash": "1a5775fb988389b3d6cb602f6c7504fd",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_128/GEMINI_PHASE_04_BATCH_01.md": {
-    "mtime": 1790687828.2032309,
-    "ast_hash": "9abe3c427635b6e0b9ef4cdad45cdb94",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_128/PHASE_04_BATCH_PLAN.md": {
-    "mtime": 1790687825.593165,
-    "ast_hash": "e036d49a87287ad3a15d4603c3b74199",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_128/REPAIR_REPORT.md": {
-    "mtime": 1790687822.7980888,
-    "ast_hash": "ec94d3a7dc0b76e3697d0231e60a9c0d",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_129/AUDIT_BUGS.md": {
-    "mtime": 1790688870.8578,
-    "ast_hash": "4ff79b17236e0b028434b591db51b3b4",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_129/GEMINI_FAST_TRACK_RELEASE_READINESS.md": {
-    "mtime": 1790688873.5481973,
-    "ast_hash": "b8fead8303aec1d0aff93d01156e6b3c",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_129/REPAIR_REPORT.md": {
-    "mtime": 1790688872.3123803,
-    "ast_hash": "0f7ef0b473397896753c62a7ab07d068",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/AUDIT_BUGS.md": {
-    "mtime": 1790689434.0242395,
-    "ast_hash": "71d81ca9dfdd4a6a7b281af73cc87f72",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/REPAIR_REPORT.md": {
-    "mtime": 1790689451.1439548,
-    "ast_hash": "44ebd6bc7842d3c9d599410ae6e0d28b",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/evidence/baseline-build.txt": {
-    "mtime": 1790689144.0808263,
-    "ast_hash": "52513b4e033472403defd7302cf7844c",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/evidence/baseline-git.txt": {
-    "mtime": 1790689144.810743,
-    "ast_hash": "eff0a97bace2305008430a831f393083",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/evidence/baseline-lint.txt": {
-    "mtime": 1790689144.5640152,
-    "ast_hash": "a9554b768e5b7dffb828b37ec72ed9e1",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/evidence/baseline-tests.txt": {
-    "mtime": 1790689206.766795,
-    "ast_hash": "4be1af98d4d1a4cdc50b6b552bc1b5c7",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/evidence/baseline-typecheck.txt": {
-    "mtime": 1790689130.356873,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_130/evidence/file-sizes.txt": {
-    "mtime": 1790689421.6090136,
-    "ast_hash": "508d914e2995257d70cd48f9696ac3eb",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_131/AUDIT_BUGS.md": {
-    "mtime": 1790690062.318005,
-    "ast_hash": "417dce61d0af75f393adf990c6adb293",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_131/GEMINI_CORRECTION_PACKET.md": {
-    "mtime": 1790690064.938207,
-    "ast_hash": "f7327e3ed8085ac94700eb79f4504c71",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_131/OWNER_FIELD_TEST_RUNBOOK.md": {
-    "mtime": 1790690092.052913,
-    "ast_hash": "741da5a74603a4f3bd9348ed293bac2a",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_131/REPAIR_REPORT.md": {
-    "mtime": 1790690063.6274774,
-    "ast_hash": "8fa580ebac62eb4d6dd8f8c90f983214",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_132/AUDIT_BUGS.md": {
-    "mtime": 1790690807.407772,
-    "ast_hash": "ae0392e7fb44990214d8432d7e496e1b",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_132/REPAIR_REPORT.md": {
-    "mtime": 1790690808.8827596,
-    "ast_hash": "31f7e703025b228e38107ca564c0cef3",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_133/AUDIT_BUGS.md": {
-    "mtime": 1790692159.322045,
-    "ast_hash": "246674bdbd1a5a311f8a79cde3c59156",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_133/REPAIR_REPORT.md": {
-    "mtime": 1790692160.2671676,
-    "ast_hash": "6ea84c0920497d9d20f5d2cdd9223696",
     "semantic_hash": ""
   }
 }

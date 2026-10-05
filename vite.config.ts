@@ -20,6 +20,7 @@ export default defineConfig({
     },
   },
   build: {
+    emptyOutDir: false,
     // PERF: Pisahkan chunk vendor agar cache browser lebih efektif & parse
     // awal lebih ringan (chunk tunggal >500kB memicu warning & TTI lambat
     // pada jaringan lapangan yang lambat).
