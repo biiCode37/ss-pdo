@@ -1,8 +1,14 @@
-import { defineConfig } from "vite";
+import { defineConfig, configDefaults } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import path from "node:path";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   server: {
     headers: {
       "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
@@ -14,6 +20,7 @@ export default defineConfig({
     },
   },
   build: {
+    emptyOutDir: false,
     // PERF: Pisahkan chunk vendor agar cache browser lebih efektif & parse
     // awal lebih ringan (chunk tunggal >500kB memicu warning & TTI lambat
     // pada jaringan lapangan yang lambat).
@@ -70,4 +77,7 @@ export default defineConfig({
       },
     }),
   ],
+  test: {
+    exclude: [...configDefaults.exclude, "refactor-ss-pdo/**"],
+  },
 });

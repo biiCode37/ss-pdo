@@ -13,10 +13,26 @@ import type { CrossPeriodSummaryResult } from './types';
 
 const CACHE_KEY_ROUTES = 'PDO_CACHE_ROUTES';
 
+function safeGetStorage(key: string): string | null {
+  if (typeof localStorage === 'undefined') return null;
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeSetStorage(key: string, value: string): void {
+  if (typeof localStorage === 'undefined') return;
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
+}
+
 export async function fetchRoutesWithSheets(): Promise<Route[]> {
   // Jika Supabase belum dikonfigurasi, langsung fallback ke cache lokal
   if (!isSupabaseConfigured) {
-    const cached = localStorage.getItem(CACHE_KEY_ROUTES);
+    const cached = safeGetStorage(CACHE_KEY_ROUTES);
     return cached ? JSON.parse(cached) : [];
   }
 
@@ -29,13 +45,13 @@ export async function fetchRoutesWithSheets(): Promise<Route[]> {
 
     if (error) throw error;
     if (data) {
-      localStorage.setItem(CACHE_KEY_ROUTES, JSON.stringify(data));
-      localStorage.setItem('PDO_CACHE_ROUTES_TIMESTAMP', new Date().toISOString());
+      safeSetStorage(CACHE_KEY_ROUTES, JSON.stringify(data));
+      safeSetStorage('PDO_CACHE_ROUTES_TIMESTAMP', new Date().toISOString());
       return data;
     }
   } catch (err) {
     console.warn('[RouteService] Offline/Error fetching from Supabase, loading local cache:', err);
-    const cached = localStorage.getItem(CACHE_KEY_ROUTES);
+    const cached = safeGetStorage(CACHE_KEY_ROUTES);
     return cached ? JSON.parse(cached) : [];
   }
 
@@ -133,7 +149,7 @@ export async function createRouteWithSheet(params: {
 
     // Telemetry: Log CREATE_ROUTE
     logActivity({
-      user_email: localStorage.getItem('PDO_USER_EMAIL') || 'admin',
+      user_email: safeGetStorage('PDO_USER_EMAIL') || 'admin',
       action: 'CREATE_ROUTE',
       route_code: formattedCode,
       details: { year: params.year, month: params.month, spreadsheetId },
@@ -143,6 +159,55 @@ export async function createRouteWithSheet(params: {
   } catch (err: any) {
     console.error('[RouteService] Failed to create route with sheet:', err);
     return { success: false, message: 'Gagal menyimpan rute. Periksa koneksi internet Anda.' };
+  }
+}
+
+/**
+ * Menyimpan banyak rute Google Sheets sekaligus (Bulk Create).
+ */
+export async function createBulkRoutesWithSheets(
+  routes: Array<{
+    routeCode: string;
+    routeName?: string;
+    year: number;
+    month: number;
+    sheetUrl: string;
+    spreadsheetId: string;
+  }>
+): Promise<{ success: boolean; savedCount: number; message?: string }> {
+  if (!isSupabaseConfigured) {
+    return { success: false, savedCount: 0, message: 'Layanan Supabase belum dikonfigurasi.' };
+  }
+  if (!routes || routes.length === 0) {
+    return { success: true, savedCount: 0 };
+  }
+
+  try {
+    let savedCount = 0;
+    for (const r of routes) {
+      const res = await createRouteWithSheet(r);
+      if (res.success) {
+        savedCount++;
+      }
+    }
+
+    await fetchRoutesWithSheets();
+
+    logActivity({
+      user_email: safeGetStorage('PDO_USER_EMAIL') || 'admin',
+      action: 'BULK_CREATE_ROUTES',
+      route_code: routes.map((r) => r.routeCode).join(', '),
+      details: { totalAttempted: routes.length, savedCount },
+    }).catch(() => {});
+
+    return {
+      success: savedCount > 0,
+      savedCount,
+      message: `Berhasil menyimpan ${savedCount} dari ${routes.length} rute.`,
+    };
+  } catch (err: any) {
+    console.error('[RouteService] Failed bulk create routes:', err);
+    return { success: false, savedCount: 0, message: err?.message || 'Gagal menyimpan bulk rute.' };
   }
 }
 

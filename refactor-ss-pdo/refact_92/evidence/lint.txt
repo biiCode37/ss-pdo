@@ -1,0 +1,6 @@
+﻿
+> pusm-pdo-app@0.0.0 lint D:\MINE\SS_PDO
+> oxlint "src/components/busCard/modal/fields" "src/components/busCard/modal/BusInputModalShift1.tsx" "src/components/busCard/modal/BusInputModalShift2.tsx"
+
+Found 0 warnings and 0 errors.
+Finished in 18ms on 5 files with 103 rules using 8 threads.

@@ -1,0 +1,571 @@
+
+ RUN  v4.1.10 D:/MINE/SS_PDO
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > renders executive dashboard tab by default with KPIs and chart
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/monitoring/tabs/MonitoringDashboardTab.test.tsx (5 tests) 1648ms
+     ✓ renders 18-bar TOA chart and handles bar interaction  468ms
+     ✓ renders 4 Hero Macro KPI cards  367ms
+     ✓ renders Leaderboard with Top 3 & Bottom 3 routes  303ms
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > renders executive dashboard tab by default with KPIs and chart
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > renders executive dashboard tab by default with KPIs and chart
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to Rute tab and filters by supervisor
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to Rute tab and filters by supervisor
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/monitoring/tabs/MonitoringRoutesTab.test.tsx (6 tests) 1929ms
+     ✓ renders routes list and search toolbar  598ms
+     ✓ filters routes by search term  351ms
+     ✓ opens MonitoringRouteDetailModal when route card is clicked, and triggers onSelectRoute from modal  364ms
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to Rute tab and filters by supervisor
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/routeSelector/RouteSelectorCard.test.tsx (8 tests) 1635ms
+     ✓ allows user to pick date from Tanggal dropdown when in AKUMULASI mode instead of disabling it  617ms
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to Rute tab and filters by supervisor
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to Rute tab and filters by supervisor
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers verification when Verifikasi button on route card is clicked in Rute tab
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/pdoReport/RouteOperationalReportCard.test.tsx (5 tests) 1439ms
+     ✓ renders input fields for renops, realops, and jam spots  389ms
+     ✓ handles toggle spot and submit correctly  562ms
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers verification when Verifikasi button on route card is clicked in Rute tab
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/fleetStatus/FleetStatusModal.test.tsx (7 tests) 1555ms
+     ✓ renders all buses and header information  426ms
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers verification when Verifikasi button on route card is clicked in Rute tab
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers verification when Verifikasi button on route card is clicked in Rute tab
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers verification when Verifikasi button on route card is clicked in Rute tab
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers verification when Verifikasi button on route card is clicked in Rute tab
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to WhatsApp Report Studio tab via bottom nav
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to WhatsApp Report Studio tab via bottom nav
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/busCard/BusInputModal.test.tsx (22 tests) 3502ms
+     ✓ renders modal header with unit name and close button when isOpen is true  314ms
+     ✓ navigates between Shift 1, Shift 2, Ritase, and Ket tabs correctly  563ms
+     ✓ calculates live distance accurately for Shift 1 and Shift 2  312ms
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to WhatsApp Report Studio tab via bottom nav
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > navigates to WhatsApp Report Studio tab via bottom nav
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > updates selected date and calls onDateChange when step buttons are clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > displays data provenance badges (Input App vs Tarik Sheet) on route cards
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > displays data provenance badges (Input App vs Tarik Sheet) on route cards
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > displays data provenance badges (Input App vs Tarik Sheet) on route cards
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/AllRouteMonitoringPage.test.tsx > AllRouteMonitoringPage Component > displays data provenance badges (Input App vs Tarik Sheet) on route cards
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/monitoring/AllRouteMonitoringPage.test.tsx (7 tests) 4393ms
+     ✓ renders executive dashboard tab by default with KPIs and chart  859ms
+     ✓ navigates to Rute tab and filters by supervisor  658ms
+     ✓ triggers verification when Verifikasi button on route card is clicked in Rute tab  584ms
+     ✓ navigates to WhatsApp Report Studio tab via bottom nav  349ms
+     ✓ updates selected date and calls onDateChange when step buttons are clicked  805ms
+     ✓ triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked  406ms
+     ✓ displays data provenance badges (Input App vs Tarik Sheet) on route cards  727ms
+ ✓ src/components/busList/BusList.test.tsx (6 tests) 980ms
+     ✓ does not render duplicate shift lock banner inside BusList (handled centrally in DashboardStatusBanners)  588ms
+ ✓ src/components/profileMenu/ProfileMenuSheet.test.tsx (4 tests) 570ms
+ ✓ src/components/monitoring/tabs/MonitoringToaBarChart.test.tsx (3 tests) 1250ms
+     ✓ renders 18 horizontal route bars with full route code and full passenger count  1114ms
+ ✓ src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx (10 tests) 1581ms
+     ✓ renders route title, korlap, and tab Operasional by default  429ms
+ ✓ src/components/dashboard/QueueReportIntegration.test.tsx (8 tests) 808ms
+ ✓ src/components/login/LoginScreen.test.tsx (5 tests) 691ms
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > renders title, back button, and formatted date label
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > renders title, back button, and formatted date label
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > renders Refresh and Load All buttons side by side in the action row
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > renders Refresh and Load All buttons side by side in the action row
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > triggers showPicker fallback on date container tap
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > triggers showPicker fallback on date container tap
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > calls onDateInputChange when native date picker changes value
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > calls onDateInputChange when native date picker changes value
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > disables Refresh and Load All buttons when syncing or refreshing
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > disables Refresh and Load All buttons when syncing or refreshing
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > renders control bar holding datepicker, refresh, and load all in a unified single row block
+The current testing environment is not configured to support act(...)
+
+stderr | src/components/monitoring/MonitoringHeader.test.tsx > MonitoringHeader Component > renders control bar holding datepicker, refresh, and load all in a unified single row block
+The current testing environment is not configured to support act(...)
+
+ ✓ src/components/monitoring/MonitoringHeader.test.tsx (6 tests) 412ms
+ ✓ src/components/busCard/BusCard.test.tsx (5 tests) 596ms
+     ✓ opens BusInputModal directly if unit is SGO (no notes)  364ms
+ ✓ src/components/login/LoginInfoModal.test.tsx (4 tests) 432ms
+ ✓ src/components/monitoring/MonitoringBottomNav.test.tsx (5 tests) 366ms
+ ✓ src/components/busCard/modal/fields/BusFormField.test.tsx (11 tests) 277ms
+ ✓ src/components/waReport/WaReportModal.test.tsx (4 tests) 611ms
+ ✓ src/components/monitoring/tabs/MonitoringFleetStatusTab.test.tsx (4 tests) 457ms
+ ✓ src/components/pdoReport/ReportModalLayout.test.tsx (5 tests) 370ms
+ ✓ src/components/monitoring/tabs/MonitoringRouteCardModern.test.tsx (3 tests) 343ms
+ ✓ src/components/monitoring/tabs/MonitoringWaReportTab.test.tsx (4 tests) 445ms
+ ✓ src/components/ui/ModalShell.test.tsx (11 tests) 343ms
+ ✓ src/components/accumulation/AccumulationSheet.test.tsx (3 tests) 335ms
+ ✓ src/utils/alertUtils.test.ts (45 tests) 267ms
+ ✓ src/components/busList/BusListHeader.test.tsx (4 tests) 334ms
+ ✓ src/components/__tests__/SwipeableContainer.test.tsx (6 tests) 96ms
+ ✓ src/utils/historyNavigation.test.ts (4 tests) 266ms
+ ✓ src/components/monitoring/IngestionProgressModal.test.tsx (3 tests) 237ms
+stderr | src/components/dailyToaTrend/DailyToaTrendCard.test.tsx > DailyToaTrendCard > renders error state when fetching monthly trend data fails
+[DailyToaTrendCard] Gagal memuat tren: Error: Network Error
+    at D:/MINE/SS_PDO/src/components/dailyToaTrend/DailyToaTrendCard.test.tsx:32:7
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+ ✓ src/components/profileMenu/UserProfileHeader.test.tsx (4 tests) 248ms
+ ✓ src/components/dailyToaTrend/DailyToaTrendCard.test.tsx (2 tests) 232ms
+ ✓ src/components/dashboard/QueueModal.test.tsx (3 tests) 178ms
+ ✓ src/components/fleetStatus/ShiftConfirmationAlertBar.test.tsx (3 tests) 144ms
+ ✓ src/components/BottomNav.test.tsx (6 tests) 263ms
+DOMException [NotSupportedError]: Failed to load script "https://apis.google.com/js/api.js". JavaScript file loading is disabled.
+    at HTMLScriptElement.#loadScript (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/html-script-element/HTMLScriptElement.js:549:31)
+    at HTMLScriptElement.[connectedToDocument] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/html-script-element/HTMLScriptElement.js:315:33)
+    at HTMLScriptElement.[connectedToNode] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:794:53)
+    at HTMLBodyElement.[appendChild] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:413:45)
+    at HTMLBodyElement.[appendChild] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/element/Element.js:1072:62)
+    at HTMLBodyElement.appendChild (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:306:48)
+    at D:/MINE/SS_PDO/src/services/googleSheets/authGis.ts:221:23
+    at new Promise (<anonymous>)
+    at initGoogleApi (D:/MINE/SS_PDO/src/services/googleSheets/authGis.ts:31:10)
+    at D:/MINE/SS_PDO/src/services/googleSheets/auth.test.ts:90:18
+ ✓ src/components/profileMenu/ProfileFeaturesSection.test.tsx (2 tests) 215ms
+ ✓ src/components/busCard/modal/useBusInputForm.test.tsx (16 tests) 240ms
+ ✓ src/services/googleSheets/auth.test.ts (8 tests) 289ms
+DOMException [AbortError]: The operation was aborted.
+    at Fetch.onAsyncTaskManagerAbort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/fetch/Fetch.js:546:23)
+    at Object.<anonymous> (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/fetch/Fetch.js:416:101)
+    at AsyncTaskManager.abortAll (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/async-task-manager/AsyncTaskManager.js:292:30)
+    at AsyncTaskManager.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/async-task-manager/AsyncTaskManager.js:52:21)
+    at DetachedBrowserFrame.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/browser/detached-browser/DetachedBrowserFrame.js:112:58)
+    at DetachedWindowAPI.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/window/DetachedWindowAPI.js:51:35)
+    at teardownWindow (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:331:22)
+    at Object.teardown (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:392:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/base.B6Opl8PE.js:168:65
+    at Traces.$ (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/traces.DT5aQ62U.js:142:27)
+stderr | fetchGoogleUserProfile (D:\MINE\SS_PDO\src\services\googleSheets\authSession.ts:263:13)
+[Auth] Gagal mengambil profil userinfo dari Google: DOMException [NetworkError]: Failed to execute "fetch()" on "Window" with URL "https://www.googleapis.com/oauth2/v3/userinfo": The operation was aborted.
+    at Fetch.onError (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/fetch/Fetch.js:540:21)
+    at ClientRequest.emit (node:events:508:28)
+    at emitErrorEvent (node:_http_client:108:11)
+    at TLSSocket.socketErrorListener (node:_http_client:575:5)
+    at TLSSocket.emit (node:events:508:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+ ✓ src/components/userManagement/RoleBadge.test.tsx (6 tests) 175ms
+ ✓ src/hooks/__tests__/useOfflineSync.test.tsx (10 tests) 102ms
+ ✓ src/hooks/__tests__/usePreviousDayOdometer.test.tsx (5 tests) 117ms
+ ✓ src/utils/numberUtils.test.ts (11 tests) 51ms
+ ✓ src/constants/texts/texts.test.ts (18 tests) 85ms
+ ✓ src/utils/waReportGenerator.test.ts (7 tests) 60ms
+ ✓ src/utils/modals/busInput/busModalPreConfirm.test.ts (5 tests) 44ms
+ ✓ src/components/busCard/useBusCardModal.test.tsx (6 tests) 85ms
+ ✓ src/components/dashboard/useDashboardUiState.test.tsx (5 tests) 77ms
+ ✓ src/hooks/__tests__/useVisualViewport.test.tsx (2 tests) 60ms
+ ✓ src/utils/holidayUtils.test.ts (8 tests) 15ms
+ ✓ src/utils/modals/busInput/busModalKeterangan.test.ts (5 tests) 98ms
+stderr | src/services/routeService.test.ts > routeService > fetchRoutesWithSheets returns cached data when offline or error occurs
+[RouteService] Offline/Error fetching from Supabase, loading local cache: Error: Network error
+    at D:/MINE/SS_PDO/src/services/routeService.test.ts:71:61
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stdout | src/services/routeService.test.ts > routeService > verifyUserProfile falls back to cached active profile on network error
+[RouteService] User profile verified via offline cache fallback.
+
+stderr | src/services/routeService.test.ts > routeService > verifyUserProfile falls back to cached active profile on network error
+[RouteService] Error verifying user profile, checking offline cache fallback: TypeError: Failed to fetch
+    at D:/MINE/SS_PDO/src/services/routeService.test.ts:200:41
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stdout | src/services/routeService.test.ts > routeService > verifyUserProfile falls back to cached active profile when supabase resolves with non-PGRST116 error
+[RouteService] User profile verified via offline cache fallback.
+
+ ✓ src/services/routeService.test.ts (20 tests) 53ms
+ ✓ src/hooks/__tests__/useUserActivityTracking.test.tsx (3 tests) 65ms
+ ✓ src/services/allRouteMonitoringService.test.ts (5 tests) 27ms
+stderr | src/utils/cacheUtils.test.ts > cacheUtils > getRoutesFromCache > returns empty array when cache is empty or corrupted
+[CacheUtils] Corrupt routes cache found, returning empty array: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at getRoutesFromCache (D:/MINE/SS_PDO/src/utils/cacheUtils.ts:34:25)
+    at D:/MINE/SS_PDO/src/utils/cacheUtils.test.ts:123:14
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+
+ ✓ src/utils/cacheUtils.test.ts (10 tests) 39ms
+ ✓ src/services/dailyRouteReportService.test.ts (8 tests) 30ms
+ ✓ src/components/dashboard/useDashboardSyncHandlers.test.tsx (5 tests) 62ms
+stderr | src/services/fleetStatusService.test.ts > fleetStatusService > fetchFleetStatusesMaster > returns fallback default statuses when query fails or error occurs
+[fleetStatusService] Gagal mengambil master status armada: { message: 'DB error' }
+
+ ✓ src/services/fleetStatusService.test.ts (6 tests) 25ms
+ ✓ src/components/busCard/useBusCardSave.test.tsx (4 tests) 196ms
+stderr | src/utils/errorFormatter.test.ts > formatUserError > returns null for null input or user cancelled popups
+[System Error Details]: { type: 'popup_closed_by_user' }
+[System Error Details]: Error: Login dibatalkan
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:8:28
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/utils/errorFormatter.test.ts > formatUserError > sanitizes technical credentials and .env error messages
+[System Error Details]: Error: API Credentials missing in .env file
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:12:20
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/utils/errorFormatter.test.ts > formatUserError > sanitizes network errors
+[System Error Details]: TypeError: Failed to fetch
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:20:20
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/utils/errorFormatter.test.ts > formatUserError > sanitizes Google Sheets column header mismatch errors
+[System Error Details]: Error: Tidak bisa menemukan kolom "No Body / Unit".
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:27:23
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/utils/errorFormatter.test.ts > formatUserError > sanitizes 403 and insufficient scopes auth errors
+[System Error Details]: Error: Request had insufficient authentication scopes.
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:35:22
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/utils/errorFormatter.test.ts > formatUserError > uses custom fallback message for unknown errors
+[System Error Details]: Error: Random unexpected error
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:42:24
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | src/utils/errorFormatter.test.ts > formatUserError > sanitizes database schema cache and postgrest errors
+[System Error Details]: Error: Could not find the 'fleet_confirmed_s2_at' column of 'daily_route_reports' in the schema cache
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:48:19
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+[System Error Details]: Error: Could not find the 'fleet_confirmed_s2_at' column of 'daily_route_reports' in the schema cache
+    at D:/MINE/SS_PDO/src/utils/errorFormatter.test.ts:48:19
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+ ✓ src/utils/errorFormatter.test.ts (7 tests) 28ms
+stdout | src/services/googleSheets/transport.test.ts > transport adapter > detects active proxy when Edge Function reports configured: true
+[Transport] Google Service Account Proxy aktif via Supabase Edge Function: service-bot@example.com
+
+ ✓ src/services/googleSheets/transport.test.ts (5 tests) 18ms
+ ✓ src/utils/keteranganUtils.test.ts (22 tests) 32ms
+stderr | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts > formatUserError > returns null for null input or user cancelled popups
+[System Error Details]: { type: 'popup_closed_by_user' }
+[System Error Details]: Error: Login dibatalkan
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:8:28
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts > formatUserError > sanitizes technical credentials and .env error messages
+[System Error Details]: Error: API Credentials missing in .env file
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:12:20
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts > formatUserError > sanitizes network errors
+[System Error Details]: TypeError: Failed to fetch
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:20:20
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts > formatUserError > sanitizes Google Sheets column header mismatch errors
+[System Error Details]: Error: Tidak bisa menemukan kolom "No Body / Unit".
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:27:23
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+stderr | .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts > formatUserError > uses custom fallback message for unknown errors
+[System Error Details]: Error: Random unexpected error
+    at D:/MINE/SS_PDO/.worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts:35:24
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/@vitest+runner@4.1.10/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64
+
+ ✓ .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts (5 tests) 25ms
+ ✓ src/services/regionalIngestionService.test.ts (2 tests) 18ms
+ ✓ src/utils/sheetColorUtils.test.ts (9 tests) 18ms
+ ✓ src/constants/operators.test.ts (12 tests) 18ms
+ ✓ src/utils/unitAnalytics.test.ts (6 tests) 15ms
+ ✓ src/utils/sheetIdentity.test.ts (14 tests) 17ms
+ ✓ src/services/appSettingsService.test.ts (3 tests) 18ms
+ ✓ src/utils/conflictMerge.test.ts (6 tests) 11ms
+ ✓ src/utils/scrollLockCoordinator.test.ts (5 tests) 33ms
+ ✓ src/utils/modals/busInput/busModalValidation.test.ts (18 tests) 16ms
+ ✓ src/utils/modals/busInput/busModalOdometer.test.ts (20 tests) 17ms
+ ✓ src/utils/routeValidation.test.ts (10 tests) 15ms
+ ✓ src/services/googleSheets/globalReportReader.test.ts (4 tests) 15ms
+ ✓ src/utils/errorClassifier.test.ts (8 tests) 14ms
+ ✓ src/utils/modals/bulkModals.test.ts (6 tests) 16ms
+ ✓ src/utils/auditLogContext.test.ts (3 tests) 11ms
+ ✓ src/utils/analytics.test.ts (5 tests) 11ms
+ ✓ .worktrees/feat-supabase-integration/src/utils/analytics.test.ts (3 tests) 10ms
+ ✓ src/services/googleSheets/core.test.ts (3 tests) 12ms
+ ✓ src/utils/modals/busInput/odometerRegistry.test.ts (4 tests) 14ms
+ ✓ src/utils/modalStackCoordinator.test.ts (4 tests) 11ms
+ ✓ src/utils/roleStorage.test.ts (4 tests) 6ms
+
+ Test Files  83 passed (83)
+      Tests  604 passed (604)
+   Start at  16:58:44
+   Duration  27.93s (transform 14.55s, setup 0ms, import 40.26s, tests 31.86s, environment 62.97s)
+

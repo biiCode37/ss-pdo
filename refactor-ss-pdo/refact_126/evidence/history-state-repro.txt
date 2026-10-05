@@ -1,0 +1,13 @@
+Reproduksi read-only dengan Happy DOM History API (bukan dispatchEvent sintetis).
+
+Urutan state dibuat: root -> rootGuard -> bus -> top.
+Perintah Node memakai Window dari happy-dom, lalu history.back() nyata dengan jeda event loop 10 ms, history.pushState(top), dan history.back() cleanup.
+
+Output:
+before { id: 'top' } 4
+after back1 { id: 'bus' } 4
+after back2 { rootGuard: 1 } 4
+after restore top { id: 'top' } 3
+after top cleanup { rootGuard: 1 } 3
+
+Analogi source `historyNavigation.ts`: restore top pada cabang isDismissing terjadi setelah Back kedua; removeBackNavigation(top) lalu memanggil history.back() karena current state masih top. Maka state akhir rootGuard sementara bus masih terdaftar/terbuka.

@@ -1,0 +1,11 @@
+Command: pnpm run test --dir src src/constants/texts/texts.test.ts src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx src/components/busCard/modal/useBusInputForm.test.tsx
+Working directory: D:\MINE\SS_PDO
+Process TEMP/TMP: D:\MINE\SS_PDO\node_modules\.tmp
+
+RUN v4.1.10 D:/MINE/SS_PDO
+Test Files 3 passed (3)
+Tests 40 passed (40)
+Duration 1.73s
+Exit code 0
+
+Captured by Codex on 2026-09-27. Full suite, lint, and build were not rerun during this review.

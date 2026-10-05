@@ -1,0 +1,33 @@
+pnpm run test --dir src
+
+ RUN  v4.1.10 D:/MINE/SS_PDO
+
+ ✓ src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx (10 tests) 281ms
+ ✓ src/constants/texts/texts.test.ts (18 tests) 34ms
+ ✓ src/components/busCard/modal/useBusInputForm.test.tsx (12 tests) 85ms
+ ✓ src/utils/errorFormatter.test.ts (7 tests) 50ms
+ ✓ src/services/regionalIngestionService.test.ts (2 tests) 27ms
+ ✓ src/utils/modals/busInput/busModalValidation.test.ts (18 tests) 25ms
+ ✓ src/utils/sheetColorUtils.test.ts (9 tests) 21ms
+ ✓ src/utils/errorClassifier.test.ts (8 tests) 15ms
+ ✓ src/constants/operators.test.ts (12 tests) 23ms
+ ✓ src/utils/unitAnalytics.test.ts (6 tests) 21ms
+ ✓ src/utils/holidayUtils.test.ts (8 tests) 19ms
+ ✓ src/utils/conflictMerge.test.ts (6 tests) 17ms
+ ✓ src/utils/modals/busInput/busModalOdometer.test.ts (10 tests) 20ms
+ ✓ src/utils/routeValidation.test.ts (10 tests) 20ms
+ ✓ src/utils/modals/bulkModals.test.ts (6 tests) 22ms
+ ✓ src/utils/sheetIdentity.test.ts (14 tests) 34ms
+ ✓ src/services/googleSheets/globalReportReader.test.ts (4 tests) 19ms
+ ✓ src/utils/auditLogContext.test.ts (3 tests) 14ms
+ ✓ src/utils/analytics.test.ts (5 tests) 10ms
+ ✓ src/services/googleSheets/core.test.ts (3 tests) 9ms
+ ✓ src/utils/modals/busInput/odometerRegistry.test.ts (4 tests) 13ms
+ ✓ src/utils/roleStorage.test.ts (4 tests) 5ms
+ ... [74 test suites total]
+
+ Test Files  74 passed (74)
+      Tests  531 passed (531)
+   Start at  19:17:59
+   Duration  44.80s (transform 21.39s, setup 0ms, import 61.31s, tests 35.17s, environment 129.44s)
+Exit Code: 0

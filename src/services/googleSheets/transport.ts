@@ -1,6 +1,11 @@
-import { gapi } from 'gapi-script';
 import { supabase, isSupabaseConfigured } from '../supabase';
-import { withAuthRetry } from './auth';
+import { withAuthRetry, getGapi } from './auth';
+
+// ponytail: native getGapiSheets eliminates external gapi-script dependency
+const getGapiSheets = () => {
+  const gapiObj = getGapi();
+  return (gapiObj?.client as any)?.sheets?.spreadsheets;
+};
 
 export type TransportMode = 'service_account' | 'client_oauth' | 'auto';
 
@@ -110,7 +115,7 @@ export async function fetchSpreadsheetMeta(
 
   // Fallback: Panggilan langsung Google API client (gapi)
   return withAuthRetry(async () => {
-    return await (gapi.client as any).sheets.spreadsheets.get({
+    return await getGapiSheets().get({
       spreadsheetId,
       fields,
     });
@@ -146,7 +151,7 @@ export async function fetchSheetValues(
 
   // Fallback: Panggilan langsung Google API client (gapi)
   return withAuthRetry(async () => {
-    return await (gapi.client as any).sheets.spreadsheets.values.get({
+    return await getGapiSheets().values.get({
       spreadsheetId,
       range,
       valueRenderOption,
@@ -183,7 +188,7 @@ export async function fetchSheetValuesBatch(
 
   // Fallback: Panggilan langsung Google API client (gapi)
   return withAuthRetry(async () => {
-    return await (gapi.client as any).sheets.spreadsheets.values.batchGet({
+    return await getGapiSheets().values.batchGet({
       spreadsheetId,
       ranges,
       valueRenderOption,
@@ -222,7 +227,7 @@ export async function updateSheetValuesBatch(
 
   // Fallback: Panggilan langsung Google API client (gapi)
   return withAuthRetry(async () => {
-    return await (gapi.client as any).sheets.spreadsheets.values.batchUpdate({
+    return await getGapiSheets().values.batchUpdate({
       spreadsheetId,
       resource: payload,
     });
@@ -257,7 +262,7 @@ export async function batchUpdateSpreadsheet(
 
   // Fallback: Panggilan langsung Google API client (gapi)
   return withAuthRetry(async () => {
-    return await (gapi.client as any).sheets.spreadsheets.batchUpdate({
+    return await getGapiSheets().batchUpdate({
       spreadsheetId,
       resource: { requests },
     });

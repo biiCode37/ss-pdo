@@ -1,9 +1,10 @@
-# Subagent-Driven Development Progress Ledger
+# Progress Ledger: Redesign Kartu Rute & Modal Detail 21 Metrik SS Global
 
-Plan: `docs/superpowers/plans/2026-08-07-user-activity-telemetry-plan.md`
-Started: 2026-08-07
+Plan: `docs/superpowers/plans/2026-09-26-monitoring-routes-card-modal-plan.md`
+Branch: `devmode`
 
-- Task 1: complete (commits 08b964b..6e06bbf, tests 9/9 pass, build pass)
-- Task 2: complete (commits 6e06bbf..c6c4d6a, tests 62/62 pass, build pass)
-- Task 3: complete (commits c6c4d6a..a1bf97b, tests 62/62 pass, build pass)
-- Task 4: complete (commits a1bf97b..7d82058, tests 62/62 pass, build pass)
+- [x] Task 1: Kamus Teks Sentral (`text_monitoring.ts` & `texts.test.ts`)
+- [x] Task 2: Komponen Modal Detail 21 Metrik (`MonitoringRouteDetailModal.tsx`)
+- [x] Task 3: Refactor Kartu Rute Modern (`MonitoringRouteCardModern.tsx`)
+- [x] Task 4: Integrasi State Modal di Tab Rute (`MonitoringRoutesTab.tsx`)
+- [x] Task 5: Quality Gates, Regresi, & Knowledge Graph Update

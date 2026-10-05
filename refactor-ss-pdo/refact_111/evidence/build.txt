@@ -1,0 +1,28 @@
+vite v8.1.4 building client environment for production...
+transforming...✓ 2043 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/registerSW.js                            0.13 kB
+dist/manifest.webmanifest                     0.48 kB
+dist/index.html                               2.25 kB │ gzip:   0.99 kB
+dist/assets/index-BbBfL-Lh.css               36.80 kB │ gzip:   7.64 kB
+dist/assets/rolldown-runtime-Bh1tDfsg.js      0.56 kB │ gzip:   0.36 kB
+dist/assets/UserManagementPage-DWAy-61R.js   21.45 kB │ gzip:   5.72 kB
+dist/assets/vendor-swal-DraO1OLU.js          78.15 kB │ gzip:  20.84 kB
+dist/assets/vendor-react-CepXLKLB.js        189.64 kB │ gzip:  59.65 kB
+dist/assets/vendor-supabase-BwF4ymOi.js     207.05 kB │ gzip:  53.40 kB
+dist/assets/index-CCJHuQD7.js               534.01 kB │ gzip: 126.43 kB
+
+✓ built in 1.82s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+PWA v1.3.0
+mode      generateSW
+precache  17 entries (1587.49 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js

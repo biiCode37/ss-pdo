@@ -142,7 +142,7 @@ export function AuditLogSkeleton({ count = 5 }: { count?: number }) {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         width: '100%',
         backgroundColor: 'var(--bg-primary, #0f172a)',
         color: 'var(--text-primary, #f8fafc)',
@@ -247,7 +247,7 @@ export function UserManagementSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         width: '100%',
         backgroundColor: 'var(--bg-primary, #0f172a)',
         color: 'var(--text-primary, #f8fafc)',

@@ -1,0 +1,105 @@
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/components/busCard/modal/useBusModalOdometer.test.tsx:19:3]
+ 18 |   const odometer = useBusModalOdometer(props);
+ 19 |   latestOdometer = odometer;
+    :   ^^^^^^^|^^^^^^
+    :          `-- `latestOdometer` cannot be reassigned
+ 20 |   return <div id="odometer-test-node">{odometer.kmAwal1}</div>;
+    `----
+  help: Variable `latestOdometer` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/components/busCard/modal/useBusInputForm.test.tsx:20:3]
+ 19 |   const form = useBusInputForm(props);
+ 20 |   latestForm = form;
+    :   ^^^^^|^^^^
+    :        `-- `latestForm` cannot be reassigned
+ 21 |   return <div id="form-test-node">{form.formId}</div>;
+    `----
+  help: Variable `latestForm` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/busCard/modal/BusInputModalNotes.tsx:5:14]
+ 4 | 
+ 5 | export const KETERANGAN_OPTIONS = [
+   :              ^^^^^^^^^^^^^^^^^^
+ 6 |   { value: "", label: "SGO (Siap Guna Operasi)" },
+   `----
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusModalOdometer.ts:250:9]
+ 245 |   // Prefill reaktif KM Awal S1 saat previousDayKmAkhir2 tiba dan field masih kosong
+ 246 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 247 |     if (previousDayKmAkhir2 && (!bus.kmAwal1 || bus.kmAwal1.trim() === "")) {
+ 248 |       const prefill = extractLeading3Digits(previousDayKmAkhir2);
+ 249 |       if (prefill) {
+ 250 |         setKmAwal1((current: string) => {
+     :         ^^^^^|^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 251 |           if (!current || current.trim() === "") {
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusModalOdometer.ts:265:9]
+ 260 |   // Reactivity KM Awal 1 -> KM Akhir 1 (Unlock & Auto-Reset)
+ 261 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 262 |     if (isKmAwal1Valid) {
+ 263 |       const prefill = extractLeading3Digits(kmAwal1);
+ 264 |       if (prefill) {
+ 265 |         setKmAkhir1((current: string) => {
+     :         ^^^^^|^^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 266 |           if (!current || current.trim() === "") {
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusModalOdometer.ts:288:9]
+ 283 |   // Reactivity KM Awal 2 -> KM Akhir 2 (Unlock & Auto-Reset)
+ 284 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 285 |     if (isKmAwal2Valid) {
+ 286 |       const prefill = extractLeading3Digits(kmAwal2);
+ 287 |       if (prefill) {
+ 288 |         setKmAkhir2((current: string) => {
+     :         ^^^^^|^^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 289 |           if (!current || current.trim() === "") {
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusModalOdometer.ts:315:9]
+ 306 |   // Prefill reaktif KM Awal S2 untuk Skenario B (Bus Dinas Siang Saja)
+ 307 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 308 |     if (
+ 309 |       !isS1Started &&
+ 310 |       (!bus.kmAwal2 || bus.kmAwal2.trim() === "") &&
+ 311 |       previousDayKmAkhir2
+ 312 |     ) {
+ 313 |       const prefill = extractLeading3Digits(previousDayKmAkhir2);
+ 314 |       if (prefill) {
+ 315 |         setKmAwal2((current: string) => {
+     :         ^^^^^|^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 316 |           if (!current || current.trim() === "") {
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+Found 7 warnings and 0 errors.
+Finished in 83ms on 27 files with 116 rules using 8 threads.

@@ -33,7 +33,7 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
         style={{
           width: "100%",
           maxWidth: "560px",
-          maxHeight: "85vh",
+          maxHeight: "min(85dvh, 760px)",
           overflowY: "auto",
           padding: "24px",
           borderRadius: "16px",

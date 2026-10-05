@@ -1,0 +1,187 @@
+
+> pusm-pdo-app@0.0.0 test D:\MINE\SS_PDO
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90mD:/MINE/SS_PDO[39m
+
+ [32m✓[39m src/components/dashboard/QueueReportIntegration.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1620[2mms[22m[39m
+     [33m[2m✓[22m[39m Solo visual layers: preserves individual base z-index when opened alone [33m 517[2mms[22m[39m
+     [33m[2m✓[22m[39m MITIGASI R97-01 & R97-02: Staggered Order 1 (Queue opened on render 1 -> parent re-renders with fresh callbacks & Report opened on render 2) [33m 332[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringDashboardTab.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3345[2mms[22m[39m
+     [33m[2m✓[22m[39m renders PDO fleet confirmation progress bar [33m 858[2mms[22m[39m
+     [33m[2m✓[22m[39m renders 18-bar TOA chart and handles bar interaction [33m 1223[2mms[22m[39m
+     [33m[2m✓[22m[39m renders 4 Hero Macro KPI cards [33m 450[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Shift Split Bar with Shift 1 & Shift 2 ratio [33m 387[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Leaderboard with Top 3 & Bottom 3 routes [33m 421[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringRoutesTab.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3244[2mms[22m[39m
+     [33m[2m✓[22m[39m renders routes list and search toolbar [33m 1149[2mms[22m[39m
+     [33m[2m✓[22m[39m filters routes by search term [33m 333[2mms[22m[39m
+     [33m[2m✓[22m[39m opens MonitoringRouteDetailModal when route card is clicked, and triggers onSelectRoute from modal [33m 647[2mms[22m[39m
+     [33m[2m✓[22m[39m closes MonitoringRouteDetailModal when close button is clicked [33m 552[2mms[22m[39m
+     [33m[2m✓[22m[39m triggers bulk verify when bulk verify button is clicked [33m 313[2mms[22m[39m
+ [32m✓[39m src/components/fleetStatus/FleetStatusModal.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2587[2mms[22m[39m
+     [33m[2m✓[22m[39m renders all buses and header information [33m 567[2mms[22m[39m
+     [33m[2m✓[22m[39m calculates real-time summary counts correctly [33m 350[2mms[22m[39m
+     [33m[2m✓[22m[39m sets all units to SGO when SGO Semua button is clicked [33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m invokes onConfirmStatus with updated statuses [33m 382[2mms[22m[39m
+     [33m[2m✓[22m[39m acts as independent modal and closes modal on confirm [33m 341[2mms[22m[39m
+     [33m[2m✓[22m[39m supports SO (Stop Operasi) brush and renders SO in summary [33m 317[2mms[22m[39m
+     [33m[2m✓[22m[39m renders locked view when shift is confirmed and prevents card clicks [33m 307[2mms[22m[39m
+ [32m✓[39m src/components/routeSelector/RouteSelectorCard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2771[2mms[22m[39m
+     [33m[2m✓[22m[39m allows user to pick date from Tanggal dropdown when in AKUMULASI mode instead of disabling it [33m 681[2mms[22m[39m
+     [33m[2m✓[22m[39m renders exit button to return to daily mode when in AKUMULASI mode [33m 430[2mms[22m[39m
+     [33m[2m✓[22m[39m opens route selector sheet only via externalOpenTrigger (from active route pill) [33m 338[2mms[22m[39m
+     [33m[2m✓[22m[39m syncs form date dropdown with currentTabName when externalOpenTrigger is triggered [33m 327[2mms[22m[39m
+     [33m[2m✓[22m[39m does NOT trigger onLoadData or parent re-render when picking date in dropdown, retains choice and only commits on Load Data Unit click [33m 306[2mms[22m[39m
+ [32m✓[39m src/components/busCard/BusInputModal.test.tsx [2m([22m[2m22 tests[22m[2m)[22m[33m 7364[2mms[22m[39m
+     [33m[2m✓[22m[39m renders modal header with unit name and close button when isOpen is true [33m 655[2mms[22m[39m
+     [33m[2m✓[22m[39m navigates between Shift 1, Shift 2, Ritase, and Ket tabs correctly [33m 568[2mms[22m[39m
+     [33m[2m✓[22m[39m calculates live distance accurately for Shift 1 and Shift 2 [33m 396[2mms[22m[39m
+     [33m[2m✓[22m[39m validates KM akhir < KM awal and blocks submission with warning message [33m 513[2mms[22m[39m
+     [33m[2m✓[22m[39m toggles Satset Mode state correctly [33m 385[2mms[22m[39m
+     [33m[2m✓[22m[39m submits valid form data and triggers onSave with normalized values [33m 480[2mms[22m[39m
+     [33m[2m✓[22m[39m renders unconfirmed shift reminder banner when isShiftConfirmed is false [33m 366[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Single-Column Focus Speed-Run mode when activeCategory is toaShift1 [33m 341[2mms[22m[39m
+     [33m[2m✓[22m[39m blocks submission if validateToaPair fails (Total TOA < TOA S1) [33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m allows copying KM Akhir S1 to KM Awal S2 via quick copy button in single mode [33m 334[2mms[22m[39m
+     [33m[2m✓[22m[39m auto-prefills 3 leading digits of KM Akhir S1 when empty and KM Awal S1 exists [33m 338[2mms[22m[39m
+     [33m[2m✓[22m[39m auto-prefills 3 leading digits of KM Akhir S2 when empty and KM Awal S2 exists [33m 450[2mms[22m[39m
+     [33m[2m✓[22m[39m handles bypass checkbox toggle correctly: keeps checkbox visible after check, removes only cross-day error, and disables save when other errors exist [33m 357[2mms[22m[39m
+     [33m[2m✓[22m[39m R102-02: maintains bypass checkbox visible and checked when cross-day is the ONLY error, and unchecking re-evaluates on submit [33m 498[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2436[2mms[22m[39m
+     [33m[2m✓[22m[39m renders route title, korlap, and tab Operasional by default [33m 535[2mms[22m[39m
+     [33m[2m✓[22m[39m switches to Pelanggan & Shift and Produktivitas & Rit tabs on click [33m 365[2mms[22m[39m
+ [32m✓[39m src/components/pdoReport/RouteOperationalReportCard.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2548[2mms[22m[39m
+     [33m[2m✓[22m[39m renders input fields for renops, realops, and jam spots [33m 658[2mms[22m[39m
+     [33m[2m✓[22m[39m loads existing report data if present [33m 401[2mms[22m[39m
+     [33m[2m✓[22m[39m handles toggle spot and submit correctly [33m 864[2mms[22m[39m
+     [33m[2m✓[22m[39m renders clean headway labels without duplicate (Menit) and acts as independent modal [33m 342[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringToaBarChart.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1852[2mms[22m[39m
+     [33m[2m✓[22m[39m renders 18 horizontal route bars with full route code and full passenger count [33m 1423[2mms[22m[39m
+ [32m✓[39m src/components/busCard/BusCard.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1939[2mms[22m[39m
+     [33m[2m✓[22m[39m opens BusInputModal directly if unit is SGO (no notes) [33m 823[2mms[22m[39m
+     [33m[2m✓[22m[39m allows opening modal and renders unconfirmed warning badge when isShiftConfirmed is false [33m 693[2mms[22m[39m
+ [32m✓[39m src/components/waReport/WaReportModal.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 2073[2mms[22m[39m
+     [33m[2m✓[22m[39m renders Format 3 tab button [33m 472[2mms[22m[39m
+     [33m[2m✓[22m[39m shows shift selector buttons when Format 3 is active [33m 400[2mms[22m[39m
+     [33m[2m✓[22m[39m enables action buttons when all routes are confirmed [33m 936[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/AllRouteMonitoringPage.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 9736[2mms[22m[39m
+     [33m[2m✓[22m[39m renders executive dashboard tab by default with KPIs and chart [33m 1605[2mms[22m[39m
+     [33m[2m✓[22m[39m navigates to Rute tab and filters by supervisor [33m 1859[2mms[22m[39m
+     [33m[2m✓[22m[39m triggers verification when Verifikasi button on route card is clicked in Rute tab [33m 1215[2mms[22m[39m
+     [33m[2m✓[22m[39m navigates to WhatsApp Report Studio tab via bottom nav [33m 677[2mms[22m[39m
+     [33m[2m✓[22m[39m updates selected date and calls onDateChange when step buttons are clicked [33m 1938[2mms[22m[39m
+     [33m[2m✓[22m[39m triggers 18 routes direct ingestion when Tarik 18 Rute (Load All) button is clicked [33m 1011[2mms[22m[39m
+     [33m[2m✓[22m[39m displays data provenance badges (Input App vs Tarik Sheet) on route cards [33m 1416[2mms[22m[39m
+ [32m✓[39m src/components/login/LoginScreen.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1306[2mms[22m[39m
+     [33m[2m✓[22m[39m renders brand, titles, badges, and login action button [33m 366[2mms[22m[39m
+     [33m[2m✓[22m[39m opens and closes info modal when triggered [33m 366[2mms[22m[39m
+ [32m✓[39m src/components/login/LoginInfoModal.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 917[2mms[22m[39m
+     [33m[2m✓[22m[39m renders header, about section, comparison, and permissions when isOpen is true [33m 374[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringFleetStatusTab.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 986[2mms[22m[39m
+     [33m[2m✓[22m[39m renders top stats bar with SGO and non-SGO totals [33m 400[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/MonitoringHeader.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 981[2mms[22m[39m
+     [33m[2m✓[22m[39m renders title, back button, and formatted date label [33m 389[2mms[22m[39m
+ [32m✓[39m src/components/accumulation/AccumulationSheet.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 911[2mms[22m[39m
+     [33m[2m✓[22m[39m renders period options and controls when isOpen is true [33m 382[2mms[22m[39m
+     [33m[2m✓[22m[39m shows reset button when isAccumulationActive is true [33m 317[2mms[22m[39m
+ [32m✓[39m src/components/profileMenu/ProfileMenuSheet.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1204[2mms[22m[39m
+     [33m[2m✓[22m[39m renders user details and features when isOpen is true [33m 371[2mms[22m[39m
+     [33m[2m✓[22m[39m renders admin section when user role is admin or superadmin [33m 529[2mms[22m[39m
+ [32m✓[39m src/components/busList/BusList.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1831[2mms[22m[39m
+     [33m[2m✓[22m[39m does not render duplicate shift lock banner inside BusList (handled centrally in DashboardStatusBanners) [33m 536[2mms[22m[39m
+     [33m[2m✓[22m[39m allows bulk trip modal even when isShiftConfirmed is false [33m 433[2mms[22m[39m
+ [32m✓[39m src/components/profileMenu/UserProfileHeader.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 841[2mms[22m[39m
+     [33m[2m✓[22m[39m renders default profile and role subtitle when localStorage is empty and triggers onOpenProfile on click [33m 499[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringWaReportTab.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1222[2mms[22m[39m
+     [33m[2m✓[22m[39m renders format tabs and live preview [33m 550[2mms[22m[39m
+     [33m[2m✓[22m[39m opens WhatsApp with report text [33m 351[2mms[22m[39m
+ [32m✓[39m src/components/busList/BusListHeader.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 870[2mms[22m[39m
+     [33m[2m✓[22m[39m renders daily progress bar and total count when shift is confirmed [33m 511[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/BusInputModalSingleFocus.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1385[2mms[22m[39m
+ [32m✓[39m src/components/pdoReport/ReportModalLayout.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 968[2mms[22m[39m
+     [33m[2m✓[22m[39m renders modal header, subtitle, status badge, and children in portal when isOpen is true [33m 485[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/tabs/MonitoringRouteCardModern.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 580[2mms[22m[39m
+     [33m[2m✓[22m[39m renders priority metrics: Renops, Realops, Total Pelanggan, TOA, Manual, KM/Bus, %, H-1, H-7 [33m 322[2mms[22m[39m
+ [32m✓[39m src/components/dailyToaTrend/DailyToaTrendCard.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 618[2mms[22m[39m
+     [33m[2m✓[22m[39m renders error state when fetching monthly trend data fails [33m 373[2mms[22m[39m
+ [32m✓[39m src/components/fleetStatus/ShiftConfirmationAlertBar.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/MonitoringBottomNav.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 633[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/fields/BusFormField.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 609[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/useUserActivityTracking.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 115[2mms[22m[39m
+ [32m✓[39m src/components/ui/ModalShell.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 860[2mms[22m[39m
+ [32m✓[39m src/utils/alertUtils.test.ts [2m([22m[2m45 tests[22m[2m)[22m[33m 617[2mms[22m[39m
+ [32m✓[39m src/components/userManagement/RoleBadge.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 263[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/QueueModal.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 438[2mms[22m[39m
+     [33m[2m✓[22m[39m renders queue items, title, and buttons when isOpen is true [33m 327[2mms[22m[39m
+ [32m✓[39m src/components/monitoring/IngestionProgressModal.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 414[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/useBusInputForm.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 598[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/useDashboardSyncHandlers.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m src/services/googleSheets/auth.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 209[2mms[22m[39m
+ [32m✓[39m src/components/profileMenu/ProfileFeaturesSection.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 450[2mms[22m[39m
+     [33m[2m✓[22m[39m renders 'Monitoring Wilayah' when isInMonitoringView is false or undefined [33m 369[2mms[22m[39m
+ [32m✓[39m src/components/BottomNav.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 386[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/useBusModalOdometer.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 508[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalKeterangan.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+ [32m✓[39m src/constants/texts/texts.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 187[2mms[22m[39m
+ [32m✓[39m src/components/busCard/useBusCardSave.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 365[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/useVisualViewport.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m src/utils/historyNavigation.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 345[2mms[22m[39m
+     [33m[2m✓[22m[39m removes entry cleanly when unmounted [33m 307[2mms[22m[39m
+ [32m✓[39m src/utils/scrollLockCoordinator.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m src/utils/numberUtils.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/useOfflineSync.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 199[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/SwipeableContainer.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 270[2mms[22m[39m
+ [32m✓[39m src/components/busCard/useBusCardModal.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 173[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/usePreviousDayOdometer.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+[90mstdout[2m | src/services/routeService.test.ts[2m > [22m[2mrouteService[2m > [22m[2mverifyUserProfile falls back to cached active profile on network error
+[22m[39m[RouteService] User profile verified via offline cache fallback.
+
+[90mstdout[2m | src/services/routeService.test.ts[2m > [22m[2mrouteService[2m > [22m[2mverifyUserProfile falls back to cached active profile when supabase resolves with non-PGRST116 error
+[22m[39m[RouteService] User profile verified via offline cache fallback.
+
+ [32m✓[39m src/services/routeService.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [32m✓[39m src/utils/waReportGenerator.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/useDashboardUiState.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 290[2mms[22m[39m
+ [32m✓[39m src/services/allRouteMonitoringService.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m .worktrees/feat-supabase-integration/src/utils/errorFormatter.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/utils/cacheUtils.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m src/services/fleetStatusService.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m src/utils/errorFormatter.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/services/dailyRouteReportService.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/utils/keteranganUtils.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalPreConfirm.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m src/services/appSettingsService.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+[90mstdout[2m | src/services/googleSheets/transport.test.ts[2m > [22m[2mtransport adapter[2m > [22m[2mdetects active proxy when Edge Function reports configured: true
+[22m[39m[Transport] Google Service Account Proxy aktif via Supabase Edge Function: service-bot@example.com
+
+ [32m✓[39m src/services/googleSheets/transport.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/utils/sheetColorUtils.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/busInputValidation.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalOdometer.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/busModalValidation.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/components/busCard/modal/busInputPayload.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/utils/modals/bulkModals.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/constants/operators.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/utils/sheetIdentity.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/services/regionalIngestionService.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/utils/unitAnalytics.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/utils/holidayUtils.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/utils/modalStackCoordinator.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/services/googleSheets/core.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/utils/conflictMerge.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/utils/routeValidation.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/utils/errorClassifier.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/services/googleSheets/globalReportReader.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/utils/analytics.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/utils/auditLogContext.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m .worktrees/feat-supabase-integration/src/utils/analytics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/utils/modals/busInput/odometerRegistry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/utils/roleStorage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m87 passed[39m[22m[90m (87)[39m
+[2m      Tests [22m [1m[32m663 passed[39m[22m[90m (663)[39m
+[2m   Start at [22m 18:12:04
+[2m   Duration [22m 48.87s[2m (transform 33.91s, setup 0ms, import 93.19s, tests 66.11s, environment 96.92s)[22m
+

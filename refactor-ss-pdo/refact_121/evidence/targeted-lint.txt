@@ -1,0 +1,4 @@
+$ pnpm exec oxlint src/components/busCard/modal/singleFocus/ src/index.css
+Found 0 warnings and 0 errors.
+Finished in 13ms on 8 files with 103 rules using 8 threads.
+Exit code: 0

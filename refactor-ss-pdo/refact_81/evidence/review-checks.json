@@ -1,0 +1,35 @@
+{
+  "CheckedAt": "2026-09-27T17:46:40.4538806+07:00",
+  "Branch": "devmode",
+  "Decision": "REVISE",
+  "InventoryCount": 167,
+  "ActualCount": 167,
+  "MissingPaths": [],
+  "ExtraPaths": [],
+  "DuplicatePaths": [],
+  "LabeledFacades": 23,
+  "ImplementationsLabeledFacade": [
+    "src/components/AnalyticsDashboard.tsx",
+    "src/components/BottomNav.tsx",
+    "src/components/CompletionStatusCard.tsx",
+    "src/components/Dashboard.tsx",
+    "src/components/FormattedNoteText.tsx",
+    "src/components/KPICard.tsx",
+    "src/components/ShiftComparisonCard.tsx",
+    "src/components/Skeletons.tsx",
+    "src/components/SwipeableContainer.tsx",
+    "src/components/UnitCard.tsx",
+    "src/components/UnitDetailModal.tsx",
+    "src/components/UnitSummaryDashboard.tsx"
+  ],
+  "FacadesLabeledPage": [
+    "src/components/AllRouteMonitoringPage.tsx",
+    "src/components/LoginScreen.tsx",
+    "src/components/UserManagementPage.tsx"
+  ],
+  "SourceFilesCompared": 319,
+  "SourceFilesChanged": [],
+  "GeminiLintExit": 0,
+  "GeminiBuildExit": 0,
+  "GeminiTestsExit": 0
+}

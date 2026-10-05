@@ -1,0 +1,242 @@
+import { supabase } from './supabase';
+import type { Route, DailyRouteReport, FleetStatusLog } from '../types/supabase';
+import { formatOperatorsDisplay } from '../constants/operators';
+
+/**
+ * Mengambil daftar seluruh master rute aktif beserta konfigurasi spesifikasi
+ * (KM baku, target HK, best record, supervisor, dan default titik macet).
+ */
+export async function fetchRouteMasterList(): Promise<Route[]> {
+  try {
+    const { data, error } = await supabase
+      .from('routes')
+      .select('*, route_operators(operator_id, operators(*))')
+      .eq('is_active', true)
+      .order('route_code', { ascending: true });
+
+    if (error) {
+      console.warn('[dailyRouteReportService] Gagal mengambil daftar rute:', error);
+      return [];
+    }
+
+    const formattedRoutes = (data || []).map((r: any) => {
+      const ops = (r.route_operators || []).map((ro: any) => ro.operators).filter(Boolean);
+      return {
+        ...r,
+        operators: ops,
+        operator_name: formatOperatorsDisplay(ops) || r.operator_name || 'Mikrotrans'
+      };
+    });
+
+    return formattedRoutes as Route[];
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception mengambil daftar rute:', err);
+    return [];
+  }
+}
+
+/**
+ * Mengambil laporan operasional harian untuk rute dan tanggal tertentu.
+ */
+export async function fetchDailyRouteReport(
+  routeId: number,
+  date: string
+): Promise<DailyRouteReport | null> {
+  try {
+    const { data, error } = await supabase
+      .from('daily_route_reports')
+      .select('*')
+      .eq('route_id', routeId)
+      .eq('date', date)
+      .maybeSingle();
+
+    if (error) {
+      console.warn(`[dailyRouteReportService] Gagal mengambil laporan rute ID ${routeId} tanggal ${date}:`, error);
+      return null;
+    }
+
+    return data as DailyRouteReport | null;
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception fetchDailyRouteReport:', err);
+    return null;
+  }
+}
+
+/**
+ * Mengambil seluruh laporan operasional harian 18 rute untuk tanggal tertentu.
+ */
+export async function fetchDailyRouteReportsByDate(date: string): Promise<DailyRouteReport[]> {
+  try {
+    const { data, error } = await supabase
+      .from('daily_route_reports')
+      .select('*')
+      .eq('date', date);
+
+    if (error) {
+      console.warn(`[dailyRouteReportService] Gagal mengambil laporan tanggal ${date}:`, error);
+      return [];
+    }
+
+    return (data || []) as DailyRouteReport[];
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception fetchDailyRouteReportsByDate:', err);
+    return [];
+  }
+}
+
+/**
+ * Menyimpan / memperbarui laporan operasional harian yang diisi oleh petugas PDO.
+ */
+export async function upsertDailyRouteReport(
+  report: Partial<DailyRouteReport> & { route_id: number; route_code: string; date: string }
+): Promise<DailyRouteReport> {
+  const payload = {
+    ...report,
+    updated_at: new Date().toISOString()
+  };
+
+  const { data, error } = await supabase
+    .from('daily_route_reports')
+    .upsert(payload, { onConflict: 'route_id,date' })
+    .select('*')
+    .single();
+
+  if (error) {
+    console.warn('[dailyRouteReportService] Gagal upsertDailyRouteReport:', error);
+    throw new Error(`Gagal menyimpan laporan operasional rute: ${error.message}`);
+  }
+
+  return data as DailyRouteReport;
+}
+
+/**
+ * Konfirmasi / verifikasi laporan rute oleh pimpinan / Korlap.
+ */
+export async function verifyDailyRouteReport(
+  idOrRouteId: number,
+  dateOrVerifiedBy?: string,
+  maybeVerifiedBy?: string
+): Promise<boolean> {
+  try {
+    const isByRouteAndDate = typeof dateOrVerifiedBy === 'string' && dateOrVerifiedBy.includes('-');
+    const verifiedBy = isByRouteAndDate ? maybeVerifiedBy : dateOrVerifiedBy;
+
+    let query = supabase
+      .from('daily_route_reports')
+      .update({
+        status: 'verified',
+        verified_by: verifiedBy,
+        updated_at: new Date().toISOString()
+      });
+
+    if (isByRouteAndDate) {
+      query = query.eq('route_id', idOrRouteId).eq('date', dateOrVerifiedBy);
+    } else {
+      query = query.eq('id', idOrRouteId);
+    }
+
+    const { error } = await query;
+
+    if (error) {
+      console.warn(`[dailyRouteReportService] Gagal verifikasi laporan:`, error);
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception verifyDailyRouteReport:', err);
+    return false;
+  }
+}
+
+/**
+ * Menambahkan catatan riwayat audit baru untuk konfirmasi / perubahan status armada (Append-Only).
+ * Tidak menimpa baris yang sudah ada, selalu melakukan INSERT baris baru untuk keperluan audit.
+ */
+export async function recordFleetStatusAuditLog(
+  log: Omit<FleetStatusLog, 'id' | 'created_at'>
+): Promise<FleetStatusLog | null> {
+  try {
+    const payload = {
+      ...log,
+      created_at: new Date().toISOString()
+    };
+
+    const { data, error } = await supabase
+      .from('fleet_status_logs')
+      .insert(payload)
+      .select('*')
+      .single();
+
+    if (error) {
+      console.warn('[dailyRouteReportService] Gagal mencatat fleet_status_logs:', error);
+      return null;
+    }
+
+    return data as FleetStatusLog;
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception recordFleetStatusAuditLog:', err);
+    return null;
+  }
+}
+
+/**
+ * Mengambil riwayat audit status armada per rute dan tanggal.
+ */
+export async function fetchFleetStatusAuditLogs(
+  routeId: number,
+  date: string
+): Promise<FleetStatusLog[]> {
+  try {
+    const { data, error } = await supabase
+      .from('fleet_status_logs')
+      .select('*')
+      .eq('route_id', routeId)
+      .eq('date', date)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('[dailyRouteReportService] Gagal mengambil audit logs:', error);
+      return [];
+    }
+
+    return (data || []) as FleetStatusLog[];
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception fetchFleetStatusAuditLogs:', err);
+    return [];
+  }
+}
+
+/**
+ * Memperbarui metrik capaian operasional (TOA, Manual, KM, Ritase) pada laporan harian rute.
+ */
+export async function syncRouteMetricsToReport(
+  routeId: number,
+  date: string,
+  metrics: Partial<DailyRouteReport>
+): Promise<boolean> {
+  try {
+    const payload = {
+      ...metrics,
+      last_synced_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('daily_route_reports')
+      .update(payload)
+      .eq('route_id', routeId)
+      .eq('date', date);
+
+    if (error) {
+      console.warn(`[dailyRouteReportService] Gagal syncRouteMetricsToReport route ${routeId} date ${date}:`, error);
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.warn('[dailyRouteReportService] Exception syncRouteMetricsToReport:', err);
+    return false;
+  }
+}
+

@@ -43,4 +43,15 @@ describe('formatUserError', () => {
     const fallbackResult = formatUserError(unknownErr, 'Pesan fallback khusus');
     expect(fallbackResult).toBe('Pesan fallback khusus');
   });
+
+  it('sanitizes database schema cache and postgrest errors', () => {
+    const dbErr = new Error("Could not find the 'fleet_confirmed_s2_at' column of 'daily_route_reports' in the schema cache");
+    const resultWithoutFallback = formatUserError(dbErr);
+    expect(resultWithoutFallback).not.toContain('fleet_confirmed_s2_at');
+    expect(resultWithoutFallback).not.toContain('schema cache');
+    expect(resultWithoutFallback).toContain('laporan operasional');
+
+    const resultWithFallback = formatUserError(dbErr, 'Gagal menerapkan status armada');
+    expect(resultWithFallback).toBe('Gagal menerapkan status armada');
+  });
 });

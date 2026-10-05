@@ -59,7 +59,7 @@ function detectCollision(
   const fieldsToCheck: (keyof BusData)[] = snapshotKeys.length > 0
     ? snapshotKeys
     : [
-        'toaShift1', 'manualShift1', 'manualShift2', 'totalToa',
+        'toaShift1', 'toaShift2', 'manualShift1', 'manualShift2', 'totalToa',
         'kmAwal1', 'kmAkhir1', 'kmAwal2', 'kmAkhir2', 'keterangan'
       ];
 

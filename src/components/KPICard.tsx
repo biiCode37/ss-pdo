@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Gauge, Users, UserCheck, Bus } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { safeFormatNumber } from "../utils/numberUtils";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   summary: AnalyticsSummary;
@@ -27,7 +28,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
       >
         <div className="analytics-card-title">
           <Gauge size={18} />
-          <span>Capaian Pelanggan & Km</span>
+          <span>{TEXT_DASHBOARD.KPIS.TITLE}</span>
         </div>
         {dateBadge && (
           <span
@@ -53,21 +54,21 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="analytics-stat-box">
           <div className="analytics-stat-label">
             <Gauge size={14} style={{ color: "var(--success-color)" }} />
-            <span>TOTAL KM</span>
+            <span>{TEXT_DASHBOARD.KPIS.TOTAL_KM}</span>
           </div>
           <div
             className="analytics-stat-value"
             style={{ color: "var(--success-color)" }}
           >
             {formatRaw(summary.totalKm)}{" "}
-            <span style={{ fontSize: "12px", fontWeight: 400 }}>KM</span>
+            <span style={{ fontSize: "12px", fontWeight: 400 }}>{TEXT_DASHBOARD.KPIS.TOTAL_KM_UNIT}</span>
           </div>
         </div>
 
         <div className="analytics-stat-box">
           <div className="analytics-stat-label">
             <Users size={14} style={{ color: "var(--accent-color)" }} />
-            <span>PELANGGAN (TOA)</span>
+            <span>{TEXT_DASHBOARD.KPIS.TOA_PASSENGERS}</span>
           </div>
           <div
             className="analytics-stat-value"
@@ -105,7 +106,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
             }}
           >
             <Bus size={16} style={{ color: "var(--accent-color)" }} />
-            <span>KM/Bus:</span>
+            <span>{TEXT_DASHBOARD.KPIS.KM_PER_BUS}</span>
           </span>
           <b
             style={{
@@ -114,7 +115,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
               textAlign: "right",
             }}
           >
-            {formatRaw(summary.kmPerBus)} KM
+            {formatRaw(summary.kmPerBus)} {TEXT_DASHBOARD.KPIS.TOTAL_KM_UNIT}
           </b>
         </div>
 
@@ -135,7 +136,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
             }}
           >
             <UserCheck size={16} style={{ color: "var(--success-color)" }} />
-            <span>Pnp/Km:</span>
+            <span>{TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM}</span>
           </span>
           <b
             style={{

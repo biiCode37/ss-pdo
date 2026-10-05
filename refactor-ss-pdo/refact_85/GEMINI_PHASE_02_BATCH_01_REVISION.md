@@ -1,0 +1,12 @@
+# Paket revisi Gemini — Fase 2, Batch 2.1
+
+Codex memutuskan **REVISE** atas `refact_84`. Kerjakan tiga temuan dalam `refact_85/AUDIT_BUGS.md`, lalu berhenti untuk review berikutnya. Jangan mulai Batch 2.2.
+
+1. Pastikan branch `devmode`, baca `AGENTS.md` dan `.agents/AGENTS.md`, lalu catat diff dan perubahan lokal. Jangan reset, stash, clean, atau mengubah folder `refact_N` yang selesai. Buat folder dokumentasi berikutnya `refactor-ss-pdo/refact_86` jika belum dipakai; bila sudah dipakai, pilih nomor tertinggi + 1.
+2. **R85-01:** perkuat dua asersi nol pada `MonitoringRouteDetailModal.test.tsx`. Periksa nilai tepat pada kartu `TOTAL_RITASE_PP`, bukan substring `container.textContent` seluruh modal. Pertahankan kasus 101/100/0 trip, prioritas `totalRitasePp = 0`, dan 5.05 ritase per bus. Buktikan tes nol akan gagal untuk hasil salah `50 Rit`.
+3. **R85-02:** pada dua file source yang sudah disentuh, pindahkan fallback/label UI yang tercantum pada audit ke modul kamus domain terkait. Gunakan entri yang sudah ada jika tepat, buat entri baru bila perlu, dan uji entri baru di `src/constants/texts/texts.test.ts`. Gunakan unit utuh dari kamus untuk `Rit/Bus`, `Org/Bus`, dan `Org/KM`. Jangan mengubah angka, logika nonritase, atau kunci teknis. Cek ulang kedua file untuk literal UI lain yang tampil; jangan menganggap string status, ID, nama properti, atau CSS sebagai teks UI.
+4. **R85-03:** pada laporan baru, betulkan pemetaan: R79-06 = label error di `useBusInputForm.ts`, R83-01 = sembilan pemanggil validasi yang terlewat dalam paket Fase 1, R83-02 = presisi ritase per bus. Jelaskan status aktual masing-masing. Jangan menulis ulang `refact_84`.
+5. Jalankan tes target, full suite `pnpm run test --dir src`, lint, build, dan `graphify update .` setelah perubahan kode. Catat hasil aktual, warning relatif ke baseline 72, serta file graph yang berubah. Simpan bukti perintah dan output yang cukup agar dapat diaudit. Perubahan graph yang murni hasil regenerasi boleh dipertahankan dan harus disebut dalam laporan.
+6. Dalam folder dokumentasi baru, tulis `AUDIT_BUGS.md` dan `REPAIR_REPORT.md` sesuai `AGENTS.md`, termasuk Before vs After dan Case: Skenario Lapangan untuk tiap perbaikan. Laporkan daftar file berubah dan status `READY_FOR_REVIEW` atau `BLOCKED` dengan alasan spesifik.
+
+Kriteria PASS: asersi nol benar-benar membedakan 0 dari 50; tidak ada teks UI literal yang terinventaris dalam dua source file yang dimodifikasi; ID temuan dalam laporan baru akurat; quality gates tidak regresi; tidak ada perubahan di luar cakupan tanpa penjelasan.

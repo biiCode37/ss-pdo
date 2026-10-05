@@ -4,6 +4,7 @@ export * from './core';
 export * from './mutations';
 export * from './analytics';
 export * from './transport';
+export * from './globalReportReader';
 
 // Canonical utility re-exports for complete backward compatibility
 export { isAuthError } from '../../utils/errorClassifier';

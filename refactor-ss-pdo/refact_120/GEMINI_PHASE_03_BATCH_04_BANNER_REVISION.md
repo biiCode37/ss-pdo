@@ -1,0 +1,9 @@
+# Instruksi Gemini — Revisi Banner Rollover Batch 3.4
+
+Batch 3.4 masih `REVISION_REQUIRED` karena R120-01 dan R120-02. Baca `refactor-ss-pdo/refact_120/AUDIT_BUGS.md` dan `REPAIR_REPORT.md`. Kerjakan hanya dua temuan itu; Batch 3.5 tetap menunggu review Codex.
+
+1. Perbaiki **seluruh teks banner rollover** di `SingleFocusKmRolloverBanner.tsx`, bukan hanya tombol. Pada Light Mode, judul `--warning-color: #d97706` di atas `--warning-badge-bg` komposit sekitar 2,82:1; isi `--text-secondary: #6b7280` sekitar 4,27:1. Gunakan token foreground yang mencapai minimal **4,5:1** untuk ukuran `0.8rem` dan `0.76rem` pada Light dan Dark. Token `--warning-text` Light `#c2410c` memberi sekitar 4,58:1 pada latar putih komposit, tetapi pilih margin kontras yang lebih aman bila mungkin. Pertahankan aksi tombol, data saran, ukuran/layout, dan perilaku Shift 1/2.
+2. Koreksi **bukti matematika R120-02** di folder revisi baru. Luminansi sRGB `#d97706` sekitar 0,2796 dan `#0f172a` sekitar 0,0088; rasionya 5,60:1. CSS chip Light memakai alpha **8%**, bukan 12%. Simpan skrip atau perhitungan yang dapat dijalankan dengan input warna/token aktual, hasil komposisi alpha, serta rasio semua teks banner dan kontrol terkait. Jangan menulis persamaan yang tidak menghasilkan rasio yang dilaporkan; jangan edit arsip `refact_119`.
+3. Jalankan tes target, `pnpm run test src/`, lint terarah, `pnpm run build`, dan `graphify update .` setelah perubahan kode. Verifikasi browser mobile Light/Dark bila tersedia; bila tidak, nyatakan batasannya. Catat output sebenarnya, termasuk warning.
+
+Tetap di branch `devmode`; jangan reset, stash, clean, commit, push, atau menyentuh branch utama. Buat folder `refactor-ss-pdo/refact_N/` baru dengan `AUDIT_BUGS.md` (ID/lokasi/keparahan/deskripsi/dampak user/mitigasi), `REPAIR_REPORT.md` (implementasi, **Before vs After**, **Case: Skenario Lapangan**), dan bukti dalam `evidence/`. Laporkan `READY_FOR_REVIEW` hanya setelah gerbang selesai.

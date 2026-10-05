@@ -42,6 +42,13 @@ describe('sheetColorUtils', () => {
       expect(getKeteranganColor('   ')).toBeNull();
       expect(getKeteranganColor(undefined)).toBeNull();
     });
+
+    it('assigns color correctly for composite notes separated by pipe', () => {
+      // Prioritizes BA (skyblue) over other statuses if present
+      expect(getKeteranganColor('BA.01 Radiator | TO EVDAL')).toEqual({ red: 0.53, green: 0.81, blue: 0.98 });
+      // If no BA, matches TO EVDAL (red)
+      expect(getKeteranganColor('OFF | TO EVDAL')).toEqual({ red: 0.95, green: 0.35, blue: 0.35 });
+    });
   });
 
   describe('getRowEndCol', () => {

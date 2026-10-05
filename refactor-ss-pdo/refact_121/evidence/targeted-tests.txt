@@ -1,0 +1,11 @@
+$ pnpm exec vitest run src/components/busCard/modal/singleFocus/ src/components/busCard/modal/BusInputModalSingleFocus.test.tsx
+
+ RUN  v4.1.10 D:/MINE/SS_PDO
+
+ ✓ src/components/busCard/modal/singleFocus/SingleFocusKmRolloverBanner.test.tsx (1 test) 79ms
+ ✓ src/components/busCard/modal/BusInputModalSingleFocus.test.tsx (13 tests) 333ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  18:57:17
+   Duration  1.46s (transform 475ms, setup 0ms, import 974ms, tests 412ms, environment 788ms)

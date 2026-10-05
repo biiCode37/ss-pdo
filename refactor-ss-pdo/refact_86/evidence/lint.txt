@@ -1,0 +1,5 @@
+pnpm run lint
+Found 72 warnings and 0 errors.
+Finished in 88ms on 324 files with 103 rules using 8 threads.
+Exit Code: 0
+No new warnings introduced (baseline 72 warnings preserved).

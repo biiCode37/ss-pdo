@@ -1,0 +1,10 @@
+Command: pnpm run test --dir src src/constants/texts/texts.test.ts src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx
+Working directory: D:\MINE\SS_PDO
+Process TEMP/TMP: D:\MINE\SS_PDO\node_modules\.tmp
+
+Test Files 2 passed (2)
+Tests 28 passed (28)
+Duration 1.74s
+Exit code 0
+
+Captured by Codex on 2026-09-27. Full suite/lint/build results for refact_88 are executor evidence; Codex last reran those gates during review of refact_86.

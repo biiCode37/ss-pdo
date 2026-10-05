@@ -1,0 +1,14 @@
+# Paket revisi Gemini — Fase 2, Batch 2.2
+
+Codex menilai ekstraksi komponen bersama dalam `refact_90` sudah tepat, tetapi memberi status **REVISE** untuk R91-01 sampai R91-03 di `refact_91/AUDIT_BUGS.md`. Kerjakan tiga temuan ini saja lalu kembali untuk review; jangan mulai Batch 2.3.
+
+1. Pastikan branch `devmode`, catat working tree, dan pertahankan seluruh perubahan lokal. Buat folder dokumentasi `refactor-ss-pdo/refact_92` jika tersedia atau nomor tertinggi + 1. Jangan mengedit `refact_N` sebelumnya, commit, push, reset, stash, atau clean.
+2. Tambahkan `aria-pressed={isActive}` pada `<button>` native di `ShiftOptionChip.tsx`. Jangan tambahkan `role="button"` atau `tabIndex={0}` yang redundan. Tes status aktif/tidak aktif dan klik callback.
+3. Perkuat tes perilaku minimal: Enter pada field yang dirender lewat komponen bersama harus mencapai `requestSubmit()` melalui handler form aktual; `KM Akhir 2` disabled saat `isKmAkhir2Locked`; tombol Manual dan Catatan pada Shift 1 dan 2 memanggil setter yang tepat. Uji ref/label/value yang sudah ada tetap dipertahankan. Hindari mengubah logika domain hanya demi tes.
+4. Ambil bukti visual modal di lebar ponsel untuk light dan dark mode bila preview tersedia, terutama field hero, field disabled, dan chip aktif. Bila preview tidak dapat diakses, tulis batas verifikasi tersebut secara jelas; jangan mengklaim kesetaraan visual yang belum dilihat. Periksa token `--input-bg`, `--card-border`, dan kontras secara faktual.
+5. Dalam laporan **baru**, koreksi semua contoh Before vs After terhadap source aktual: style awal memakai `rgba(0,0,0,0.35)`/`rgba(0,0,0,0.25)`; komponen aktual tidak memiliki `isLocked`, `suffix`, `helperText`, atau `onBlur`; chip memakai prop `onToggle`, dan label tidak memakai `CHIP_ADD_LABEL`. Jelaskan bahwa `requestSubmit()` berada di `useBusInputForm.ts`, sedangkan field meneruskan `onKeyDown`. Jangan mengubah arsip `refact_90`.
+6. Hapus blank line ekstra di EOF `BusInputModalShift1.tsx` dan `BusInputModalShift2.tsx`. Jalankan `git diff --check` hingga tidak ada error whitespace. Pertahankan source lain yang tidak terkait.
+7. Jalankan tes target, full suite `pnpm run test --dir src`, lint terarah untuk file Batch 2.2, build, dan `graphify update .` setelah kode berubah. Root lint boleh dicatat sebagai terkontaminasi `dist_old/` (R89-01), tetapi jangan menghapus folder itu. Laporkan hasil aktual, bukan angka baseline yang tidak sebanding.
+8. Simpan `AUDIT_BUGS.md`, `REPAIR_REPORT.md`, dan evidence pada folder baru; sertakan ID/lokasi/keparahan/dampak/mitigasi, implementasi, Before vs After, Case: Skenario Lapangan, file berubah, dan status `READY_FOR_REVIEW` atau `BLOCKED` dengan alasan spesifik.
+
+Kriteria PASS: status chip diumumkan dengan benar, tes menutup alur interaksi utama kedua Shift, visual dinyatakan berdasarkan bukti atau batas nyata, dokumentasi sesuai source, whitespace bersih, dan gate tidak regresi.

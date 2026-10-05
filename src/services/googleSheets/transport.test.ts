@@ -1,22 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('gapi-script', () => ({
-  gapi: {
-    client: {
-      sheets: {
-        spreadsheets: {
-          get: vi.fn(),
-          values: {
-            get: vi.fn(),
-            batchGet: vi.fn(),
-            batchUpdate: vi.fn(),
-          },
-          batchUpdate: vi.fn(),
-        },
-      },
+const mockSpreadsheets = {
+  get: vi.fn(),
+  values: {
+    get: vi.fn(),
+    batchGet: vi.fn(),
+    batchUpdate: vi.fn(),
+  },
+  batchUpdate: vi.fn(),
+};
+
+const mockGapi = {
+  client: {
+    sheets: {
+      spreadsheets: mockSpreadsheets,
     },
   },
-}));
+};
 
 vi.mock('../supabase', () => ({
   isSupabaseConfigured: true,
@@ -30,6 +30,7 @@ vi.mock('../supabase', () => ({
 vi.mock('./auth', () => ({
   withAuthRetry: vi.fn((fn) => fn()),
   ensureValidToken: vi.fn(),
+  getGapi: vi.fn(() => mockGapi),
 }));
 
 import {
@@ -43,7 +44,6 @@ import {
   isUsingServiceAccount,
 } from './transport';
 import { supabase } from '../supabase';
-import { gapi } from 'gapi-script';
 
 describe('transport adapter', () => {
   beforeEach(() => {
@@ -144,19 +144,12 @@ describe('transport adapter', () => {
   it('falls back to gapi when transport mode is client_oauth', async () => {
     setTransportMode('client_oauth');
 
-    const mockGapiGet = vi.fn().mockResolvedValue({
+    mockSpreadsheets.get.mockResolvedValue({
       result: { sheets: [] },
     });
-    (gapi as any).client = {
-      sheets: {
-        spreadsheets: {
-          get: mockGapiGet,
-        },
-      },
-    };
 
     const res = await fetchSpreadsheetMeta('sheet123');
-    expect(mockGapiGet).toHaveBeenCalledWith({ spreadsheetId: 'sheet123', fields: undefined });
+    expect(mockSpreadsheets.get).toHaveBeenCalledWith({ spreadsheetId: 'sheet123', fields: undefined });
     expect(res.result.sheets).toBeDefined();
   });
 });

@@ -1,17 +1,20 @@
-export type UserRole = 'superadmin' | 'admin' | 'petugas';
+export type UserRole = 'superadmin' | 'admin' | 'korwil' | 'korlap' | 'pdo';
 
-const VALID_ROLES: UserRole[] = ['superadmin', 'admin', 'petugas'];
+export const VALID_ROLES: UserRole[] = ['superadmin', 'admin', 'korwil', 'korlap', 'pdo'];
 
 /**
  * Membaca & memvalidasi role user dari localStorage.
  * Nilai tidak valid / rusak (misal hasil manipulasi manual) fallback ke
- * 'petugas' agar guard RBAC tidak terlewati oleh string arbitrer.
+ * 'pdo' agar guard RBAC tidak terlewati oleh string arbitrer.
+ * Mendukung migrasi dari string warisan 'petugas' -> 'pdo'.
  */
 export function getStoredUserRole(): UserRole {
   try {
     const raw = localStorage.getItem('PDO_USER_ROLE');
-    return VALID_ROLES.includes(raw as UserRole) ? (raw as UserRole) : 'petugas';
+    if (raw === 'petugas') return 'pdo';
+    return VALID_ROLES.includes(raw as UserRole) ? (raw as UserRole) : 'pdo';
   } catch {
-    return 'petugas';
+    return 'pdo';
   }
 }
+

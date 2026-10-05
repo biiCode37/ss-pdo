@@ -1,0 +1,1874 @@
+﻿
+  ! File is too long to fit on the screen
+  help: dist_old/assets/UserManagementPage-B1kA2NXW.js seems like a minified file
+
+  ! eslint(no-unused-expressions): Expected expression to be used
+   ,-[dist_old/assets/rolldown-runtime-Bh1tDfsg.js:1:334]
+ 1 | var e=Object.create,t=Object.defineProperty,n=Object.getOwnPropertyDescriptor,r=Object.getOwnPropertyNames,i=Object.getPrototypeOf,a=Object.prototype.hasOwnProperty,o=(e,t)=>()=>(t||(e((t={exports:{}}).exports,t),e=null),t.exports),s=(e,i,o,s)=>{if(i&&typeof i==`object`||typeof i==`function`)for(var c=r(i),l=0,u=c.length,d;l<u;l++)d=c[l],!a.call(e,d)&&d!==o&&t(e,d,{get:(e=>i[e]).bind(null,d),enumerable:!(s=n(i,d))||s.enumerable});return e},c=(n,r,a)=>(a=n==null?{}:e(i(n)),s(r||!n||!n.__esModule?t(a,`default`,{value:n,enumerable:!0}):a,n));export{c as n,o as t};
+   :                                                                                                                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   `----
+  help: Consider using this expression or removing it
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/RouteSelectorCard.tsx:5:29]
+ 4 |  */
+ 5 | export { RouteSelectorCard, default } from "./routeSelector/RouteSelectorCard";
+   :                             ^^^^^^^
+ 6 | export type { RouteSelectorCardProps } from "./routeSelector/types";
+   `----
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/hooks/__tests__/useVisualViewport.test.tsx:14:3]
+ 13 |   const info = useVisualViewport();
+ 14 |   latestInfo = info;
+    :   ^^^^^|^^^^
+    :        `-- `latestInfo` cannot be reassigned
+ 15 |   return <div id="viewport-test-node">{info.viewportHeight}</div>;
+    `----
+  help: Variable `latestInfo` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/hooks/__tests__/usePreviousDayOdometer.test.tsx:25:3]
+ 24 |   const result = usePreviousDayOdometer(props);
+ 25 |   latestHookResult = result;
+    :   ^^^^^^^^|^^^^^^^
+    :           `-- `latestHookResult` cannot be reassigned
+ 26 |   return <div id="odometer-test-node">{Object.keys(result.previousDayKmMap).length}</div>;
+    `----
+  help: Variable `latestHookResult` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/hooks/__tests__/useOfflineSync.test.tsx:24:3]
+ 23 | function TestHookComponent({ options }: { options?: Parameters<typeof useOfflineSync>[0] }) {
+ 24 |   latestHookResult = useOfflineSync(options);
+    :   ^^^^^^^^|^^^^^^^
+    :           `-- `latestHookResult` cannot be reassigned
+ 25 |   return <div id="hook-mounted">Queue: {latestHookResult.queue.length}</div>;
+    `----
+  help: Variable `latestHookResult` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+    ,-[src/utils/historyNavigation.ts:79:12]
+ 78 |     history.pushState({ pdoRootGuard: true, timestamp: now }, '');
+ 79 |   } catch (_err) {}
+    :            ^^|^
+    :              `-- '_err' is declared here
+ 80 | }
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+    ,-[src/utils/historyNavigation.ts:94:12]
+ 93 |     history.pushState({ pdoRootGuard: true }, '');
+ 94 |   } catch (_err) {}
+    :            ^^|^
+    :              `-- '_err' is declared here
+ 95 | 
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+     ,-[src/utils/historyNavigation.ts:113:12]
+ 112 |     history.pushState({ pdoNavId: entry.id, depth: navigationStack.length }, '');
+ 113 |   } catch (_err) {}
+     :            ^^|^
+     :              `-- '_err' is declared here
+ 114 | }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+     ,-[src/utils/historyNavigation.ts:129:16]
+ 128 |         history.back();
+ 129 |       } catch (_err) {
+     :                ^^|^
+     :                  `-- '_err' is declared here
+ 130 |         isProgrammaticPop = false;
+     `----
+  help: Consider handling this error.
+
+  ! react(purity): Cannot call impure function during render
+    ,-[src/hooks/useUserActivityTracking.ts:15:43]
+ 14 |   emailRef.current = userEmail;
+ 15 |   const lastHeartbeatRef = useRef<number>(Date.now());
+    :                                           ^^^^^|^^^^
+    :                                                `-- Cannot call impure function
+ 16 | 
+    `----
+  help: `Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component re-renders
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/purity
+
+  ! react(refs): Cannot access refs during render
+    ,-[src/hooks/useUserActivityTracking.ts:14:11]
+ 13 |   const emailRef = useRef(userEmail);
+ 14 |   emailRef.current = userEmail;
+    :   ^^^^|^^^^^^^|^^^
+    :       |       `-- Cannot update ref value during render
+    :       `-- This value is a ref
+ 15 |   const lastHeartbeatRef = useRef<number>(Date.now());
+    `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! eslint(no-loss-of-precision): This number literal will lose precision at runtime.
+    ,-[src/utils/analytics.test.ts:50:17]
+ 49 |       totalPassengers: 4670,
+ 50 |       kmPerBus: 192.72620689655172,
+    :                 ^^^^^^^^^^^^^^^^^^
+ 51 |       passengersPerKm: 0.8355601120404863
+    `----
+  help: Use a number literal representable by a 64-bit floating-point number, or use a `BigInt` literal (for example, `9007199254740993n`) for exact large integers.
+  note: In JavaScript, `Number` values exactly represent integers only in the range -9007199254740991 to 9007199254740991 (`Number.MIN_SAFE_INTEGER` to `Number.MAX_SAFE_INTEGER`). `BigInt` supports arbitrarily large integers.
+
+  ! eslint(no-loss-of-precision): This number literal will lose precision at runtime.
+    ,-[src/utils/analytics.test.ts:55:39]
+ 54 |     expect(ssotSummary.totalKm).toBe(5589.06);
+ 55 |     expect(ssotSummary.kmPerBus).toBe(192.72620689655172);
+    :                                       ^^^^^^^^^^^^^^^^^^
+ 56 |     expect(ssotSummary.passengersPerKm).toBe(0.8355601120404863);
+    `----
+  help: Use a number literal representable by a 64-bit floating-point number, or use a `BigInt` literal (for example, `9007199254740993n`) for exact large integers.
+  note: In JavaScript, `Number` values exactly represent integers only in the range -9007199254740991 to 9007199254740991 (`Number.MIN_SAFE_INTEGER` to `Number.MAX_SAFE_INTEGER`). `BigInt` supports arbitrarily large integers.
+
+  ! eslint(no-unused-vars): Catch parameter '_cacheErr' is caught but never used.
+    ,-[src/services/routes/users.ts:40:12]
+ 39 |     }
+ 40 |   } catch (_cacheErr) {}
+    :            ^^^^|^^^^
+    :                `-- '_cacheErr' is declared here
+ 41 |   return null;
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/routes/users.ts:107:14]
+ 106 |       }));
+ 107 |     } catch (_e) {}
+     :              ^|
+     :               `-- '_e' is declared here
+ 108 | 
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/routes/users.ts:163:16]
+ 162 |         }));
+ 163 |       } catch (_e) { /* localStorage bisa penuh */ }
+     :                ^|
+     :                 `-- '_e' is declared here
+ 164 |     } else {
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/routes/users.ts:177:14]
+ 176 |       }));
+ 177 |     } catch (_e) { /* silent */ }
+     :              ^|
+     :               `-- '_e' is declared here
+ 178 |   }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+     ,-[src/services/routes/users.ts:201:12]
+ 200 |       .eq('email', userEmail);
+ 201 |   } catch (_err) {
+     :            ^^|^
+     :              `-- '_err' is declared here
+ 202 |     /* Non-blocking fail-safe */
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+    ,-[src/services/routes/sync.ts:17:14]
+ 16 |       localStorage.removeItem(PENDING_PROFILE_SYNC_KEY);
+ 17 |     } catch (_e) {}
+    :              ^|
+    :               `-- '_e' is declared here
+ 18 |   }
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+    ,-[src/services/routes/sync.ts:27:16]
+ 26 |         if (error) remaining.push(log);
+ 27 |       } catch (_e) {
+    :                ^|
+    :                 `-- '_e' is declared here
+ 28 |         remaining.push(log);
+    `----
+  help: Consider handling this error.
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/BusCard.tsx:5:19]
+ 4 |  */
+ 5 | export { BusCard, default } from "./busCard/BusCard";
+   :                   ^^^^^^^
+ 6 | export type { BusCardProps } from "./busCard/types";
+   `----
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/components/routeSelector/useRouteCascade.ts:179:18]
+ 178 |           }
+ 179 |         } catch (_e) {}
+     :                  ^|
+     :                   `-- '_e' is declared here
+ 180 | 
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/components/routeSelector/useRouteCascade.ts:235:16]
+ 234 |         );
+ 235 |       } catch (_e) {}
+     :                ^|
+     :                 `-- '_e' is declared here
+ 236 |     }
+     `----
+  help: Consider handling this error.
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/routeSelector/useRouteCascade.ts:126:5]
+ 124 | 
+ 125 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 126 |     loadRoutes().then((data) => {
+     :     ^^^^^|^^^^
+     :          `-- Avoid calling setState() directly within an effect
+ 127 |       const flat = data.flatMap((r) =>
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/routeSelector/useRouteCascade.ts:219:7]
+ 203 |   const prevLoadedSheetIdRef = useRef<string | undefined>(currentSheetId);
+ 204 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 205 |     if (flatSheets.length === 0 || !currentSheetId) return;
+ 206 | 
+ 207 |     if (prevLoadedSheetIdRef.current === currentSheetId && selectedRouteCode)
+ 208 |       return;
+ 209 |     prevLoadedSheetIdRef.current = currentSheetId;
+ 210 | 
+ 211 |     const active = flatSheets.find((f) => {
+ 212 |       const fId =
+ 213 |         extractSpreadsheetId(f.sheet.sheet_url) ||
+ 214 |         extractSpreadsheetId(f.sheet.spreadsheet_id);
+ 215 |       return fId === currentSheetId;
+ 216 |     });
+ 217 | 
+ 218 |     if (active) {
+ 219 |       setSelectedYear(active.sheet.year);
+     :       ^^^^^^^|^^^^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 220 |       setSelectedMonth(active.sheet.month);
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/routeSelector/useRouteCascade.ts:301:7]
+ 298 |   // Sinkronkan pilihan form dengan tab data yang sedang aktif saat data baru dimuat
+ 299 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 300 |     if (currentTabName) {
+ 301 |       setFormTab(currentTabName);
+     :       ^^^^^|^^^^
+     :            `-- Avoid calling setState() directly within an effect
+ 302 |     }
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'isAccumulation', 'sheetUrl', 'setSelectedTab', 'currentTabName', 'setSheetUrl', 'selectedTab', and 'isDataLoaded'
+     ,-[src/components/routeSelector/useRouteCascade.ts:199:6]
+ 137 |         try {
+ 138 |           const saved = !isDataLoaded
+     :                          ^^^^^^^^^^^^
+ 139 |             ? localStorage.getItem("PDO_LAST_VISITED")
+ 140 |             : null;
+ 141 |           if (saved) {
+ 142 |             const parsed = JSON.parse(saved);
+ 143 |             const savedMatch = flat.find(
+ 144 |               (f) =>
+ 145 |                 f.sheet.sheet_url === parsed.sheetUrl ||
+ 146 |                 (extractSpreadsheetId(f.sheet.sheet_url) &&
+ 147 |                   extractSpreadsheetId(parsed.sheetUrl) &&
+ 148 |                   extractSpreadsheetId(f.sheet.sheet_url) ===
+ 149 |                     extractSpreadsheetId(parsed.sheetUrl)),
+ 150 |             );
+ 151 |             if (
+ 152 |               savedMatch &&
+ 153 |               parsed.year &&
+ 154 |               parsed.month &&
+ 155 |               parsed.routeCode
+ 156 |             ) {
+ 157 |               // Restore penuh → semua dropdown disabled cascade menjadi enabled
+ 158 |               setSelectedYear(parsed.year);
+ 159 |               setSelectedMonth(parsed.month);
+ 160 |               setSelectedRouteCode(parsed.routeCode);
+ 161 |               setSheetUrl(savedMatch.sheet.sheet_url);
+     :               ^^^^^^^^^^^
+ 162 | 
+ 163 |               // BUG-FIX: Sinkronisasi tanggal saat membuka aplikasi.
+ 164 |               // Jika rute tersimpan adalah periode bulan & tahun saat ini, tanggal HARUS selalu hari ini (today).
+ 165 |               // Tanggal tersimpan (parsed.selectedTab) hanya digunakan jika membuka arsip periode lampau.
+ 166 |               const now = new Date();
+ 167 |               const isCurrentPeriod =
+ 168 |                 parsed.year === now.getFullYear() &&
+ 169 |                 parsed.month === now.getMonth() + 1;
+ 170 |               const todayDay = String(now.getDate());
+ 171 |               const restoredTab = isCurrentPeriod
+ 172 |                 ? todayDay
+ 173 |                 : parsed.selectedTab || todayDay;
+ 174 |               setSelectedTab(restoredTab);
+     :               ^^^^^^^^^^^^^^
+ 175 |               setFormTab(restoredTab);
+ 176 |               return;
+ 177 |             }
+ 178 |           }
+ 179 |         } catch (_e) {}
+ 180 | 
+ 181 |         // Fallback: hanya Tahun default ke tahun sekarang, sisanya menunggu
+ 182 |         // input cascade dari user (Bulan/Rute/Tanggal disabled).
+ 183 |         const currentYear = new Date().getFullYear();
+ 184 |         if (flat.some((f) => f.sheet.year === currentYear)) {
+ 185 |           setSelectedYear(currentYear);
+ 186 |         } else if (flat.length > 0) {
+ 187 |           setSelectedYear(flat[0].sheet.year);
+ 188 |         }
+ 189 |         // BUG-13: Jangan menampilkan tanggal "terisi" yang menyesatkan pada
+ 190 |         // dropdown Tanggal yang masih disabled (belum ada rute terpilih).
+ 191 |         if (!isAccumulation && !currentTabName && !selectedTab) {
+     :              ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^^
+ 192 |           setFormTab("");
+ 193 |         }
+ 194 |         if (!sheetUrl) {
+     :              ^^^^^^^^
+ 195 |           setSheetUrl("");
+ 196 |         }
+ 197 |       }
+ 198 |     });
+ 199 |   }, []);
+     :      ^^
+ 200 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'selectedRouteCode'
+     ,-[src/components/routeSelector/useRouteCascade.ts:237:6]
+ 206 | 
+ 207 |     if (prevLoadedSheetIdRef.current === currentSheetId && selectedRouteCode)
+     :                                                            ^^^^^^^^|^^^^^^^^
+     :                                                                    `-- useEffect uses `selectedRouteCode` here
+ 208 |       return;
+ 209 |     prevLoadedSheetIdRef.current = currentSheetId;
+ 210 | 
+ 211 |     const active = flatSheets.find((f) => {
+ 212 |       const fId =
+ 213 |         extractSpreadsheetId(f.sheet.sheet_url) ||
+ 214 |         extractSpreadsheetId(f.sheet.spreadsheet_id);
+ 215 |       return fId === currentSheetId;
+ 216 |     });
+ 217 | 
+ 218 |     if (active) {
+ 219 |       setSelectedYear(active.sheet.year);
+ 220 |       setSelectedMonth(active.sheet.month);
+ 221 |       setSelectedRouteCode(active.routeCode);
+ 222 | 
+ 223 |       // Simpan ke localStorage (BUG-42)
+ 224 |       try {
+ 225 |         localStorage.setItem(
+ 226 |           "PDO_LAST_VISITED",
+ 227 |           JSON.stringify({
+ 228 |             sheetUrl: active.sheet.sheet_url,
+ 229 |             selectedTab,
+ 230 |             routeCode: active.routeCode,
+ 231 |             month: active.sheet.month,
+ 232 |             year: active.sheet.year,
+ 233 |           }),
+ 234 |         );
+ 235 |       } catch (_e) {}
+ 236 |     }
+ 237 |   }, [flatSheets, currentSheetId, selectedTab]);
+     :      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 238 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+    ,-[src/services/routes/audit.ts:19:12]
+ 18 |     localStorage.setItem(PENDING_ACTIVITY_LOGS_KEY, JSON.stringify(logs.slice(-100)));
+ 19 |   } catch (_e) {}
+    :            ^|
+    :             `-- '_e' is declared here
+ 20 | }
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'upsertErr' is caught but never used.
+     ,-[src/services/googleSheets/core.ts:391:24]
+ 390 |                 await upsertDailyUnitSummaries(summaries);
+ 391 |               } catch (upsertErr) {
+     :                        ^^^^|^^^^
+     :                            `-- 'upsertErr' is declared here
+ 392 |                 // 1x retry setelah 3 detik jika gagal (SOL-R6-009)
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/core.ts:401:18]
+ 400 |           }
+ 401 |         } catch (_e) {}
+     :                  ^|
+     :                   `-- '_e' is declared here
+ 402 |       })();
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/authSession.ts:132:14]
+ 131 |       }
+ 132 |     } catch (_e) {}
+     :              ^|
+     :               `-- '_e' is declared here
+ 133 |   }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/authSession.ts:189:14]
+ 188 |       client.requestAccessToken();
+ 189 |     } catch (_e) {
+     :              ^|
+     :               `-- '_e' is declared here
+ 190 |       client.requestAccessToken({ prompt: "select_account" });
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/authSession.ts:239:16]
+ 238 |         }
+ 239 |       } catch (_e) {}
+     :                ^|
+     :                 `-- '_e' is declared here
+ 240 |     }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/authSession.ts:304:14]
+ 303 |       }
+ 304 |     } catch (_e) {
+     :              ^|
+     :               `-- '_e' is declared here
+ 305 |       /* silent */
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/authSession.ts:348:14]
+ 347 |       }
+ 348 |     } catch (_e) {
+     :              ^|
+     :               `-- '_e' is declared here
+ 349 |       /* fallthrough */
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/authSession.ts:353:12]
+ 352 |     return { authenticated: true, reason: "needs_reauth" };
+ 353 |   } catch (_e) {
+     :            ^|
+     :             `-- '_e' is declared here
+ 354 |     return { authenticated: true, reason: "needs_reauth" };
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/services/googleSheets/authGis.ts:129:30]
+ 128 |                       }
+ 129 |                     } catch (_e) {
+     :                              ^|
+     :                               `-- '_e' is declared here
+ 130 |                       // Fallback: network error saat fetch userinfo
+     `----
+  help: Consider handling this error.
+
+  ! react(immutability): This value cannot be modified
+    ,-[src/components/UnitDetailModal.tsx:80:3]
+ 79 |   const handleDismissRef = useRef(handleDismiss);
+ 80 |   handleDismissRef.current = handleDismiss;
+    :   ^^^^^^^^|^^^^^^^
+    :           `-- value cannot be modified
+ 81 | 
+    `----
+  help: Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect()
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability
+
+  ! react(refs): Cannot access refs during render
+    ,-[src/components/UnitDetailModal.tsx:80:19]
+ 79 |   const handleDismissRef = useRef(handleDismiss);
+ 80 |   handleDismissRef.current = handleDismiss;
+    :   ^^^^^^^^|^^^^^^^^^^^|^^^
+    :           |           `-- Cannot update ref value during render
+    :           `-- This value is a ref
+ 81 | 
+    `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! eslint(no-unused-vars): Catch parameter '_err' is caught but never used.
+     ,-[src/components/routeSelector/useAddRouteForm.ts:105:16]
+ 104 |         }
+ 105 |       } catch (_err) {
+     :                ^^|^
+     :                  `-- '_err' is declared here
+ 106 |         if (newRouteUrl !== checkedUrl) return;
+     `----
+  help: Consider handling this error.
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/routeSelector/useAddRouteForm.ts:61:7]
+ 58 |   // Live check inspection saat user mengisi link Google Sheets
+ 59 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 60 |     if (!isAddingRoute || !newRouteUrl.trim()) {
+ 61 |       setCheckStatus("idle");
+    :       ^^^^^^^|^^^^^^
+    :              `-- Avoid calling setState() directly within an effect
+ 62 |       setCheckMessage(null);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/busCard/useBusCardSave.ts:55:5]
+ 53 |   // Sync formData when bus prop updates
+ 54 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 55 |     setFormData({
+    :     ^^^^^|^^^^^
+    :          `-- Avoid calling setState() directly within an effect
+ 56 |       toaShift1: bus.toaShift1 || "",
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/components/busCard/useBusCardSave.test.tsx:54:3]
+ 53 |   const save = useBusCardSave(props);
+ 54 |   latestSave = save;
+    :   ^^^^^|^^^^
+    :        `-- `latestSave` cannot be reassigned
+ 55 |   return <div id="save-test-node">{save.saveStatus}</div>;
+    `----
+  help: Variable `latestSave` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/components/busCard/useBusCardModal.test.tsx:47:3]
+ 46 | }) {
+ 47 |   latestHookResult = useBusCardModal(options);
+    :   ^^^^^^^^|^^^^^^^
+    :           `-- `latestHookResult` cannot be reassigned
+ 48 |   return <div id="hook-ready">Ready</div>;
+    `----
+  help: Variable `latestHookResult` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/busList/useBulkOperations.ts:54:7]
+ 51 |   // Otomatis sinkronkan bulkPergi & bulkPulang jika masih kosong tapi targetTrip terdeteksi dari data armada
+ 52 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 53 |     if (!bulkPergi && !bulkPulang && targetTrip) {
+ 54 |       setBulkPergi(String(targetTrip.pergi));
+    :       ^^^^^^|^^^^^
+    :             `-- Avoid calling setState() directly within an effect
+ 55 |       setBulkPulang(String(targetTrip.pulang));
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(refs): Cannot access refs during render
+    ,-[src/components/profileMenu/ProfileMenuSheet.tsx:47:19]
+ 46 |   const handleDismissRef = useRef(handleDismiss);
+ 47 |   handleDismissRef.current = handleDismiss;
+    :   ^^^^^^^^|^^^^^^^^^^^|^^^
+    :           |           `-- Cannot update ref value during render
+    :           `-- This value is a ref
+ 48 | 
+    `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/profileMenu/ProfileMenuSheet.tsx:57:7]
+ 54 | 
+ 55 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 56 |     if (!isOpen) {
+ 57 |       setIsMounted(false);
+    :       ^^^^^^|^^^^^
+    :             `-- Avoid calling setState() directly within an effect
+ 58 |       setIsClosing(false);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! File is too long to fit on the screen
+  help: dist_old/assets/index-fXysPkw0.js seems like a minified file
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/routeSelector/RouteSelectorCard.tsx:118:7]
+ 114 |   // Buka drawer sheet dan inisialisasi formTab dengan tanggal aktif saat tombol pill ditekan
+ 115 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 116 |     if (externalOpenTrigger && externalOpenTrigger > 0) {
+ 117 |       setFormTab(currentTabName || selectedTab || String(new Date().getDate()));
+ 118 |       setIsSheetOpen(true);
+     :       ^^^^^^^|^^^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 119 |     }
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'currentTabName', 'setFormTab', and 'selectedTab'
+     ,-[src/components/routeSelector/RouteSelectorCard.tsx:120:6]
+ 116 |     if (externalOpenTrigger && externalOpenTrigger > 0) {
+ 117 |       setFormTab(currentTabName || selectedTab || String(new Date().getDate()));
+     :       ^^^^^^^^^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^
+ 118 |       setIsSheetOpen(true);
+ 119 |     }
+ 120 |   }, [externalOpenTrigger]);
+     :      ^^^^^^^^^^^^^^^^^^^^^
+ 121 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react-hooks(exhaustive-deps): React hook useCallback depends on `mainTabs`, which changes every render
+    ,-[src/components/dashboard/useDashboardUiState.ts:72:7]
+ 63 |   // Swipe Tab Navigation
+ 64 |   const mainTabs: DashboardMainTab[] = ["input", "analytics", "units"];
+    :         ^^^^|^^^
+    :             `-- `mainTabs` is declared here
+ 65 | 
+ 66 |   const handleSwipeNextTab = useCallback(() => {
+ 67 |     setMainTab((prev) => {
+ 68 |       const currentIndex = mainTabs.indexOf(prev);
+ 69 |       const nextIndex = (currentIndex + 1) % mainTabs.length;
+ 70 |       return mainTabs[nextIndex];
+ 71 |     });
+ 72 |   }, [mainTabs]);
+    :       ^^^^|^^^
+    :           `-- it will always cause this hook to re-evaluate
+ 73 | 
+    `----
+  help: Try memoizing this variable with `useRef` or `useCallback`.
+
+  ! react-hooks(exhaustive-deps): React hook useCallback depends on `mainTabs`, which changes every render
+    ,-[src/components/dashboard/useDashboardUiState.ts:80:7]
+ 63 |   // Swipe Tab Navigation
+ 64 |   const mainTabs: DashboardMainTab[] = ["input", "analytics", "units"];
+    :         ^^^^|^^^
+    :             `-- `mainTabs` is declared here
+ 65 | 
+ 66 |   const handleSwipeNextTab = useCallback(() => {
+ 67 |     setMainTab((prev) => {
+ 68 |       const currentIndex = mainTabs.indexOf(prev);
+ 69 |       const nextIndex = (currentIndex + 1) % mainTabs.length;
+ 70 |       return mainTabs[nextIndex];
+ 71 |     });
+ 72 |   }, [mainTabs]);
+ 73 | 
+ 74 |   const handleSwipePrevTab = useCallback(() => {
+ 75 |     setMainTab((prev) => {
+ 76 |       const currentIndex = mainTabs.indexOf(prev);
+ 77 |       const prevIndex = (currentIndex - 1 + mainTabs.length) % mainTabs.length;
+ 78 |       return mainTabs[prevIndex];
+ 79 |     });
+ 80 |   }, [mainTabs]);
+    :       ^^^^|^^^
+    :           `-- it will always cause this hook to re-evaluate
+ 81 | 
+    `----
+  help: Try memoizing this variable with `useRef` or `useCallback`.
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/components/dashboard/useDashboardUiState.test.tsx:17:3]
+ 16 | }) {
+ 17 |   latestHookResult = useDashboardUiState({ onClearError });
+    :   ^^^^^^^^|^^^^^^^
+    :           `-- `latestHookResult` cannot be reassigned
+ 18 |   return (
+    `----
+  help: Variable `latestHookResult` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/hooks/usePreviousDayOdometer.ts:128:7]
+ 123 | 
+ 124 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 125 |     cancelRef.current = false;
+ 126 | 
+ 127 |     if (!sheetId || !currentTabName || currentTabName === "AKUMULASI") {
+ 128 |       setPreviousDayKmMap({});
+     :       ^^^^^^^^^|^^^^^^^^^
+     :                `-- Avoid calling setState() directly within an effect
+ 129 |       setPreviousDayRefMap({});
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'activeUnits'
+     ,-[src/hooks/usePreviousDayOdometer.ts:286:6]
+ 147 |       const unitsToFind = new Set<string>(
+ 148 |         (activeUnits || []).map((u) => u.trim().toUpperCase()).filter(Boolean),
+     :          ^^^^^|^^^^^
+     :               `-- useEffect uses `activeUnits` here
+ 149 |       );
+ 150 | 
+ 151 |       const maxDays = Math.max(1, Math.min(maxLookbackDays, 7));
+ 152 | 
+ 153 |       try {
+ 154 |         for (let offset = 1; offset <= maxDays; offset++) {
+ 155 |           if (!isSubscribed || cancelRef.current) return;
+ 156 | 
+ 157 |           const target = resolveLookbackTarget({
+ 158 |             currentDay,
+ 159 |             offset,
+ 160 |             sheetId,
+ 161 |             activeMonth,
+ 162 |             activeYear,
+ 163 |             routeCode,
+ 164 |           });
+ 165 | 
+ 166 |           if (!target) break;
+ 167 | 
+ 168 |           const cacheKey = `${target.targetSheetId}_${target.targetTab}`;
+ 169 |           let dayData: CachedDayResult | undefined = memoryKmCache.get(cacheKey);
+ 170 | 
+ 171 |           if (!dayData) {
+ 172 |             let busDataResult;
+ 173 |             try {
+ 174 |               busDataResult = await getBusData(target.targetSheetId, target.targetTab);
+ 175 |             } catch (_err) {
+ 176 |               if (target.targetTab.length === 1) {
+ 177 |                 busDataResult = await getBusData(
+ 178 |                   target.targetSheetId,
+ 179 |                   target.targetTab.padStart(2, "0"),
+ 180 |                 );
+ 181 |               } else {
+ 182 |                 throw _err;
+ 183 |               }
+ 184 |             }
+ 185 | 
+ 186 |             const kmMap: Record<string, string> = {};
+ 187 |             if (busDataResult?.data) {
+ 188 |               for (const b of busDataResult.data) {
+ 189 |                 if (!b.unit) continue;
+ 190 |                 const rawKm =
+ 191 |                   b.kmAkhir2 && b.kmAkhir2.trim() !== ""
+ 192 |                     ? b.kmAkhir2.trim()
+ 193 |                     : b.kmAkhir1 && b.kmAkhir1.trim() !== ""
+ 194 |                       ? b.kmAkhir1.trim()
+ 195 |                       : "";
+ 196 | 
+ 197 |                 if (rawKm) {
+ 198 |                   kmMap[b.unit.trim().toUpperCase()] = rawKm;
+ 199 |                   kmMap[b.unit.trim()] = rawKm;
+ 200 |                 }
+ 201 |               }
+ 202 |             }
+ 203 | 
+ 204 |             dayData = { kmMap };
+ 205 |             memoryKmCache.set(cacheKey, dayData);
+ 206 |           }
+ 207 | 
+ 208 |           // Masukkan data untuk unit yang belum terisi
+ 209 |           for (const [unit, rawKm] of Object.entries(dayData.kmMap)) {
+ 210 |             const norm = unit.toUpperCase();
+ 211 |             if (!combinedKmMap[norm] && rawKm) {
+ 212 |               combinedKmMap[norm] = rawKm;
+ 213 |               combinedKmMap[unit] = rawKm;
+ 214 |               combinedRefMap[norm] = { km: rawKm, dateLabel: target.dateLabel };
+ 215 |               combinedRefMap[unit] = { km: rawKm, dateLabel: target.dateLabel };
+ 216 |             }
+ 217 |           }
+ 218 | 
+ 219 |           // Cek apakah seluruh unit yang dicari sudah ketemu
+ 220 |           if (unitsToFind.size > 0) {
+ 221 |             const allFound = Array.from(unitsToFind).every((u) => Boolean(combinedKmMap[u]));
+ 222 |             if (allFound) {
+ 223 |               break;
+ 224 |             }
+ 225 |           } else {
+ 226 |             // Jika daftar unit tidak diberikan di awal, cukup telusuri H-1
+ 227 |             if (offset >= 1) break;
+ 228 |           }
+ 229 |         }
+ 230 | 
+ 231 |         // Fallback ke Local Storage Registry untuk unit yang belum ketemu
+ 232 |         if (unitsToFind.size > 0) {
+ 233 |           for (const u of unitsToFind) {
+ 234 |             if (!combinedKmMap[u]) {
+ 235 |               const stored = getStoredOdometerForUnit(u);
+ 236 |               if (stored && stored.km) {
+ 237 |                 combinedKmMap[u] = stored.km;
+ 238 |                 combinedRefMap[u] = {
+ 239 |                   km: stored.km,
+ 240 |                   dateLabel: stored.dateLabel || "Riwayat",
+ 241 |                 };
+ 242 |               }
+ 243 |             }
+ 244 |           }
+ 245 |         }
+ 246 | 
+ 247 |         // Perbarui Local Storage Registry dengan data terbaru yang ditemukan
+ 248 |         saveStoredOdometers(combinedRefMap);
+ 249 | 
+ 250 |         if (isSubscribed && !cancelRef.current) {
+ 251 |           setPreviousDayKmMap(combinedKmMap);
+ 252 |           setPreviousDayRefMap(combinedRefMap);
+ 253 |         }
+ 254 |       } catch (err) {
+ 255 |         console.warn("[usePreviousDayOdometer] Gagal memuat data KM lookback:", err);
+ 256 |         // Jika Google Sheets gagal/offline, coba fallback sepenuhnya ke Local Storage
+ 257 |         if (unitsToFind.size > 0) {
+ 258 |           for (const u of unitsToFind) {
+ 259 |             const stored = getStoredOdometerForUnit(u);
+ 260 |             if (stored && stored.km) {
+ 261 |               combinedKmMap[u] = stored.km;
+ 262 |               combinedRefMap[u] = {
+ 263 |                 km: stored.km,
+ 264 |                 dateLabel: stored.dateLabel || "Riwayat",
+ 265 |               };
+ 266 |             }
+ 267 |           }
+ 268 |         }
+ 269 |         if (isSubscribed && !cancelRef.current) {
+ 270 |           setPreviousDayKmMap(combinedKmMap);
+ 271 |           setPreviousDayRefMap(combinedRefMap);
+ 272 |         }
+ 273 |       } finally {
+ 274 |         if (isSubscribed && !cancelRef.current) {
+ 275 |           setIsLoading(false);
+ 276 |         }
+ 277 |       }
+ 278 |     };
+ 279 | 
+ 280 |     fetchSmartLookback();
+ 281 | 
+ 282 |     return () => {
+ 283 |       isSubscribed = false;
+ 284 |       cancelRef.current = true;
+ 285 |     };
+ 286 |   }, [sheetId, currentTabName, activeMonth, activeYear, routeCode, activeUnitsKey, maxLookbackDays]);
+     :      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 287 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/components/dashboard/useDashboardSyncHandlers.test.tsx:35:3]
+ 34 | }) {
+ 35 |   latestHandlers = useDashboardSyncHandlers(options);
+    :   ^^^^^^^|^^^^^^
+    :          `-- `latestHandlers` cannot be reassigned
+ 36 |   return <div id="sync-handlers-ready">Ready</div>;
+    `----
+  help: Variable `latestHandlers` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:99:17]
+  98 | 
+  99 |   if (isOpen && assignedZIndexRef.current === null) {
+     :                 ^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^
+     :                                  `-- Cannot access ref value during render
+ 100 |     const highestActiveZ = getHighestActiveZIndex();
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:104:22]
+ 103 |   } else if (!isOpen) {
+ 104 |     assignedZIndexRef.current = null;
+     :     ^^^^^^^^|^^^^^^^^^^^^|^^^
+     :             |            `-- Cannot update ref value during render
+     :             `-- This value is a ref
+ 105 |   }
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+     ,-[src/components/ui/ModalShell.tsx:107:26]
+ 106 | 
+ 107 |   const computedZIndex = assignedZIndexRef.current ?? baseZIndex;
+     :                          ^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                                      `-- Cannot access ref value during render
+ 108 | 
+     `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(refs): Cannot access refs during render
+    ,-[src/hooks/useMobileBackHandler.ts:16:13]
+ 15 |   const onCloseRef = useRef(onClose);
+ 16 |   onCloseRef.current = onClose;
+    :   ^^^^^|^^^^^^^^|^^^
+    :        |        `-- Cannot update ref value during render
+    :        `-- This value is a ref
+ 17 | 
+    `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/UserManagementPage.tsx:7:3]
+ 6 |   UserManagementPage,
+ 7 |   default,
+   :   ^^^^^^^
+ 8 | } from "./userManagement/UserManagementPage";
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/UserProfileHeader.tsx:5:29]
+ 4 |  */
+ 5 | export { UserProfileHeader, default } from "./profileMenu/UserProfileHeader";
+   :                             ^^^^^^^
+ 6 | export type { UserProfileHeaderProps } from "./profileMenu/UserProfileHeader";
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/WaReportModal.tsx:5:25]
+ 4 |  */
+ 5 | export { WaReportModal, default } from "./waReport/WaReportModal";
+   :                         ^^^^^^^
+ 6 | export type { WaReportModalProps } from "./waReport/types";
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/busCard/modal/BusInputModalNotes.tsx:5:14]
+ 4 | 
+ 5 | export const KETERANGAN_OPTIONS = [
+   :              ^^^^^^^^^^^^^^^^^^
+ 6 |   { value: "", label: "SGO (Siap Guna Operasi)" },
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/RouteOperationalReportCard.tsx:7:3]
+ 6 |   RouteOperationalReportCard,
+ 7 |   default,
+   :   ^^^^^^^
+ 8 | } from "./pdoReport/RouteOperationalReportCard";
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/RoleBadge.tsx:5:21]
+ 4 |  */
+ 5 | export { RoleBadge, default } from "./userManagement/RoleBadge";
+   :                     ^^^^^^^
+ 6 | export type { RoleBadgeProps } from "./userManagement/RoleBadge";
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/QueueModal.tsx:5:22]
+ 4 |  */
+ 5 | export { QueueModal, default } from "./dashboard/QueueModal";
+   :                      ^^^^^^^
+ 6 | export type { QueueModalProps } from "./dashboard/QueueModal";
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/ProfileMenuSheet.tsx:5:28]
+ 4 |  */
+ 5 | export { ProfileMenuSheet, default } from "./profileMenu/ProfileMenuSheet";
+   :                            ^^^^^^^
+ 6 | export type { ProfileMenuSheetProps } from "./profileMenu/types";
+   `----
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/profileMenu/useProfileData.ts:32:7]
+ 22 | 
+ 23 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 24 |     if (!isOpen) return;
+ 25 | 
+ 26 |     // Ambil data profil dari localStorage & sync dari Supabase DB
+ 27 |     const cachedEmail = localStorage.getItem("PDO_USER_EMAIL") || "";
+ 28 |     const cachedName = localStorage.getItem("PDO_USER_NAME") || "";
+ 29 |     const cachedAvatar = localStorage.getItem("PDO_USER_AVATAR") || "";
+ 30 | 
+ 31 |     if (cachedEmail || cachedName) {
+ 32 |       setUserProfile({
+    :       ^^^^^^^|^^^^^^
+    :              `-- Avoid calling setState() directly within an effect
+ 33 |         full_name: cachedName || TEXT_DASHBOARD.PROFILE_MENU.DEFAULT_USER_NAME,
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/fleetStatus/useFleetStatusData.ts:48:5]
+ 46 |   // Perbarui targetRenops jika prop renopsTarget berubah
+ 47 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 48 |     setTargetRenops(renopsTarget);
+    :     ^^^^^^^|^^^^^^^
+    :            `-- Avoid calling setState() directly within an effect
+ 49 |   }, [renopsTarget]);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/fleetStatus/useFleetStatusData.ts:62:5]
+ 54 |   // Inisialisasi unitMap dari daftar buses
+ 55 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 56 |     if (!buses || buses.length === 0) return;
+ 57 |     const nextMap = new Map<number, { s1: string; s2: string }>();
+ 58 |     for (const b of buses) {
+ 59 |       const split = splitShiftKeterangan(b.keterangan);
+ 60 |       nextMap.set(b.rowIndex, { s1: split.s1, s2: split.s2 });
+ 61 |     }
+ 62 |     setUnitMap(nextMap);
+    :     ^^^^^|^^^^
+    :          `-- Avoid calling setState() directly within an effect
+ 63 |   }, [buses]);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+    ,-[src/components/monitoring/AllRouteMonitoringPage.tsx:28:27]
+ 27 | // Re-export untuk kompatibilitas penuh (Zero Breaking Change)
+ 28 | export { SUPERVISOR_TABS, matchesSupervisorTab };
+    :                           ^^^^^^^^^^^^^^^^^^^^
+ 29 | 
+    `----
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/monitoring/AllRouteMonitoringPage.tsx:105:5]
+ 103 | 
+ 104 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 105 |     loadData();
+     :     ^^^^|^^^
+     :         `-- Avoid calling setState() directly within an effect
+ 106 |   }, [loadData]);
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(immutability): This value cannot be modified
+    ,-[src/components/busCard/BusInputModal.tsx:81:9]
+ 80 | 
+ 81 |   const form = useBusInputForm({
+    :         ^^|^
+    :           `-- `form` originates here
+ 82 |     bus,
+    `----
+     ,-[src/components/busCard/BusInputModal.tsx:278:23]
+ 277 |                       // Hapus error cross-day saat dicentang
+ 278 |                       form.validationErrors.length = 0;
+     :                       ^^^^^^^^^^|^^^^^^^^^^
+     :                                 `-- `form` cannot be modified
+ 279 |                     }
+     `----
+  help: Modifying a value returned from a hook is not allowed. Consider moving the modification into the hook where the value is constructed
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/immutability
+
+  ! react(refs): Cannot access refs during render
+    ,-[src/components/busCard/BusInputModal.tsx:57:19]
+ 56 |   const handleDismissRef = useRef(handleDismiss);
+ 57 |   handleDismissRef.current = handleDismiss;
+    :   ^^^^^^^^|^^^^^^^^^^^|^^^
+    :           |           `-- Cannot update ref value during render
+    :           `-- This value is a ref
+ 58 | 
+    `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/busCard/BusInputModal.tsx:61:7]
+ 58 | 
+ 59 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 60 |     if (!isOpen) {
+ 61 |       setIsMounted(false);
+    :       ^^^^^^|^^^^^
+    :             `-- Avoid calling setState() directly within an effect
+ 62 |       setIsClosing(false);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/AllRouteMonitoringPage.tsx:7:3]
+ 6 |   AllRouteMonitoringPage,
+ 7 |   default,
+   :   ^^^^^^^
+ 8 |   SUPERVISOR_TABS,
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+    ,-[src/components/AllRouteMonitoringPage.tsx:9:3]
+  8 |   SUPERVISOR_TABS,
+  9 |   matchesSupervisorTab,
+    :   ^^^^^^^^^^^^^^^^^^^^
+ 10 | } from "./monitoring/AllRouteMonitoringPage";
+    `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/AccumulationSheet.tsx:5:29]
+ 4 |  */
+ 5 | export { AccumulationSheet, default } from "./accumulation/AccumulationSheet";
+   :                             ^^^^^^^
+ 6 | export type { AccumulationSheetProps } from "./accumulation/types";
+   `----
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusInputForm.ts:280:9]
+ 271 |   // Prefill reaktif KM Awal S1 saat previousDayKmAkhir2 tiba dan field masih kosong
+ 272 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 273 |     if (
+ 274 |       (!kmAwal1 || kmAwal1.trim() === "") &&
+ 275 |       (!bus.kmAwal1 || bus.kmAwal1.trim() === "") &&
+ 276 |       previousDayKmAkhir2
+ 277 |     ) {
+ 278 |       const prefill = extractLeading3Digits(previousDayKmAkhir2);
+ 279 |       if (prefill) {
+ 280 |         setKmAwal1(prefill);
+     :         ^^^^^|^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 281 |       }
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusInputForm.ts:291:11]
+ 285 |   // Reactivity KM Awal 1 -> KM Akhir 1 (Unlock & Auto-Reset)
+ 286 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 287 |     if (isKmAwal1Valid) {
+ 288 |       if (!kmAkhir1 || kmAkhir1.trim() === "") {
+ 289 |         const prefill = extractLeading3Digits(kmAwal1);
+ 290 |         if (prefill) {
+ 291 |           setKmAkhir1(prefill);
+     :           ^^^^^|^^^^^
+     :                `-- Avoid calling setState() directly within an effect
+ 292 |         }
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusInputForm.ts:308:11]
+ 302 |   // Reactivity KM Awal 2 -> KM Akhir 2 (Unlock & Auto-Reset)
+ 303 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 304 |     if (isKmAwal2Valid) {
+ 305 |       if (!kmAkhir2 || kmAkhir2.trim() === "") {
+ 306 |         const prefill = extractLeading3Digits(kmAwal2);
+ 307 |         if (prefill) {
+ 308 |           setKmAkhir2(prefill);
+     :           ^^^^^|^^^^^
+     :                `-- Avoid calling setState() directly within an effect
+ 309 |         }
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/busCard/modal/useBusInputForm.ts:329:9]
+ 319 |   // Prefill reaktif KM Awal S2 untuk Skenario B (Bus Dinas Siang Saja)
+ 320 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+ 321 |     if (
+ 322 |       !isS1Started &&
+ 323 |       (!kmAwal2 || kmAwal2.trim() === "") &&
+ 324 |       (!bus.kmAwal2 || bus.kmAwal2.trim() === "") &&
+ 325 |       previousDayKmAkhir2
+ 326 |     ) {
+ 327 |       const prefill = extractLeading3Digits(previousDayKmAkhir2);
+ 328 |       if (prefill) {
+ 329 |         setKmAwal2(prefill);
+     :         ^^^^^|^^^^
+     :              `-- Avoid calling setState() directly within an effect
+ 330 |       }
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAwal1'
+     ,-[src/components/busCard/modal/useBusInputForm.ts:283:6]
+ 273 |     if (
+ 274 |       (!kmAwal1 || kmAwal1.trim() === "") &&
+     :         ^^^|^^^
+     :            `-- useEffect uses `kmAwal1` here
+ 275 |       (!bus.kmAwal1 || bus.kmAwal1.trim() === "") &&
+ 276 |       previousDayKmAkhir2
+ 277 |     ) {
+ 278 |       const prefill = extractLeading3Digits(previousDayKmAkhir2);
+ 279 |       if (prefill) {
+ 280 |         setKmAwal1(prefill);
+ 281 |       }
+ 282 |     }
+ 283 |   }, [previousDayKmAkhir2, bus.kmAwal1]);
+     :      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 284 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAkhir1'
+     ,-[src/components/busCard/modal/useBusInputForm.ts:300:6]
+ 287 |     if (isKmAwal1Valid) {
+ 288 |       if (!kmAkhir1 || kmAkhir1.trim() === "") {
+     :            ^^^^|^^^
+     :                `-- useEffect uses `kmAkhir1` here
+ 289 |         const prefill = extractLeading3Digits(kmAwal1);
+ 290 |         if (prefill) {
+ 291 |           setKmAkhir1(prefill);
+ 292 |         }
+ 293 |       }
+ 294 |     } else {
+ 295 |       // Skenario 4: Jika KM Awal S1 dihapus / tidak valid, auto-reset KM Akhir S1
+ 296 |       if (kmAkhir1 && (!bus.kmAkhir1 || kmAkhir1.trim().length <= 3)) {
+ 297 |         setKmAkhir1("");
+ 298 |       }
+ 299 |     }
+ 300 |   }, [isKmAwal1Valid, kmAwal1, bus.kmAkhir1]);
+     :      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 301 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAkhir2'
+     ,-[src/components/busCard/modal/useBusInputForm.ts:317:6]
+ 304 |     if (isKmAwal2Valid) {
+ 305 |       if (!kmAkhir2 || kmAkhir2.trim() === "") {
+     :            ^^^^|^^^
+     :                `-- useEffect uses `kmAkhir2` here
+ 306 |         const prefill = extractLeading3Digits(kmAwal2);
+ 307 |         if (prefill) {
+ 308 |           setKmAkhir2(prefill);
+ 309 |         }
+ 310 |       }
+ 311 |     } else {
+ 312 |       // Skenario 4: Jika KM Awal S2 dihapus / tidak valid, auto-reset KM Akhir S2
+ 313 |       if (kmAkhir2 && (!bus.kmAkhir2 || kmAkhir2.trim().length <= 3)) {
+ 314 |         setKmAkhir2("");
+ 315 |       }
+ 316 |     }
+ 317 |   }, [isKmAwal2Valid, kmAwal2, bus.kmAkhir2]);
+     :      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 318 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'kmAwal2'
+     ,-[src/components/busCard/modal/useBusInputForm.ts:332:6]
+ 322 |       !isS1Started &&
+ 323 |       (!kmAwal2 || kmAwal2.trim() === "") &&
+     :         ^^^|^^^
+     :            `-- useEffect uses `kmAwal2` here
+ 324 |       (!bus.kmAwal2 || bus.kmAwal2.trim() === "") &&
+ 325 |       previousDayKmAkhir2
+ 326 |     ) {
+ 327 |       const prefill = extractLeading3Digits(previousDayKmAkhir2);
+ 328 |       if (prefill) {
+ 329 |         setKmAwal2(prefill);
+ 330 |       }
+ 331 |     }
+ 332 |   }, [isS1Started, previousDayKmAkhir2, bus.kmAwal2]);
+     :      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 333 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react(refs): Cannot access refs during render
+    ,-[src/components/accumulation/AccumulationSheet.tsx:34:19]
+ 33 |   const handleDismissRef = useRef(handleDismiss);
+ 34 |   handleDismissRef.current = handleDismiss;
+    :   ^^^^^^^^|^^^^^^^^^^^|^^^
+    :           |           `-- Cannot update ref value during render
+    :           `-- This value is a ref
+ 35 | 
+    `----
+  help: React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/refs
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/accumulation/AccumulationSheet.tsx:72:7]
+ 69 | 
+ 70 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 71 |     if (!isOpen) {
+ 72 |       setIsMounted(false);
+    :       ^^^^^^|^^^^^
+    :             `-- Avoid calling setState() directly within an effect
+ 73 |       setIsClosing(false);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(globals): Cannot reassign variables declared outside of the component/hook
+    ,-[src/components/busCard/modal/useBusInputForm.test.tsx:20:3]
+ 19 |   const form = useBusInputForm(props);
+ 20 |   latestForm = form;
+    :   ^^^^^|^^^^
+    :        `-- `latestForm` cannot be reassigned
+ 21 |   return <div id="form-test-node">{form.formId}</div>;
+    `----
+  help: Variable `latestForm` is declared outside of the component/hook. Reassigning this value during render is a side effect which can cause unpredictable behavior. If this variable is used in rendering, use useState instead. Otherwise, update it in an effect
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/globals
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+     ,-[src/components/accumulation/useAccumulationRange.ts:111:16]
+ 110 |         }
+ 111 |       } catch (_e) {}
+     :                ^|
+     :                 `-- '_e' is declared here
+ 112 |     };
+     `----
+  help: Consider handling this error.
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/accumulation/useAccumulationRange.ts:60:5]
+ 55 | 
+ 56 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 57 |     if (!isOpen) return;
+ 58 | 
+ 59 |     // BUG-52: Reset penuh state tanggal setiap kali sheet dibuka
+ 60 |     setStartDay(1);
+    :     ^^^^^|^^^^^
+    :          `-- Avoid calling setState() directly within an effect
+ 61 |     if (
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/accumulation/useAccumulationRange.ts:118:9]
+  71 | 
+  72 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+  73 |     const loadDbPeriods = async (
+  74 |       candidateStartMonth: number,
+  75 |       candidateStartYear: number,
+  76 |     ) => {
+  77 |       try {
+  78 |         let cachedRoutes = getRoutesFromCache();
+  79 |         if (cachedRoutes.length === 0) {
+  80 |           cachedRoutes = await fetchRoutesWithSheets();
+  81 |         }
+  82 | 
+  83 |         const allSheets: any[] = [];
+  84 |         for (const r of cachedRoutes) {
+  85 |           for (const s of r.route_sheets || []) {
+  86 |             allSheets.push(s);
+  87 |           }
+  88 |         }
+  89 | 
+  90 |         if (allSheets.length > 0) {
+  91 |           const mSet = Array.from(new Set(allSheets.map((s) => s.month))).sort(
+  92 |             (a, b) => a - b,
+  93 |           );
+  94 |           const ySet = Array.from(new Set(allSheets.map((s) => s.year))).sort(
+  95 |             (a, b) => b - a,
+  96 |           );
+  97 | 
+  98 |           setAvailableMonths(mSet);
+  99 |           setAvailableYears(ySet);
+ 100 | 
+ 101 |           // BUG-54: Bandingkan terhadap kandidat eksplisit (nilai reset)
+ 102 |           if (mSet.length > 0 && !mSet.includes(candidateStartMonth)) {
+ 103 |             setStartMonth(mSet[0]);
+ 104 |             setEndMonth(mSet[mSet.length - 1]);
+ 105 |           }
+ 106 |           if (ySet.length > 0 && !ySet.includes(candidateStartYear)) {
+ 107 |             setStartYear(ySet[0]);
+ 108 |             setEndYear(ySet[0]);
+ 109 |           }
+ 110 |         }
+ 111 |       } catch (_e) {}
+ 112 |     };
+ 113 | 
+ 114 |     if (isOpen) {
+ 115 |       const baseMonth = currentMonth || defaultMonth;
+ 116 |       const baseYear = currentYear || defaultYear;
+ 117 |       if (currentMonth) {
+ 118 |         setStartMonth(currentMonth);
+     :         ^^^^^^|^^^^^^
+     :               `-- Avoid calling setState() directly within an effect
+ 119 |         setEndMonth(currentMonth);
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! File is too long to fit on the screen
+  help: dist_old/assets/vendor-swal-DraO1OLU.js seems like a minified file
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/dailyToaTrend/DailyToaTrendCard.tsx:43:5]
+ 40 | 
+ 41 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 42 |     // Reset tooltip when active tab changes
+ 43 |     setActiveTooltipDay(null);
+    :     ^^^^^^^^^|^^^^^^^^^
+    :              `-- Avoid calling setState() directly within an effect
+ 44 |   }, [selectedTab]);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/userManagement/UserManagementPage.tsx:71:5]
+ 69 | 
+ 70 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 71 |     loadUsers();
+    :     ^^^^|^^^^
+    :         `-- Avoid calling setState() directly within an effect
+ 72 |     window.scrollTo({ top: 0, behavior: "instant" });
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'currentUserEmail', and 'loadUsers'
+     ,-[src/components/userManagement/UserManagementPage.tsx:100:6]
+  70 |   useEffect(() => {
+  71 |     loadUsers();
+     :     ^^^^^^^^^
+  72 |     window.scrollTo({ top: 0, behavior: "instant" });
+  73 | 
+  74 |     // Sync avatar from Google if missing
+  75 |     if (!localStorage.getItem("PDO_USER_AVATAR")) {
+  76 |       fetchGoogleUserProfile()
+  77 |         .then((info) => {
+  78 |           if (info && info.picture) {
+  79 |             localStorage.setItem("PDO_USER_AVATAR", info.picture);
+  80 |             upsertUserProfile({
+  81 |               email: currentUserEmail,
+     :                      ^^^^^^^^^^^^^^^^
+  82 |               full_name: info.name || currentUserEmail,
+  83 |               avatar_url: info.picture,
+  84 |             }).catch((err) => {
+  85 |               console.warn("[UserManagement] Gagal upsert avatar profil Google:", err);
+  86 |             });
+  87 |             setUsers((prev) =>
+  88 |               prev.map((u) =>
+  89 |                 u.email.toLowerCase() === currentUserEmail.toLowerCase()
+  90 |                   ? { ...u, avatar_url: info.picture }
+  91 |                   : u,
+  92 |               ),
+  93 |             );
+  94 |           }
+  95 |         })
+  96 |         .catch((err) => {
+  97 |           console.warn("[UserManagement] Gagal fetch profil Google:", err);
+  98 |         });
+  99 |     }
+ 100 |   }, []);
+     :      ^^
+ 101 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/BusList.tsx:5:19]
+ 4 |  */
+ 5 | export { BusList, default } from "./busList/BusList";
+   :                   ^^^^^^^
+ 6 | export type { BusListProps } from "./busList/BusList";
+   `----
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/LoginScreen.tsx:5:23]
+ 4 |  */
+ 5 | export { LoginScreen, default } from "./login/LoginScreen";
+   :                       ^^^^^^^
+ 6 | export type { LoginScreenProps } from "./login/LoginScreen";
+   `----
+
+  ! File is too long to fit on the screen
+  help: dist_old/assets/vendor-supabase-BwF4ymOi.js seems like a minified file
+
+  ! File is too long to fit on the screen
+  help: dist_old/assets/vendor-react-CepXLKLB.js seems like a minified file
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+     ,-[src/components/dashboard/useDashboardFleet.ts:116:7]
+  66 | 
+  67 |   useEffect(() => {
+     :   ^^^^|^^^^
+     :       `-- This is the containing effect
+  68 |     let isMounted = true;
+  69 |     if (matchedRoute?.id && operationalReportDate) {
+  70 |       Promise.all([
+  71 |         fetchDailyFleetShift(matchedRoute.id, operationalReportDate, 1),
+  72 |         fetchDailyFleetShift(matchedRoute.id, operationalReportDate, 2),
+  73 |         fetchDailyRouteReport(matchedRoute.id, operationalReportDate),
+  74 |       ])
+  75 |         .then(([fleetS1, fleetS2, report]) => {
+  76 |           if (isMounted) {
+  77 |             setOperationalReportStatus(report?.status || "draft");
+  78 |             setConfirmedShifts({
+  79 |               1: Boolean(
+  80 |                 fleetS1?.is_confirmed ??
+  81 |                   report?.is_fleet_confirmed_s1 ??
+  82 |                   (report &&
+  83 |                     (report.realops_shift1 > 0 ||
+  84 |                       report.status === "submitted" ||
+  85 |                       report.status === "verified")),
+  86 |               ),
+  87 |               2: Boolean(
+  88 |                 fleetS2?.is_confirmed ??
+  89 |                   report?.is_fleet_confirmed_s2 ??
+  90 |                   (report &&
+  91 |                     (report.realops_shift2 > 0 ||
+  92 |                       report.status === "submitted" ||
+  93 |                       report.status === "verified")),
+  94 |               ),
+  95 |             });
+  96 |             setConfirmedInfo({
+  97 |               s1: {
+  98 |                 by: fleetS1?.user_id ? `User #${fleetS1.user_id}` : undefined,
+  99 |                 at: fleetS1?.confirmed_at || report?.fleet_confirmed_s1_at,
+ 100 |               },
+ 101 |               s2: {
+ 102 |                 by: fleetS2?.user_id ? `User #${fleetS2.user_id}` : undefined,
+ 103 |                 at: fleetS2?.confirmed_at || report?.fleet_confirmed_s2_at,
+ 104 |               },
+ 105 |             });
+ 106 |           }
+ 107 |         })
+ 108 |         .catch(() => {
+ 109 |           if (isMounted) {
+ 110 |             setOperationalReportStatus("draft");
+ 111 |             setConfirmedShifts({ 1: false, 2: false });
+ 112 |             setConfirmedInfo({ s1: {}, s2: {} });
+ 113 |           }
+ 114 |         });
+ 115 |     } else {
+ 116 |       setOperationalReportStatus("draft");
+     :       ^^^^^^^^^^^^^|^^^^^^^^^^^^
+     :                    `-- Avoid calling setState() directly within an effect
+ 117 |       setConfirmedShifts({ 1: false, 2: false });
+     `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(only-export-components): Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components.
+   ,-[src/components/DailyToaTrendCard.tsx:5:29]
+ 4 |  */
+ 5 | export { DailyToaTrendCard, default } from "./dailyToaTrend/DailyToaTrendCard";
+   :                             ^^^^^^^
+ 6 | export type { DailyToaTrendCardProps } from "./dailyToaTrend/types";
+   `----
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+    ,-[src/components/dashboard/useDashboardData.ts:25:14]
+ 24 |       }
+ 25 |     } catch (_e) {}
+    :              ^|
+    :               `-- '_e' is declared here
+ 26 |     return "";
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter '_e' is caught but never used.
+    ,-[src/components/dashboard/useDashboardData.ts:36:14]
+ 35 |       }
+ 36 |     } catch (_e) {}
+    :              ^|
+    :               `-- '_e' is declared here
+ 37 |     return "";
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+    ,-[.agent/skills/brainstorming/scripts/helper.js:28:14]
+ 27 |       return window.sessionStorage && window.sessionStorage.getItem('brainstorm-session-key');
+ 28 |     } catch (e) {}
+    :              |
+    :              `-- 'e' is declared here
+ 29 |     return null;
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/helper.js:99:51]
+  98 |       let data;
+  99 |       try { data = JSON.parse(msg.data); } catch (e) { return; }
+     :                                                   |
+     :                                                   `-- 'e' is declared here
+ 100 |       if (data.type === 'reload') window.location.reload();
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/helper.js:117:53]
+ 116 |     // Let onclose own reconnection so we don't schedule it twice.
+ 117 |     ws.onerror = () => { try { ws.close(); } catch (e) {} };
+     :                                                     |
+     :                                                     `-- 'e' is declared here
+ 118 |   }
+     `----
+  help: Consider handling this error.
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/dailyToaTrend/useMonthlyTrendData.ts:29:5]
+ 26 |   // When sheetId or refreshKey changes (e.g. user clicks "LOAD DATA" in header), reset chartMaxDay to selectedTab
+ 27 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 28 |     const selectedNum = parseSelectedDay(selectedTab);
+ 29 |     setChartMaxDay(Math.max(1, Math.min(31, selectedNum)));
+    :     ^^^^^^^|^^^^^^
+    :            `-- Avoid calling setState() directly within an effect
+ 30 |   }, [sheetId, refreshKey, selectedTab]);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/dailyToaTrend/useMonthlyTrendData.ts:36:7]
+ 32 |   // When selectedTab increases beyond current chartMaxDay, expand chartMaxDay
+ 33 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 34 |     const selectedNum = parseSelectedDay(selectedTab);
+ 35 |     if (selectedNum > chartMaxDay) {
+ 36 |       setChartMaxDay(Math.min(31, selectedNum));
+    :       ^^^^^^^|^^^^^^
+    :              `-- Avoid calling setState() directly within an effect
+ 37 |     }
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! react(set-state-in-effect): Calling setState synchronously within an effect can trigger cascading renders
+    ,-[src/components/dailyToaTrend/useMonthlyTrendData.ts:44:5]
+ 39 | 
+ 40 |   useEffect(() => {
+    :   ^^^^|^^^^
+    :       `-- This is the containing effect
+ 41 |     if (!sheetId || chartMaxDay < 1) return;
+ 42 | 
+ 43 |     let isMounted = true;
+ 44 |     setIsLoading(true);
+    :     ^^^^^^|^^^^^
+    :           `-- Avoid calling setState() directly within an effect
+ 45 |     setHasError(false);
+    `----
+  help: Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.
+  note: React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+    ,-[.agent/skills/brainstorming/scripts/server.cjs:95:14]
+ 94 |       if (Number.isInteger(p) && p > 1023 && p < 65536) return p;
+ 95 |     } catch (e) { /* no prior port recorded */ }
+    :              |
+    :              `-- 'e' is declared here
+ 96 |   }
+    `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:129:45]
+ 128 | function chmodOwnerOnly(file) {
+ 129 |   try { fs.chmodSync(file, 0o600); } catch (e) { /* best effort */ }
+     :                                             |
+     :                                             `-- 'e' is declared here
+ 130 | }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:143:14]
+ 142 |       }
+ 143 |     } catch (e) { /* no prior token recorded */ }
+     :              |
+     :              `-- 'e' is declared here
+ 144 |   }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:219:14]
+ 218 |       if (data.version) return String(data.version);
+ 219 |     } catch (e) {
+     :              |
+     :              `-- 'e' is declared here
+ 220 |       // Packaged Codex plugins omit package.json; try the next manifest.
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:313:12]
+ 312 |     realFilePath = fs.realpathSync(filePath);
+ 313 |   } catch (e) {
+     :            |
+     :            `-- 'e' is declared here
+ 314 |     return false;
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:467:16]
+ 466 |         result = decodeFrame(buffer);
+ 467 |       } catch (e) {
+     :                |
+     :                `-- 'e' is declared here
+ 468 |         socket.end(encodeFrame(OPCODES.CLOSE, Buffer.alloc(0)));
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:522:41]
+ 521 |   for (const socket of clients) {
+ 522 |     try { socket.write(frame); } catch (e) { clients.delete(socket); }
+     :                                         |
+     :                                         `-- 'e' is declared here
+ 523 |   }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:540:100]
+ 539 |   if (process.env.BRAINSTORM_OPEN_CMD) {
+ 540 |     try { cp.exec(process.env.BRAINSTORM_OPEN_CMD + ' ' + JSON.stringify(url), () => {}); } catch (e) { /* best effort */ }
+     :                                                                                                    |
+     :                                                                                                    `-- 'e' is declared here
+ 541 |     return;
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:547:70]
+ 546 |   if (!launcher) return; // headless: nothing to open
+ 547 |   try { cp.execFile(launcher.bin, launcher.args, () => {}); } catch (e) { /* best effort */ }
+     :                                                                      |
+     :                                                                      `-- 'e' is declared here
+ 548 | }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:629:40]
+ 628 |     for (const socket of clients) {
+ 629 |       try { socket.destroy(); } catch (e) { /* already gone */ }
+     :                                        |
+     :                                        `-- 'e' is declared here
+ 630 |     }
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:673:65]
+ 672 |     if (PORT_FILE && !triedFallback) {
+ 673 |       try { fs.writeFileSync(PORT_FILE, String(PORT)); } catch (e) { /* best effort */ }
+     :                                                                 |
+     :                                                                 `-- 'e' is declared here
+ 674 |       if (TOKEN_FILE) {
+     `----
+  help: Consider handling this error.
+
+  ! eslint(no-unused-vars): Catch parameter 'e' is caught but never used.
+     ,-[.agent/skills/brainstorming/scripts/server.cjs:678:18]
+ 677 |           chmodOwnerOnly(TOKEN_FILE);
+ 678 |         } catch (e) { /* best effort */ }
+     :                  |
+     :                  `-- 'e' is declared here
+ 679 |       }
+     `----
+  help: Consider handling this error.
+
+Found 1919 warnings and 0 errors.
+Finished in 642ms on 342 files with 116 rules using 8 threads.

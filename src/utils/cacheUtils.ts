@@ -1,5 +1,5 @@
 import type { Route, RouteSheet } from '../types/supabase';
-import { extractSpreadsheetId } from './sheetIdentity';
+import { matchRouteSheetById } from './sheetIdentity';
 
 export const CURRENT_CACHE_VERSION = '6';
 const CACHE_VERSION_KEY = 'PDO_APP_CACHE_VERSION';
@@ -39,36 +39,13 @@ export function getRoutesFromCache(): Route[] {
   }
 }
 
-export interface SheetMatchResult {
+export type SheetMatchResult = {
   route: Route;
   sheet: RouteSheet;
-}
+};
 
-/**
- * Finds a matching sheet and its parent route from the routes list by sheet URL or Sheet ID.
- */
-export function findSheetInRoutes(routes: Route[], sheetUrlOrId: string): SheetMatchResult | null {
-  if (!routes || !Array.isArray(routes) || !sheetUrlOrId) return null;
-  const targetId = extractSpreadsheetId(sheetUrlOrId);
-  const targetUrl = sheetUrlOrId.trim().toLowerCase();
-
-  for (const r of routes) {
-    if (r.route_sheets && Array.isArray(r.route_sheets)) {
-      for (const s of r.route_sheets) {
-        const sUrl = (s.sheet_url || '').trim().toLowerCase();
-        const sId = extractSpreadsheetId(sUrl) || extractSpreadsheetId(s.spreadsheet_id);
-
-        if (
-          (targetId && sId && targetId === sId) ||
-          (targetUrl && sUrl && (sUrl === targetUrl || targetUrl.includes(sUrl) || sUrl.includes(targetUrl)))
-        ) {
-          return { route: r, sheet: s };
-        }
-      }
-    }
-  }
-  return null;
-}
+// ponytail: consolidate duplicate findSheetInRoutes onto canonical matchRouteSheetById (SSOT)
+export const findSheetInRoutes = matchRouteSheetById;
 
 /**
  * Helper to get route_code for a sheet URL or ID from routes cache.

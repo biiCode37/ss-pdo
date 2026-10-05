@@ -10,6 +10,7 @@ import { formatUserError } from './utils/errorFormatter';
 import { showErrorAlert } from './utils/alertUtils';
 import { checkAndMigrateCache } from './utils/cacheUtils';
 import { initHistoryNavigation } from './utils/historyNavigation';
+import { TEXT_AUTH } from './constants/texts';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -54,6 +55,9 @@ export default function App() {
             setIsSignedIn(false);
             return;
           }
+          if (verify.profile?.id) {
+            localStorage.setItem('PDO_USER_ID', String(verify.profile.id));
+          }
           if (verify.profile?.role) {
             localStorage.setItem('PDO_USER_ROLE', verify.profile.role);
           }
@@ -70,7 +74,7 @@ export default function App() {
         setNeedsReauth(true);
       }
     } catch (err: any) {
-      setInitError(formatUserError(err, 'Gagal menginisialisasi layanan Google API.'));
+      setInitError(formatUserError(err, TEXT_AUTH.INIT_ERROR_FALLBACK));
     }
   };
 
@@ -83,7 +87,7 @@ export default function App() {
   // Display initialization errors using SweetAlert2
   useEffect(() => {
     if (initError) {
-      showErrorAlert('Gagal Inisialisasi Layanan', initError);
+      showErrorAlert(TEXT_AUTH.INIT_ERROR_TITLE, initError);
     }
   }, [initError]);
 

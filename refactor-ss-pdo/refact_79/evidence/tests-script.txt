@@ -1,0 +1,35 @@
+
+> pusm-pdo-app@0.0.0 test D:\MINE\SS_PDO
+> vitest run "src/"
+
+
+ RUN  v4.1.10 D:/MINE/SS_PDO
+
+DOMException [NotSupportedError]: Failed to load script "https://apis.google.com/js/api.js". JavaScript file loading is disabled.
+    at HTMLScriptElement.#loadScript (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/html-script-element/HTMLScriptElement.js:549:31)
+    at HTMLScriptElement.[connectedToDocument] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/html-script-element/HTMLScriptElement.js:315:33)
+    at HTMLScriptElement.[connectedToNode] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:794:53)
+    at HTMLBodyElement.[appendChild] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:413:45)
+    at HTMLBodyElement.[appendChild] (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/element/Element.js:1072:62)
+    at HTMLBodyElement.appendChild (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/nodes/node/Node.js:306:48)
+    at D:/MINE/SS_PDO/src/services/googleSheets/authGis.ts:221:23
+    at new Promise (<anonymous>)
+    at initGoogleApi (D:/MINE/SS_PDO/src/services/googleSheets/authGis.ts:31:10)
+    at D:/MINE/SS_PDO/src/services/googleSheets/auth.test.ts:90:18
+DOMException [AbortError]: The operation was aborted.
+    at Fetch.onAsyncTaskManagerAbort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/fetch/Fetch.js:546:23)
+    at Object.<anonymous> (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/fetch/Fetch.js:416:101)
+    at AsyncTaskManager.abortAll (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/async-task-manager/AsyncTaskManager.js:292:30)
+    at AsyncTaskManager.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/async-task-manager/AsyncTaskManager.js:52:21)
+    at DetachedBrowserFrame.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/browser/detached-browser/DetachedBrowserFrame.js:112:58)
+    at DetachedWindowAPI.abort (file:///D:/MINE/SS_PDO/node_modules/.pnpm/happy-dom@20.11.1/node_modules/happy-dom/lib/window/DetachedWindowAPI.js:51:35)
+    at teardownWindow (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:331:22)
+    at Object.teardown (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:392:10)
+    at file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/base.B6Opl8PE.js:168:65
+    at Traces.$ (file:///D:/MINE/SS_PDO/node_modules/.pnpm/vitest@4.1.10_@types+node@2_d3f136d71a9e5a41d6b7a72e7b5175cf/node_modules/vitest/dist/chunks/traces.DT5aQ62U.js:142:27)
+
+ Test Files  76 passed (76)
+      Tests  532 passed (532)
+   Start at  17:17:44
+   Duration  60.03s (transform 15.97s, setup 0ms, import 60.91s, tests 34.74s, environment 220.21s)
+

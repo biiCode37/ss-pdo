@@ -1,12 +1,78 @@
+export interface Operator {
+  id: number;
+  operator_code: string;
+  operator_name: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Route {
   id: number;
   uuid: string;
   route_code: string;
   route_name: string;
   is_active: boolean;
+  operator_name?: string; // Derived / computed display name
+  operators?: Operator[];
+  route_operators?: { operator_id: number; operators: Operator }[];
+  is_looping?: boolean;
+  km_baku?: number;
+  target_hk?: number;
+  best_record?: number;
+  default_renops?: number;
+  renops_weekday?: number;
+  renops_saturday?: number;
+  renops_sunday?: number;
+  renops_holiday?: number;
+  supervisor_name?: string;
+  default_traffic_jam_spots?: string[];
   created_at: string;
   updated_at: string;
   route_sheets?: RouteSheet[];
+}
+
+export interface FleetUnitStatusDetail {
+  unit: string;
+  note: string;
+  isOff: boolean;
+}
+
+export interface DailyRouteReport {
+  id?: number;
+  route_id: number;
+  route_code: string;
+  date: string; // YYYY-MM-DD
+  renops_shift1: number;
+  realops_shift1: number;
+  renops_shift2: number;
+  realops_shift2: number;
+  headway_fastest: number;
+  headway_slowest: number;
+  traffic_jam_spots: string[];
+  operational_issues?: string;
+  status: 'draft' | 'submitted' | 'verified';
+  submitted_by?: string;
+  verified_by?: string;
+  fleet_status_shift1?: FleetUnitStatusDetail[];
+  fleet_status_shift2?: FleetUnitStatusDetail[];
+  is_fleet_confirmed_s1?: boolean;
+  is_fleet_confirmed_s2?: boolean;
+  fleet_confirmed_s1_at?: string;
+  fleet_confirmed_s2_at?: string;
+  // Kolom metrik capaian teragregasi
+  toa_shift1?: number;
+  manual_shift1?: number;
+  toa_shift2?: number;
+  manual_shift2?: number;
+  total_passengers?: number;
+  total_km?: number;
+  achievement_km?: number;
+  total_trip?: number;
+  data_source?: 'app_input' | 'sheet_ingestion';
+  last_synced_at?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface RouteSheet {
@@ -22,13 +88,28 @@ export interface RouteSheet {
   updated_at: string;
 }
 
+export type UserRole = 'superadmin' | 'admin' | 'korwil' | 'korlap' | 'pdo';
+
+export interface Role {
+  id: number;
+  uuid: string;
+  code: UserRole;
+  name: string;
+  description?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface UserProfile {
   id?: number;
   uuid?: string;
   email: string;
   full_name: string;
   avatar_url?: string;
-  role: 'superadmin' | 'admin' | 'petugas';
+  role_id: number;
+  roles?: Role;
+  role?: UserRole;
   is_active?: boolean;
   created_by?: string;
   notes?: string;
@@ -81,5 +162,67 @@ export interface DailyUnitSummary {
   keterangan?: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface FleetStatusLog {
+  id?: number;
+  route_id: number;
+  route_code: string;
+  date: string; // YYYY-MM-DD
+  shift: 1 | 2;
+  sgo_count: number;
+  to_count: number;
+  off_count: number;
+  total_units: number;
+  fleet_status: FleetUnitStatusDetail[];
+  confirmed_by?: string;
+  created_at?: string;
+}
+
+export interface FleetStatusMaster {
+  id: number;
+  code: string;
+  name: string;
+  default_note: string;
+  is_operational: boolean;
+  is_editable_note: boolean;
+  sort_order: number;
+  is_active: boolean;
+  created_at?: string;
+}
+
+export interface DailyFleetShift {
+  id?: number;
+  route_id: number;
+  route_code: string;
+  date: string; // YYYY-MM-DD
+  shift: 1 | 2;
+  target_renops: number;
+  realops: number;
+  total_units: number;
+  sgo_count: number;
+  to_count: number;
+  off_count: number;
+  so_count: number;
+  other_count: number;
+  is_confirmed: boolean;
+  user_id?: number | null;
+  confirmed_at?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface DailyFleetNonSgoUnit {
+  id?: number;
+  fleet_shift_id?: number;
+  unit_body: string;
+  status_id: number;
+  status_code: string;
+  note: string;
+  created_at?: string;
+}
+
+export interface DailyFleetShiftWithUnits extends DailyFleetShift {
+  non_sgo_units: DailyFleetNonSgoUnit[];
 }
 

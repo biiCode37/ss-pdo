@@ -1,6 +1,7 @@
 import type { BusData } from '../services/googleSheets';
 
-const EDITABLE_BUS_FIELDS: (keyof BusData)[] = [
+// ponytail: directly export array, eliminate redundant getter wrapper
+export const EDITABLE_BUS_FIELDS: (keyof BusData)[] = [
   'toaShift1',
   'toaShift2',
   'manualShift1',
@@ -12,10 +13,6 @@ const EDITABLE_BUS_FIELDS: (keyof BusData)[] = [
   'kmAkhir2',
   'keterangan',
 ];
-
-export function getEditableBusFields(): (keyof BusData)[] {
-  return EDITABLE_BUS_FIELDS;
-}
 
 export function mergeRemoteBusDataWithLocalUpdates(
   remoteData: Partial<BusData>,

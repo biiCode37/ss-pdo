@@ -6,6 +6,7 @@ import { UnitCard } from "./UnitCard";
 import { UnitDetailModal } from "./UnitDetailModal";
 import { UnitCardSkeleton } from "./Skeletons";
 import { useMobileBackHandler } from "../hooks/useMobileBackHandler";
+import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   busData: BusData[] | null;
@@ -63,7 +64,7 @@ function UnitSummaryDashboardComponent({
           <input
             type="text"
             className="input-field search-input"
-            placeholder="Cari No. Body Unit..."
+            placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -99,7 +100,7 @@ function UnitSummaryDashboardComponent({
             size={32}
             style={{ color: "var(--text-secondary)", marginBottom: "8px" }}
           />
-          <p>Tidak ada armada yang sesuai dengan kata kunci "{searchQuery}"</p>
+          <p>{TEXT_DASHBOARD.BUS_LIST.EMPTY_SUMMARY(searchQuery)}</p>
         </div>
       )}
 

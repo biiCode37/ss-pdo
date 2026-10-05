@@ -1,0 +1,17 @@
+# Bukti Ukuran Berkas & Penghitungan Baris (Fase 3 Batch 3.5 Revisi)
+
+## Metodologi Penghitungan (Errata R124-02):
+- **Baris Fisik (Physical Lines):** Dihitung via `[System.IO.File]::ReadAllLines()` (mencakup seluruh baris termasuk baris kosong).
+- **Baris Tidak Kosong (Non-Empty Lines):** Dihitung via baris yang memiliki karakter non-spasi (`Where-Object { $_.Trim() -ne '' }`).
+- **Catatan Audit Sebelumnya (`refact_123`):** Angka 340 baris (`BusInputModal.tsx`) dan 908 baris (`BusInputModal.test.tsx`) adalah hitungan baris tidak kosong pada saat audit tersebut, sedangkan jumlah baris fisiknya saat itu adalah 361 dan 1062. Setelah penambahan proteksi R124-01, baris fisik `BusInputModal.tsx` adalah **368** (baris tidak kosong **346**), tetap berada jauh di bawah batas god-file (< 400 baris).
+
+| Nama Berkas | Ukuran (Bytes) | Baris Fisik (Raw) | Baris Tidak Kosong (Non-Empty) | Keterangan Batas Modularitas (< 400 baris) |
+|---|---|---|---|---|
+| `BusInputModal.tsx` | 12626 | 368 | 346 | Lolos (< 400 baris) |
+| `BusInputModal.test.tsx` | 39240 | 1298 | 1107 | Suite Pengujian Komprehensif (29 tes) |
+| `historyNavigation.ts` | 5188 | 170 | 145 | Lolos (< 400 baris) |
+| `historyNavigation.test.ts` | 1539 | 53 | 42 | Suite Pengujian LIFO Navigation (4 tes) |
+| `ModalShell.tsx` | 10589 | 338 | 301 | Lolos (< 400 baris) |
+| `scrollLockCoordinator.ts` | 1643 | 57 | 50 | Lolos (< 400 baris) |
+| `modalStackCoordinator.ts` | 3245 | 112 | 99 | Lolos (< 400 baris) |
+| `useMobileBackHandler.ts` | 852 | 33 | 28 | Lolos (< 400 baris) |

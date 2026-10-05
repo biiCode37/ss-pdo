@@ -1,0 +1,63 @@
+================================================================================
+             WCAG 2.1 CONTRAST & RELATIVE LUMINANCE AUDIT (refact_121)           
+================================================================================
+
+Executed script: refactor-ss-pdo/refact_121/evidence/contrast-verification.js
+Standard Formula: IEC 61966-2-1 sRGB relative luminance
+L = 0.2126 * R_lin + 0.7152 * G_lin + 0.0722 * B_lin
+Contrast Ratio = (L_lighter + 0.05) / (L_darker + 0.05)
+Alpha Blending: C_comp = round(alpha * C_fg + (1 - alpha) * C_bg)
+
+--- 1. LIGHT MODE AUDIT ---
+Latar Banner Komposit (10% rgba(234,88,12,0.1) over #ffffff): [ 253, 238, 231 ]
+  Luminansi L_bg = 0.8780
+
+A. Judul Banner (--warning-banner-title: #9a3412):
+   L_fg = 0.0937 | L_bg = 0.8780
+   Formula: (0.8780 + 0.05) / (0.0937 + 0.05)
+   Ratio = 6.46:1 [PASS AA >= 4.5:1]
+
+B. Isi Penjelas Banner (--warning-banner-text: #171717):
+   L_fg = 0.0086 | L_bg = 0.8780
+   Formula: (0.8780 + 0.05) / (0.0086 + 0.05)
+   Ratio = 15.85:1 [PASS AAA >= 7.0:1]
+
+C. Tombol Banner (--warning-btn-text: #0f172a over --warning-color: #d97706):
+   L_fg = 0.0088 | L_bg = 0.2796
+   Formula: (0.2796 + 0.05) / (0.0088 + 0.05)
+   Ratio = 5.60:1 [PASS AA >= 4.5:1]
+
+D. Chip Aktif Shift 1 Light (--shift1-action-text: #0369a1 over 8% --shift1-bg):
+   Latar Chip Komposit: [ 235, 245, 251 ] L_bg = 0.8993
+   L_fg = 0.1270
+   Formula: (0.8993 + 0.05) / (0.1270 + 0.05)
+   Ratio = 5.36:1 [PASS AA >= 4.5:1]
+
+
+--- 2. DARK MODE AUDIT ---
+Latar Banner Komposit (12% rgba(249,115,22,0.12) over darkCard): [ 48, 32, 21 ]
+  Luminansi L_bg = 0.0172
+
+A. Judul Banner (--warning-banner-title: #f59e0b):
+   L_fg = 0.4389 | L_bg = 0.0172
+   Formula: (0.4389 + 0.05) / (0.0172 + 0.05)
+   Ratio = 7.28:1 [PASS AAA >= 7.0:1]
+
+B. Isi Penjelas Banner (--warning-banner-text: #ededed):
+   L_fg = 0.8469 | L_bg = 0.0172
+   Formula: (0.8469 + 0.05) / (0.0172 + 0.05)
+   Ratio = 13.36:1 [PASS AAA >= 7.0:1]
+
+C. Tombol Banner (--warning-btn-text: #0f172a over --warning-color: #f59e0b):
+   L_fg = 0.0088 | L_bg = 0.4389
+   Formula: (0.4389 + 0.05) / (0.0088 + 0.05)
+   Ratio = 8.31:1 [PASS AAA >= 7.0:1]
+
+--------------------------------------------------------------------------------
+Catatan Errata R120-02:
+1. Luminansi sRGB #d97706 yang benar adalah 0.2796 (bukan 0.2378).
+2. Luminansi sRGB #0f172a yang benar adalah 0.0088 (bukan 0.0135).
+3. Rasio kontras tombol: (0.2796 + 0.05) / (0.0088 + 0.05) = 0.3296 / 0.0588 = 5.60:1.
+4. CSS --shift1-bg di Light Mode memakai alpha 8% (0.08), menghasilkan latar komposit [235, 245, 251] (L = 0.8993), dan rasio kontras teks #0369a1 adalah 5.36:1.
+5. Judul banner Light Mode diubah dari #d97706 (2.82:1 FAIL) menjadi --warning-banner-title: #9a3412 (6.46:1 PASS AA).
+6. Isi teks banner Light Mode diubah dari #6b7280 (4.27:1 FAIL) menjadi --warning-banner-text: #171717 (15.85:1 PASS AAA).
