@@ -192,7 +192,6 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_FLEET_STATUS.MODAL.LOCK_BANNER_MESSAGE(1)).toContain('Shift 1');
     expect(TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP).toContain('Pengingat');
     expect(TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(1)).toContain('Shift 1');
-    expect(TEXT_FLEET_STATUS.MODAL.NON_SGO_ALERT_TITLE('01')).toContain('01');
   });
 
   it('exports TEXT_USER_MANAGEMENT with header, tabs, and alerts', () => {

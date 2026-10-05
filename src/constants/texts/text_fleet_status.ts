@@ -24,11 +24,6 @@ export const TEXT_FLEET_STATUS = {
       'Pengingat: Status armada belum dikonfirmasi. Disarankan untuk segera mengonfirmasi status armada.',
     MODAL_REMINDER: (shift: number) =>
       `Pengingat: Status armada Shift ${shift} belum dikonfirmasi. Disarankan untuk segera mengonfirmasi status armada.`,
-    NON_SGO_ALERT_TITLE: (unit: string) => `Unit ${unit} Tidak Beroperasi`,
-    NON_SGO_ALERT_HTML: (unit: string, status: string) =>
-      `Unit <b>${unit}</b> saat ini berstatus <b>${status}</b> sehingga pengisian data operasional dikunci.<br/><br/>Apakah Anda ingin membuka <b>Status Armada</b> untuk mengubah status unit ini?`,
-    NON_SGO_BTN_OPEN_FLEET: 'Buka Status Armada',
-    NON_SGO_BTN_CANCEL: 'Batal',
   },
   STATUS_CODES: {
     SGO: 'SGO',

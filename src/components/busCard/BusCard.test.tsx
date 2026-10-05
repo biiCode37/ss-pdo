@@ -94,9 +94,8 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(document.body.textContent).toContain('JAK.15-01');
   });
 
-  it('blocks operational input and prompts to open fleet status when tapping unit with OFF status', async () => {
+  it('allows opening modal without blocking when tapping unit with OFF status', async () => {
     const onOpenFleetStatusMock = vi.fn();
-    (alertUtils.pdoSwal.fire as any).mockResolvedValue({ isConfirmed: true });
 
     await act(async () => {
       root.render(
@@ -116,19 +115,13 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       card?.click();
     });
 
-    expect(alertUtils.pdoSwal.fire).toHaveBeenCalledWith(
-      expect.objectContaining({
-        icon: 'warning',
-        html: expect.stringContaining('OFF'),
-      })
-    );
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
-    expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
+    expect(alertUtils.pdoSwal.fire).not.toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
+    expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
-  it('cancels action if non-SGO confirmation alert is canceled', async () => {
+  it('allows opening modal without blocking when tapping unit with TO EVDAL status', async () => {
     const onOpenFleetStatusMock = vi.fn();
-    (alertUtils.pdoSwal.fire as any).mockResolvedValue({ isConfirmed: false });
 
     await act(async () => {
       root.render(
@@ -148,9 +141,9 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       card?.click();
     });
 
-    expect(alertUtils.pdoSwal.fire).toHaveBeenCalled();
+    expect(alertUtils.pdoSwal.fire).not.toHaveBeenCalled();
     expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
-    expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
+    expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
   it('allows opening modal and renders unconfirmed warning badge when isShiftConfirmed is false', async () => {

@@ -133,9 +133,8 @@ describe("useBusCardModal Hook", () => {
     expect(latestHookResult.isModalOpen).toBe(true);
   });
 
-  it("shows non-SGO confirmation alert when unit has OFF/TO status", async () => {
+  it("allows modal opening freely even when unit has OFF/TO status (no fleet status blocking)", async () => {
     const onOpenFleetStatusMock = vi.fn();
-    (alertUtils.pdoSwal.fire as any).mockResolvedValue({ isConfirmed: true });
 
     await act(async () => {
       root.render(
@@ -155,9 +154,9 @@ describe("useBusCardModal Hook", () => {
       await latestHookResult.handleOpenModal();
     });
 
-    expect(alertUtils.pdoSwal.fire).toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).toHaveBeenCalledTimes(1);
-    expect(latestHookResult.isModalOpen).toBe(false);
+    expect(alertUtils.pdoSwal.fire).not.toHaveBeenCalled();
+    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
+    expect(latestHookResult.isModalOpen).toBe(true);
   });
 
   it("opens modal and sets requested initial tab when conditions are met", async () => {

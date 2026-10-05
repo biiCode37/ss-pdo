@@ -1,12 +1,8 @@
 import { useState } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { splitShiftKeterangan } from "@/utils/keteranganUtils";
-import {
-  showWarningToast,
-  escapeHtml,
-  pdoSwal,
-} from "@/utils/alertUtils";
-import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "@/constants/texts";
+import { showWarningToast } from "@/utils/alertUtils";
+import { TEXT_DASHBOARD } from "@/constants/texts";
 
 interface UseBusCardModalOptions {
   bus: BusData;
@@ -26,7 +22,6 @@ export function useBusCardModal({
   tabName,
   activeCategory,
   activeShift = 1,
-  onOpenFleetStatus,
   handleSaveUpdates,
 }: UseBusCardModalOptions) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,7 +41,7 @@ export function useBusCardModal({
   const activeShiftStatus = relevantShift === 1 ? shift1Status : shift2Status;
   const isNonSgo = Boolean(activeShiftStatus && activeShiftStatus.trim() !== "");
 
-  const handleOpenModal = async (
+  const handleOpenModal = (
     initialTab?: "shift1" | "shift2" | "trip" | "notes",
   ) => {
     if (tabName === "AKUMULASI") {
@@ -54,30 +49,7 @@ export function useBusCardModal({
       return;
     }
 
-    // ponytail: [hapus pemblokir status armada, biarkan input dapat diisi, status armada menjadi soft reminder]
-
-    // 2. Jika unit berstatus non-SGO (OFF, TO EVDAL, BA), blokir pengisian data operasional
-    if (isNonSgo) {
-      const confirmResult = await pdoSwal.fire({
-        icon: "warning",
-        title: TEXT_FLEET_STATUS.MODAL.NON_SGO_ALERT_TITLE(escapeHtml(bus.unit)),
-        html: TEXT_FLEET_STATUS.MODAL.NON_SGO_ALERT_HTML(
-          escapeHtml(bus.unit),
-          escapeHtml(activeShiftStatus),
-        ),
-        showCancelButton: true,
-        confirmButtonText: TEXT_FLEET_STATUS.MODAL.NON_SGO_BTN_OPEN_FLEET,
-        cancelButtonText: TEXT_FLEET_STATUS.MODAL.NON_SGO_BTN_CANCEL,
-        confirmButtonColor: "#38bdf8",
-        cancelButtonColor: "#71717a",
-      });
-
-      if (confirmResult.isConfirmed && onOpenFleetStatus) {
-        onOpenFleetStatus();
-      }
-      return;
-    }
-
+    // ponytail: bebas input tanpa pemblokiran status armada, status armada hanya indikator visual
     setModalInitialTab(initialTab || "shift1");
     setIsModalOpen(true);
   };

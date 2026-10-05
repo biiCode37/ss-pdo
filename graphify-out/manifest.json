@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1791164081.1925,
-    "ast_hash": "2739e929e308ccdeaae0e9ea1ddf0ea3",
+    "mtime": 1791171366.117912,
+    "ast_hash": "bf536b88f478ea1c51c1d20598b981ed",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-08-centralized-ui-text-dictionary.md": {
@@ -1655,8 +1655,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_fleet_status.ts": {
-    "mtime": 1789956765.9511576,
-    "ast_hash": "1a92d2e45149b892801ab35539662c5a",
+    "mtime": 1791171353.867171,
+    "ast_hash": "32d7be25b8d29c1d63c6439962402ffd",
     "semantic_hash": ""
   },
   "src/constants/texts/text_unit_detail.ts": {
@@ -2285,8 +2285,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.ts": {
-    "mtime": 1789675284.8311117,
-    "ast_hash": "2c32ffabd46ad5a45782b8139b79eb96",
+    "mtime": 1791171289.2588603,
+    "ast_hash": "5d145325b87e4091131fe320e8b9a2fa",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardSave.ts": {
@@ -2605,8 +2605,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.test.tsx": {
-    "mtime": 1789675141.1282866,
-    "ast_hash": "0eadfd8ec79e0f9137aedf4f798a7e2b",
+    "mtime": 1791171316.8782263,
+    "ast_hash": "0ceb5f90e53b23959c4bfc84d6dfc29a",
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.tsx": {
@@ -2755,8 +2755,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.test.tsx": {
-    "mtime": 1789675276.1644595,
-    "ast_hash": "ec4b4510ad44673a5674ee4709032191",
+    "mtime": 1791171303.0959034,
+    "ast_hash": "6a96655eb9123dbe837df4ce9fc52ddd",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_59/AUDIT_BUGS.md": {
@@ -5005,8 +5005,8 @@
     "semantic_hash": ""
   },
   "src/utils/bulkRouteInspector.test.ts": {
-    "mtime": 1791169951.8570223,
-    "ast_hash": "128b32c8d14a0f4664a46fce5367922a",
+    "mtime": 1791170420.5717242,
+    "ast_hash": "7ceec104323fc70aa5d51cfd5514fca3",
     "semantic_hash": ""
   },
   "src/utils/bulkRouteInspector.ts": {
