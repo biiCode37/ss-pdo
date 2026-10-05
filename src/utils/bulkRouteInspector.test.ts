@@ -26,6 +26,19 @@ describe('extractRoutePeriodFromTitle', () => {
     expect(res.year).toBe(2026);
   });
 
+  it('harus mengekstrak variasi rute dari screenshot (JAK.113, JAK.120, JAK.118) dan cocok dengan kamus TEXT_COMMON.MONTHS', () => {
+    const rutes = [
+      'JAK.113_OKTOBER_2026',
+      'JAK.120_OKTOBER_2026',
+      'JAK.118_OKTOBER_2026',
+    ];
+    for (const title of rutes) {
+      const res = extractRoutePeriodFromTitle(title, 1, 2026);
+      expect(res.month).toBe(10);
+      expect(res.year).toBe(2026);
+    }
+  });
+
   it('harus menggunakan fallbackMonth dan fallbackYear jika judul tidak memuat bulan/tahun', () => {
     const res = extractRoutePeriodFromTitle('JAK.115', 8, 2026);
     expect(res.routeCode).toBe('JAK.115');

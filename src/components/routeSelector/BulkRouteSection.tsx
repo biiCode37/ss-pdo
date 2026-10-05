@@ -79,7 +79,7 @@ export function BulkRouteSection({
             className="input-field"
             style={{ width: '100%', padding: '8px 10px', fontSize: '12px' }}
           >
-            {MONTH_NAMES_ID.map((name, idx) => (
+            {MONTH_NAMES_ID.slice(1).map((name, idx) => (
               <option key={idx + 1} value={idx + 1}>
                 {name}
               </option>
@@ -243,7 +243,7 @@ export function BulkRouteSection({
                         {item.routeCode || 'Rute ?'}
                       </span>
                       <span style={{ fontSize: '10.5px', color: 'var(--text-secondary)' }}>
-                        ({MONTH_NAMES_ID[item.month - 1]} {item.year})
+                        ({MONTH_NAMES_ID[item.month] || item.month} {item.year})
                       </span>
                     </div>
 
