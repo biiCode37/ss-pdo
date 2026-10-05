@@ -58,6 +58,17 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP('OFF')).toBe('Status unit: OFF');
   });
 
+  it('exports TEXT_DASHBOARD.ROUTE_SELECTOR.BULK_ADD with full dictionary entries', () => {
+    const bulkTexts = (TEXT_DASHBOARD.ROUTE_SELECTOR as any).BULK_ADD;
+    expect(bulkTexts).toBeDefined();
+    expect(bulkTexts.TAB_SINGLE).toBe('Satu Rute');
+    expect(bulkTexts.TAB_BULK).toBe('Banyak Sekaligus (Bulk)');
+    expect(typeof bulkTexts.INSPECTING_PROGRESS).toBe('function');
+    expect(bulkTexts.INSPECTING_PROGRESS(2, 5)).toContain('2/5');
+    expect(typeof bulkTexts.BTN_SAVE_BULK).toBe('function');
+    expect(bulkTexts.BTN_SAVE_BULK(3)).toContain('3');
+  });
+
   it('exports TEXT_PDO_FORM with shift inputs and badges', () => {
     expect(TEXT_PDO_FORM.CARD_TITLE).toBe('Laporan Kondisi & Armada Rute');
     expect(TEXT_PDO_FORM.SHIFT_1.TITLE).toBe('Shift 1');
