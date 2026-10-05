@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   extractRoutePeriodFromTitle,
   inspectBulkRoutesWithConcurrency,
-  type BulkRouteItem,
 } from './bulkRouteInspector';
+import type { BulkRouteItem } from './bulkRouteInspector';
 
 vi.mock('../services/googleSheets/transport', () => ({
   fetchSpreadsheetMeta: vi.fn(),
@@ -77,7 +77,7 @@ describe('inspectBulkRoutesWithConcurrency', () => {
       10,
       2026,
       existingSheets,
-      (updated) => updates.push(updated)
+      (updated: BulkRouteItem) => updates.push(updated)
     );
 
     expect(results).toHaveLength(2);
