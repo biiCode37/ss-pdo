@@ -52,7 +52,7 @@ export const updateBulkBusData = async (
         data: data
       });
 
-      // Format sel bulk: Normal text (Bold untuk Keterangan), Horizontal Center, Vertical Middle, Wrap Text & Row Color
+      // Format sel bulk: Bold text untuk semua nilai input, Horizontal Center, Vertical Middle, Wrap Text & Row Color
       try {
         const tabGid = await getTabGid(sheetId, tabName);
         if (tabGid !== null) {
@@ -60,9 +60,6 @@ export const updateBulkBusData = async (
 
           if (formatCells.length > 0) {
             for (const cell of formatCells) {
-              const isKet =
-                headerMap.keterangan !== undefined &&
-                cell.colIndex === headerMap.keterangan;
               requests.push({
                 repeatCell: {
                   range: {
@@ -74,7 +71,7 @@ export const updateBulkBusData = async (
                   },
                   cell: {
                     userEnteredFormat: {
-                      textFormat: { bold: isKet },
+                      textFormat: { bold: true },
                       horizontalAlignment: "CENTER",
                       verticalAlignment: "MIDDLE",
                       wrapStrategy: "WRAP",
@@ -242,7 +239,7 @@ export const formatWholeSheet = async (
 
     const requests: any[] = [];
 
-    // 1. Format dasar seluruh grid data: Normal text, Center horizontal, Middle vertical, Wrap text
+    // 1. Format dasar seluruh grid data: Bold text, Center horizontal, Middle vertical, Wrap text
     requests.push({
       repeatCell: {
         range: {
@@ -254,7 +251,7 @@ export const formatWholeSheet = async (
         },
         cell: {
           userEnteredFormat: {
-            textFormat: { bold: false },
+            textFormat: { bold: true },
             horizontalAlignment: "CENTER",
             verticalAlignment: "MIDDLE",
             wrapStrategy: "WRAP",
