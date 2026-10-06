@@ -24,6 +24,11 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
   - **`km_baku`** = Total jarak tempuh untuk **1 ritase (PP)**.
   - Setiap penyebutan kata *"ritase"* atau *"rit"* dalam instruksi selalu berarti **PP**.
   - Kalkulasi total ritase dari data trip bus adalah $\frac{\text{tripPergi} + \text{tripPulang}}{2}$ atau $\frac{\text{Total KM Tempuh}}{\text{km\_baku}}$. Dilarang menyimpan atau menampilkan akumulasi trip satu arah mentah sebagai "ritase" tanpa dinormalisasi ke ritase PP.
+- **Proteksi Kolom Berumus Spreadsheet (Strict No-Overwrite Formula Columns):**
+  - **Dilarang keras menyentuh, mengubah, atau mengirim nilai/mutasi ke kolom-kolom yang sudah memiliki rumus bawaan dari file spreadsheet asli (SSOT).**
+  - Kolom-kolom yang dihitung otomatis oleh formula spreadsheet (misalnya: `"TOA SHIFT 2"` yang merupakan rumus `=TOTAL_TOA - TOA_SHIFT_1`, total ritase bus, total KM tempuh, dsb.) **TIDAK BOLEH** disertakan dalam payload penyimpanan/mutasi ke Google Sheets, baik pada mode form penuh ([Semua Kolom]), mode fokus tunggal, maupun batch/bulk update.
+  - Setiap kali membuat atau memodifikasi fungsi/fitur baru maupun eksisting (termasuk form UI, state management, adapter API, dan payload builder), Agent **WAJIB menganalisis batas dampak mutasi** untuk menjamin tidak ada kolom berumus yang tertimpa nilai statis.
+  - Nilai input dari pengguna yang merepresentasikan angka kumulatif atau bacaan fisik (seperti form "Total TOA" pada shift 2) harus secara ketat diarahkan ke kolom input murni miliknya (kolom "Total TOA"), bukan ke kolom turunan yang dihitung rumus ("TOA SHIFT 2").
 
 ---
 
