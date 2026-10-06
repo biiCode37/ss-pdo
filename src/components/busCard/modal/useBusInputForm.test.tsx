@@ -350,7 +350,7 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
       expect(onSave.mock.calls[0][0].kmAwal1).toBe("001200");
     });
 
-    it("renders user-visible validation messages with dictionary labels for Shift 1, Shift 2, and TOA Shift 2", () => {
+    it("renders user-visible validation messages with dictionary labels for Shift 1, Shift 2, and Total TOA", () => {
       const onSave = vi.fn();
       renderForm({
         ...defaultProps,
@@ -358,13 +358,13 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
         onSave,
       });
 
-      // Berikan input yang memicu error pada Shift 1, Shift 2, dan TOA Shift 2
+      // Berikan input yang memicu error pada Shift 1, Shift 2, dan Total TOA
       act(() => {
         // S1 error: KM Akhir < KM Awal
         latestForm?.setKmAwal1("200000");
         latestForm?.setKmAkhir1("199900");
-        // TOA S2 error: > 3 digit (> 999)
-        latestForm?.setToaShift2("1200");
+        // Total TOA error: > 3 digit (> 999)
+        latestForm?.setTotalToa("1200");
         // S2 error: KM Akhir < KM Awal
         latestForm?.setKmAwal2("200100");
         latestForm?.setKmAkhir2("200050");
@@ -385,13 +385,13 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
       const hasShift2Error = errors.some((err) =>
         err.includes(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_2)
       );
-      const hasToaS2Error = errors.some((err) =>
-        err.includes(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S2)
+      const hasTotalToaError = errors.some((err) =>
+        err.includes(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA)
       );
 
       expect(hasShift1Error).toBe(true);
       expect(hasShift2Error).toBe(true);
-      expect(hasToaS2Error).toBe(true);
+      expect(hasTotalToaError).toBe(true);
     });
 
     it("handles mixed validation errors: checking bypass clears ONLY cross-day error, leaves other errors intact, and unchecking re-evaluates cross-day on submit", () => {

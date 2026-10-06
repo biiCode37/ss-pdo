@@ -1,6 +1,5 @@
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { TEXT_ALERTS } from "@/constants/texts";
-import { parseIndonesianNumber } from "@/utils/numberUtils";
 import {
   validateKmPair,
   validateKmCrossShift,
@@ -128,7 +127,6 @@ export function validateBusInputForm(params: ValidateBusInputFormParams): string
     tripPergi,
     tripPulang,
     toaShift1,
-    toaShift2,
     totalToa,
     manualShift1,
     manualShift2,
@@ -261,11 +259,11 @@ export function validateBusInputForm(params: ValidateBusInputFormParams): string
     );
     if (errCross) errors.push(errCross);
 
-    const errToaS2 = validateToaValue(
-      toaShift2,
-      TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S2,
+    const errTotalToa = validateToaValue(
+      totalToa,
+      TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA,
     );
-    if (errToaS2) errors.push(errToaS2);
+    if (errTotalToa) errors.push(errTotalToa);
     if (showManual2) {
       const errManS2 = validateToaValue(
         manualShift2,
@@ -281,15 +279,8 @@ export function validateBusInputForm(params: ValidateBusInputFormParams): string
     );
     if (errKmS2) errors.push(errKmS2);
 
-    const toaS1Num = parseIndonesianNumber(toaShift1);
-    const toaS2Num = parseIndonesianNumber(toaShift2);
-    const finalToaS1 = isNaN(toaS1Num) ? 0 : toaS1Num;
-    const finalToaS2 = isNaN(toaS2Num) ? 0 : toaS2Num;
-    const computedTotal = finalToaS1 + finalToaS2;
-    const prospectiveTotal =
-      computedTotal > 0 ? String(computedTotal) : totalToa;
-    if (prospectiveTotal) {
-      const errPair = validateToaPair(toaShift1, prospectiveTotal);
+    if (totalToa) {
+      const errPair = validateToaPair(toaShift1, totalToa);
       if (errPair) errors.push(errPair);
     }
   }

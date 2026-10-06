@@ -56,19 +56,14 @@ describe("busInputPayload - Pure Payload Module", () => {
   });
 
   describe("computeEffectiveTotalToa", () => {
-    it("menjumlahkan toaS1 dan toaS2 secara numerik jika keduanya valid dan > 0", () => {
-      const res = computeEffectiveTotalToa("150", "150", "999", false, "all");
+    it("langsung mengembalikan totalToa yang diinput pengguna", () => {
+      const res = computeEffectiveTotalToa("150", "150", "300", false, "all");
       expect(res).toBe("300");
     });
 
-    it("mempertahankan totalToa manual jika penjumlahan S1 + S2 adalah 0", () => {
+    it("mempertahankan totalToa manual", () => {
       const res = computeEffectiveTotalToa("", "", "500", false, "all");
       expect(res).toBe("500");
-    });
-
-    it("mendukung format koma dan titik desimal Indonesia", () => {
-      const res = computeEffectiveTotalToa("150,5", "100,5", "", false, "all");
-      expect(res).toBe("251");
     });
 
     it("pada mode single kategori totalToa, langsung mengembalikan totalToa", () => {
@@ -200,7 +195,7 @@ describe("busInputPayload - Pure Payload Module", () => {
   });
 
   describe("Mode All Scoped Updates", () => {
-    it("mengirimkan seluruh field yang memenuhi syarat", () => {
+    it("mengirimkan seluruh field yang memenuhi syarat dan TIDAK mengirimkan toaShift2 (mencegah menimpa rumus SS)", () => {
       const params = createBaseParams();
       const payload = buildBusInputPayload(params);
       expect(payload).toEqual({
@@ -210,13 +205,13 @@ describe("busInputPayload - Pure Payload Module", () => {
         manualShift1: "10",
         kmAwal1: "200100",
         kmAkhir1: "200200",
-        toaShift2: "150",
         manualShift2: "20",
         kmAwal2: "200200",
         kmAkhir2: "200300",
         totalToa: "300",
         keterangan: "Catatan baru",
       });
+      expect(payload.toaShift2).toBeUndefined();
     });
 
     it("mengosongkan field manual jika showManual1 dan showManual2 nonaktif", () => {

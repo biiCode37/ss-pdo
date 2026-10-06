@@ -1,5 +1,4 @@
 import type { BusData } from "@/services/googleSheets";
-import { parseIndonesianNumber } from "@/utils/numberUtils";
 import {
   sanitizeKmAwal,
   sanitizeKmAkhir,
@@ -34,26 +33,16 @@ export interface BuildBusInputPayloadParams {
 
 /**
  * Menghitung Total TOA efektif:
- * Pada Mode All, otomatis menghitung jumlah numerik shift 1 + shift 2 jika > 0,
- * atau mempertahankan totalToa manual jika tidak ada penjumlahan shift.
- * Pada Single Mode kategori totalToa, mengembalikan totalToa langsung.
+ * Mengembalikan nilai totalToa yang diinput pengguna.
  */
 export function computeEffectiveTotalToa(
-  toaShift1: string,
-  toaShift2: string,
-  totalToa: string,
-  isSingleMode: boolean,
-  effectiveCategory: string,
+  _toaShift1?: string,
+  _toaShift2?: string,
+  totalToa?: string,
+  _isSingleMode?: boolean,
+  _effectiveCategory?: string,
 ): string {
-  if (isSingleMode && effectiveCategory === "totalToa") {
-    return totalToa.trim();
-  }
-  const toaS1Num = parseIndonesianNumber(toaShift1);
-  const toaS2Num = parseIndonesianNumber(toaShift2);
-  const finalToaS1 = isNaN(toaS1Num) ? 0 : toaS1Num;
-  const finalToaS2 = isNaN(toaS2Num) ? 0 : toaS2Num;
-  const computedTotal = finalToaS1 + finalToaS2;
-  return computedTotal > 0 ? String(computedTotal) : totalToa.trim();
+  return totalToa ? totalToa.trim() : "";
 }
 
 /**
@@ -68,7 +57,7 @@ export function buildBusInputPayload(params: BuildBusInputPayloadParams): Partia
     tripPergi,
     tripPulang,
     toaShift1,
-    toaShift2,
+    toaShift2: _toaShift2,
     totalToa,
     manualShift1,
     manualShift2,
@@ -89,13 +78,7 @@ export function buildBusInputPayload(params: BuildBusInputPayloadParams): Partia
     previousDayKmAkhir2,
   } = params;
 
-  const effectiveTotalToa = computeEffectiveTotalToa(
-    toaShift1,
-    toaShift2,
-    totalToa,
-    isSingleMode,
-    effectiveCategory,
-  );
+  const effectiveTotalToa = totalToa.trim();
 
   const updates: Partial<BusData> = {};
 
@@ -167,7 +150,8 @@ export function buildBusInputPayload(params: BuildBusInputPayloadParams): Partia
     updates.kmAkhir1 = isKmAwal1Valid
       ? sanitizeKmAkhir(kmAkhir1, kmAwal1, bus.kmAkhir1)
       : "";
-    updates.toaShift2 = toaShift2.trim();
+    // Note: updates.toaShift2 ditiadakan agar rumus kolom "TOA SHIFT 2" pada file spreadsheet asli
+    // tidak tertimpa/rusak. Nilai input Total TOA dikirim langsung ke kolom Total TOA.
     updates.manualShift2 = showManual2 ? manualShift2.trim() : "";
     updates.kmAwal2 = !isKmAwal2Locked
       ? sanitizeKmAwal(kmAwal2, bus.kmAwal2, previousDayKmAkhir2)

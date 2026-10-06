@@ -187,6 +187,7 @@ describe("busInputValidation - Pure Validation Module", () => {
       // 2. Format ribuan Indonesia yang melebihi batas TOA (1.200 -> 1200 > 999)
       const paramsExceed = createBaseParams({
         toaShift1: "1.200",
+        totalToa: "",
       });
       const errorsExceed = validateBusInputForm(paramsExceed);
       expect(errorsExceed.length).toBe(1);

@@ -5193,15 +5193,5 @@
     "mtime": 1790692160.2671676,
     "ast_hash": "6ea84c0920497d9d20f5d2cdd9223696",
     "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_134/AUDIT_BUGS.md": {
-    "mtime": 1791246244.6338034,
-    "ast_hash": "f01953a860402fedecc509c9103aaac0",
-    "semantic_hash": ""
-  },
-  "refactor-ss-pdo/refact_134/REPAIR_REPORT.md": {
-    "mtime": 1791246251.273325,
-    "ast_hash": "68001366b6f795b802ee203ebe719598",
-    "semantic_hash": ""
   }
 }
