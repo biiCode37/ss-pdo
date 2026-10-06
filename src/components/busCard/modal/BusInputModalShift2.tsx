@@ -17,8 +17,6 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
     toaS2InputRef,
     totalToa,
     setTotalToa,
-    toaShift2,
-    setToaShift2,
     showManual2,
     setShowManual2,
     manualShift2,
@@ -41,13 +39,6 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
 
   const [showKmAwalEdit, setShowKmAwalEdit] = useState(!kmAwal2);
 
-  // Sync value between totalToa and toaShift2 input
-  const displayToaValue = totalToa || toaShift2;
-  const handleToaChange = (val: string) => {
-    setTotalToa(val);
-    setToaShift2(val);
-  };
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
       {/* 1. Paket Pasangan Berdampingan: TOTAL TOA & KM Akhir S2 */}
@@ -66,8 +57,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           type="number"
           min="0"
           max={MAX_TOA_VALUE}
-          value={displayToaValue}
-          onChange={(e) => handleToaChange(e.target.value)}
+          value={totalToa}
+          onChange={(e) => setTotalToa(e.target.value)}
           onFocus={handleInputFocus}
           onKeyDown={handleInputKeyDown}
           placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.TOTAL_TOA}

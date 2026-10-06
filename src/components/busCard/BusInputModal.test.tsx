@@ -235,7 +235,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
           onClose={onCloseMock}
           bus={createMockBus({
             toaShift1: "110",
-            toaShift2: "130",
+            totalToa: "240",
             kmAwal1: "100",
             kmAkhir1: "150",
             kmAwal2: "150",
@@ -256,7 +256,6 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     expect(onSaveMock).toHaveBeenCalledWith(
       expect.objectContaining({
         toaShift1: "110",
-        toaShift2: "130",
         totalToa: "240",
         kmAwal1: "100",
         kmAkhir1: "150",
@@ -266,6 +265,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
         tripPulang: "2",
       }),
     );
+    expect(onSaveMock.mock.calls[0][0].toaShift2).toBeUndefined();
   });
 
   it("renders unconfirmed shift reminder banner when isShiftConfirmed is false", async () => {
