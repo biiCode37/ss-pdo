@@ -10,6 +10,7 @@ export interface RouteFleetReportItem {
   renops: number; // Target SGO
   realops: number; // Realisasi Ops
   nonSgoUnits?: FleetUnitStatusDetail[];
+  pelengkapUnits?: FleetUnitStatusDetail[];
 }
 
 export interface RouteWaData {
@@ -329,6 +330,13 @@ export function generateWaReportFormat3(
     if (offUnits.length > 0) {
       lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
       offUnits.forEach((u) => {
+        lines.push(`- ${u.unit} : ${u.note}`);
+      });
+    }
+
+    if (shift === 2 && r.pelengkapUnits && r.pelengkapUnits.length > 0) {
+      lines.push('*Unit Pelengkap Renops (Shift 2):*');
+      r.pelengkapUnits.forEach((u) => {
         lines.push(`- ${u.unit} : ${u.note}`);
       });
     }

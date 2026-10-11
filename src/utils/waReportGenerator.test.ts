@@ -292,4 +292,25 @@ describe('waReportGenerator - Format 2 (Rincian Shift)', () => {
     expect(report).toContain('TOTAL       : 104.447');
     expect(report).toContain('TARGET      : 108.500');
   });
+
+  it('renders Shift 2 complementary unit section when pelengkapUnits are provided', () => {
+    const mockRoutes: RouteFleetReportItem[] = [
+      {
+        no: 1,
+        routeCode: 'JAK.15',
+        routeName: 'BULAK TURI - TG. PRIOK',
+        operatorName: 'KLM',
+        renops: 30,
+        realops: 28,
+        nonSgoUnits: [],
+        pelengkapUnits: [
+          { unit: 'TS.02', note: 'BA.02 NP1 Telat Start', isOff: false },
+        ],
+      },
+    ];
+
+    const report = generateWaReportFormat3('2026-10-11', 2, mockRoutes);
+    expect(report).toContain('*Unit Pelengkap Renops (Shift 2):*');
+    expect(report).toContain('- TS.02 : BA.02 NP1 Telat Start');
+  });
 });

@@ -68,6 +68,9 @@ describe('WaReportModal Component - Format 3 & Blocking Rules', () => {
     ...mockRouteConfirmed(code, id),
     isFleetConfirmedS1: false,
     isFleetConfirmedS2: false,
+    realopsShift1: 0,
+    realopsShift2: 0,
+    totalRealops: 0,
   });
 
   const mockRegionalData = (routes: RegionalRouteItem[]): RegionalMonitoringResult => ({
