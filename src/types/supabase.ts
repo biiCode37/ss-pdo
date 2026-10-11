@@ -191,6 +191,8 @@ export interface FleetStatusMaster {
   created_at?: string;
 }
 
+export type FleetSourceType = 'pdo_a2' | 'spreadsheet_auto' | 'korlap_manual';
+
 export interface DailyFleetShift {
   id?: number;
   route_id: number;
@@ -205,6 +207,8 @@ export interface DailyFleetShift {
   off_count: number;
   so_count: number;
   other_count: number;
+  source_type?: FleetSourceType;
+  submitted_by_role?: 'pdo' | 'korlap' | 'korwil' | 'system';
   is_confirmed: boolean;
   user_id?: number | null;
   confirmed_at?: string;
