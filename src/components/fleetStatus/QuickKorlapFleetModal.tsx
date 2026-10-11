@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { upsertDailyFleetShift } from '../../services/fleetStatusService';
 import { TEXT_FLEET_STATUS } from '../../constants/texts/text_fleet_status';
 import { TEXT_COMMON } from '../../constants/texts/text_common';

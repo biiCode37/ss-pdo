@@ -1,6 +1,5 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react';
 import { QuickKorlapFleetModal } from './QuickKorlapFleetModal';

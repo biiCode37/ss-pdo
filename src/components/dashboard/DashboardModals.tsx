@@ -1,5 +1,4 @@
 import React from "react";
-import { RouteOperationalReportCard } from "@/components/RouteOperationalReportCard";
 import { A2ReportModal } from "@/components/pdoReport/A2ReportModal";
 import { FleetStatusModal } from "@/components/fleetStatus/FleetStatusModal";
 import { QueueModal } from "@/components/QueueModal";
@@ -76,7 +75,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   onCloseReportModal,
   operationalReportDate,
   dynamicRenops,
-  onOperationalStatusChange,
+  onOperationalStatusChange: _onOperationalStatusChange,
   busData,
   isFleetModalOpen,
   onCloseFleetModal,
