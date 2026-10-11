@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import type { WaReportModalProps } from "./types";
 import {
   useWaReportData,
@@ -6,6 +6,7 @@ import {
   WaReportFormatTabs,
   WaReportPreview,
 } from "./index";
+import { QuickKorlapFleetModal } from "../fleetStatus/QuickKorlapFleetModal";
 
 function WaReportModalComponent({
   isOpen,
@@ -13,6 +14,7 @@ function WaReportModalComponent({
   regionalData,
   selectedDate,
 }: WaReportModalProps) {
+  const [quickModalRoute, setQuickModalRoute] = useState<{ id: number; routeCode: string } | null>(null);
   const {
     formatType,
     setFormatType,
@@ -82,6 +84,7 @@ function WaReportModalComponent({
           totalRoutesCount={filteredRoutes.length}
           isFormat3Blocked={isFormat3Blocked}
           unconfirmedRoutes={unconfirmedRoutes}
+          onQuickEditRoute={(r) => setQuickModalRoute(r)}
         />
 
         <WaReportPreview
@@ -91,6 +94,20 @@ function WaReportModalComponent({
           onCopy={handleCopy}
           onOpenWa={handleOpenWa}
         />
+
+        {quickModalRoute && (
+          <QuickKorlapFleetModal
+            isOpen={true}
+            onClose={() => setQuickModalRoute(null)}
+            routeId={quickModalRoute.id}
+            routeCode={quickModalRoute.routeCode}
+            selectedDate={selectedDate}
+            shift={selectedShift}
+            onSaveSuccess={() => {
+              setQuickModalRoute(null);
+            }}
+          />
+        )}
       </div>
     </div>
   );

@@ -53,4 +53,16 @@ export const TEXT_FLEET_STATUS = {
     APPLY_FAILED: 'Gagal menerapkan status armada',
     APPLY_ERROR: 'Gagal menerapkan status armada',
   },
+  QUICK_KORLAP: {
+    MODAL_TITLE: 'Input Cepat Status Armada (Korlap)',
+    SUBTITLE: (route: string, shift: number) => `Penetapan Manual Rute ${route} • Shift ${shift}`,
+    RENOPS_LABEL: 'Target Renops (Unit)',
+    REALOPS_LABEL: 'Realisasi Operasi (Realops)',
+    NOTES_LABEL: 'Catatan / Keterangan Unit (Opsional)',
+    NOTES_PLACEHOLDER: 'Contoh: TS.02 BA.01 Radiator, TS.05 EVDAL',
+    BTN_SUBMIT: 'Simpan Status Rute',
+    BTN_SAVING: 'Menyimpan...',
+    TOAST_SUCCESS: (route: string) => `Status armada ${route} berhasil disimpan`,
+    BTN_OPEN_QUICK_INPUT: '+ Isi Data Rute',
+  },
 } as const;
