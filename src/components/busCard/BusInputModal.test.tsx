@@ -268,7 +268,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     expect(onSaveMock.mock.calls[0][0].toaShift2).toBeUndefined();
   });
 
-  it("renders unconfirmed shift reminder banner when isShiftConfirmed is false", async () => {
+  it("does not render obsolete unconfirmed shift reminder banner when isShiftConfirmed is false", async () => {
     await act(async () => {
       root.render(
         <BusInputModal
@@ -282,7 +282,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       );
     });
 
-    expect(document.body.textContent).toContain(
+    expect(document.body.textContent).not.toContain(
       TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(1),
     );
   });

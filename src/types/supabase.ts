@@ -220,7 +220,7 @@ export interface DailyFleetNonSgoUnit {
   id?: number;
   fleet_shift_id?: number;
   unit_body: string;
-  status_id: number;
+  status_id?: number | null;
   status_code: string;
   note: string;
   created_at?: string;

@@ -12,21 +12,25 @@ import {
   type RegionTotals,
 } from "@/utils/waReportGenerator";
 import { showSuccessToast } from "@/utils/alertUtils";
-import { FileSpreadsheet, Copy, Share2, Sun, Moon } from "lucide-react";
+import { FileSpreadsheet, Copy, Share2, Sun, Moon, AlertTriangle, PlusCircle } from "lucide-react";
+import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
 
 export interface MonitoringWaReportTabProps {
   data: RegionalMonitoringResult;
   selectedDate: string;
   fleetShifts?: DailyFleetShiftWithUnits[];
+  onRefresh?: () => void;
 }
 
 export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
   data,
   selectedDate,
   fleetShifts,
+  onRefresh,
 }) => {
   const [format, setFormat] = useState<1 | 2 | 3>(1);
   const [format3Shift, setFormat3Shift] = useState<1 | 2>(1);
+  const [quickRoute, setQuickRoute] = useState<{ routeCode: string; routeId: number; defaultRenops?: number } | null>(null);
 
   // Map RouteWaData for Format 1 & 2
   const routeWaData: RouteWaData[] = useMemo(() => {
@@ -78,30 +82,77 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
     };
   }, [data]);
 
-  // RouteFleetReportItem for Format 3
+  // RouteFleetReportItem for Format 3 (Menerapkan Hierarki 3 Jalur)
   const routeFleetData: RouteFleetReportItem[] = useMemo(() => {
     return data.routes.map((r, idx) => {
+      // 1. Jalur 1 (Utama): Data di DB (Laporan A2 Petugas atau Input Korlap)
       const matchingShift = fleetShifts?.find(
         (s) => s.route_code === r.routeCode && s.shift === format3Shift,
       );
-      const renops = format3Shift === 1 ? r.renopsShift1 : r.renopsShift2;
-      const realops = format3Shift === 1 ? r.realopsShift1 : r.realopsShift2;
 
-      const nonSgoUnits =
-        matchingShift?.non_sgo_units?.map((u) => ({
-          unit: u.unit_body,
-          note: u.note || u.status_code,
-          isOff: u.status_code === "OFF",
-        })) || [];
+      if (matchingShift) {
+        const nonSgoUnits =
+          matchingShift.non_sgo_units?.map((u) => ({
+            unit: u.unit_body,
+            note: u.note || u.status_code,
+            isOff: u.status_code === "OFF",
+          })) || [];
 
+        return {
+          no: idx + 1,
+          routeCode: r.routeCode,
+          routeName: r.routeName,
+          operatorName: r.operatorName,
+          renops: matchingShift.target_renops || r.defaultRenops || 0,
+          realops: matchingShift.realops ?? 0,
+          hasData: true,
+          sourceType: matchingShift.source_type || 'pdo_a2',
+          nonSgoUnits,
+        };
+      }
+
+      // 2. Jalur 2 (Fallback Otomatis Spreadsheet): Ritase / Unit Beroperasi di Sheet Asli
+      const ssRenops = format3Shift === 1 ? r.renopsShift1 : r.renopsShift2;
+      const ssRealops = format3Shift === 1 ? r.realopsShift1 : r.realopsShift2;
+      const hasSpreadsheetData =
+        ssRealops > 0 ||
+        (r.totalTrips && r.totalTrips > 0) ||
+        (r.todayPassengers > 0 && r.status !== "empty");
+
+      if (hasSpreadsheetData) {
+        const ssNonSgo =
+          (format3Shift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2)?.map(
+            (u) => ({
+              unit: u.unit,
+              note: u.note,
+              isOff: u.isOff,
+            })
+          ) || [];
+
+        return {
+          no: idx + 1,
+          routeCode: r.routeCode,
+          routeName: r.routeName,
+          operatorName: r.operatorName,
+          renops: ssRenops || r.defaultRenops || 0,
+          realops: ssRealops,
+          hasData: true,
+          sourceType: 'spreadsheet_auto',
+          nonSgoUnits: ssNonSgo,
+        };
+      }
+
+      // 3. Jalur 3: Belum Ada Data (Menunggu Keputusan / Input Korlap)
       return {
         no: idx + 1,
         routeCode: r.routeCode,
         routeName: r.routeName,
         operatorName: r.operatorName,
-        renops: matchingShift ? matchingShift.target_renops : renops,
-        realops: matchingShift ? matchingShift.realops : realops,
-        nonSgoUnits,
+        renops: r.defaultRenops || 0,
+        realops: 0,
+        hasData: false,
+        sourceType: 'empty',
+        nonSgoUnits: [],
       };
     });
   }, [data.routes, fleetShifts, format3Shift]);
@@ -116,6 +167,12 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
     }
     return generateWaReportFormat3(selectedDate, format3Shift, routeFleetData);
   }, [format, format3Shift, selectedDate, routeWaData, regionTotals, routeFleetData]);
+
+  // Pending Routes for Format 3
+  const pendingRoutes = useMemo(
+    () => routeFleetData.filter((r) => r.hasData === false),
+    [routeFleetData]
+  );
 
   const handleCopy = async () => {
     try {
@@ -329,7 +386,116 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
         )}
       </div>
 
-      {/* 2. Action Bar */}
+      {/* 2. Format 3 Data Readiness Banner & Quick Input for Korlap */}
+      {format === 3 && pendingRoutes.length > 0 && (
+        <div
+          className="monitoring-card"
+          style={{
+            background: "rgba(245, 158, 11, 0.08)",
+            border: "1px solid rgba(245, 158, 11, 0.25)",
+            borderRadius: "16px",
+            padding: "14px 16px",
+            marginBottom: "16px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "8px",
+            }}
+          >
+            <AlertTriangle size={18} style={{ color: "#F59E0B" }} />
+            <h4
+              style={{
+                fontSize: "13.5px",
+                fontWeight: 700,
+                color: "var(--text-primary)",
+                margin: 0,
+              }}
+            >
+              {TEXT_WA_REPORT.DATA_READINESS.BANNER_TITLE(pendingRoutes.length, format3Shift)}
+            </h4>
+          </div>
+          <p
+            style={{
+              fontSize: "12px",
+              color: "var(--text-secondary)",
+              margin: "0 0 12px 0",
+              lineHeight: 1.5,
+            }}
+          >
+            {TEXT_WA_REPORT.DATA_READINESS.BANNER_DESC}
+          </p>
+
+          <div
+            className="no-scrollbar"
+            style={{
+              display: "flex",
+              gap: "8px",
+              overflowX: "auto",
+              paddingBottom: "4px",
+            }}
+          >
+            {pendingRoutes.map((pr) => {
+              const originalRoute = data.routes.find((r) => r.routeCode === pr.routeCode);
+              return (
+                <div
+                  key={pr.routeCode}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    background: "var(--card-bg, rgba(23, 23, 23, 0.8))",
+                    border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+                    borderRadius: "10px",
+                    padding: "6px 10px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-primary)" }}>
+                    {pr.routeCode}
+                  </span>
+                  <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
+                    Target: {pr.renops}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (originalRoute) {
+                        setQuickRoute({
+                          routeId: originalRoute.id,
+                          routeCode: originalRoute.routeCode,
+                          defaultRenops: originalRoute.defaultRenops,
+                        });
+                      }
+                    }}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      background: "rgba(62, 207, 142, 0.15)",
+                      color: "var(--accent-color, #3ECF8E)",
+                      border: "1px solid rgba(62, 207, 142, 0.3)",
+                      borderRadius: "6px",
+                      padding: "4px 8px",
+                      fontSize: "11px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <PlusCircle size={12} />
+                    <span>{TEXT_WA_REPORT.DATA_READINESS.INPUT_QUICK_BTN}</span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* 3. Action Bar */}
       <div
         style={{
           display: "flex",
@@ -390,7 +556,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
         </button>
       </div>
 
-      {/* 3. Live Monospace Preview Box */}
+      {/* 4. Live Monospace Preview Box */}
       <div
         className="monitoring-card"
         style={{
@@ -418,6 +584,22 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
           {reportText}
         </pre>
       </div>
+
+      {quickRoute && (
+        <QuickKorlapFleetModal
+          isOpen={true}
+          onClose={() => setQuickRoute(null)}
+          routeId={quickRoute.routeId}
+          routeCode={quickRoute.routeCode}
+          selectedDate={selectedDate}
+          shift={format3Shift}
+          defaultRenops={quickRoute.defaultRenops || 30}
+          onSaveSuccess={() => {
+            setQuickRoute(null);
+            onRefresh?.();
+          }}
+        />
+      )}
     </div>
   );
 };

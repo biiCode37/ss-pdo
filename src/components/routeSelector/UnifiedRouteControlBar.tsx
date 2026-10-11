@@ -1,6 +1,6 @@
 import React from "react";
 import { Calendar, ChevronDown } from "lucide-react";
-import { TEXT_DASHBOARD } from "@/constants/texts";
+import { TEXT_DASHBOARD, TEXT_PDO_FORM } from "@/constants/texts";
 
 interface UnifiedRouteControlBarProps {
   displayDateLabel: string;
@@ -153,7 +153,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
             whiteSpace: "nowrap",
             transition: "all 0.2s ease",
           }}
-          title="Buka laporan kondisi dan armada rute"
+          title={TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE}
         >
           <span
             style={{
@@ -171,10 +171,10 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
           />
           <span>
             {reportStatus === "verified"
-              ? "Terverifikasi"
+              ? TEXT_PDO_FORM.A2_REPORT.STATUS_VERIFIED
               : reportStatus === "submitted"
-                ? "Terkirim"
-                : "Laporan"}
+                ? TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED
+                : TEXT_PDO_FORM.A2_REPORT.PILL_LABEL}
           </span>
           <ChevronDown size={13} style={{ opacity: 0.7 }} />
         </button>

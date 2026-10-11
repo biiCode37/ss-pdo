@@ -429,7 +429,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               whiteSpace: "nowrap",
             }}
           >
-            TO (Tukar Operasi)
+            TO (Tidak Operasi)
           </button>
 
           <button

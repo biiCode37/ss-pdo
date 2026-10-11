@@ -146,7 +146,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
-  it('allows opening modal and renders unconfirmed warning badge when isShiftConfirmed is false', async () => {
+  it('allows opening modal and does not render obsolete unconfirmed warning badge when isShiftConfirmed is false', async () => {
     const onOpenFleetStatusMock = vi.fn();
 
     await act(async () => {
@@ -159,7 +159,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       );
     });
 
-    expect(container.textContent).toContain('Belum Konfirmasi');
+    expect(container.textContent).not.toContain('Belum Konfirmasi');
 
     const card = container.querySelector('.bus-card') as HTMLDivElement;
     await act(async () => {

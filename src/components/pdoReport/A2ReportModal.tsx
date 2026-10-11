@@ -4,6 +4,8 @@ import { parseIndonesianNumber } from '../../utils/numberUtils';
 import { upsertDailyFleetShift } from '../../services/fleetStatusService';
 import { TEXT_PDO_FORM } from '../../constants/texts/text_pdo_form';
 import { TEXT_COMMON } from '../../constants/texts/text_common';
+import { TEXT_ERRORS } from '../../constants/texts/text_errors';
+import { showSuccessToast, showErrorAlert } from '../../utils/alertUtils';
 
 export interface A2ReportModalProps {
   isOpen: boolean;
@@ -22,6 +24,21 @@ interface UnitNoteItem {
   unit_body: string;
   note: string;
 }
+
+// ponytail: inferensi status dari teks catatan agar selaras dengan master fleet_statuses (1=SGO, 2=TO, 3=OFF, 4=SO)
+const resolveStatusFromNote = (noteText: string): { status_id: number | null; status_code: string } => {
+  const upper = noteText.toUpperCase().trim();
+  if (upper.includes('OFF') || upper.includes('LIBUR')) {
+    return { status_id: 3, status_code: 'OFF' };
+  }
+  if (upper.includes('TO') || upper.includes('EVDAL') || upper.includes('TUKAR')) {
+    return { status_id: 2, status_code: 'TO' };
+  }
+  if (upper.includes('SO') || upper.includes('STOP')) {
+    return { status_id: 4, status_code: 'SO' };
+  }
+  return { status_id: null, status_code: 'CATATAN' };
+};
 
 function A2ReportModalComponent({
   isOpen,
@@ -107,12 +124,20 @@ function A2ReportModalComponent({
 
       const nonSgoUnitsPayload = notes
         .filter((n) => n.unit_body.trim() !== '')
-        .map((n) => ({
-          unit_body: n.unit_body.trim(),
-          status_id: 0,
-          status_code: 'CATATAN',
-          note: n.note.trim(),
-        }));
+        .map((n) => {
+          const resolved = resolveStatusFromNote(n.note);
+          return {
+            unit_body: n.unit_body.trim(),
+            status_id: resolved.status_id,
+            status_code: resolved.status_code,
+            note: n.note.trim(),
+          };
+        });
+
+      const toCount = nonSgoUnitsPayload.filter((u) => u.status_code === 'TO').length;
+      const offCount = nonSgoUnitsPayload.filter((u) => u.status_code === 'OFF').length;
+      const soCount = nonSgoUnitsPayload.filter((u) => u.status_code === 'SO').length;
+      const otherCount = nonSgoUnitsPayload.filter((u) => !['TO', 'OFF', 'SO'].includes(u.status_code)).length;
 
       await upsertDailyFleetShift(
         {
@@ -124,10 +149,10 @@ function A2ReportModalComponent({
           realops,
           total_units: targetRenops,
           sgo_count: realops,
-          to_count: 0,
-          off_count: 0,
-          so_count: 0,
-          other_count: 0,
+          to_count: toCount,
+          off_count: offCount,
+          so_count: soCount,
+          other_count: otherCount,
           source_type: 'pdo_a2',
           submitted_by_role: 'pdo',
           is_confirmed: true,
@@ -136,12 +161,15 @@ function A2ReportModalComponent({
         nonSgoUnitsPayload
       );
 
+      showSuccessToast(TEXT_PDO_FORM.A2_REPORT.TOAST_SUCCESS(shift));
+
       if (onSaveSuccess) {
         onSaveSuccess();
       }
       onClose();
     } catch (err) {
       console.warn('[A2ReportModal] Gagal menyimpan laporan A2:', err);
+      showErrorAlert(TEXT_ERRORS.SAVE_REPORT_FAILED, TEXT_PDO_FORM.A2_REPORT.ERROR_SUBMIT);
     } finally {
       setIsSubmitting(false);
     }

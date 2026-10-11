@@ -153,6 +153,12 @@ export function useWaReportData({
             ? r.realopsShift1 || 0
             : Math.max(r.realopsShift2 || 0, r.realopsShift1 || 0);
 
+        const hasData =
+          r.status === "submitted" ||
+          r.status === "verified" ||
+          realops > 0 ||
+          (r.todayPassengers && r.todayPassengers > 0);
+
         return {
           no: idx + 1,
           routeCode: r.routeCode,
@@ -160,6 +166,7 @@ export function useWaReportData({
           operatorName: r.operatorName,
           renops,
           realops,
+          hasData: !!hasData,
           nonSgoUnits: selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2,
         };
       });

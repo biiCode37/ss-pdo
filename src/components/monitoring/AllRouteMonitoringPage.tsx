@@ -317,6 +317,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 data={data}
                 selectedDate={selectedDate}
                 fleetShifts={fleetShifts}
+                onRefresh={() => loadData(true)}
               />
             )}
           </>

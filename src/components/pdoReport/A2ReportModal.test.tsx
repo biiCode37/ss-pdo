@@ -2,14 +2,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react';
-import { A2ReportModal } from './A2ReportModal';
-import * as fleetStatusService from '../../services/fleetStatusService';
-import type { BusData } from '../../services/googleSheets';
+import { A2ReportModal } from '@/components/pdoReport/A2ReportModal';
+import * as fleetStatusService from '@/services/fleetStatusService';
+import type { BusData } from '@/services/googleSheets';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-vi.mock('../../services/fleetStatusService', () => ({
+vi.mock('@/services/fleetStatusService', () => ({
   upsertDailyFleetShift: vi.fn(),
   fetchDailyFleetShift: vi.fn().mockResolvedValue(null),
 }));

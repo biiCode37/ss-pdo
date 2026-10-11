@@ -48,7 +48,7 @@ function QuickKorlapFleetModalComponent({
       // Parsing catatan unit jika dimasukkan teks bebas (cth: "TS.02 BA.01 Radiator, TS.05 EVDAL")
       const nonSgoUnitsPayload: Array<{
         unit_body: string;
-        status_id: number;
+        status_id?: number | null;
         status_code: string;
         note: string;
       }> = [];
@@ -63,14 +63,34 @@ function QuickKorlapFleetModalComponent({
           const splitSpace = p.split(/\s+/);
           const unitBody = splitSpace[0] || 'UNIT';
           const noteText = splitSpace.slice(1).join(' ') || p;
+          const upperNote = noteText.toUpperCase();
+          let statusId: number | null = null;
+          let statusCode = 'CATATAN';
+
+          if (upperNote.includes('OFF') || upperNote.includes('LIBUR')) {
+            statusId = 3;
+            statusCode = 'OFF';
+          } else if (upperNote.includes('TO') || upperNote.includes('EVDAL') || upperNote.includes('TUKAR')) {
+            statusId = 2;
+            statusCode = 'TO';
+          } else if (upperNote.includes('SO') || upperNote.includes('STOP')) {
+            statusId = 4;
+            statusCode = 'SO';
+          }
+
           nonSgoUnitsPayload.push({
             unit_body: unitBody,
-            status_id: 0,
-            status_code: 'CATATAN',
+            status_id: statusId,
+            status_code: statusCode,
             note: noteText,
           });
         });
       }
+
+      const toCount = nonSgoUnitsPayload.filter((u) => u.status_code === 'TO').length;
+      const offCount = nonSgoUnitsPayload.filter((u) => u.status_code === 'OFF').length;
+      const soCount = nonSgoUnitsPayload.filter((u) => u.status_code === 'SO').length;
+      const otherCount = nonSgoUnitsPayload.filter((u) => !['TO', 'OFF', 'SO'].includes(u.status_code)).length;
 
       await upsertDailyFleetShift(
         {
@@ -82,10 +102,10 @@ function QuickKorlapFleetModalComponent({
           realops,
           total_units: targetRenops,
           sgo_count: realops,
-          to_count: 0,
-          off_count: 0,
-          so_count: 0,
-          other_count: 0,
+          to_count: toCount,
+          off_count: offCount,
+          so_count: soCount,
+          other_count: otherCount,
           source_type: 'korlap_manual',
           submitted_by_role: 'korlap',
           is_confirmed: true,

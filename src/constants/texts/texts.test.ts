@@ -76,9 +76,11 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL).toBe('Headway Tercepat (Menit)');
     expect(TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL).toBe('Headway Terlama (Menit)');
     expect(TEXT_PDO_FORM.BUTTONS.SUBMIT).toContain('Kirim Laporan Operasional');
+    expect(TEXT_PDO_FORM.A2_REPORT.PILL_LABEL).toBe('Laporan A2');
     expect(TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE).toBe('Laporan Harian A2 Armada');
     expect(TEXT_PDO_FORM.A2_REPORT.SUBMIT_BTN(1)).toContain('Shift 1');
     expect(TEXT_PDO_FORM.A2_REPORT.TOAST_SUCCESS(2)).toContain('Shift 2');
+    expect(TEXT_PDO_FORM.A2_REPORT.ERROR_SUBMIT).toContain('Gagal');
   });
 
   it('exports TEXT_MONITORING with interpolation functions and KPI titles', () => {
@@ -152,6 +154,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_WA_REPORT.UNCONFIRMED_ROUTES_BADGE(3)).toContain('3');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_HEADER('Kamis', '10 September 2026', 1, 'Pagi')).toContain('1 (Pagi)');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_CLOSING).toContain('diketahui');
+    expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_NO_DATA_STATUS).toBe('BELUM ADA DATA ⏳');
+    expect(TEXT_WA_REPORT.DATA_READINESS.INPUT_QUICK_BTN).toBe('Input Data Korlap');
+    expect(TEXT_WA_REPORT.DATA_READINESS.BANNER_DESC).toBeDefined();
     expect(TEXT_WA_REPORT.WARNING_UNSUBMITTED(2, 18)).toContain('2 dari 18 rute');
   });
 

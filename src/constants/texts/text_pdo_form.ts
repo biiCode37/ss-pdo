@@ -42,6 +42,9 @@ export const TEXT_PDO_FORM = {
   },
   TOAST_SUCCESS: 'Laporan operasional rute berhasil dikirim',
   A2_REPORT: {
+    PILL_LABEL: 'Laporan A2',
+    STATUS_VERIFIED: 'Terverifikasi',
+    STATUS_SUBMITTED: 'Terkirim',
     MODAL_TITLE: 'Laporan Harian A2 Armada',
     SUBTITLE: (routeCode: string, date: string, shift: number) =>
       `Rute ${routeCode} • ${date} • Shift ${shift}`,
@@ -56,5 +59,6 @@ export const TEXT_PDO_FORM = {
     SUBMIT_BTN: (shift: number) => `Kirim Laporan A2 Shift ${shift}`,
     SAVING_BTN: 'Menyimpan Laporan...',
     TOAST_SUCCESS: (shift: number) => `Laporan A2 Shift ${shift} berhasil disimpan`,
+    ERROR_SUBMIT: 'Gagal menyimpan laporan A2 ke server. Silakan periksa jaringan dan coba lagi.',
   },
 } as const;

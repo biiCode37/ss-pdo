@@ -105,12 +105,8 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     setOperationalReportStatus,
     dynamicRenops,
     activeShift,
-    isFleetModalOpen,
-    setIsFleetModalOpen,
     confirmedShifts,
-    confirmedInfo,
     isShiftConfirmed,
-    handleConfirmFleetStatus,
   } = useDashboardFleet({
     matchedRoute,
     operationalReportDate,
@@ -306,7 +302,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         selectedTab={selectedTab}
         busData={busData}
         activeShift={activeShift}
-        onOpenFleetModal={() => setIsFleetModalOpen(true)}
         isLoading={isLoading}
         mainTab={mainTab}
       />
@@ -329,7 +324,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           onExitAccumulation={() => handleExitAccumulation()}
           isShiftConfirmed={isShiftConfirmed}
           activeShift={activeShift}
-          onOpenFleetStatus={() => setIsFleetModalOpen(true)}
           sheetSummary={sheetSummary}
           selectedTab={selectedTab}
           refreshKey={refreshKey}
@@ -354,12 +348,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         dynamicRenops={dynamicRenops}
         onOperationalStatusChange={setOperationalReportStatus}
         busData={busData}
-        isFleetModalOpen={isFleetModalOpen}
-        onCloseFleetModal={() => setIsFleetModalOpen(false)}
         activeShift={activeShift}
-        confirmedShifts={confirmedShifts}
-        confirmedInfo={confirmedInfo}
-        onConfirmFleetStatus={handleConfirmFleetStatus}
         isQueueModalOpen={isQueueModalOpen}
         onCloseQueueModal={() => setIsQueueModalOpen(false)}
         queue={queue}

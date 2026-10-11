@@ -313,4 +313,37 @@ describe('waReportGenerator - Format 2 (Rincian Shift)', () => {
     expect(report).toContain('*Unit Pelengkap Renops (Shift 2):*');
     expect(report).toContain('- TS.02 : BA.02 NP1 Telat Start');
   });
+
+  it('handles routes without data gracefully without falsely counting them as tidak ops', () => {
+    const mockRoutes: RouteFleetReportItem[] = [
+      {
+        no: 1,
+        routeCode: 'JAK.115',
+        routeName: 'TG. PRIOK - PEGANGSAAN II',
+        operatorName: 'KWK',
+        renops: 23,
+        realops: 23,
+        hasData: true,
+        nonSgoUnits: [],
+      },
+      {
+        no: 2,
+        routeCode: 'JAK.01',
+        routeName: 'TG. PRIOK - PLUMPANG',
+        operatorName: 'KLM',
+        renops: 20,
+        realops: 0,
+        hasData: false,
+        nonSgoUnits: [],
+      },
+    ];
+
+    const report = generateWaReportFormat3('2026-10-11', 1, mockRoutes);
+    expect(report).toContain('Target SGO      : 43 Unit');
+    expect(report).toContain('Realisasi Ops   : 23 Unit');
+    expect(report).toContain('Tidak Ops       : 0 Unit');
+    expect(report).toContain('Ketercapaian    : 100,0%');
+    expect(report).toContain('1 Lengkap | 0 Kurang | 1 Belum Ada Data');
+    expect(report).toContain('Status        : BELUM ADA DATA ⏳');
+  });
 });

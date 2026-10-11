@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { resolveRouteFleetStatus } from './fleetResolutionService';
-import type { DailyFleetShiftWithUnits } from '../types/supabase';
+import { resolveRouteFleetStatus } from '@/services/fleetResolutionService';
+import type { DailyFleetShiftWithUnits, DailyFleetNonSgoUnit } from '@/types/supabase';
 import type { BusData } from './googleSheets';
 
 describe('fleetResolutionService - resolveRouteFleetStatus', () => {
@@ -83,7 +83,7 @@ describe('fleetResolutionService - resolveRouteFleetStatus', () => {
     expect(res.realops).toBe(2); // TS.01 dan TS.02
     expect(res.targetRenops).toBe(30);
     expect(res.sourceLabel).toBe('Otomatis Spreadsheet');
-    expect(res.nonSgoUnits.some((u) => u.unit_body === 'TS.02' && u.note.includes('Radiator'))).toBe(true);
+    expect(res.nonSgoUnits.some((u: DailyFleetNonSgoUnit) => u.unit_body === 'TS.02' && u.note.includes('Radiator'))).toBe(true);
   });
 
   it('Prioritas 3: Menandai status empty jika DB kosong dan spreadsheet tidak memiliki ritase', () => {

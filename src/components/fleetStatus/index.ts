@@ -5,3 +5,4 @@ export * from "./FleetStatusToolbar";
 export * from "./FleetStatusGrid";
 export * from "./FleetStatusFooter";
 export * from "./ShiftConfirmationAlertBar";
+export * from "./QuickKorlapFleetModal";

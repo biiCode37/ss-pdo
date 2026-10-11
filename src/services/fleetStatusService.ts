@@ -11,7 +11,7 @@ import type {
  */
 export const FALLBACK_FLEET_STATUSES: FleetStatusMaster[] = [
   { id: 1, code: 'SGO', name: 'Siap Guna Operasi', default_note: '', is_operational: true, is_editable_note: false, sort_order: 1, is_active: true },
-  { id: 2, code: 'TO', name: 'T.O (Tukar Operasi)', default_note: 'EVDAL', is_operational: false, is_editable_note: true, sort_order: 2, is_active: true },
+  { id: 2, code: 'TO', name: 'T.O (Tidak Operasi)', default_note: 'EVDAL', is_operational: false, is_editable_note: true, sort_order: 2, is_active: true },
   { id: 3, code: 'OFF', name: 'Libur (OFF)', default_note: 'LIBUR', is_operational: false, is_editable_note: false, sort_order: 3, is_active: true },
   { id: 4, code: 'SO', name: 'Stop Operasi (SO)', default_note: '', is_operational: false, is_editable_note: true, sort_order: 4, is_active: true },
 ];
@@ -94,7 +94,7 @@ export async function upsertDailyFleetShift(
   shiftData: Omit<DailyFleetShift, 'id' | 'created_at' | 'updated_at'>,
   nonSgoUnits: Array<{
     unit_body: string;
-    status_id: number;
+    status_id?: number | null;
     status_code: string;
     note: string;
   }>
@@ -133,7 +133,8 @@ export async function upsertDailyFleetShift(
     const unitsPayload = nonSgoUnits.map((u) => ({
       fleet_shift_id: shiftId,
       unit_body: u.unit_body,
-      status_id: u.status_id,
+      // ponytail: jika status_id 0 atau falsy, gunakan null agar tidak melanggar foreign key constraint fleet_statuses
+      status_id: u.status_id && u.status_id > 0 ? u.status_id : null,
       status_code: u.status_code,
       note: u.note || '',
       created_at: new Date().toISOString(),

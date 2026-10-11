@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { slugifyUnitId } from "@/utils/analytics";
 import { FormattedNoteText } from "@/components/FormattedNoteText";
-import { TEXT_DASHBOARD, TEXT_FLEET_STATUS } from "@/constants/texts";
+import { TEXT_DASHBOARD } from "@/constants/texts";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import type { BusCardProps } from "./types";
 import {
@@ -90,15 +90,7 @@ function BusCardComponent({
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
           <span style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
-          {isShiftConfirmed === false && (
-            <span
-              className="unit-status-badge unit-status-badge-to"
-              title={TEXT_FLEET_STATUS.MODAL.LOCK_CARD_TOOLTIP}
-            >
-              {TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNCONFIRMED_BADGE}
-            </span>
-          )}
-          {isShiftConfirmed !== false && isNonSgo && (
+          {isNonSgo && (
             activeShiftStatus.toUpperCase().includes("OFF") ? (
               <span
                 className="unit-status-badge unit-status-badge-off"

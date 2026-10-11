@@ -2,13 +2,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react';
-import { QuickKorlapFleetModal } from './QuickKorlapFleetModal';
-import * as fleetStatusService from '../../services/fleetStatusService';
+import { QuickKorlapFleetModal } from '@/components/fleetStatus/QuickKorlapFleetModal';
+import * as fleetStatusService from '@/services/fleetStatusService';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-vi.mock('../../services/fleetStatusService', () => ({
+vi.mock('@/services/fleetStatusService', () => ({
   upsertDailyFleetShift: vi.fn(),
 }));
 
