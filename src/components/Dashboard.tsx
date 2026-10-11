@@ -284,7 +284,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onExitAccumulation={handleExitAccumulation}
         reportRoute={matchedRoute}
         reportStatus={operationalReportStatus}
-        onOpenReportModal={() => setIsReportModalOpen(true)}
+        /* onOpenReportModal dinonaktifkan: menyembunyikan akses RouteOperationalReportCard lama */
         onRouteCodeChange={(code: string) => setSelectedRouteCode(code)}
         routeSelectorOpenTrigger={routeSelectorOpenTrigger}
       />

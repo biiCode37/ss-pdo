@@ -114,8 +114,8 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
 }) => {
   return (
     <>
-      {/* Modal Laporan Operasional Rute */}
-      {matchedRoute && selectedTab !== "AKUMULASI" && (
+      {/* Modal Laporan Operasional Rute (Legacy - Ditangguhkan dari sisi user per instruksi) */}
+      {/* matchedRoute && selectedTab !== "AKUMULASI" && (
         <RouteOperationalReportCard
           asModal={true}
           isOpen={isReportModalOpen}
@@ -128,7 +128,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
           userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
           onStatusChange={onOperationalStatusChange}
         />
-      )}
+      ) */}
 
       {/* Modal Penetapan Status Armada */}
       {matchedRoute && selectedTab !== "AKUMULASI" && busData && (
