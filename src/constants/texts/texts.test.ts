@@ -76,6 +76,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL).toBe('Headway Tercepat (Menit)');
     expect(TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL).toBe('Headway Terlama (Menit)');
     expect(TEXT_PDO_FORM.BUTTONS.SUBMIT).toContain('Kirim Laporan Operasional');
+    expect(TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE).toBe('Laporan Harian A2 Armada');
+    expect(TEXT_PDO_FORM.A2_REPORT.SUBMIT_BTN(1)).toContain('Shift 1');
+    expect(TEXT_PDO_FORM.A2_REPORT.TOAST_SUCCESS(2)).toContain('Shift 2');
   });
 
   it('exports TEXT_MONITORING with interpolation functions and KPI titles', () => {

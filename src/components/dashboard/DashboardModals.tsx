@@ -1,5 +1,6 @@
 import React from "react";
 import { RouteOperationalReportCard } from "@/components/RouteOperationalReportCard";
+import { A2ReportModal } from "@/components/pdoReport/A2ReportModal";
 import { FleetStatusModal } from "@/components/fleetStatus/FleetStatusModal";
 import { QueueModal } from "@/components/QueueModal";
 import { AccumulationSheet } from "@/components/AccumulationSheet";
@@ -114,21 +115,19 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
 }) => {
   return (
     <>
-      {/* Modal Laporan Operasional Rute (Legacy - Ditangguhkan dari sisi user per instruksi) */}
-      {/* matchedRoute && selectedTab !== "AKUMULASI" && (
-        <RouteOperationalReportCard
-          asModal={true}
+      {/* Modal Laporan Harian A2 Armada Petugas PDO */}
+      {matchedRoute && selectedTab !== "AKUMULASI" && (
+        <A2ReportModal
           isOpen={isReportModalOpen}
           onClose={onCloseReportModal}
           routeId={matchedRoute.id}
           routeCode={matchedRoute.route_code}
           selectedDate={operationalReportDate}
-          defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
           defaultRenops={dynamicRenops.renops}
-          userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
-          onStatusChange={onOperationalStatusChange}
+          buses={busData}
+          initialShift={activeShift}
         />
-      ) */}
+      )}
 
       {/* Modal Penetapan Status Armada */}
       {matchedRoute && selectedTab !== "AKUMULASI" && busData && (

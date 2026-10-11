@@ -41,4 +41,20 @@ export const TEXT_PDO_FORM = {
     VERIFIED: 'Terverifikasi',
   },
   TOAST_SUCCESS: 'Laporan operasional rute berhasil dikirim',
+  A2_REPORT: {
+    MODAL_TITLE: 'Laporan Harian A2 Armada',
+    SUBTITLE: (routeCode: string, date: string, shift: number) =>
+      `Rute ${routeCode} • ${date} • Shift ${shift}`,
+    RENOPS_TARGET_LABEL: 'Target Renops (Unit)',
+    REALOPS_LABEL: 'Realisasi Operasi (Realops)',
+    NOTES_SECTION_TITLE: 'Daftar Unit Berkendala / Catatan Khusus',
+    PREFILL_BANNER: 'Draft catatan ditarik otomatis dari keterangan spreadsheet rute.',
+    ADD_UNIT_BTN: '+ Tambah Catatan Unit',
+    UNIT_BODY_PLACEHOLDER: 'No. Body (cth: TS.01)',
+    NOTE_PLACEHOLDER: 'Keterangan kendala / status (cth: BA.01 Radiator)',
+    REMOVE_UNIT_BTN: 'Hapus',
+    SUBMIT_BTN: (shift: number) => `Kirim Laporan A2 Shift ${shift}`,
+    SAVING_BTN: 'Menyimpan Laporan...',
+    TOAST_SUCCESS: (shift: number) => `Laporan A2 Shift ${shift} berhasil disimpan`,
+  },
 } as const;
