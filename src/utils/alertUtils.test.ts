@@ -21,6 +21,7 @@ import {
   pdoToast,
 } from "./alertUtils";
 import { getKeteranganColor, getRowEndCol } from "./sheetColorUtils";
+import { TEXT_ALERTS } from "../constants/texts";
 
 describe("alertUtils", () => {
   beforeEach(() => {
@@ -161,8 +162,8 @@ describe("alertUtils", () => {
       expect(result).toBe(true);
       expect(swalSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: "Hapus Antrean",
-          confirmButtonText: "Hapus",
+          title: TEXT_ALERTS.DELETE_QUEUE.TITLE,
+          confirmButtonText: TEXT_ALERTS.DELETE_QUEUE.CONFIRM_BTN,
         }),
       );
     });

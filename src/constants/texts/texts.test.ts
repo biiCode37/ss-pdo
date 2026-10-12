@@ -81,6 +81,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PDO_FORM.A2_REPORT.SUBMIT_BTN(1)).toContain('Shift 1');
     expect(TEXT_PDO_FORM.A2_REPORT.TOAST_SUCCESS(2)).toContain('Shift 2');
     expect(TEXT_PDO_FORM.A2_REPORT.ERROR_SUBMIT).toContain('Gagal');
+    expect(TEXT_PDO_FORM.A2_REPORT.SELECT_UNIT_PLACEHOLDER).toContain('Pilih');
+    expect(TEXT_PDO_FORM.A2_REPORT.CUSTOM_UNIT_OPTION).toContain('Input Manual');
+    expect(TEXT_PDO_FORM.A2_REPORT.SWITCH_TO_DROPDOWN_BTN).toBeDefined();
   });
 
   it('exports TEXT_MONITORING with interpolation functions and KPI titles', () => {

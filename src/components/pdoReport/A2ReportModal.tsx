@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import type { BusData } from '../../services/googleSheets';
 import { parseIndonesianNumber } from '../../utils/numberUtils';
 import { upsertDailyFleetShift } from '../../services/fleetStatusService';
@@ -23,6 +23,7 @@ interface UnitNoteItem {
   id: string;
   unit_body: string;
   note: string;
+  isCustom?: boolean;
 }
 
 // ponytail: inferensi status dari teks catatan agar selaras dengan master fleet_statuses (1=SGO, 2=TO, 3=OFF, 4=SO)
@@ -57,6 +58,15 @@ function A2ReportModalComponent({
   const [notes, setNotes] = useState<UnitNoteItem[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  // Daftar nomor body bus terdaftar dari spreadsheet rute aktif
+  const busOptions = useMemo(() => {
+    if (!buses || buses.length === 0) return [];
+    const units = buses
+      .map((b) => (b.unit || '').trim())
+      .filter((u) => u.length > 0);
+    return Array.from(new Set(units));
+  }, [buses]);
+
   // Inisialisasi & prefill otomatis dari data keterangan spreadsheet (Opsi C)
   useEffect(() => {
     if (!isOpen) return;
@@ -81,6 +91,7 @@ function A2ReportModalComponent({
             id: `note-${idx}-${Date.now()}`,
             unit_body: bus.unit,
             note: rawNote,
+            isCustom: false,
           });
         }
       });
@@ -104,12 +115,19 @@ function A2ReportModalComponent({
         id: `note-new-${Date.now()}-${Math.random()}`,
         unit_body: '',
         note: '',
+        isCustom: busOptions.length === 0,
       },
     ]);
   };
 
   const handleRemoveNote = (id: string) => {
     setNotes((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleSetCustomNote = (id: string, isCustom: boolean) => {
+    setNotes((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, isCustom } : item))
+    );
   };
 
   const handleUpdateNote = (id: string, field: 'unit_body' | 'note', val: string) => {
@@ -436,22 +454,91 @@ function A2ReportModalComponent({
                     border: '1px solid var(--color-border, #334155)',
                   }}
                 >
-                  <input
-                    type="text"
-                    data-testid="a2-unit-input"
-                    value={item.unit_body}
-                    placeholder={TEXT_PDO_FORM.A2_REPORT.UNIT_BODY_PLACEHOLDER}
-                    onChange={(e) => handleUpdateNote(item.id, 'unit_body', e.target.value)}
-                    style={{
-                      width: '100px',
-                      padding: '6px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid var(--color-border, #475569)',
-                      backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                      color: '#fff',
-                      fontSize: '0.85rem',
-                    }}
-                  />
+                  {item.isCustom || busOptions.length === 0 ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <input
+                        type="text"
+                        data-testid="a2-unit-input"
+                        value={item.unit_body}
+                        placeholder={TEXT_PDO_FORM.A2_REPORT.UNIT_BODY_PLACEHOLDER}
+                        onChange={(e) => handleUpdateNote(item.id, 'unit_body', e.target.value)}
+                        style={{
+                          width: busOptions.length > 0 ? '95px' : '110px',
+                          padding: '6px 8px',
+                          borderRadius: '6px',
+                          border: '1px solid var(--color-border, #475569)',
+                          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                          color: '#fff',
+                          fontSize: '0.85rem',
+                        }}
+                      />
+                      {busOptions.length > 0 && (
+                        <button
+                          type="button"
+                          title={TEXT_PDO_FORM.A2_REPORT.SWITCH_TO_DROPDOWN_BTN}
+                          onClick={() => handleSetCustomNote(item.id, false)}
+                          style={{
+                            background: 'rgba(56, 189, 248, 0.15)',
+                            border: '1px solid rgba(56, 189, 248, 0.3)',
+                            color: '#38bdf8',
+                            borderRadius: '6px',
+                            padding: '6px 7px',
+                            fontSize: '0.75rem',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          ▼
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <select
+                      data-testid="a2-unit-input"
+                      data-unit-select="true"
+                      aria-label="Pilih Nomor Body Unit"
+                      value={item.unit_body}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '__manual__') {
+                          handleUpdateNote(item.id, 'unit_body', '');
+                          handleSetCustomNote(item.id, true);
+                        } else {
+                          handleUpdateNote(item.id, 'unit_body', val);
+                        }
+                      }}
+                      style={{
+                        width: '135px',
+                        padding: '6px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid var(--color-border, #475569)',
+                        backgroundColor: 'var(--color-bg-elevated, #1e293b)',
+                        color: item.unit_body ? 'var(--color-text-main, #f8fafc)' : 'var(--color-text-muted, #94a3b8)',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <option value="" disabled style={{ background: '#1e293b', color: '#94a3b8' }}>
+                        {TEXT_PDO_FORM.A2_REPORT.SELECT_UNIT_PLACEHOLDER}
+                      </option>
+                      {item.unit_body && !busOptions.includes(item.unit_body) && (
+                        <option value={item.unit_body} style={{ background: '#1e293b', color: '#f8fafc' }}>
+                          {item.unit_body}
+                        </option>
+                      )}
+                      {busOptions.map((unit) => (
+                        <option key={unit} value={unit} style={{ background: '#1e293b', color: '#f8fafc' }}>
+                          {unit}
+                        </option>
+                      ))}
+                      <option
+                        value="__manual__"
+                        style={{ background: '#0f172a', color: '#38bdf8', fontWeight: 600 }}
+                      >
+                        {TEXT_PDO_FORM.A2_REPORT.CUSTOM_UNIT_OPTION}
+                      </option>
+                    </select>
+                  )}
                   <input
                     type="text"
                     data-testid="a2-note-input"

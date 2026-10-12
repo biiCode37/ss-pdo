@@ -9,8 +9,8 @@ export const TEXT_ALERTS = {
     CANCEL_BTN: 'Batal',
   },
   DELETE_QUEUE: {
-    TITLE: 'Hapus Antrean',
-    TEXT: 'Apakah Anda yakin ingin menghapus perubahan ini dari antrean offline?',
+    TITLE: 'Hapus Antrian',
+    TEXT: 'Apakah Anda yakin ingin menghapus perubahan ini dari antrian offline?',
     CONFIRM_BTN: 'Hapus',
     CANCEL_BTN: 'Batal',
   },
@@ -23,21 +23,21 @@ export const TEXT_ALERTS = {
   CONFLICT: {
     TITLE: 'Tabrakan Data (Conflict)',
     UNIT_TEXT: (unit: string) =>
-      `Data unit ${unit} di Google Sheets telah berubah saat Anda offline. Data dari server digabung dengan input Anda.`,
+      `Data unit ${unit} di Google Sheets telah berubah saat Anda offline. Data dari SS digabung dengan data yang anda input.`,
     GENERAL_TEXT:
-      'Data di Google Sheets telah berubah saat Anda offline. Data dari server digabung dengan input Anda.',
-    CONFIRM_BTN: 'Force Save (Timpa)',
-    DENY_BTN: 'Gunakan & Gabung Data Server',
+      'Data di Google Sheets telah berubah saat Anda offline. Data dari SS digabung dengan data yang anda input.',
+    CONFIRM_BTN: 'Timpa Data SS',
+    DENY_BTN: 'Gunakan & Gabung Data SS',
     CANCEL_BTN: 'Batal',
   },
   CONFLICT_ONLINE: {
     TITLE: 'Data Spreadsheet Telah Berubah',
     UNIT_TEXT: (unit: string) =>
-      `Data unit ${unit} di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data server?`,
+      `Data unit ${unit} di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data SS?`,
     GENERAL_TEXT:
-      'Data di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data server?',
-    CONFIRM_BTN: 'Force Save (Timpa)',
-    DENY_BTN: 'Gunakan & Gabung Server',
+      'Data di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data SS?',
+    CONFIRM_BTN: 'Timpa Data SS',
+    DENY_BTN: 'Gunakan & Gabung Data SS',
     CANCEL_BTN: 'Batal',
   },
   FORMAT_SHEET: {
@@ -49,7 +49,7 @@ export const TEXT_ALERTS = {
         <div style="margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(62, 207, 142, 0.08); border: 1px solid rgba(62, 207, 142, 0.2);">
           <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Standar Format yang Diterapkan:</div>
           <div style="font-size: 12px; color: var(--text-secondary);">
-            • <strong>Teks & Perataan:</strong> Normal (tidak bold), Rata Tengah Horizontal & Vertikal, Wrap Text.<br/>
+            • <strong>Teks & Perataan:</strong> Bold, Rata Tengah Horizontal & Vertikal, Wrap Text.<br/>
             • <strong>Warna Baris (No Body s/d Total KM S2):</strong><br/>
             &nbsp;&nbsp;🔵 Skyblue untuk <code>BA.01-04</code>, <code>NP1</code>, <code>NP2</code><br/>
             &nbsp;&nbsp;🟡 Kuning untuk <code>OFF</code><br/>
@@ -59,14 +59,14 @@ export const TEXT_ALERTS = {
         </div>
       </div>
     `,
-    CONFIRM_BTN: 'Ya, Rapikan Sheet',
+    CONFIRM_BTN: 'Ya, Rapikan SS',
     CANCEL_BTN: 'Batal',
-    SUCCESS: 'Spreadsheet berhasil dirapikan!',
+    SUCCESS: 'SS berhasil dirapikan!',
   },
   BULK_TRIP: {
     TITLE: 'Set Jumlah Trip Armada',
     DESCRIPTION: (count: number | string) =>
-      `Nilai di bawah akan langsung diterapkan ke seluruh <strong>${count} unit bus</strong> pada rute ini dan disimpan ke spreadsheet.`,
+      `Nilai di bawah akan langsung diterapkan ke seluruh <strong>${count} unit bus</strong> pada rute ini dan disimpan ke SS.`,
     APPLY_BTN: 'Terapkan',
     CANCEL_BTN: 'Batal',
     REQUIRED: 'Harap isi nilai Trip Pergi dan Trip Pulang!',
@@ -74,7 +74,7 @@ export const TEXT_ALERTS = {
     VALIDATION_MAX: (max: number) => `Jumlah trip tidak boleh lebih dari ${max}!`,
   },
   BULK_COPY_KM: {
-    TITLE: 'Salin Massal KM S1 ➔ KM S2',
+    TITLE: 'Salin KM S1 ➔ KM S2',
     APPLY_BTN: 'Terapkan Salin KM',
     CANCEL_BTN: 'Batal',
     ELIGIBLE_UNITS: (count: number | string) =>
