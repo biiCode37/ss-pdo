@@ -482,4 +482,43 @@ describe('AllRouteMonitoringPage Component', () => {
       '2026-09-02'
     );
   });
+
+  it('opens MonthlySyncModal when sync button is clicked in monthly period mode', async () => {
+    (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue(mockData);
+    (regionalService.fetchRegionalPeriodMonitoringData as any).mockResolvedValue(mockData);
+
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+    });
+
+    // Switch to monthly
+    const monthlyBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="period-btn-monthly"]'
+    );
+    expect(monthlyBtn).toBeTruthy();
+
+    await act(async () => {
+      monthlyBtn?.click();
+    });
+
+    // Sync button should now have monthly label
+    const syncBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-load-all-btn"]'
+    );
+    expect(syncBtn).toBeTruthy();
+    expect(syncBtn?.getAttribute('aria-label')).toBe(TEXT_MONITORING.MONTHLY_SYNC.BUTTON_LABEL_MONTHLY);
+
+    // Modal should not be open yet
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+
+    // Click sync button
+    await act(async () => {
+      syncBtn?.click();
+    });
+
+    // MonthlySyncModal should now be visible in DOM
+    const modalDialog = container.querySelector('[role="dialog"]');
+    expect(modalDialog).toBeTruthy();
+    expect(modalDialog?.textContent).toContain(TEXT_MONITORING.MONTHLY_SYNC.TITLE);
+  });
 });

@@ -18,6 +18,7 @@ import { TEXT_ERRORS, TEXT_ALERTS, TEXT_MONITORING } from "@/constants/texts";
 
 import { MonitoringHeader } from "./MonitoringHeader";
 import { IngestionProgressModal } from "./IngestionProgressModal";
+import { MonthlySyncModal } from "./MonthlySyncModal";
 import { MonitoringStates } from "./MonitoringStates";
 import { MonitoringBottomNav, type MonitoringTab } from "./MonitoringBottomNav";
 import { MonitoringDashboardTab } from "./tabs/MonitoringDashboardTab";
@@ -90,6 +91,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [syncing18Routes, setSyncing18Routes] = useState<boolean>(false);
   const [ingestionProgress, setIngestionProgress] = useState<IngestionProgress | null>(null);
   const [showProgressModal, setShowProgressModal] = useState<boolean>(false);
+  const [showMonthlySyncModal, setShowMonthlySyncModal] = useState<boolean>(false);
   const [isBulking, setIsBulking] = useState<boolean>(false);
   const [verifyingRouteId, setVerifyingRouteId] = useState<number | null>(null);
 
@@ -280,6 +282,23 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     }
   };
 
+  // 10. Monthly Master Ingestion Handler
+  const [selYearStr, selMonthStr] = selectedDate.split("-");
+  const selYear = parseInt(selYearStr, 10) || new Date().getFullYear();
+  const selMonth = parseInt(selMonthStr, 10) || new Date().getMonth() + 1;
+  const monthNames = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+  ];
+  const selMonthName = monthNames[selMonth - 1] || "Oktober";
+
+  const handleMonthlySyncSuccess = async (saved: number, skipped: number) => {
+    showSuccessToast(
+      TEXT_MONITORING.MONTHLY_SYNC.SUCCESS_SUMMARY(saved, skipped)
+    );
+    await loadData(true);
+  };
+
   return (
     <div
       style={{
@@ -302,6 +321,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         syncing18Routes={syncing18Routes}
         currentPeriod={currentPeriod}
         onPeriodChange={handlePeriodChange}
+        onOpenMonthlySyncModal={() => setShowMonthlySyncModal(true)}
       />
 
       {/* Main Content Area: States or Active Tab */}
@@ -380,6 +400,16 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         isOpen={showProgressModal}
         progress={ingestionProgress}
         onClose={() => setShowProgressModal(false)}
+      />
+
+      {/* Monthly Sync Modal */}
+      <MonthlySyncModal
+        isOpen={showMonthlySyncModal}
+        onClose={() => setShowMonthlySyncModal(false)}
+        onSuccess={handleMonthlySyncSuccess}
+        currentYear={selYear}
+        currentMonth={selMonth}
+        monthName={selMonthName}
       />
     </div>
   );
