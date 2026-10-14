@@ -19,6 +19,7 @@ vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
   return {
     ...actual,
     fetchRegionalMonitoringData: vi.fn(),
+    fetchRegionalPeriodMonitoringData: vi.fn(),
     syncRegionalDailyFromGlobalSheet: vi.fn(),
     SUPERVISORS: [
       'Ranto Lumban Toruan',
@@ -414,5 +415,71 @@ describe('AllRouteMonitoringPage Component', () => {
 
     expect(container.textContent).toContain(TEXT_MONITORING.PROVENANCE.APP_INPUT);
     expect(container.textContent).toContain(TEXT_MONITORING.PROVENANCE.SHEET_SYNC);
+  });
+
+  it('navigates to korwil tab and renders supervisor summaries', async () => {
+    (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue({
+      ...mockData,
+      supervisorSummaries: [
+        {
+          id: 'RANTO',
+          name: 'Ranto Lumban Toruan',
+          routes: [mockData.routes[0]],
+          totalRenops: 12,
+          totalRealops: 12,
+          totalKm: 215.4,
+          averageKmPerBus: 17.95,
+          totalTodayPassengers: 3150,
+          totalTargetPassengers: 3000,
+          targetAchievementPercentage: 105,
+          totalRitasePp: 11.6,
+          averageRitasePerBus: 0.97,
+          passengersPerKm: 14.6,
+          passengersPerBus: 262.5,
+        },
+      ],
+    });
+
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+
+    const korwilTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-korwil"]'
+    );
+    expect(korwilTabBtn).toBeTruthy();
+
+    await act(async () => {
+      korwilTabBtn?.click();
+    });
+
+    expect(container.textContent).toContain(TEXT_MONITORING.KORWIL_TAB.TOTAL_WILAYAH_CARD);
+    expect(container.textContent).toContain('Ranto Lumban Toruan');
+  });
+
+  it('switches period to weekly and calls fetchRegionalPeriodMonitoringData', async () => {
+    (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue(mockData);
+    (regionalService.fetchRegionalPeriodMonitoringData as any).mockResolvedValue({
+      ...mockData,
+      date: '2026-08-27 s.d. 2026-09-02',
+    });
+
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+
+    const weeklyBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="period-btn-weekly"]'
+    );
+    expect(weeklyBtn).toBeTruthy();
+
+    await act(async () => {
+      weeklyBtn?.click();
+    });
+
+    expect(regionalService.fetchRegionalPeriodMonitoringData).toHaveBeenCalledWith(
+      '2026-08-27',
+      '2026-09-02'
+    );
   });
 });
