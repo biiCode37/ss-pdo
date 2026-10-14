@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CloudDownload, X, AlertCircle, Loader2, Calendar } from 'lucide-react';
 import { TEXT_MONITORING } from '@/constants/texts';
 import {
   ingestMonthlyMasterSheet,
+  parseMonthAndYearFromTab,
+  INDONESIAN_MONTH_NAMES,
   type MonthlyMasterIngestionProgress,
 } from '@/services/monthlyMasterIngestionService';
 
@@ -55,12 +57,41 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, syncing, onClose]);
 
-  if (!isOpen) return null;
+  // Deteksi target bulan & tahun secara reaktif dan cerdas dari input tabName
+  const detected = useMemo(
+    () => parseMonthAndYearFromTab(tabName, currentYear, currentMonth),
+    [tabName, currentYear, currentMonth]
+  );
+  const targetYear = detected.year;
+  const targetMonth = detected.month;
+  const targetMonthName = detected.monthName;
 
-  // Hitung batas hari untuk informasi badge
+  // Hitung batas hari dan status masa depan secara dinamis
   const now = new Date();
-  const isCurrentMonth = now.getFullYear() === currentYear && now.getMonth() + 1 === currentMonth;
-  const maxDay = isCurrentMonth ? now.getDate() : new Date(currentYear, currentMonth, 0).getDate();
+  const isCurrentMonth = now.getFullYear() === targetYear && now.getMonth() + 1 === targetMonth;
+  const isFutureMonth =
+    targetYear > now.getFullYear() ||
+    (targetYear === now.getFullYear() && targetMonth > now.getMonth() + 1);
+  const daysInMonth = new Date(targetYear, targetMonth, 0).getDate();
+  const maxDay = isCurrentMonth ? Math.min(now.getDate(), daysInMonth) : daysInMonth;
+
+  // Daftar tombol pilihan cepat (Quick Pills) 4 bulan terakhir
+  const quickMonths = useMemo(() => {
+    const list: { name: string; tab: string }[] = [];
+    for (let i = 3; i >= 0; i--) {
+      const d = new Date(currentYear, currentMonth - 1 - i, 1);
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const mName = INDONESIAN_MONTH_NAMES[m - 1];
+      list.push({
+        name: `${mName} ${y}`,
+        tab: `${mName.toUpperCase()} ${y}`,
+      });
+    }
+    return list;
+  }, [currentYear, currentMonth]);
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,6 +111,11 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
       return;
     }
 
+    if (isFutureMonth) {
+      setErrorMessage(TEXT_MONITORING.MONTHLY_SYNC.FUTURE_MONTH_ERR(targetMonthName, targetYear));
+      return;
+    }
+
     try {
       setSyncing(true);
       setProgress({
@@ -95,8 +131,8 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
       const res = await ingestMonthlyMasterSheet(
         trimmedUrl,
         trimmedTab,
-        currentYear,
-        currentMonth,
+        targetYear,
+        targetMonth,
         (p) => setProgress(p)
       );
 
@@ -221,11 +257,15 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
             gap: '8px',
             padding: '8px 12px',
             borderRadius: '10px',
-            background: 'var(--input-bg, rgba(255, 255, 255, 0.04))',
-            border: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+            background: isFutureMonth
+              ? 'rgba(239, 68, 68, 0.12)'
+              : 'var(--input-bg, rgba(255, 255, 255, 0.04))',
+            border: isFutureMonth
+              ? '1px solid rgba(239, 68, 68, 0.3)'
+              : '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
             fontSize: '12px',
             fontWeight: 600,
-            color: 'var(--accent-color, #3ECF8E)',
+            color: isFutureMonth ? '#ef4444' : 'var(--accent-color, #3ECF8E)',
             marginBottom: '18px',
             width: '100%',
             boxSizing: 'border-box',
@@ -233,7 +273,9 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
         >
           <Calendar size={14} style={{ flexShrink: 0 }} />
           <span>
-            {TEXT_MONITORING.MONTHLY_SYNC.RANGE_INFO(1, maxDay, monthName, currentYear)}
+            {isFutureMonth
+              ? TEXT_MONITORING.MONTHLY_SYNC.FUTURE_MONTH_ERR(targetMonthName, targetYear)
+              : TEXT_MONITORING.MONTHLY_SYNC.RANGE_INFO(1, maxDay, targetMonthName, targetYear)}
           </span>
         </div>
 
@@ -297,6 +339,62 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
           </div>
 
           <div>
+            {/* Quick Month Chips */}
+            <div style={{ marginBottom: '8px' }}>
+              <span
+                style={{
+                  display: 'block',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: 'var(--text-secondary, #a3a3a3)',
+                  marginBottom: '6px',
+                }}
+              >
+                {TEXT_MONITORING.MONTHLY_SYNC.QUICK_CHIPS_LABEL}
+              </span>
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '6px',
+                }}
+              >
+                {quickMonths.map((qm) => {
+                  const isSelected = tabName.trim().toUpperCase() === qm.tab;
+                  return (
+                    <button
+                      key={qm.tab}
+                      type="button"
+                      disabled={syncing}
+                      onClick={() => {
+                        setTabName(qm.tab);
+                        setErrorMessage(null);
+                      }}
+                      style={{
+                        padding: '4px 10px',
+                        borderRadius: '8px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: syncing ? 'not-allowed' : 'pointer',
+                        border: isSelected
+                          ? '1px solid var(--accent-color, #3ECF8E)'
+                          : '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
+                        background: isSelected
+                          ? 'rgba(62, 207, 142, 0.15)'
+                          : 'var(--input-bg, rgba(255, 255, 255, 0.04))',
+                        color: isSelected
+                          ? 'var(--accent-color, #3ECF8E)'
+                          : 'var(--text-secondary, #a3a3a3)',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      {qm.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <label
               htmlFor="monthly-sync-tab-input"
               style={{

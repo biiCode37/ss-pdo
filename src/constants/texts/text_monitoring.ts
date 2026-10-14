@@ -50,6 +50,11 @@ export const TEXT_MONITORING = {
     ERR_INVALID_TAB: "Nama lembar bulan wajib diisi.",
     TOOLTIP_MONTHLY: "Tarik Data 1 Bulan Sekaligus dari Master Sheet",
     BUTTON_LABEL_MONTHLY: "Tarik Data 1 Bulan",
+    QUICK_CHIPS_LABEL: "Pilihan Cepat Bulan:",
+    AUTO_DETECTED_BADGE: (monthName: string, year: number) =>
+      `Terdeteksi: ${monthName} ${year}`,
+    FUTURE_MONTH_ERR: (monthName: string, year: number) =>
+      `Bulan ${monthName} ${year} berada di masa depan dan belum memiliki data operasional.`,
   },
   ERROR_STATE: {
     TITLE: "Gagal Memuat Data",

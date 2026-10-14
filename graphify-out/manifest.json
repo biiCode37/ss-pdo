@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1791986908.5803607,
-    "ast_hash": "4c4349e2635017694effa18354bfd459",
+    "mtime": 1791987120.610601,
+    "ast_hash": "219628b1b8780408a4acd28d82f517e4",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1791986286.8948119,
-    "ast_hash": "d51c88e5573a56dea6734c5b465d3df4",
+    "mtime": 1791989389.6308358,
+    "ast_hash": "549b22b892012867210774e02b23e20c",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1791986269.593107,
-    "ast_hash": "5c8cf29853c23667fb2afa71d6e5e7da",
+    "mtime": 1791989404.9723632,
+    "ast_hash": "ffbf5cc8c6a146790b0dbf4b7bb0beae",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -5050,23 +5050,23 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonthlySyncModal.test.tsx": {
-    "mtime": 1791987004.8891773,
-    "ast_hash": "f5fd801a14ac359c86327c44ba4b220f",
+    "mtime": 1791989796.3641398,
+    "ast_hash": "bfc016409b15bef2a459204b451e7ac8",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonthlySyncModal.tsx": {
-    "mtime": 1791987011.3480673,
-    "ast_hash": "18ea471555a4f51f527aa51300b9406b",
+    "mtime": 1791989565.8646126,
+    "ast_hash": "9a5006deb23727293465e18aa2ccaf0b",
     "semantic_hash": ""
   },
   "src/services/monthlyMasterIngestionService.test.ts": {
-    "mtime": 1791987018.8171735,
-    "ast_hash": "23b62aa6b7eda17b6b290ac95fa9b7fc",
+    "mtime": 1791989647.5036612,
+    "ast_hash": "4fb4a3baf762502ba6e45cdc57b938f0",
     "semantic_hash": ""
   },
   "src/services/monthlyMasterIngestionService.ts": {
-    "mtime": 1791986405.9334905,
-    "ast_hash": "cfeb54745ad9ff2ebc8c956242bd3c92",
+    "mtime": 1791989766.8945005,
+    "ast_hash": "9fb16e46000aa5e9c1da5951f090352d",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-10-14-monthly-master-ingestion-plan.md": {

@@ -1,3 +1,4 @@
+// @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react';
@@ -5,9 +6,13 @@ import { MonthlySyncModal, type MonthlySyncModalProps } from './MonthlySyncModal
 import * as monthlyService from '@/services/monthlyMasterIngestionService';
 import { TEXT_MONITORING } from '@/constants/texts';
 
-vi.mock('@/services/monthlyMasterIngestionService', () => ({
-  ingestMonthlyMasterSheet: vi.fn(),
-}));
+vi.mock('@/services/monthlyMasterIngestionService', async () => {
+  const actual = await vi.importActual<any>('@/services/monthlyMasterIngestionService');
+  return {
+    ...actual,
+    ingestMonthlyMasterSheet: vi.fn(),
+  };
+});
 
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -153,5 +158,88 @@ describe('MonthlySyncModal', () => {
 
     expect(container.textContent).toContain('Sheet tidak ditemukan');
     expect(defaultProps.onSuccess).not.toHaveBeenCalled();
+  });
+
+  it('smartly detects past month (e.g. September) when typed into tab input and passes correct targetMonth', async () => {
+    (monthlyService.ingestMonthlyMasterSheet as any).mockResolvedValueOnce({
+      success: true,
+      savedCount: 540,
+      skippedCount: 0,
+      errors: [],
+    });
+
+    await renderModal();
+
+    const urlInput = container.querySelector('#monthly-sync-url-input') as HTMLInputElement;
+    const tabInput = container.querySelector('#monthly-sync-tab-input') as HTMLInputElement;
+
+    await act(async () => {
+      setNativeInputValue(
+        urlInput,
+        'https://docs.google.com/spreadsheets/d/1Hkvs4DLGWGJMPHRlSV-5g72nL_zRHjkTuRuTyXwFYs4/edit'
+      );
+      setNativeInputValue(tabInput, 'SEPTEMBER 2026');
+    });
+
+    // Badge info should dynamically update to 30 September 2026
+    expect(container.textContent).toContain('30 September 2026');
+
+    const submitBtn = container.querySelector('button[type="submit"]') as HTMLButtonElement;
+    await act(async () => {
+      submitBtn.click();
+    });
+
+    expect(monthlyService.ingestMonthlyMasterSheet).toHaveBeenCalledWith(
+      'https://docs.google.com/spreadsheets/d/1Hkvs4DLGWGJMPHRlSV-5g72nL_zRHjkTuRuTyXwFYs4/edit',
+      'SEPTEMBER 2026',
+      2026,
+      9, // Target month is smartly 9 (September), NOT 10!
+      expect.any(Function)
+    );
+  });
+
+  it('sets tab name and resolves month when quick chip button is clicked', async () => {
+    (monthlyService.ingestMonthlyMasterSheet as any).mockResolvedValueOnce({
+      success: true,
+      savedCount: 540,
+      skippedCount: 0,
+      errors: [],
+    });
+
+    await renderModal();
+
+    const urlInput = container.querySelector('#monthly-sync-url-input') as HTMLInputElement;
+    await act(async () => {
+      setNativeInputValue(
+        urlInput,
+        'https://docs.google.com/spreadsheets/d/1Hkvs4DLGWGJMPHRlSV-5g72nL_zRHjkTuRuTyXwFYs4/edit'
+      );
+    });
+
+    // Find quick chip for September 2026
+    const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('button[type="button"]'));
+    const septBtn = buttons.find((b) => b.textContent?.includes('September 2026'));
+    expect(septBtn).toBeDefined();
+
+    await act(async () => {
+      septBtn?.click();
+    });
+
+    const tabInput = container.querySelector('#monthly-sync-tab-input') as HTMLInputElement;
+    expect(tabInput.value).toBe('SEPTEMBER 2026');
+    expect(container.textContent).toContain('30 September 2026');
+
+    const submitBtn = container.querySelector('button[type="submit"]') as HTMLButtonElement;
+    await act(async () => {
+      submitBtn.click();
+    });
+
+    expect(monthlyService.ingestMonthlyMasterSheet).toHaveBeenCalledWith(
+      'https://docs.google.com/spreadsheets/d/1Hkvs4DLGWGJMPHRlSV-5g72nL_zRHjkTuRuTyXwFYs4/edit',
+      'SEPTEMBER 2026',
+      2026,
+      9,
+      expect.any(Function)
+    );
   });
 });

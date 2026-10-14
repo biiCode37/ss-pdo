@@ -70,7 +70,22 @@ export function parseCSV(text: string): string[][] {
   return lines;
 }
 
-const INDONESIAN_MONTH_MAP: Record<string, number> = {
+export const INDONESIAN_MONTH_NAMES = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
+
+export const INDONESIAN_MONTH_MAP: Record<string, number> = {
   januari: 1,
   februari: 2,
   maret: 3,
@@ -83,7 +98,80 @@ const INDONESIAN_MONTH_MAP: Record<string, number> = {
   oktober: 10,
   november: 11,
   desember: 12,
+  jan: 1,
+  feb: 2,
+  mar: 3,
+  apr: 4,
+  jun: 6,
+  jul: 7,
+  agu: 8,
+  agt: 8,
+  sep: 9,
+  sept: 9,
+  okt: 10,
+  oct: 10,
+  nov: 11,
+  des: 12,
+  dec: 12,
 };
+
+export interface DetectedMonthYear {
+  month: number;
+  year: number;
+  monthName: string;
+  isDetected: boolean;
+}
+
+/**
+ * Deteksi nama bulan dan tahun dari nama tab sheet secara cerdas dan fleksibel.
+ * Mendukung nama panjang (September) maupun singkatan (Sept, Sep), serta tahun 4 digit.
+ */
+export function parseMonthAndYearFromTab(
+  tabName: string,
+  defaultYear?: number,
+  defaultMonth?: number
+): DetectedMonthYear {
+  const fallbackYear = defaultYear || new Date().getFullYear();
+  const fallbackMonth = defaultMonth || new Date().getMonth() + 1;
+  const fallbackMonthName = INDONESIAN_MONTH_NAMES[fallbackMonth - 1] || 'Oktober';
+
+  if (!tabName || typeof tabName !== 'string') {
+    return {
+      month: fallbackMonth,
+      year: fallbackYear,
+      monthName: fallbackMonthName,
+      isDetected: false,
+    };
+  }
+
+  const clean = tabName.trim().toLowerCase();
+
+  // Ekstrak 4 digit tahun (contoh: 2024, 2025, 2026)
+  const yearMatch = clean.match(/\b(20\d\d)\b/);
+  const detectedYear = yearMatch ? parseInt(yearMatch[1], 10) : fallbackYear;
+
+  // Cari kecocokan bulan (prioritaskan key yang lebih panjang untuk mencegah prefix false-positive)
+  const sortedKeys = Object.keys(INDONESIAN_MONTH_MAP).sort((a, b) => b.length - a.length);
+  for (const key of sortedKeys) {
+    const regex = new RegExp(`\\b${key}\\b`, 'i');
+    if (regex.test(clean) || clean.includes(key)) {
+      const monthNum = INDONESIAN_MONTH_MAP[key];
+      return {
+        month: monthNum,
+        year: detectedYear,
+        monthName: INDONESIAN_MONTH_NAMES[monthNum - 1],
+        isDetected: true,
+      };
+    }
+  }
+
+  return {
+    month: fallbackMonth,
+    year: detectedYear,
+    monthName: fallbackMonthName,
+    isDetected: false,
+  };
+}
 
 interface DayBlock {
   dayNum: number;
@@ -101,8 +189,8 @@ interface DayBlock {
 export async function ingestMonthlyMasterSheet(
   spreadsheetUrlOrId: string,
   sheetTabName: string,
-  targetYear: number,
-  targetMonth: number, // 1-12
+  targetYear?: number,
+  targetMonth?: number, // 1-12
   onProgress?: (progress: MonthlyMasterIngestionProgress) => void,
   nowDateOverride?: Date
 ): Promise<MonthlyMasterIngestionResult> {
@@ -189,15 +277,7 @@ export async function ingestMonthlyMasterSheet(
       routeMap.set(normalizeRouteCode(r.route_code), r);
     });
 
-    // 4. Hitung Batas Hari (Date Limit Filter)
-    const now = nowDateOverride || new Date();
-    const isCurrentMonth =
-      now.getFullYear() === targetYear && now.getMonth() + 1 === targetMonth;
-    const maxDayAllowed = isCurrentMonth
-      ? now.getDate()
-      : new Date(targetYear, targetMonth, 0).getDate();
-
-    // 5. Pindai Seluruh Header Tanggal dari CSV untuk Menetapkan Batas Baris yang Presisi
+    // 4. Pindai Seluruh Header Tanggal dari CSV untuk Menetapkan Batas Baris yang Presisi
     interface RawDayHeader {
       dayNum: number;
       monthNum: number;
@@ -212,9 +292,79 @@ export async function ingestMonthlyMasterSheet(
         const dayNum = parseInt(match[2], 10);
         const monthName = match[3].toLowerCase();
         const yearNum = parseInt(match[4], 10);
-        const parsedMonth = INDONESIAN_MONTH_MAP[monthName] || targetMonth;
-        allHeaders.push({ dayNum, monthNum: parsedMonth, yearNum, rowIdx: r });
+        const parsedMonth = INDONESIAN_MONTH_MAP[monthName];
+        if (parsedMonth) {
+          allHeaders.push({ dayNum, monthNum: parsedMonth, yearNum, rowIdx: r });
+        }
       }
+    }
+
+    // 5. Resolusi Cerdas Bulan & Tahun (Smart Auto-Resolution)
+    // A. Prioritas 1: Deteksi dari nama tab (misal "SEPTEMBER 2026")
+    const detectedFromTab = parseMonthAndYearFromTab(trimmedTab, targetYear, targetMonth);
+    let resolvedYear = detectedFromTab.isDetected
+      ? detectedFromTab.year
+      : targetYear || new Date().getFullYear();
+    let resolvedMonth = detectedFromTab.isDetected
+      ? detectedFromTab.month
+      : targetMonth || new Date().getMonth() + 1;
+
+    // B. Prioritas 2 (Koreksi Mandiri): Jika kombinasi tidak ada di CSV, ambil kombinasi dominan dari CSV
+    const matchingHeaderCount = allHeaders.filter(
+      (h) => h.yearNum === resolvedYear && h.monthNum === resolvedMonth
+    ).length;
+
+    if (matchingHeaderCount === 0 && allHeaders.length > 0) {
+      const freqMap = new Map<string, { year: number; month: number; count: number }>();
+      allHeaders.forEach((h) => {
+        const key = `${h.yearNum}-${h.monthNum}`;
+        const existing = freqMap.get(key) || { year: h.yearNum, month: h.monthNum, count: 0 };
+        existing.count++;
+        freqMap.set(key, existing);
+      });
+
+      let maxCount = 0;
+      let dominant: { year: number; month: number } | null = null;
+      for (const item of freqMap.values()) {
+        if (item.count > maxCount) {
+          maxCount = item.count;
+          dominant = item;
+        }
+      }
+
+      if (dominant) {
+        resolvedYear = dominant.year;
+        resolvedMonth = dominant.month;
+      }
+    }
+
+    // 6. Hitung Batas Hari Secara Fleksibel (Date Limit Filter)
+    const now = nowDateOverride || new Date();
+    const isCurrentMonth =
+      now.getFullYear() === resolvedYear && now.getMonth() + 1 === resolvedMonth;
+    const isFutureMonth =
+      resolvedYear > now.getFullYear() ||
+      (resolvedYear === now.getFullYear() && resolvedMonth > now.getMonth() + 1);
+
+    const daysInMonth = new Date(resolvedYear, resolvedMonth, 0).getDate();
+
+    let maxDayAllowed = daysInMonth;
+    if (isCurrentMonth) {
+      // Bulan berjalan: dibatasi s.d. tanggal hari ini
+      maxDayAllowed = Math.min(now.getDate(), daysInMonth);
+    } else if (isFutureMonth) {
+      const futureMonthName = INDONESIAN_MONTH_NAMES[resolvedMonth - 1] || `${resolvedMonth}`;
+      return {
+        success: false,
+        savedCount: 0,
+        skippedCount: 0,
+        errors: [
+          `Bulan ${futureMonthName} ${resolvedYear} berada di masa depan dan belum memiliki data operasional.`,
+        ],
+      };
+    } else {
+      // Bulan lalu: AMBIL LENGKAP SELURUH HARI (1 s.d. 30/31)!
+      maxDayAllowed = daysInMonth;
     }
 
     const dayBlocks: DayBlock[] = [];
@@ -222,8 +372,8 @@ export async function ingestMonthlyMasterSheet(
       const header = allHeaders[h];
       const nextRowIdx = h < allHeaders.length - 1 ? allHeaders[h + 1].rowIdx : rows.length;
       if (
-        header.yearNum === targetYear &&
-        header.monthNum === targetMonth &&
+        header.yearNum === resolvedYear &&
+        header.monthNum === resolvedMonth &&
         header.dayNum <= maxDayAllowed
       ) {
         const dateStr = `${header.yearNum}-${String(header.monthNum).padStart(2, '0')}-${String(
