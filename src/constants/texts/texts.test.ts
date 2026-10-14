@@ -102,9 +102,17 @@ describe('Centralized UI Text Dictionary', () => {
   it('exports TEXT_MONITORING new tokens for bottom nav, bulk verify, dashboard, and fleet tab', () => {
     expect((TEXT_MONITORING as any).NAV.DASHBOARD).toBe('Dashboard');
     expect((TEXT_MONITORING as any).NAV.ROUTES).toBe('Rute');
+    expect((TEXT_MONITORING as any).NAV.KORWIL).toBe('Rekap Korwil');
     expect((TEXT_MONITORING as any).NAV.FLEET_STATUS).toBe('Status Armada');
     expect((TEXT_MONITORING as any).NAV.WA_REPORT).toBe('Laporan WA');
     expect((TEXT_MONITORING as any).NAV.PROFILE).toBe('Profil');
+    expect((TEXT_MONITORING as any).PERIOD.DAILY).toBe('Harian');
+    expect((TEXT_MONITORING as any).PERIOD.WEEKLY).toBe('Mingguan');
+    expect((TEXT_MONITORING as any).PERIOD.MONTHLY).toBe('Bulanan');
+    expect((TEXT_MONITORING as any).PERIOD.CUSTOM).toBe('Kustom');
+    expect((TEXT_MONITORING as any).KORWIL_TAB.TITLE).toBe('Rekapitulasi Tim Korwil');
+    expect((TEXT_MONITORING as any).KORWIL_TAB.TOTAL_WILAYAH_CARD).toBe('Total 18 Rute Wilayah');
+    expect((TEXT_MONITORING as any).KORWIL_TAB.ROUTES_COUNT(6)).toBe('6 Rute');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Grafik Jumlah Pelanggan Per Rute');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE('Selasa, 01/09/2026')).toBe('Komparasi total pelanggan pada hari Selasa, 01/09/2026');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE()).toBe('Komparasi total pelanggan dari 18 rute hari ini');
