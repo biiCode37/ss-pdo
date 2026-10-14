@@ -187,7 +187,6 @@ describe('MonitoringHeader Component', () => {
     expect(dateTrigger?.textContent).toContain('2026-10-01 s.d. 2026-10-14');
 
     // Step buttons should be hidden in non-daily mode
-    const prevBtn = container.querySelector(`[title="${TEXT_MONITORING.NAV.ROUTES}"]`);
     expect(container.textContent).not.toContain('Kemarin');
   });
 });

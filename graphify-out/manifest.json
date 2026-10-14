@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1791722660.665741,
-    "ast_hash": "70c8c0660a60255ae3774628408e926b",
+    "mtime": 1791981934.52771,
+    "ast_hash": "4bd59bfd7de3aaef49d4690698c0f61c",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1315,13 +1315,13 @@
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.test.ts": {
-    "mtime": 1790003977.870072,
-    "ast_hash": "89d4dfb2e1dce2bea500f5911ba673fd",
+    "mtime": 1791981131.9697258,
+    "ast_hash": "9883846a32fb396e749b64d3b7bc1589",
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.ts": {
-    "mtime": 1790424467.9303212,
-    "ast_hash": "2d4fe75721e4ba5cb754e70f4a5e0533",
+    "mtime": 1791981097.790121,
+    "ast_hash": "429e931b6b18a6b5138caf447852fdcf",
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.test.ts": {
@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1790511433.4101052,
-    "ast_hash": "fef2ae18eb209f84cc234dd294d48a06",
+    "mtime": 1791980532.6361997,
+    "ast_hash": "6a67532a7f5a24a17640b58889be5606",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1791802274.9270947,
-    "ast_hash": "7dcf28c3f97bec207d1282cc5270c41c",
+    "mtime": 1791980483.4885132,
+    "ast_hash": "544d9336673ddb9bb2238493a05d3fb9",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -1795,8 +1795,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.tsx": {
-    "mtime": 1790039407.5676527,
-    "ast_hash": "9bd7cbec633d668ef1d8dd46f0ebe046",
+    "mtime": 1791981346.5769992,
+    "ast_hash": "b6d74f0b00359a5d2b89618960718367",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringKpiCards.tsx": {
@@ -2575,13 +2575,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.test.tsx": {
-    "mtime": 1790051964.0489411,
-    "ast_hash": "c7a3b3c646ae95ca1710da635f6c4dce",
+    "mtime": 1791981838.241369,
+    "ast_hash": "697c983889b00168a66669fff7470027",
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.tsx": {
-    "mtime": 1791728838.2763152,
-    "ast_hash": "c3dc8e71838b63c1fda5ebd924db2652",
+    "mtime": 1791981903.4222164,
+    "ast_hash": "fbec17f38655b3761041b89390eac0ea",
     "semantic_hash": ""
   },
   "src/components/monitoring/index.ts": {
@@ -2935,13 +2935,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringBottomNav.test.tsx": {
-    "mtime": 1790036573.6852112,
-    "ast_hash": "9e6caca64e7d9d1863383a681356c83c",
+    "mtime": 1791981475.4952633,
+    "ast_hash": "3ccdc30445dd85f1d8872696eb5f72bb",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringBottomNav.tsx": {
-    "mtime": 1790036561.3152337,
-    "ast_hash": "9601db6a37d1e0428276a979dce56a7f",
+    "mtime": 1791981507.3775306,
+    "ast_hash": "e8c225a912a61d4146eb44f62535c6a8",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringDashboardTab.test.tsx": {
@@ -3120,8 +3120,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.test.tsx": {
-    "mtime": 1790039424.3066702,
-    "ast_hash": "34232de62ca68712ce1a2f88f4f8d8c1",
+    "mtime": 1791982029.3739913,
+    "ast_hash": "ee567097724dcd9c7e418113497464a6",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_76/AUDIT_BUGS.md": {
@@ -5012,6 +5012,41 @@
   "docs/superpowers/plans/2026-10-11-overhaul-sumber-status-armada.md": {
     "mtime": 1791721152.3964639,
     "ast_hash": "c99e4494a921f383ee6531352ced1bb3",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/MonitoringPeriodSelector.test.tsx": {
+    "mtime": 1791981289.9753635,
+    "ast_hash": "ff95f6bdae92f9b3dfda2019cad51e5c",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/MonitoringPeriodSelector.tsx": {
+    "mtime": 1791981256.2105315,
+    "ast_hash": "8a7498ee2b1d67ffa8321ee288c55378",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/tabs/MonitoringKorwilTab.test.tsx": {
+    "mtime": 1791981568.6422176,
+    "ast_hash": "0bd874589b94e6d274f90e3d32cf98ac",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/tabs/MonitoringKorwilTab.tsx": {
+    "mtime": 1791982017.018994,
+    "ast_hash": "07352e005132462e975c5902eb7e9d83",
+    "semantic_hash": ""
+  },
+  "docs/adr/0003-regional-monitoring-and-korwil-recap.md": {
+    "mtime": 1791979976.7702382,
+    "ast_hash": "b07573d704ed0acf4bdb135bd17d1b98",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-14-regional-monitoring-recap-plan.md": {
+    "mtime": 1791980193.852688,
+    "ast_hash": "4199507b0ead5ef588fe4f6fa0fb0365",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-14-regional-monitoring-recap-design.md": {
+    "mtime": 1791979996.6672542,
+    "ast_hash": "9bacfde328683179a14366c6c5cb027a",
     "semantic_hash": ""
   }
 }

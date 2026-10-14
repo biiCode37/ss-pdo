@@ -4,9 +4,6 @@ import {
   ChevronDown,
   ChevronUp,
   Award,
-  Bus,
-  Gauge,
-  RotateCcw,
   UserCheck,
   ArrowUpRight,
 } from "lucide-react";
