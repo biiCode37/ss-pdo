@@ -28,6 +28,29 @@ export const TEXT_MONITORING = {
       `Berhasil menyinkronkan ${count} rute ke database.`,
     FAILED_TITLE: "Sinkronisasi Gagal",
   },
+  MONTHLY_SYNC: {
+    TITLE: "Tarik Data 1 Bulan Sekaligus",
+    DESC: "Tarik otomatis seluruh riwayat operasional 18 rute dari Spreadsheet Rekap Master ke database Supabase.",
+    LABEL_URL: "Link Spreadsheet Rekap Master Wilayah",
+    PLACEHOLDER_URL: "https://docs.google.com/spreadsheets/d/...",
+    LABEL_TAB: "Nama Lembar (Tab Bulan)",
+    PLACEHOLDER_TAB: "Contoh: OKTOBER 2026",
+    BTN_START: "Mulai Sinkronisasi",
+    BTN_CANCEL: "Batal",
+    RANGE_INFO: (start: number, end: number, monthName: string, year: number) =>
+      `Menyinkronkan Tanggal ${start} s.d. ${end} ${monthName} ${year} (18 Rute)`,
+    STATUS_FETCHING: "Mengunduh data spreadsheet master...",
+    STATUS_PARSING: "Menganalisis baris data 18 rute...",
+    STATUS_SAVING: (processed: number, total: number) =>
+      `Menyimpan data ke database (${processed}/${total})...`,
+    SUCCESS_TITLE: "Sinkronisasi Bulanan Selesai",
+    SUCCESS_SUMMARY: (saved: number, skipped: number) =>
+      `${saved} laporan rute berhasil diperbarui, ${skipped} dilewati (sudah diisi di aplikasi).`,
+    ERR_INVALID_URL: "Link spreadsheet tidak valid atau kosong.",
+    ERR_INVALID_TAB: "Nama lembar bulan wajib diisi.",
+    TOOLTIP_MONTHLY: "Tarik Data 1 Bulan Sekaligus dari Master Sheet",
+    BUTTON_LABEL_MONTHLY: "Tarik Data 1 Bulan",
+  },
   ERROR_STATE: {
     TITLE: "Gagal Memuat Data",
     RETRY_BTN: "Coba Lagi",

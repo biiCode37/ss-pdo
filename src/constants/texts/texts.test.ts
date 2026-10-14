@@ -139,6 +139,24 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_PCT_ONLY('75')).toBe('75%');
   });
 
+  it('exports TEXT_MONITORING.MONTHLY_SYNC tokens for monthly master spreadsheet sync', () => {
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC).toBeDefined();
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.TITLE).toBe('Tarik Data 1 Bulan Sekaligus');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.DESC).toContain('Spreadsheet Rekap Master');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.LABEL_URL).toBe('Link Spreadsheet Rekap Master Wilayah');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.LABEL_TAB).toBe('Nama Lembar (Tab Bulan)');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.BTN_START).toBe('Mulai Sinkronisasi');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.BTN_CANCEL).toBe('Batal');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.RANGE_INFO(1, 14, 'Oktober', 2026)).toBe('Menyinkronkan Tanggal 1 s.d. 14 Oktober 2026 (18 Rute)');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.STATUS_FETCHING).toBe('Mengunduh data spreadsheet master...');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.STATUS_PARSING).toBe('Menganalisis baris data 18 rute...');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.STATUS_SAVING(10, 50)).toBe('Menyimpan data ke database (10/50)...');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.SUCCESS_TITLE).toBe('Sinkronisasi Bulanan Selesai');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.SUCCESS_SUMMARY(180, 5)).toBe('180 laporan rute berhasil diperbarui, 5 dilewati (sudah diisi di aplikasi).');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.TOOLTIP_MONTHLY).toBe('Tarik Data 1 Bulan Sekaligus dari Master Sheet');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.BUTTON_LABEL_MONTHLY).toBe('Tarik Data 1 Bulan');
+  });
+
   it('exports TEXT_MONITORING ingestion, provenance, and detailed readiness tokens', () => {
     expect((TEXT_MONITORING as any).INGESTION.BUTTON_LABEL).toBe('Load All');
     expect((TEXT_MONITORING as any).INGESTION.BUTTON_LOADING).toBe('Loading...');
