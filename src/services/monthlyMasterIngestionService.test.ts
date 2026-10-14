@@ -19,7 +19,7 @@ vi.mock('./dailyRouteReportService', () => ({
 
 // Mock global fetch for CSV
 const mockFetch = vi.fn();
-global.fetch = mockFetch;
+(globalThis as any).fetch = mockFetch;
 
 describe('monthlyMasterIngestionService', () => {
   beforeEach(() => {

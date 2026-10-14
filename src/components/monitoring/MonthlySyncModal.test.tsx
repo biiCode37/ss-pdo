@@ -1,8 +1,6 @@
-// @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react';
-import React from 'react';
 import { MonthlySyncModal, type MonthlySyncModalProps } from './MonthlySyncModal';
 import * as monthlyService from '@/services/monthlyMasterIngestionService';
 import { TEXT_MONITORING } from '@/constants/texts';

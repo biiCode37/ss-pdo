@@ -204,6 +204,7 @@ describe('MonitoringHeader Component', () => {
         date: '2026-10-14',
         startDate: '2026-10-14',
         endDate: '2026-10-14',
+        label: '2026-10-14',
       },
     });
 
@@ -227,6 +228,7 @@ describe('MonitoringHeader Component', () => {
         date: '2026-10-14',
         startDate: '2026-10-01',
         endDate: '2026-10-14',
+        label: '2026-10-01 s.d. 2026-10-14',
       },
     });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CloudDownload, X, AlertCircle, CheckCircle2, Loader2, Calendar } from 'lucide-react';
+import { CloudDownload, X, AlertCircle, Loader2, Calendar } from 'lucide-react';
 import { TEXT_MONITORING } from '@/constants/texts';
 import {
   ingestMonthlyMasterSheet,

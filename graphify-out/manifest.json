@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1791982148.1964583,
-    "ast_hash": "a81b4a326a3274c118e88939bd59743b",
+    "mtime": 1791986908.5803607,
+    "ast_hash": "4c4349e2635017694effa18354bfd459",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1791980532.6361997,
-    "ast_hash": "6a67532a7f5a24a17640b58889be5606",
+    "mtime": 1791986286.8948119,
+    "ast_hash": "d51c88e5573a56dea6734c5b465d3df4",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1791980483.4885132,
-    "ast_hash": "544d9336673ddb9bb2238493a05d3fb9",
+    "mtime": 1791986269.593107,
+    "ast_hash": "5c8cf29853c23667fb2afa71d6e5e7da",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -1795,8 +1795,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.tsx": {
-    "mtime": 1791981346.5769992,
-    "ast_hash": "b6d74f0b00359a5d2b89618960718367",
+    "mtime": 1791986684.1173482,
+    "ast_hash": "eaf40b767b568f1f507e58b1a73359c4",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringKpiCards.tsx": {
@@ -2575,13 +2575,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.test.tsx": {
-    "mtime": 1791981838.241369,
-    "ast_hash": "697c983889b00168a66669fff7470027",
+    "mtime": 1791986758.0333228,
+    "ast_hash": "4be97b3dcd1a3d12a5ffc104da917c42",
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.tsx": {
-    "mtime": 1791981903.4222164,
-    "ast_hash": "fbec17f38655b3761041b89390eac0ea",
+    "mtime": 1791986881.9983761,
+    "ast_hash": "cc39197df1b595b374b518addbe5e9f3",
     "semantic_hash": ""
   },
   "src/components/monitoring/index.ts": {
@@ -3120,8 +3120,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.test.tsx": {
-    "mtime": 1791982029.3739913,
-    "ast_hash": "ee567097724dcd9c7e418113497464a6",
+    "mtime": 1791986995.2327054,
+    "ast_hash": "f274c4adc01103d99f94356b79506695",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_76/AUDIT_BUGS.md": {
@@ -5047,6 +5047,36 @@
   "docs/superpowers/specs/2026-10-14-regional-monitoring-recap-design.md": {
     "mtime": 1791979996.6672542,
     "ast_hash": "9bacfde328683179a14366c6c5cb027a",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/MonthlySyncModal.test.tsx": {
+    "mtime": 1791987004.8891773,
+    "ast_hash": "f5fd801a14ac359c86327c44ba4b220f",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/MonthlySyncModal.tsx": {
+    "mtime": 1791987011.3480673,
+    "ast_hash": "18ea471555a4f51f527aa51300b9406b",
+    "semantic_hash": ""
+  },
+  "src/services/monthlyMasterIngestionService.test.ts": {
+    "mtime": 1791987018.8171735,
+    "ast_hash": "23b62aa6b7eda17b6b290ac95fa9b7fc",
+    "semantic_hash": ""
+  },
+  "src/services/monthlyMasterIngestionService.ts": {
+    "mtime": 1791986405.9334905,
+    "ast_hash": "cfeb54745ad9ff2ebc8c956242bd3c92",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-14-monthly-master-ingestion-plan.md": {
+    "mtime": 1791986143.5467074,
+    "ast_hash": "28c8d116cee06363e8898c03cdc5118f",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-14-monthly-master-ingestion-design.md": {
+    "mtime": 1791986061.114482,
+    "ast_hash": "7461dffb76bed203a753100524d12c51",
     "semantic_hash": ""
   }
 }
