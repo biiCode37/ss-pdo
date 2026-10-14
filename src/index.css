@@ -2101,14 +2101,29 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   padding: 16px;
   max-width: 1200px;
   margin: 0 auto;
-  padding-bottom: 84px;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom, 16px));
   width: 100%;
   box-sizing: border-box;
 }
 
 @media (max-width: 640px) {
   .monitoring-dashboard-tab {
-    padding: 12px 12px 84px 12px;
+    padding: 12px 12px calc(92px + env(safe-area-inset-bottom, 16px)) 12px;
+  }
+}
+
+.monitoring-korwil-tab {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 16px));
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .monitoring-korwil-tab {
+    padding: 12px 12px calc(100px + env(safe-area-inset-bottom, 16px)) 12px;
   }
 }
 

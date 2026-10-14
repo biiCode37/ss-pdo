@@ -110,6 +110,10 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).PERIOD.WEEKLY).toBe('Mingguan');
     expect((TEXT_MONITORING as any).PERIOD.MONTHLY).toBe('Bulanan');
     expect((TEXT_MONITORING as any).PERIOD.CUSTOM).toBe('Kustom');
+    expect((TEXT_MONITORING as any).PERIOD.MONTHLY_MODAL_TITLE).toBe('Pilih Periode Bulan');
+    expect((TEXT_MONITORING as any).PERIOD.SELECT_YEAR).toBe('Pilih Tahun');
+    expect((TEXT_MONITORING as any).PERIOD.CURRENT_MONTH).toBe('Bulan Ini');
+    expect((TEXT_MONITORING as any).PERIOD.PREV_MONTH).toBe('Bulan Lalu');
     expect((TEXT_MONITORING as any).KORWIL_TAB.TITLE).toBe('Rekapitulasi Tim Korwil');
     expect((TEXT_MONITORING as any).KORWIL_TAB.TOTAL_WILAYAH_CARD).toBe('Total 18 Rute Wilayah');
     expect((TEXT_MONITORING as any).KORWIL_TAB.ROUTES_COUNT(6)).toBe('6 Rute');

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Bus,
   ChevronLeft,
@@ -12,6 +12,7 @@ import {
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
 import { MonitoringPeriodSelector } from "./MonitoringPeriodSelector";
+import { MonitoringMonthPickerModal } from "./MonitoringMonthPickerModal";
 import type { MonitoringPeriodFilter } from "@/services/allRouteMonitoringService";
 
 export interface MonitoringHeaderProps {
@@ -46,8 +47,17 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   onOpenMonthlySyncModal,
 }) => {
   const dateInputRef = useRef<HTMLInputElement>(null);
+  const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
+
+  const isDaily = !currentPeriod || currentPeriod.mode === "daily";
+  const isMonthly = currentPeriod?.mode === "monthly";
 
   const handleOpenDatePicker = () => {
+    if (isMonthly) {
+      setIsMonthPickerOpen(true);
+      return;
+    }
+
     if (!dateInputRef.current) return;
     try {
       if (typeof dateInputRef.current.showPicker === "function") {
@@ -59,6 +69,28 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
     } catch {
       dateInputRef.current?.click();
     }
+  };
+
+  const handleStepMonth = (deltaMonths: number) => {
+    if (!currentPeriod || !onPeriodChange) return;
+    const curDateStr = currentPeriod.startDate || selectedDate;
+    const [yStr, mStr] = curDateStr.split("-");
+    const y = parseInt(yStr, 10) || new Date().getFullYear();
+    const m = parseInt(mStr, 10) || new Date().getMonth() + 1;
+    const targetDate = new Date(y, m - 1 + deltaMonths, 1);
+    const newY = targetDate.getFullYear();
+    const newM = targetDate.getMonth() + 1;
+    const padM = String(newM).padStart(2, "0");
+    const startDate = `${newY}-${padM}-01`;
+    const daysInMonth = new Date(newY, newM, 0).getDate();
+    const endDate = `${newY}-${padM}-${String(daysInMonth).padStart(2, "0")}`;
+    onPeriodChange({
+      mode: "monthly",
+      date: endDate,
+      startDate,
+      endDate,
+      label: `${startDate} s.d. ${endDate}`,
+    });
   };
 
   return (
@@ -191,7 +223,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               padding: "2px 4px",
             }}
           >
-            {(!currentPeriod || currentPeriod.mode === "daily") && (
+            {isDaily && (
               <button
                 type="button"
                 onClick={() => onStepDate(-1)}
@@ -210,6 +242,31 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 }}
                 title={TEXT_COMMON.NAV.PREV_DAY}
                 aria-label={TEXT_COMMON.NAV.PREV_DAY}
+              >
+                <ChevronLeft size={16} />
+              </button>
+            )}
+
+            {isMonthly && (
+              <button
+                type="button"
+                onClick={() => handleStepMonth(-1)}
+                data-testid="monitoring-step-prev-month"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--text-primary, #ededed)",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+                title={TEXT_MONITORING.PERIOD.PREV_MONTH}
+                aria-label={TEXT_MONITORING.PERIOD.PREV_MONTH}
               >
                 <ChevronLeft size={16} />
               </button>
@@ -244,8 +301,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 borderRadius: "8px",
                 transition: "background-color 0.15s ease",
               }}
-              title={TEXT_COMMON.NAV.CHOOSE_DATE}
-              aria-label={TEXT_COMMON.NAV.CHOOSE_DATE}
+              title={isMonthly ? TEXT_MONITORING.PERIOD.CHOOSE_MONTH_BTN : TEXT_COMMON.NAV.CHOOSE_DATE}
+              aria-label={isMonthly ? TEXT_MONITORING.PERIOD.CHOOSE_MONTH_BTN : TEXT_COMMON.NAV.CHOOSE_DATE}
             >
               <Calendar
                 size={14}
@@ -285,7 +342,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               />
             </div>
 
-            {(!currentPeriod || currentPeriod.mode === "daily") && (
+            {isDaily && (
               <button
                 type="button"
                 onClick={() => onStepDate(1)}
@@ -304,6 +361,31 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 }}
                 title={TEXT_COMMON.NAV.NEXT_DAY}
                 aria-label={TEXT_COMMON.NAV.NEXT_DAY}
+              >
+                <ChevronRight size={16} />
+              </button>
+            )}
+
+            {isMonthly && (
+              <button
+                type="button"
+                onClick={() => handleStepMonth(1)}
+                data-testid="monitoring-step-next-month"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--text-primary, #ededed)",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+                title={TEXT_MONITORING.PERIOD.CURRENT_MONTH}
+                aria-label="Bulan Berikutnya"
               >
                 <ChevronRight size={16} />
               </button>
@@ -405,6 +487,17 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Month Picker Modal for Monthly Period */}
+      {currentPeriod && onPeriodChange && (
+        <MonitoringMonthPickerModal
+          isOpen={isMonthPickerOpen}
+          onClose={() => setIsMonthPickerOpen(false)}
+          currentPeriod={currentPeriod}
+          onSelectMonth={onPeriodChange}
+          referenceDate={selectedDate}
+        />
+      )}
     </header>
   );
 };

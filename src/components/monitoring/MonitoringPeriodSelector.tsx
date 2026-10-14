@@ -8,6 +8,8 @@ import {
 } from "@/services/allRouteMonitoringService";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
 
+import { MonitoringMonthPickerModal } from "./MonitoringMonthPickerModal";
+
 export interface MonitoringPeriodSelectorProps {
   currentPeriod: MonitoringPeriodFilter;
   onPeriodChange: (filter: MonitoringPeriodFilter) => void;
@@ -20,6 +22,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
   loading = false,
 }) => {
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
+  const [isMonthModalOpen, setIsMonthModalOpen] = useState(false);
   const [customStart, setCustomStart] = useState(currentPeriod.startDate);
   const [customEnd, setCustomEnd] = useState(currentPeriod.endDate);
 
@@ -45,6 +48,10 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
         label: `${startDate} s.d. ${endDate} (7 Hari)`,
       });
     } else if (mode === "monthly") {
+      if (currentPeriod.mode === "monthly") {
+        setIsMonthModalOpen(true);
+        return;
+      }
       const [y, m] = currentPeriod.date.split("-");
       const startDate = `${y}-${m}-01`;
       const endDate = currentPeriod.date;
@@ -391,6 +398,18 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           </div>
         </div>
       )}
+
+      {/* Month Picker Modal for Monthly Period */}
+      <MonitoringMonthPickerModal
+        isOpen={isMonthModalOpen}
+        onClose={() => setIsMonthModalOpen(false)}
+        currentPeriod={currentPeriod}
+        onSelectMonth={(filter) => {
+          onPeriodChange(filter);
+          setIsMonthModalOpen(false);
+        }}
+        referenceDate={currentPeriod.date}
+      />
     </div>
   );
 };

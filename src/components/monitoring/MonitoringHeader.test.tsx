@@ -241,4 +241,59 @@ describe('MonitoringHeader Component', () => {
     });
     expect(onOpenMonthlySyncModal).toHaveBeenCalledTimes(1);
   });
+
+  it('opens MonthPickerModal when date trigger is tapped in monthly mode', async () => {
+    const onPeriodChange = vi.fn();
+    await renderHeader({
+      selectedDate: '2026-10-14',
+      currentPeriod: {
+        mode: 'monthly',
+        date: '2026-10-14',
+        startDate: '2026-10-01',
+        endDate: '2026-10-14',
+        label: '2026-10-01 s.d. 2026-10-14',
+      },
+      onPeriodChange,
+    });
+
+    const dateTrigger = container.querySelector<HTMLDivElement>('[data-testid="monitoring-date-picker-trigger"]');
+    expect(dateTrigger).toBeTruthy();
+
+    await act(async () => {
+      dateTrigger?.click();
+    });
+
+    const monthModal = container.querySelector('[data-testid="month-picker-modal"]');
+    expect(monthModal).toBeTruthy();
+    expect(monthModal?.textContent).toContain(TEXT_MONITORING.PERIOD.MONTHLY_MODAL_TITLE);
+  });
+
+  it('navigates to previous month and updates period filter when step prev month button is clicked', async () => {
+    const onPeriodChange = vi.fn();
+    await renderHeader({
+      selectedDate: '2026-10-14',
+      currentPeriod: {
+        mode: 'monthly',
+        date: '2026-10-14',
+        startDate: '2026-10-01',
+        endDate: '2026-10-14',
+        label: '2026-10-01 s.d. 2026-10-14',
+      },
+      onPeriodChange,
+    });
+
+    const prevMonthBtn = container.querySelector<HTMLButtonElement>('[data-testid="monitoring-step-prev-month"]');
+    expect(prevMonthBtn).toBeTruthy();
+
+    await act(async () => {
+      prevMonthBtn?.click();
+    });
+
+    expect(onPeriodChange).toHaveBeenCalledTimes(1);
+    const calledFilter = onPeriodChange.mock.calls[0][0];
+    expect(calledFilter.mode).toBe('monthly');
+    expect(calledFilter.startDate).toBe('2026-09-01');
+    expect(calledFilter.endDate).toBe('2026-09-30');
+    expect(calledFilter.label).toBe('2026-09-01 s.d. 2026-09-30');
+  });
 });

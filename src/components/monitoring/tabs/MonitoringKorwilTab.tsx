@@ -39,20 +39,35 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
   if (!hasData && supervisorSummaries.length === 0) {
     return (
       <div
-        className="monitoring-card"
+        className="monitoring-korwil-tab"
         style={{
-          textAlign: "center",
-          padding: "48px 20px",
-          color: "var(--text-secondary)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "16px",
+          paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
+          boxSizing: "border-box",
+          width: "100%",
         }}
       >
-        <Users size={48} style={{ opacity: 0.4, margin: "0 auto 16px auto", display: "block" }} />
-        <h3 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 8px 0", color: "var(--text-primary)" }}>
-          {TEXT_MONITORING.KORWIL_TAB.EMPTY_TITLE}
-        </h3>
-        <p style={{ fontSize: "13px", margin: 0, opacity: 0.8 }}>
-          {TEXT_MONITORING.KORWIL_TAB.EMPTY_DESC}
-        </p>
+        <div
+          className="monitoring-card"
+          style={{
+            textAlign: "center",
+            padding: "48px 20px",
+            color: "var(--text-secondary)",
+          }}
+        >
+          <Users size={48} style={{ opacity: 0.4, margin: "0 auto 16px auto", display: "block" }} />
+          <h3 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 8px 0", color: "var(--text-primary)" }}>
+            {TEXT_MONITORING.KORWIL_TAB.EMPTY_TITLE}
+          </h3>
+          <p style={{ fontSize: "13px", margin: 0, opacity: 0.8 }}>
+            {TEXT_MONITORING.KORWIL_TAB.EMPTY_DESC}
+          </p>
+        </div>
       </div>
     );
   }
@@ -70,7 +85,20 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
       : 0;
 
   return (
-    <div className="monitoring-korwil-tab" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div
+      className="monitoring-korwil-tab"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "16px",
+        paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
+        boxSizing: "border-box",
+        width: "100%",
+      }}
+    >
       {/* 1. KARTU RANGKUMAN TOTAL 18 RUTE WILAYAH */}
       <div
         className="monitoring-card"

@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1791990696.5047257,
-    "ast_hash": "709eb168221aaf840653a508d8dcce52",
+    "mtime": 1791991920.505722,
+    "ast_hash": "cd64bf3e212d1408e70ee91018899059",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1791990710.025347,
-    "ast_hash": "5bfb2644483957972c1cfed32e2e245f",
+    "mtime": 1791991940.6077225,
+    "ast_hash": "28c90b930b03ebcf3a02d5264d0ab380",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -1795,8 +1795,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.tsx": {
-    "mtime": 1791986684.1173482,
-    "ast_hash": "eaf40b767b568f1f507e58b1a73359c4",
+    "mtime": 1791992340.6386113,
+    "ast_hash": "de9b6643238444d7a254e71a2ce5286c",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringKpiCards.tsx": {
@@ -3120,8 +3120,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.test.tsx": {
-    "mtime": 1791986995.2327054,
-    "ast_hash": "f274c4adc01103d99f94356b79506695",
+    "mtime": 1791992390.3528006,
+    "ast_hash": "e2e7a8e3f9ec57dbd1b9192c8aff1540",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_76/AUDIT_BUGS.md": {
@@ -5015,13 +5015,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringPeriodSelector.test.tsx": {
-    "mtime": 1791983847.719958,
-    "ast_hash": "bbf4d3b5174f61ebd31de9444f7ce295",
+    "mtime": 1791992492.7733953,
+    "ast_hash": "da4833510c70f19629abf98fd9d95b8c",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringPeriodSelector.tsx": {
-    "mtime": 1791981256.2105315,
-    "ast_hash": "8a7498ee2b1d67ffa8321ee288c55378",
+    "mtime": 1791992474.6433637,
+    "ast_hash": "c084c2ddff641f7ef23963fe58d98008",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringKorwilTab.test.tsx": {
@@ -5030,8 +5030,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringKorwilTab.tsx": {
-    "mtime": 1791982017.018994,
-    "ast_hash": "07352e005132462e975c5902eb7e9d83",
+    "mtime": 1791992062.6134992,
+    "ast_hash": "7b12e607a33d16cc55230dc563c491d1",
     "semantic_hash": ""
   },
   "docs/adr/0003-regional-monitoring-and-korwil-recap.md": {
@@ -5077,6 +5077,16 @@
   "docs/superpowers/specs/2026-10-14-monthly-master-ingestion-design.md": {
     "mtime": 1791986061.114482,
     "ast_hash": "7461dffb76bed203a753100524d12c51",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/MonitoringMonthPickerModal.test.tsx": {
+    "mtime": 1791992407.2589006,
+    "ast_hash": "9067a24d30e77ea1dd67586fb8264481",
+    "semantic_hash": ""
+  },
+  "src/components/monitoring/MonitoringMonthPickerModal.tsx": {
+    "mtime": 1791992171.5079255,
+    "ast_hash": "2b2671664e631df57d01d47d33d2ccbd",
     "semantic_hash": ""
   }
 }

@@ -104,6 +104,29 @@ describe('MonitoringPeriodSelector Component', () => {
     expect(calledFilter.endDate).toBe('2026-10-14');
   });
 
+  it('opens MonthPickerModal when monthly capsule is tapped while already in monthly mode', async () => {
+    const onPeriodChange = vi.fn();
+    await renderSelector({
+      currentPeriod: {
+        mode: 'monthly',
+        date: '2026-10-14',
+        startDate: '2026-10-01',
+        endDate: '2026-10-14',
+        label: '2026-10-01 s.d. 2026-10-14',
+      },
+      onPeriodChange,
+    });
+
+    const monthlyBtn = container.querySelector<HTMLButtonElement>('[data-testid="period-btn-monthly"]');
+    await act(async () => {
+      monthlyBtn?.click();
+    });
+
+    const monthModal = container.querySelector('[data-testid="month-picker-modal"]');
+    expect(monthModal).toBeTruthy();
+    expect(monthModal?.textContent).toContain(TEXT_MONITORING.PERIOD.MONTHLY_MODAL_TITLE);
+  });
+
   it('opens custom modal when custom button is clicked and applies date range', async () => {
     const onPeriodChange = vi.fn();
     await renderSelector({ onPeriodChange });
