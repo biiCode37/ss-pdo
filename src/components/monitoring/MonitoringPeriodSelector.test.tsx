@@ -5,7 +5,7 @@ import { act } from 'react';
 import {
   MonitoringPeriodSelector,
   type MonitoringPeriodSelectorProps,
-} from './MonitoringPeriodSelector';
+} from '@/components/monitoring/MonitoringPeriodSelector';
 import { TEXT_MONITORING } from '@/constants/texts';
 import type { MonitoringPeriodFilter } from '@/services/allRouteMonitoringService';
 

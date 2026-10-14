@@ -5,7 +5,7 @@ import { act } from "react";
 import {
   MonitoringKorwilTab,
   type MonitoringKorwilTabProps,
-} from "./MonitoringKorwilTab";
+} from "@/components/monitoring/tabs/MonitoringKorwilTab";
 import { TEXT_MONITORING } from "@/constants/texts";
 import type { RegionalMonitoringResult } from "@/services/allRouteMonitoringService";
 
