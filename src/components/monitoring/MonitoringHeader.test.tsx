@@ -189,4 +189,54 @@ describe('MonitoringHeader Component', () => {
     // Step buttons should be hidden in non-daily mode
     expect(container.textContent).not.toContain('Kemarin');
   });
+
+  it('triggers onSync18Routes when in daily mode and onOpenMonthlySyncModal when in non-daily mode', async () => {
+    const onSync18Routes = vi.fn();
+    const onOpenMonthlySyncModal = vi.fn();
+
+    // 1. Daily mode
+    await renderHeader({
+      selectedDate: '2026-10-14',
+      onSync18Routes,
+      onOpenMonthlySyncModal,
+      currentPeriod: {
+        mode: 'daily',
+        date: '2026-10-14',
+        startDate: '2026-10-14',
+        endDate: '2026-10-14',
+      },
+    });
+
+    let syncBtn = container.querySelector<HTMLButtonElement>('[data-testid="monitoring-load-all-btn"]');
+    expect(syncBtn?.getAttribute('aria-label')).toBe(TEXT_MONITORING.INGESTION.BUTTON_LABEL);
+    expect(syncBtn?.title).toBe(TEXT_MONITORING.INGESTION.TOOLTIP);
+
+    await act(async () => {
+      syncBtn?.click();
+    });
+    expect(onSync18Routes).toHaveBeenCalledTimes(1);
+    expect(onOpenMonthlySyncModal).not.toHaveBeenCalled();
+
+    // 2. Monthly mode
+    await renderHeader({
+      selectedDate: '2026-10-14',
+      onSync18Routes,
+      onOpenMonthlySyncModal,
+      currentPeriod: {
+        mode: 'monthly',
+        date: '2026-10-14',
+        startDate: '2026-10-01',
+        endDate: '2026-10-14',
+      },
+    });
+
+    syncBtn = container.querySelector<HTMLButtonElement>('[data-testid="monitoring-load-all-btn"]');
+    expect(syncBtn?.getAttribute('aria-label')).toBe(TEXT_MONITORING.MONTHLY_SYNC.BUTTON_LABEL_MONTHLY);
+    expect(syncBtn?.title).toBe(TEXT_MONITORING.MONTHLY_SYNC.TOOLTIP_MONTHLY);
+
+    await act(async () => {
+      syncBtn?.click();
+    });
+    expect(onOpenMonthlySyncModal).toHaveBeenCalledTimes(1);
+  });
 });

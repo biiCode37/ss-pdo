@@ -28,6 +28,7 @@ export interface MonitoringHeaderProps {
   syncing18Routes?: boolean;
   currentPeriod?: MonitoringPeriodFilter;
   onPeriodChange?: (filter: MonitoringPeriodFilter) => void;
+  onOpenMonthlySyncModal?: () => void;
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
@@ -42,6 +43,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   syncing18Routes,
   currentPeriod,
   onPeriodChange,
+  onOpenMonthlySyncModal,
 }) => {
   const dateInputRef = useRef<HTMLInputElement>(null);
 
@@ -350,39 +352,56 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
             </button>
 
             {/* Load All Button (Icon Only for Compact Row) */}
-            {onSync18Routes && (
-              <button
-                type="button"
-                onClick={onSync18Routes}
-                disabled={syncing18Routes || loading || refreshing}
-                data-testid="monitoring-load-all-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "12px",
-                  background: "rgba(62, 207, 142, 0.14)",
-                  border: "1px solid rgba(62, 207, 142, 0.3)",
-                  color: "var(--accent-color, #3ECF8E)",
-                  cursor: syncing18Routes || loading || refreshing ? "not-allowed" : "pointer",
-                  opacity: syncing18Routes || loading || refreshing ? 0.6 : 1,
-                  transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
-                  flexShrink: 0,
-                }}
-                title={TEXT_MONITORING.INGESTION.TOOLTIP}
-                aria-label={TEXT_MONITORING.INGESTION.BUTTON_LABEL}
-              >
-                <CloudDownload
-                  size={16}
+            {(onSync18Routes || onOpenMonthlySyncModal) && (() => {
+              const isDaily = !currentPeriod || currentPeriod.mode === "daily";
+              const handleSyncClick = () => {
+                if (isDaily) {
+                  onSync18Routes?.();
+                } else {
+                  onOpenMonthlySyncModal?.();
+                }
+              };
+              const syncTitle = isDaily
+                ? TEXT_MONITORING.INGESTION.TOOLTIP
+                : TEXT_MONITORING.MONTHLY_SYNC.TOOLTIP_MONTHLY;
+              const syncAriaLabel = isDaily
+                ? TEXT_MONITORING.INGESTION.BUTTON_LABEL
+                : TEXT_MONITORING.MONTHLY_SYNC.BUTTON_LABEL_MONTHLY;
+
+              return (
+                <button
+                  type="button"
+                  onClick={handleSyncClick}
+                  disabled={syncing18Routes || loading || refreshing}
+                  data-testid="monitoring-load-all-btn"
                   style={{
-                    animation: syncing18Routes ? "bounce 1s infinite ease-in-out" : "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "12px",
+                    background: "rgba(62, 207, 142, 0.14)",
+                    border: "1px solid rgba(62, 207, 142, 0.3)",
+                    color: "var(--accent-color, #3ECF8E)",
+                    cursor: syncing18Routes || loading || refreshing ? "not-allowed" : "pointer",
+                    opacity: syncing18Routes || loading || refreshing ? 0.6 : 1,
+                    transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+                    flexShrink: 0,
                   }}
-                />
-              </button>
-            )}
+                  title={syncTitle}
+                  aria-label={syncAriaLabel}
+                >
+                  <CloudDownload
+                    size={16}
+                    style={{
+                      animation: syncing18Routes ? "bounce 1s infinite ease-in-out" : "none",
+                    }}
+                  />
+                </button>
+              );
+            })()}
           </div>
         </div>
       </div>
