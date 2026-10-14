@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1791981934.52771,
-    "ast_hash": "4bd59bfd7de3aaef49d4690698c0f61c",
+    "mtime": 1791982148.1964583,
+    "ast_hash": "a81b4a326a3274c118e88939bd59743b",
     "semantic_hash": ""
   },
   "CHANGELOG.md": {
@@ -5015,8 +5015,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringPeriodSelector.test.tsx": {
-    "mtime": 1791981289.9753635,
-    "ast_hash": "ff95f6bdae92f9b3dfda2019cad51e5c",
+    "mtime": 1791983847.719958,
+    "ast_hash": "bbf4d3b5174f61ebd31de9444f7ce295",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringPeriodSelector.tsx": {
@@ -5025,8 +5025,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringKorwilTab.test.tsx": {
-    "mtime": 1791981568.6422176,
-    "ast_hash": "0bd874589b94e6d274f90e3d32cf98ac",
+    "mtime": 1791983853.4379141,
+    "ast_hash": "81e4dea9b1cd612dd01eef8173c2c843",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringKorwilTab.tsx": {
