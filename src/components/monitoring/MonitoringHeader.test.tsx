@@ -165,4 +165,29 @@ describe('MonitoringHeader Component', () => {
     expect(controlBar?.querySelector('[data-testid="monitoring-refresh-btn"]')).toBeTruthy();
     expect(controlBar?.querySelector('[data-testid="monitoring-load-all-btn"]')).toBeTruthy();
   });
+
+  it('renders period container and displays range label when non-daily period is provided', async () => {
+    const onPeriodChange = vi.fn();
+    await renderHeader({
+      selectedDate: '2026-10-14',
+      currentPeriod: {
+        mode: 'monthly',
+        date: '2026-10-14',
+        startDate: '2026-10-01',
+        endDate: '2026-10-14',
+        label: '2026-10-01 s.d. 2026-10-14',
+      },
+      onPeriodChange,
+    });
+
+    const periodContainer = container.querySelector('[data-testid="monitoring-period-container"]');
+    expect(periodContainer).toBeTruthy();
+
+    const dateTrigger = container.querySelector('[data-testid="monitoring-date-picker-trigger"]');
+    expect(dateTrigger?.textContent).toContain('2026-10-01 s.d. 2026-10-14');
+
+    // Step buttons should be hidden in non-daily mode
+    const prevBtn = container.querySelector(`[title="${TEXT_MONITORING.NAV.ROUTES}"]`);
+    expect(container.textContent).not.toContain('Kemarin');
+  });
 });

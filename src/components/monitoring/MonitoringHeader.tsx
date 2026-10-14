@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
+import { MonitoringPeriodSelector } from "./MonitoringPeriodSelector";
+import type { MonitoringPeriodFilter } from "@/services/allRouteMonitoringService";
 
 export interface MonitoringHeaderProps {
   onBackToRouteView?: () => void;
@@ -24,6 +26,8 @@ export interface MonitoringHeaderProps {
   hasData?: boolean;
   onSync18Routes?: () => void;
   syncing18Routes?: boolean;
+  currentPeriod?: MonitoringPeriodFilter;
+  onPeriodChange?: (filter: MonitoringPeriodFilter) => void;
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
@@ -36,6 +40,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   loading,
   onSync18Routes,
   syncing18Routes,
+  currentPeriod,
+  onPeriodChange,
 }) => {
   const dateInputRef = useRef<HTMLInputElement>(null);
 
@@ -137,6 +143,24 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           </div>
         </div>
 
+        {/* Periode Selector (Jika disediakan) */}
+        {currentPeriod && onPeriodChange && (
+          <div
+            data-testid="monitoring-period-container"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <MonitoringPeriodSelector
+              currentPeriod={currentPeriod}
+              onPeriodChange={onPeriodChange}
+              loading={loading || refreshing}
+            />
+          </div>
+        )}
+
         {/* 1 Blok Baris Komponen: Datepicker + Refresh + Load All (Responsive & No Blank Space) */}
         <div
           data-testid="monitoring-control-bar"
@@ -165,27 +189,29 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               padding: "2px 4px",
             }}
           >
-            <button
-              type="button"
-              onClick={() => onStepDate(-1)}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "var(--text-primary, #ededed)",
-                width: "30px",
-                height: "30px",
-                borderRadius: "8px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-              title={TEXT_COMMON.NAV.PREV_DAY}
-              aria-label={TEXT_COMMON.NAV.PREV_DAY}
-            >
-              <ChevronLeft size={16} />
-            </button>
+            {(!currentPeriod || currentPeriod.mode === "daily") && (
+              <button
+                type="button"
+                onClick={() => onStepDate(-1)}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--text-primary, #ededed)",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+                title={TEXT_COMMON.NAV.PREV_DAY}
+                aria-label={TEXT_COMMON.NAV.PREV_DAY}
+              >
+                <ChevronLeft size={16} />
+              </button>
+            )}
 
             {/* Interactive Date Picker Trigger */}
             <div
@@ -224,7 +250,9 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
               />
               <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                {formatIndonesianDateLabel(selectedDate)}
+                {currentPeriod && currentPeriod.mode !== "daily"
+                  ? currentPeriod.label
+                  : formatIndonesianDateLabel(selectedDate)}
               </span>
               <ChevronDown
                 size={12}
@@ -255,27 +283,29 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               />
             </div>
 
-            <button
-              type="button"
-              onClick={() => onStepDate(1)}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "var(--text-primary, #ededed)",
-                width: "30px",
-                height: "30px",
-                borderRadius: "8px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-              title={TEXT_COMMON.NAV.NEXT_DAY}
-              aria-label={TEXT_COMMON.NAV.NEXT_DAY}
-            >
-              <ChevronRight size={16} />
-            </button>
+            {(!currentPeriod || currentPeriod.mode === "daily") && (
+              <button
+                type="button"
+                onClick={() => onStepDate(1)}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--text-primary, #ededed)",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+                title={TEXT_COMMON.NAV.NEXT_DAY}
+                aria-label={TEXT_COMMON.NAV.NEXT_DAY}
+              >
+                <ChevronRight size={16} />
+              </button>
+            )}
           </div>
 
           {/* Action Group: Refresh Button & Load All Button in the same row with clean gap */}
