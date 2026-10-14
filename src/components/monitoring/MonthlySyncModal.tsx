@@ -143,7 +143,16 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
         setErrorMessage(res.errors.join('\n') || 'Gagal menyinkronkan data.');
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Terjadi kesalahan sistem saat sinkronisasi.');
+      let errMsg = err?.message || 'Terjadi kesalahan sistem saat sinkronisasi.';
+      if (
+        errMsg.includes('Failed to fetch') ||
+        errMsg.includes('ERR_NAME_NOT_RESOLVED') ||
+        errMsg.includes('NetworkError') ||
+        errMsg.includes('network')
+      ) {
+        errMsg = TEXT_MONITORING.MONTHLY_SYNC.ERR_NETWORK;
+      }
+      setErrorMessage(errMsg);
     } finally {
       setSyncing(false);
     }

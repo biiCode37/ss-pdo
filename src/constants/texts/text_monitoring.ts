@@ -55,6 +55,8 @@ export const TEXT_MONITORING = {
       `Terdeteksi: ${monthName} ${year}`,
     FUTURE_MONTH_ERR: (monthName: string, year: number) =>
       `Bulan ${monthName} ${year} berada di masa depan dan belum memiliki data operasional.`,
+    ERR_NETWORK:
+      "Koneksi internet terputus atau gagal terhubung ke server Google Sheets. Silakan periksa jaringan internet Anda dan coba lagi.",
   },
   ERROR_STATE: {
     TITLE: "Gagal Memuat Data",

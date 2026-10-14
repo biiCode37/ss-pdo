@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 import { fetchRouteMasterList } from './dailyRouteReportService';
 import { parseIndonesianNumber } from '../utils/numberUtils';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
+import { TEXT_MONITORING } from '../constants/texts';
 import type { Route } from '../types/supabase';
 
 export interface MonthlyMasterIngestionProgress {
@@ -367,10 +368,20 @@ export async function ingestMonthlyMasterSheet(
       maxDayAllowed = daysInMonth;
     }
 
+    // 7. Cari baris rangkuman TOTAL bulanan di bagian bawah lembar agar tidak ikut terbaca sebagai hari terakhir
+    let totalSummaryRowIdx = rows.length;
+    for (let r = 0; r < rows.length; r++) {
+      const firstCell = rows[r][0] ? rows[r][0].trim().toUpperCase() : '';
+      if (firstCell.startsWith('TOTAL')) {
+        totalSummaryRowIdx = r;
+        break;
+      }
+    }
+
     const dayBlocks: DayBlock[] = [];
     for (let h = 0; h < allHeaders.length; h++) {
       const header = allHeaders[h];
-      const nextRowIdx = h < allHeaders.length - 1 ? allHeaders[h + 1].rowIdx : rows.length;
+      const nextRowIdx = h < allHeaders.length - 1 ? allHeaders[h + 1].rowIdx : totalSummaryRowIdx;
       if (
         header.yearNum === resolvedYear &&
         header.monthNum === resolvedMonth &&
@@ -401,7 +412,7 @@ export async function ingestMonthlyMasterSheet(
       };
     }
 
-    // 6. Ambil Data yang Sudah Disubmit dari App untuk Smart Skip
+    // 8. Ambil Data yang Sudah Disubmit dari App untuk Smart Skip
     const minDateStr = dayBlocks[0].dateStr;
     const maxDateStr = dayBlocks[dayBlocks.length - 1].dateStr;
 
@@ -418,8 +429,8 @@ export async function ingestMonthlyMasterSheet(
       }
     });
 
-    // 7. Ekstraksi Data Tiap Rute di Dalam Blok Tanggal
-    const recordsToUpsert: any[] = [];
+    // 9. Ekstraksi Data Tiap Rute di Dalam Blok Tanggal (Deduplikasi Terjamin dengan Map)
+    const recordsMap = new Map<string, any>();
     const totalPotential = dayBlocks.length * routes.length;
 
     for (let b = 0; b < dayBlocks.length; b++) {
@@ -428,6 +439,10 @@ export async function ingestMonthlyMasterSheet(
       for (let r = block.rowStartIdx + 1; r < block.rowEndIdx; r++) {
         const row = rows[r];
         if (!row || row.length < 3) continue;
+
+        // Berhenti jika baris merupakan baris rangkuman TOTAL
+        const firstCell = row[0] ? row[0].trim().toUpperCase() : '';
+        if (firstCell.startsWith('TOTAL')) break;
 
         const rawRouteCode = row[2] ? row[2].trim() : '';
         if (!rawRouteCode || !rawRouteCode.toUpperCase().startsWith('JAK')) continue;
@@ -442,15 +457,15 @@ export async function ingestMonthlyMasterSheet(
           continue;
         }
 
-        // Parse Kolom-Kolom Metrik
+        // Parse Kolom-Kolom Metrik (Integer diformat ketat dengan Math.round agar aman di DB)
         const renops = Math.round(parseIndonesianNumber(row[3])) || (matchedRoute.default_renops || 0);
         const realops = Math.round(parseIndonesianNumber(row[4])) || 0;
         const totalKm = parseIndonesianNumber(row[5]);
-        const toaS1 = parseIndonesianNumber(row[6]);
-        const manS1 = parseIndonesianNumber(row[7]);
-        const toaS2 = parseIndonesianNumber(row[9]);
-        const manS2 = parseIndonesianNumber(row[10]);
-        const totalPax = parseIndonesianNumber(row[12]) || (toaS1 + manS1 + toaS2 + manS2);
+        const toaS1 = Math.round(parseIndonesianNumber(row[6]));
+        const manS1 = Math.round(parseIndonesianNumber(row[7]));
+        const toaS2 = Math.round(parseIndonesianNumber(row[9]));
+        const manS2 = Math.round(parseIndonesianNumber(row[10]));
+        const totalPax = Math.round(parseIndonesianNumber(row[12])) || (toaS1 + manS1 + toaS2 + manS2);
         const ritaseCol = parseIndonesianNumber(row[19]);
 
         // Activity Guard: Jika belum ada realisasi apa pun, lewati
@@ -467,7 +482,8 @@ export async function ingestMonthlyMasterSheet(
 
         const achievementKm = realops > 0 ? totalKm / realops : 0;
 
-        recordsToUpsert.push({
+        // Simpan ke Map untuk menjamin tidak ada duplikasi (route_id, date) dalam satu batch upsert
+        recordsMap.set(skipKey, {
           route_id: matchedRoute.id,
           route_code: matchedRoute.route_code,
           date: block.dateStr,
@@ -491,7 +507,9 @@ export async function ingestMonthlyMasterSheet(
       }
     }
 
-    // 8. Bulk Upsert ke Supabase dalam Chunks
+    const recordsToUpsert = Array.from(recordsMap.values());
+
+    // 10. Bulk Upsert ke Supabase dalam Chunks
     const CHUNK_SIZE = 50;
     for (let i = 0; i < recordsToUpsert.length; i += CHUNK_SIZE) {
       const chunk = recordsToUpsert.slice(i, i + CHUNK_SIZE);
@@ -533,11 +551,20 @@ export async function ingestMonthlyMasterSheet(
     };
   } catch (err: any) {
     console.warn('[monthlyMasterIngestionService] Exception:', err);
+    let errMsg = err?.message || 'Terjadi kesalahan sistem saat sinkronisasi bulanan.';
+    if (
+      errMsg.includes('Failed to fetch') ||
+      errMsg.includes('ERR_NAME_NOT_RESOLVED') ||
+      errMsg.includes('NetworkError') ||
+      errMsg.includes('network')
+    ) {
+      errMsg = TEXT_MONITORING.MONTHLY_SYNC.ERR_NETWORK;
+    }
     return {
       success: false,
       savedCount,
       skippedCount,
-      errors: [err?.message || 'Terjadi kesalahan sistem saat sinkronisasi bulanan.'],
+      errors: [errMsg],
     };
   }
 }

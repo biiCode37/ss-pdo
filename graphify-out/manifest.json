@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1791989389.6308358,
-    "ast_hash": "549b22b892012867210774e02b23e20c",
+    "mtime": 1791990696.5047257,
+    "ast_hash": "709eb168221aaf840653a508d8dcce52",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1791989404.9723632,
-    "ast_hash": "ffbf5cc8c6a146790b0dbf4b7bb0beae",
+    "mtime": 1791990710.025347,
+    "ast_hash": "5bfb2644483957972c1cfed32e2e245f",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -5055,18 +5055,18 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonthlySyncModal.tsx": {
-    "mtime": 1791989565.8646126,
-    "ast_hash": "9a5006deb23727293465e18aa2ccaf0b",
+    "mtime": 1791990790.0918026,
+    "ast_hash": "0a13ec9c23a3f3f9f2390841114bd715",
     "semantic_hash": ""
   },
   "src/services/monthlyMasterIngestionService.test.ts": {
-    "mtime": 1791989647.5036612,
-    "ast_hash": "4fb4a3baf762502ba6e45cdc57b938f0",
+    "mtime": 1791990823.1752481,
+    "ast_hash": "c8f3cb45420a40633861b8b890491859",
     "semantic_hash": ""
   },
   "src/services/monthlyMasterIngestionService.ts": {
-    "mtime": 1791989766.8945005,
-    "ast_hash": "9fb16e46000aa5e9c1da5951f090352d",
+    "mtime": 1791990769.2867467,
+    "ast_hash": "321ca45a371409c9f7fb01195ffb9bee",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-10-14-monthly-master-ingestion-plan.md": {

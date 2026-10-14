@@ -158,6 +158,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).MONTHLY_SYNC.QUICK_CHIPS_LABEL).toBe('Pilihan Cepat Bulan:');
     expect((TEXT_MONITORING as any).MONTHLY_SYNC.AUTO_DETECTED_BADGE('September', 2026)).toBe('Terdeteksi: September 2026');
     expect((TEXT_MONITORING as any).MONTHLY_SYNC.FUTURE_MONTH_ERR('November', 2026)).toContain('masa depan');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.ERR_NETWORK).toContain('Koneksi internet');
   });
 
   it('exports TEXT_MONITORING ingestion, provenance, and detailed readiness tokens', () => {

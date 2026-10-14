@@ -288,5 +288,70 @@ describe('monthlyMasterIngestionService', () => {
       expect(res.success).toBe(false);
       expect(res.errors[0]).toContain('masa depan');
     });
+
+    it('ignores TOTAL summary rows at the bottom of the sheet to prevent duplicate records', async () => {
+      (fetchRouteMasterList as any).mockResolvedValue(mockRoutes);
+
+      let upsertedRecords: any[] = [];
+      const mockUpsert = vi.fn().mockImplementation((chunk: any[]) => {
+        upsertedRecords = upsertedRecords.concat(chunk);
+        return Promise.resolve({ error: null });
+      });
+
+      (supabase.from as any).mockImplementation((table: string) => {
+        if (table === 'daily_route_reports') {
+          return {
+            select: vi.fn().mockReturnValue({
+              gte: vi.fn().mockReturnValue({
+                lte: vi.fn().mockResolvedValue({ data: [], error: null }),
+              }),
+            }),
+            upsert: mockUpsert,
+          };
+        }
+        return {};
+      });
+
+      const csvWithTotal = `
+"Rabu, 30 September 2026","","RUTE","","","","","","","","","","","","","","","","","","","","","",""
+"","1","JAK 01","20","20","3.791,76","2.100","0","2.100","2.600","0","2.600","4.700","196,76","5161","95,66%","1,5","83,64%","1,255","273,0"
+"","2","JAK 05","33","33","6.390,97","2.870","95","2.965","3.104","184","3.288","6.253","193,67","6238","100,24%","1,5","97,84%","1,468","206,8"
+"TOTAL SEPTEMBER 2026","","RUTE","","","","","","","","","","","","","","","","","","","","","",""
+"","1","JAK 01","564","555","100.000,00","50.000","0","50.000","60.000","0","60.000","110.000","196,76","5161","95,66%","1,5","83,64%","1,255","273,0"
+"","2","JAK 05","926","921","200.000,00","60.000","0","60.000","70.000","0","70.000","130.000","193,67","6238","100,24%","1,5","97,84%","1,468","206,8"
+`;
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        text: vi.fn().mockResolvedValue(csvWithTotal),
+      });
+
+      const res = await ingestMonthlyMasterSheet(
+        'https://docs.google.com/spreadsheets/d/1Hkvs4DLGWGJMPHRlSV-5g72nL_zRHjkTuRuTyXwFYs4/edit',
+        'SEPTEMBER 2026',
+        2026,
+        9
+      );
+
+      expect(res.success).toBe(true);
+      // Only 2 daily records from Sept 30 should be saved. The TOTAL rows MUST be excluded.
+      expect(res.savedCount).toBe(2);
+      expect(upsertedRecords.length).toBe(2);
+      expect(upsertedRecords[0].realops_shift1).toBe(20); // Daily realops, not monthly 555!
+    });
+
+    it('returns user-friendly error message when network fetch throws Failed to fetch', async () => {
+      mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+
+      const res = await ingestMonthlyMasterSheet(
+        'https://docs.google.com/spreadsheets/d/1Hkvs4DLGWGJMPHRlSV-5g72nL_zRHjkTuRuTyXwFYs4/edit',
+        'SEPTEMBER 2026',
+        2026,
+        9
+      );
+
+      expect(res.success).toBe(false);
+      expect(res.errors[0]).toContain('Koneksi internet terputus atau gagal terhubung');
+    });
   });
 });
