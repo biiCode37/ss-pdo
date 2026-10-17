@@ -55,7 +55,7 @@ describe("BottomNav Component", () => {
 
     expect(inputBtn?.getAttribute('title')).toBe('Input SS');
     expect(analyticsBtn?.getAttribute('title')).toBe('Dashboard');
-    expect(unitsBtn?.getAttribute('title')).toBe('Ringkasan Armada');
+    expect(unitsBtn?.getAttribute('title')).toBe('Armada');
   });
 
   it("calls onSelectTab when an inactive tab is clicked", () => {

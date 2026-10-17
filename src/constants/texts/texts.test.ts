@@ -41,8 +41,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.TABS.INPUT_SHORT).toBe('Input SS');
     expect(TEXT_DASHBOARD.TABS.DASHBOARD).toBe('Dashboard');
     expect(TEXT_DASHBOARD.TABS.DASHBOARD_SHORT).toBe('Dashboard');
-    expect(TEXT_DASHBOARD.TABS.UNIT_LIST).toBe('Ringkasan Armada');
-    expect(TEXT_DASHBOARD.TABS.UNIT_SHORT).toBe('Ringkasan Armada');
+    expect(TEXT_DASHBOARD.TABS.UNIT_LIST).toBe('Armada');
+    expect(TEXT_DASHBOARD.TABS.UNIT_SHORT).toBe('Armada');
     expect(TEXT_DASHBOARD.TABS.ACCUMULATION).toBe('Akumulasi');
     expect(TEXT_DASHBOARD.TOA_TREND.TITLE).toBe('Grafik Pelanggan Harian');
     expect(TEXT_DASHBOARD.KPIS.TITLE).toBe('Capaian Pelanggan & Km');

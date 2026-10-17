@@ -657,7 +657,7 @@ body.light-mode .bottom-nav {
 }
 
 .bottom-nav-item.active .bottom-nav-label {
-  max-width: 90px;
+  max-width: 140px;
   opacity: 1;
   transform: translateX(0);
   margin-left: 6px;
