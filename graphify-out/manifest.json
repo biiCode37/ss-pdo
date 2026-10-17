@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1792206815.8751884,
-    "ast_hash": "19985a95ac37426db705fbc3176f4e82",
+    "mtime": 1792210222.122052,
+    "ast_hash": "527d88158775b4e4b62c05df0a3cbfce",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -1090,13 +1090,13 @@
     "semantic_hash": ""
   },
   "src/utils/historyNavigation.test.ts": {
-    "mtime": 1790686811.36936,
-    "ast_hash": "0322b4ab9f4bc4b209a670758350bfab",
+    "mtime": 1792210466.9809225,
+    "ast_hash": "3d28baf44681205c5c4e769afde97e4e",
     "semantic_hash": ""
   },
   "src/utils/historyNavigation.ts": {
-    "mtime": 1790686674.382753,
-    "ast_hash": "4e17b95b9ba0ece4dbdcbb01b6e0d74b",
+    "mtime": 1792210079.4075868,
+    "ast_hash": "26a524efe95906d690362791a88b14b0",
     "semantic_hash": ""
   },
   "src/services/routes/audit.ts": {
@@ -2000,8 +2000,8 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileFeaturesSection.tsx": {
-    "mtime": 1789968348.018911,
-    "ast_hash": "050fe5812c7e270cb054e79bd53c449b",
+    "mtime": 1792210364.6403904,
+    "ast_hash": "9c5cb41d748f4b8572867190957d200a",
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuFooter.tsx": {
@@ -2605,8 +2605,8 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuSheet.tsx": {
-    "mtime": 1789968270.2001624,
-    "ast_hash": "aceb0f5ee97b32fd55344d4982ca2b8b",
+    "mtime": 1792210165.390822,
+    "ast_hash": "e3d0c22b59b40b103ec59d775e3897ca",
     "semantic_hash": ""
   },
   "src/components/profileMenu/UserProfileHeader.test.tsx": {

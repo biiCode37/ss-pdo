@@ -10,8 +10,8 @@ export interface BackNavigationEntry {
 // Global LIFO Stack for active modals / sheets / sub-views
 const navigationStack: BackNavigationEntry[] = [];
 
-// Flag to ignore popstate triggered programmatically by history.back()
-let isProgrammaticPop = false;
+// Counter to ignore popstate triggered programmatically by history.back() or history.forward()
+let programmaticPopCount = 0;
 
 // Double-back to exit timer for root dashboard in PWA / mobile mode
 let lastRootBackPress = 0;
@@ -35,9 +35,9 @@ export function isRunningStandalone(): boolean {
  * Global PopState Listener to intercept hardware back button & swipe back gestures
  */
 function handlePopState(_e?: PopStateEvent) {
-  // If popstate was triggered by our own programmatic history.back(), skip handling
-  if (isProgrammaticPop) {
-    isProgrammaticPop = false;
+  // If popstate was triggered by our own programmatic history traversal, skip handling
+  if (programmaticPopCount > 0) {
+    programmaticPopCount--;
     return;
   }
 
@@ -67,11 +67,11 @@ function handlePopState(_e?: PopStateEvent) {
       // Jika traversal browser bergerak mundur melebihi target yang sah,
       // pulihkan pointer ke depan (history.forward()) tanpa memicu popstate handler.
       if (!isAtTarget && !isAtTop) {
-        isProgrammaticPop = true;
+        programmaticPopCount++;
         try {
           history.forward();
         } catch {
-          isProgrammaticPop = false;
+          programmaticPopCount = Math.max(0, programmaticPopCount - 1);
         }
       }
       return;
@@ -83,6 +83,19 @@ function handlePopState(_e?: PopStateEvent) {
   }
 
   // 3. Priority: Root view reached (No modals / sub-views active)
+  // MITIGASI BUG-PROFILE-EXIT: Jika navigationStack sudah kosong tetapi history.state
+  // masih memegang pdoNavId (stale entry dari transisi modal/view yang unmount bersamaan),
+  // jangan tampilkan toast keluar; selaraskan pointer ke root guard secara programmatic.
+  if (history.state?.pdoNavId) {
+    programmaticPopCount++;
+    try {
+      history.back();
+    } catch {
+      programmaticPopCount = Math.max(0, programmaticPopCount - 1);
+    }
+    return;
+  }
+
   const now = Date.now();
   if (now - lastRootBackPress < 2000) {
     // User pressed back twice within 2 seconds: allow exit/back to proceed
@@ -149,11 +162,11 @@ export function removeBackNavigation(id: string) {
 
     // If current history state corresponds to this modal, pop history without triggering popstate handler
     if (history.state?.pdoNavId === id) {
-      isProgrammaticPop = true;
+      programmaticPopCount++;
       try {
         history.back();
       } catch {
-        isProgrammaticPop = false;
+        programmaticPopCount = Math.max(0, programmaticPopCount - 1);
       }
     }
   }
@@ -178,7 +191,7 @@ export function markBackNavigationDismissing(id: string): void {
 export function _resetHistoryNavigationForTest(): void {
   navigationStack.length = 0;
   isInitialized = false;
-  isProgrammaticPop = false;
+  programmaticPopCount = 0;
   window.removeEventListener('popstate', handlePopState);
 }
 

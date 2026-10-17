@@ -153,6 +153,56 @@ describe('historyNavigation', () => {
 
     _resetHistoryNavigationForTest();
   });
+
+  it('Kontrak 4: Unmount beruntun (misal sub-modal + parent modal) tidak membocorkan toast keluar ke layar', async () => {
+    const alertUtils = await import('./alertUtils');
+    const toastSpy = vi.spyOn(alertUtils, 'showToast').mockResolvedValue({} as any);
+
+    const { _resetHistoryNavigationForTest } = await import('./historyNavigation');
+    _resetHistoryNavigationForTest();
+    initHistoryNavigation();
+
+    // 1. Buka parent view (misal regional_monitoring)
+    pushBackNavigation({ id: 'regional_monitoring_view', onBack: () => {} });
+    // 2. Buka sub-modal (misal profile_menu_sheet)
+    pushBackNavigation({ id: 'profile_menu_sheet', onBack: () => {} });
+
+    expect(window.history.state?.pdoNavId).toBe('profile_menu_sheet');
+
+    // 3. User berpindah halaman: kedua entri di-remove beruntun
+    removeBackNavigation('profile_menu_sheet');
+    removeBackNavigation('regional_monitoring_view');
+
+    await new Promise((r) => setTimeout(r, 60));
+
+    // Toast exit TIDAK BOLEH terpanggil sama sekali
+    expect(toastSpy).not.toHaveBeenCalled();
+    expect(window.history.state?.pdoRootGuard).toBe(true);
+
+    _resetHistoryNavigationForTest();
+  });
+
+  it('Kontrak 5: Popstate dengan stale pdoNavId saat navigationStack kosong diselaraskan ke root guard tanpa memicu toast', async () => {
+    const alertUtils = await import('./alertUtils');
+    const toastSpy = vi.spyOn(alertUtils, 'showToast').mockResolvedValue({} as any);
+
+    const { _resetHistoryNavigationForTest } = await import('./historyNavigation');
+    _resetHistoryNavigationForTest();
+    initHistoryNavigation();
+
+    // Simulasikan state browser berada di modal yang sudah tidak ada di navigationStack
+    window.history.pushState({ pdoNavId: 'stale_modal_id' }, '');
+
+    // Popstate terjadi (misal gestur mundur ke root guard)
+    const popEvent = new PopStateEvent('popstate');
+    window.dispatchEvent(popEvent);
+    await new Promise((r) => setTimeout(r, 40));
+
+    // Toast keluar TIDAK BOLEH muncul
+    expect(toastSpy).not.toHaveBeenCalled();
+
+    _resetHistoryNavigationForTest();
+  });
 });
 
 

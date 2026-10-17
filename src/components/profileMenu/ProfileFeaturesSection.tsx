@@ -58,6 +58,8 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
     }
 
     onDismiss();
+    // Beri waktu 250ms agar animasi keluar dan cleanup history selesai sebelum memunculkan modal SweetAlert2
+    await new Promise((resolve) => setTimeout(resolve, 250));
     const confirmed = await showFormatSheetConfirm(currentTabName || "aktif");
     if (!confirmed) return;
 

@@ -365,7 +365,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onApplyAccumulation={handleApplyAccumulation}
         isProfileMenuOpen={isProfileMenuOpen}
         onCloseProfileMenu={() => setIsProfileMenuOpen(false)}
-        onOpenAccumulation={() => setIsAccSheetOpen(true)}
+        onOpenAccumulation={() => {
+          setIsProfileMenuOpen(false);
+          setIsAccSheetOpen(true);
+        }}
         onOpenRegionalMonitoring={() => {
           setIsProfileMenuOpen(false);
           setCurrentView("regional_monitoring");
