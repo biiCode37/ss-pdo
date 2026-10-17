@@ -52,6 +52,10 @@ describe("BottomNav Component", () => {
     expect(inputBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.INPUT_SHORT);
     expect(analyticsBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.DASHBOARD_SHORT);
     expect(unitsBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.UNIT_SHORT);
+
+    expect(inputBtn?.getAttribute('title')).toBe('Input SS');
+    expect(analyticsBtn?.getAttribute('title')).toBe('Dashboard');
+    expect(unitsBtn?.getAttribute('title')).toBe('Ringkasan Armada');
   });
 
   it("calls onSelectTab when an inactive tab is clicked", () => {

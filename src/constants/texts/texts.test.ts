@@ -37,10 +37,12 @@ describe('Centralized UI Text Dictionary', () => {
 
   it('exports TEXT_DASHBOARD with app header, tabs, and selectors', () => {
     expect(TEXT_DASHBOARD.APP_TITLE).toBe('PUSM');
-    expect(TEXT_DASHBOARD.APP_SUBTITLE).toBe('PDO Utara Spreadsheet Mobile');
     expect(TEXT_DASHBOARD.TABS.INPUT_SS).toBe('Input SS');
+    expect(TEXT_DASHBOARD.TABS.INPUT_SHORT).toBe('Input SS');
     expect(TEXT_DASHBOARD.TABS.DASHBOARD).toBe('Dashboard');
-    expect(TEXT_DASHBOARD.TABS.UNIT_LIST).toBe('Daftar Unit');
+    expect(TEXT_DASHBOARD.TABS.DASHBOARD_SHORT).toBe('Dashboard');
+    expect(TEXT_DASHBOARD.TABS.UNIT_LIST).toBe('Ringkasan Armada');
+    expect(TEXT_DASHBOARD.TABS.UNIT_SHORT).toBe('Ringkasan Armada');
     expect(TEXT_DASHBOARD.TABS.ACCUMULATION).toBe('Akumulasi');
     expect(TEXT_DASHBOARD.TOA_TREND.TITLE).toBe('Grafik Pelanggan Harian');
     expect(TEXT_DASHBOARD.KPIS.TITLE).toBe('Capaian Pelanggan & Km');
