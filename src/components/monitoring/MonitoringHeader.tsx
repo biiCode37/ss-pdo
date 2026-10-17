@@ -9,7 +9,10 @@ import {
   CloudDownload,
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
-import { formatIndonesianDateLabel } from "./monitoringUtils";
+import {
+  formatIndonesianDateLabel,
+  formatIndonesianMonthYear,
+} from "./monitoringUtils";
 import { MonitoringPeriodSelector } from "./MonitoringPeriodSelector";
 import { MonitoringMonthPickerModal } from "./MonitoringMonthPickerModal";
 import { UserProfileHeader } from "@/components/UserProfileHeader";
@@ -91,7 +94,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
       date: endDate,
       startDate,
       endDate,
-      label: `${startDate} s.d. ${endDate}`,
+      label: formatIndonesianMonthYear(startDate),
     });
   };
 
@@ -313,7 +316,9 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               />
               <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                 {currentPeriod && currentPeriod.mode !== "daily"
-                  ? currentPeriod.label
+                  ? currentPeriod.mode === "monthly"
+                    ? formatIndonesianMonthYear(currentPeriod.startDate || currentPeriod.date)
+                    : currentPeriod.label
                   : formatIndonesianDateLabel(selectedDate)}
               </span>
               <ChevronDown

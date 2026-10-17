@@ -486,5 +486,57 @@ describe("MonitoringRouteDetailModal", () => {
         )
       ).toBe("5.05 Rit/Bus");
     });
+
+    it("formats fractional kmPerBus (192.437027027) to 1 decimal place (192,4) without overflowing", async () => {
+      const routeWithFractionalKm: RegionalRouteItem = {
+        ...mockRoute,
+        kmPerBus: 192.437027027,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithFractionalKm}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(container.textContent).toContain("192,4");
+      expect(container.textContent).not.toContain("192.437027027");
+    });
+
+    it("formats floating point ritasePerBus (3.3333333333333335) to at most 2 decimal places (3.33)", async () => {
+      const routeWithFloatingRitase: RegionalRouteItem = {
+        ...mockRoute,
+        ritasePerBus: 3.3333333333333335,
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithFloatingRitase}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const ritaseTabBtn = container.querySelector<HTMLButtonElement>(
+        '[data-testid="tab-produktivitas"]'
+      );
+      await act(async () => {
+        ritaseTabBtn?.click();
+      });
+
+      expect(
+        getMetricCardValue(
+          container,
+          TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.RITASE_BUS
+        )
+      ).toBe("3.33 Rit/Bus");
+    });
   });
 });
+

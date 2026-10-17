@@ -62,7 +62,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
     const totalNonSgo = totalTo + totalOff + totalSo + totalOther;
     const totalFleet = totalSgo + totalNonSgo;
     const sgoPct =
-      totalFleet > 0 ? ((totalSgo / totalFleet) * 100).toFixed(1) : "100.0";
+      totalFleet > 0 ? ((totalSgo / totalFleet) * 100).toFixed(1) : "0.0";
 
     return {
       totalFleet,
@@ -478,57 +478,111 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
 
       {/* 3. Grouped Routes or Empty State */}
       {groupedRoutes.length === 0 ? (
-        <div
-          style={{
-            background: "rgba(16, 185, 129, 0.05)",
-            border: "1px solid rgba(16, 185, 129, 0.25)",
-            borderRadius: "16px",
-            padding: "40px 20px",
-            textAlign: "center",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10px",
-          }}
-        >
+        stats.totalFleet === 0 ? (
           <div
             style={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "50%",
-              background: "rgba(16, 185, 129, 0.15)",
+              background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
+              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+              borderRadius: "16px",
+              padding: "40px 20px",
+              textAlign: "center",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              color: "#10B981",
-              marginBottom: "4px",
+              gap: "10px",
             }}
           >
-            <ShieldCheck size={28} />
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--text-secondary, #8b8b8b)",
+                marginBottom: "4px",
+              }}
+            >
+              <Bus size={24} />
+            </div>
+            <h4
+              style={{
+                margin: 0,
+                fontSize: "15px",
+                fontWeight: 800,
+                color: "var(--text-primary)",
+              }}
+            >
+              {TEXT_MONITORING.FLEET_TAB.NO_DATA_TITLE}
+            </h4>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "12.5px",
+                color: "var(--text-secondary)",
+                maxWidth: "400px",
+                lineHeight: 1.4,
+              }}
+            >
+              {TEXT_MONITORING.FLEET_TAB.NO_DATA_DESC}
+            </p>
           </div>
-          <h4
+        ) : (
+          <div
             style={{
-              margin: 0,
-              fontSize: "15px",
-              fontWeight: 800,
-              color: "var(--text-primary)",
+              background: "rgba(16, 185, 129, 0.05)",
+              border: "1px solid rgba(16, 185, 129, 0.25)",
+              borderRadius: "16px",
+              padding: "40px 20px",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
             }}
           >
-            {TEXT_MONITORING.FLEET_TAB.EMPTY_TITLE}
-          </h4>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "12.5px",
-              color: "var(--text-secondary)",
-              maxWidth: "400px",
-              lineHeight: 1.4,
-            }}
-          >
-            {TEXT_MONITORING.FLEET_TAB.EMPTY_DESC}
-          </p>
-        </div>
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                background: "rgba(16, 185, 129, 0.15)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#10B981",
+                marginBottom: "4px",
+              }}
+            >
+              <ShieldCheck size={28} />
+            </div>
+            <h4
+              style={{
+                margin: 0,
+                fontSize: "15px",
+                fontWeight: 800,
+                color: "var(--text-primary)",
+              }}
+            >
+              {TEXT_MONITORING.FLEET_TAB.EMPTY_TITLE}
+            </h4>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "12.5px",
+                color: "var(--text-secondary)",
+                maxWidth: "400px",
+                lineHeight: 1.4,
+              }}
+            >
+              {TEXT_MONITORING.FLEET_TAB.EMPTY_DESC}
+            </p>
+          </div>
+        )
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {groupedRoutes.map((group) => (

@@ -330,6 +330,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
+          paddingBottom: "calc(96px + env(safe-area-inset-bottom, 0px))",
         }}
       >
         <MonitoringStates

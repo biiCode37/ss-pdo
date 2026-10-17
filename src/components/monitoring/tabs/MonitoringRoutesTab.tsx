@@ -120,21 +120,22 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "10px",
+            gap: "8px",
             flexWrap: "wrap",
           }}
         >
           {/* Search Box */}
           <div
             style={{
-              flex: "1 1 240px",
+              flex: "1 1 200px",
+              minWidth: "160px",
               position: "relative",
               display: "flex",
               alignItems: "center",
             }}
           >
             <Search
-              size={16}
+              size={15}
               style={{
                 position: "absolute",
                 left: "12px",
@@ -147,15 +148,15 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               data-testid="routes-search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari rute (JAK.XX), lintasan, atau operator..."
+              placeholder={TEXT_MONITORING.ROUTES_TAB.SEARCH_PLACEHOLDER}
               style={{
                 width: "100%",
-                padding: "9px 34px 9px 36px",
-                borderRadius: "12px",
+                padding: "8px 32px 8px 34px",
+                borderRadius: "10px",
                 background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
                 color: "var(--text-primary)",
-                fontSize: "13px",
+                fontSize: "12.5px",
                 outline: "none",
               }}
             />
@@ -165,7 +166,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 onClick={() => setSearchQuery("")}
                 style={{
                   position: "absolute",
-                  right: "10px",
+                  right: "8px",
                   background: "transparent",
                   border: "none",
                   color: "var(--text-secondary)",
@@ -191,21 +192,22 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "9px 16px",
-                borderRadius: "12px",
+                padding: "8px 14px",
+                borderRadius: "10px",
                 background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
                 color: "#ffffff",
                 border: "none",
-                fontSize: "12.5px",
+                fontSize: "12px",
                 fontWeight: 700,
                 cursor: isBulking ? "wait" : "pointer",
                 opacity: isBulking ? 0.7 : 1,
-                boxShadow: "0 4px 14px rgba(16, 185, 129, 0.35)",
+                boxShadow: "0 4px 12px rgba(16, 185, 129, 0.3)",
                 whiteSpace: "nowrap",
+                flexShrink: 0,
                 transition: "all 0.2s ease",
               }}
             >
-              <CheckCheck size={16} />
+              <CheckCheck size={15} />
               <span>
                 {TEXT_MONITORING.BULK_VERIFY.BUTTON_LABEL(
                   submittedRoutes.length,
@@ -222,16 +224,17 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             display: "flex",
             gap: "6px",
             overflowX: "auto",
-            paddingBottom: "2px",
+            padding: "2px 16px 4px 0",
+            WebkitOverflowScrolling: "touch",
           }}
         >
           <button
             type="button"
             onClick={() => setStatusFilter("all")}
             style={{
-              padding: "6px 12px",
-              borderRadius: "10px",
-              fontSize: "11.5px",
+              padding: "5px 11px",
+              borderRadius: "8px",
+              fontSize: "11px",
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
@@ -241,18 +244,19 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
-            Semua ({counts.all})
+            {TEXT_MONITORING.ROUTES_TAB.FILTER_ALL(counts.all)}
           </button>
 
           <button
             type="button"
             onClick={() => setStatusFilter("submitted")}
             style={{
-              padding: "6px 12px",
-              borderRadius: "10px",
-              fontSize: "11.5px",
+              padding: "5px 11px",
+              borderRadius: "8px",
+              fontSize: "11px",
               fontWeight: statusFilter === "submitted" ? 700 : 500,
               background:
                 statusFilter === "submitted"
@@ -268,18 +272,19 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
-            Perlu Verifikasi ({counts.submitted})
+            {TEXT_MONITORING.ROUTES_TAB.FILTER_SUBMITTED(counts.submitted)}
           </button>
 
           <button
             type="button"
             onClick={() => setStatusFilter("uncompleted")}
             style={{
-              padding: "6px 12px",
-              borderRadius: "10px",
-              fontSize: "11.5px",
+              padding: "5px 11px",
+              borderRadius: "8px",
+              fontSize: "11px",
               fontWeight: statusFilter === "uncompleted" ? 700 : 500,
               background:
                 statusFilter === "uncompleted"
@@ -295,18 +300,19 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
-            Belum Lengkap ({counts.uncompleted})
+            {TEXT_MONITORING.ROUTES_TAB.FILTER_UNCOMPLETED(counts.uncompleted)}
           </button>
 
           <button
             type="button"
             onClick={() => setStatusFilter("verified")}
             style={{
-              padding: "6px 12px",
-              borderRadius: "10px",
-              fontSize: "11.5px",
+              padding: "5px 11px",
+              borderRadius: "8px",
+              fontSize: "11px",
               fontWeight: statusFilter === "verified" ? 700 : 500,
               background:
                 statusFilter === "verified"
@@ -322,9 +328,10 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
-            Terverifikasi ({counts.verified})
+            {TEXT_MONITORING.ROUTES_TAB.FILTER_VERIFIED(counts.verified)}
           </button>
         </div>
 
@@ -336,7 +343,8 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             alignItems: "center",
             gap: "6px",
             overflowX: "auto",
-            paddingBottom: "2px",
+            padding: "2px 16px 4px 0",
+            WebkitOverflowScrolling: "touch",
           }}
         >
           <div
@@ -347,10 +355,11 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               fontSize: "11px",
               color: "var(--text-secondary)",
               marginRight: "4px",
+              flexShrink: 0,
             }}
           >
             <Filter size={12} />
-            <span>Korlap:</span>
+            <span>{TEXT_MONITORING.ROUTES_TAB.KORLAP_LABEL}</span>
           </div>
 
           <button
@@ -372,9 +381,10 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
-            Semua
+            {TEXT_MONITORING.ROUTES_TAB.KORLAP_ALL}
           </button>
 
           {SUPERVISORS.map((spv) => (
@@ -398,6 +408,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
+                flexShrink: 0,
               }}
             >
               {spv.split(" ")[0]}
@@ -419,7 +430,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
           }}
         >
           <p style={{ margin: 0, fontSize: "14px", fontWeight: 600 }}>
-            Tidak ada rute yang cocok dengan filter yang dipilih.
+            {TEXT_MONITORING.ROUTES_TAB.EMPTY_FILTER}
           </p>
         </div>
       ) : (

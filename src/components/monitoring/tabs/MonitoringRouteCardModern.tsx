@@ -2,6 +2,7 @@ import React from "react";
 import { CheckCircle2, Send, Clock, AlertTriangle, ChevronRight, Check } from "lucide-react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
+import { formatDecimal, formatNumber } from "../monitoringUtils";
 
 export interface MonitoringRouteCardModernProps {
   route: RegionalRouteItem;
@@ -27,7 +28,10 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
   const totalManual = route.manualShift1 + route.manualShift2;
   const renops = route.totalRenops || route.defaultRenops || 0;
   const realops = route.totalRealops || 0;
-  const kmPerBus = route.kmPerBus ?? route.achievementKm ?? (realops > 0 ? (route.totalKm / realops).toFixed(0) : 0);
+  const rawKmPerBus = route.kmPerBus ?? route.achievementKm ?? (realops > 0 ? (route.totalKm / realops) : 0);
+  const kmPerBus = typeof rawKmPerBus === "number"
+    ? (Number.isInteger(rawKmPerBus) ? rawKmPerBus.toString() : formatDecimal(rawKmPerBus, 1))
+    : rawKmPerBus;
   const targetPax = route.targetPax ?? route.targetHk ?? 0;
   const paxPct = route.paxPercentage !== undefined
     ? `${Number(route.paxPercentage).toFixed(1)}%`
@@ -320,9 +324,22 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               fontWeight: 800,
               color: "var(--accent-color, #3ECF8E)",
               marginTop: "2px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "4px",
             }}
           >
-            {route.todayPassengers.toLocaleString("id-ID")}
+            <span>{route.todayPassengers.toLocaleString("id-ID")}</span>
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                color: "var(--accent-color, #3ECF8E)",
+              }}
+            >
+              ({paxPct})
+            </span>
           </div>
           <div
             style={{
@@ -337,7 +354,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           </div>
         </div>
 
-        {/* Efisiensi: KM/Bus & Capaian % */}
+        {/* Efisiensi: KM/Bus & Total KM */}
         <div>
           <div
             style={{
@@ -346,7 +363,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               fontWeight: 600,
             }}
           >
-            {TEXT_MONITORING.ROUTE_CARD.LBL_CORE_KM}
+            {TEXT_MONITORING.ROUTE_CARD.LBL_CORE_KM_PER_BUS}
           </div>
           <div
             style={{
@@ -366,7 +383,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               whiteSpace: "nowrap",
             }}
           >
-            {TEXT_MONITORING.ROUTE_CARD.PCT_PAX_PREFIX} {paxPct}
+            {TEXT_MONITORING.ROUTE_CARD.TOTAL_KM_PREFIX} {formatNumber(route.totalKm || 0)} km
           </div>
         </div>
       </div>

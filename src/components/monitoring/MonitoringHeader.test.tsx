@@ -181,7 +181,7 @@ describe('MonitoringHeader Component', () => {
     expect(periodContainer).toBeTruthy();
 
     const dateTrigger = container.querySelector('[data-testid="monitoring-date-picker-trigger"]');
-    expect(dateTrigger?.textContent).toContain('2026-10-01 s.d. 2026-10-14');
+    expect(dateTrigger?.textContent).toContain('Oktober 2026');
 
     // Step buttons should be hidden in non-daily mode
     expect(container.textContent).not.toContain('Kemarin');
@@ -291,7 +291,7 @@ describe('MonitoringHeader Component', () => {
     expect(calledFilter.mode).toBe('monthly');
     expect(calledFilter.startDate).toBe('2026-09-01');
     expect(calledFilter.endDate).toBe('2026-09-30');
-    expect(calledFilter.label).toBe('2026-09-01 s.d. 2026-09-30');
+    expect(calledFilter.label).toBe('September 2026');
   });
 
   it('renders profile button when onOpenProfile is provided and handles click', async () => {
