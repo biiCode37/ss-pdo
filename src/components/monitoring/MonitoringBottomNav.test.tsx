@@ -26,7 +26,7 @@ describe("MonitoringBottomNav Component", () => {
     vi.clearAllMocks();
   });
 
-  it("renders all tabs with correct labels and places Dashboard in the center position", async () => {
+  it("renders all tabs with correct labels and streamlined 5-item dock layout", async () => {
     const onSelectTab = vi.fn();
     const onOpenProfile = vi.fn();
 
@@ -42,20 +42,18 @@ describe("MonitoringBottomNav Component", () => {
 
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.DASHBOARD);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.ROUTES);
-    expect(container.textContent).toContain(TEXT_MONITORING.NAV.KORWIL);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.FLEET_STATUS);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.WA_REPORT);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.PROFILE);
 
-    // Verify ordering: [Routes, Korwil, Dashboard (Center), Fleet Status, WA Report, Profile]
+    // Verify ordering: [Routes, Dashboard, Fleet Status, WA Report, Profile]
     const buttons = container.querySelectorAll<HTMLButtonElement>(".monitoring-tab-btn");
-    expect(buttons.length).toBe(6);
+    expect(buttons.length).toBe(5);
     expect(buttons[0].getAttribute("data-testid")).toBe("monitoring-tab-routes");
-    expect(buttons[1].getAttribute("data-testid")).toBe("monitoring-tab-korwil");
-    expect(buttons[2].getAttribute("data-testid")).toBe("monitoring-tab-dashboard"); // CENTER!
-    expect(buttons[3].getAttribute("data-testid")).toBe("monitoring-tab-fleet_status");
-    expect(buttons[4].getAttribute("data-testid")).toBe("monitoring-tab-wa_report");
-    expect(buttons[5].getAttribute("data-testid")).toBe("monitoring-tab-profile");
+    expect(buttons[1].getAttribute("data-testid")).toBe("monitoring-tab-dashboard");
+    expect(buttons[2].getAttribute("data-testid")).toBe("monitoring-tab-fleet_status");
+    expect(buttons[3].getAttribute("data-testid")).toBe("monitoring-tab-wa_report");
+    expect(buttons[4].getAttribute("data-testid")).toBe("monitoring-tab-profile");
   });
 
   it("indicates the active tab via aria-selected or active class", async () => {

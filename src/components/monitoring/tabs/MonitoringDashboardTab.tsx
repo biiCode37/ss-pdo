@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import type { RegionalMonitoringResult } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
-import { CheckCircle2, ShieldAlert } from "lucide-react";
+import { CheckCircle2, ShieldAlert, BarChart3, Users } from "lucide-react";
 import { MonitoringToaBarChart } from "./MonitoringToaBarChart";
 import { MonitoringMacroKpiGrid } from "./MonitoringMacroKpiGrid";
 import { MonitoringShiftSplitBar } from "./MonitoringShiftSplitBar";
 import { MonitoringLeaderboard } from "./MonitoringLeaderboard";
+import { MonitoringKorwilTab } from "./MonitoringKorwilTab";
 
 export interface MonitoringDashboardTabProps {
   data: RegionalMonitoringResult;
   confirmedRoutesCount: number;
   totalRoutesCount: number;
   onSelectRoute?: (routeCode: string) => void;
+  initialSubView?: "overview" | "korwil";
 }
 
 export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
@@ -19,7 +21,10 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
   confirmedRoutesCount,
   totalRoutesCount,
   onSelectRoute,
+  initialSubView = "overview",
 }) => {
+  const [subView, setSubView] = useState<"overview" | "korwil">(initialSubView);
+
   const totalRoutes = totalRoutesCount > 0 ? totalRoutesCount : 18;
   const progressPct = Math.min(
     100,
@@ -29,6 +34,108 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
 
   return (
     <div className="monitoring-dashboard-tab">
+      {/* SubView Segmented Switcher */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "16px",
+          width: "100%",
+        }}
+      >
+        <div
+          role="tablist"
+          aria-label={TEXT_MONITORING.DASHBOARD.VIEW_SELECTOR_LABEL}
+          style={{
+            display: "inline-flex",
+            background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+            padding: "4px",
+            borderRadius: "14px",
+            border: "1px solid var(--border-color, rgba(255, 255, 255, 0.1))",
+            gap: "4px",
+            width: "100%",
+            maxWidth: "420px",
+          }}
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={subView === "overview"}
+            data-testid="subview-btn-overview"
+            onClick={() => setSubView("overview")}
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              padding: "8px 14px",
+              borderRadius: "10px",
+              fontSize: "12.5px",
+              fontWeight: subView === "overview" ? 700 : 500,
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
+              background:
+                subView === "overview"
+                  ? "var(--accent-color, #3ECF8E)"
+                  : "transparent",
+              color:
+                subView === "overview"
+                  ? "#0c0c0c"
+                  : "var(--text-secondary, #9ca3af)",
+              boxShadow:
+                subView === "overview"
+                  ? "0 2px 8px rgba(62, 207, 142, 0.25)"
+                  : "none",
+            }}
+          >
+            <BarChart3 size={15} />
+            <span>{TEXT_MONITORING.DASHBOARD.SUBVIEW_OVERVIEW}</span>
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={subView === "korwil"}
+            data-testid="subview-btn-korwil"
+            onClick={() => setSubView("korwil")}
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              padding: "8px 14px",
+              borderRadius: "10px",
+              fontSize: "12.5px",
+              fontWeight: subView === "korwil" ? 700 : 500,
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
+              background:
+                subView === "korwil"
+                  ? "var(--accent-color, #3ECF8E)"
+                  : "transparent",
+              color:
+                subView === "korwil"
+                  ? "#0c0c0c"
+                  : "var(--text-secondary, #9ca3af)",
+              boxShadow:
+                subView === "korwil"
+                  ? "0 2px 8px rgba(62, 207, 142, 0.25)"
+                  : "none",
+            }}
+          >
+            <Users size={15} />
+            <span>{TEXT_MONITORING.DASHBOARD.SUBVIEW_KORWIL}</span>
+          </button>
+        </div>
+      </div>
+
+      {subView === "overview" ? (
+        <>
       {/* 1. PDO Fleet Status Confirmation Progress Bar */}
       <div className="monitoring-card">
         <div
@@ -146,8 +253,16 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
         routes={data.routes}
         onSelectRoute={onSelectRoute}
       />
-    </div>
-  );
+    </>
+  ) : (
+    <MonitoringKorwilTab
+      data={data}
+      onSelectRoute={onSelectRoute}
+      isEmbedded={true}
+    />
+  )}
+</div>
+);
 };
 
 export default MonitoringDashboardTab;

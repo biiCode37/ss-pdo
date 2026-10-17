@@ -417,7 +417,7 @@ describe('AllRouteMonitoringPage Component', () => {
     expect(container.textContent).toContain(TEXT_MONITORING.PROVENANCE.SHEET_SYNC);
   });
 
-  it('navigates to korwil tab and renders supervisor summaries', async () => {
+  it('navigates to dashboard tab, switches to korwil view, and renders supervisor summaries', async () => {
     (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue({
       ...mockData,
       supervisorSummaries: [
@@ -444,13 +444,22 @@ describe('AllRouteMonitoringPage Component', () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
     });
 
-    const korwilTabBtn = container.querySelector<HTMLButtonElement>(
-      '[data-testid="monitoring-tab-korwil"]'
+    const dashboardTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-dashboard"]'
     );
-    expect(korwilTabBtn).toBeTruthy();
+    expect(dashboardTabBtn).toBeTruthy();
 
     await act(async () => {
-      korwilTabBtn?.click();
+      dashboardTabBtn?.click();
+    });
+
+    const korwilSubViewBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="subview-btn-korwil"]'
+    );
+    expect(korwilSubViewBtn).toBeTruthy();
+
+    await act(async () => {
+      korwilSubViewBtn?.click();
     });
 
     expect(container.textContent).toContain(TEXT_MONITORING.KORWIL_TAB.TOTAL_WILAYAH_CARD);

@@ -187,6 +187,9 @@ export const TEXT_MONITORING = {
       "Tidak ada rute berstatus submitted yang siap diverifikasi.",
   },
   DASHBOARD: {
+    VIEW_SELECTOR_LABEL: "Pilihan Tampilan Dashboard",
+    SUBVIEW_OVERVIEW: "Ringkasan Wilayah",
+    SUBVIEW_KORWIL: "Kinerja Tim Korwil",
     PROGRESS_TITLE: "Status Armada Rute",
     PROGRESS_RATIO: (confirmed: number, total: number) =>
       `${confirmed} / ${total} Rute Terkonfirmasi`,

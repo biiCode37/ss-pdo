@@ -1,5 +1,5 @@
 import { memo, useState, useEffect } from "react";
-import { LayoutDashboard, Route, Bus, FileSpreadsheet, User, Users } from "lucide-react";
+import { LayoutDashboard, Route, Bus, FileSpreadsheet, User } from "lucide-react";
 import { TEXT_MONITORING } from "@/constants/texts";
 
 export type MonitoringTab = "dashboard" | "routes" | "fleet_status" | "wa_report" | "korwil";
@@ -21,11 +21,6 @@ const NAV_ITEMS: NavItemConfig[] = [
     id: "routes",
     label: TEXT_MONITORING.NAV.ROUTES,
     icon: Route,
-  },
-  {
-    id: "korwil",
-    label: TEXT_MONITORING.NAV.KORWIL,
-    icon: Users,
   },
   {
     id: "dashboard",

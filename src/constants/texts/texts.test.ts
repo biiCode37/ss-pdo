@@ -118,6 +118,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).KORWIL_TAB.TOTAL_WILAYAH_CARD).toBe('Total 18 Rute Wilayah');
     expect((TEXT_MONITORING as any).KORWIL_TAB.ROUTES_COUNT(6)).toBe('6 Rute');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Grafik Jumlah Pelanggan Per Rute');
+    expect((TEXT_MONITORING as any).DASHBOARD.SUBVIEW_OVERVIEW).toBe('Ringkasan Wilayah');
+    expect((TEXT_MONITORING as any).DASHBOARD.SUBVIEW_KORWIL).toBe('Kinerja Tim Korwil');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE('Selasa, 01/09/2026')).toBe('Komparasi total pelanggan pada hari Selasa, 01/09/2026');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE()).toBe('Komparasi total pelanggan dari 18 rute hari ini');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOA_UNIT).toBe('TOA');

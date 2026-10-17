@@ -18,11 +18,13 @@ import { formatNumber, formatDecimal } from "../monitoringUtils";
 export interface MonitoringKorwilTabProps {
   data: RegionalMonitoringResult;
   onSelectRoute?: (routeCode: string) => void;
+  isEmbedded?: boolean;
 }
 
 export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
   data,
   onSelectRoute,
+  isEmbedded = false,
 }) => {
   const [expandedTeams, setExpandedTeams] = useState<Record<string, boolean>>({});
 
@@ -39,18 +41,22 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
   if (!hasData && supervisorSummaries.length === 0) {
     return (
       <div
-        className="monitoring-korwil-tab"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "16px",
-          paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
-          boxSizing: "border-box",
-          width: "100%",
-        }}
+        className={isEmbedded ? "monitoring-korwil-embedded" : "monitoring-korwil-tab"}
+        style={
+          isEmbedded
+            ? { display: "flex", flexDirection: "column", gap: "16px", width: "100%" }
+            : {
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                maxWidth: "1200px",
+                margin: "0 auto",
+                padding: "16px",
+                paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
+                boxSizing: "border-box",
+                width: "100%",
+              }
+        }
       >
         <div
           className="monitoring-card"
@@ -86,18 +92,22 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
 
   return (
     <div
-      className="monitoring-korwil-tab"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-        maxWidth: "1200px",
-        margin: "0 auto",
-        padding: "16px",
-        paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
-        boxSizing: "border-box",
-        width: "100%",
-      }}
+      className={isEmbedded ? "monitoring-korwil-embedded" : "monitoring-korwil-tab"}
+      style={
+        isEmbedded
+          ? { display: "flex", flexDirection: "column", gap: "16px", width: "100%" }
+          : {
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+              maxWidth: "1200px",
+              margin: "0 auto",
+              padding: "16px",
+              paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
+              boxSizing: "border-box",
+              width: "100%",
+            }
+      }
     >
       {/* 1. KARTU RANGKUMAN TOTAL 18 RUTE WILAYAH */}
       <div
