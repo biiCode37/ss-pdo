@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-10-17)
 
 ## Corpus Check
-- 845 files · ~781,409 words
+- 845 files · ~781,489 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5504 nodes · 6871 edges · 525 communities (482 shown, 43 thin omitted)
+- 5504 nodes · 6871 edges · 525 communities (481 shown, 44 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 28 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dd298024`
+- Built from commit: `99dbed99`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -354,7 +354,7 @@
 - userManagement/RoleBadge.tsx
 - 3. Case: Skenario Lapangan
 - 🎯 Case: Skenario Lapangan
-- 1. THE THREE DIALS (Core Configuration)
+- MonitoringDashboardTab.test.tsx
 - 2. Before vs After Perbaikan
 - 🚗 Case: 5 Skenario Lapangan
 - waReport/WaReportModal.tsx
@@ -567,7 +567,7 @@
 - 3-file cycle: `src/services/googleSheets/auth.ts -> src/services/googleSheets/authSession.ts -> src/services/googleSheets/transport.ts -> src/services/googleSheets/auth.ts`
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 
-## Communities (525 total, 43 thin omitted)
+## Communities (525 total, 44 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -1030,8 +1030,8 @@ Cohesion: 0.20
 Nodes (10): 10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know), Animation Library Choice, Cards & Containers, Galleries & Media, Hero Paradigms, Layout & Grids, Micro-Interactions & Effects, Navigation & Menus (+2 more)
 
 ### Community 131 - "tasteskill: Anti-Slop Frontend Skill"
-Cohesion: 0.18
-Nodes (11): 0.A Read these signals first, 0.B Output a one-line "Design Read" before generating, 0. BRIEF INFERENCE (Read the Room Before Anything Else), 0.C If the brief is ambiguous, ask one question, do not guess, 0.D Anti-Default Discipline, 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 2.A When to reach for a real design system (use official packages) (+3 more)
+Cohesion: 0.13
+Nodes (15): 0.A Read these signals first, 0.B Output a one-line "Design Read" before generating, 0. BRIEF INFERENCE (Read the Room Before Anything Else), 0.C If the brief is ambiguous, ask one question, do not guess, 0.D Anti-Default Discipline, 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 1.A Dial Inference (design read → dial values) (+7 more)
 
 ### Community 132 - "Daftar Masalah v4 — Proyek SS_PDO / SPUM"
 Cohesion: 0.20
@@ -1526,8 +1526,8 @@ Cohesion: 0.50
 Nodes (3): AUDIT BUGS — Refactor 35: Isolasi Penuh State Form Tanggal dan Pencegahan Kedipan Refresh, Ringkasan Eksekutif, Tabel Temuan Masalah
 
 ### Community 263 - "react"
-Cohesion: 0.06
-Nodes (12): react, mockData, mockRoutes, mockFleetShifts, mockRoute, mockRouteItems, mockData, SwipeableContainer() (+4 more)
+Cohesion: 0.07
+Nodes (10): react, mockFleetShifts, mockRoute, mockRouteItems, mockData, SwipeableContainer(), SwipeableContainerProps, ViewportTestComponent() (+2 more)
 
 ### Community 264 - "1. Perbaikan Bug & Implementasi"
 Cohesion: 0.20
@@ -1824,10 +1824,6 @@ Nodes (9): 1. Implementasi Perbaikan, 2. Before vs After, 3. Case: Skenario Lapa
 ### Community 340 - "🎯 Case: Skenario Lapangan"
 Cohesion: 0.13
 Nodes (14): 🎯 Case: Skenario Lapangan, 🔄 Perbandingan Before vs After, 🔄 Perbandingan Sebelum vs Sesudah (Before vs After), REPAIR REPORT — REFACTOR 64: REDESIGN ERGONOMI MODAL INPUT BUS (TOUCH SATSET & ANTI-KEYBOARD VIRTUAL), 📋 Ringkasan Implementasi, Skenario 1: Petugas Pengawas Melakukan Penutupan Shift 1 (TOA S1 + KM Akhir S1), Skenario 2: Petugas Memasukkan KM Awal Shift 2 & Total TOA Malam Hari, Skenario 3: Penggunaan Smartphone Layar 360px dengan Gboard Virtual Keyboard Aktif (+6 more)
-
-### Community 342 - "1. THE THREE DIALS (Core Configuration)"
-Cohesion: 0.50
-Nodes (4): 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration)
 
 ### Community 343 - "2. Before vs After Perbaikan"
 Cohesion: 0.14
@@ -2492,12 +2488,12 @@ Nodes (4): AUDIT BUGS — Refactor 135, BUG-135-01: Nilai Input Angka/Teks Disim
 ## Knowledge Gaps
 - **2959 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+2954 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `plugins`, `ModalShell.test.tsx`, `usePreviousDayOdometer.ts`, `monitoringUtils.ts`, `MonitoringRoutesTab.tsx`, `Dashboard.tsx`, `dailyToaTrend/DailyToaTrendCard.tsx`, `routeSelector/RouteSelectorCard.tsx`, `MonitoringDashboardTab.tsx`, `busCard/BusCard.tsx`, `BusFormField.test.tsx`, `busList/BusList.tsx`, `BusInputModal.tsx`, `SingleFocusKmShift2.tsx`, `profileMenu/ProfileMenuSheet.tsx`, `A2ReportModal.tsx`, `useBusInputForm.ts`, `userManagement/RoleBadge.tsx`, `waReport/WaReportModal.tsx`, `BusInputFormReturn`, `useBusModalOdometer.ts`, `monitoring/AllRouteMonitoringPage.tsx`, `profileMenu/UserProfileHeader.tsx`, `utils/analytics.ts`, `texts/index.ts`, `accumulation/AccumulationSheet.tsx`, `userManagement/UserManagementPage.tsx`, `LoginInfoModal.tsx`, `useOfflineSync.ts`, `pdoReport/RouteOperationalReportCard.tsx`, `MonitoringHeader.tsx`?**
+- **Why does `react` connect `react` to `plugins`, `ModalShell.test.tsx`, `usePreviousDayOdometer.ts`, `monitoringUtils.ts`, `MonitoringRoutesTab.tsx`, `Dashboard.tsx`, `dailyToaTrend/DailyToaTrendCard.tsx`, `routeSelector/RouteSelectorCard.tsx`, `MonitoringDashboardTab.tsx`, `busCard/BusCard.tsx`, `BusFormField.test.tsx`, `busList/BusList.tsx`, `BusInputModal.tsx`, `SingleFocusKmShift2.tsx`, `profileMenu/ProfileMenuSheet.tsx`, `A2ReportModal.tsx`, `useBusInputForm.ts`, `userManagement/RoleBadge.tsx`, `MonitoringDashboardTab.test.tsx`, `waReport/WaReportModal.tsx`, `BusInputFormReturn`, `useBusModalOdometer.ts`, `monitoring/AllRouteMonitoringPage.tsx`, `profileMenu/UserProfileHeader.tsx`, `utils/analytics.ts`, `texts/index.ts`, `accumulation/AccumulationSheet.tsx`, `userManagement/UserManagementPage.tsx`, `LoginInfoModal.tsx`, `useOfflineSync.ts`, `pdoReport/RouteOperationalReportCard.tsx`, `MonitoringHeader.tsx`?**
   _High betweenness centrality (0.042) - this node is a cross-community bridge._
 - **Why does `logActivity()` connect `routes.ts` to `transport.ts`, `auth.ts`, `types/supabase.ts`, `texts/index.ts`, `useOfflineSync.ts`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._

@@ -175,45 +175,42 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
         <div
           style={{
             display: "flex",
-            flexWrap: "wrap",
+            flexDirection: "column",
             alignItems: "center",
-            justifyContent: "space-between",
             gap: "10px",
             width: "100%",
           }}
         >
+          {/* Periode Selector (Jika disediakan) */}
+          {currentPeriod && onPeriodChange && (
+            <div
+              data-testid="monitoring-period-container"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <MonitoringPeriodSelector
+                currentPeriod={currentPeriod}
+                onPeriodChange={onPeriodChange}
+                loading={loading || refreshing}
+              />
+            </div>
+          )}
 
-        {/* Periode Selector (Jika disediakan) */}
-        {currentPeriod && onPeriodChange && (
+          {/* 1 Blok Baris Komponen: Datepicker + Refresh + Load All (Responsive & No Blank Space) */}
           <div
-            data-testid="monitoring-period-container"
+            data-testid="monitoring-control-bar"
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
+              gap: "8px",
+              flexWrap: "nowrap",
+              width: "100%",
             }}
           >
-            <MonitoringPeriodSelector
-              currentPeriod={currentPeriod}
-              onPeriodChange={onPeriodChange}
-              loading={loading || refreshing}
-            />
-          </div>
-        )}
-
-        {/* 1 Blok Baris Komponen: Datepicker + Refresh + Load All (Responsive & No Blank Space) */}
-        <div
-          data-testid="monitoring-control-bar"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            flexWrap: "nowrap",
-            flex: "1 1 320px",
-            maxWidth: "520px",
-            width: "100%",
-          }}
-        >
           {/* Date Navigator Box (Interactive Date Picker - Mengisi ruang fleksibel) */}
           <div
             style={{

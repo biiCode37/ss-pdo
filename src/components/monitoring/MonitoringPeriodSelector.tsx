@@ -86,13 +86,16 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
   return (
     <div
       style={{
-        display: "inline-flex",
+        display: "flex",
         alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        boxSizing: "border-box",
         background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
         borderRadius: "9999px",
         padding: "3px",
         border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
-        gap: "2px",
+        gap: "4px",
         userSelect: "none",
       }}
     >
@@ -104,7 +107,13 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
         onClick={() => handleSelectMode("daily")}
         disabled={loading}
         style={{
-          padding: "5px 12px",
+          flex: "1 1 0px",
+          minWidth: 0,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          padding: "6px 8px",
           borderRadius: "9999px",
           border: "none",
           fontSize: "12px",
@@ -123,6 +132,9 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
             currentPeriod.mode === "daily"
               ? "0 2px 8px rgba(62, 207, 142, 0.3)"
               : "none",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {TEXT_MONITORING.PERIOD.DAILY}
@@ -136,7 +148,13 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
         onClick={() => handleSelectMode("weekly")}
         disabled={loading}
         style={{
-          padding: "5px 12px",
+          flex: "1 1 0px",
+          minWidth: 0,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          padding: "6px 8px",
           borderRadius: "9999px",
           border: "none",
           fontSize: "12px",
@@ -155,6 +173,9 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
             currentPeriod.mode === "weekly"
               ? "0 2px 8px rgba(62, 207, 142, 0.3)"
               : "none",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {TEXT_MONITORING.PERIOD.WEEKLY}
@@ -168,7 +189,13 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
         onClick={() => handleSelectMode("monthly")}
         disabled={loading}
         style={{
-          padding: "5px 12px",
+          flex: "1 1 0px",
+          minWidth: 0,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          padding: "6px 8px",
           borderRadius: "9999px",
           border: "none",
           fontSize: "12px",
@@ -187,6 +214,9 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
             currentPeriod.mode === "monthly"
               ? "0 2px 8px rgba(62, 207, 142, 0.3)"
               : "none",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {TEXT_MONITORING.PERIOD.MONTHLY}
@@ -200,7 +230,13 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
         onClick={() => handleSelectMode("custom")}
         disabled={loading}
         style={{
-          padding: "5px 12px",
+          flex: "1 1 0px",
+          minWidth: 0,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          padding: "6px 8px",
           borderRadius: "9999px",
           border: "none",
           fontSize: "12px",
@@ -219,6 +255,9 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
             currentPeriod.mode === "custom"
               ? "0 2px 8px rgba(62, 207, 142, 0.3)"
               : "none",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
       >
         {TEXT_MONITORING.PERIOD.CUSTOM}
