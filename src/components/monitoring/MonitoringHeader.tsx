@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import {
   Bus,
   ChevronLeft,
@@ -7,13 +7,12 @@ import {
   Calendar,
   RefreshCw,
   CloudDownload,
-  ArrowLeft,
-  User,
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
 import { MonitoringPeriodSelector } from "./MonitoringPeriodSelector";
 import { MonitoringMonthPickerModal } from "./MonitoringMonthPickerModal";
+import { UserProfileHeader } from "@/components/UserProfileHeader";
 import type { MonitoringPeriodFilter } from "@/services/allRouteMonitoringService";
 
 export interface MonitoringHeaderProps {
@@ -35,7 +34,7 @@ export interface MonitoringHeaderProps {
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
-  onBackToRouteView,
+  onBackToRouteView: _onBackToRouteView,
   selectedDate,
   onStepDate,
   onDateInputChange,
@@ -51,20 +50,6 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
 }) => {
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
-  const [avatarFailed, setAvatarFailed] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
-    () => localStorage.getItem("PDO_USER_AVATAR") || undefined
-  );
-
-  useEffect(() => {
-    const handleStorage = () => {
-      setAvatarUrl(localStorage.getItem("PDO_USER_AVATAR") || undefined);
-      setAvatarFailed(false);
-    };
-
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
 
   const isDaily = !currentPeriod || currentPeriod.mode === "daily";
   const isMonthly = currentPeriod?.mode === "monthly";
@@ -129,70 +114,74 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
           maxWidth: "1200px",
           margin: "0 auto",
           display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "12px",
+          flexDirection: "column",
+          gap: "10px",
         }}
       >
-        {/* Pojok Kiri: Judul & Subtitle */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          {onBackToRouteView && (
-            <button
-              type="button"
-              onClick={onBackToRouteView}
-              data-testid="monitoring-back-btn"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "36px",
-                height: "36px",
-                borderRadius: "10px",
-                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
-                color: "var(--text-primary, #ededed)",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              title={TEXT_COMMON.BUTTONS.BACK}
-              aria-label={TEXT_COMMON.BUTTONS.BACK}
-            >
-              <ArrowLeft size={18} />
-            </button>
-          )}
-          <div>
-            <h1
-              style={{
-                fontSize: "17px",
-                fontWeight: 800,
-                margin: 0,
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                color: "var(--text-primary, #ededed)",
-                letterSpacing: "-0.3px",
-              }}
-            >
-              <Bus
-                size={20}
-                style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
-              />
-              <span>{TEXT_MONITORING.HEADER.TITLE}</span>
-            </h1>
-            <span
-              style={{
-                fontSize: "11px",
-                color: "var(--text-secondary, #8b8b8b)",
-                fontWeight: 500,
-                display: "block",
-                marginTop: "1px",
-              }}
-            >
-              {TEXT_MONITORING.HEADER.SUBTITLE}
-            </span>
+        {/* ROW 1: Judul Halaman di Kiri, Profil Pengguna di Kanan */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            gap: "12px",
+          }}
+        >
+          {/* Pojok Kiri: Judul & Subtitle (Ikon panah kembali dihapus sesuai instruksi) */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
+            <div>
+              <h1
+                style={{
+                  fontSize: "17px",
+                  fontWeight: 800,
+                  margin: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  color: "var(--text-primary, #ededed)",
+                  letterSpacing: "-0.3px",
+                }}
+              >
+                <Bus
+                  size={20}
+                  style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
+                />
+                <span>{TEXT_MONITORING.HEADER.TITLE}</span>
+              </h1>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "var(--text-secondary, #8b8b8b)",
+                  fontWeight: 500,
+                  display: "block",
+                  marginTop: "1px",
+                }}
+              >
+                {TEXT_MONITORING.HEADER.SUBTITLE}
+              </span>
+            </div>
           </div>
+
+          {/* Pojok Kanan: Profil Akun Pengguna (Avatar, Nama, Role) */}
+          {onOpenProfile && (
+            <div style={{ flexShrink: 0 }}>
+              <UserProfileHeader onOpenProfile={onOpenProfile} />
+            </div>
+          )}
         </div>
+
+        {/* ROW 2: Kontrol Periode & Baris Datepicker + Refresh + Load All */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "10px",
+            width: "100%",
+          }}
+        >
 
         {/* Periode Selector (Jika disediakan) */}
         {currentPeriod && onPeriodChange && (
@@ -501,52 +490,10 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 </button>
               );
             })()}
-
-            {/* Profile Button */}
-            {onOpenProfile && (
-              <button
-                type="button"
-                onClick={onOpenProfile}
-                data-testid="monitoring-profile-btn"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "12px",
-                  background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
-                  color: "var(--text-primary, #ededed)",
-                  cursor: "pointer",
-                  transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                  flexShrink: 0,
-                  padding: 0,
-                  overflow: "hidden",
-                }}
-                title={TEXT_MONITORING.NAV.PROFILE}
-                aria-label={TEXT_MONITORING.NAV.PROFILE}
-              >
-                {avatarUrl && !avatarFailed ? (
-                  <img
-                    src={avatarUrl}
-                    alt={TEXT_MONITORING.NAV.PROFILE}
-                    referrerPolicy="no-referrer"
-                    onError={() => setAvatarFailed(true)}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                ) : (
-                  <User size={17} style={{ color: "var(--text-secondary, #9ca3af)" }} />
-                )}
-              </button>
-            )}
           </div>
         </div>
       </div>
+    </div>
 
       {/* Month Picker Modal for Monthly Period */}
       {currentPeriod && onPeriodChange && (

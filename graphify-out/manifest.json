@@ -1760,8 +1760,8 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardHeader.tsx": {
-    "mtime": 1789283529.6844127,
-    "ast_hash": "cb7fecfc0a340030eb47bc5a664ae19a",
+    "mtime": 1792205232.8584187,
+    "ast_hash": "9e6923f321945fe00934f70d3c00c0a7",
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardModals.tsx": {
@@ -1795,8 +1795,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.tsx": {
-    "mtime": 1792203682.3454604,
-    "ast_hash": "ca3d2afe4659be82071992483f11be1b",
+    "mtime": 1792205332.6675887,
+    "ast_hash": "8e4dcf5d7e7a569955273a858099ea2a",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringKpiCards.tsx": {
@@ -3120,8 +3120,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringHeader.test.tsx": {
-    "mtime": 1792203759.8457253,
-    "ast_hash": "d0ac04f9e93826eeef2e93f2ad33a208",
+    "mtime": 1792205366.3755138,
+    "ast_hash": "73559ccacf59db57e76da8c46012b21b",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_76/AUDIT_BUGS.md": {

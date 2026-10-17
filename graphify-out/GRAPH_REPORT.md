@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-10-17)
 
 ## Corpus Check
-- 845 files · ~781,499 words
+- 845 files · ~781,409 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5504 nodes · 6871 edges · 526 communities (483 shown, 43 thin omitted)
+- 5504 nodes · 6871 edges · 525 communities (482 shown, 43 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 28 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c52d8203`
+- Built from commit: `dd298024`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -354,7 +354,6 @@
 - userManagement/RoleBadge.tsx
 - 3. Case: Skenario Lapangan
 - 🎯 Case: Skenario Lapangan
-- bulkRouteInspector.ts
 - 1. THE THREE DIALS (Core Configuration)
 - 2. Before vs After Perbaikan
 - 🚗 Case: 5 Skenario Lapangan
@@ -365,7 +364,7 @@
 - Daftar Temuan Bug
 - Daftar Temuan Masalah & Keterbatasan
 - Daftar Temuan Bug
-- cacheUtils.ts
+- core.ts
 - Laporan Perbaikan — Fase 3, Batch 3.1: Keamanan State & Helper KM
 - Daftar Temuan Masalah
 - monitoring/AllRouteMonitoringPage.tsx
@@ -446,7 +445,7 @@
 - GEMINI_BATCH_2_3_REVISION_2.md
 - Laporan Perbaikan Kode — Fase 2, Batch 2.3 Revisi Akhir (`refact_98`)
 - Paket Revisi Gemini — Fase 3 Batch 3.1
-- core.ts
+- transport.ts
 - Laporan Perbaikan Revisi Fase 3 Batch 3.1
 - 1. Temuan Aktif & Mitigasi
 - Audit Awal Fase 3 — Form Input Bus dan Odometer
@@ -568,7 +567,7 @@
 - 3-file cycle: `src/services/googleSheets/auth.ts -> src/services/googleSheets/authSession.ts -> src/services/googleSheets/transport.ts -> src/services/googleSheets/auth.ts`
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 
-## Communities (526 total, 43 thin omitted)
+## Communities (525 total, 43 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -1826,10 +1825,6 @@ Nodes (9): 1. Implementasi Perbaikan, 2. Before vs After, 3. Case: Skenario Lapa
 Cohesion: 0.13
 Nodes (14): 🎯 Case: Skenario Lapangan, 🔄 Perbandingan Before vs After, 🔄 Perbandingan Sebelum vs Sesudah (Before vs After), REPAIR REPORT — REFACTOR 64: REDESIGN ERGONOMI MODAL INPUT BUS (TOUCH SATSET & ANTI-KEYBOARD VIRTUAL), 📋 Ringkasan Implementasi, Skenario 1: Petugas Pengawas Melakukan Penutupan Shift 1 (TOA S1 + KM Akhir S1), Skenario 2: Petugas Memasukkan KM Awal Shift 2 & Total TOA Malam Hari, Skenario 3: Penggunaan Smartphone Layar 360px dengan Gboard Virtual Keyboard Aktif (+6 more)
 
-### Community 341 - "bulkRouteInspector.ts"
-Cohesion: 0.53
-Nodes (4): BulkRouteItem, extractRoutePeriodFromTitle(), inspectBulkRoutesWithConcurrency(), MONTH_MAP
-
 ### Community 342 - "1. THE THREE DIALS (Core Configuration)"
 Cohesion: 0.50
 Nodes (4): 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration)
@@ -1870,9 +1865,9 @@ Nodes (5): 📋 Audit Bugs: Refactor 69 — Daily Fleet Status Architecture & De
 Cohesion: 0.40
 Nodes (4): 📋 Audit Bugs: Refactor 67 — Overnight Odometer Rollover & Cross-Day Validation, BUG-67-01: Ketiadaan Validasi Lintas Hari (Cross-Day Odometer Guard), BUG-67-02: Ketiadaan Bantuan Koreksi Cepat Rollover (Smart Rollover Suggestion), Daftar Temuan Bug
 
-### Community 353 - "cacheUtils.ts"
-Cohesion: 0.24
-Nodes (13): RouteSheet, extractMonthYearLabel(), parseNumericTab(), resolveRouteContext(), RouteContext, checkAndMigrateCache(), CURRENT_CACHE_VERSION, findSheetInRoutes (+5 more)
+### Community 353 - "core.ts"
+Cohesion: 0.16
+Nodes (19): extractSheetId(), HEADER_KEYWORDS, normalizeString(), tabGidCache, RouteSheet, extractMonthYearLabel(), parseNumericTab(), resolveRouteContext() (+11 more)
 
 ### Community 358 - "Laporan Perbaikan — Fase 3, Batch 3.1: Keamanan State & Helper KM"
 Cohesion: 0.25
@@ -2162,9 +2157,9 @@ Nodes (20): 1. Ringkasan Eksekutif, 2. Rincian Implementasi Perbaikan, 3. Matrik
 Cohesion: 0.50
 Nodes (3): Paket Revisi Gemini — Fase 3 Batch 3.1, Perbaikan minimum, Reproduksi wajib
 
-### Community 450 - "core.ts"
+### Community 450 - "transport.ts"
 Cohesion: 0.11
-Nodes (39): getAccumulatedBusData(), getMonthlyToaTrend(), inspectSpreadsheetHeader(), monthlyToaTrendCache, withAuthRetry(), detectHeaderRowAndBuildComposite(), extractSheetId(), findColumnIndex() (+31 more)
+Nodes (37): getAccumulatedBusData(), getMonthlyToaTrend(), inspectSpreadsheetHeader(), monthlyToaTrendCache, withAuthRetry(), detectHeaderRowAndBuildComposite(), findColumnIndex(), getBusData() (+29 more)
 
 ### Community 451 - "Laporan Perbaikan Revisi Fase 3 Batch 3.1"
 Cohesion: 0.14
@@ -2504,9 +2499,9 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `react` connect `react` to `plugins`, `ModalShell.test.tsx`, `usePreviousDayOdometer.ts`, `monitoringUtils.ts`, `MonitoringRoutesTab.tsx`, `Dashboard.tsx`, `dailyToaTrend/DailyToaTrendCard.tsx`, `routeSelector/RouteSelectorCard.tsx`, `MonitoringDashboardTab.tsx`, `busCard/BusCard.tsx`, `BusFormField.test.tsx`, `busList/BusList.tsx`, `BusInputModal.tsx`, `SingleFocusKmShift2.tsx`, `profileMenu/ProfileMenuSheet.tsx`, `A2ReportModal.tsx`, `useBusInputForm.ts`, `userManagement/RoleBadge.tsx`, `waReport/WaReportModal.tsx`, `BusInputFormReturn`, `useBusModalOdometer.ts`, `monitoring/AllRouteMonitoringPage.tsx`, `profileMenu/UserProfileHeader.tsx`, `utils/analytics.ts`, `texts/index.ts`, `accumulation/AccumulationSheet.tsx`, `userManagement/UserManagementPage.tsx`, `LoginInfoModal.tsx`, `useOfflineSync.ts`, `pdoReport/RouteOperationalReportCard.tsx`, `MonitoringHeader.tsx`?**
   _High betweenness centrality (0.042) - this node is a cross-community bridge._
-- **Why does `logActivity()` connect `routes.ts` to `core.ts`, `auth.ts`, `types/supabase.ts`, `texts/index.ts`, `useOfflineSync.ts`?**
+- **Why does `logActivity()` connect `routes.ts` to `transport.ts`, `auth.ts`, `types/supabase.ts`, `texts/index.ts`, `useOfflineSync.ts`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
-- **Why does `BusData` connect `utils/analytics.ts` to `core.ts`, `fleetStatusService.ts`, `A2ReportModal.tsx`, `LoginInfoModal.tsx`, `useOfflineSync.ts`, `routes.ts`?**
+- **Why does `BusData` connect `utils/analytics.ts` to `core.ts`, `transport.ts`, `fleetStatusService.ts`, `A2ReportModal.tsx`, `LoginInfoModal.tsx`, `useOfflineSync.ts`, `routes.ts`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
   _2959 weakly-connected nodes found - possible documentation gaps or missing edges._

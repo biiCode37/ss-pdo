@@ -41,7 +41,7 @@ describe('MonitoringHeader Component', () => {
     return defaultProps;
   };
 
-  it('renders title, back button, and formatted date label', async () => {
+  it('renders title, formatted date label, and does not render back arrow button', async () => {
     const onBack = vi.fn();
     await renderHeader({
       selectedDate: '2026-09-02',
@@ -51,12 +51,9 @@ describe('MonitoringHeader Component', () => {
     expect(container.textContent).toContain(TEXT_MONITORING.HEADER.TITLE);
     expect(container.textContent).toContain('2 September 2026');
 
+    // Sesuai instruksi: icon panah kembali dihapus (user navigasi via gesture peranti/menu profil)
     const backBtn = container.querySelector<HTMLButtonElement>('[data-testid="monitoring-back-btn"]');
-    expect(backBtn).toBeTruthy();
-    await act(async () => {
-      backBtn?.click();
-    });
-    expect(onBack).toHaveBeenCalledTimes(1);
+    expect(backBtn).toBeNull();
   });
 
   it('renders Refresh and Load All buttons side by side in the action row', async () => {
@@ -303,7 +300,7 @@ describe('MonitoringHeader Component', () => {
       onOpenProfile,
     });
 
-    const profileBtn = container.querySelector<HTMLButtonElement>('[data-testid="monitoring-profile-btn"]');
+    const profileBtn = container.querySelector<HTMLElement>('[data-testid="user-profile-header-btn"]');
     expect(profileBtn).toBeTruthy();
 
     await act(async () => {
@@ -318,7 +315,7 @@ describe('MonitoringHeader Component', () => {
       onOpenProfile: undefined,
     });
 
-    const profileBtn = container.querySelector('[data-testid="monitoring-profile-btn"]');
+    const profileBtn = container.querySelector('[data-testid="user-profile-header-btn"]');
     expect(profileBtn).toBeNull();
   });
 });
