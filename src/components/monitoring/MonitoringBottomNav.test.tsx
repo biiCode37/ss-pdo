@@ -26,37 +26,35 @@ describe("MonitoringBottomNav Component", () => {
     vi.clearAllMocks();
   });
 
-  it("renders all tabs with correct labels and streamlined 5-item dock layout", async () => {
+  it("renders 5 symmetric tabs with Dashboard at the exact center (Slot 3)", async () => {
     const onSelectTab = vi.fn();
-    const onOpenProfile = vi.fn();
 
     await act(async () => {
       root.render(
         <MonitoringBottomNav
           activeTab="dashboard"
           onSelectTab={onSelectTab}
-          onOpenProfile={onOpenProfile}
         />
       );
     });
 
-    expect(container.textContent).toContain(TEXT_MONITORING.NAV.DASHBOARD);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.ROUTES);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.FLEET_STATUS);
+    expect(container.textContent).toContain(TEXT_MONITORING.NAV.DASHBOARD);
+    expect(container.textContent).toContain(TEXT_MONITORING.NAV.KORWIL);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.WA_REPORT);
-    expect(container.textContent).toContain(TEXT_MONITORING.NAV.PROFILE);
 
-    // Verify ordering: [Routes, Dashboard, Fleet Status, WA Report, Profile]
+    // Verify ordering: [Routes, Fleet Status, Dashboard (Center), Korwil, WA Report]
     const buttons = container.querySelectorAll<HTMLButtonElement>(".monitoring-tab-btn");
     expect(buttons.length).toBe(5);
     expect(buttons[0].getAttribute("data-testid")).toBe("monitoring-tab-routes");
-    expect(buttons[1].getAttribute("data-testid")).toBe("monitoring-tab-dashboard");
-    expect(buttons[2].getAttribute("data-testid")).toBe("monitoring-tab-fleet_status");
-    expect(buttons[3].getAttribute("data-testid")).toBe("monitoring-tab-wa_report");
-    expect(buttons[4].getAttribute("data-testid")).toBe("monitoring-tab-profile");
+    expect(buttons[1].getAttribute("data-testid")).toBe("monitoring-tab-fleet_status");
+    expect(buttons[2].getAttribute("data-testid")).toBe("monitoring-tab-dashboard"); // EXACT CENTER (Slot 3)!
+    expect(buttons[3].getAttribute("data-testid")).toBe("monitoring-tab-korwil");
+    expect(buttons[4].getAttribute("data-testid")).toBe("monitoring-tab-wa_report");
   });
 
-  it("indicates the active tab via aria-selected or active class", async () => {
+  it("indicates the active tab via aria-selected and active class", async () => {
     const onSelectTab = vi.fn();
 
     await act(async () => {
@@ -102,47 +100,27 @@ describe("MonitoringBottomNav Component", () => {
     expect(onSelectTab).toHaveBeenCalledWith("fleet_status");
   });
 
-  it("renders profile button when onOpenProfile is provided and handles click", async () => {
+  it("calls onSelectTab with korwil when Capaian Korwil tab is clicked", async () => {
     const onSelectTab = vi.fn();
-    const onOpenProfile = vi.fn();
 
     await act(async () => {
       root.render(
         <MonitoringBottomNav
           activeTab="dashboard"
           onSelectTab={onSelectTab}
-          onOpenProfile={onOpenProfile}
         />
       );
     });
 
-    const profileBtn = container.querySelector<HTMLButtonElement>(
-      '[data-testid="monitoring-tab-profile"]'
+    const korwilTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-korwil"]'
     );
-    expect(profileBtn).toBeTruthy();
-    expect(profileBtn?.textContent).toContain(TEXT_MONITORING.NAV.PROFILE);
+    expect(korwilTabBtn).toBeTruthy();
 
     act(() => {
-      profileBtn?.click();
+      korwilTabBtn?.click();
     });
 
-    expect(onOpenProfile).toHaveBeenCalledTimes(1);
-    expect(onSelectTab).not.toHaveBeenCalled();
-  });
-
-  it("does not render profile button when onOpenProfile is undefined", async () => {
-    const onSelectTab = vi.fn();
-
-    await act(async () => {
-      root.render(
-        <MonitoringBottomNav
-          activeTab="dashboard"
-          onSelectTab={onSelectTab}
-        />
-      );
-    });
-
-    const profileBtn = container.querySelector('[data-testid="monitoring-tab-profile"]');
-    expect(profileBtn).toBeNull();
+    expect(onSelectTab).toHaveBeenCalledWith("korwil");
   });
 });

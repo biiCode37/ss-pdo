@@ -102,7 +102,7 @@ describe('Centralized UI Text Dictionary', () => {
   it('exports TEXT_MONITORING new tokens for bottom nav, bulk verify, dashboard, and fleet tab', () => {
     expect((TEXT_MONITORING as any).NAV.DASHBOARD).toBe('Dashboard');
     expect((TEXT_MONITORING as any).NAV.ROUTES).toBe('Rute');
-    expect((TEXT_MONITORING as any).NAV.KORWIL).toBe('Rekap Korwil');
+    expect((TEXT_MONITORING as any).NAV.KORWIL).toBe('Capaian Korwil');
     expect((TEXT_MONITORING as any).NAV.FLEET_STATUS).toBe('Status Armada');
     expect((TEXT_MONITORING as any).NAV.WA_REPORT).toBe('Laporan WA');
     expect((TEXT_MONITORING as any).NAV.PROFILE).toBe('Profil');

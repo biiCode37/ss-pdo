@@ -296,4 +296,29 @@ describe('MonitoringHeader Component', () => {
     expect(calledFilter.endDate).toBe('2026-09-30');
     expect(calledFilter.label).toBe('2026-09-01 s.d. 2026-09-30');
   });
+
+  it('renders profile button when onOpenProfile is provided and handles click', async () => {
+    const onOpenProfile = vi.fn();
+    await renderHeader({
+      onOpenProfile,
+    });
+
+    const profileBtn = container.querySelector<HTMLButtonElement>('[data-testid="monitoring-profile-btn"]');
+    expect(profileBtn).toBeTruthy();
+
+    await act(async () => {
+      profileBtn?.click();
+    });
+
+    expect(onOpenProfile).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not render profile button when onOpenProfile is undefined', async () => {
+    await renderHeader({
+      onOpenProfile: undefined,
+    });
+
+    const profileBtn = container.querySelector('[data-testid="monitoring-profile-btn"]');
+    expect(profileBtn).toBeNull();
+  });
 });

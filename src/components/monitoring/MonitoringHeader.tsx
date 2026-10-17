@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Bus,
   ChevronLeft,
@@ -8,6 +8,7 @@ import {
   RefreshCw,
   CloudDownload,
   ArrowLeft,
+  User,
 } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { formatIndonesianDateLabel } from "./monitoringUtils";
@@ -30,6 +31,7 @@ export interface MonitoringHeaderProps {
   currentPeriod?: MonitoringPeriodFilter;
   onPeriodChange?: (filter: MonitoringPeriodFilter) => void;
   onOpenMonthlySyncModal?: () => void;
+  onOpenProfile?: () => void;
 }
 
 export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
@@ -45,9 +47,24 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   currentPeriod,
   onPeriodChange,
   onOpenMonthlySyncModal,
+  onOpenProfile,
 }) => {
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
+    () => localStorage.getItem("PDO_USER_AVATAR") || undefined
+  );
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setAvatarUrl(localStorage.getItem("PDO_USER_AVATAR") || undefined);
+      setAvatarFailed(false);
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   const isDaily = !currentPeriod || currentPeriod.mode === "daily";
   const isMonthly = currentPeriod?.mode === "monthly";
@@ -484,6 +501,49 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 </button>
               );
             })()}
+
+            {/* Profile Button */}
+            {onOpenProfile && (
+              <button
+                type="button"
+                onClick={onOpenProfile}
+                data-testid="monitoring-profile-btn"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "12px",
+                  background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+                  color: "var(--text-primary, #ededed)",
+                  cursor: "pointer",
+                  transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                  flexShrink: 0,
+                  padding: 0,
+                  overflow: "hidden",
+                }}
+                title={TEXT_MONITORING.NAV.PROFILE}
+                aria-label={TEXT_MONITORING.NAV.PROFILE}
+              >
+                {avatarUrl && !avatarFailed ? (
+                  <img
+                    src={avatarUrl}
+                    alt={TEXT_MONITORING.NAV.PROFILE}
+                    referrerPolicy="no-referrer"
+                    onError={() => setAvatarFailed(true)}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                ) : (
+                  <User size={17} style={{ color: "var(--text-secondary, #9ca3af)" }} />
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>

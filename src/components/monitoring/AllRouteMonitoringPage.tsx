@@ -23,6 +23,7 @@ import { MonitoringStates } from "./MonitoringStates";
 import { MonitoringBottomNav, type MonitoringTab } from "./MonitoringBottomNav";
 import { MonitoringDashboardTab } from "./tabs/MonitoringDashboardTab";
 import { MonitoringRoutesTab } from "./tabs/MonitoringRoutesTab";
+import { MonitoringKorwilTab } from "./tabs/MonitoringKorwilTab";
 import { MonitoringFleetStatusTab } from "./tabs/MonitoringFleetStatusTab";
 import { MonitoringWaReportTab } from "./tabs/MonitoringWaReportTab";
 import { SUPERVISOR_TABS, matchesSupervisorTab } from "./monitoringUtils";
@@ -321,6 +322,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         currentPeriod={currentPeriod}
         onPeriodChange={handlePeriodChange}
         onOpenMonthlySyncModal={() => setShowMonthlySyncModal(true)}
+        onOpenProfile={onOpenProfile}
       />
 
       {/* Main Content Area: States or Active Tab */}
@@ -338,13 +340,12 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
 
         {!loading && !errorMessage && data && (
           <>
-            {(activeTab === "dashboard" || activeTab === "korwil") && (
+            {activeTab === "dashboard" && (
               <MonitoringDashboardTab
                 data={data}
                 confirmedRoutesCount={confirmedRoutesCount}
                 totalRoutesCount={data.totalRoutesCount || 18}
                 onSelectRoute={onSelectRoute}
-                initialSubView={activeTab === "korwil" ? "korwil" : "overview"}
               />
             )}
 
@@ -358,6 +359,13 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 onSelectRoute={onSelectRoute}
                 verifyingRouteId={verifyingRouteId}
                 isBulking={isBulking}
+              />
+            )}
+
+            {activeTab === "korwil" && (
+              <MonitoringKorwilTab
+                data={data}
+                onSelectRoute={onSelectRoute}
               />
             )}
 

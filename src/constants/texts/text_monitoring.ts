@@ -130,7 +130,7 @@ export const TEXT_MONITORING = {
   NAV: {
     DASHBOARD: "Dashboard",
     ROUTES: "Rute",
-    KORWIL: "Rekap Korwil",
+    KORWIL: "Capaian Korwil",
     FLEET_STATUS: "Status Armada",
     WA_REPORT: "Laporan WA",
     PROFILE: "Profil",
