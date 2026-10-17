@@ -116,7 +116,7 @@ describe('MonitoringMonthPickerModal Component', () => {
     expect(calledFilter.mode).toBe('monthly');
     expect(calledFilter.startDate).toBe('2026-09-01');
     expect(calledFilter.endDate).toBe('2026-09-30');
-    expect(calledFilter.label).toBe('2026-09-01 s.d. 2026-09-30');
+    expect(calledFilter.label).toBe('September 2026');
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 

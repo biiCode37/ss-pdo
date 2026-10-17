@@ -229,7 +229,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               color: "var(--text-primary)",
             }}
           >
-            Report Studio WhatsApp
+            {TEXT_WA_REPORT.STUDIO_TITLE}
           </h3>
         </div>
 
@@ -240,6 +240,8 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
             display: "flex",
             gap: "8px",
             overflowX: "auto",
+            padding: "2px 16px 4px 0",
+            WebkitOverflowScrolling: "touch",
             marginBottom: format === 3 ? "12px" : "0",
           }}
         >
@@ -262,6 +264,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               textAlign: "center",
+              flexShrink: 0,
               transition: "all 0.2s ease",
             }}
           >
@@ -287,6 +290,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               textAlign: "center",
+              flexShrink: 0,
               transition: "all 0.2s ease",
             }}
           >
@@ -312,6 +316,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               textAlign: "center",
+              flexShrink: 0,
               transition: "all 0.2s ease",
             }}
           >

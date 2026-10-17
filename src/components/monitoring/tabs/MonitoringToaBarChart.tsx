@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
-import { TEXT_MONITORING } from "@/constants/texts";
-import { BarChart3, ChevronDown } from "lucide-react";
+import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
+import { BarChart3, ChevronDown, X } from "lucide-react";
 import { formatIndonesianDaySlashDate } from "../monitoringUtils";
 
 interface MonitoringToaBarChartProps {
@@ -41,6 +41,10 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
   const formattedDate = useMemo(() => {
     return date ? formatIndonesianDaySlashDate(date) : undefined;
   }, [date]);
+
+  const isRangeDate = useMemo(() => {
+    return Boolean(date?.includes(" s.d. ") || (formattedDate && !formattedDate.includes(",")));
+  }, [date, formattedDate]);
 
   const maxPassengers = useMemo(() => {
     const max = Math.max(
@@ -236,92 +240,238 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 margin: 0,
               }}
             >
-              {TEXT_MONITORING.DASHBOARD.CHART_SUBTITLE(formattedDate)}
+              {TEXT_MONITORING.DASHBOARD.CHART_SUBTITLE(formattedDate, isRangeDate)}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Selected Route Tooltip Detail Box */}
+      {/* Selected Route Floating Detail Bottom Sheet (Anti-CLS) */}
       {selectedRoute && (
         <div
-          data-testid="toa-chart-tooltip"
           style={{
-            background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
-            border: "1px solid var(--accent-color, #3ECF8E)",
-            borderRadius: "12px",
-            padding: "10px 14px",
-            marginBottom: "14px",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.65)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
+            zIndex: 9999,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "8px",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            padding: "0 12px",
             animation: "fadeIn 0.2s ease",
           }}
+          onClick={() => setSelectedRoute(null)}
         >
-          <div>
-            <span
-              style={{
-                fontSize: "13px",
-                fontWeight: 800,
-                color: "var(--accent-color, #3ECF8E)",
-                marginRight: "6px",
-              }}
-            >
-              {selectedRoute.routeCode}
-            </span>
-            <span
-              style={{
-                fontSize: "12px",
-                color: "var(--text-primary)",
-                fontWeight: 600,
-              }}
-            >
-              {selectedRoute.routeName}
-            </span>
+          <div
+            data-testid="toa-chart-tooltip"
+            style={{
+              background: "var(--card-bg, #1a1a1a)",
+              borderTop: "2px solid var(--accent-color, #3ECF8E)",
+              borderLeft: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+              borderRight: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+              borderTopLeftRadius: "20px",
+              borderTopRightRadius: "20px",
+              padding: "18px 20px calc(24px + env(safe-area-inset-bottom, 0px))",
+              width: "100%",
+              maxWidth: "520px",
+              boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.6)",
+              animation: "slideUp 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header: Badge Kode Rute, Nama Rute, & Tombol Close (X) */}
             <div
               style={{
-                fontSize: "11px",
-                color: "var(--text-secondary)",
-                marginTop: "2px",
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                gap: "12px",
+                marginBottom: "14px",
               }}
             >
-              {TEXT_MONITORING.DASHBOARD.CHART_TOOLTIP_SHIFT(
-                selectedRoute.toaShift1 || 0,
-                selectedRoute.toaShift2 || 0,
-              )}
+              <div style={{ flex: 1 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    flexWrap: "wrap",
+                    marginBottom: "4px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 800,
+                      color: "var(--accent-color, #3ECF8E)",
+                      background: "rgba(62, 207, 142, 0.12)",
+                      padding: "2px 8px",
+                      borderRadius: "6px",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    {selectedRoute.routeCode}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      color: "var(--text-primary)",
+                    }}
+                  >
+                    {selectedRoute.routeName}
+                  </span>
+                </div>
+                {(selectedRoute.operatorName || selectedRoute.supervisorName) && (
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    {selectedRoute.operatorName}
+                    {selectedRoute.operatorName && selectedRoute.supervisorName ? " • " : ""}
+                    {selectedRoute.supervisorName ? `${TEXT_MONITORING.ROUTE_CARD.KORLAP_PREFIX} ${selectedRoute.supervisorName}` : ""}
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedRoute(null)}
+                aria-label={TEXT_COMMON.CLOSE}
+                style={{
+                  background: "var(--input-bg, rgba(255, 255, 255, 0.08))",
+                  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+                  borderRadius: "50%",
+                  width: "30px",
+                  height: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--text-secondary)",
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  transition: "background 0.2s ease, color 0.2s ease",
+                }}
+              >
+                <X size={16} />
+              </button>
             </div>
-          </div>
-          <div style={{ textAlign: "right" }}>
+
+            {/* Metrics 2-Column Grid */}
             <div
               style={{
-                fontSize: "14px",
-                fontWeight: 800,
-                color: "var(--text-primary)",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "10px",
               }}
             >
-              {((selectedRoute.toaShift1 || 0) + (selectedRoute.toaShift2 || 0) || selectedRoute.todayPassengers).toLocaleString("id-ID")}{" "}
-              <span style={{ fontSize: "11px", fontWeight: 500 }}>
-                {TEXT_MONITORING.DASHBOARD.CHART_TOA_UNIT}
-              </span>
-            </div>
-            <div
-              style={{
-                fontSize: "10.5px",
-                fontWeight: 700,
-                color:
-                  selectedRoute.targetHk > 0 &&
-                  selectedRoute.todayPassengers >= selectedRoute.targetHk
-                    ? "#10B981"
-                    : "#F59E0B",
-              }}
-            >
-              {selectedRoute.targetHk > 0
-                ? TEXT_MONITORING.DASHBOARD.CHART_TARGET_PCT(
-                    ((selectedRoute.todayPassengers / selectedRoute.targetHk) * 100).toFixed(1),
-                  )
-                : TEXT_MONITORING.DASHBOARD.CHART_TARGET_ZERO}
+              {/* Kolom 1: Total Capaian TOA */}
+              <div
+                style={{
+                  background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
+                  borderRadius: "12px",
+                  padding: "10px 12px",
+                  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--text-secondary)",
+                    marginBottom: "4px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {TEXT_MONITORING.DASHBOARD.CHART_TOOLTIP_TOTAL_LABEL}
+                </div>
+                <div
+                  style={{
+                    fontSize: "17px",
+                    fontWeight: 800,
+                    color: "var(--text-primary)",
+                  }}
+                >
+                  {((selectedRoute.toaShift1 || 0) + (selectedRoute.toaShift2 || 0) || selectedRoute.todayPassengers).toLocaleString("id-ID")}{" "}
+                  <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-secondary)" }}>
+                    {TEXT_MONITORING.DASHBOARD.CHART_TOA_UNIT}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    marginTop: "2px",
+                    color:
+                      selectedRoute.targetHk > 0 &&
+                      selectedRoute.todayPassengers >= selectedRoute.targetHk
+                        ? "#10B981"
+                        : "#F59E0B",
+                  }}
+                >
+                  {selectedRoute.targetHk > 0
+                    ? TEXT_MONITORING.DASHBOARD.CHART_TARGET_PCT(
+                        ((selectedRoute.todayPassengers / selectedRoute.targetHk) * 100).toFixed(1),
+                      )
+                    : TEXT_MONITORING.DASHBOARD.CHART_TARGET_ZERO}
+                </div>
+              </div>
+
+              {/* Kolom 2: Rincian Shift 1 vs Shift 2 */}
+              <div
+                style={{
+                  background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
+                  borderRadius: "12px",
+                  padding: "10px 12px",
+                  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--text-secondary)",
+                    marginBottom: "4px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {TEXT_MONITORING.DASHBOARD.CHART_TOOLTIP_SHIFT_LABEL}
+                </div>
+                <div
+                  style={{
+                    fontSize: "11.5px",
+                    color: "var(--text-primary)",
+                    fontWeight: 600,
+                    lineHeight: "1.4",
+                  }}
+                >
+                  {TEXT_MONITORING.DASHBOARD.CHART_TOOLTIP_SHIFT(
+                    selectedRoute.toaShift1 || 0,
+                    selectedRoute.toaShift2 || 0,
+                  )}
+                </div>
+                {selectedRoute.targetHk > 0 && (
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      color: "var(--text-secondary)",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {TEXT_MONITORING.DASHBOARD.CHART_TOOLTIP_TARGET_HK(
+                      selectedRoute.targetHk.toLocaleString("id-ID"),
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

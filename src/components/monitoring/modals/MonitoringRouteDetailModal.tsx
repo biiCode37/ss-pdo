@@ -62,6 +62,12 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
     : realops > 0
     ? (kmTempuh / realops).toFixed(1)
     : 0;
+  const numKmPerBus = Number(kmPerBus);
+  const displayKmPerBus = !isNaN(numKmPerBus)
+    ? Number.isInteger(numKmPerBus)
+      ? String(numKmPerBus)
+      : Number(numKmPerBus.toFixed(1)).toLocaleString("id-ID")
+    : String(kmPerBus);
   const targetPaxPerKm = route.targetPaxPerKm !== undefined
     ? Number(route.targetPaxPerKm).toFixed(2)
     : route.targetPassengersPerKm !== undefined
@@ -90,6 +96,10 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
     : realops > 0
     ? totalRitasePp / realops
     : 0;
+  const numRitasePerBus = Number(ritasePerBus);
+  const displayRitasePerBus = !isNaN(numRitasePerBus)
+    ? Number(Number(numRitasePerBus.toFixed(2)))
+    : ritasePerBus;
   const paxPerBus = route.paxPerBus !== undefined
     ? Math.round(route.paxPerBus)
     : route.passengersPerBus !== undefined
@@ -490,7 +500,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                     {tMetrics.KM_BUS}
                   </div>
                   <div style={{ fontSize: "16px", fontWeight: 700, marginTop: "2px" }}>
-                    {kmPerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_KM}</span>
+                    {displayKmPerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_KM}</span>
                   </div>
                 </div>
               </div>
@@ -740,7 +750,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                     {tMetrics.RITASE_BUS}
                   </div>
                   <div style={{ fontSize: "16px", fontWeight: 700, marginTop: "4px" }}>
-                    {ritasePerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_RIT_PER_BUS}</span>
+                    {displayRitasePerBus} <span style={{ fontSize: "11px" }}>{tMetrics.UNIT_RIT_PER_BUS}</span>
                   </div>
                 </div>
 
@@ -767,11 +777,12 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
         {/* Sticky Action Footer */}
         <div
           style={{
-            padding: "12px 18px",
+            padding: "12px 18px calc(12px + env(safe-area-inset-bottom, 0px))",
             borderTop: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
+            flexWrap: "wrap",
             gap: "8px",
             background: "var(--card-bg, #18181b)",
           }}

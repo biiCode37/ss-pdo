@@ -123,15 +123,30 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).DASHBOARD.SUBVIEW_OVERVIEW).toBe('Ringkasan Wilayah');
     expect((TEXT_MONITORING as any).DASHBOARD.SUBVIEW_KORWIL).toBe('Kinerja Tim Korwil');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE('Selasa, 01/09/2026')).toBe('Komparasi total pelanggan pada hari Selasa, 01/09/2026');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE('September 2026', true)).toBe('Komparasi total pelanggan periode September 2026');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE()).toBe('Komparasi total pelanggan dari 18 rute hari ini');
+    expect((TEXT_MONITORING as any).ROUTE_CARD.LBL_CORE_KM_PER_BUS).toBe('KM / Bus');
+    expect((TEXT_MONITORING as any).ROUTE_CARD.TOTAL_KM_PREFIX).toBe('Total:');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOA_UNIT).toBe('TOA');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOOLTIP_SHIFT(100, 200)).toContain('TOA Shift 1: 100 • Shift 2: 200');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOOLTIP_TOTAL_LABEL).toBe('Total Pelanggan');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOOLTIP_SHIFT_LABEL).toBe('Rincian per Shift');
+    expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOOLTIP_TARGET_HK('2.000')).toBe('Target HK: 2.000 TOA');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.SEARCH_PLACEHOLDER).toContain('Cari rute');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.FILTER_ALL(18)).toBe('Semua (18)');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.FILTER_SUBMITTED(16)).toBe('Perlu Verifikasi (16)');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.FILTER_UNCOMPLETED(0)).toBe('Belum Lengkap (0)');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.FILTER_VERIFIED(2)).toBe('Terverifikasi (2)');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.KORLAP_LABEL).toBe('Korlap:');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.KORLAP_ALL).toBe('Semua');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.EMPTY_FILTER).toContain('Tidak ada rute yang cocok');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_PCT('85.5')).toBe('85.5% dari Target');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_ZERO).toBe('Target 0');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_BAR_TITLE('JAK.01', '1.200')).toBe('JAK.01: 1.200 TOA');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_EXPAND_BTN(18)).toBe('Lihat Semua (18 Rute)');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_COLLAPSE_BTN).toBe('Tampilkan Top 5 Saja');
     expect((TEXT_MONITORING as any).FLEET_TAB.TITLE).toBe('Status Armada Wilayah (Non-SGO)');
+    expect((TEXT_MONITORING as any).FLEET_TAB.NO_DATA_TITLE).toBe('Belum Ada Data Status Armada');
     expect(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE).toBe('Kembali ke Operasi Rute');
     expect(TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PASSENGERS_SUFFIX).toBe('Org');
     expect(TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PRODUCTIVITY_SUFFIX).toBe('Org/Bus');
@@ -386,5 +401,17 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TARGET_CAP_SUBTEXT('1.11', '107.2')).toBe('Target: 1.11 • Cap: 107.2%');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.ACHIEVEMENT_PCT('107.5')).toBe('Capaian: 107.5%');
   });
+
+  it('exports TEXT_WA_REPORT with studio title, format labels, and actions', () => {
+    expect(TEXT_WA_REPORT.STUDIO_TITLE).toBe('Report Studio WhatsApp');
+    expect(TEXT_WA_REPORT.MODAL_TITLE).toBe('Generator Laporan WhatsApp');
+    expect(TEXT_WA_REPORT.FORMAT_LABELS.FORMAT_1).toContain('Format 1');
+    expect(TEXT_WA_REPORT.FORMAT_LABELS.FORMAT_2).toContain('Format 2');
+    expect(TEXT_WA_REPORT.FORMAT_LABELS.FORMAT_3).toContain('Format 3');
+    expect(TEXT_WA_REPORT.ACTIONS.COPY).toBe('Salin Teks');
+    expect(TEXT_WA_REPORT.ACTIONS.SHARE).toBe('Kirim ke WhatsApp');
+    expect(TEXT_WA_REPORT.ACTIONS.COPY_SUCCESS).toContain('berhasil disalin');
+  });
 });
+
 

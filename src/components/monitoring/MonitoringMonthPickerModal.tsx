@@ -3,6 +3,7 @@ import { Calendar, ChevronLeft, ChevronRight, X, Check } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { type MonitoringPeriodFilter } from "@/services/allRouteMonitoringService";
 import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
+import { formatIndonesianMonthYear } from "./monitoringUtils";
 
 export interface MonitoringMonthPickerModalProps {
   isOpen: boolean;
@@ -97,7 +98,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
       date: endDate,
       startDate,
       endDate,
-      label: `${startDate} s.d. ${endDate}`,
+      label: formatIndonesianMonthYear(startDate),
     });
     onClose();
   };

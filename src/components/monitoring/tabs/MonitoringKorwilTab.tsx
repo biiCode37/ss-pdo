@@ -190,10 +190,10 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               {TEXT_MONITORING.KPI.FLEET_LABEL}
             </span>
             <div style={{ fontSize: "17px", fontWeight: 800, color: "var(--text-primary, #ededed)", marginTop: "2px" }}>
-              {data.totalRealops} <span style={{ fontSize: "11px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.FLEET_UNIT}</span>
+              {formatNumber(data.totalRealops)} <span style={{ fontSize: "11px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.FLEET_UNIT}</span>
             </div>
             <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)" }}>
-              {data.totalRenops} Renops
+              {formatNumber(data.totalRenops)} Renops
             </span>
           </div>
 
@@ -374,9 +374,9 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   {TEXT_MONITORING.KPI.FLEET_LABEL}
                 </span>
                 <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
-                  {team.totalRealops} Bus{" "}
+                  {formatNumber(team.totalRealops)} {TEXT_MONITORING.KPI.FLEET_UNIT}{" "}
                   <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)", fontWeight: 400 }}>
-                    ({team.totalRenops} Ren)
+                    ({formatNumber(team.totalRenops)} Ren)
                   </span>
                 </div>
               </div>
@@ -412,7 +412,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   {TEXT_MONITORING.KPI.PASSENGER_LABEL}
                 </span>
                 <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>
-                  {formatNumber(team.totalTodayPassengers)} org
+                  {formatNumber(team.totalTodayPassengers)} {TEXT_MONITORING.KPI.PASSENGER_UNIT}
                 </div>
               </div>
 

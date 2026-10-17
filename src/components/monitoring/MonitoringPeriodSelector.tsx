@@ -6,7 +6,10 @@ import {
   type MonitoringPeriodMode,
   getRelativeDate,
 } from "@/services/allRouteMonitoringService";
-import { formatIndonesianDateLabel } from "./monitoringUtils";
+import {
+  formatIndonesianDateLabel,
+  formatIndonesianMonthYear,
+} from "./monitoringUtils";
 
 import { MonitoringMonthPickerModal } from "./MonitoringMonthPickerModal";
 
@@ -60,7 +63,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
         date: currentPeriod.date,
         startDate,
         endDate,
-        label: `${startDate} s.d. ${endDate}`,
+        label: formatIndonesianMonthYear(startDate),
       });
     } else if (mode === "custom") {
       setCustomStart(currentPeriod.startDate);

@@ -80,11 +80,11 @@ export const TEXT_MONITORING = {
   },
   KPI: {
     FLEET_LABEL: "Armada Wilayah",
-    FLEET_UNIT: "bus",
+    FLEET_UNIT: "Bus",
     FLEET_PCT: (pct: string) => `${pct}% Armada`,
     FLEET_BREAKDOWN: (s1: number, s2: number) => `S1: ${s1} | S2: ${s2}`,
     PASSENGER_LABEL: "Total Pelanggan",
-    PASSENGER_UNIT: "org",
+    PASSENGER_UNIT: "Org",
     PASSENGER_BREAKDOWN: (s1: string, s2: string) => `S1: ${s1} S2: ${s2}`,
     KM_LABEL: "Total Jarak Tempuh",
     KM_UNIT: "km",
@@ -117,6 +117,8 @@ export const TEXT_MONITORING = {
     LBL_CORE_FLEET: "Armada",
     LBL_CORE_PASSENGERS: "Pelanggan",
     LBL_CORE_KM: "KM Tempuh",
+    LBL_CORE_KM_PER_BUS: "KM / Bus",
+    TOTAL_KM_PREFIX: "Total:",
     RENOPS_PREFIX: "Ren:",
     REALOPS_PREFIX: "Real:",
     PAX_TOTAL_PREFIX: "Total:",
@@ -126,6 +128,16 @@ export const TEXT_MONITORING = {
     PAX_YESTERDAY_PREFIX: "H-1:",
     PAX_LAST_WEEK_PREFIX: "H-7:",
     ARIA_CARD_CLICK: (code: string) => `Buka detail operasional rute ${code}`,
+  },
+  ROUTES_TAB: {
+    SEARCH_PLACEHOLDER: "Cari rute (JAK.XX), lintasan, atau operator...",
+    FILTER_ALL: (count: number) => `Semua (${count})`,
+    FILTER_SUBMITTED: (count: number) => `Perlu Verifikasi (${count})`,
+    FILTER_UNCOMPLETED: (count: number) => `Belum Lengkap (${count})`,
+    FILTER_VERIFIED: (count: number) => `Terverifikasi (${count})`,
+    KORLAP_LABEL: "Korlap:",
+    KORLAP_ALL: "Semua",
+    EMPTY_FILTER: "Tidak ada rute yang cocok dengan filter yang dipilih.",
   },
   NAV: {
     DASHBOARD: "Dashboard",
@@ -195,12 +207,17 @@ export const TEXT_MONITORING = {
       `${confirmed} / ${total} Rute Terkonfirmasi`,
     PROGRESS_ALL_CONFIRMED: "Seluruh rute telah mengonfirmasi status armada.",
     CHART_TITLE: "Grafik Jumlah Pelanggan Per Rute",
-    CHART_SUBTITLE: (dateStr?: string) =>
+    CHART_SUBTITLE: (dateStr?: string, isRange?: boolean) =>
       dateStr
-        ? `Komparasi total pelanggan pada hari ${dateStr}`
+        ? (isRange
+            ? `Komparasi total pelanggan periode ${dateStr}`
+            : `Komparasi total pelanggan pada hari ${dateStr}`)
         : "Komparasi total pelanggan dari 18 rute hari ini",
     CHART_TOOLTIP_SHIFT: (s1: number, s2: number) =>
       `TOA Shift 1: ${s1.toLocaleString("id-ID")} • Shift 2: ${s2.toLocaleString("id-ID")}`,
+    CHART_TOOLTIP_TOTAL_LABEL: "Total Pelanggan",
+    CHART_TOOLTIP_SHIFT_LABEL: "Rincian per Shift",
+    CHART_TOOLTIP_TARGET_HK: (target: string) => `Target HK: ${target} TOA`,
     CHART_TOA_UNIT: "TOA",
     CHART_TARGET_PCT: (pct: string) => `${pct}% dari Target`,
     CHART_TARGET_ZERO: "Target 0",
@@ -248,6 +265,9 @@ export const TEXT_MONITORING = {
     NON_SGO_LABEL: "Kendala (Non-SGO)",
     ALL_SHIFTS: "Semua Shift",
     ALL_NON_SGO: "Semua Kendala",
+    NO_DATA_TITLE: "Belum Ada Data Status Armada",
+    NO_DATA_DESC:
+      "Laporan kesiapan armada (SGO / Kendala) untuk periode ini belum tersedia atau belum ditarik.",
     EMPTY_TITLE: "Seluruh Armada Beroperasi Normal",
     EMPTY_DESC:
       "Luar biasa! Seluruh armada 18 rute berstatus SGO (Siap Guna Operasi) tanpa kendala.",

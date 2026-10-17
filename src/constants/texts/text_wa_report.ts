@@ -2,6 +2,7 @@
  * Kamus teks antarmuka: Modal Generator Laporan WhatsApp & template pesan Transjakarta.
  */
 export const TEXT_WA_REPORT = {
+  STUDIO_TITLE: "Report Studio WhatsApp",
   MODAL_TITLE: "Generator Laporan WhatsApp",
   MODAL_SUBTITLE: "Siap salin & kirim ke grup pimpinan",
   FORMAT_1_BTN: "Format 1 (Komprehensif)",
