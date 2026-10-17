@@ -390,7 +390,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       <BottomNav
         activeTab={mainTab}
         onSelectTab={setMainTab}
-        onOpenMore={() => setIsProfileMenuOpen(true)}
         pendingQueueCount={
           queue.filter((q) => q.status === "pending" || q.status === "failed")
             .length
