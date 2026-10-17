@@ -30,7 +30,7 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
       </label>
       <textarea
         id="single-input-keterangan"
-        rows={2}
+        rows={3}
         value={keterangan}
         onChange={(e) => setKeterangan(e.target.value)}
         onFocus={handleInputFocus}

@@ -9,7 +9,10 @@ export interface RouteFleetReportItem {
   operatorName: string;
   renops: number; // Target SGO
   realops: number; // Realisasi Ops
+  hasData?: boolean; // apakah data rute sudah ada (A2 / Spreadsheet / Korlap)
+  sourceType?: 'pdo_a2' | 'spreadsheet_auto' | 'korlap_manual' | 'empty';
   nonSgoUnits?: FleetUnitStatusDetail[];
+  pelengkapUnits?: FleetUnitStatusDetail[];
 }
 
 export interface RouteWaData {
@@ -252,6 +255,8 @@ export function getOperatorFullName(operatorCodeOrName: string): string {
 /**
  * Menghasilkan teks laporan WhatsApp Format 3 (Status Kesiapan Armada Per Shift)
  * dengan format Executive Modern, ringkasan wilayah di atas, dan rincian unit non-SGO.
+ * Menerapkan hierarki 3 jalur: rute tanpa data ditandai 'BELUM ADA DATA' dan tidak
+ * disalahartikan sebagai 0 realops / 100% tidak ops.
  */
 export function generateWaReportFormat3(
   dateStr: string,
@@ -264,16 +269,24 @@ export function generateWaReportFormat3(
   const shiftName = shift === 1 ? 'Pagi' : 'Siang';
   const divider = '━━━━━━━━━━━━━━━━━━━';
 
-  // Kalkulasi agregat wilayah
-  const totalSgo = routes.reduce((sum, r) => sum + (r.renops || 0), 0);
-  const totalRealops = routes.reduce((sum, r) => sum + (r.realops || 0), 0);
-  const totalTidakOps = Math.max(0, totalSgo - totalRealops);
-  const percentage = totalSgo > 0 ? ((totalRealops / totalSgo) * 100).toFixed(1).replace('.', ',') : '0,0';
+  // Kalkulasi agregat wilayah berdasarkan rute yang sudah memiliki data
+  const totalTargetSgo = routes.reduce((sum, r) => sum + (r.renops || 0), 0);
+  const reportedRoutes = routes.filter((r) => r.hasData !== false);
+  const pendingRoutes = routes.filter((r) => r.hasData === false);
+
+  const totalRealops = reportedRoutes.reduce((sum, r) => sum + (r.realops || 0), 0);
+  const reportedSgo = reportedRoutes.reduce((sum, r) => sum + (r.renops || 0), 0);
+  const totalTidakOps = reportedRoutes.reduce(
+    (sum, r) => sum + Math.max(0, (r.renops || 0) - (r.realops || 0)),
+    0
+  );
+  const percentage =
+    reportedSgo > 0 ? ((totalRealops / reportedSgo) * 100).toFixed(1).replace('.', ',') : '0,0';
 
   let lengkapCount = 0;
   let kurangCount = 0;
 
-  routes.forEach((r) => {
+  reportedRoutes.forEach((r) => {
     const routeTidakOps = Math.max(0, (r.renops || 0) - (r.realops || 0));
     if (routeTidakOps === 0) {
       lengkapCount++;
@@ -287,50 +300,72 @@ export function generateWaReportFormat3(
     divider,
     `*${TEXT_WA_REPORT.TEMPLATE.FORMAT_3_SUMMARY_TITLE}*`,
     '```',
-    `Target SGO      : ${totalSgo} Unit`,
+    `Target SGO      : ${totalTargetSgo} Unit`,
     `Realisasi Ops   : ${totalRealops} Unit`,
     `Tidak Ops       : ${totalTidakOps} Unit`,
     `Ketercapaian    : ${percentage}%`,
-    `Status Rute     : ${lengkapCount} Lengkap | ${kurangCount} Kurang`,
-    '```',
-    divider,
-    `*${TEXT_WA_REPORT.TEMPLATE.FORMAT_3_ROUTE_DETAIL_TITLE}*`,
   ];
+
+  if (pendingRoutes.length > 0) {
+    lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_NO_DATA_SUMMARY(lengkapCount, kurangCount, pendingRoutes.length));
+  } else {
+    lines.push(`Status Rute     : ${lengkapCount} Lengkap | ${kurangCount} Kurang`);
+  }
+  lines.push('```');
+  lines.push(divider);
+  lines.push(`*${TEXT_WA_REPORT.TEMPLATE.FORMAT_3_ROUTE_DETAIL_TITLE}*`);
 
   routes.forEach((r) => {
     const paddedNo = String(r.no).padStart(2, '0');
     const operator = getOperatorFullName(r.operatorName);
-    const routeTidakOps = Math.max(0, (r.renops || 0) - (r.realops || 0));
-    const isLengkap = routeTidakOps === 0;
     const routeTitle = `*${paddedNo}. ${r.routeCode}${r.routeName ? ` | ${r.routeName}` : ''}*`;
 
     lines.push('');
     lines.push(routeTitle);
     lines.push(`- ${operator}`);
     lines.push('```');
-    lines.push(`Target SGO    : ${r.renops} Unit`);
-    lines.push(`Realisasi Ops : ${r.realops} Unit`);
-    lines.push(`Tidak Ops     : ${routeTidakOps} Unit`);
-    lines.push(`Status        : ${isLengkap ? 'LENGKAP ✅' : 'TIDAK LENGKAP ✖️'}`);
-    lines.push('```');
 
-    // Filter unit non-SGO
-    const allNonSgo = r.nonSgoUnits || [];
-    const kendalaUnits = allNonSgo.filter((u) => !u.isOff);
-    const offUnits = allNonSgo.filter((u) => u.isOff);
+    if (r.hasData === false) {
+      lines.push(`Target SGO    : ${r.renops} Unit`);
+      lines.push(`Realisasi Ops : -`);
+      lines.push(`Tidak Ops     : -`);
+      lines.push(`Status        : ${TEXT_WA_REPORT.TEMPLATE.FORMAT_3_NO_DATA_STATUS}`);
+      lines.push('```');
+    } else {
+      const routeTidakOps = Math.max(0, (r.renops || 0) - (r.realops || 0));
+      const isLengkap = routeTidakOps === 0;
 
-    if (kendalaUnits.length > 0) {
-      lines.push('*Rincian Tidak Ops:*');
-      kendalaUnits.forEach((u) => {
-        lines.push(`- ${u.unit} : ${u.note}`);
-      });
-    }
+      lines.push(`Target SGO    : ${r.renops} Unit`);
+      lines.push(`Realisasi Ops : ${r.realops} Unit`);
+      lines.push(`Tidak Ops     : ${routeTidakOps} Unit`);
+      lines.push(`Status        : ${isLengkap ? 'LENGKAP ✅' : 'TIDAK LENGKAP ✖️'}`);
+      lines.push('```');
 
-    if (offUnits.length > 0) {
-      lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
-      offUnits.forEach((u) => {
-        lines.push(`- ${u.unit} : ${u.note}`);
-      });
+      // Filter unit non-SGO
+      const allNonSgo = r.nonSgoUnits || [];
+      const kendalaUnits = allNonSgo.filter((u) => !u.isOff);
+      const offUnits = allNonSgo.filter((u) => u.isOff);
+
+      if (kendalaUnits.length > 0) {
+        lines.push('*Rincian Tidak Ops:*');
+        kendalaUnits.forEach((u) => {
+          lines.push(`- ${u.unit} : ${u.note}`);
+        });
+      }
+
+      if (offUnits.length > 0) {
+        lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
+        offUnits.forEach((u) => {
+          lines.push(`- ${u.unit} : ${u.note}`);
+        });
+      }
+
+      if (shift === 2 && r.pelengkapUnits && r.pelengkapUnits.length > 0) {
+        lines.push('*Unit Pelengkap Renops (Shift 2):*');
+        r.pelengkapUnits.forEach((u) => {
+          lines.push(`- ${u.unit} : ${u.note}`);
+        });
+      }
     }
 
     lines.push(divider);

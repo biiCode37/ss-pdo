@@ -208,7 +208,7 @@ export function extractKeteranganFromForm(popup: HTMLElement): string {
   const isBa02Active =
     prefix === "BA.02" && ba02Wrapper && ba02Wrapper.style.display !== "none";
 
-  const noteInput = popup.querySelector<HTMLInputElement>(
+  const noteInput = popup.querySelector<HTMLInputElement | HTMLTextAreaElement>(
     "#swal-input-keterangan",
   );
 

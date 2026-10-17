@@ -1,8 +1,8 @@
-import { memo, useState, useEffect } from "react";
-import { LayoutDashboard, Route, Bus, FileSpreadsheet, User } from "lucide-react";
+import { memo } from "react";
+import { LayoutDashboard, Route, Bus, FileSpreadsheet, Users } from "lucide-react";
 import { TEXT_MONITORING } from "@/constants/texts";
 
-export type MonitoringTab = "dashboard" | "routes" | "fleet_status" | "wa_report";
+export type MonitoringTab = "dashboard" | "routes" | "fleet_status" | "wa_report" | "korwil";
 
 export interface MonitoringBottomNavProps {
   activeTab: MonitoringTab;
@@ -33,6 +33,11 @@ const NAV_ITEMS: NavItemConfig[] = [
     icon: LayoutDashboard,
   },
   {
+    id: "korwil",
+    label: TEXT_MONITORING.NAV.KORWIL,
+    icon: Users,
+  },
+  {
     id: "wa_report",
     label: TEXT_MONITORING.NAV.WA_REPORT,
     icon: FileSpreadsheet,
@@ -42,50 +47,11 @@ const NAV_ITEMS: NavItemConfig[] = [
 export const MonitoringBottomNav = memo(function MonitoringBottomNav({
   activeTab,
   onSelectTab,
-  onOpenProfile,
 }: MonitoringBottomNavProps) {
-  const [avatarFailed, setAvatarFailed] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
-    () => localStorage.getItem("PDO_USER_AVATAR") || undefined
-  );
-
-  useEffect(() => {
-    const handleStorage = () => {
-      setAvatarUrl(localStorage.getItem("PDO_USER_AVATAR") || undefined);
-      setAvatarFailed(false);
-    };
-
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
-
   return (
-    <div
-      className="monitoring-bottom-nav-wrapper"
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: "var(--card-bg, rgba(23, 23, 23, 0.95))",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-        borderTop: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-        paddingBottom: "env(safe-area-inset-bottom, 0px)",
-        boxShadow: "0 -4px 20px rgba(0, 0, 0, 0.2)",
-      }}
-    >
+    <div className="bottom-nav-wrapper monitoring-bottom-nav-wrapper">
       <nav
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-around",
-          height: "64px",
-          maxWidth: "768px",
-          margin: "0 auto",
-          padding: "0 6px",
-        }}
+        className="bottom-nav"
         role="tablist"
         aria-label={TEXT_MONITORING.HEADER.TITLE}
       >
@@ -100,137 +66,20 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
               role="tab"
               aria-selected={isActive}
               data-testid={`monitoring-tab-${item.id}`}
-              className={`monitoring-tab-btn ${isActive ? "active" : ""}`}
+              className={`bottom-nav-item monitoring-tab-btn ${isActive ? "active" : ""}`}
               onClick={() => onSelectTab(item.id)}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "3px",
-                height: "52px",
-                borderRadius: "12px",
-                border: "none",
-                background: isActive
-                  ? "var(--accent-bg-subtle, rgba(62, 207, 142, 0.12))"
-                  : "transparent",
-                color: isActive
-                  ? "var(--accent-color, #3ECF8E)"
-                  : "var(--text-secondary, #8b8b8b)",
-                cursor: "pointer",
-                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                padding: "4px 2px",
-                outline: "none",
-              }}
+              title={item.label}
+              aria-label={item.label}
             >
-              <Icon
-                size={20}
-                style={{
-                  strokeWidth: isActive ? 2.5 : 1.8,
-                  transform: isActive ? "scale(1.05)" : "scale(1)",
-                  transition: "transform 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                }}
-              />
-              <span
-                style={{
-                  fontSize: "10.5px",
-                  fontWeight: isActive ? 700 : 500,
-                  letterSpacing: "-0.2px",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  maxWidth: "100%",
-                }}
-              >
+              <div className="bottom-nav-icon-wrapper">
+                <Icon size={19} />
+              </div>
+              <span className="bottom-nav-label">
                 {item.label}
               </span>
             </button>
           );
         })}
-
-        {/* User Profile Menu Item */}
-        {onOpenProfile && (
-          <button
-            type="button"
-            role="button"
-            data-testid="monitoring-tab-profile"
-            aria-label={TEXT_MONITORING.NAV.PROFILE}
-            title={TEXT_MONITORING.NAV.PROFILE}
-            className="monitoring-tab-btn"
-            onClick={onOpenProfile}
-            style={{
-              flex: 1,
-              minWidth: 0,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "3px",
-              height: "52px",
-              borderRadius: "12px",
-              border: "none",
-              background: "transparent",
-              color: "var(--text-secondary, #8b8b8b)",
-              cursor: "pointer",
-              transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-              padding: "4px 2px",
-              outline: "none",
-            }}
-          >
-            {avatarUrl && !avatarFailed ? (
-              <div
-                style={{
-                  width: "22px",
-                  height: "22px",
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                  border: "1.5px solid var(--text-secondary, #8b8b8b)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.2)",
-                  transition: "border-color 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                }}
-              >
-                <img
-                  src={avatarUrl}
-                  alt={TEXT_MONITORING.NAV.PROFILE}
-                  referrerPolicy="no-referrer"
-                  onError={() => setAvatarFailed(true)}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            ) : (
-              <User
-                size={20}
-                style={{
-                  strokeWidth: 1.8,
-                  transition: "transform 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-                }}
-              />
-            )}
-            <span
-              style={{
-                fontSize: "10.5px",
-                fontWeight: 500,
-                letterSpacing: "-0.2px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
-              }}
-            >
-              {TEXT_MONITORING.NAV.PROFILE}
-            </span>
-          </button>
-        )}
       </nav>
     </div>
   );

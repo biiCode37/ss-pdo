@@ -1,6 +1,5 @@
 import React from "react";
 import { RefreshCw, AlertTriangle } from "lucide-react";
-import { ShiftConfirmationAlertBar } from "@/components/fleetStatus/ShiftConfirmationAlertBar";
 import {
   BusCardSkeleton,
   DailyToaTrendSkeleton,
@@ -25,12 +24,12 @@ interface DashboardStatusBannersProps {
   error: string | null;
   missingColumns: string[];
   needsReauth?: boolean;
-  confirmedShifts: { 1: boolean; 2: boolean };
+  confirmedShifts?: { 1: boolean; 2: boolean };
   matchedRoute: Route | null;
   selectedTab: string;
   busData: BusData[] | null;
   activeShift: 1 | 2;
-  onOpenFleetModal: () => void;
+  onOpenFleetModal?: () => void;
   isLoading: boolean;
   mainTab: "input" | "analytics" | "units";
 }
@@ -46,12 +45,12 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
   error,
   missingColumns,
   needsReauth,
-  confirmedShifts,
-  matchedRoute,
-  selectedTab,
+  confirmedShifts: _confirmedShifts,
+  matchedRoute: _matchedRoute,
+  selectedTab: _selectedTab,
   busData,
-  activeShift,
-  onOpenFleetModal,
+  activeShift: _activeShift,
+  onOpenFleetModal: _onOpenFleetModal,
   isLoading,
   mainTab,
 }) => {
@@ -143,18 +142,6 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
         </div>
       )}
 
-      {/* Shift Confirmation Bar */}
-      <ShiftConfirmationAlertBar
-        isOpen={
-          !confirmedShifts[activeShift] &&
-          Boolean(matchedRoute) &&
-          selectedTab !== "AKUMULASI" &&
-          Boolean(busData && busData.length > 0)
-        }
-        shift={activeShift}
-        routeCode={matchedRoute?.route_code || ""}
-        onOpenModal={onOpenFleetModal}
-      />
 
       {/* Error Message */}
       {error && !isAuthExpired && (

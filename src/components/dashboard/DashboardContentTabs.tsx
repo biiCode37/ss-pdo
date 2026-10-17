@@ -32,7 +32,7 @@ interface DashboardContentTabsProps {
   onExitAccumulation: () => void;
   isShiftConfirmed: boolean;
   activeShift: 1 | 2;
-  onOpenFleetStatus: () => void;
+  onOpenFleetStatus?: () => void;
   sheetSummary: Record<string, number>;
   selectedTab: string;
   refreshKey: number;

@@ -10,10 +10,10 @@ export const TEXT_DASHBOARD = {
   NAV_MAIN: 'Navigasi Utama',
   TABS: {
     INPUT_SS: 'Input SS',
-    INPUT_SHORT: 'Input',
+    INPUT_SHORT: 'Input SS',
     DASHBOARD: 'Dashboard',
-    DASHBOARD_SHORT: 'Ringkasan',
-    UNIT_LIST: 'Daftar Unit',
+    DASHBOARD_SHORT: 'Dashboard',
+    UNIT_LIST: 'Armada',
     UNIT_SHORT: 'Armada',
     ACCUMULATION: 'Akumulasi',
     MORE: 'Lainnya',

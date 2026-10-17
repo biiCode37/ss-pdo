@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AlertCircle, Sparkles } from "lucide-react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
-import { TEXT_ALERTS, TEXT_FLEET_STATUS } from "@/constants/texts";
+import { TEXT_ALERTS } from "@/constants/texts";
 import { useBusInputForm, type ModalTab } from "./modal/useBusInputForm";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { ModalShell } from "@/components/ui/ModalShell";
@@ -37,8 +37,8 @@ export function BusInputModal({
   activeCategory = "all",
   initialTab = "shift1",
   onSave,
-  isShiftConfirmed,
-  activeShift = 1,
+  isShiftConfirmed: _isShiftConfirmed,
+  activeShift: _activeShift = 1,
   previousDayKmAkhir2,
   previousDayDateLabel,
 }: BusInputModalProps) {
@@ -172,28 +172,6 @@ export function BusInputModal({
           />
         )}
 
-        {/* 2b. Unconfirmed Shift Warning Reminder Banner */}
-        {isShiftConfirmed === false && (
-          <div
-            style={{
-              margin: "10px 0 0 0",
-              padding: "8px 12px",
-              borderRadius: "8px",
-              background: "rgba(245, 158, 11, 0.12)",
-              border: "1px solid rgba(245, 158, 11, 0.35)",
-              color: "var(--warning-text, #f59e0b)",
-              fontSize: "0.8rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            <AlertCircle size={15} style={{ flexShrink: 0 }} />
-            <span style={{ lineHeight: 1.35, fontWeight: 500 }}>
-              {TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(activeShift || 1)}
-            </span>
-          </div>
-        )}
 
         {/* 3. Validation Errors Alert Bar & Odometer Controls */}
         {(form.validationErrors.length > 0 || form.hasCrossDayError) && (

@@ -6,6 +6,7 @@ import { ProfileFeaturesSection } from "./ProfileFeaturesSection";
 import { ProfileMenuFooter } from "./ProfileMenuFooter";
 import { useProfileData } from "./useProfileData";
 import { useSheetGesture } from "./useSheetGesture";
+import { markBackNavigationDismissing } from "@/utils/historyNavigation";
 import type { ProfileMenuSheetProps } from "./types";
 
 export function ProfileMenuSheet({
@@ -33,12 +34,14 @@ export function ProfileMenuSheet({
   const overlayRef = useRef<HTMLDivElement>(null);
   const mountTimeRef = useRef(0);
   const isClosingRef = useRef(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleDismiss = () => {
     if (isClosingRef.current) return;
     isClosingRef.current = true;
     setIsClosing(true);
-    setTimeout(onClose, 220);
+    markBackNavigationDismissing("profile_menu_sheet");
+    closeTimerRef.current = setTimeout(onClose, 220);
   };
 
   // BUG-58: Ref agar listener Escape memanggil handleDismiss terbaru
@@ -54,6 +57,10 @@ export function ProfileMenuSheet({
 
   useEffect(() => {
     if (!isOpen) {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
       setIsMounted(false);
       setIsClosing(false);
       isClosingRef.current = false;
@@ -72,6 +79,10 @@ export function ProfileMenuSheet({
     document.body.style.overflow = "hidden";
 
     return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
       cancelAnimationFrame(frameId);
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";

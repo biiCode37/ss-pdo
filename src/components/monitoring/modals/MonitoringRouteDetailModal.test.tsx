@@ -5,6 +5,10 @@ import { act } from "react";
 import { MonitoringRouteDetailModal } from "./MonitoringRouteDetailModal";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
+import {
+  getActiveScrollLockCount,
+  _resetScrollLockCoordinatorForTest,
+} from "@/utils/scrollLockCoordinator";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -67,6 +71,7 @@ describe("MonitoringRouteDetailModal", () => {
   let root: Root;
 
   beforeEach(() => {
+    _resetScrollLockCoordinatorForTest();
     container = document.createElement("div");
     document.body.appendChild(container);
     root = createRoot(container);
@@ -77,6 +82,7 @@ describe("MonitoringRouteDetailModal", () => {
       root.unmount();
     });
     container.remove();
+    _resetScrollLockCoordinatorForTest();
     vi.clearAllMocks();
   });
 
@@ -102,6 +108,34 @@ describe("MonitoringRouteDetailModal", () => {
       );
     });
     expect(container.innerHTML).toBe("");
+  });
+
+  it("acquires scroll lock when opened and releases when closed or unmounted", async () => {
+    expect(getActiveScrollLockCount()).toBe(0);
+
+    await act(async () => {
+      root.render(
+        <MonitoringRouteDetailModal
+          route={mockRoute}
+          isOpen={true}
+          onClose={vi.fn()}
+        />
+      );
+    });
+
+    expect(getActiveScrollLockCount()).toBe(1);
+
+    await act(async () => {
+      root.render(
+        <MonitoringRouteDetailModal
+          route={mockRoute}
+          isOpen={false}
+          onClose={vi.fn()}
+        />
+      );
+    });
+
+    expect(getActiveScrollLockCount()).toBe(0);
   });
 
   it("renders route title, korlap, and tab Operasional by default", async () => {

@@ -6,3 +6,4 @@ export * from "./ReportIssuesSection";
 export * from "./ReportModalLayout";
 export * from "./ReportAccordionHeader";
 export * from "./RouteOperationalReportCard";
+export * from "./A2ReportModal";

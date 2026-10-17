@@ -37,10 +37,12 @@ describe('Centralized UI Text Dictionary', () => {
 
   it('exports TEXT_DASHBOARD with app header, tabs, and selectors', () => {
     expect(TEXT_DASHBOARD.APP_TITLE).toBe('PUSM');
-    expect(TEXT_DASHBOARD.APP_SUBTITLE).toBe('PDO Utara Spreadsheet Mobile');
     expect(TEXT_DASHBOARD.TABS.INPUT_SS).toBe('Input SS');
+    expect(TEXT_DASHBOARD.TABS.INPUT_SHORT).toBe('Input SS');
     expect(TEXT_DASHBOARD.TABS.DASHBOARD).toBe('Dashboard');
-    expect(TEXT_DASHBOARD.TABS.UNIT_LIST).toBe('Daftar Unit');
+    expect(TEXT_DASHBOARD.TABS.DASHBOARD_SHORT).toBe('Dashboard');
+    expect(TEXT_DASHBOARD.TABS.UNIT_LIST).toBe('Armada');
+    expect(TEXT_DASHBOARD.TABS.UNIT_SHORT).toBe('Armada');
     expect(TEXT_DASHBOARD.TABS.ACCUMULATION).toBe('Akumulasi');
     expect(TEXT_DASHBOARD.TOA_TREND.TITLE).toBe('Grafik Pelanggan Harian');
     expect(TEXT_DASHBOARD.KPIS.TITLE).toBe('Capaian Pelanggan & Km');
@@ -76,6 +78,14 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PDO_FORM.HEADWAY.FASTEST_LABEL).toBe('Headway Tercepat (Menit)');
     expect(TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL).toBe('Headway Terlama (Menit)');
     expect(TEXT_PDO_FORM.BUTTONS.SUBMIT).toContain('Kirim Laporan Operasional');
+    expect(TEXT_PDO_FORM.A2_REPORT.PILL_LABEL).toBe('Laporan A2');
+    expect(TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE).toBe('Laporan Harian A2 Armada');
+    expect(TEXT_PDO_FORM.A2_REPORT.SUBMIT_BTN(1)).toContain('Shift 1');
+    expect(TEXT_PDO_FORM.A2_REPORT.TOAST_SUCCESS(2)).toContain('Shift 2');
+    expect(TEXT_PDO_FORM.A2_REPORT.ERROR_SUBMIT).toContain('Gagal');
+    expect(TEXT_PDO_FORM.A2_REPORT.SELECT_UNIT_PLACEHOLDER).toContain('Pilih');
+    expect(TEXT_PDO_FORM.A2_REPORT.CUSTOM_UNIT_OPTION).toContain('Input Manual');
+    expect(TEXT_PDO_FORM.A2_REPORT.SWITCH_TO_DROPDOWN_BTN).toBeDefined();
   });
 
   it('exports TEXT_MONITORING with interpolation functions and KPI titles', () => {
@@ -94,10 +104,24 @@ describe('Centralized UI Text Dictionary', () => {
   it('exports TEXT_MONITORING new tokens for bottom nav, bulk verify, dashboard, and fleet tab', () => {
     expect((TEXT_MONITORING as any).NAV.DASHBOARD).toBe('Dashboard');
     expect((TEXT_MONITORING as any).NAV.ROUTES).toBe('Rute');
+    expect((TEXT_MONITORING as any).NAV.KORWIL).toBe('Capaian Korwil');
     expect((TEXT_MONITORING as any).NAV.FLEET_STATUS).toBe('Status Armada');
     expect((TEXT_MONITORING as any).NAV.WA_REPORT).toBe('Laporan WA');
     expect((TEXT_MONITORING as any).NAV.PROFILE).toBe('Profil');
+    expect((TEXT_MONITORING as any).PERIOD.DAILY).toBe('Harian');
+    expect((TEXT_MONITORING as any).PERIOD.WEEKLY).toBe('Mingguan');
+    expect((TEXT_MONITORING as any).PERIOD.MONTHLY).toBe('Bulanan');
+    expect((TEXT_MONITORING as any).PERIOD.CUSTOM).toBe('Kustom');
+    expect((TEXT_MONITORING as any).PERIOD.MONTHLY_MODAL_TITLE).toBe('Pilih Periode Bulan');
+    expect((TEXT_MONITORING as any).PERIOD.SELECT_YEAR).toBe('Pilih Tahun');
+    expect((TEXT_MONITORING as any).PERIOD.CURRENT_MONTH).toBe('Bulan Ini');
+    expect((TEXT_MONITORING as any).PERIOD.PREV_MONTH).toBe('Bulan Lalu');
+    expect((TEXT_MONITORING as any).KORWIL_TAB.TITLE).toBe('Rekapitulasi Tim Korwil');
+    expect((TEXT_MONITORING as any).KORWIL_TAB.TOTAL_WILAYAH_CARD).toBe('Total 18 Rute Wilayah');
+    expect((TEXT_MONITORING as any).KORWIL_TAB.ROUTES_COUNT(6)).toBe('6 Rute');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TITLE).toBe('Grafik Jumlah Pelanggan Per Rute');
+    expect((TEXT_MONITORING as any).DASHBOARD.SUBVIEW_OVERVIEW).toBe('Ringkasan Wilayah');
+    expect((TEXT_MONITORING as any).DASHBOARD.SUBVIEW_KORWIL).toBe('Kinerja Tim Korwil');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE('Selasa, 01/09/2026')).toBe('Komparasi total pelanggan pada hari Selasa, 01/09/2026');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_SUBTITLE()).toBe('Komparasi total pelanggan dari 18 rute hari ini');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TOA_UNIT).toBe('TOA');
@@ -121,6 +145,28 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(2000)).toBe('Target: 2.000');
     expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_LABEL(0)).toBe('Target: -');
     expect(TEXT_MONITORING.DASHBOARD.LEADERBOARD.TARGET_PCT_ONLY('75')).toBe('75%');
+  });
+
+  it('exports TEXT_MONITORING.MONTHLY_SYNC tokens for monthly master spreadsheet sync', () => {
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC).toBeDefined();
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.TITLE).toBe('Tarik Data 1 Bulan Sekaligus');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.DESC).toContain('Spreadsheet Rekap Master');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.LABEL_URL).toBe('Link Spreadsheet Rekap Master Wilayah');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.LABEL_TAB).toBe('Nama Lembar (Tab Bulan)');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.BTN_START).toBe('Mulai Sinkronisasi');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.BTN_CANCEL).toBe('Batal');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.RANGE_INFO(1, 14, 'Oktober', 2026)).toBe('Menyinkronkan Tanggal 1 s.d. 14 Oktober 2026 (18 Rute)');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.STATUS_FETCHING).toBe('Mengunduh data spreadsheet master...');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.STATUS_PARSING).toBe('Menganalisis baris data 18 rute...');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.STATUS_SAVING(10, 50)).toBe('Menyimpan data ke database (10/50)...');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.SUCCESS_TITLE).toBe('Sinkronisasi Bulanan Selesai');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.SUCCESS_SUMMARY(180, 5)).toBe('180 laporan rute berhasil diperbarui, 5 dilewati (sudah diisi di aplikasi).');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.TOOLTIP_MONTHLY).toBe('Tarik Data 1 Bulan Sekaligus dari Master Sheet');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.BUTTON_LABEL_MONTHLY).toBe('Tarik Data 1 Bulan');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.QUICK_CHIPS_LABEL).toBe('Pilihan Cepat Bulan:');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.AUTO_DETECTED_BADGE('September', 2026)).toBe('Terdeteksi: September 2026');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.FUTURE_MONTH_ERR('November', 2026)).toContain('masa depan');
+    expect((TEXT_MONITORING as any).MONTHLY_SYNC.ERR_NETWORK).toContain('Koneksi internet');
   });
 
   it('exports TEXT_MONITORING ingestion, provenance, and detailed readiness tokens', () => {
@@ -149,6 +195,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_WA_REPORT.UNCONFIRMED_ROUTES_BADGE(3)).toContain('3');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_HEADER('Kamis', '10 September 2026', 1, 'Pagi')).toContain('1 (Pagi)');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_CLOSING).toContain('diketahui');
+    expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_NO_DATA_STATUS).toBe('BELUM ADA DATA ⏳');
+    expect(TEXT_WA_REPORT.DATA_READINESS.INPUT_QUICK_BTN).toBe('Input Data Korlap');
+    expect(TEXT_WA_REPORT.DATA_READINESS.BANNER_DESC).toBeDefined();
     expect(TEXT_WA_REPORT.WARNING_UNSUBMITTED(2, 18)).toContain('2 dari 18 rute');
   });
 

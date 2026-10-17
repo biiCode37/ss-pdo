@@ -505,7 +505,7 @@ select.input-field {
 /* Bottom Navigation Bar (Expanding Pill Solid Floating Dock) */
 .bottom-nav-wrapper {
   position: fixed;
-  bottom: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   left: 0;
   right: 0;
   z-index: 50;
@@ -515,6 +515,24 @@ select.input-field {
   padding: 0 12px;
   pointer-events: none;
   transition: opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1), transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@media (max-width: 420px) {
+  .monitoring-bottom-nav-wrapper .bottom-nav {
+    gap: 2px;
+    padding: 3px 4px;
+    max-width: 98vw;
+  }
+  .monitoring-bottom-nav-wrapper .bottom-nav-item {
+    min-width: 38px;
+    padding: 6px 8px;
+  }
+  .monitoring-bottom-nav-wrapper .bottom-nav-item.active {
+    padding: 6px 12px;
+  }
+  .monitoring-bottom-nav-wrapper .bottom-nav-label {
+    font-size: 11px;
+  }
 }
 
 /* Sembunyikan floating BottomNav secara otomatis saat body scroll terkunci (mis. bottom sheet aktif) */
@@ -639,7 +657,7 @@ body.light-mode .bottom-nav {
 }
 
 .bottom-nav-item.active .bottom-nav-label {
-  max-width: 90px;
+  max-width: 140px;
   opacity: 1;
   transform: translateX(0);
   margin-left: 6px;
@@ -2101,14 +2119,29 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   padding: 16px;
   max-width: 1200px;
   margin: 0 auto;
-  padding-bottom: 84px;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom, 16px));
   width: 100%;
   box-sizing: border-box;
 }
 
 @media (max-width: 640px) {
   .monitoring-dashboard-tab {
-    padding: 12px 12px 84px 12px;
+    padding: 12px 12px calc(92px + env(safe-area-inset-bottom, 16px)) 12px;
+  }
+}
+
+.monitoring-korwil-tab {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 16px));
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .monitoring-korwil-tab {
+    padding: 12px 12px calc(100px + env(safe-area-inset-bottom, 16px)) 12px;
   }
 }
 

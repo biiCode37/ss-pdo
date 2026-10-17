@@ -14,6 +14,7 @@ interface WaReportFormatTabsProps {
   totalRoutesCount: number;
   isFormat3Blocked: boolean;
   unconfirmedRoutes: RegionalRouteItem[];
+  onQuickEditRoute?: (route: { id: number; routeCode: string }) => void;
 }
 
 export function WaReportFormatTabs({
@@ -27,6 +28,7 @@ export function WaReportFormatTabs({
   totalRoutesCount,
   isFormat3Blocked,
   unconfirmedRoutes,
+  onQuickEditRoute,
 }: WaReportFormatTabsProps) {
   return (
     <>
@@ -279,22 +281,30 @@ export function WaReportFormatTabs({
             className="no-scrollbar"
           >
             {unconfirmedRoutes.map((r) => (
-              <span
+              <button
                 key={r.id}
+                type="button"
+                onClick={() => onQuickEditRoute?.({ id: r.id, routeCode: r.routeCode })}
+                title={`Input cepat data armada rute ${r.routeCode}`}
                 style={{
                   fontSize: "10.5px",
                   fontWeight: 700,
-                  padding: "2px 7px",
+                  padding: "3px 8px",
                   borderRadius: "6px",
                   background: "rgba(239, 68, 68, 0.2)",
                   border: "1px solid rgba(239, 68, 68, 0.4)",
                   color: "#f87171",
                   whiteSpace: "nowrap",
                   letterSpacing: "0.2px",
+                  cursor: onQuickEditRoute ? "pointer" : "default",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
                 }}
               >
-                {r.routeCode}
-              </span>
+                <span>{r.routeCode}</span>
+                {onQuickEditRoute && <span style={{ fontSize: "9px", opacity: 0.8 }}>✏️</span>}
+              </button>
             ))}
           </div>
         </div>

@@ -1,18 +1,16 @@
 import { memo } from "react";
-import { ClipboardList, BarChart3, Bus, MoreHorizontal } from "lucide-react";
+import { ClipboardList, BarChart3, Bus } from "lucide-react";
 import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface BottomNavProps {
   activeTab: "input" | "analytics" | "units";
   onSelectTab: (tab: "input" | "analytics" | "units") => void;
-  onOpenMore: () => void;
   pendingQueueCount?: number;
 }
 
 function BottomNavComponent({
   activeTab,
   onSelectTab,
-  onOpenMore,
   pendingQueueCount = 0,
 }: BottomNavProps) {
   const handleTabClick = (tab: "input" | "analytics" | "units") => {
@@ -72,22 +70,6 @@ function BottomNavComponent({
           </div>
           <span className="bottom-nav-label">
             {TEXT_DASHBOARD.TABS.UNIT_SHORT}
-          </span>
-        </button>
-
-        <button
-          type="button"
-          onClick={onOpenMore}
-          className="bottom-nav-item"
-          title={TEXT_DASHBOARD.TABS.MORE}
-          aria-label={TEXT_DASHBOARD.TABS.MORE}
-          data-testid="bottom-nav-more"
-        >
-          <div className="bottom-nav-icon-wrapper">
-            <MoreHorizontal size={19} />
-          </div>
-          <span className="bottom-nav-label">
-            {TEXT_DASHBOARD.TABS.MORE_SHORT}
           </span>
         </button>
       </nav>

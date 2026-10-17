@@ -13,7 +13,6 @@ export function getBusCardStyles({
   formData,
   bus,
   targetTrip,
-  isShiftConfirmed,
   isNonSgo,
 }: BusCardStyleOptions) {
   // Visual Hierarchy: Left-border status accent stripe (Fase 1 UI Refactor)
@@ -49,12 +48,7 @@ export function getBusCardStyles({
       ketLower.includes("bko") ||
       cardIsBelowTarget);
 
-  const lockedClass =
-    isShiftConfirmed === false
-      ? "bus-card-locked"
-      : isNonSgo
-        ? "bus-card-non-sgo"
-        : "";
+  const lockedClass = isNonSgo ? "bus-card-non-sgo" : "";
 
   const statusClass = hasKendala
     ? "status-kendala"

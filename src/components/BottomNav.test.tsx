@@ -25,13 +25,12 @@ describe("BottomNav Component", () => {
     container.remove();
   });
 
-  it("renders 4 tabs correctly and highlights active tab", () => {
+  it("renders 3 tabs correctly, highlights active tab, and does not render redundant more tab", () => {
     act(() => {
       root.render(
         <BottomNav
           activeTab="input"
           onSelectTab={() => {}}
-          onOpenMore={() => {}}
         />
       );
     });
@@ -44,7 +43,7 @@ describe("BottomNav Component", () => {
     expect(inputBtn).not.toBeNull();
     expect(analyticsBtn).not.toBeNull();
     expect(unitsBtn).not.toBeNull();
-    expect(moreBtn).not.toBeNull();
+    expect(moreBtn).toBeNull();
 
     expect(inputBtn?.classList.contains("active")).toBe(true);
     expect(analyticsBtn?.classList.contains("active")).toBe(false);
@@ -53,7 +52,10 @@ describe("BottomNav Component", () => {
     expect(inputBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.INPUT_SHORT);
     expect(analyticsBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.DASHBOARD_SHORT);
     expect(unitsBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.UNIT_SHORT);
-    expect(moreBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.MORE_SHORT);
+
+    expect(inputBtn?.getAttribute('title')).toBe('Input SS');
+    expect(analyticsBtn?.getAttribute('title')).toBe('Dashboard');
+    expect(unitsBtn?.getAttribute('title')).toBe('Armada');
   });
 
   it("calls onSelectTab when an inactive tab is clicked", () => {
@@ -63,7 +65,6 @@ describe("BottomNav Component", () => {
         <BottomNav
           activeTab="input"
           onSelectTab={handleSelectTab}
-          onOpenMore={() => {}}
         />
       );
     });
@@ -83,7 +84,6 @@ describe("BottomNav Component", () => {
         <BottomNav
           activeTab="input"
           onSelectTab={handleSelectTab}
-          onOpenMore={() => {}}
         />
       );
     });
@@ -96,24 +96,18 @@ describe("BottomNav Component", () => {
     expect(handleSelectTab).not.toHaveBeenCalled();
   });
 
-  it("calls onOpenMore when more tab is clicked", () => {
-    const handleOpenMore = vi.fn();
+  it("does not render more button because profile trigger is available on header", () => {
     act(() => {
       root.render(
         <BottomNav
           activeTab="input"
           onSelectTab={() => {}}
-          onOpenMore={handleOpenMore}
         />
       );
     });
 
-    const moreBtn = container.querySelector('[data-testid="bottom-nav-more"]') as HTMLButtonElement;
-    act(() => {
-      moreBtn.click();
-    });
-
-    expect(handleOpenMore).toHaveBeenCalledTimes(1);
+    const moreBtn = container.querySelector('[data-testid="bottom-nav-more"]');
+    expect(moreBtn).toBeNull();
   });
 
   it("displays pendingQueueCount badge when count > 0", () => {
@@ -122,7 +116,6 @@ describe("BottomNav Component", () => {
         <BottomNav
           activeTab="input"
           onSelectTab={() => {}}
-          onOpenMore={() => {}}
           pendingQueueCount={5}
         />
       );
@@ -139,7 +132,6 @@ describe("BottomNav Component", () => {
         <BottomNav
           activeTab="input"
           onSelectTab={() => {}}
-          onOpenMore={() => {}}
           pendingQueueCount={0}
         />
       );

@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useMemo, useRef, memo } from "react";
 import {
   fetchRegionalMonitoringData,
+  fetchRegionalPeriodMonitoringData,
   getRelativeDate,
   type RegionalMonitoringResult,
+  type MonitoringPeriodFilter,
 } from "@/services/allRouteMonitoringService";
 import { fetchDailyFleetShiftsByDate } from "@/services/fleetStatusService";
 import { verifyDailyRouteReport } from "@/services/dailyRouteReportService";
@@ -16,10 +18,12 @@ import { TEXT_ERRORS, TEXT_ALERTS, TEXT_MONITORING } from "@/constants/texts";
 
 import { MonitoringHeader } from "./MonitoringHeader";
 import { IngestionProgressModal } from "./IngestionProgressModal";
+import { MonthlySyncModal } from "./MonthlySyncModal";
 import { MonitoringStates } from "./MonitoringStates";
 import { MonitoringBottomNav, type MonitoringTab } from "./MonitoringBottomNav";
 import { MonitoringDashboardTab } from "./tabs/MonitoringDashboardTab";
 import { MonitoringRoutesTab } from "./tabs/MonitoringRoutesTab";
+import { MonitoringKorwilTab } from "./tabs/MonitoringKorwilTab";
 import { MonitoringFleetStatusTab } from "./tabs/MonitoringFleetStatusTab";
 import { MonitoringWaReportTab } from "./tabs/MonitoringWaReportTab";
 import { SUPERVISOR_TABS, matchesSupervisorTab } from "./monitoringUtils";
@@ -47,19 +51,36 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   // 1. Navigation Tab State
   const [activeTab, setActiveTab] = useState<MonitoringTab>("dashboard");
 
-  // 2. Date State
+  // 2. Date & Period State
   const todayStr = useMemo(() => new Date().toISOString().split("T")[0], []);
   const [selectedDate, setSelectedDate] = useState<string>(
     currentDate || todayStr,
   );
   const prevCurrentDateRef = useRef(currentDate);
 
+  const [currentPeriod, setCurrentPeriod] = useState<MonitoringPeriodFilter>({
+    mode: "daily",
+    date: currentDate || todayStr,
+    startDate: currentDate || todayStr,
+    endDate: currentDate || todayStr,
+    label: currentDate || todayStr,
+  });
+
   useEffect(() => {
     if (currentDate && currentDate !== prevCurrentDateRef.current) {
       prevCurrentDateRef.current = currentDate;
       setSelectedDate(currentDate);
+      if (currentPeriod.mode === "daily") {
+        setCurrentPeriod((prev) => ({
+          ...prev,
+          date: currentDate,
+          startDate: currentDate,
+          endDate: currentDate,
+          label: currentDate,
+        }));
+      }
     }
-  }, [currentDate]);
+  }, [currentDate, currentPeriod.mode]);
 
   // 3. Data State
   const [loading, setLoading] = useState<boolean>(true);
@@ -70,19 +91,26 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [syncing18Routes, setSyncing18Routes] = useState<boolean>(false);
   const [ingestionProgress, setIngestionProgress] = useState<IngestionProgress | null>(null);
   const [showProgressModal, setShowProgressModal] = useState<boolean>(false);
+  const [showMonthlySyncModal, setShowMonthlySyncModal] = useState<boolean>(false);
   const [isBulking, setIsBulking] = useState<boolean>(false);
   const [verifyingRouteId, setVerifyingRouteId] = useState<number | null>(null);
 
   // 4. Load Data Function
   const loadData = useCallback(
-    async (showRefreshIndicator = false) => {
+    async (showRefreshIndicator = false, periodOverride?: MonitoringPeriodFilter) => {
+      const activePeriod = periodOverride || currentPeriod;
       if (showRefreshIndicator) setRefreshing(true);
       else setLoading(true);
       setErrorMessage(null);
 
       try {
+        const regionalPromise =
+          activePeriod.mode === "daily"
+            ? fetchRegionalMonitoringData(activePeriod.date)
+            : fetchRegionalPeriodMonitoringData(activePeriod.startDate, activePeriod.endDate);
+
         const [regionalRes, fleetRes] = await Promise.all([
-          fetchRegionalMonitoringData(selectedDate),
+          regionalPromise,
           fetchDailyFleetShiftsByDate(selectedDate).catch((err) => {
             console.warn("[AllRouteMonitoringPage] Gagal memuat fleet shifts:", err);
             return [] as DailyFleetShiftWithUnits[];
@@ -98,12 +126,21 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         setRefreshing(false);
       }
     },
-    [selectedDate],
+    [selectedDate, currentPeriod],
   );
 
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const handlePeriodChange = (newPeriod: MonitoringPeriodFilter) => {
+    setCurrentPeriod(newPeriod);
+    if (newPeriod.mode === "daily") {
+      setSelectedDate(newPeriod.date);
+      onDateChange?.(newPeriod.date);
+    }
+    loadData(false, newPeriod);
+  };
 
   // 5. Date Step Handlers
   const handleStepDate = (days: number) => {
@@ -245,6 +282,23 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     }
   };
 
+  // 10. Monthly Master Ingestion Handler
+  const [selYearStr, selMonthStr] = selectedDate.split("-");
+  const selYear = parseInt(selYearStr, 10) || new Date().getFullYear();
+  const selMonth = parseInt(selMonthStr, 10) || new Date().getMonth() + 1;
+  const monthNames = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+  ];
+  const selMonthName = monthNames[selMonth - 1] || "Oktober";
+
+  const handleMonthlySyncSuccess = async (saved: number, skipped: number) => {
+    showSuccessToast(
+      TEXT_MONITORING.MONTHLY_SYNC.SUCCESS_SUMMARY(saved, skipped)
+    );
+    await loadData(true);
+  };
+
   return (
     <div
       style={{
@@ -265,6 +319,10 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         loading={loading}
         onSync18Routes={handleSync18Routes}
         syncing18Routes={syncing18Routes}
+        currentPeriod={currentPeriod}
+        onPeriodChange={handlePeriodChange}
+        onOpenMonthlySyncModal={() => setShowMonthlySyncModal(true)}
+        onOpenProfile={onOpenProfile}
       />
 
       {/* Main Content Area: States or Active Tab */}
@@ -304,6 +362,13 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
               />
             )}
 
+            {activeTab === "korwil" && (
+              <MonitoringKorwilTab
+                data={data}
+                onSelectRoute={onSelectRoute}
+              />
+            )}
+
             {activeTab === "fleet_status" && (
               <MonitoringFleetStatusTab
                 selectedDate={selectedDate}
@@ -317,6 +382,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 data={data}
                 selectedDate={selectedDate}
                 fleetShifts={fleetShifts}
+                onRefresh={() => loadData(true)}
               />
             )}
           </>
@@ -335,6 +401,16 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         isOpen={showProgressModal}
         progress={ingestionProgress}
         onClose={() => setShowProgressModal(false)}
+      />
+
+      {/* Monthly Sync Modal */}
+      <MonthlySyncModal
+        isOpen={showMonthlySyncModal}
+        onClose={() => setShowMonthlySyncModal(false)}
+        onSuccess={handleMonthlySyncSuccess}
+        currentYear={selYear}
+        currentMonth={selMonth}
+        monthName={selMonthName}
       />
     </div>
   );

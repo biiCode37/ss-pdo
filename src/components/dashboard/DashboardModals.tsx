@@ -1,6 +1,5 @@
 import React from "react";
-import { RouteOperationalReportCard } from "@/components/RouteOperationalReportCard";
-import { FleetStatusModal } from "@/components/fleetStatus/FleetStatusModal";
+import { A2ReportModal } from "@/components/pdoReport/A2ReportModal";
 import { QueueModal } from "@/components/QueueModal";
 import { AccumulationSheet } from "@/components/AccumulationSheet";
 import { ProfileMenuSheet } from "@/components/ProfileMenuSheet";
@@ -19,10 +18,10 @@ interface DashboardModalsProps {
   dynamicRenops: { renops: number; label: string };
   onOperationalStatusChange: (status: "draft" | "submitted" | "verified") => void;
   busData: BusData[] | null;
-  isFleetModalOpen: boolean;
-  onCloseFleetModal: () => void;
+  isFleetModalOpen?: boolean;
+  onCloseFleetModal?: () => void;
   activeShift: 1 | 2;
-  onConfirmFleetStatus: (
+  onConfirmFleetStatus?: (
     shift: 1 | 2,
     statusMap: Map<number, { s1: string; s2: string }>,
   ) => Promise<void>;
@@ -75,14 +74,14 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   onCloseReportModal,
   operationalReportDate,
   dynamicRenops,
-  onOperationalStatusChange,
+  onOperationalStatusChange: _onOperationalStatusChange,
   busData,
-  isFleetModalOpen,
-  onCloseFleetModal,
+  isFleetModalOpen: _isFleetModalOpen,
+  onCloseFleetModal: _onCloseFleetModal,
   activeShift,
-  confirmedShifts,
-  confirmedInfo,
-  onConfirmFleetStatus,
+  confirmedShifts: _confirmedShifts,
+  confirmedInfo: _confirmedInfo,
+  onConfirmFleetStatus: _onConfirmFleetStatus,
   isQueueModalOpen,
   onCloseQueueModal,
   queue,
@@ -114,42 +113,20 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
 }) => {
   return (
     <>
-      {/* Modal Laporan Operasional Rute */}
+      {/* Modal Laporan Harian A2 Armada Petugas PDO */}
       {matchedRoute && selectedTab !== "AKUMULASI" && (
-        <RouteOperationalReportCard
-          asModal={true}
+        <A2ReportModal
           isOpen={isReportModalOpen}
           onClose={onCloseReportModal}
           routeId={matchedRoute.id}
           routeCode={matchedRoute.route_code}
           selectedDate={operationalReportDate}
-          defaultTrafficJamSpots={matchedRoute.default_traffic_jam_spots || []}
           defaultRenops={dynamicRenops.renops}
-          userEmail={localStorage.getItem("PDO_USER_EMAIL") || undefined}
-          onStatusChange={onOperationalStatusChange}
+          buses={busData}
+          initialShift={activeShift}
         />
       )}
 
-      {/* Modal Penetapan Status Armada */}
-      {matchedRoute && selectedTab !== "AKUMULASI" && busData && (
-        <FleetStatusModal
-          isOpen={isFleetModalOpen}
-          onClose={onCloseFleetModal}
-          routeCode={matchedRoute.route_code}
-          selectedDate={operationalReportDate}
-          renopsTarget={dynamicRenops.renops}
-          dayLabel={dynamicRenops.label}
-          buses={busData}
-          initialShift={activeShift}
-          isConfirmedS1={confirmedShifts?.[1]}
-          isConfirmedS2={confirmedShifts?.[2]}
-          confirmedByS1={confirmedInfo?.s1?.by}
-          confirmedByS2={confirmedInfo?.s2?.by}
-          confirmedAtS1={confirmedInfo?.s1?.at}
-          confirmedAtS2={confirmedInfo?.s2?.at}
-          onConfirmStatus={onConfirmFleetStatus}
-        />
-      )}
 
       {/* Modal Antrean Sinkronisasi Offline */}
       <QueueModal

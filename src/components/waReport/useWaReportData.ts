@@ -42,12 +42,15 @@ export function useWaReportData({
   }, [regionalData, supervisorFilter]);
 
   // Check unconfirmed routes for Format 3 blocking (18 routes regional check)
+  // Rute dianggap terisi/selesai jika sudah dikonfirmasi di DB ATAU memiliki data realops fisik > 0 dari spreadsheet
   const unconfirmedRoutes = useMemo(() => {
     if (formatType !== "format3") return [];
     const allRoutes = regionalData?.routes || [];
-    return allRoutes.filter((r) =>
-      selectedShift === 1 ? !r.isFleetConfirmedS1 : !r.isFleetConfirmedS2,
-    );
+    return allRoutes.filter((r) => {
+      const isConfirmed = selectedShift === 1 ? r.isFleetConfirmedS1 : r.isFleetConfirmedS2;
+      const realops = selectedShift === 1 ? r.realopsShift1 : r.realopsShift2;
+      return !isConfirmed && (!realops || realops === 0);
+    });
   }, [formatType, regionalData?.routes, selectedShift]);
 
   const isFormat3Blocked = formatType === "format3" && unconfirmedRoutes.length > 0;
@@ -142,15 +145,31 @@ export function useWaReportData({
       return generateWaReportFormat2(selectedDate, waRouteItems, regionTotals);
     }
     if (formatType === "format3") {
-      const fleetItems: RouteFleetReportItem[] = filteredRoutes.map((r, idx) => ({
-        no: idx + 1,
-        routeCode: r.routeCode,
-        routeName: r.routeName,
-        operatorName: r.operatorName,
-        renops: selectedShift === 1 ? r.renopsShift1 : r.renopsShift2,
-        realops: selectedShift === 1 ? r.realopsShift1 : r.realopsShift2,
-        nonSgoUnits: selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2,
-      }));
+      const fleetItems: RouteFleetReportItem[] = filteredRoutes.map((r, idx) => {
+        const renops = selectedShift === 1 ? r.renopsShift1 : r.renopsShift2;
+        // Aturan kumulatif harian non-decreasing: Realops Shift 2 >= Realops Shift 1
+        const realops =
+          selectedShift === 1
+            ? r.realopsShift1 || 0
+            : Math.max(r.realopsShift2 || 0, r.realopsShift1 || 0);
+
+        const hasData =
+          r.status === "submitted" ||
+          r.status === "verified" ||
+          realops > 0 ||
+          (r.todayPassengers && r.todayPassengers > 0);
+
+        return {
+          no: idx + 1,
+          routeCode: r.routeCode,
+          routeName: r.routeName,
+          operatorName: r.operatorName,
+          renops,
+          realops,
+          hasData: !!hasData,
+          nonSgoUnits: selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2,
+        };
+      });
       return generateWaReportFormat3(selectedDate, selectedShift, fleetItems);
     }
     return "";

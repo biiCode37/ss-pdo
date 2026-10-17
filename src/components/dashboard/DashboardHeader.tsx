@@ -98,10 +98,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           textAlign: "left",
         }}
       >
-        {/* POJOK KIRI: Profil Akun Pengguna (Avatar, Nama, Role, Email) */}
-        <UserProfileHeader onOpenProfile={onOpenProfile} />
-
-        {/* POJOK KANAN: Badge Kode Rute Aktif + Status Antrean Offline */}
+        {/* POJOK KIRI: Badge Kode Rute Aktif + Status Antrean Offline */}
         <div
           style={{
             display: "flex",
@@ -173,6 +170,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             </div>
           )}
         </div>
+
+        {/* POJOK KANAN: Profil Akun Pengguna (Avatar, Nama, Role, Email) */}
+        <UserProfileHeader onOpenProfile={onOpenProfile} />
       </div>
 
       <RouteSelectorCard

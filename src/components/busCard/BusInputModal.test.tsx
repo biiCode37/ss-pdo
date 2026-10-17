@@ -268,7 +268,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
     expect(onSaveMock.mock.calls[0][0].toaShift2).toBeUndefined();
   });
 
-  it("renders unconfirmed shift reminder banner when isShiftConfirmed is false", async () => {
+  it("does not render obsolete unconfirmed shift reminder banner when isShiftConfirmed is false", async () => {
     await act(async () => {
       root.render(
         <BusInputModal
@@ -282,7 +282,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       );
     });
 
-    expect(document.body.textContent).toContain(
+    expect(document.body.textContent).not.toContain(
       TEXT_FLEET_STATUS.MODAL.MODAL_REMINDER(1),
     );
   });
@@ -1379,7 +1379,39 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       expect(titleHeading?.tagName.toLowerCase()).toBe("h2");
       expect(titleHeading?.textContent).toContain("TJ-0456");
     });
+
+    it("renders pure textarea without any quick chips/pills in notes tab", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus()}
+            onSave={vi.fn()}
+            initialTab="notes"
+          />,
+        );
+      });
+
+      const textarea = document.body.querySelector<HTMLTextAreaElement>("#input-keterangan");
+      expect(textarea).not.toBeNull();
+
+      // Pastikan tidak ada tombol pill/chip cepat status (SGO, AP, TO, dsb.)
+      const pillButtons = Array.from(document.body.querySelectorAll("button")).filter(
+        (btn) => ["SGO", "AP", "TO", "BA", "OFF"].includes(btn.textContent?.trim() || "")
+      );
+      expect(pillButtons.length).toBe(0);
+
+      // Pastikan user bebas menginput teks di textarea
+      await act(async () => {
+        textarea!.value = "BA.01 Perbaikan Dinamo";
+        textarea!.dispatchEvent(new Event("input", { bubbles: true }));
+        textarea!.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      expect(textarea!.value).toBe("BA.01 Perbaikan Dinamo");
+    });
   });
 });
+
 
 

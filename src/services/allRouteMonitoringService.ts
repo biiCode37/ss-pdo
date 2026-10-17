@@ -75,11 +75,85 @@ export interface RegionalRouteItem {
   paxPerBus?: number;
 }
 
+export type MonitoringPeriodMode = 'daily' | 'weekly' | 'monthly' | 'custom';
+
+export interface MonitoringPeriodFilter {
+  mode: MonitoringPeriodMode;
+  date: string;
+  startDate: string;
+  endDate: string;
+  label: string;
+}
+
+export interface SupervisorTeamSummary {
+  id: string; // 'RANTO' | 'ABDUL' | 'MOAMAR'
+  name: string;
+  routes: RegionalRouteItem[];
+  totalRenops: number;
+  totalRealops: number;
+  totalKm: number;
+  averageKmPerBus: number;
+  totalTodayPassengers: number;
+  totalTargetPassengers: number;
+  targetAchievementPercentage: number;
+  totalRitasePp: number;
+  averageRitasePerBus: number;
+  passengersPerKm: number;
+  passengersPerBus: number;
+}
+
+export const SUPERVISOR_TEAMS = [
+  { id: 'RANTO', name: 'Ranto Lumban Toruan', match: (n: string) => (n || '').toUpperCase().includes('RANTO') },
+  { id: 'ABDUL', name: 'Abdul Manan', match: (n: string) => (n || '').toUpperCase().includes('ABDUL') },
+  { id: 'MOAMAR', name: 'Moamar Z.A. Mahu', match: (n: string) => (n || '').toUpperCase().includes('MOAMAR') },
+] as const;
+
+export function calculateSupervisorSummaries(routes: RegionalRouteItem[]): SupervisorTeamSummary[] {
+  return SUPERVISOR_TEAMS.map((team) => {
+    const teamRoutes = routes.filter((r) => team.match(r.supervisorName));
+    const totalRenops = teamRoutes.reduce((acc, r) => acc + (r.totalRenops || 0), 0);
+    const totalRealops = teamRoutes.reduce((acc, r) => acc + (r.totalRealops || 0), 0);
+    const totalKm = teamRoutes.reduce((acc, r) => acc + (r.totalKm || 0), 0);
+    const averageKmPerBus = totalRealops > 0 ? totalKm / totalRealops : 0;
+    const totalTodayPassengers = teamRoutes.reduce((acc, r) => acc + (r.todayPassengers || 0), 0);
+    const totalTargetPassengers = teamRoutes.reduce((acc, r) => acc + (r.targetHk || 0), 0);
+    const targetAchievementPercentage = totalTargetPassengers > 0
+      ? (totalTodayPassengers / totalTargetPassengers) * 100
+      : 0;
+    const totalRitasePp = teamRoutes.reduce((acc, r) => {
+      if (r.totalRitasePp !== undefined && r.totalRitasePp !== null) return acc + r.totalRitasePp;
+      if (r.kmBaku > 0) return acc + (r.totalKm / r.kmBaku);
+      return acc + ((r.totalTrips || 0) / 2);
+    }, 0);
+    const averageRitasePerBus = totalRealops > 0 ? totalRitasePp / totalRealops : 0;
+    const passengersPerKm = totalKm > 0 ? totalTodayPassengers / totalKm : 0;
+    const passengersPerBus = totalRealops > 0 ? totalTodayPassengers / totalRealops : 0;
+
+    return {
+      id: team.id,
+      name: team.name,
+      routes: teamRoutes,
+      totalRenops,
+      totalRealops,
+      totalKm,
+      averageKmPerBus,
+      totalTodayPassengers,
+      totalTargetPassengers,
+      targetAchievementPercentage,
+      totalRitasePp,
+      averageRitasePerBus,
+      passengersPerKm,
+      passengersPerBus,
+    };
+  });
+}
+
 export interface RegionalMonitoringResult {
   date: string;
   yesterdayDate: string;
   lastWeekDate: string;
   routes: RegionalRouteItem[];
+  supervisorSummaries?: SupervisorTeamSummary[];
   // Totals
   totalRenops: number;
   totalRealops: number;
@@ -331,7 +405,17 @@ export async function fetchRegionalMonitoringData(
       passengersPerKm,
       passengersPerKmPercentage,
       tripsPerBus,
-      passengersPerBus
+      passengersPerBus,
+      // PP metrics & aliases
+      totalRitasePp: (Number(r.km_baku) || 0) > 0 ? totalKm / (Number(r.km_baku) || 0) : ((totalTrips || 0) / 2),
+      ritasePerBus: realopsS1 > 0 ? ((Number(r.km_baku) || 0) > 0 ? totalKm / (Number(r.km_baku) || 0) : ((totalTrips || 0) / 2)) / realopsS1 : 0,
+      kmPerBus: achievementKm,
+      paxPerBus: passengersPerBus,
+      targetPax: targetHk,
+      paxPercentage: targetPercentage,
+      paxPerKm: passengersPerKm,
+      targetPaxPerKm: targetPassengersPerKm,
+      paxPerKmPercentage: passengersPerKmPercentage,
     };
   });
 
@@ -343,7 +427,200 @@ export async function fetchRegionalMonitoringData(
     yesterdayDate,
     lastWeekDate,
     routes: routeItems,
+    supervisorSummaries: calculateSupervisorSummaries(routeItems),
     ...totals
+  };
+}
+
+/**
+ * Mengambil data agregasi monitoring regional untuk rentang periode (mingguan, bulanan, kustom)
+ */
+export async function fetchRegionalPeriodMonitoringData(
+  startDate: string,
+  endDate: string
+): Promise<RegionalMonitoringResult> {
+  if (startDate === endDate) {
+    return fetchRegionalMonitoringData(startDate);
+  }
+
+  // 1. Ambil daftar master rute
+  const routes = await fetchRouteMasterList();
+
+  // 2. Ambil daily_route_reports untuk rentang tanggal
+  let reports: DailyRouteReport[] = [];
+  try {
+    const { data: reportData } = await supabase
+      .from('daily_route_reports')
+      .select('*')
+      .gte('date', startDate)
+      .lte('date', endDate);
+    if (reportData) reports = reportData as DailyRouteReport[];
+  } catch (err) {
+    console.warn('[allRouteMonitoringService] Gagal fetch period daily_route_reports:', err);
+  }
+
+  // 3. Petakan akumulasi per rute
+  const routeItems: RegionalRouteItem[] = routes.map((r: Route) => {
+    const code = r.route_code;
+    const routeReports = reports.filter((rep) => rep.route_code === code);
+
+    const targetHkPerDay = Number(r.target_hk) || 0;
+    const uniqueDays = new Set(routeReports.map((rep) => rep.date)).size || 1;
+    const targetHk = targetHkPerDay * uniqueDays;
+
+    const todayPassengers = routeReports.reduce((acc, cur) => acc + (Number(cur.total_passengers) || 0), 0);
+    const totalKm = routeReports.reduce((acc, cur) => acc + (Number(cur.total_km) || 0), 0);
+    const totalTrips = routeReports.reduce((acc, cur) => acc + (Number(cur.total_trip) || 0), 0);
+
+    const renopsS1 = routeReports.reduce((acc, cur) => acc + (Number(cur.renops_shift1) || 0), 0);
+    const realopsS1 = routeReports.reduce((acc, cur) => acc + (Number(cur.realops_shift1) || 0), 0);
+    const renopsS2 = routeReports.reduce((acc, cur) => acc + (Number(cur.renops_shift2) || 0), 0);
+    const realopsS2 = routeReports.reduce((acc, cur) => acc + (Number(cur.realops_shift2) || 0), 0);
+
+    const totalRenops = Math.max(renopsS1, renopsS2);
+    const totalRealops = Math.max(realopsS1, realopsS2);
+
+    const toaShift1 = routeReports.reduce((acc, cur) => acc + (Number(cur.toa_shift1) || 0), 0);
+    const manualShift1 = routeReports.reduce((acc, cur) => acc + (Number(cur.manual_shift1) || 0), 0);
+    const totalShift1 = toaShift1 + manualShift1;
+
+    const toaShift2 = routeReports.reduce((acc, cur) => acc + (Number(cur.toa_shift2) || 0), 0);
+    const manualShift2 = routeReports.reduce((acc, cur) => acc + (Number(cur.manual_shift2) || 0), 0);
+    const totalShift2 = toaShift2 + manualShift2;
+
+    const kmBaku = Number(r.km_baku) || 0;
+    const totalRitasePp = kmBaku > 0 ? totalKm / kmBaku : (totalTrips > 0 ? totalTrips / 2 : 0);
+    const achievementKm = totalRealops > 0 ? totalKm / totalRealops : 0;
+    const kmPerBus = achievementKm;
+    const ritasePerBus = totalRealops > 0 ? totalRitasePp / totalRealops : 0;
+    const targetPercentage = targetHk > 0 ? (todayPassengers / targetHk) * 100 : 0;
+    const targetPassengersPerKm = 1.5;
+    const passengersPerKm = totalKm > 0 ? todayPassengers / totalKm : 0;
+    const passengersPerKmPercentage = targetPassengersPerKm > 0
+      ? (passengersPerKm / targetPassengersPerKm) * 100
+      : 0;
+    const tripsPerBus = totalRealops > 0 ? totalTrips / totalRealops : 0;
+    const passengersPerBus = totalRealops > 0 ? todayPassengers / totalRealops : 0;
+
+    const status = routeReports.length > 0 ? 'submitted' : 'empty';
+    const dataSource = routeReports.some((rep) => rep.last_synced_at) ? 'sheet_ingestion' : (routeReports.length > 0 ? 'app_input' : 'empty');
+
+    return {
+      id: r.id,
+      routeCode: code,
+      routeName: r.route_name || '',
+      operatorName: r.operator_name || 'Mikrotrans',
+      isLooping: !!r.is_looping,
+      kmBaku,
+      targetHk,
+      bestRecord: Number(r.best_record) || 0,
+      supervisorName: r.supervisor_name || 'Pengawas Wilayah',
+      defaultRenops: Number(r.default_renops) || 0,
+      renopsShift1: renopsS1,
+      realopsShift1: realopsS1,
+      renopsShift2: renopsS2,
+      realopsShift2: realopsS2,
+      totalRenops,
+      totalRealops,
+      headwayFastest: 3,
+      headwaySlowest: 10,
+      trafficJamSpots: r.default_traffic_jam_spots || [],
+      operationalIssues: '',
+      status,
+      todayPassengers,
+      yesterdayPassengers: 0,
+      lastWeekPassengers: 0,
+      totalKm,
+      achievementKm,
+      totalTrips,
+      totalRitasePp,
+      ritasePerBus,
+      kmPerBus,
+      paxPerBus: passengersPerBus,
+      targetPax: targetHk,
+      paxPercentage: targetPercentage,
+      paxPerKm: passengersPerKm,
+      targetPaxPerKm: targetPassengersPerKm,
+      paxPerKmPercentage: passengersPerKmPercentage,
+      toaShift1,
+      manualShift1,
+      totalShift1,
+      toaShift2,
+      manualShift2,
+      totalShift2,
+      dataSource,
+      targetPercentage,
+      targetPassengersPerKm,
+      passengersPerKm,
+      passengersPerKmPercentage,
+      tripsPerBus,
+      passengersPerBus,
+    };
+  });
+
+  const supervisorSummaries = calculateSupervisorSummaries(routeItems);
+
+  // Hitung total regional untuk rentang periode
+  const totalRenops = routeItems.reduce((acc, r) => acc + r.totalRenops, 0);
+  const totalRealops = routeItems.reduce((acc, r) => acc + r.totalRealops, 0);
+  const totalTodayPassengers = routeItems.reduce((acc, r) => acc + r.todayPassengers, 0);
+  const totalTargetPassengers = routeItems.reduce((acc, r) => acc + r.targetHk, 0);
+  const totalKm = routeItems.reduce((acc, r) => acc + r.totalKm, 0);
+  const averageKmPerBus = totalRealops > 0 ? totalKm / totalRealops : 0;
+  const totalTrips = routeItems.reduce((acc, r) => acc + (r.totalTrips || 0), 0);
+  const averageTripsPerBus = totalRealops > 0 ? totalTrips / totalRealops : 0;
+
+  const tomShift1 = routeItems.reduce((acc, r) => acc + r.toaShift1, 0);
+  const manualShift1 = routeItems.reduce((acc, r) => acc + r.manualShift1, 0);
+  const totalShift1 = tomShift1 + manualShift1;
+
+  const tomShift2 = routeItems.reduce((acc, r) => acc + r.toaShift2, 0);
+  const manualShift2 = routeItems.reduce((acc, r) => acc + r.manualShift2, 0);
+  const totalShift2 = tomShift2 + manualShift2;
+
+  const submittedCount = routeItems.filter((r) => r.status === 'submitted' || r.status === 'verified').length;
+  const verifiedCount = routeItems.filter((r) => r.status === 'verified').length;
+  const draftCount = routeItems.filter((r) => r.status === 'draft').length;
+  const emptyCount = routeItems.filter((r) => r.status === 'empty').length;
+
+  const appInputCount = routeItems.filter((r) => r.dataSource === 'app_input').length;
+  const sheetSyncCount = routeItems.filter((r) => r.dataSource === 'sheet_ingestion').length;
+  const emptySourceCount = routeItems.filter((r) => !r.dataSource || r.dataSource === 'empty').length;
+
+  return {
+    date: `${startDate} s.d. ${endDate}`,
+    yesterdayDate: '',
+    lastWeekDate: '',
+    routes: routeItems,
+    supervisorSummaries,
+    totalRenops,
+    totalRealops,
+    totalTodayPassengers,
+    totalTargetPassengers,
+    totalYesterdayPassengers: 0,
+    totalLastWeekPassengers: 0,
+    totalKm,
+    averageKmPerBus,
+    totalTrips,
+    averageTripsPerBus,
+    tomShift1,
+    manualShift1,
+    totalShift1,
+    yesterdayShift1: 0,
+    lastWeekShift1: 0,
+    tomShift2,
+    manualShift2,
+    totalShift2,
+    yesterdayShift2: 0,
+    lastWeekShift2: 0,
+    submittedCount,
+    verifiedCount,
+    draftCount,
+    emptyCount,
+    totalRoutesCount: routeItems.length,
+    appInputCount,
+    sheetSyncCount,
+    emptySourceCount,
   };
 }
 

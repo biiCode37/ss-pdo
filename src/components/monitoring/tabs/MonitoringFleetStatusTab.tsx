@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from "react";
 import type { DailyFleetShiftWithUnits, DailyFleetNonSgoUnit } from "@/types/supabase";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
-import { TEXT_MONITORING } from "@/constants/texts";
+import { TEXT_MONITORING, TEXT_FLEET_STATUS } from "@/constants/texts";
 import { Bus, CheckCircle2, AlertTriangle, ShieldCheck } from "lucide-react";
+import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
 
 export interface MonitoringFleetStatusTabProps {
   selectedDate: string;
@@ -19,11 +20,13 @@ interface EnrichedNonSgoUnit extends DailyFleetNonSgoUnit {
 }
 
 export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> = ({
+  selectedDate,
   fleetShifts,
   routes = [],
 }) => {
   const [shiftFilter, setShiftFilter] = useState<ShiftFilter>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [quickRoute, setQuickRoute] = useState<{ routeCode: string; routeId: number } | null>(null);
 
   // Map routeCode -> operatorName
   const operatorMap = useMemo(() => {
@@ -426,7 +429,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               whiteSpace: "nowrap",
             }}
           >
-            TO (Tukar Operasi)
+            TO (Tidak Operasi)
           </button>
 
           <button
@@ -575,19 +578,48 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   </span>
                 </div>
 
-                <span
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    color: "#F59E0B",
-                    background: "rgba(245, 158, 11, 0.12)",
-                    padding: "3px 8px",
-                    borderRadius: "6px",
-                    border: "1px solid rgba(245, 158, 11, 0.25)",
-                  }}
-                >
-                  {TEXT_MONITORING.FLEET_TAB.ROUTE_ISSUES_COUNT(group.units.length)}
-                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const matched = routes.find((r) => r.routeCode === group.routeCode);
+                      setQuickRoute({
+                        routeCode: group.routeCode,
+                        routeId: matched?.id || 0,
+                      });
+                    }}
+                    style={{
+                      fontSize: "10.5px",
+                      fontWeight: 700,
+                      color: "#38bdf8",
+                      background: "rgba(56, 189, 248, 0.12)",
+                      padding: "3px 8px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(56, 189, 248, 0.25)",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <span>✏️</span>
+                    <span>{TEXT_FLEET_STATUS.QUICK_KORLAP.BTN_OPEN_QUICK_INPUT}</span>
+                  </button>
+
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      color: "#F59E0B",
+                      background: "rgba(245, 158, 11, 0.12)",
+                      padding: "3px 8px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(245, 158, 11, 0.25)",
+                    }}
+                  >
+                    {TEXT_MONITORING.FLEET_TAB.ROUTE_ISSUES_COUNT(group.units.length)}
+                  </span>
+                </div>
               </div>
 
               {/* Units Grid */}
@@ -692,6 +724,20 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
           ))}
         </div>
+      )}
+
+      {quickRoute && (
+        <QuickKorlapFleetModal
+          isOpen={true}
+          onClose={() => setQuickRoute(null)}
+          routeId={quickRoute.routeId}
+          routeCode={quickRoute.routeCode}
+          selectedDate={selectedDate}
+          shift={shiftFilter === "all" ? 1 : shiftFilter}
+          onSaveSuccess={() => {
+            setQuickRoute(null);
+          }}
+        />
       )}
     </div>
   );
