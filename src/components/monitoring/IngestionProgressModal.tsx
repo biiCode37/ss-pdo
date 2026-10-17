@@ -3,6 +3,8 @@ import { CloudDownload, CheckCircle2, Loader2, Sparkles } from "lucide-react";
 import { TEXT_MONITORING } from "@/constants/texts";
 import type { IngestionProgress } from "@/services/regionalIngestionService";
 
+import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
+
 export interface IngestionProgressModalProps {
   isOpen: boolean;
   progress: IngestionProgress | null;
@@ -15,13 +17,10 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
   onClose,
 }) => {
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!isOpen) return;
+    const releaseLock = acquireScrollLock();
     return () => {
-      document.body.style.overflow = "";
+      releaseLock();
     };
   }, [isOpen]);
 

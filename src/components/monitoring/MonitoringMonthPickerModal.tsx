@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Calendar, ChevronLeft, ChevronRight, X, Check } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { type MonitoringPeriodFilter } from "@/services/allRouteMonitoringService";
+import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
 
 export interface MonitoringMonthPickerModalProps {
   isOpen: boolean;
@@ -39,6 +40,15 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
 
   const [selectedYear, setSelectedYear] = useState<number>(initY || today.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState<number>(initM || today.getMonth() + 1);
+
+  // Body Scroll Lock (Reference Counting)
+  useEffect(() => {
+    if (!isOpen) return;
+    const releaseLock = acquireScrollLock();
+    return () => {
+      releaseLock();
+    };
+  }, [isOpen]);
 
   // Sync state when modal opens
   useEffect(() => {

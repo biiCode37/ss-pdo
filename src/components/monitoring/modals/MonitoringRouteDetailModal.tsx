@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, ExternalLink, Check, CheckCircle2, Send, Clock, AlertTriangle } from "lucide-react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
+import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
 
 export interface MonitoringRouteDetailModalProps {
   route: RegionalRouteItem | null;
@@ -23,6 +24,15 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
   isVerifying,
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>("operasional");
+
+  // Coordinated Body Scroll Lock (Reference Counting)
+  useEffect(() => {
+    if (!isOpen) return;
+    const releaseLock = acquireScrollLock();
+    return () => {
+      releaseLock();
+    };
+  }, [isOpen]);
 
   if (!isOpen || !route) return null;
 
@@ -105,8 +115,16 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "center",
+        overscrollBehavior: "contain",
+        touchAction: "none",
       }}
       onClick={onClose}
+      onTouchMove={(e) => {
+        // Cegah scroll tembus ke background saat user menyentuh/menggeser area backdrop blur
+        if (e.target === e.currentTarget) {
+          e.preventDefault();
+        }
+      }}
     >
       <div
         style={{
@@ -122,6 +140,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
+          overscrollBehavior: "contain",
           animation: "slideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
         onClick={(e) => e.stopPropagation()}
@@ -392,6 +411,9 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
           style={{
             padding: "16px 18px",
             overflowY: "auto",
+            overscrollBehavior: "contain",
+            WebkitOverflowScrolling: "touch",
+            touchAction: "pan-y",
             display: "flex",
             flexDirection: "column",
             gap: "14px",

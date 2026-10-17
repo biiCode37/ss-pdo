@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { CloudDownload, X, AlertCircle, Loader2, Calendar } from 'lucide-react';
 import { TEXT_MONITORING } from '@/constants/texts';
+import { acquireScrollLock } from '@/utils/scrollLockCoordinator';
 import {
   ingestMonthlyMasterSheet,
   parseMonthAndYearFromTab,
@@ -32,6 +33,15 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
   const [syncing, setSyncing] = useState(false);
   const [progress, setProgress] = useState<MonthlyMasterIngestionProgress | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Body Scroll Lock (Reference Counting)
+  useEffect(() => {
+    if (!isOpen) return;
+    const releaseLock = acquireScrollLock();
+    return () => {
+      releaseLock();
+    };
+  }, [isOpen]);
 
   // Inisialisasi URL dari localStorage dan tab default saat modal dibuka
   useEffect(() => {
