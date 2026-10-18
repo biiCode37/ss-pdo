@@ -15,6 +15,10 @@ Setiap audit kode atau refactor SS_PDO wajib didokumentasikan di `refactor-ss-pd
 1. Seluruh pengerjaan fitur, debugging, audit, dan refactor **WAJIB** berada di branch `devmode`.
 2. Jika branch `devmode` belum ada pada repositori/proyek, agent wajib membuatnya terlebih dahulu sebelum melakukan modifikasi file (`git checkout -b devmode`).
 3. Agent dilarang keras menyentuh, mengakses, atau mengubah branch `main` / `master` / `production` kecuali ada instruksi eksplisit langsung dari pengguna.
+4. **Perintah Cepat "PA" (Push All):**
+   - Ketika pengguna mengatakan/memberikan perintah `"PA"` (Push All), agent wajib menjalankan rangkaian tugas berurutan ini:
+     `commit > push devmode > switch branch main > merge devmode ke main > push main` (lalu kembali checkout ke `devmode`).
+   - **Klausul Keselamatan Wajib:** Jika ditemukan permasalahan dalam proses tugas-tugas itu, agent **DILARANG KERAS mengambil keputusan sendiri**. Agent **WAJIB memberi konfirmasi kepada pengguna mengenai permasalahan yang ditemukan dilengkapi dengan rekomendasi solusi**, lalu menunggu keputusan pengguna sebelum melanjutkan atau mengulangi tugas yang belum selesai/terganggu/terhenti.
 
 ## Standar Kamus Teks Sentral (`src/constants/texts/`)
 
