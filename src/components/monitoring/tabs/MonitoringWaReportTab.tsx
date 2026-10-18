@@ -192,10 +192,9 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
     <div
       className="monitoring-wa-report-tab"
       style={{
-        padding: "16px",
+        padding: "16px 16px 0 16px",
         maxWidth: "1200px",
         margin: "0 auto",
-        paddingBottom: "84px",
       }}
     >
       {/* 1. Header & Format Segmented Tabs */}

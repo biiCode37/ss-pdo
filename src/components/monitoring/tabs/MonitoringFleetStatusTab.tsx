@@ -111,10 +111,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
     <div
       className="monitoring-fleet-status-tab"
       style={{
-        padding: "16px",
+        padding: "16px 16px 0 16px",
         maxWidth: "1200px",
         margin: "0 auto",
-        paddingBottom: "84px",
       }}
     >
       {/* 1. Header & Macro Stats Bar */}

@@ -94,6 +94,18 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
   - Judul commit wajib seringkas mungkin (maksimal **≤ 50 karakter**) dan jelas menggunakan format Conventional Commits (contoh: `fix: input TOA S1`, `feat: dropdown BA.02`). Dilarang membuat judul panjang bertele-tele.
 - **Hindari Over-Commit:**
   - Dilarang melakukan `git commit` untuk perubahan-perubahan mikro (seperti tweaking spacing kecil, padding, dll). Kumpulkan beberapa perubahan kecil dalam satu sesi fitur sebelum commit.
+- **Perintah Cepat "PA" (Push All):**
+  - Ketika pengguna mengatakan/memberikan perintah `"PA"`, itu artinya **Push All**.
+  - Agent **WAJIB** secara otomatis menjalankan rangkaian tugas berurutan berikut:
+    1. **Commit:** Buat commit ringkas (≤ 50 karakter) di branch `devmode`.
+    2. **Push Devmode:** `git push origin devmode`.
+    3. **Switch Branch Main:** `git checkout main`.
+    4. **Merge Devmode ke Main:** `git merge devmode -m "merge: devmode to main"`.
+    5. **Push Main:** `git push origin main`.
+    6. **Kembali ke Devmode:** `git checkout devmode` (agar pekerjaan selanjutnya tetap terisolasi di `devmode`).
+  - **Klausul Keselamatan Wajib (Larangan Keputusan Mandiri):**
+    - Jika ditemukan kendala/permasalahan dalam proses tugas-tugas itu (seperti merge conflict, test gagal, build gagal, git rejection, atau anomali jaringan), agent **DILARANG KERAS mengambil keputusan sendiri**.
+    - Agent **WAJIB memberi konfirmasi kepada pengguna mengenai permasalahan yang ditemukan secara transparan dilengkapi dengan rekomendasi solusi**, lalu menunggu keputusan/arahan pengguna sebelum melanjutkan atau mengulangi tugas yang belum selesai/terganggu/terhenti.
 
 ---
 

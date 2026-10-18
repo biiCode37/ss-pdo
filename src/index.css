@@ -149,7 +149,7 @@ input[type="number"] {
 .app-container {
   max-width: 480px;
   margin: 0 auto;
-  padding: clamp(12px, 2.5vw, 16px) clamp(12px, 2.5vw, 16px) calc(92px + env(safe-area-inset-bottom, 16px)) clamp(12px, 2.5vw, 16px);
+  padding: clamp(12px, 2.5vw, 16px) clamp(12px, 2.5vw, 16px) calc(76px + env(safe-area-inset-bottom, 12px)) clamp(12px, 2.5vw, 16px);
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -2132,32 +2132,30 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 
 /* Monitoring Regional & Leaderboard Responsive System */
 .monitoring-dashboard-tab {
-  padding: 16px;
+  padding: 16px 16px 0 16px;
   max-width: 1200px;
   margin: 0 auto;
-  padding-bottom: calc(88px + env(safe-area-inset-bottom, 16px));
   width: 100%;
   box-sizing: border-box;
 }
 
 @media (max-width: 640px) {
   .monitoring-dashboard-tab {
-    padding: 12px 12px calc(92px + env(safe-area-inset-bottom, 16px)) 12px;
+    padding: 12px 12px 0 12px;
   }
 }
 
 .monitoring-korwil-tab {
-  padding: 16px;
+  padding: 16px 16px 0 16px;
   max-width: 1200px;
   margin: 0 auto;
-  padding-bottom: calc(96px + env(safe-area-inset-bottom, 16px));
   width: 100%;
   box-sizing: border-box;
 }
 
 @media (max-width: 640px) {
   .monitoring-korwil-tab {
-    padding: 12px 12px calc(100px + env(safe-area-inset-bottom, 16px)) 12px;
+    padding: 12px 12px 0 12px;
   }
 }
 

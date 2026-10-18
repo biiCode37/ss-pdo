@@ -51,8 +51,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 gap: "16px",
                 maxWidth: "1200px",
                 margin: "0 auto",
-                padding: "16px",
-                paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
+                padding: "16px 16px 0 16px",
                 boxSizing: "border-box",
                 width: "100%",
               }
@@ -102,8 +101,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               gap: "16px",
               maxWidth: "1200px",
               margin: "0 auto",
-              padding: "16px",
-              paddingBottom: "calc(96px + env(safe-area-inset-bottom, 16px))",
+              padding: "16px 16px 0 16px",
               boxSizing: "border-box",
               width: "100%",
             }

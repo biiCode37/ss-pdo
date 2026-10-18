@@ -101,10 +101,9 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
     <div
       className="monitoring-routes-tab"
       style={{
-        padding: "16px",
+        padding: "16px 16px 0 16px",
         maxWidth: "1200px",
         margin: "0 auto",
-        paddingBottom: "84px",
       }}
     >
       {/* 1. Search Toolbar & Bulk Verify */}
