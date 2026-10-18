@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "test": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ingest:regional": "node --env-file=.env scripts/ingest-regional.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.0",

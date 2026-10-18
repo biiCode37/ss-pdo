@@ -554,29 +554,35 @@ body[style*="overflow: hidden"] .bottom-nav-wrapper {
   max-width: fit-content;
   padding: 4px 6px;
 
-  /* Supabase Surface-100 Dark Background */
-  background: #171717;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Elevated High-Contrast Dark Floating Capsule */
+  background: rgba(26, 28, 34, 0.94);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
   border-radius: 9999px;
 
-  /* Premium Floating Multi-Layer Shadow */
+  /* Premium High-Elevation Shadow for Clear Contrast */
   box-shadow:
-    0 12px 32px -4px rgba(0, 0, 0, 0.6),
-    0 4px 12px -2px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 20px 48px -4px rgba(0, 0, 0, 0.85),
+    0 8px 24px -2px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
   transition: all 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Solid Light Mode Background Override */
+/* High-Contrast Light Mode Floating Capsule */
 [data-theme="light"] .bottom-nav,
 body.light-mode .bottom-nav {
-  background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1.5px solid rgba(15, 23, 42, 0.22) !important;
   box-shadow:
-    0 12px 32px -4px rgba(0, 0, 0, 0.1),
-    0 4px 12px -2px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    0 18px 44px -4px rgba(15, 23, 42, 0.24),
+    0 6px 18px -2px rgba(15, 23, 42, 0.14),
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    inset 0 1.5px 0 rgba(255, 255, 255, 1) !important;
 }
 
 /* Tab Items (Ergonomic Minimum Tap Target 44px) */
@@ -591,12 +597,22 @@ body.light-mode .bottom-nav {
   border-radius: 9999px;
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.75);
   cursor: pointer;
   touch-action: manipulation;
   transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+[data-theme="light"] .bottom-nav-item,
+body.light-mode .bottom-nav-item {
+  color: #475569;
+}
+
+[data-theme="light"] .bottom-nav-item:hover,
+body.light-mode .bottom-nav-item:hover {
+  color: #0f172a;
 }
 
 .bottom-nav-item:hover {

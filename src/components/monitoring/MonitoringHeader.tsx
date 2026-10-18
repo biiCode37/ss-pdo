@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import {
-  Bus,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
@@ -141,15 +140,10 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                   margin: 0,
                   display: "flex",
                   alignItems: "center",
-                  gap: "8px",
                   color: "var(--text-primary, #ededed)",
                   letterSpacing: "-0.3px",
                 }}
               >
-                <Bus
-                  size={20}
-                  style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
-                />
                 <span>{TEXT_MONITORING.HEADER.TITLE}</span>
               </h1>
               <span
