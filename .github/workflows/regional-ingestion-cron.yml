@@ -1,0 +1,47 @@
+name: Regional Ingestion Cron
+
+on:
+  schedule:
+    # 07:30 UTC = 14:30 WIB (Akhir Shift 1)
+    - cron: '30 7 * * *'
+    # 16:00 UTC = 23:00 WIB (Akhir Shift 2 / Tutup Operasi)
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: 'Tanggal Target (Format: YYYY-MM-DD, kosong = hari ini WIB)'
+        required: false
+        default: ''
+      force:
+        description: 'Paksa sync rute yang berstatus submitted/verified?'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  run-ingestion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Execute Regional Ingestion Runner
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+        run: |
+          CMD="node scripts/ingest-regional.mjs"
+          if [ -n "${{ github.event.inputs.target_date }}" ]; then
+            CMD="$CMD --date=${{ github.event.inputs.target_date }}"
+          fi
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            CMD="$CMD --force"
+          fi
+          echo "Executing: $CMD"
+          $CMD

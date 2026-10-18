@@ -4,7 +4,7 @@
 export const TEXT_MONITORING = {
   HEADER: {
     TITLE: "Monitoring Wilayah",
-    SUBTITLE: "Ringkasan 18 Rute & Rekapitulasi Harian",
+    SUBTITLE: "18 Rute Aktif",
     BTN_BACK: "Operasi Rute",
     BTN_BACK_TITLE: "Kembali ke Operasi Rute Tunggal",
     BTN_WA_REPORT: "Buat Laporan WA",
@@ -184,7 +184,8 @@ export const TEXT_MONITORING = {
     ACHIEVEMENT_LABEL: "Capaian Target",
     SUPERVISOR_PREFIX: "Pengawas:",
     EMPTY_TITLE: "Data Tim Korwil Belum Tersedia",
-    EMPTY_DESC: "Data operasional untuk periode ini belum tersedia di database.",
+    EMPTY_DESC:
+      "Data operasional untuk periode ini belum tersedia di database.",
   },
   BULK_VERIFY: {
     BUTTON_LABEL: (count: number) => `Verifikasi Semua (${count})`,
@@ -209,9 +210,9 @@ export const TEXT_MONITORING = {
     CHART_TITLE: "Grafik Jumlah Pelanggan Per Rute",
     CHART_SUBTITLE: (dateStr?: string, isRange?: boolean) =>
       dateStr
-        ? (isRange
-            ? `Komparasi total pelanggan periode ${dateStr}`
-            : `Komparasi total pelanggan pada hari ${dateStr}`)
+        ? isRange
+          ? `Komparasi total pelanggan periode ${dateStr}`
+          : `Komparasi total pelanggan pada hari ${dateStr}`
         : "Komparasi total pelanggan dari 18 rute hari ini",
     CHART_TOOLTIP_SHIFT: (s1: number, s2: number) =>
       `TOA Shift 1: ${s1.toLocaleString("id-ID")} • Shift 2: ${s2.toLocaleString("id-ID")}`,
