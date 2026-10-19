@@ -10,7 +10,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { usePageAccess } from '@/context/PageAccessContext';
-import { PageCategory, PageKey, AppPageSetting } from '@/types/pageManagement';
+import type { PageCategory, AppPageSetting } from '@/types/pageManagement';
 import { TEXT_PAGE_MANAGEMENT } from '@/constants/texts';
 import { showSuccessToast, showErrorToast } from '@/utils/alertUtils';
 
@@ -21,7 +21,7 @@ interface Props {
 type FilterCategory = 'all' | PageCategory;
 
 export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
-  const { pageSettings, togglePageStatus, isLoading } = usePageAccess();
+  const { pageSettings, togglePageStatus } = usePageAccess();
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('all');
   const [togglingKey, setTogglingKey] = useState<string | null>(null);
 

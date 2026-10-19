@@ -1,9 +1,6 @@
 import { supabase, isSupabaseConfigured } from './supabase';
-import {
-  AppPageSetting,
-  DEFAULT_PAGE_SETTINGS,
-  PageKey,
-} from '@/types/pageManagement';
+import type { AppPageSetting, PageKey } from '@/types/pageManagement';
+import { DEFAULT_PAGE_SETTINGS } from '@/types/pageManagement';
 
 const CACHE_KEY = 'APP_PAGE_SETTINGS';
 

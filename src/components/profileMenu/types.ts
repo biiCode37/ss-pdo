@@ -8,6 +8,7 @@ export interface ProfileMenuSheetProps {
   onReturnToRouteView?: () => void;
   isInMonitoringView?: boolean;
   onOpenUserManagement?: () => void;
+  onOpenPageManagement?: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
   offlineQueueCount: number;

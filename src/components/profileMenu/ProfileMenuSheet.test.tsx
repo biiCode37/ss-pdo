@@ -146,4 +146,65 @@ describe("ProfileMenuSheet", () => {
     expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.OFFLINE_MODE);
     expect(overlay?.textContent).toContain(`3 ${TEXT_DASHBOARD.PROFILE_MENU.PENDING_SUFFIX}`);
   });
+
+  it("renders Page Management menu only for superadmin and handles click", async () => {
+    localStorage.setItem("PDO_USER_NAME", "Super User");
+    localStorage.setItem("PDO_USER_ROLE", "superadmin");
+
+    const onOpenPageManagement = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <ProfileMenuSheet
+          isOpen={true}
+          onClose={vi.fn()}
+          onOpenPageManagement={onOpenPageManagement}
+          isDarkMode={false}
+          onToggleTheme={vi.fn()}
+          offlineQueueCount={0}
+          isOnline={true}
+          onLogout={vi.fn()}
+        />
+      );
+    });
+
+    const overlay = document.body.querySelector(".profile-menu-overlay");
+    expect(overlay?.textContent).toContain("Manajemen Halaman");
+
+    const pageMgmtBtn = overlay?.querySelector(
+      '[data-testid="profile-menu-page-management-btn"]'
+    ) as HTMLButtonElement;
+    expect(pageMgmtBtn).not.toBeNull();
+
+    act(() => {
+      pageMgmtBtn.click();
+    });
+
+    expect(onOpenPageManagement).toHaveBeenCalledTimes(1);
+  });
+
+  it("does NOT render Page Management menu for admin role", async () => {
+    localStorage.setItem("PDO_USER_NAME", "Regular Admin");
+    localStorage.setItem("PDO_USER_ROLE", "admin");
+
+    await act(async () => {
+      root.render(
+        <ProfileMenuSheet
+          isOpen={true}
+          onClose={vi.fn()}
+          isDarkMode={false}
+          onToggleTheme={vi.fn()}
+          offlineQueueCount={0}
+          isOnline={true}
+          onLogout={vi.fn()}
+        />
+      );
+    });
+
+    const overlay = document.body.querySelector(".profile-menu-overlay");
+    expect(overlay?.textContent).not.toContain("Manajemen Halaman");
+    expect(
+      overlay?.querySelector('[data-testid="profile-menu-page-management-btn"]')
+    ).toBeNull();
+  });
 });

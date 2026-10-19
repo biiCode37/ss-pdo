@@ -21,10 +21,22 @@ import {
   useDashboardSyncHandlers,
 } from "./dashboard/index";
 
+import { usePageAccess } from "@/context/PageAccessContext";
+import {
+  PageDisabledState,
+  SuperadminMaintenanceBanner,
+} from "@/components/pageManagement";
+
 // Dynamic Code Splitting for infrequently visited administration pages
 const UserManagementPage = lazy(() =>
   import("./UserManagementPage").then((m) => ({
     default: m.UserManagementPage,
+  })),
+);
+
+const PageManagementPage = lazy(() =>
+  import("./pageManagement/PageManagementPage").then((m) => ({
+    default: m.PageManagementPage,
   })),
 );
 
@@ -34,6 +46,9 @@ interface Props {
 }
 
 export function Dashboard({ onLogout, needsReauth }: Props) {
+  const { canAccessPage, isUnderMaintenance } = usePageAccess();
+  const currentUserRole = getStoredUserRole();
+
   // 1. Google Sheets Data & Accumulation Hook
   const {
     sheetUrl,
@@ -107,6 +122,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     activeShift,
     confirmedShifts,
     isShiftConfirmed,
+    refreshFleetData,
   } = useDashboardFleet({
     matchedRoute,
     operationalReportDate,
@@ -191,13 +207,36 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   });
 
   // 7. Dynamic Administration & Regional Views
-  if (currentView === "user_management") {
+  if (currentView === "page_management") {
+    if (currentUserRole !== "superadmin") {
+      return (
+        <PageDisabledState onBack={() => setCurrentView("dashboard")} />
+      );
+    }
     return (
       <Suspense fallback={<UserManagementSkeleton />}>
+        <PageManagementPage onBack={() => setCurrentView("dashboard")} />
+      </Suspense>
+    );
+  }
+
+  if (currentView === "user_management") {
+    if (!canAccessPage("user_management", currentUserRole)) {
+      return (
+        <PageDisabledState onBack={() => setCurrentView("dashboard")} />
+      );
+    }
+    return (
+      <Suspense fallback={<UserManagementSkeleton />}>
+        {currentUserRole === "superadmin" && isUnderMaintenance("user_management") && (
+          <SuperadminMaintenanceBanner
+            onManageAccess={() => setCurrentView("page_management")}
+          />
+        )}
         <UserManagementPage
           onBack={() => setCurrentView("dashboard")}
           currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
-          currentUserRole={getStoredUserRole()}
+          currentUserRole={currentUserRole}
           isDarkMode={theme === "dark"}
         />
       </Suspense>
@@ -205,8 +244,18 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   }
 
   if (currentView === "regional_monitoring") {
+    if (!canAccessPage("regional_monitoring", currentUserRole)) {
+      return (
+        <PageDisabledState onBack={() => setCurrentView("dashboard")} />
+      );
+    }
     return (
       <>
+        {currentUserRole === "superadmin" && isUnderMaintenance("regional_monitoring") && (
+          <SuperadminMaintenanceBanner
+            onManageAccess={() => setCurrentView("page_management")}
+          />
+        )}
         <AllRouteMonitoringPage
           onBackToRouteView={() => setCurrentView("dashboard")}
           onOpenProfile={() => setIsProfileMenuOpen(true)}
@@ -232,6 +281,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             setIsProfileMenuOpen(false);
             setCurrentView("user_management");
           }}
+          onOpenPageManagement={() => {
+            setIsProfileMenuOpen(false);
+            setCurrentView("page_management");
+          }}
           isDarkMode={theme === "dark"}
           onToggleTheme={toggleTheme}
           offlineQueueCount={
@@ -247,6 +300,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   }
 
   // 8. Main Route Dashboard View
+  if (!canAccessPage("dashboard", currentUserRole)) {
+    return <PageDisabledState />;
+  }
+
   return (
     <div
       className="app-container"
@@ -254,6 +311,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
+      {currentUserRole === "superadmin" && isUnderMaintenance("dashboard") && (
+        <SuperadminMaintenanceBanner
+          onManageAccess={() => setCurrentView("page_management")}
+        />
+      )}
       {/* 1. Header & Sticky Route Selector */}
       <DashboardHeader
         headerBlockRef={headerBlockRef}
@@ -280,6 +342,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onExitAccumulation={handleExitAccumulation}
         reportRoute={matchedRoute}
         reportStatus={operationalReportStatus}
+        confirmedShifts={confirmedShifts}
         onOpenReportModal={() => setIsReportModalOpen(true)}
         onRouteCodeChange={(code: string) => setSelectedRouteCode(code)}
         routeSelectorOpenTrigger={routeSelectorOpenTrigger}
@@ -312,6 +375,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           mainTab={mainTab}
           onSwipeNext={handleSwipeNextTab}
           onSwipePrev={handleSwipePrevTab}
+          onOpenPageManagement={() => setCurrentView("page_management")}
           busData={busData}
           headerMap={headerMap}
           currentSheetId={currentSheetId}
@@ -347,6 +411,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         operationalReportDate={operationalReportDate}
         dynamicRenops={dynamicRenops}
         onOperationalStatusChange={setOperationalReportStatus}
+        onRefreshFleetData={refreshFleetData}
         busData={busData}
         activeShift={activeShift}
         isQueueModalOpen={isQueueModalOpen}
@@ -377,6 +442,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onOpenUserManagement={() => {
           setIsProfileMenuOpen(false);
           setCurrentView("user_management");
+        }}
+        onOpenPageManagement={() => {
+          setIsProfileMenuOpen(false);
+          setCurrentView("page_management");
         }}
         theme={theme}
         onToggleTheme={toggleTheme}

@@ -17,6 +17,7 @@ export function ProfileMenuSheet({
   onReturnToRouteView,
   isInMonitoringView,
   onOpenUserManagement,
+  onOpenPageManagement,
   isDarkMode,
   onToggleTheme,
   offlineQueueCount,
@@ -162,6 +163,7 @@ export function ProfileMenuSheet({
           role={userProfile.role}
           onClose={onClose}
           onOpenUserManagement={onOpenUserManagement}
+          onOpenPageManagement={onOpenPageManagement}
         />
 
         <ProfileFeaturesSection

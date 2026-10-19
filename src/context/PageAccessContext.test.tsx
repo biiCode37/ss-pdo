@@ -1,9 +1,9 @@
 // @vitest-environment happy-dom
 (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
-import React, { act } from 'react';
-import { createRoot, Root } from 'react-dom/client';
+import { act } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { PageAccessProvider, usePageAccess, PageAccessContextType } from './PageAccessContext';
+import { PageAccessProvider, usePageAccess, type PageAccessContextType } from './PageAccessContext';
 
 vi.mock('@/services/pageManagementService', () => ({
   fetchPageSettings: vi.fn().mockResolvedValue([

@@ -6,7 +6,8 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import { PageKey, AppPageSetting } from '@/types/pageManagement';
+import type { PageKey, AppPageSetting } from '@/types/pageManagement';
+import { DEFAULT_PAGE_SETTINGS } from '@/types/pageManagement';
 import {
   fetchPageSettings,
   getCachedSettings,
@@ -137,10 +138,27 @@ export const PageAccessProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
+const defaultFallbackSettingsMap: Record<PageKey, AppPageSetting> = DEFAULT_PAGE_SETTINGS.reduce(
+  (acc, curr) => {
+    acc[curr.page_key] = curr;
+    return acc;
+  },
+  {} as Record<PageKey, AppPageSetting>
+);
+
+const defaultFallbackContext: PageAccessContextType = {
+  pageSettings: defaultFallbackSettingsMap,
+  isLoading: false,
+  canAccessPage: () => true,
+  isUnderMaintenance: () => false,
+  togglePageStatus: async () => true,
+  refreshSettings: async () => {},
+};
+
 export function usePageAccess(): PageAccessContextType {
   const context = useContext(PageAccessContext);
   if (!context) {
-    throw new Error('usePageAccess must be used within PageAccessProvider');
+    return defaultFallbackContext;
   }
   return context;
 }

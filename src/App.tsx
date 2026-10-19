@@ -11,6 +11,7 @@ import { showErrorAlert } from './utils/alertUtils';
 import { checkAndMigrateCache } from './utils/cacheUtils';
 import { initHistoryNavigation } from './utils/historyNavigation';
 import { TEXT_AUTH } from './constants/texts';
+import { PageAccessProvider } from './context/PageAccessContext';
 
 export default function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -117,13 +118,13 @@ export default function App() {
   };
 
   return (
-    <>
+    <PageAccessProvider>
       {!isSignedIn ? (
         <LoginScreen onLoginSuccess={() => setIsSignedIn(true)} isApiReady={isApiReady} />
       ) : (
         <Dashboard onLogout={handleLogout} needsReauth={needsReauth} />
       )}
-    </>
+    </PageAccessProvider>
   );
 }
 
