@@ -31,18 +31,20 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
   onResetAccumulation,
   onDismiss,
 }) => {
+  const startMonthName = MONTH_NAMES_ID[startMonth] || startMonth;
+  const endMonthName = MONTH_NAMES_ID[endMonth] || endMonth;
+
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {/* Preview Badge */}
       <div
         style={{
-          background: "rgba(62, 207, 142, 0.1)",
-          border: "1px solid rgba(62, 207, 142, 0.25)",
+          background: "rgba(56, 189, 248, 0.1)",
+          border: "1px solid rgba(56, 189, 248, 0.25)",
           borderRadius: "10px",
           padding: "10px 14px",
-          marginBottom: "16px",
-          fontSize: "12.5px",
-          color: "var(--accent-color)",
+          fontSize: "0.82rem",
+          color: "var(--accent-color, #38bdf8)",
           fontWeight: 600,
           display: "flex",
           alignItems: "center",
@@ -51,9 +53,14 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
       >
         <Layers size={14} style={{ flexShrink: 0 }} />
         <span>
-          Rentang: {safeStartDay} {MONTH_NAMES_ID[startMonth] || startMonth}{" "}
-          {startYear} — {safeEndDay} {MONTH_NAMES_ID[endMonth] || endMonth}{" "}
-          {endYear}
+          {TEXT_DASHBOARD.ACCUMULATION_SHEET.PREVIEW_RANGE_LABEL(
+            safeStartDay,
+            startMonthName,
+            startYear,
+            safeEndDay,
+            endMonthName,
+            endYear,
+          )}
         </span>
       </div>
 
@@ -66,8 +73,7 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
             border: "1px solid rgba(239, 68, 68, 0.35)",
             borderRadius: "10px",
             padding: "10px 14px",
-            marginBottom: "16px",
-            fontSize: "12.5px",
+            fontSize: "0.8rem",
             color: "var(--danger-color, #ef4444)",
             fontWeight: 600,
           }}
@@ -79,19 +85,29 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
       {/* Tombol Apply */}
       <button
         type="button"
-        className="btn"
         onClick={handleApply}
         style={{
           width: "100%",
-          padding: "12px",
+          minHeight: "44px",
+          padding: "10px 16px",
+          borderRadius: "12px",
+          border: "none",
+          background: "linear-gradient(135deg, #0284c7, #0ea5e9)",
+          color: "#ffffff",
           fontWeight: 700,
-          fontSize: "14px",
+          fontSize: "0.92rem",
+          cursor: "pointer",
+          boxShadow: "0 4px 14px rgba(14, 165, 233, 0.35)",
+          transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         {TEXT_DASHBOARD.ACCUMULATION_SHEET.APPLY_BTN}
       </button>
 
-      {/* Tombol Reset Mode Akumulasi (ACC-17-01) */}
+      {/* Tombol Reset Mode Akumulasi */}
       {isAccumulationActive && onResetAccumulation && (
         <button
           type="button"
@@ -101,20 +117,24 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
           }}
           style={{
             width: "100%",
-            padding: "11px",
+            minHeight: "40px",
+            padding: "8px 14px",
+            borderRadius: "12px",
+            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+            background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+            color: "var(--text-secondary, #94a3b8)",
             fontWeight: 600,
-            fontSize: "13px",
-            marginTop: "8px",
-            background: "transparent",
-            border: "1px solid var(--card-border)",
-            borderRadius: "10px",
-            color: "var(--text-secondary)",
+            fontSize: "0.85rem",
             cursor: "pointer",
+            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           {TEXT_DASHBOARD.ACCUMULATION_SHEET.RESET_BTN}
         </button>
       )}
-    </>
+    </div>
   );
 };

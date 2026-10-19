@@ -63,14 +63,14 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
           onClick={onOpenBulkTripModal}
           disabled={isSubmittingBulk}
           style={{
-            height: "38px",
+            height: "36px",
             padding: "0 12px",
-            borderRadius: "11px",
-            background: "var(--card-bg)",
+            borderRadius: "10px",
+            background: "var(--input-bg)",
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 600,
-            fontSize: "12.5px",
+            fontSize: "12px",
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
@@ -78,7 +78,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             whiteSpace: "nowrap",
             cursor: "pointer",
             boxShadow: "none",
-            transition: "opacity 0.12s ease",
+            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
             opacity: isSubmittingBulk ? 0.7 : 1,
           }}
           title={
@@ -92,7 +92,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
         >
           {isSubmittingBulk && (
             <Loader2
-              size={14}
+              size={13}
               className="spinner"
               style={{ color: "var(--accent-color)" }}
             />
@@ -110,12 +110,12 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             onChange={(e) => onCategoryChange(e.target.value)}
             className="input-field"
             style={{
-              height: "38px",
-              padding: "0 32px 0 12px",
-              fontSize: "12.5px",
+              height: "36px",
+              padding: "0 28px 0 10px",
+              fontSize: "12px",
               fontWeight: 600,
-              borderRadius: "11px",
-              background: "var(--card-bg)",
+              borderRadius: "10px",
+              background: "var(--input-bg)",
               border: "1px solid var(--card-border)",
               color: "var(--text-primary)",
               cursor: "pointer",
@@ -139,10 +139,10 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             ))}
           </select>
           <ChevronDown
-            size={15}
+            size={14}
             style={{
               position: "absolute",
-              right: "10px",
+              right: "9px",
               top: "50%",
               transform: "translateY(-50%)",
               color: "var(--text-secondary)",
@@ -158,36 +158,46 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
         style={{ display: "flex", gap: "clamp(6px, 1.5vw, 8px)", margin: 0 }}
       >
         <div className="search-input-wrapper" style={{ flex: 1 }}>
-          <Search className="search-icon" size={17} />
+          <Search className="search-icon" size={16} />
           <input
             type="text"
             className="input-field search-input"
             placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            style={{ height: "38px", fontSize: "13px" }}
+            style={{ height: "36px", fontSize: "12.5px", borderRadius: "10px" }}
           />
         </div>
         <button
-          className={`btn ${showOnlyUnfinished ? "" : "btn-outline"}`}
+          className="btn"
           style={{
             width: "auto",
             padding: "0 12px",
             display: "flex",
             gap: "5px",
             alignItems: "center",
-            height: "38px",
-            fontSize: "12.5px",
+            height: "36px",
+            fontSize: "12px",
             fontWeight: 600,
-            borderRadius: "11px",
+            borderRadius: "10px",
             whiteSpace: "nowrap",
+            background: showOnlyUnfinished
+              ? "rgba(16, 185, 129, 0.15)"
+              : "var(--input-bg)",
+            border: showOnlyUnfinished
+              ? "1px solid rgba(16, 185, 129, 0.4)"
+              : "1px solid var(--card-border)",
+            color: showOnlyUnfinished
+              ? "var(--success-color, #10b981)"
+              : "var(--text-secondary)",
+            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
           onClick={onToggleUnfinished}
         >
           {showOnlyUnfinished ? (
-            <CheckCircle2 size={15} />
+            <CheckCircle2 size={14} style={{ color: "var(--success-color)" }} />
           ) : (
-            <Filter size={15} />
+            <Filter size={14} />
           )}
           {showOnlyUnfinished
             ? TEXT_DASHBOARD.BUS_LIST.FILTER_UNFINISHED

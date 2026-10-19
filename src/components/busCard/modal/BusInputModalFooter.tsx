@@ -19,7 +19,7 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
     <div
       style={{
         display: "flex",
-        gap: "8px",
+        gap: "10px",
         marginTop: "auto",
         paddingTop: isKeyboardOpen ? "8px" : "12px",
         borderTop: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
@@ -34,19 +34,19 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
         onClick={onDismiss}
         style={{
           flex: 1,
-          minHeight: isKeyboardOpen ? "42px" : "48px",
-          padding: isKeyboardOpen ? "8px 12px" : "12px 14px",
-          borderRadius: isKeyboardOpen ? "12px" : "14px",
+          minHeight: isKeyboardOpen ? "40px" : "46px",
+          padding: isKeyboardOpen ? "6px 12px" : "10px 14px",
+          borderRadius: "12px",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-          background: "rgba(255, 255, 255, 0.05)",
-          color: "var(--text-secondary, #8b8b8b)",
-          fontSize: isKeyboardOpen ? "0.88rem" : "0.92rem",
+          background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+          color: "var(--text-secondary, #94a3b8)",
+          fontSize: isKeyboardOpen ? "0.85rem" : "0.9rem",
           fontWeight: 600,
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          transition: "background 0.15s ease",
+          transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
         {TEXT_COMMON.BUTTONS.CANCEL}
@@ -58,25 +58,25 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
         disabled={isDisabled}
         style={{
           flex: 2,
-          minHeight: isKeyboardOpen ? "42px" : "48px",
+          minHeight: isKeyboardOpen ? "40px" : "46px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           gap: "6px",
-          padding: isKeyboardOpen ? "8px 14px" : "12px 16px",
-          borderRadius: isKeyboardOpen ? "12px" : "14px",
+          padding: isKeyboardOpen ? "6px 14px" : "10px 16px",
+          borderRadius: "12px",
           border: "none",
           background: isDisabled
-            ? "rgba(100, 116, 139, 0.3)"
+            ? "rgba(100, 116, 139, 0.25)"
             : "linear-gradient(135deg, #0284c7, #0ea5e9)",
-          color: isDisabled ? "#94a3b8" : "#ffffff",
-          fontSize: isKeyboardOpen ? "0.9rem" : "0.95rem",
+          color: isDisabled ? "#64748b" : "#ffffff",
+          fontSize: isKeyboardOpen ? "0.88rem" : "0.92rem",
           fontWeight: 700,
           cursor: isDisabled ? "not-allowed" : "pointer",
           boxShadow: isDisabled
             ? "none"
-            : "0 4px 16px rgba(14, 165, 233, 0.35)",
-          transition: "all 0.15s cubic-bezier(0.32, 0.72, 0, 1)",
+            : "0 4px 14px rgba(14, 165, 233, 0.35)",
+          transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
         <Check size={isKeyboardOpen ? 16 : 18} />

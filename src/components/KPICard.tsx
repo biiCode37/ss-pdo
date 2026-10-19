@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Gauge, Users, UserCheck, Bus } from "lucide-react";
+import { Gauge, Users, UserCheck, Bus, Activity } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { TEXT_DASHBOARD } from "../constants/texts";
@@ -27,19 +27,19 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         }}
       >
         <div className="analytics-card-title">
-          <Gauge size={18} />
+          <Activity size={18} style={{ color: "var(--accent-color)" }} />
           <span>{TEXT_DASHBOARD.KPIS.TITLE}</span>
         </div>
         {dateBadge && (
           <span
             style={{
-              fontSize: "12px",
+              fontSize: "11.5px",
               fontWeight: 700,
               fontFamily: "monospace",
               color: "var(--accent-color)",
               background: "rgba(62, 207, 142, 0.12)",
               border: "1px solid rgba(62, 207, 142, 0.25)",
-              padding: "3px 8px",
+              padding: "2px 8px",
               borderRadius: "6px",
               whiteSpace: "nowrap",
               letterSpacing: "0.5px",
@@ -50,103 +50,69 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         )}
       </div>
 
-      <div className="analytics-grid-2">
-        <div className="analytics-stat-box">
-          <div className="analytics-stat-label">
-            <Gauge size={14} style={{ color: "var(--success-color)" }} />
-            <span>{TEXT_DASHBOARD.KPIS.TOTAL_KM}</span>
+      <div className="kpi-executive-grid">
+        {/* Cell 1: Total KM */}
+        <div className="kpi-metric-card">
+          <div className="kpi-metric-head">
+            <span className="kpi-metric-label">
+              <Gauge size={13} style={{ color: "var(--success-color)" }} />
+              {TEXT_DASHBOARD.KPIS.TOTAL_KM}
+            </span>
           </div>
-          <div
-            className="analytics-stat-value"
-            style={{ color: "var(--success-color)" }}
-          >
-            {formatRaw(summary.totalKm)}{" "}
-            <span style={{ fontSize: "12px", fontWeight: 400 }}>{TEXT_DASHBOARD.KPIS.TOTAL_KM_UNIT}</span>
+          <div className="kpi-metric-value-row">
+            <span className="kpi-metric-value" style={{ color: "var(--success-color)" }}>
+              {formatRaw(summary.totalKm)}
+            </span>
+            <span className="kpi-metric-unit">{TEXT_DASHBOARD.KPIS.TOTAL_KM_UNIT}</span>
           </div>
         </div>
 
-        <div className="analytics-stat-box">
-          <div className="analytics-stat-label">
-            <Users size={14} style={{ color: "var(--accent-color)" }} />
-            <span>{TEXT_DASHBOARD.KPIS.TOA_PASSENGERS}</span>
+        {/* Cell 2: Total Pelanggan TOA */}
+        <div className="kpi-metric-card">
+          <div className="kpi-metric-head">
+            <span className="kpi-metric-label">
+              <Users size={13} style={{ color: "var(--accent-color)" }} />
+              {TEXT_DASHBOARD.KPIS.TOA_PASSENGERS}
+            </span>
           </div>
-          <div
-            className="analytics-stat-value"
-            style={{ color: "var(--accent-color)" }}
-          >
-            {formatInt(summary.totalPassengers)}
+          <div className="kpi-metric-value-row">
+            <span className="kpi-metric-value" style={{ color: "var(--accent-color)" }}>
+              {formatInt(summary.totalPassengers)}
+            </span>
+            <span className="kpi-metric-unit">{TEXT_DASHBOARD.UNIT_CARD.PNP_UNIT}</span>
           </div>
         </div>
-      </div>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          marginTop: "14px",
-          paddingTop: "12px",
-          borderTop: "1px solid var(--card-border)",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontSize: "13px",
-          }}
-        >
-          <span
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              color: "var(--text-secondary)",
-            }}
-          >
-            <Bus size={16} style={{ color: "var(--accent-color)" }} />
-            <span>{TEXT_DASHBOARD.KPIS.KM_PER_BUS}</span>
-          </span>
-          <b
-            style={{
-              color: "var(--text-primary)",
-              wordBreak: "break-all",
-              textAlign: "right",
-            }}
-          >
-            {formatRaw(summary.kmPerBus)} {TEXT_DASHBOARD.KPIS.TOTAL_KM_UNIT}
-          </b>
+        {/* Cell 3: KM per Bus */}
+        <div className="kpi-metric-card">
+          <div className="kpi-metric-head">
+            <span className="kpi-metric-label">
+              <Bus size={13} style={{ color: "#38bdf8" }} />
+              {TEXT_DASHBOARD.KPIS.KM_PER_BUS_LABEL}
+            </span>
+          </div>
+          <div className="kpi-metric-value-row">
+            <span className="kpi-metric-value" style={{ color: "#38bdf8" }}>
+              {formatRaw(summary.kmPerBus)}
+            </span>
+            <span className="kpi-metric-unit">{TEXT_DASHBOARD.KPIS.BUS_UNIT}</span>
+          </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontSize: "13px",
-          }}
-        >
-          <span
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              color: "var(--text-secondary)",
-            }}
-          >
-            <UserCheck size={16} style={{ color: "var(--success-color)" }} />
-            <span>{TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM}</span>
-          </span>
-          <b
-            style={{
-              color: "var(--text-primary)",
-              wordBreak: "break-all",
-              textAlign: "right",
-            }}
-          >
-            {formatRaw(summary.passengersPerKm)}
-          </b>
+        {/* Cell 4: Pelanggan per KM */}
+        <div className="kpi-metric-card">
+          <div className="kpi-metric-head">
+            <span className="kpi-metric-label">
+              <UserCheck size={13} style={{ color: "#a78bfa" }} />
+              {TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM_LABEL}
+            </span>
+          </div>
+          <div className="kpi-metric-value-row">
+            <span className="kpi-metric-value" style={{ color: "#a78bfa" }}>
+              {formatRaw(summary.passengersPerKm)}
+            </span>
+            <span className="kpi-metric-unit">{TEXT_DASHBOARD.KPIS.RATIO_UNIT}</span>
+          </div>
         </div>
       </div>
     </div>

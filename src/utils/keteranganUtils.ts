@@ -220,3 +220,35 @@ export function splitShiftKeterangan(combined?: string | null): {
   return { s1: single, s2: single };
 }
 
+/**
+ * Mengecek apakah catatan keterangan memiliki informasi operasional tambahan
+ * yang perlu ditampilkan di bagian catatan kartu.
+ * Mengembalikan false jika catatan hanya berupa status armada tetap murni ("OFF", "T.O", "TO", "TO EVDAL", "SO", "SGO")
+ * yang sudah ditampilkan secara eksplisit melalui badge status di header kartu,
+ * sehingga mencegah tampilan redundan dan menjaga kerapian kartu.
+ */
+export function hasMeaningfulNote(raw?: string | null): boolean {
+  if (!raw || typeof raw !== 'string') return false;
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+
+  const PURE_STATUS_REGEX = /^(?:OFF|T\.?O(?:\s*EVDAL)?|SO|SGO)$/i;
+
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|').map((p) => p.trim());
+    return parts.some((part) => {
+      if (!part) return false;
+      const normalized = normalizeKeterangan(part).trim();
+      return !PURE_STATUS_REGEX.test(normalized) && !PURE_STATUS_REGEX.test(part);
+    });
+  }
+
+  const normalized = normalizeKeterangan(trimmed).trim();
+  if (PURE_STATUS_REGEX.test(normalized) || PURE_STATUS_REGEX.test(trimmed)) {
+    return false;
+  }
+
+  return true;
+}
+
+

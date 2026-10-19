@@ -11,7 +11,8 @@ interface UnifiedRouteControlBarProps {
   onLoadData: (tab?: string, targetSheetUrl?: string) => void;
   onExitAccumulation?: (targetDay?: string) => void;
   reportRoute?: { id: number; route_code: string } | null;
-  reportStatus?: "draft" | "submitted" | "verified";
+  reportStatus?: "draft" | "submitted" | "verified" | "failed";
+  confirmedShifts?: { 1: boolean; 2: boolean };
   onOpenReportModal?: () => void;
 }
 
@@ -25,6 +26,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
   onExitAccumulation,
   reportRoute,
   reportStatus,
+  confirmedShifts,
   onOpenReportModal,
 }) => {
   return (
@@ -35,13 +37,13 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
         alignItems: "center",
         justifyContent: "space-between",
         gap: "8px",
-        padding: "6px 8px",
-        borderRadius: "14px",
-        marginBottom: "14px",
+        padding: "5px 8px",
+        borderRadius: "12px",
+        marginBottom: "12px",
         border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
         background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
       }}
     >
       {/* Left Segment: Static Date Display Badge (Informative Only, Not Clickable) */}
@@ -53,8 +55,8 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
           gap: "6px",
           flex: 1,
           minWidth: 0,
-          padding: "5px 8px",
-          borderRadius: "9px",
+          padding: "4px 6px",
+          borderRadius: "8px",
           background: "transparent",
           userSelect: "none",
           cursor: "default",
@@ -68,12 +70,12 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
         <span
           style={{
             fontWeight: 600,
-            fontSize: "13px",
+            fontSize: "12.5px",
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
             color: "var(--text-primary)",
-            letterSpacing: "-0.1px",
+            letterSpacing: "-0.01em",
           }}
         >
           {displayDateLabel}
@@ -98,87 +100,98 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "6px",
+            gap: "5px",
             background: "rgba(234, 179, 8, 0.12)",
             border: "1px solid rgba(234, 179, 8, 0.35)",
-            borderRadius: "9px",
+            borderRadius: "8px",
             color: "var(--warning-color, #eab308)",
-            padding: "6px 10px",
-            fontSize: "12px",
+            padding: "5px 9px",
+            fontSize: "11.5px",
             fontWeight: 700,
             cursor: "pointer",
             flexShrink: 0,
             whiteSpace: "nowrap",
-            transition: "all 0.2s ease",
+            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
           title="Keluar dari mode akumulasi kembali ke harian"
         >
           <span>✕</span>
           <span>Keluar Akumulasi</span>
         </button>
-      ) : reportRoute && onOpenReportModal ? (
-        <button
-          type="button"
-          data-testid="open-operational-report-btn"
-          onClick={onOpenReportModal}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            background:
-              reportStatus === "verified"
-                ? "rgba(16, 185, 129, 0.1)"
-                : reportStatus === "submitted"
-                  ? "rgba(14, 165, 233, 0.1)"
-                  : "rgba(245, 158, 11, 0.1)",
-            border: `1px solid ${
-              reportStatus === "verified"
-                ? "rgba(16, 185, 129, 0.25)"
-                : reportStatus === "submitted"
-                  ? "rgba(14, 165, 233, 0.25)"
-                  : "rgba(245, 158, 11, 0.25)"
-            }`,
-            borderRadius: "9px",
-            color:
-              reportStatus === "verified"
-                ? "var(--success-color, #10b981)"
-                : reportStatus === "submitted"
-                  ? "var(--info-color, #38bdf8)"
-                  : "var(--warning-color, #f59e0b)",
-            padding: "6px 10px",
-            fontSize: "12px",
-            fontWeight: 700,
-            cursor: "pointer",
-            flexShrink: 0,
-            whiteSpace: "nowrap",
-            transition: "all 0.2s ease",
-          }}
-          title={TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE}
-        >
-          <span
+      ) : reportRoute && onOpenReportModal ? (() => {
+        const isFailed = reportStatus === "failed";
+        const isVerified = reportStatus === "verified";
+        const isSubmitted = reportStatus === "submitted";
+
+        let statusBg = "rgba(245, 158, 11, 0.1)";
+        let statusBorder = "rgba(245, 158, 11, 0.25)";
+        let statusColor = "var(--warning-color, #f59e0b)";
+        let statusLabel: string = TEXT_PDO_FORM.A2_REPORT.PILL_LABEL;
+        let statusTitle: string = TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE;
+
+        if (isFailed) {
+          statusBg = "rgba(239, 68, 68, 0.12)";
+          statusBorder = "rgba(239, 68, 68, 0.35)";
+          statusColor = "var(--danger-color, #ef4444)";
+          statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_FAILED;
+          statusTitle = TEXT_PDO_FORM.A2_REPORT.TOOLTIP_FAILED;
+        } else if (isVerified) {
+          statusBg = "rgba(16, 185, 129, 0.1)";
+          statusBorder = "rgba(16, 185, 129, 0.25)";
+          statusColor = "var(--success-color, #10b981)";
+          statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_VERIFIED;
+        } else if (isSubmitted) {
+          statusBg = "rgba(14, 165, 233, 0.1)";
+          statusBorder = "rgba(14, 165, 233, 0.25)";
+          statusColor = "var(--info-color, #38bdf8)";
+          if (confirmedShifts?.[1] && confirmedShifts?.[2]) {
+            statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED_BOTH;
+          } else if (confirmedShifts?.[1]) {
+            statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED_SHIFT_1;
+          } else if (confirmedShifts?.[2]) {
+            statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED_SHIFT_2;
+          } else {
+            statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED;
+          }
+        }
+
+        return (
+          <button
+            type="button"
+            data-testid="open-operational-report-btn"
+            onClick={onOpenReportModal}
             style={{
-              width: "6px",
-              height: "6px",
-              borderRadius: "50%",
-              background:
-                reportStatus === "verified"
-                  ? "var(--success-color, #10b981)"
-                  : reportStatus === "submitted"
-                    ? "var(--info-color, #38bdf8)"
-                    : "var(--warning-color, #f59e0b)",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              background: statusBg,
+              border: `1px solid ${statusBorder}`,
+              borderRadius: "8px",
+              color: statusColor,
+              padding: "5px 9px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              cursor: "pointer",
               flexShrink: 0,
+              whiteSpace: "nowrap",
+              transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
-          />
-          <span>
-            {reportStatus === "verified"
-              ? TEXT_PDO_FORM.A2_REPORT.STATUS_VERIFIED
-              : reportStatus === "submitted"
-                ? TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED
-                : TEXT_PDO_FORM.A2_REPORT.PILL_LABEL}
-          </span>
-          <ChevronDown size={13} style={{ opacity: 0.7 }} />
-        </button>
-      ) : null}
+            title={statusTitle}
+          >
+            <span
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                background: statusColor,
+                flexShrink: 0,
+              }}
+            />
+            <span>{statusLabel}</span>
+            <ChevronDown size={12} style={{ opacity: 0.7 }} />
+          </button>
+        );
+      })() : null}
     </div>
   );
 };

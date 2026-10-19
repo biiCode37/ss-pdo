@@ -5,7 +5,8 @@ import { slugifyUnitId } from "@/utils/analytics";
 export type DashboardView =
   | "dashboard"
   | "user_management"
-  | "regional_monitoring";
+  | "regional_monitoring"
+  | "page_management";
 
 export type DashboardMainTab = "input" | "analytics" | "units";
 
@@ -109,6 +110,12 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
   useMobileBackHandler({
     id: "user_management_view",
     isOpen: currentView === "user_management",
+    onClose: () => setCurrentView("dashboard"),
+  });
+
+  useMobileBackHandler({
+    id: "page_management_view",
+    isOpen: currentView === "page_management",
     onClose: () => setCurrentView("dashboard"),
   });
 

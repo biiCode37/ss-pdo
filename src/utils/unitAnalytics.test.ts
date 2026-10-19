@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   extractUnitList,
+  extractAccumulatedUnitList,
   calculateUnitMetrics,
   calculateUnitMetricsFromRow,
   detectTargetTrip,
@@ -140,5 +141,24 @@ describe('unitAnalytics helper', () => {
     ];
     const target = detectTargetTrip(routeData);
     expect(target).toEqual({ pergi: 7, pulang: 7 });
+  });
+
+  it('extractAccumulatedUnitList accumulates tripPergi and tripPulang across days', () => {
+    const allDaysData: Record<string, BusData[]> = {
+      '1': [
+        createMockBus({ rowIndex: 2, unit: 'U1', tripPergi: '7', tripPulang: '7', totalToa: '100', kmAwal1: '100', kmAkhir1: '200' }),
+      ],
+      '2': [
+        createMockBus({ rowIndex: 2, unit: 'U1', tripPergi: '7', tripPulang: '6', totalToa: '90', kmAwal1: '200', kmAkhir1: '300' }),
+      ],
+    };
+
+    const accumulated = extractAccumulatedUnitList(allDaysData, 2);
+    expect(accumulated).toHaveLength(1);
+    expect(accumulated[0].unit).toBe('U1');
+    expect(accumulated[0].tripPergi).toBe('14');
+    expect(accumulated[0].tripPulang).toBe('13');
+    expect(accumulated[0].totalKm).toBe(200);
+    expect(accumulated[0].isFilled).toBe(true);
   });
 });

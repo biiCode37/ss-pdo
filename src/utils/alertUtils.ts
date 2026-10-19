@@ -150,6 +150,24 @@ export async function showDeleteQueueConfirm(): Promise<boolean> {
 }
 
 /**
+ * Dialog Alert Sukses (Success Alert Modal)
+ */
+export async function showSuccessAlert(title: string, message?: string | null) {
+  if (!message) return;
+  return pdoSwal.fire({
+    title,
+    text: message,
+    icon: "success",
+    confirmButtonText: TEXT_ALERTS.MODAL_COMMON.UNDERSTAND,
+    customClass: {
+      container: "pdo-swal-container",
+      popup: "pdo-swal-popup",
+      confirmButton: "pdo-swal-confirm-btn",
+    },
+  });
+}
+
+/**
  * Dialog Alert Kesalahan (Error Alert Modal)
  */
 export async function showErrorAlert(title: string, message?: string | null) {

@@ -28,6 +28,7 @@ function RouteSelectorCardComponent({
   onExitAccumulation,
   reportRoute,
   reportStatus,
+  confirmedShifts,
   onOpenReportModal,
   onRouteCodeChange,
   externalOpenTrigger,
@@ -173,6 +174,7 @@ function RouteSelectorCardComponent({
         onExitAccumulation={onExitAccumulation}
         reportRoute={reportRoute}
         reportStatus={reportStatus}
+        confirmedShifts={confirmedShifts}
         onOpenReportModal={onOpenReportModal}
       />
 

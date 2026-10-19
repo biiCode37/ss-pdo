@@ -12,7 +12,6 @@ interface UseBusCardModalOptions {
   activeCategory: string;
   activeShift?: 1 | 2;
   isShiftConfirmed?: boolean;
-  onOpenFleetStatus?: () => void;
   handleSaveUpdates: (updates: Partial<BusData>, forceOverwrite?: boolean) => Promise<void>;
 }
 

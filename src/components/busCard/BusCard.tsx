@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { slugifyUnitId } from "@/utils/analytics";
 import { FormattedNoteText } from "@/components/FormattedNoteText";
+import { hasMeaningfulNote } from "@/utils/keteranganUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import type { BusCardProps } from "./types";
@@ -25,7 +26,6 @@ function BusCardComponent({
   onSaveAndNext,
   isShiftConfirmed,
   activeShift = 1,
-  onOpenFleetStatus,
   previousDayKmAkhir2,
   previousDayDateLabel,
 }: BusCardProps) {
@@ -55,7 +55,6 @@ function BusCardComponent({
     activeCategory,
     activeShift,
     isShiftConfirmed,
-    onOpenFleetStatus,
     handleSaveUpdates,
   });
 
@@ -79,42 +78,63 @@ function BusCardComponent({
         transition: "all 0.18s var(--ease-spring)",
       }}
     >
-      <div
-        className="bus-card-header"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "14px 16px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-          <span style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
-          {isNonSgo && (
-            activeShiftStatus.toUpperCase().includes("OFF") ? (
-              <span
-                className="unit-status-badge unit-status-badge-off"
-                title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
-              >
-                OFF
+        <div
+          className="bus-card-header"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "12px 16px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+            <span className="bus-card-unit" style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
+            {isNonSgo && (
+              activeShiftStatus.toUpperCase().includes("OFF") ? (
+                <span
+                  className="unit-status-badge unit-status-badge-off"
+                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
+                >
+                  OFF
+                </span>
+              ) : activeShiftStatus.toUpperCase().includes("TO") ? (
+                <span
+                  className="unit-status-badge unit-status-badge-to"
+                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
+                >
+                  T.O
+                </span>
+              ) : null
+            )}
+            {(saveStatus === "queued" || isQueued) && (
+              <span className="bus-card-status status-queued">
+                {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}
               </span>
-            ) : activeShiftStatus.toUpperCase().includes("TO") ? (
-              <span
-                className="unit-status-badge unit-status-badge-to"
-                title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
-              >
-                T.O
-              </span>
-            ) : null
-          )}
-          {(saveStatus === "queued" || isQueued) && (
-            <span className="bus-card-status status-queued">
-              {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}
-            </span>
-          )}
+            )}
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            {activeCategory !== "ALL" && (
+              <BusCardSummary
+                formData={formData}
+                bus={bus}
+                tabName={tabName}
+                activeCategory={activeCategory}
+                targetTrip={targetTrip}
+                onOpenTripModal={() => handleOpenModal("trip")}
+              />
+            )}
+            {isLoading && (
+              <Loader2
+                size={14}
+                className="spinner"
+                style={{ color: "var(--accent-color)", flexShrink: 0 }}
+              />
+            )}
+          </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        {activeCategory === "ALL" && (
           <BusCardSummary
             formData={formData}
             bus={bus}
@@ -123,31 +143,25 @@ function BusCardComponent({
             targetTrip={targetTrip}
             onOpenTripModal={() => handleOpenModal("trip")}
           />
-          {isLoading && (
-            <Loader2
-              size={14}
-              className="spinner"
-              style={{ color: "var(--accent-color)", flexShrink: 0 }}
-            />
-          )}
-        </div>
-      </div>
+        )}
 
-      {formData.keterangan && formData.keterangan.trim() !== "" && (
+      {hasMeaningfulNote(formData.keterangan) && (
         <div
           style={{
-            margin: "0 16px 14px 16px",
-            fontSize: "12px",
+            padding: "8px 16px 10px 16px",
+            borderTop: "1px solid var(--card-border)",
+            fontSize: "11.5px",
             color: "var(--warning-text)",
             fontWeight: 600,
             letterSpacing: "0.01em",
             display: "flex",
             gap: "8px",
             alignItems: "flex-start",
+            background: "rgba(245, 158, 11, 0.04)",
           }}
         >
           <AlertTriangle
-            size={14}
+            size={13}
             style={{
               color: "var(--orange-color)",
               flexShrink: 0,
@@ -157,7 +171,7 @@ function BusCardComponent({
           <div
             style={{
               flex: 1,
-              lineHeight: "1.4",
+              lineHeight: "1.35",
               wordBreak: "break-word",
               textTransform: "uppercase",
             }}

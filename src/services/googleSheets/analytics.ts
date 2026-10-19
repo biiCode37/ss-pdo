@@ -212,6 +212,8 @@ export const getAccumulatedBusData = async (
               const exMan2 = parseIndonesianNumber(existing.manualShift2);
               const exTotToa = parseIndonesianNumber(existing.totalToa);
               const exKmAkh1 = parseIndonesianNumber(existing.kmAkhir1);
+              const exTripP = parseIndonesianNumber(existing.tripPergi);
+              const exTripQ = parseIndonesianNumber(existing.tripPulang);
 
               const newToa1 = exToa1 + parseIndonesianNumber(bus.toaShift1);
               const newMan1 = exMan1 + parseIndonesianNumber(bus.manualShift1);
@@ -219,6 +221,8 @@ export const getAccumulatedBusData = async (
               const newMan2 = exMan2 + parseIndonesianNumber(bus.manualShift2);
               const newTotToa = exTotToa + parseIndonesianNumber(bus.totalToa);
               const newKmAkh1 = exKmAkh1 + parseIndonesianNumber(bus.kmAkhir1);
+              const newTripP = exTripP + parseIndonesianNumber(bus.tripPergi);
+              const newTripQ = exTripQ + parseIndonesianNumber(bus.tripPulang);
 
               existing.toaShift1 = newToa1 > 0 ? String(newToa1) : '';
               existing.manualShift1 = newMan1 > 0 ? String(newMan1) : '';
@@ -226,6 +230,8 @@ export const getAccumulatedBusData = async (
               existing.manualShift2 = newMan2 > 0 ? String(newMan2) : '';
               existing.totalToa = newTotToa > 0 ? String(newTotToa) : '';
               existing.kmAkhir1 = newKmAkh1 > 0 ? String(newKmAkh1) : '0';
+              existing.tripPergi = newTripP > 0 ? String(newTripP) : '';
+              existing.tripPulang = newTripQ > 0 ? String(newTripQ) : '';
             }
           }
         } catch (_dayErr) {
@@ -261,8 +267,24 @@ export const getAccumulatedBusData = async (
       const { headerRowIndex, isSubHeader, compositeHeaders } = detectHeaderRowAndBuildComposite(rows);
       if (headerRowIndex === -1) continue;
 
+      const unitIdx = findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit);
+      let tripPergiIdx = -1;
+      let tripPulangIdx = -1;
+      if (unitIdx !== -1) {
+        if (compositeHeaders[unitIdx + 1] && !compositeHeaders[unitIdx + 1].toLowerCase().includes("toa")) {
+          tripPergiIdx = unitIdx + 1;
+        }
+        if (compositeHeaders[unitIdx + 2] && !compositeHeaders[unitIdx + 2].toLowerCase().includes("toa")) {
+          tripPulangIdx = unitIdx + 2;
+        }
+      }
+
       const headerMap: HeaderMap = {
-        unit: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.unit),
+        unit: unitIdx,
+        tripPergi: tripPergiIdx,
+        tripPulang: tripPulangIdx,
+        tripPergiLabel: tripPergiIdx !== -1 ? compositeHeaders[tripPergiIdx] : 'Trip Pergi',
+        tripPulangLabel: tripPulangIdx !== -1 ? compositeHeaders[tripPulangIdx] : 'Trip Pulang',
         toaShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift1),
         toaShift2: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.toaShift2),
         manualShift1: findColumnIndex(compositeHeaders, HEADER_KEYWORDS.manualShift1),
@@ -289,6 +311,9 @@ export const getAccumulatedBusData = async (
         const unitName = getVal(headerMap.unit);
         if (!unitName) continue;
 
+        const tripPergiVal = parseIndonesianNumber(getVal(headerMap.tripPergi));
+        const tripPulangVal = parseIndonesianNumber(getVal(headerMap.tripPulang));
+
         const kmA1 = parseIndonesianNumber(getVal(headerMap.kmAwal1));
         const kmAkh1 = parseIndonesianNumber(getVal(headerMap.kmAkhir1));
         const kmA2 = parseIndonesianNumber(getVal(headerMap.kmAwal2));
@@ -314,6 +339,8 @@ export const getAccumulatedBusData = async (
           unitMap.set(unitName, {
             rowIndex: r + 1,
             unit: unitName,
+            tripPergi: tripPergiVal > 0 ? tripPergiVal.toString() : "",
+            tripPulang: tripPulangVal > 0 ? tripPulangVal.toString() : "",
             toaShift1: toa1 > 0 ? toa1.toString() : "",
             manualShift1: man1 > 0 ? man1.toString() : "",
             toaShift2: toa2 > 0 ? toa2.toString() : "",
@@ -327,6 +354,11 @@ export const getAccumulatedBusData = async (
             originalRow: row.map(String),
           });
         } else {
+          const exTripP = parseIndonesianNumber(existing.tripPergi);
+          const exTripQ = parseIndonesianNumber(existing.tripPulang);
+          const sumTripP = exTripP + tripPergiVal;
+          const sumTripQ = exTripQ + tripPulangVal;
+
           const exKmA1 = parseIndonesianNumber(existing.kmAwal1);
           const exKmAkh1 = parseIndonesianNumber(existing.kmAkhir1);
           const exKmA2 = parseIndonesianNumber(existing.kmAwal2);
@@ -349,6 +381,8 @@ export const getAccumulatedBusData = async (
           const sumMan2 = exMan2 + man2;
           const sumTotToa = exTotToa + (totToa > 0 ? totToa : toa1 + toa2);
 
+          existing.tripPergi = sumTripP > 0 ? sumTripP.toString() : "";
+          existing.tripPulang = sumTripQ > 0 ? sumTripQ.toString() : "";
           existing.toaShift1 = sumToa1 > 0 ? sumToa1.toString() : "";
           existing.manualShift1 = sumMan1 > 0 ? sumMan1.toString() : "";
           existing.toaShift2 = sumToa2 > 0 ? sumToa2.toString() : "";

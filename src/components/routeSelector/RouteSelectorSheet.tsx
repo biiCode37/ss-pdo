@@ -253,10 +253,10 @@ export function RouteSelectorSheet({
         )}
 
         {/* Sequential Cascade: 4 Kolom (Tahun → Bulan → Rute → Tanggal) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
           {/* Kolom 1: Tahun */}
           <div>
-            <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 600 }}>
+            <label style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 700 }}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_LABEL}
             </label>
             <select
@@ -265,7 +265,7 @@ export function RouteSelectorSheet({
               onChange={(e) => onYearChange(e.target.value)}
               disabled={availableYears.length === 0}
               title={availableYears.length === 0 ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_NO_ROUTE_DATA : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_YEAR_FIRST}
-              style={{ width: '100%', padding: '9px 10px', fontSize: '13px' }}
+              style={{ width: '100%', padding: '8px 10px', fontSize: '12.5px', borderRadius: '10px' }}
             >
               <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_PLACEHOLDER}</option>
               {availableYears.map((y) => (
@@ -276,7 +276,7 @@ export function RouteSelectorSheet({
 
           {/* Kolom 2: Bulan */}
           <div>
-            <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 600 }}>
+            <label style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 700 }}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_LABEL}
             </label>
             <select
@@ -285,7 +285,7 @@ export function RouteSelectorSheet({
               onChange={(e) => onMonthChange(e.target.value)}
               disabled={!monthEnabled || availableMonths.length === 0}
               title={!monthEnabled ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_YEAR_FIRST : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_MONTH}
-              style={{ width: '100%', padding: '9px 10px', fontSize: '13px', opacity: !monthEnabled ? 0.55 : 1 }}
+              style={{ width: '100%', padding: '8px 10px', fontSize: '12.5px', borderRadius: '10px', opacity: !monthEnabled ? 0.55 : 1 }}
             >
               <option value="">{TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_PLACEHOLDER}</option>
               {availableMonths.map((m) => (
@@ -296,7 +296,7 @@ export function RouteSelectorSheet({
 
           {/* Kolom 3: Rute */}
           <div>
-            <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 600 }}>
+            <label style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 700 }}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_LABEL}
             </label>
             <select
@@ -305,7 +305,7 @@ export function RouteSelectorSheet({
               onChange={(e) => onRouteCodeChange(e.target.value)}
               disabled={!routeEnabled || availableRouteCodes.length === 0}
               title={!routeEnabled ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_MONTH_FIRST : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_ROUTE}
-              style={{ width: '100%', padding: '9px 10px', fontSize: '13px', opacity: !routeEnabled ? 0.55 : 1 }}
+              style={{ width: '100%', padding: '8px 10px', fontSize: '12.5px', borderRadius: '10px', opacity: !routeEnabled ? 0.55 : 1 }}
             >
               <option value="">
                 {routeEnabled && availableRouteCodes.length === 0
@@ -320,7 +320,7 @@ export function RouteSelectorSheet({
 
           {/* Kolom 4: Tanggal */}
           <div>
-            <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 600 }}>
+            <label style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px', fontWeight: 700 }}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_LABEL}
             </label>
             <select
@@ -329,7 +329,7 @@ export function RouteSelectorSheet({
               onChange={(e) => onTabChange(e.target.value)}
               disabled={!dateEnabled || days.length === 0}
               title={!dateEnabled ? TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_ROUTE_FIRST : TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE_SELECT_DATE}
-              style={{ width: '100%', padding: '9px 10px', fontSize: '13px', opacity: !dateEnabled ? 0.55 : 1 }}
+              style={{ width: '100%', padding: '8px 10px', fontSize: '12.5px', borderRadius: '10px', opacity: !dateEnabled ? 0.55 : 1 }}
             >
               {isAccumulation && (
                 <option value="AKUMULASI">{TEXT_DASHBOARD.ROUTE_SELECTOR.ACCUMULATION_OPTION}</option>

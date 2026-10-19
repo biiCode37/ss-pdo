@@ -36,23 +36,39 @@ export function BusCardSkeleton({ count = 4 }: { count?: number }) {
           key={idx}
           className="bus-card glass"
           style={{
-            padding: '14px 16px',
+            padding: 0,
             borderRadius: '16px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
           }}
         >
-          {/* Header Row: Unit Name Pill & Status Badge */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <SkeletonBox width="110px" height="22px" borderRadius="10px" />
-            <SkeletonBox width="80px" height="18px" borderRadius="12px" />
+          {/* Header Row: Unit Title & Badges */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '12px 16px',
+            }}
+          >
+            <SkeletonBox width="110px" height="20px" borderRadius="8px" />
+            <SkeletonBox width="70px" height="18px" borderRadius="8px" />
           </div>
 
-          {/* Body Row: TOA Summary & KM Metrics */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <SkeletonBox width="150px" height="14px" borderRadius="6px" />
-            <SkeletonBox width="90px" height="14px" borderRadius="6px" />
+          {/* 3-Column Glanceable Metric Strip */}
+          <div className="bus-metric-strip">
+            <div className="bus-metric-col">
+              <SkeletonBox width="45px" height="10px" borderRadius="4px" />
+              <SkeletonBox width="50px" height="15px" borderRadius="6px" style={{ marginTop: '4px' }} />
+            </div>
+            <div className="bus-metric-col">
+              <SkeletonBox width="55px" height="10px" borderRadius="4px" />
+              <SkeletonBox width="65px" height="15px" borderRadius="6px" style={{ marginTop: '4px' }} />
+            </div>
+            <div className="bus-metric-col">
+              <SkeletonBox width="60px" height="10px" borderRadius="4px" />
+              <SkeletonBox width="60px" height="15px" borderRadius="6px" style={{ marginTop: '4px' }} />
+            </div>
           </div>
         </div>
       ))}
@@ -103,6 +119,52 @@ export function DailyToaTrendSkeleton() {
   );
 }
 
+export function KPICardSkeleton() {
+  return (
+    <div className="analytics-card glass" style={{ padding: '16px', borderRadius: '16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+        <SkeletonBox width="130px" height="20px" borderRadius="8px" />
+        <SkeletonBox width="80px" height="16px" borderRadius="6px" />
+      </div>
+      <div className="kpi-executive-grid">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="kpi-metric-card" style={{ gap: '8px' }}>
+            <SkeletonBox width="65%" height="12px" borderRadius="4px" />
+            <SkeletonBox width="80%" height="22px" borderRadius="6px" />
+            <SkeletonBox width="50%" height="11px" borderRadius="4px" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function ShiftComparisonSkeleton() {
+  return (
+    <div className="analytics-card glass" style={{ padding: '16px', borderRadius: '16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+        <SkeletonBox width="150px" height="20px" borderRadius="8px" />
+        <SkeletonBox width="80px" height="16px" borderRadius="6px" />
+      </div>
+      <SkeletonBox height="14px" borderRadius="7px" style={{ marginBottom: '12px' }} />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        <SkeletonBox height="72px" borderRadius="12px" />
+        <SkeletonBox height="72px" borderRadius="12px" />
+      </div>
+    </div>
+  );
+}
+
+export function AnalyticsDashboardSkeleton() {
+  return (
+    <div className="analytics-container" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <DailyToaTrendSkeleton />
+      <KPICardSkeleton />
+      <ShiftComparisonSkeleton />
+    </div>
+  );
+}
+
 export function UnitCardSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div
@@ -115,22 +177,41 @@ export function UnitCardSkeleton({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, idx) => (
         <div
           key={idx}
-          className="card glass"
+          className="bus-card glass"
           style={{
-            padding: '16px',
+            padding: 0,
             borderRadius: '16px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <SkeletonBox width="100px" height="20px" borderRadius="8px" />
-            <SkeletonBox width="60px" height="18px" borderRadius="12px" />
+          {/* Line 1: Unit Title + Status Badge */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '12px 16px',
+            }}
+          >
+            <SkeletonBox width="110px" height="20px" borderRadius="8px" />
+            <SkeletonBox width="80px" height="20px" borderRadius="8px" />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
-            <SkeletonBox width="120px" height="14px" borderRadius="6px" />
-            <SkeletonBox width="70px" height="14px" borderRadius="6px" />
+
+          {/* Line 2: 3-Column Metric Strip */}
+          <div className="bus-metric-strip">
+            <div className="bus-metric-col">
+              <SkeletonBox width="45px" height="10px" borderRadius="4px" />
+              <SkeletonBox width="55px" height="15px" borderRadius="6px" style={{ marginTop: '4px' }} />
+            </div>
+            <div className="bus-metric-col">
+              <SkeletonBox width="55px" height="10px" borderRadius="4px" />
+              <SkeletonBox width="65px" height="15px" borderRadius="6px" style={{ marginTop: '4px' }} />
+            </div>
+            <div className="bus-metric-col">
+              <SkeletonBox width="60px" height="10px" borderRadius="4px" />
+              <SkeletonBox width="60px" height="15px" borderRadius="6px" style={{ marginTop: '4px' }} />
+            </div>
           </div>
         </div>
       ))}

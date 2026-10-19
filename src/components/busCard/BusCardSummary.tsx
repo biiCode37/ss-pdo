@@ -3,7 +3,6 @@ import { parseIndonesianNumber, safeFormatNumber } from "@/utils/numberUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import {
   Navigation,
-  Users,
   AlertCircle,
   ArrowRightLeft,
 } from "lucide-react";
@@ -167,116 +166,93 @@ export function BusCardSummary({
     );
   }
 
-  if (!hasKm && !hasPnp && !hasTrip) {
-    return (
-      <span
-        style={{
-          fontSize: "11px",
-          fontWeight: 600,
-          padding: "3px 8px",
-          borderRadius: "8px",
-          backgroundColor: "rgba(239, 68, 68, 0.15)",
-          color: "var(--danger-color)",
-        }}
-      >
-        {TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}
-      </span>
-    );
-  }
-
+  // Mode ALL: Modern 3-Column Glanceable Metric Strip
   return (
-    <div
-      className="tabular-nums"
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "clamp(5px, 1.2vw, 8px)",
-        fontSize: "12px",
-        padding: "3px 8px",
-        borderRadius: "10px",
-        background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
-        border: "1px solid var(--card-border)",
-      }}
-    >
-      {/* Interactive Trip Shortcut */}
-      <button
-        type="button"
+    <div className="bus-metric-strip">
+      {/* Kolom 1: Ritase (Interactive tap to open Trip Modal) */}
+      <div
+        role="button"
+        tabIndex={0}
         onClick={(e) => {
-          e.stopPropagation();
-          onOpenTripModal();
+          if (tabName !== "AKUMULASI") {
+            e.stopPropagation();
+            onOpenTripModal();
+          }
         }}
-        className="bus-card-badge-trip"
+        onKeyDown={(e) => {
+          if (tabName !== "AKUMULASI" && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            e.stopPropagation();
+            onOpenTripModal();
+          }
+        }}
+        className={`bus-metric-col ${tabName !== "AKUMULASI" ? "bus-metric-interactive" : ""}`.trim()}
         title={tripStatusTitle}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "4px",
-          background: "transparent",
-          border: "none",
-          cursor: tabName === "AKUMULASI" ? "default" : "pointer",
-          fontWeight: 700,
-          fontSize: "11.5px",
-          color: isBelowTarget || isImbalanced
-            ? "var(--warning-text, #f59e0b)"
-            : isTargetAchieved || (hasTrip && !hasTarget)
-            ? "var(--success-color, #10b981)"
-            : "var(--text-secondary)",
-          padding: "2px 4px",
-          borderRadius: "6px",
-        }}
       >
-        <ArrowRightLeft size={11} style={{ flexShrink: 0, opacity: 0.85 }} />
-        <span>
-          {isBelowTarget
-            ? `⚠️ ${pergiVal || 0}/${pulangVal || 0}`
-            : `${pergiVal || 0}/${pulangVal || 0}`}
+        <span className="bus-metric-label">
+          {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_RITASE}
         </span>
-      </button>
-
-      <span style={{ opacity: 0.25, color: "var(--text-secondary)" }}>•</span>
-
-      {/* KM Readout */}
-      <span
-        style={{
-          fontWeight: 600,
-          fontSize: "11.5px",
-          color: "var(--shift1-color)",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "3px",
-        }}
-      >
-        <Navigation size={11} style={{ opacity: 0.85, flexShrink: 0 }} />
-        <span>
-          {totalKm > 0
-            ? `${safeFormatNumber(totalKm)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}`
-            : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}`}
+        <span
+          className="bus-metric-value"
+          style={{
+            color: isBelowTarget || isImbalanced
+              ? "var(--warning-text, #f59e0b)"
+              : isTargetAchieved || (hasTrip && !hasTarget)
+              ? "var(--success-color, #10b981)"
+              : "var(--text-primary)",
+          }}
+        >
+          {hasTrip ? (
+            <>
+              {isBelowTarget && "⚠️ "}
+              {pergiVal || 0}/{pulangVal || 0}
+              <span className="bus-metric-unit">{TEXT_DASHBOARD.BUS_CARD_ACTIONS.RIT_UNIT}</span>
+            </>
+          ) : (
+            <span className="bus-metric-empty">-</span>
+          )}
         </span>
-      </span>
+      </div>
 
-      <span style={{ opacity: 0.25, color: "var(--text-secondary)" }}>•</span>
-
-      {/* Pnp Readout */}
-      <span
-        style={{
-          fontWeight: 600,
-          fontSize: "11.5px",
-          color: "var(--text-primary)",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "3px",
-        }}
-      >
-        <Users
-          size={11}
-          style={{ color: "var(--text-secondary)", opacity: 0.85, flexShrink: 0 }}
-        />
-        <span>
-          {totalPnp > 0
-            ? `${safeFormatNumber(totalPnp)} ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}`
-            : `0 ${TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}`}
+      {/* Kolom 2: Total KM Tempuh */}
+      <div className="bus-metric-col">
+        <span className="bus-metric-label">
+          {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_KM}
         </span>
-      </span>
+        <span
+          className="bus-metric-value"
+          style={{ color: "var(--shift1-color)" }}
+        >
+          {hasKm ? (
+            <>
+              {safeFormatNumber(totalKm)}
+              <span className="bus-metric-unit">{TEXT_DASHBOARD.BUS_CARD_ACTIONS.KM_UNIT}</span>
+            </>
+          ) : (
+            <span className="bus-metric-empty">-</span>
+          )}
+        </span>
+      </div>
+
+      {/* Kolom 3: Total Pelanggan (TOA + Manual) */}
+      <div className="bus-metric-col">
+        <span className="bus-metric-label">
+          {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_PASSENGER}
+        </span>
+        <span
+          className="bus-metric-value"
+          style={{ color: "var(--text-primary)" }}
+        >
+          {hasPnp ? (
+            <>
+              {safeFormatNumber(totalPnp)}
+              <span className="bus-metric-unit">{TEXT_DASHBOARD.BUS_CARD_ACTIONS.PNP_UNIT}</span>
+            </>
+          ) : (
+            <span className="bus-metric-empty">-</span>
+          )}
+        </span>
+      </div>
     </div>
   );
 }

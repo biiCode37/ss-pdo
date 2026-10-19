@@ -32,7 +32,8 @@ interface DashboardHeaderProps {
   } | null;
   onExitAccumulation: (targetDay?: string) => Promise<void>;
   reportRoute: Route | null;
-  reportStatus: "draft" | "submitted" | "verified";
+  reportStatus: "draft" | "submitted" | "verified" | "failed";
+  confirmedShifts?: { 1: boolean; 2: boolean };
   onOpenReportModal: () => void;
   onRouteCodeChange: (code: string) => void;
   routeSelectorOpenTrigger: number;
@@ -59,6 +60,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onExitAccumulation,
   reportRoute,
   reportStatus,
+  confirmedShifts,
   onOpenReportModal,
   onRouteCodeChange,
   routeSelectorOpenTrigger,
@@ -190,6 +192,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         onExitAccumulation={onExitAccumulation}
         reportRoute={reportRoute}
         reportStatus={reportStatus}
+        confirmedShifts={confirmedShifts}
         onOpenReportModal={onOpenReportModal}
         onRouteCodeChange={onRouteCodeChange}
         externalOpenTrigger={routeSelectorOpenTrigger}

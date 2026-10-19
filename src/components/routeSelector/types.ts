@@ -21,7 +21,8 @@ export interface RouteSelectorCardProps {
   } | null;
   onExitAccumulation?: (targetDay?: string) => void;
   reportRoute?: { id: number; route_code: string } | null;
-  reportStatus?: "draft" | "submitted" | "verified";
+  reportStatus?: "draft" | "submitted" | "verified" | "failed";
+  confirmedShifts?: { 1: boolean; 2: boolean };
   onOpenReportModal?: () => void;
   onRouteCodeChange?: (routeCode: string) => void;
   externalOpenTrigger?: number;

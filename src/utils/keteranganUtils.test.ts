@@ -5,6 +5,7 @@ import {
   filterBusesForKmCopy,
   combineShiftKeterangan,
   splitShiftKeterangan,
+  hasMeaningfulNote,
 } from './keteranganUtils';
 
 describe('keteranganUtils - normalizeKeterangan', () => {
@@ -234,5 +235,39 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(res.s2).toBe('');
     });
   });
+
+  describe('hasMeaningfulNote', () => {
+    it('returns false for empty, null, or undefined strings', () => {
+      expect(hasMeaningfulNote(null)).toBe(false);
+      expect(hasMeaningfulNote(undefined)).toBe(false);
+      expect(hasMeaningfulNote('')).toBe(false);
+      expect(hasMeaningfulNote('   ')).toBe(false);
+    });
+
+    it('returns false for pure status notes (OFF, TO, TO EVDAL, SO, SGO)', () => {
+      expect(hasMeaningfulNote('OFF')).toBe(false);
+      expect(hasMeaningfulNote('off')).toBe(false);
+      expect(hasMeaningfulNote('TO')).toBe(false);
+      expect(hasMeaningfulNote('T.O')).toBe(false);
+      expect(hasMeaningfulNote('TO EVDAL')).toBe(false);
+      expect(hasMeaningfulNote('to evdal')).toBe(false);
+      expect(hasMeaningfulNote('SO')).toBe(false);
+      expect(hasMeaningfulNote('SGO')).toBe(false);
+      expect(hasMeaningfulNote('OFF | OFF')).toBe(false);
+      expect(hasMeaningfulNote('SGO | OFF')).toBe(false);
+      expect(hasMeaningfulNote('TO | OFF')).toBe(false);
+    });
+
+    it('returns true for notes with actual operational details or BA codes', () => {
+      expect(hasMeaningfulNote('BA.02 NP1')).toBe(true);
+      expect(hasMeaningfulNote('BA.01 Rusak transmisi')).toBe(true);
+      expect(hasMeaningfulNote('OFF - Rusak AC')).toBe(true);
+      expect(hasMeaningfulNote('Mogok radiator')).toBe(true);
+      expect(hasMeaningfulNote('OFF | Rusak Ban')).toBe(true);
+      expect(hasMeaningfulNote('BA.01')).toBe(true);
+      expect(hasMeaningfulNote('Cadangan')).toBe(true);
+    });
+  });
 });
+
 

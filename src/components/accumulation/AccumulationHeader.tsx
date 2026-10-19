@@ -11,72 +11,100 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
 }) => {
   return (
     <>
-      {/* Top Handle Bar for Touch Swipe Down to Close */}
+      {/* Top Handle Bar for Touch Swipe Visual Indicator */}
       <div
+        className="accumulation-sheet-handle"
         style={{
           display: "flex",
           justifyContent: "center",
-          paddingBottom: "16px",
+          paddingBottom: "12px",
         }}
       >
         <div
           style={{
-            width: "40px",
+            width: "36px",
             height: "4px",
             borderRadius: "2px",
-            background: "var(--text-secondary)",
-            opacity: 0.3,
+            background: "var(--card-border, rgba(255, 255, 255, 0.2))",
           }}
         />
       </div>
 
-      {/* Header */}
+      {/* Header Bar: Icon, Title, and Dismiss Button */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "16px",
+          paddingBottom: "12px",
+          borderBottom: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+          marginBottom: "14px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <Layers size={18} style={{ color: "var(--accent-color)" }} />
-          <span
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
             style={{
-              fontWeight: 700,
-              fontSize: "16px",
-              color: "var(--text-primary)",
+              width: "36px",
+              height: "36px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.1))",
+              color: "var(--accent-color, #38bdf8)",
+              border: "1px solid rgba(56, 189, 248, 0.3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
           >
-            {TEXT_DASHBOARD.ACCUMULATION_SHEET.TITLE}
-          </span>
+            <Layers size={18} />
+          </div>
+          <div>
+            <h3
+              id="accumulation-sheet-title"
+              style={{
+                margin: 0,
+                fontSize: "1.1rem",
+                fontWeight: 800,
+                color: "var(--text-primary, #ededed)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              {TEXT_DASHBOARD.ACCUMULATION_SHEET.TITLE}
+            </h3>
+            <span
+              style={{
+                fontSize: "0.76rem",
+                color: "var(--text-secondary, #94a3b8)",
+                fontWeight: 500,
+              }}
+            >
+              {TEXT_DASHBOARD.ACCUMULATION_SHEET.DESC}
+            </span>
+          </div>
         </div>
+
         <button
           type="button"
           onClick={onDismiss}
+          aria-label={TEXT_DASHBOARD.ACCUMULATION_SHEET.CLOSE_MODAL_ARIA}
           style={{
-            background: "none",
-            border: "none",
+            width: "34px",
+            height: "34px",
+            borderRadius: "10px",
+            background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+            color: "var(--text-secondary, #94a3b8)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             cursor: "pointer",
-            color: "var(--text-secondary)",
-            padding: "4px",
+            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
+            flexShrink: 0,
           }}
         >
-          <X size={20} />
+          <X size={17} />
         </button>
       </div>
-
-      {/* Deskripsi */}
-      <p
-        style={{
-          fontSize: "12.5px",
-          color: "var(--text-secondary)",
-          margin: "0 0 16px",
-          lineHeight: 1.4,
-        }}
-      >
-        {TEXT_DASHBOARD.ACCUMULATION_SHEET.DESC}
-      </p>
     </>
   );
 };

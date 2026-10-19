@@ -180,19 +180,32 @@ export function extractAccumulatedUnitList(
 
   if (daysToInclude.length === 0) return [];
 
-  const unitMap = new Map<string, { totalToa: number; totalManual: number; totalKm: number; notes: string[]; shiftStatus: UnitShiftStatus }>();
+  const unitMap = new Map<string, {
+    totalToa: number;
+    totalManual: number;
+    totalKm: number;
+    tripPergi: number;
+    tripPulang: number;
+    notes: string[];
+    shiftStatus: UnitShiftStatus;
+  }>();
 
   for (const day of daysToInclude) {
     const dayData = allDaysData[String(day)] || [];
     for (const b of dayData) {
       if (!b.unit) continue;
       const metrics = calculateUnitMetricsFromRow(b);
+      const tripPergiNum = parseIndonesianNumber(metrics.tripPergi);
+      const tripPulangNum = parseIndonesianNumber(metrics.tripPulang);
+
       const existing = unitMap.get(b.unit);
       if (!existing) {
         unitMap.set(b.unit, {
           totalToa: metrics.totalToa,
           totalManual: metrics.manualShift1 + metrics.manualShift2,
           totalKm: metrics.totalKm,
+          tripPergi: tripPergiNum,
+          tripPulang: tripPulangNum,
           notes: [...metrics.notes],
           shiftStatus: getUnitShiftStatus(b),
         });
@@ -200,6 +213,8 @@ export function extractAccumulatedUnitList(
         existing.totalToa += metrics.totalToa;
         existing.totalManual += metrics.manualShift1 + metrics.manualShift2;
         existing.totalKm += metrics.totalKm;
+        existing.tripPergi += tripPergiNum;
+        existing.tripPulang += tripPulangNum;
         metrics.notes.forEach((n) => {
           if (!existing.notes.includes(n)) existing.notes.push(n);
         });
@@ -212,14 +227,16 @@ export function extractAccumulatedUnitList(
   const result: UnitSummaryItem[] = [];
   unitMap.forEach((val, unitKey) => {
     const totalPnp = val.totalToa + val.totalManual;
+    const pStr = val.tripPergi > 0 ? String(val.tripPergi) : '';
+    const qStr = val.tripPulang > 0 ? String(val.tripPulang) : '';
     result.push({
       unit: unitKey,
       totalToa: val.totalToa,
       totalPassengers: totalPnp,
       totalKm: val.totalKm,
-      tripPergi: '',
-      tripPulang: '',
-      isFilled: totalPnp > 0 || val.totalKm > 0 || val.notes.length > 0,
+      tripPergi: pStr,
+      tripPulang: qStr,
+      isFilled: totalPnp > 0 || val.totalKm > 0 || val.notes.length > 0 || Boolean(pStr || qStr),
       shiftStatus: val.shiftStatus,
       notes: val.notes,
       noteCount: val.notes.length,

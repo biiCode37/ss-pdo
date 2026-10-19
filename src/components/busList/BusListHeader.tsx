@@ -16,7 +16,6 @@ export interface BusListHeaderProps {
   onExitAccumulation?: () => void;
   isShiftConfirmed?: boolean;
   activeShift?: 1 | 2;
-  onOpenFleetStatus?: () => void;
   activeCategory: string;
   onCategoryChange: (cat: string) => void;
   filledCount: number;

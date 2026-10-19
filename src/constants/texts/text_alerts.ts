@@ -229,6 +229,8 @@ export const TEXT_ALERTS = {
     NOTES_DETAIL_PLACEHOLDER: "Contoh: BA.02 Pramudi Sakit",
     MODAL_CLOSE_ARIA: "Tutup modal input bus",
     SATSET_TOOLTIP: "Mode Satset: Otomatis buka bus berikutnya setelah simpan",
+    TAB_SHIFT_1: "Shift 1",
+    TAB_SHIFT_2: "Shift 2",
     TAB_RITASE: "Ritase",
     TAB_KET: "Ket",
     SWITCH_TO_FULL_FORM: "Semua Kolom",

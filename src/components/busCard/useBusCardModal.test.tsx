@@ -60,7 +60,6 @@ describe("useBusCardModal Hook", () => {
     activeCategory: "all",
     activeShift: 1 as const,
     isShiftConfirmed: true,
-    onOpenFleetStatus: vi.fn(),
     handleSaveUpdates: vi.fn(),
   };
 
@@ -111,14 +110,12 @@ describe("useBusCardModal Hook", () => {
   });
 
   it("allows modal opening even when isShiftConfirmed is false", async () => {
-    const onOpenFleetStatusMock = vi.fn();
     await act(async () => {
       root.render(
         <TestHookComponent
           options={{
             ...defaultOptions,
             isShiftConfirmed: false,
-            onOpenFleetStatus: onOpenFleetStatusMock,
           }}
         />,
       );
@@ -129,20 +126,16 @@ describe("useBusCardModal Hook", () => {
     });
 
     expect(alertUtils.showWarningToast).not.toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
     expect(latestHookResult.isModalOpen).toBe(true);
   });
 
   it("allows modal opening freely even when unit has OFF/TO status (no fleet status blocking)", async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
     await act(async () => {
       root.render(
         <TestHookComponent
           options={{
             ...defaultOptions,
             bus: createMockBus({ keterangan: "OFF" }),
-            onOpenFleetStatus: onOpenFleetStatusMock,
           }}
         />,
       );
@@ -155,7 +148,6 @@ describe("useBusCardModal Hook", () => {
     });
 
     expect(alertUtils.pdoSwal.fire).not.toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
     expect(latestHookResult.isModalOpen).toBe(true);
   });
 

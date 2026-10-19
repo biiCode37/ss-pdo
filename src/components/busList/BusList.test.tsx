@@ -96,14 +96,11 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
   });
 
   it('allows bulk trip modal even when isShiftConfirmed is false', async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
     await act(async () => {
       root.render(
         <BusList
           {...defaultProps}
           isShiftConfirmed={false}
-          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
@@ -118,7 +115,6 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     });
 
     expect(alertUtils.showBulkTripModal).toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
   });
 
   it('calculates progress bar total count based only on units allowed for input (excluding OFF/non-SGO)', async () => {

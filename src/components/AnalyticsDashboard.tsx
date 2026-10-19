@@ -5,9 +5,11 @@ import { KPICard } from "./KPICard";
 import { ShiftComparisonCard } from "./ShiftComparisonCard";
 import { CompletionStatusCard } from "./CompletionStatusCard";
 import { DailyToaTrendCard } from "./DailyToaTrendCard";
+import { AnalyticsDashboardSkeleton } from "./Skeletons";
 
 interface Props {
   busData: BusData[];
+  isLoading?: boolean;
   sheetSummary?: Record<string, number>;
   sheetId?: string;
   selectedTab?: string;
@@ -29,6 +31,7 @@ interface Props {
 
 function AnalyticsDashboardComponent({
   busData,
+  isLoading,
   sheetSummary,
   sheetId = "",
   selectedTab = "1",
@@ -43,7 +46,7 @@ function AnalyticsDashboardComponent({
   const summary = useMemo(
     () =>
       calculateAnalytics(
-        busData,
+        busData || [],
         selectedTab === "AKUMULASI" ? undefined : sheetSummary,
       ),
     [busData, selectedTab, sheetSummary],
@@ -59,6 +62,10 @@ function AnalyticsDashboardComponent({
       ),
     [selectedTab, activeMonth, activeYear, accRange],
   );
+
+  if (isLoading || !busData) {
+    return <AnalyticsDashboardSkeleton />;
+  }
 
   return (
     <div className="analytics-container">
