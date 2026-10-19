@@ -10,6 +10,7 @@ import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface Props {
   busData: BusData[] | null;
+  isLoading?: boolean;
   sheetId: string;
   selectedTab: string;
   activeMonth?: number;
@@ -19,6 +20,7 @@ interface Props {
 
 function UnitSummaryDashboardComponent({
   busData,
+  isLoading,
   sheetId,
   selectedTab,
   activeMonth,
@@ -36,8 +38,10 @@ function UnitSummaryDashboardComponent({
   });
 
   const targetTrip = useMemo(() => {
+    // Mode akumulasi menyajikan akumulasi total lintas hari sehingga perbandingan target ritase harian dinonaktifkan
+    if (selectedTab === "AKUMULASI") return null;
     return detectTargetTrip(busData);
-  }, [busData]);
+  }, [busData, selectedTab]);
 
   const unitList = useMemo(() => {
     if (!busData) return [];
@@ -60,19 +64,20 @@ function UnitSummaryDashboardComponent({
       {/* Header & Search */}
       <div className="search-container" style={{ marginBottom: "12px" }}>
         <div className="search-input-wrapper" style={{ flex: 1 }}>
-          <Search className="search-icon" size={20} />
+          <Search className="search-icon" size={16} />
           <input
             type="text"
             className="input-field search-input"
             placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ height: "36px", fontSize: "12.5px", borderRadius: "10px" }}
           />
         </div>
       </div>
 
       {/* Grid Kartu Unit */}
-      {!busData ? (
+      {isLoading || !busData ? (
         <UnitCardSkeleton count={6} />
       ) : filteredUnits.length > 0 ? (
         <div

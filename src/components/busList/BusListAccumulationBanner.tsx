@@ -1,4 +1,5 @@
 import React from "react";
+import { AlertTriangle } from "lucide-react";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
 interface BusListAccumulationBannerProps {
@@ -30,12 +31,12 @@ export const BusListAccumulationBanner: React.FC<BusListAccumulationBannerProps>
   return (
     <div
       style={{
-        background: "rgba(234, 179, 8, 0.15)",
-        border: "1px solid rgba(234, 179, 8, 0.4)",
-        color: "var(--warning-color, #eab308)",
+        background: "rgba(245, 158, 11, 0.12)",
+        border: "1px solid rgba(245, 158, 11, 0.35)",
+        color: "var(--warning-text, #f59e0b)",
         padding: "10px 14px",
         borderRadius: "12px",
-        fontSize: "12.5px",
+        fontSize: "0.8rem",
         fontWeight: 600,
         marginBottom: "12px",
         display: "flex",
@@ -43,7 +44,6 @@ export const BusListAccumulationBanner: React.FC<BusListAccumulationBannerProps>
         justifyContent: "space-between",
         flexWrap: "wrap",
         gap: "8px",
-        boxShadow: "0 2px 8px rgba(234, 179, 8, 0.15)",
       }}
     >
       <div
@@ -52,10 +52,10 @@ export const BusListAccumulationBanner: React.FC<BusListAccumulationBannerProps>
           alignItems: "center",
           gap: "8px",
           flex: 1,
-          minWidth: "240px",
+          minWidth: "220px",
         }}
       >
-        <span style={{ fontSize: "16px" }}>⚠️</span>
+        <AlertTriangle size={16} style={{ color: "var(--warning-color, #f59e0b)", flexShrink: 0 }} />
         <span>
           Rekap Akumulasi (Tgl {dateRangeText}) aktif.{" "}
           {TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED}
@@ -66,18 +66,24 @@ export const BusListAccumulationBanner: React.FC<BusListAccumulationBannerProps>
           type="button"
           onClick={onExitAccumulation}
           style={{
-            background: "rgba(234, 179, 8, 0.2)",
-            border: "1px solid rgba(234, 179, 8, 0.45)",
-            color: "var(--warning-color, #eab308)",
+            height: "32px",
+            background: "rgba(245, 158, 11, 0.18)",
+            border: "1px solid rgba(245, 158, 11, 0.45)",
+            color: "var(--warning-text, #f59e0b)",
             borderRadius: "8px",
-            padding: "5px 12px",
-            fontSize: "11.5px",
+            padding: "0 12px",
+            fontSize: "0.75rem",
             fontWeight: 700,
             cursor: "pointer",
             whiteSpace: "nowrap",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "4px",
+            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
         >
-          {TEXT_DASHBOARD.ROUTE_SELECTOR.EXIT_ACCUMULATION} ➔
+          <span>{TEXT_DASHBOARD.ROUTE_SELECTOR.EXIT_ACCUMULATION}</span>
+          <span>➔</span>
         </button>
       )}
     </div>

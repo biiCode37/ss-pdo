@@ -12,7 +12,9 @@ export interface MonitoringRoutesTabProps {
   onVerifyRoute: (routeId: number, status: "verified") => void;
   onBulkVerify: () => Promise<void>;
   onSelectRoute?: (routeCode: string) => void;
+  onSyncRoute?: (route: RegionalRouteItem) => void;
   verifyingRouteId?: number | null;
+  syncingRouteId?: number | null;
   isBulking?: boolean;
 }
 
@@ -23,7 +25,9 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
   onVerifyRoute,
   onBulkVerify,
   onSelectRoute,
+  onSyncRoute,
   verifyingRouteId,
+  syncingRouteId,
   isBulking,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -447,7 +451,9 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               onCardClick={(r) => setSelectedRouteForModal(r)}
               onVerify={onVerifyRoute}
               onSelectRoute={onSelectRoute}
+              onSyncRoute={onSyncRoute}
               isVerifying={verifyingRouteId === route.id}
+              isSyncing={syncingRouteId === route.id}
             />
           ))}
         </div>

@@ -32,7 +32,6 @@ export interface BusListProps {
   onExitAccumulation?: () => void;
   isShiftConfirmed?: boolean;
   activeShift?: 1 | 2;
-  onOpenFleetStatus?: () => void;
   previousDayKmMap?: Record<string, string>;
   previousDayRefMap?: Record<string, OdometerRefInfo>;
 }
@@ -50,7 +49,6 @@ function BusListComponent({
   onExitAccumulation,
   isShiftConfirmed,
   activeShift = 1,
-  onOpenFleetStatus,
   previousDayKmMap,
   previousDayRefMap,
 }: BusListProps) {
@@ -75,7 +73,6 @@ function BusListComponent({
     addToQueue,
     onUpdateBus,
     isShiftConfirmed,
-    onOpenFleetStatus,
   });
 
   const checkAllowed = useCallback(
@@ -171,7 +168,6 @@ function BusListComponent({
         onExitAccumulation={onExitAccumulation}
         isShiftConfirmed={isShiftConfirmed}
         activeShift={activeShift}
-        onOpenFleetStatus={onOpenFleetStatus}
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
         filledCount={filledCount}
@@ -231,7 +227,6 @@ function BusListComponent({
                   onSaveAndNext={handleSaveAndNext}
                   isShiftConfirmed={isShiftConfirmed}
                   activeShift={activeShift}
-                  onOpenFleetStatus={onOpenFleetStatus}
                   previousDayKmAkhir2={prevKm}
                   previousDayDateLabel={prevDateLabel}
                 />

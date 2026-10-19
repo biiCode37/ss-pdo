@@ -3,7 +3,7 @@ import { fetchRouteMasterList } from './dailyRouteReportService';
 import { fetchGlobalReportDailyMetrics } from './googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
 import { TEXT_ERRORS } from '../constants/texts';
-import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail } from '../types/supabase';
+import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail, DailyFleetShift } from '../types/supabase';
 
 export const SUPERVISORS = [
   'Ranto Lumban Toruan',
@@ -254,6 +254,18 @@ export async function fetchRegionalMonitoringData(
     console.warn('[allRouteMonitoringService] Gagal fetch daily_unit_summaries:', err);
   }
 
+  // 3b. Ambil daily_fleet_shifts untuk tanggal aktif (fallback defensif armada A2)
+  let fleetShifts: DailyFleetShift[] = [];
+  try {
+    const { data: fsData } = await supabase
+      .from('daily_fleet_shifts')
+      .select('*')
+      .eq('date', dateStr);
+    if (fsData) fleetShifts = fsData as DailyFleetShift[];
+  } catch (err) {
+    console.warn('[allRouteMonitoringService] Gagal fetch daily_fleet_shifts:', err);
+  }
+
   // 4. Petakan dan gabungkan per rute
   const routeItems: RegionalRouteItem[] = routes.map((r: Route) => {
     const code = r.route_code;
@@ -318,10 +330,19 @@ export async function fetchRegionalMonitoringData(
       : sumManualShift2;
     const totalShift2 = toaShift2 + manualShift2;
 
-    const renopsS1 = todayReport?.renops_shift1 ?? (r.default_renops || 0);
-    const realopsS1 = todayReport?.realops_shift1 ?? 0;
-    const renopsS2 = todayReport?.renops_shift2 ?? (r.default_renops || 0);
-    const realopsS2 = todayReport?.realops_shift2 ?? 0;
+    // Fallback defensif dari daily_fleet_shifts jika daily_route_reports belum disinkronkan
+    const fsS1 = fleetShifts.find((fs) => fs.route_id === r.id && fs.shift === 1);
+    const fsS2 = fleetShifts.find((fs) => fs.route_id === r.id && fs.shift === 2);
+
+    const renopsS1 = todayReport?.renops_shift1 ?? (fsS1?.target_renops ?? (r.default_renops || 0));
+    const realopsS1 = (todayReport?.realops_shift1 !== undefined && todayReport.realops_shift1 !== null && todayReport.realops_shift1 > 0)
+      ? todayReport.realops_shift1
+      : (fsS1?.realops ?? 0);
+
+    const renopsS2 = todayReport?.renops_shift2 ?? (fsS2?.target_renops ?? (r.default_renops || 0));
+    const realopsS2 = (todayReport?.realops_shift2 !== undefined && todayReport.realops_shift2 !== null && todayReport.realops_shift2 > 0)
+      ? todayReport.realops_shift2
+      : (fsS2?.realops ?? 0);
 
     const totalRenops = renopsS1 || renopsS2 ? Math.max(renopsS1, renopsS2) : (r.default_renops || 0);
     const totalRealops = realopsS1 || realopsS2 ? Math.max(realopsS1, realopsS2) : 0;
@@ -330,11 +351,16 @@ export async function fetchRegionalMonitoringData(
       ? Number(todayReport.achievement_km)
       : (totalRealops > 0 ? totalKm / totalRealops : 0);
 
+    const isFleetConfirmedS1 = Boolean(todayReport?.is_fleet_confirmed_s1 || fsS1?.is_confirmed);
+    const isFleetConfirmedS2 = Boolean(todayReport?.is_fleet_confirmed_s2 || fsS2?.is_confirmed);
+
     // Tentukan status kelengkapan
     let status: 'draft' | 'submitted' | 'verified' | 'empty' = 'empty';
     if (todayReport) {
       status = todayReport.status || 'draft';
-    } else if (todayPassengers > 0) {
+    } else if (isFleetConfirmedS1 || isFleetConfirmedS2) {
+      status = 'submitted';
+    } else if (todayPassengers > 0 || fsS1 || fsS2) {
       status = 'draft';
     }
 
@@ -352,7 +378,7 @@ export async function fetchRegionalMonitoringData(
     let dataSource: 'app_input' | 'sheet_ingestion' | 'empty' = 'empty';
     if (todayReport?.data_source) {
       dataSource = todayReport.data_source;
-    } else if (todayReport?.status === 'submitted' || todayReport?.status === 'verified') {
+    } else if (todayReport?.status === 'submitted' || todayReport?.status === 'verified' || isFleetConfirmedS1 || isFleetConfirmedS2) {
       dataSource = 'app_input';
     } else if (todayPassengers > 0) {
       dataSource = 'app_input';
@@ -383,10 +409,10 @@ export async function fetchRegionalMonitoringData(
       status,
       fleetStatusShift1: todayReport?.fleet_status_shift1 || [],
       fleetStatusShift2: todayReport?.fleet_status_shift2 || [],
-      isFleetConfirmedS1: !!todayReport?.is_fleet_confirmed_s1,
-      isFleetConfirmedS2: !!todayReport?.is_fleet_confirmed_s2,
-      fleetConfirmedS1At: todayReport?.fleet_confirmed_s1_at,
-      fleetConfirmedS2At: todayReport?.fleet_confirmed_s2_at,
+      isFleetConfirmedS1,
+      isFleetConfirmedS2,
+      fleetConfirmedS1At: todayReport?.fleet_confirmed_s1_at || fsS1?.confirmed_at,
+      fleetConfirmedS2At: todayReport?.fleet_confirmed_s2_at || fsS2?.confirmed_at,
       todayPassengers,
       yesterdayPassengers,
       lastWeekPassengers,
@@ -758,6 +784,14 @@ export async function syncRegionalDailyFromGlobalSheet(
     for (const route of routes) {
       const metric = metricsMap.get(route.route_code);
       if (!metric) continue;
+
+      // ponytail: Jangan sinkronisasi baris template global yang belum ada aktivitas penumpang sama sekali
+      const hasActualActivity =
+        metric.totalPassengers > 0 ||
+        metric.toaShift1 + metric.manualShift1 + metric.toaShift2 + metric.manualShift2 > 0;
+      if (!hasActualActivity && metric.totalPassengers === 0 && metric.kmTempuh === 0) {
+        continue;
+      }
 
       try {
         const payload = {

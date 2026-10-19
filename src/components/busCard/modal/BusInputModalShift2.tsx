@@ -146,7 +146,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-            <span style={{ color: "var(--text-secondary, #8b8b8b)" }}>
+            <span style={{ color: "var(--text-secondary, #94a3b8)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S2}
             </span>
             <span style={{ fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
@@ -214,7 +214,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               fontSize: "0.8rem",
             }}
           >
-            <span style={{ color: "var(--text-secondary, #8b8b8b)" }}>
+            <span style={{ color: "var(--text-secondary, #94a3b8)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S2}
             </span>
             <span
@@ -350,7 +350,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             style={{
               fontSize: "0.8rem",
               fontWeight: 600,
-              color: "var(--text-secondary, #8b8b8b)",
+              color: "var(--text-secondary, #94a3b8)",
               display: "block",
               marginBottom: "4px",
             }}

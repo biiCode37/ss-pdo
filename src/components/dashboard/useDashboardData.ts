@@ -238,6 +238,8 @@ export function useDashboardData() {
 
   const handleSelectTab = async (newTab: string) => {
     handleSetSelectedTab(newTab);
+    setIsLoading(true);
+    setCurrentTabName(newTab);
     if (currentSheetId || sheetUrlRef.current) {
       await handleLoadData(false, newTab);
     }
@@ -250,6 +252,8 @@ export function useDashboardData() {
     setAccRange(null);
     setAccRangeDetails(null);
     handleSetSelectedTab(dayToSelect);
+    setIsLoading(true);
+    setCurrentTabName(dayToSelect);
     if (currentSheetId || sheetUrlRef.current) {
       await handleLoadData(false, dayToSelect);
     }

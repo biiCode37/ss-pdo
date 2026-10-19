@@ -10,6 +10,7 @@ import { fetchDailyFleetShiftsByDate } from "@/services/fleetStatusService";
 import { verifyDailyRouteReport } from "@/services/dailyRouteReportService";
 import {
   ingestRegionalRouteSummaries,
+  ingestSingleRouteSummary,
   type IngestionProgress,
 } from "@/services/regionalIngestionService";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
@@ -27,6 +28,9 @@ import { MonitoringKorwilTab } from "./tabs/MonitoringKorwilTab";
 import { MonitoringFleetStatusTab } from "./tabs/MonitoringFleetStatusTab";
 import { MonitoringWaReportTab } from "./tabs/MonitoringWaReportTab";
 import { SUPERVISOR_TABS, matchesSupervisorTab } from "./monitoringUtils";
+import { usePageAccess } from "@/context/PageAccessContext";
+import { getStoredUserRole } from "@/utils/roleStorage";
+import { PageDisabledState, SuperadminMaintenanceBanner } from "@/components/pageManagement";
 
 // Re-export untuk kompatibilitas penuh (Zero Breaking Change)
 export { SUPERVISOR_TABS, matchesSupervisorTab };
@@ -50,6 +54,8 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
 }: AllRouteMonitoringPageProps) {
   // 1. Navigation Tab State
   const [activeTab, setActiveTab] = useState<MonitoringTab>("dashboard");
+  const { canAccessPage, isUnderMaintenance } = usePageAccess();
+  const currentUserRole = getStoredUserRole();
 
   // 2. Date & Period State
   const todayStr = useMemo(() => new Date().toISOString().split("T")[0], []);
@@ -94,6 +100,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [showMonthlySyncModal, setShowMonthlySyncModal] = useState<boolean>(false);
   const [isBulking, setIsBulking] = useState<boolean>(false);
   const [verifyingRouteId, setVerifyingRouteId] = useState<number | null>(null);
+  const [syncingRouteId, setSyncingRouteId] = useState<number | null>(null);
 
   // 4. Load Data Function
   const loadData = useCallback(
@@ -299,6 +306,34 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     await loadData(true);
   };
 
+  // 11. Single Route Ingestion Handler
+  const handleSyncSingleRoute = async (route: any) => {
+    if (currentPeriod.mode !== "daily") return;
+    setSyncingRouteId(route.id);
+    try {
+      const res = await ingestSingleRouteSummary(selectedDate, route.id);
+      if (res.success) {
+        showSuccessToast(
+          TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_SUCCESS(route.routeCode)
+        );
+        await loadData(true);
+      } else {
+        showErrorAlert(
+          TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE,
+          res.error || TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_FAILED(route.routeCode)
+        );
+      }
+    } catch (err: unknown) {
+      console.warn("[AllRouteMonitoringPage] Gagal sinkronisasi rute tunggal:", err);
+      showErrorAlert(
+        TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE,
+        TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_FAILED(route.routeCode)
+      );
+    } finally {
+      setSyncingRouteId(null);
+    }
+  };
+
   return (
     <div
       style={{
@@ -342,12 +377,22 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         {!loading && !errorMessage && data && (
           <>
             {activeTab === "dashboard" && (
-              <MonitoringDashboardTab
-                data={data}
-                confirmedRoutesCount={confirmedRoutesCount}
-                totalRoutesCount={data.totalRoutesCount || 18}
-                onSelectRoute={onSelectRoute}
-              />
+              !canAccessPage("regional_summary", currentUserRole) ? (
+                <PageDisabledState />
+              ) : (
+                <>
+                  {currentUserRole === "superadmin" &&
+                    isUnderMaintenance("regional_summary") && (
+                      <SuperadminMaintenanceBanner />
+                    )}
+                  <MonitoringDashboardTab
+                    data={data}
+                    confirmedRoutesCount={confirmedRoutesCount}
+                    totalRoutesCount={data.totalRoutesCount || 18}
+                    onSelectRoute={onSelectRoute}
+                  />
+                </>
+              )
             )}
 
             {activeTab === "routes" && (
@@ -358,7 +403,9 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
                 }
                 onBulkVerify={handleBulkVerify}
                 onSelectRoute={onSelectRoute}
+                onSyncRoute={handleSyncSingleRoute}
                 verifyingRouteId={verifyingRouteId}
+                syncingRouteId={syncingRouteId}
                 isBulking={isBulking}
               />
             )}
@@ -379,12 +426,22 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
             )}
 
             {activeTab === "wa_report" && (
-              <MonitoringWaReportTab
-                data={data}
-                selectedDate={selectedDate}
-                fleetShifts={fleetShifts}
-                onRefresh={() => loadData(true)}
-              />
+              !canAccessPage("regional_wa_report", currentUserRole) ? (
+                <PageDisabledState />
+              ) : (
+                <>
+                  {currentUserRole === "superadmin" &&
+                    isUnderMaintenance("regional_wa_report") && (
+                      <SuperadminMaintenanceBanner />
+                    )}
+                  <MonitoringWaReportTab
+                    data={data}
+                    selectedDate={selectedDate}
+                    fleetShifts={fleetShifts}
+                    onRefresh={() => loadData(true)}
+                  />
+                </>
+              )
             )}
           </>
         )}

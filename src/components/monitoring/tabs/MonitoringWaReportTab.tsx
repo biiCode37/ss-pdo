@@ -112,30 +112,39 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
       }
 
       // 2. Jalur 2 (Fallback Otomatis Spreadsheet): Ritase / Unit Beroperasi di Sheet Asli
-      const ssRenops = format3Shift === 1 ? r.renopsShift1 : r.renopsShift2;
-      const ssRealops = format3Shift === 1 ? r.realopsShift1 : r.realopsShift2;
-      const hasSpreadsheetData =
-        ssRealops > 0 ||
-        (r.totalTrips && r.totalTrips > 0) ||
-        (r.todayPassengers > 0 && r.status !== "empty");
+      const ssRenops = (format3Shift === 1 ? r.renopsShift1 : r.renopsShift2) || r.defaultRenops || 0;
+      const ssRawRealops = format3Shift === 1 ? r.realopsShift1 : r.realopsShift2;
+      const ssNonSgo =
+        (format3Shift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2)?.map(
+          (u) => ({
+            unit: u.unit,
+            note: u.note,
+            isOff: u.isOff,
+          })
+        ) || [];
 
-      if (hasSpreadsheetData) {
-        const ssNonSgo =
-          (format3Shift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2)?.map(
-            (u) => ({
-              unit: u.unit,
-              note: u.note,
-              isOff: u.isOff,
-            })
-          ) || [];
+      // Validasi aktivitas nyata: ada trip > 0, penumpang > 0, ada unit non-SGO terdeteksi, atau status submitted/verified
+      const hasActualActivity =
+        (r.totalTrips && r.totalTrips > 0) ||
+        (r.todayPassengers && r.todayPassengers > 0) ||
+        ssNonSgo.length > 0 ||
+        r.status === "submitted" ||
+        r.status === "verified";
+
+      if (hasActualActivity) {
+        const kendalaCount = ssNonSgo.filter((u) => !u.isOff).length;
+        const calculatedRealops =
+          kendalaCount > 0
+            ? Math.min(ssRawRealops, Math.max(0, ssRenops - kendalaCount))
+            : ssRawRealops;
 
         return {
           no: idx + 1,
           routeCode: r.routeCode,
           routeName: r.routeName,
           operatorName: r.operatorName,
-          renops: ssRenops || r.defaultRenops || 0,
-          realops: ssRealops,
+          renops: ssRenops,
+          realops: calculatedRealops,
           hasData: true,
           sourceType: 'spreadsheet_auto',
           nonSgoUnits: ssNonSgo,

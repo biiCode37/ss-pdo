@@ -22,7 +22,6 @@ interface UseBulkOperationsProps {
   addToQueue: (item: Omit<SyncItem, "id" | "status" | "retryCount">) => void;
   onUpdateBus?: (rowIndex: number, updates: Partial<BusData>) => void;
   isShiftConfirmed?: boolean;
-  onOpenFleetStatus?: () => void;
 }
 
 export function useBulkOperations({
@@ -39,6 +38,9 @@ export function useBulkOperations({
 
   // Menentukan target trip operasional rute saat ini
   const targetTrip = useMemo(() => {
+    // Mode akumulasi menyajikan akumulasi total lintas hari sehingga perbandingan target ritase harian dinonaktifkan
+    if (tabName === "AKUMULASI") return null;
+
     const manualP = parseIndonesianNumber(bulkPergi, 0);
     const manualQ = parseIndonesianNumber(bulkPulang, 0);
     if (manualP > 0 && manualQ > 0) {
@@ -46,7 +48,7 @@ export function useBulkOperations({
     }
 
     return detectTargetTrip(data);
-  }, [bulkPergi, bulkPulang, data]);
+  }, [bulkPergi, bulkPulang, data, tabName]);
 
   // Otomatis sinkronkan bulkPergi & bulkPulang jika masih kosong tapi targetTrip terdeteksi dari data armada
   useEffect(() => {

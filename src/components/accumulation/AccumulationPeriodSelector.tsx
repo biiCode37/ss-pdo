@@ -1,5 +1,6 @@
 import React from "react";
 import { TEXT_DASHBOARD, TEXT_COMMON } from "@/constants/texts";
+import { Calendar } from "lucide-react";
 
 const MONTH_NAMES_ID = TEXT_COMMON.MONTHS;
 
@@ -60,21 +61,53 @@ export const AccumulationPeriodSelector: React.FC<
     ));
   };
 
+  const selectStyle: React.CSSProperties = {
+    width: "100%",
+    height: "36px",
+    padding: "0 8px",
+    fontSize: "12.5px",
+    borderRadius: "8px",
+    background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
+    border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+    color: "var(--text-primary, #ededed)",
+    boxSizing: "border-box",
+  };
+
+  const labelStyle: React.CSSProperties = {
+    fontSize: "9.5px",
+    textTransform: "uppercase",
+    letterSpacing: "0.04em",
+    fontWeight: 700,
+    color: "var(--text-secondary, #94a3b8)",
+    display: "block",
+    marginBottom: "3px",
+  };
+
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
       {/* Section 1: Dari Periode */}
-      <div style={{ marginBottom: "16px" }}>
-        <span
+      <div
+        style={{
+          padding: "12px",
+          borderRadius: "12px",
+          background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
+          border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+        }}
+      >
+        <div
           style={{
-            fontSize: "11px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            fontSize: "0.75rem",
             fontWeight: 700,
-            color: "var(--accent-color)",
-            display: "block",
-            marginBottom: "6px",
+            color: "var(--accent-color, #38bdf8)",
+            marginBottom: "8px",
           }}
         >
-          {TEXT_DASHBOARD.ACCUMULATION_SHEET.FROM_LABEL}
-        </span>
+          <Calendar size={13} />
+          <span>{TEXT_DASHBOARD.ACCUMULATION_SHEET.FROM_LABEL}</span>
+        </div>
         <div
           style={{
             display: "grid",
@@ -83,21 +116,14 @@ export const AccumulationPeriodSelector: React.FC<
           }}
         >
           <div>
-            <label
-              style={{
-                fontSize: "10px",
-                color: "var(--text-secondary)",
-                display: "block",
-                marginBottom: "2px",
-              }}
-            >
+            <label style={labelStyle}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_LABEL}
             </label>
             <select
               className="input-field"
               value={safeStartDay}
               onChange={(e) => setStartDay(Number(e.target.value))}
-              style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
+              style={selectStyle}
             >
               {days.map((d) => (
                 <option key={d} value={d}>
@@ -108,41 +134,27 @@ export const AccumulationPeriodSelector: React.FC<
             </select>
           </div>
           <div>
-            <label
-              style={{
-                fontSize: "10px",
-                color: "var(--text-secondary)",
-                display: "block",
-                marginBottom: "2px",
-              }}
-            >
+            <label style={labelStyle}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_LABEL}
             </label>
             <select
               className="input-field"
               value={startMonth}
               onChange={(e) => setStartMonth(Number(e.target.value))}
-              style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
+              style={selectStyle}
             >
               {renderMonthOptions(startMonth)}
             </select>
           </div>
           <div>
-            <label
-              style={{
-                fontSize: "10px",
-                color: "var(--text-secondary)",
-                display: "block",
-                marginBottom: "2px",
-              }}
-            >
+            <label style={labelStyle}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_LABEL}
             </label>
             <select
               className="input-field"
               value={startYear}
               onChange={(e) => setStartYear(Number(e.target.value))}
-              style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
+              style={selectStyle}
             >
               {renderYearOptions(startYear)}
             </select>
@@ -151,18 +163,28 @@ export const AccumulationPeriodSelector: React.FC<
       </div>
 
       {/* Section 2: Sampai Periode */}
-      <div style={{ marginBottom: "16px" }}>
-        <span
+      <div
+        style={{
+          padding: "12px",
+          borderRadius: "12px",
+          background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
+          border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+        }}
+      >
+        <div
           style={{
-            fontSize: "11px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            fontSize: "0.75rem",
             fontWeight: 700,
-            color: "var(--accent-color)",
-            display: "block",
-            marginBottom: "6px",
+            color: "var(--shift2-color, #c084fc)",
+            marginBottom: "8px",
           }}
         >
-          {TEXT_DASHBOARD.ACCUMULATION_SHEET.TO_LABEL}
-        </span>
+          <Calendar size={13} />
+          <span>{TEXT_DASHBOARD.ACCUMULATION_SHEET.TO_LABEL}</span>
+        </div>
         <div
           style={{
             display: "grid",
@@ -171,21 +193,14 @@ export const AccumulationPeriodSelector: React.FC<
           }}
         >
           <div>
-            <label
-              style={{
-                fontSize: "10px",
-                color: "var(--text-secondary)",
-                display: "block",
-                marginBottom: "2px",
-              }}
-            >
+            <label style={labelStyle}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_LABEL}
             </label>
             <select
               className="input-field"
               value={safeEndDay}
               onChange={(e) => setEndDay(Number(e.target.value))}
-              style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
+              style={selectStyle}
             >
               {endDays.map((d) => (
                 <option key={d} value={d}>
@@ -196,47 +211,33 @@ export const AccumulationPeriodSelector: React.FC<
             </select>
           </div>
           <div>
-            <label
-              style={{
-                fontSize: "10px",
-                color: "var(--text-secondary)",
-                display: "block",
-                marginBottom: "2px",
-              }}
-            >
+            <label style={labelStyle}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.MONTH_LABEL}
             </label>
             <select
               className="input-field"
               value={endMonth}
               onChange={(e) => setEndMonth(Number(e.target.value))}
-              style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
+              style={selectStyle}
             >
               {renderMonthOptions(endMonth)}
             </select>
           </div>
           <div>
-            <label
-              style={{
-                fontSize: "10px",
-                color: "var(--text-secondary)",
-                display: "block",
-                marginBottom: "2px",
-              }}
-            >
+            <label style={labelStyle}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.YEAR_LABEL}
             </label>
             <select
               className="input-field"
               value={endYear}
               onChange={(e) => setEndYear(Number(e.target.value))}
-              style={{ width: "100%", padding: "8px", fontSize: "12.5px" }}
+              style={selectStyle}
             >
               {renderYearOptions(endYear)}
             </select>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

@@ -85,7 +85,15 @@ function CompletionStatusCardComponent({
           {summary.busesWithNotes.map((note, idx) => (
             <div
               key={idx}
+              role="button"
+              tabIndex={0}
               onClick={() => onSelectUnit?.(note.unit)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelectUnit?.(note.unit);
+                }
+              }}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -96,7 +104,7 @@ function CompletionStatusCardComponent({
                 borderRadius: "10px",
                 fontSize: "12.5px",
                 cursor: "pointer",
-                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+                transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
                 gap: "10px",
               }}
               title={TEXT_DASHBOARD.COMPLETION_STATUS.JUMP_TO_UNIT_TITLE}

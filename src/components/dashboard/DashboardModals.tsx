@@ -6,8 +6,10 @@ import { ProfileMenuSheet } from "@/components/ProfileMenuSheet";
 import type { BusData } from "@/services/googleSheets";
 import type { Route } from "@/types/supabase";
 import type { SyncItem } from "@/hooks/useOfflineSync";
-import { TEXT_DASHBOARD } from "@/constants/texts";
+import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
 import { showInfoToast, showWarningToast } from "@/utils/alertUtils";
+import { usePageAccess } from "@/context/PageAccessContext";
+import { getStoredUserRole } from "@/utils/roleStorage";
 
 interface DashboardModalsProps {
   matchedRoute: Route | null;
@@ -16,15 +18,10 @@ interface DashboardModalsProps {
   onCloseReportModal: () => void;
   operationalReportDate: string;
   dynamicRenops: { renops: number; label: string };
-  onOperationalStatusChange: (status: "draft" | "submitted" | "verified") => void;
+  onOperationalStatusChange: (status: "draft" | "submitted" | "verified" | "failed") => void;
+  onRefreshFleetData?: () => Promise<void> | void;
   busData: BusData[] | null;
-  isFleetModalOpen?: boolean;
-  onCloseFleetModal?: () => void;
   activeShift: 1 | 2;
-  onConfirmFleetStatus?: (
-    shift: 1 | 2,
-    statusMap: Map<number, { s1: string; s2: string }>,
-  ) => Promise<void>;
   isQueueModalOpen: boolean;
   onCloseQueueModal: () => void;
   queue: SyncItem[];
@@ -53,16 +50,12 @@ interface DashboardModalsProps {
   onReturnToRouteView?: () => void;
   isInMonitoringView?: boolean;
   onOpenUserManagement: () => void;
+  onOpenPageManagement?: () => void;
   theme: "light" | "dark";
   onToggleTheme: () => void;
   isOnline: boolean;
   onLogout: () => void;
   onFormatWholeSheet: () => Promise<void>;
-  confirmedShifts?: { 1: boolean; 2: boolean };
-  confirmedInfo?: {
-    s1: { by?: string; at?: string };
-    s2: { by?: string; at?: string };
-  };
   currentTabName: string;
   hasActiveData: boolean;
 }
@@ -74,14 +67,10 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   onCloseReportModal,
   operationalReportDate,
   dynamicRenops,
-  onOperationalStatusChange: _onOperationalStatusChange,
+  onOperationalStatusChange,
+  onRefreshFleetData,
   busData,
-  isFleetModalOpen: _isFleetModalOpen,
-  onCloseFleetModal: _onCloseFleetModal,
   activeShift,
-  confirmedShifts: _confirmedShifts,
-  confirmedInfo: _confirmedInfo,
-  onConfirmFleetStatus: _onConfirmFleetStatus,
   isQueueModalOpen,
   onCloseQueueModal,
   queue,
@@ -103,6 +92,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   onReturnToRouteView,
   isInMonitoringView,
   onOpenUserManagement,
+  onOpenPageManagement,
   theme,
   onToggleTheme,
   isOnline,
@@ -111,10 +101,27 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   currentTabName,
   hasActiveData,
 }) => {
+  const { canAccessPage } = usePageAccess();
+  const currentUserRole = getStoredUserRole();
+
+  React.useEffect(() => {
+    if (isReportModalOpen && !canAccessPage("a2_report", currentUserRole)) {
+      onCloseReportModal();
+      showWarningToast(TEXT_PAGE_MANAGEMENT.MAINTENANCE.DEFAULT_MESSAGE);
+    }
+  }, [isReportModalOpen, canAccessPage, currentUserRole, onCloseReportModal]);
+
+  React.useEffect(() => {
+    if (isAccSheetOpen && !canAccessPage("accumulation", currentUserRole)) {
+      onCloseAccSheet();
+      showWarningToast(TEXT_PAGE_MANAGEMENT.MAINTENANCE.DEFAULT_MESSAGE);
+    }
+  }, [isAccSheetOpen, canAccessPage, currentUserRole, onCloseAccSheet]);
+
   return (
     <>
       {/* Modal Laporan Harian A2 Armada Petugas PDO */}
-      {matchedRoute && selectedTab !== "AKUMULASI" && (
+      {matchedRoute && selectedTab !== "AKUMULASI" && canAccessPage("a2_report", currentUserRole) && (
         <A2ReportModal
           isOpen={isReportModalOpen}
           onClose={onCloseReportModal}
@@ -124,6 +131,13 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
           defaultRenops={dynamicRenops.renops}
           buses={busData}
           initialShift={activeShift}
+          onSaveSuccess={() => {
+            onOperationalStatusChange("submitted");
+            onRefreshFleetData?.();
+          }}
+          onSaveFailure={() => {
+            onOperationalStatusChange("failed");
+          }}
         />
       )}
 
@@ -169,6 +183,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
         onReturnToRouteView={onReturnToRouteView}
         isInMonitoringView={isInMonitoringView}
         onOpenUserManagement={onOpenUserManagement}
+        onOpenPageManagement={onOpenPageManagement}
         isDarkMode={theme === "dark"}
         onToggleTheme={onToggleTheme}
         offlineQueueCount={

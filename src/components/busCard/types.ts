@@ -13,7 +13,6 @@ export interface BusCardProps {
   onSaveAndNext?: (savedBus: BusData) => void;
   isShiftConfirmed?: boolean;
   activeShift?: 1 | 2;
-  onOpenFleetStatus?: () => void;
   previousDayKmAkhir2?: string;
   previousDayDateLabel?: string;
 }

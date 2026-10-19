@@ -19,4 +19,10 @@ export const TEXT_UNIT_DETAIL = {
   TOTAL_MANUAL_LABEL: 'Manual:',
   NOTES_SECTION_TITLE: 'Catatan & Keterangan Operasional',
   NO_NOTES: 'Tidak ada catatan khusus yang dilaporkan untuk unit ini.',
+  STRIP_RITASE: 'RITASE',
+  STRIP_TOTAL_KM: 'TOTAL KM',
+  STRIP_PASSENGERS: 'PELANGGAN',
+  LABEL_KM_TEMPUH: 'KM Tempuh',
+  LABEL_PELANGGAN: 'Pelanggan',
+  MODAL_CLOSE_ARIA: 'Tutup modal detail unit',
 } as const;

@@ -95,8 +95,6 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
   });
 
   it('allows opening modal without blocking when tapping unit with OFF status', async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
     await act(async () => {
       root.render(
         <BusCard
@@ -105,7 +103,6 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
             ...defaultProps.bus,
             keterangan: 'OFF',
           }}
-          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
@@ -116,13 +113,10 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     });
 
     expect(alertUtils.pdoSwal.fire).not.toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
     expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
   it('allows opening modal without blocking when tapping unit with TO EVDAL status', async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
     await act(async () => {
       root.render(
         <BusCard
@@ -131,7 +125,6 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
             ...defaultProps.bus,
             keterangan: 'TO EVDAL',
           }}
-          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
@@ -142,19 +135,15 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     });
 
     expect(alertUtils.pdoSwal.fire).not.toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
     expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
   it('allows opening modal and does not render obsolete unconfirmed warning badge when isShiftConfirmed is false', async () => {
-    const onOpenFleetStatusMock = vi.fn();
-
     await act(async () => {
       root.render(
         <BusCard
           {...defaultProps}
           isShiftConfirmed={false}
-          onOpenFleetStatus={onOpenFleetStatusMock}
         />
       );
     });
@@ -167,7 +156,6 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     });
 
     expect(alertUtils.showWarningToast).not.toHaveBeenCalled();
-    expect(onOpenFleetStatusMock).not.toHaveBeenCalled();
     expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
@@ -189,5 +177,47 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(headerBadge).toBeNull();
     // But FormattedNoteText still renders the note detail
     expect(container.textContent).toContain('Pramudi Meriang');
+  });
+
+  it('suppresses redundant bottom note strip when bus keterangan is pure status (OFF)', async () => {
+    await act(async () => {
+      root.render(
+        <BusCard
+          {...defaultProps}
+          bus={{
+            ...defaultProps.bus,
+            keterangan: 'OFF',
+          }}
+          isShiftConfirmed={true}
+        />
+      );
+    });
+
+    // Header has the OFF badge
+    const headerBadge = container.querySelector('.unit-status-badge-off');
+    expect(headerBadge).not.toBeNull();
+    expect(headerBadge?.textContent).toBe('OFF');
+
+    // Bottom note strip should NOT be rendered (preventing duplicate warning icon & badge)
+    expect(container.querySelector('svg.lucide-alert-triangle')).toBeNull();
+  });
+
+  it('renders bottom note strip when bus has meaningful detail even if containing OFF prefix', async () => {
+    await act(async () => {
+      root.render(
+        <BusCard
+          {...defaultProps}
+          bus={{
+            ...defaultProps.bus,
+            keterangan: 'OFF - BAN PECAH',
+          }}
+          isShiftConfirmed={true}
+        />
+      );
+    });
+
+    // Bottom note strip is rendered for meaningful detail
+    expect(container.textContent).toContain('BAN PECAH');
+    expect(container.querySelector('svg')).not.toBeNull();
   });
 });

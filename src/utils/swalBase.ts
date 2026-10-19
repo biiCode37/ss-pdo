@@ -46,6 +46,7 @@ export const pdoToast = Swal.mixin({
   timer: 3000,
   timerProgressBar: true,
   customClass: {
+    container: "pdo-swal-toast-container",
     popup: "pdo-swal-toast",
   },
   didOpen: (toast) => {

@@ -1,18 +1,20 @@
 import React from "react";
-import { Users, History, ChevronRight } from "lucide-react";
-import { TEXT_DASHBOARD } from "@/constants/texts";
+import { Users, History, ChevronRight, Sliders } from "lucide-react";
+import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
 import type { UserRole } from "@/utils/roleStorage";
 
 interface ProfileAdminSectionProps {
   role?: UserRole | "petugas";
   onClose: () => void;
   onOpenUserManagement?: () => void;
+  onOpenPageManagement?: () => void;
 }
 
 export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
   role,
   onClose,
   onOpenUserManagement,
+  onOpenPageManagement,
 }) => {
   if (role !== "superadmin" && role !== "admin") return null;
 
@@ -71,6 +73,48 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
           </div>
           <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
         </button>
+
+        {/* Manajemen Halaman & Fitur (Superadmin Only) */}
+        {role === "superadmin" && (
+          <button
+            type="button"
+            data-testid="profile-menu-page-management-btn"
+            onClick={() => {
+              onClose();
+              onOpenPageManagement?.();
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 14px",
+              borderRadius: "12px",
+              background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+              border: "1px solid var(--card-border)",
+              color: "var(--text-primary)",
+              fontWeight: 500,
+              fontSize: "13.5px",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <Sliders size={18} style={{ color: "#f59e0b" }} />
+              <div style={{ textAlign: "left" }}>
+                <div>{TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT}</div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--text-secondary)",
+                    marginTop: "1px",
+                  }}
+                >
+                  {TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT_DESC}
+                </div>
+              </div>
+            </div>
+            <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
+          </button>
+        )}
 
         {/* Log Aktivitas & Audit (Disabled - Coming Soon) */}
         {/* BUG-66: Halaman belum siap production — dikunci untuk SEMUA

@@ -43,7 +43,7 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
       <div
         style={{
           fontSize: "0.76rem",
-          color: "var(--warning-banner-text, var(--text-primary, #171717))",
+          color: "var(--warning-banner-text, var(--text-primary, #ededed))",
           lineHeight: 1.4,
         }}
       >
@@ -60,10 +60,10 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
           display: "inline-flex",
           alignItems: "center",
           gap: "4px",
-          padding: "4px 10px",
+          padding: "5px 12px",
           borderRadius: "6px",
-          background: "var(--warning-color, #d97706)",
-          color: "var(--warning-btn-text, #0f172a)",
+          background: "var(--warning-color, #f59e0b)",
+          color: "var(--warning-btn-text, #000)",
           fontWeight: 700,
           fontSize: "0.78rem",
           border: "none",

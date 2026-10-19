@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircle2, Send, Clock, AlertTriangle, ChevronRight, Check } from "lucide-react";
+import { CheckCircle2, Send, Clock, AlertTriangle, ChevronRight, Check, RefreshCw, Loader2 } from "lucide-react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { formatDecimal, formatNumber } from "../monitoringUtils";
@@ -9,7 +9,9 @@ export interface MonitoringRouteCardModernProps {
   onCardClick?: (route: RegionalRouteItem) => void;
   onVerify?: (routeId: number, status: "verified") => void;
   onSelectRoute?: (routeCode: string) => void;
+  onSyncRoute?: (route: RegionalRouteItem) => void;
   isVerifying?: boolean;
+  isSyncing?: boolean;
 }
 
 export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps> = ({
@@ -17,7 +19,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
   onCardClick,
   onVerify,
   onSelectRoute,
+  onSyncRoute,
   isVerifying,
+  isSyncing,
 }) => {
   const isVerified = route.status === "verified";
   const isSubmitted = route.status === "submitted";
@@ -178,6 +182,43 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               {TEXT_MONITORING.PROVENANCE.SHEET_SYNC}
             </span>
           ) : null}
+
+          {/* Tombol Aksi Tarik Ulang Sheet Rute Tunggal */}
+          {onSyncRoute && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onSyncRoute(route);
+              }}
+              disabled={isSyncing}
+              title={TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE_TOOLTIP(route.routeCode)}
+              data-testid={`sync-route-${route.routeCode}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "4px",
+                padding: "2px 6px",
+                borderRadius: "6px",
+                fontSize: "10px",
+                fontWeight: 600,
+                background: isSyncing
+                  ? "rgba(56, 189, 248, 0.25)"
+                  : "var(--bg-secondary, rgba(255, 255, 255, 0.05))",
+                color: isSyncing ? "#38bdf8" : "var(--text-secondary)",
+                border: "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
+                cursor: isSyncing ? "wait" : "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              {isSyncing ? (
+                <Loader2 size={11} className="animate-spin text-sky-400" />
+              ) : (
+                <RefreshCw size={11} />
+              )}
+            </button>
+          )}
 
           {isVerified && (
             <span

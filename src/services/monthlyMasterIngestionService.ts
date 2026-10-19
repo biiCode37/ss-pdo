@@ -468,8 +468,9 @@ export async function ingestMonthlyMasterSheet(
         const totalPax = Math.round(parseIndonesianNumber(row[12])) || (toaS1 + manS1 + toaS2 + manS2);
         const ritaseCol = parseIndonesianNumber(row[19]);
 
-        // Activity Guard: Jika belum ada realisasi apa pun, lewati
-        if (realops === 0 && totalKm === 0 && totalPax === 0) {
+        // Activity Guard: Jika belum ada realisasi penumpang atau hanya baris rencana template awal, lewati
+        const isTemplatePlanOnly = totalPax === 0 && (toaS1 + toaS2 + manS1 + manS2 === 0);
+        if ((realops === 0 && totalKm === 0 && totalPax === 0) || isTemplatePlanOnly) {
           continue;
         }
 

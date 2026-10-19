@@ -128,6 +128,10 @@ export const TEXT_MONITORING = {
     PAX_YESTERDAY_PREFIX: "H-1:",
     PAX_LAST_WEEK_PREFIX: "H-7:",
     ARIA_CARD_CLICK: (code: string) => `Buka detail operasional rute ${code}`,
+    BTN_SYNC_ROUTE: "Tarik Sheet",
+    BTN_SYNC_ROUTE_TOOLTIP: (code: string) => `Tarik data terbaru dari spreadsheet rute ${code}`,
+    SYNC_ROUTE_SUCCESS: (code: string) => `Data spreadsheet rute ${code} berhasil ditarik dan disinkronkan.`,
+    SYNC_ROUTE_FAILED: (code: string) => `Gagal menarik data spreadsheet rute ${code}.`,
   },
   ROUTES_TAB: {
     SEARCH_PLACEHOLDER: "Cari rute (JAK.XX), lintasan, atau operator...",
