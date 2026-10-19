@@ -11,6 +11,7 @@ import {
   TEXT_FLEET_STATUS,
   TEXT_USER_MANAGEMENT,
   TEXT_UNIT_DETAIL,
+  TEXT_PAGE_MANAGEMENT,
 } from './index';
 
 describe('Centralized UI Text Dictionary', () => {
@@ -46,7 +47,11 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.TABS.ACCUMULATION).toBe('Akumulasi');
     expect(TEXT_DASHBOARD.TOA_TREND.TITLE).toBe('Grafik Pelanggan Harian');
     expect(TEXT_DASHBOARD.KPIS.TITLE).toBe('Capaian Pelanggan & Km');
+    expect(TEXT_DASHBOARD.KPIS.KM_PER_BUS_LABEL).toBe('KM / BUS');
+    expect(TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM_LABEL).toBe('PELANGGAN / KM');
     expect(TEXT_DASHBOARD.SHIFT_COMPARISON.TITLE).toBe('Komparasi Pelanggan');
+    expect(TEXT_DASHBOARD.SHIFT_COMPARISON.RATIO_LABEL).toBe('Rasio Distribusi Shift');
+    expect(TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_1_SHARE(55)).toBe('Shift 1 (55%)');
     expect(TEXT_DASHBOARD.COMPLETION_STATUS.TITLE).toBe('Unit Dengan Keterangan Tertentu');
     expect(TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER).toBe('Cari No. Body Unit...');
     expect(TEXT_DASHBOARD.ACCUMULATION_SHEET.TITLE).toBe('Rekap Akumulasi Lintas Periode');
@@ -79,13 +84,27 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PDO_FORM.HEADWAY.SLOWEST_LABEL).toBe('Headway Terlama (Menit)');
     expect(TEXT_PDO_FORM.BUTTONS.SUBMIT).toContain('Kirim Laporan Operasional');
     expect(TEXT_PDO_FORM.A2_REPORT.PILL_LABEL).toBe('Laporan A2');
+    expect(TEXT_PDO_FORM.A2_REPORT.STATUS_VERIFIED).toBe('Terverifikasi');
+    expect(TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED).toBe('Terkirim');
+    expect(TEXT_PDO_FORM.A2_REPORT.STATUS_FAILED).toBe('Gagal Kirim');
+    expect(TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED_SHIFT_1).toBe('Shift 1 Terkirim');
+    expect(TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED_SHIFT_2).toBe('Shift 2 Terkirim');
+    expect(TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED_BOTH).toBe('Selesai Terkirim');
+    expect(TEXT_PDO_FORM.A2_REPORT.TOOLTIP_FAILED).toContain('gagal');
     expect(TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE).toBe('Laporan Harian A2 Armada');
+    expect(TEXT_PDO_FORM.A2_REPORT.SHIFT_1_TAB).toContain('Shift 1');
+    expect(TEXT_PDO_FORM.A2_REPORT.SHIFT_2_TAB).toContain('Shift 2');
     expect(TEXT_PDO_FORM.A2_REPORT.SUBMIT_BTN(1)).toContain('Shift 1');
     expect(TEXT_PDO_FORM.A2_REPORT.TOAST_SUCCESS(2)).toContain('Shift 2');
     expect(TEXT_PDO_FORM.A2_REPORT.ERROR_SUBMIT).toContain('Gagal');
     expect(TEXT_PDO_FORM.A2_REPORT.SELECT_UNIT_PLACEHOLDER).toContain('Pilih');
     expect(TEXT_PDO_FORM.A2_REPORT.CUSTOM_UNIT_OPTION).toContain('Input Manual');
     expect(TEXT_PDO_FORM.A2_REPORT.SWITCH_TO_DROPDOWN_BTN).toBeDefined();
+    expect(TEXT_PDO_FORM.A2_REPORT.ALERT_SUCCESS_TITLE).toBe('Laporan A2 Berhasil Disimpan');
+    expect(TEXT_PDO_FORM.A2_REPORT.ALERT_SUCCESS_DETAIL(1, 'JAK.15')).toContain('JAK.15');
+    expect(TEXT_PDO_FORM.A2_REPORT.RETRY_BTN).toBe('Coba Kirim Lagi');
+    expect(TEXT_PDO_FORM.A2_REPORT.UNIT_SELECT_ARIA).toBe('Pilih Nomor Body Unit');
+    expect(TEXT_PDO_FORM.A2_REPORT.SAVED_BANNER(1, '10:00')).toContain('10:00');
   });
 
   it('exports TEXT_MONITORING with interpolation functions and KPI titles', () => {
@@ -337,11 +356,12 @@ describe('Centralized UI Text Dictionary', () => {
   });
 
   it('exports UNIT_CARD with operational statuses and metrics', () => {
-    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE).toBe('S1 & S2 Lengkap');
-    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY).toBe('Negatif Data S2');
-    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY).toBe('Negatif Data S1');
+    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE).toBe('2 Shift Lengkap');
+    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY).toBe('Hanya Shift 1');
+    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY).toBe('Hanya Shift 2');
     expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE).toBe('Parsial');
-    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY).toBe('Negatif Data S1 & S2');
+    expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY).toBe('Belum Terisi');
+    expect(TEXT_DASHBOARD.UNIT_CARD.LABEL_RITASE).toBe('RITASE');
     expect(TEXT_DASHBOARD.UNIT_CARD.ARIA_VIEW_DETAIL('101')).toBe('Lihat detail unit 101');
     expect(TEXT_DASHBOARD.BUS_LIST.ALL_UNITS_FILLED).toContain('selesai diisi');
   });
@@ -378,6 +398,10 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.ROUTE_CARD.PAX_YESTERDAY_PREFIX).toBe('H-1:');
     expect(TEXT_MONITORING.ROUTE_CARD.PAX_LAST_WEEK_PREFIX).toBe('H-7:');
     expect(TEXT_MONITORING.ROUTE_CARD.ARIA_CARD_CLICK('JAK.01')).toContain('JAK.01');
+    expect(TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE).toBe('Tarik Sheet');
+    expect(TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE_TOOLTIP('JAK.01')).toContain('JAK.01');
+    expect(TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_SUCCESS('JAK.01')).toContain('JAK.01');
+    expect(TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_FAILED('JAK.01')).toContain('JAK.01');
 
     // ROUTE_DETAIL_MODAL
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TITLE('JAK.01')).toContain('JAK.01');
@@ -411,6 +435,29 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_WA_REPORT.ACTIONS.COPY).toBe('Salin Teks');
     expect(TEXT_WA_REPORT.ACTIONS.SHARE).toBe('Kirim ke WhatsApp');
     expect(TEXT_WA_REPORT.ACTIONS.COPY_SUCCESS).toContain('berhasil disalin');
+  });
+
+  it('exports TEXT_PDO_FORM with A2 report labels and Renops/Realops clean text', () => {
+    expect(TEXT_PDO_FORM.CARD_TITLE).toBe('Laporan Kondisi & Armada Rute');
+    expect(TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE).toBe('Laporan Harian A2 Armada');
+    expect(TEXT_PDO_FORM.A2_REPORT.RENOPS_TARGET_LABEL).toBe('Renops');
+    expect(TEXT_PDO_FORM.A2_REPORT.REALOPS_LABEL).toBe('Realops');
+    expect(TEXT_PDO_FORM.A2_REPORT.SUBTITLE('JAK.15', '2026-10-18', 1)).toBe('Rute JAK.15 • 2026-10-18 • Shift 1');
+    expect(TEXT_PDO_FORM.A2_REPORT.SUBMIT_BTN(1)).toBe('Kirim Laporan A2 Shift 1');
+    expect(TEXT_PDO_FORM.A2_REPORT.REMOVE_UNIT_BTN).toBe('Hapus');
+  });
+
+  it('exports TEXT_PAGE_MANAGEMENT with page management strings and maintenance messages', () => {
+    expect(TEXT_PAGE_MANAGEMENT.TITLE).toBe('Manajemen Halaman & Fitur');
+    expect(TEXT_PAGE_MANAGEMENT.SUPERADMIN_BADGE).toBe('Superadmin Access Only');
+    expect(TEXT_PAGE_MANAGEMENT.MAINTENANCE.DEFAULT_MESSAGE).toBe(
+      'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan'
+    );
+    expect(TEXT_PAGE_MANAGEMENT.SUPERADMIN_BANNER.TEXT).toBe(
+      'Mode Pratinjau Superadmin: Halaman ini sedang dinonaktifkan untuk pengguna lain.'
+    );
+    expect(TEXT_PAGE_MANAGEMENT.CATEGORIES.ALL).toBe('Semua');
+    expect(TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT).toBe('Manajemen Halaman');
   });
 });
 
