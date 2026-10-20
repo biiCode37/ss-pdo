@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MAX_TOA_VALUE } from "@/utils/modals/busInput/busModalTypes";
 import { TEXT_ALERTS, TEXT_COMMON } from "@/constants/texts";
+import { parseIndonesianNumber } from "@/utils/numberUtils";
 import type { BusInputFormReturn } from "./useBusInputForm";
 import { AlertTriangle, Copy, ChevronDown, ChevronUp } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
@@ -39,6 +40,16 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
 
   const [showKmAwalEdit, setShowKmAwalEdit] = useState(!kmAwal2);
 
+  const crossShiftErrorS2 = React.useMemo(() => {
+    if (!form.isKmAkhir1Valid || !form.kmAkhir1 || !kmAwal2 || kmAwal2.trim().length <= 3) return null;
+    const numAkhir1 = parseIndonesianNumber(form.kmAkhir1, NaN);
+    const numAwal2 = parseIndonesianNumber(kmAwal2, NaN);
+    if (!isNaN(numAkhir1) && !isNaN(numAwal2) && numAwal2 < numAkhir1) {
+      return TEXT_ALERTS.BUS_INPUT_MODAL.KM_AWAL_S2_LESS_THAN_KM_AKHIR_S1(kmAwal2, form.kmAkhir1);
+    }
+    return null;
+  }, [form.isKmAkhir1Valid, form.kmAkhir1, kmAwal2]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
       {/* 1. Paket Pasangan Berdampingan: TOTAL TOA & KM Akhir S2 */}
@@ -57,6 +68,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           type="number"
           min="0"
           max={MAX_TOA_VALUE}
+          hasError={toaLiveS2.status === "invalid"}
           value={totalToa}
           onChange={(e) => setTotalToa(e.target.value)}
           onFocus={handleInputFocus}
@@ -69,6 +81,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S2}
           variant="hero"
           disabled={form.isKmAkhir2Locked}
+          hasError={kmLiveS2.status === "negative"}
           value={kmAkhir2}
           onChange={(e) => setKmAkhir2(e.target.value)}
           onFocus={handleInputFocus}
@@ -272,6 +285,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S2}
               variant="secondary"
               disabled={form.isKmAwal2Locked}
+              hasError={Boolean(crossShiftErrorS2)}
               value={kmAwal2}
               onChange={(e) => setKmAwal2(e.target.value)}
               onFocus={handleInputFocus}
@@ -282,6 +296,26 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                   : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_2
               }
             />
+
+            {crossShiftErrorS2 && (
+              <div
+                style={{
+                  marginTop: "8px",
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  background: "rgba(239, 68, 68, 0.12)",
+                  border: "1px solid rgba(239, 68, 68, 0.35)",
+                  fontSize: "0.78rem",
+                  color: "#f87171",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                <span>{crossShiftErrorS2}</span>
+              </div>
+            )}
           </div>
         )}
       </div>

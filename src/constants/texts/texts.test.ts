@@ -250,6 +250,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_S2_LOCKED).toContain('Shift 1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.GUIDE_FILL_KM_AWAL_FIRST).toContain('KM Awal Shift 1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_KM_S2_REQUIRES_S1_CLOSED).toContain('KM Akhir Shift 1 wajib diisi');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.KM_AWAL_S2_LESS_THAN_KM_AKHIR_S1('150100', '150200')).toContain('tidak boleh lebih kecil');
     expect(TEXT_ALERTS.BULK_TRIP.VALIDATION_POSITIVE).toBe('Nilai trip harus berupa angka positif!');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.KM_AWAL_LESS_THAN_PREVIOUS_DAY('Shift 1', '292003', '292990', 'Kemarin', 987)).toContain('292003');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_SUGGESTION_TEXT('293003', 13)).toContain('293003');

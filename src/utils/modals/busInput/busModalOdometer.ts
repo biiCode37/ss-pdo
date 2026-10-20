@@ -4,7 +4,7 @@ import { MAX_SHIFT_DISTANCE_KM } from "./busModalTypes";
 
 export interface KmDistanceResult {
   diff: number | null;
-  status: "empty" | "normal" | "negative" | "extreme";
+  status: "empty" | "normal" | "negative" | "extreme" | "typing";
   formattedText: string | null;
 }
 
@@ -35,6 +35,28 @@ export function computeRealtimeDistance(
 ): KmDistanceResult {
   if (!awalRaw || !akhirRaw) {
     return { diff: null, status: "empty", formattedText: null };
+  }
+
+  const awalTrim = awalRaw.trim();
+  const akhirTrim = akhirRaw.trim();
+  const digitsAwal = awalTrim.replace(/\D/g, "");
+  const digitsAkhir = akhirTrim.replace(/\D/g, "");
+
+  // Typing-in-progress guard: jika digit akhir masih belum lengkap namun berpotensi valid saat selesai
+  // Mensyaratkan 3 digit prefix cocok dengan kepala angka KM Awal agar tidak false positive pada angka puluhan ribu yang berbeda
+  if (
+    digitsAwal.length >= 4 &&
+    digitsAkhir.length > 0 &&
+    digitsAkhir.length < digitsAwal.length &&
+    digitsAwal.slice(0, 3) === digitsAkhir.slice(0, Math.min(3, digitsAkhir.length))
+  ) {
+    const paddingLength = digitsAwal.length - digitsAkhir.length;
+    const maxPotentialNum = parseInt(digitsAkhir + "9".repeat(paddingLength), 10);
+    const numAwalPure = parseInt(digitsAwal, 10);
+
+    if (!isNaN(maxPotentialNum) && !isNaN(numAwalPure) && maxPotentialNum >= numAwalPure) {
+      return { diff: null, status: "typing", formattedText: null };
+    }
   }
 
   const numAwal = parseIndonesianNumber(awalRaw, NaN);

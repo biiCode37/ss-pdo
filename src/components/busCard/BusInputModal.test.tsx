@@ -1410,6 +1410,63 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       });
       expect(textarea!.value).toBe("BA.01 Perbaikan Dinamo");
     });
+
+    it("BUG-152-01: automatically re-enables Save button in realtime when user corrects invalid data", async () => {
+      const onSave = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({
+              kmAwal1: "100000",
+              kmAkhir1: "99000", // Salah: KM Akhir < KM Awal
+            })}
+            activeCategory="all"
+            initialTab="shift1"
+            onSave={onSave}
+          />
+        );
+      });
+
+      const formEl = document.body.querySelector("form");
+      const submitBtn = document.body.querySelector<HTMLButtonElement>('button[type="submit"]');
+      expect(formEl).not.toBeNull();
+      expect(submitBtn).not.toBeNull();
+
+      // 1. Submit form saat data salah -> memicu error validasi
+      await act(async () => {
+        formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      });
+
+      // Tombol Simpan terdisabled karena ada error
+      expect(submitBtn?.disabled).toBe(true);
+      expect(document.body.textContent).toContain("tidak boleh lebih kecil");
+
+      // 2. User memperbaiki angka KM Akhir menjadi benar (100080)
+      const inputKmAkhir = document.body.querySelector<HTMLInputElement>("#input-km-akhir-1");
+      expect(inputKmAkhir).not.toBeNull();
+
+      await act(async () => {
+        const nativeSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value",
+        )?.set;
+        nativeSetter?.call(inputKmAkhir, "100080");
+        inputKmAkhir!.dispatchEvent(new Event("input", { bubbles: true }));
+        inputKmAkhir!.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+
+      // 3. Tombol Simpan otomatis ENABLED KEMBALI secara realtime!
+      expect(submitBtn?.disabled).toBe(false);
+      expect(document.body.textContent).not.toContain(TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER);
+
+      // 4. User dapat submit kembali dan onSave terpanggil
+      await act(async () => {
+        formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      });
+      expect(onSave).toHaveBeenCalled();
+    });
   });
 });
 

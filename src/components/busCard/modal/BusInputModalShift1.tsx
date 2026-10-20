@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MAX_TOA_VALUE } from "@/utils/modals/busInput/busModalTypes";
 import { TEXT_ALERTS, TEXT_COMMON } from "@/constants/texts";
+import { validateKmCrossDay } from "@/utils/modals/busInput/busModalValidation";
 import type { BusInputFormReturn } from "./useBusInputForm";
 import { AlertTriangle, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
@@ -37,6 +38,20 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
 
   // Jika KM Awal S1 belum tersimpan di sheet (masih kosong atau hanya berisi 3 digit prefill),
   // buka form input KM Awal S1 secara default agar petugas langsung melihat dan melengkapi angka.
+  const previousDateLabel =
+    form.previousDayDateLabel || TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_PREVIOUS_DAY;
+
+  const crossDayErrorS1 = React.useMemo(() => {
+    if (!form.previousDayKmAkhir2 || form.bypassOdometerReset) return null;
+    return validateKmCrossDay(
+      kmAwal1,
+      form.previousDayKmAkhir2,
+      TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_1,
+      previousDateLabel,
+      form.bypassOdometerReset,
+    );
+  }, [kmAwal1, form.previousDayKmAkhir2, previousDateLabel, form.bypassOdometerReset]);
+
   const isKmAwalSaved = Boolean(
     form.bus?.kmAwal1 && form.bus.kmAwal1.trim().length >= 4,
   );
@@ -72,6 +87,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
           label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AKHIR_S1}
           variant="hero"
           disabled={form.isKmAkhir1Locked}
+          hasError={kmLiveS1.status === "negative"}
           value={kmAkhir1}
           onChange={(e) => setKmAkhir1(e.target.value)}
           onFocus={handleInputFocus}
@@ -240,6 +256,50 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               onKeyDown={handleInputKeyDown}
               placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_1}
             />
+
+            {crossDayErrorS1 && !form.smartRolloverSuggestion && (
+              <div
+                style={{
+                  marginTop: "8px",
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  background: "rgba(239, 68, 68, 0.12)",
+                  border: "1px solid rgba(239, 68, 68, 0.35)",
+                  fontSize: "0.78rem",
+                  color: "#f87171",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "6px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                  <span>{crossDayErrorS1}</span>
+                </div>
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    cursor: "pointer",
+                    color: "var(--text-secondary, #cbd5e1)",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={form.bypassOdometerReset}
+                    onChange={(e) =>
+                      form.handleToggleBypassOdometerReset(e.target.checked)
+                    }
+                    style={{ accentColor: "#38bdf8" }}
+                  />
+                  <span>
+                    {TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL}
+                  </span>
+                </label>
+              </div>
+            )}
 
             {form.smartRolloverSuggestion && (
               <div

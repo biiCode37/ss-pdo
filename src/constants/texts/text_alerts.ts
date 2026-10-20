@@ -128,6 +128,8 @@ export const TEXT_ALERTS = {
       "Abaikan: Odometer di-reset / ganti speedometer",
     VALIDATION_KM_S2_REQUIRES_S1_CLOSED:
       "KM Akhir Shift 1 wajib diisi sebelum mengisi data Shift 2!",
+    KM_AWAL_S2_LESS_THAN_KM_AKHIR_S1: (awal2: string, akhir1: string) =>
+      `KM Awal Shift 2 (${awal2}) tidak boleh lebih kecil dari KM Akhir Shift 1 (${akhir1})!`,
     KM_DIFF_EXCEEDS_MAX: (shift: string, diff: number, max: number) =>
       `Jarak tempuh ${shift} (+${diff} KM) melebihi batas maksimal wajar (${max} KM). Periksa kembali angka yang dimasukkan!`,
     TOA_MUST_BE_POSITIVE: (field: string) =>

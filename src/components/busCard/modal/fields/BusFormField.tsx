@@ -13,6 +13,7 @@ export interface BusFormFieldProps {
   max?: string | number;
   placeholder?: string;
   disabled?: boolean;
+  hasError?: boolean;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   labelStyle?: React.CSSProperties;
@@ -40,6 +41,7 @@ export const BusFormField = forwardRef<HTMLInputElement, BusFormFieldProps>(
       max,
       placeholder,
       disabled = false,
+      hasError = false,
       onFocus,
       onKeyDown,
       labelStyle,
@@ -54,12 +56,16 @@ export const BusFormField = forwardRef<HTMLInputElement, BusFormFieldProps>(
       width: "100%",
       padding: "10px 12px",
       borderRadius: "12px",
-      border: isHero
-        ? "1.5px solid var(--card-border, rgba(255, 255, 255, 0.12))"
-        : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+      border: hasError
+        ? "1.5px solid rgba(239, 68, 68, 0.8)"
+        : isHero
+          ? "1.5px solid var(--card-border, rgba(255, 255, 255, 0.12))"
+          : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
       background: disabled
         ? "rgba(255, 255, 255, 0.03)"
-        : "var(--input-bg, rgba(0, 0, 0, 0.25))",
+        : hasError
+          ? "rgba(239, 68, 68, 0.08)"
+          : "var(--input-bg, rgba(0, 0, 0, 0.25))",
       color: "var(--text-primary, #ededed)",
       fontSize: isHero ? "1.15rem" : "0.95rem",
       fontWeight: isHero ? 800 : 400,

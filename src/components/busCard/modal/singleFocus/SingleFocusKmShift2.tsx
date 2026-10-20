@@ -1,6 +1,8 @@
-import React from "react";
-import { Copy } from "lucide-react";
+import React, { useMemo } from "react";
+import { Copy, AlertTriangle } from "lucide-react";
 import { TEXT_ALERTS } from "@/constants/texts";
+import { validateKmCrossDay } from "@/utils/modals/busInput/busModalValidation";
+import { parseIndonesianNumber } from "@/utils/numberUtils";
 import type { BusInputFormReturn } from "../useBusInputForm";
 import {
   singleFocusPrimaryInputStyle,
@@ -34,9 +36,41 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
     showKmAkhir2InSingle,
     setShowKmAkhir2InSingle,
     kmDistanceS2,
+    kmLiveS2,
     showKeterangan,
     setShowKeterangan,
   } = form;
+
+  const previousDateLabel =
+    form.previousDayDateLabel || TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_PREVIOUS_DAY;
+
+  // Cross-shift validation realtime: KM Awal S2 tidak boleh lebih kecil dari KM Akhir S1
+  const crossShiftError = useMemo(() => {
+    if (!form.isKmAkhir1Valid || !kmAkhir1 || !kmAwal2 || kmAwal2.trim().length <= 3) return null;
+    const numAkhir1 = parseIndonesianNumber(kmAkhir1, NaN);
+    const numAwal2 = parseIndonesianNumber(kmAwal2, NaN);
+    if (!isNaN(numAkhir1) && !isNaN(numAwal2) && numAwal2 < numAkhir1) {
+      return TEXT_ALERTS.BUS_INPUT_MODAL.KM_AWAL_S2_LESS_THAN_KM_AKHIR_S1(kmAwal2, kmAkhir1);
+    }
+    return null;
+  }, [form.isKmAkhir1Valid, kmAkhir1, kmAwal2]);
+
+  // Cross-day validation realtime untuk Shift 2 jika Shift 1 kosong murni (Skenario B)
+  const crossDayErrorS2 = useMemo(() => {
+    if (!form.previousDayKmAkhir2 || form.bypassOdometerReset) return null;
+    const hasShift1 =
+      (form.bus.kmAwal1 && form.bus.kmAwal1.trim() !== "") ||
+      (form.kmAwal1 && form.kmAwal1.trim().length > 3);
+    if (hasShift1) return null;
+
+    return validateKmCrossDay(
+      kmAwal2,
+      form.previousDayKmAkhir2,
+      TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_2,
+      previousDateLabel,
+      form.bypassOdometerReset,
+    );
+  }, [form.bus.kmAwal1, form.kmAwal1, kmAwal2, form.previousDayKmAkhir2, previousDateLabel, form.bypassOdometerReset]);
 
   // KM AWAL 2
   if (currentCategory === "kmAwal2") {
@@ -85,9 +119,14 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               ...singleFocusPrimaryInputStyle,
               opacity: form.isKmAwal2Locked ? 0.45 : 1,
               cursor: form.isKmAwal2Locked ? "not-allowed" : "text",
+              border: crossShiftError
+                ? "1.5px solid #ef4444"
+                : singleFocusPrimaryInputStyle.border,
               background: form.isKmAwal2Locked
                 ? "var(--card-border, rgba(0, 0, 0, 0.04))"
-                : singleFocusPrimaryInputStyle.background,
+                : crossShiftError
+                  ? "rgba(239, 68, 68, 0.08)"
+                  : singleFocusPrimaryInputStyle.background,
             }}
           />
 
@@ -96,6 +135,70 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               suggestion={form.smartRolloverSuggestion}
               onApply={form.handleApplyRollover}
             />
+          )}
+
+          {crossShiftError && (
+            <div
+              style={{
+                marginTop: "8px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                background: "rgba(239, 68, 68, 0.12)",
+                border: "1px solid rgba(239, 68, 68, 0.35)",
+                fontSize: "0.78rem",
+                color: "#f87171",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+              <span>{crossShiftError}</span>
+            </div>
+          )}
+
+          {crossDayErrorS2 && !form.smartRolloverSuggestion && (
+            <div
+              style={{
+                marginTop: "8px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                background: "rgba(239, 68, 68, 0.12)",
+                border: "1px solid rgba(239, 68, 68, 0.35)",
+                fontSize: "0.78rem",
+                color: "#f87171",
+                display: "flex",
+                flexDirection: "column",
+                gap: "6px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                <span>{crossDayErrorS2}</span>
+              </div>
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  cursor: "pointer",
+                  color: "var(--text-secondary, #cbd5e1)",
+                  fontSize: "0.75rem",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={form.bypassOdometerReset}
+                  onChange={(e) =>
+                    form.handleToggleBypassOdometerReset(e.target.checked)
+                  }
+                  style={{ accentColor: "#c084fc" }}
+                />
+                <span>
+                  {TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL}
+                </span>
+              </label>
+            </div>
           )}
         </div>
 
@@ -157,12 +260,59 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                   ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
                   : TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AKHIR_2
               }
-              style={singleFocusSubInputStyle(form.isKmAkhir2Locked)}
+              style={{
+                ...singleFocusSubInputStyle(form.isKmAkhir2Locked),
+                border: kmLiveS2.status === "negative"
+                  ? "1px solid #ef4444"
+                  : singleFocusSubInputStyle(form.isKmAkhir2Locked).border,
+                background: kmLiveS2.status === "negative" ? "rgba(239, 68, 68, 0.08)" : undefined,
+              }}
             />
           </div>
         )}
 
-        {kmDistanceS2 !== null && (
+        {/* Realtime Distance & Error Badges untuk sub-input */}
+        {kmLiveS2.status === "negative" && (
+          <div
+            style={{
+              padding: "8px 12px",
+              borderRadius: "8px",
+              background: "rgba(239, 68, 68, 0.12)",
+              border: "1px solid rgba(239, 68, 68, 0.35)",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              color: "#f87171",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <span>{kmLiveS2.formattedText}</span>
+          </div>
+        )}
+
+        {kmLiveS2.status === "extreme" && (
+          <div
+            style={{
+              padding: "8px 12px",
+              borderRadius: "8px",
+              background: "rgba(245, 158, 11, 0.12)",
+              border: "1px solid rgba(245, 158, 11, 0.35)",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              color: "#f59e0b",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <span>{kmLiveS2.formattedText}</span>
+          </div>
+        )}
+
+        {kmLiveS2.status !== "negative" && kmLiveS2.status !== "extreme" && kmDistanceS2 !== null && (
           <div style={singleFocusDistanceBadgeStyle(true)}>
             <span>{TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S2}</span>
             <span style={{ fontWeight: 700, color: "var(--shift2-color, #7e22ce)" }}>
@@ -225,14 +375,60 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               ...singleFocusPrimaryInputStyle,
               opacity: form.isKmAkhir2Locked ? 0.45 : 1,
               cursor: form.isKmAkhir2Locked ? "not-allowed" : "text",
+              border: kmLiveS2.status === "negative"
+                ? "1.5px solid #ef4444"
+                : singleFocusPrimaryInputStyle.border,
               background: form.isKmAkhir2Locked
                 ? "var(--card-border, rgba(0, 0, 0, 0.04))"
-                : singleFocusPrimaryInputStyle.background,
+                : kmLiveS2.status === "negative"
+                  ? "rgba(239, 68, 68, 0.08)"
+                  : singleFocusPrimaryInputStyle.background,
             }}
           />
         </div>
 
-        {kmDistanceS2 !== null && (
+        {/* Realtime Distance & Error Badges untuk primary input */}
+        {kmLiveS2.status === "negative" && (
+          <div
+            style={{
+              padding: "8px 12px",
+              borderRadius: "8px",
+              background: "rgba(239, 68, 68, 0.12)",
+              border: "1px solid rgba(239, 68, 68, 0.35)",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              color: "#f87171",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <span>{kmLiveS2.formattedText}</span>
+          </div>
+        )}
+
+        {kmLiveS2.status === "extreme" && (
+          <div
+            style={{
+              padding: "8px 12px",
+              borderRadius: "8px",
+              background: "rgba(245, 158, 11, 0.12)",
+              border: "1px solid rgba(245, 158, 11, 0.35)",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              color: "#f59e0b",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+            }}
+          >
+            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <span>{kmLiveS2.formattedText}</span>
+          </div>
+        )}
+
+        {kmLiveS2.status !== "negative" && kmLiveS2.status !== "extreme" && kmDistanceS2 !== null && (
           <div style={singleFocusDistanceBadgeStyle(true)}>
             <span>{TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S2}</span>
             <span style={{ fontWeight: 700, color: "var(--shift2-color, #7e22ce)" }}>
