@@ -33,6 +33,19 @@ describe('busModalValidation - validateKmPair', () => {
     expect(validateKmPair('299980', '300100', 'Shift 1')).toBeNull();
   });
 
+  it('bypasses error during typing in progress when kmAkhir digits can reach valid number', () => {
+    // KM Awal is 185200 (6 digits), user has typed "1852" or "18525" (5 digits)
+    expect(validateKmPair('185200', '1852', 'Shift 1')).toBeNull();
+    expect(validateKmPair('185200', '18525', 'Shift 1')).toBeNull();
+  });
+
+  it('detects error immediately if incomplete kmAkhir digits cannot possibly reach kmAwal', () => {
+    // KM Awal is 185200, user typed "18400" (5 digits, max 184009 < 185200)
+    const err = validateKmPair('185200', '18400', 'Shift 1');
+    expect(err).not.toBeNull();
+    expect(err).toContain('tidak boleh lebih kecil');
+  });
+
   it('returns error when distance exceeds 400 KM', () => {
     const err = validateKmPair('300000', '300500', 'Shift 1');
     expect(err).toContain('melebihi batas maksimal wajar');

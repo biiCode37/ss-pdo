@@ -42,7 +42,26 @@ export function validateKmPair(
     (akhir.length <= 3 && awal.length > akhir.length && awal.startsWith(akhir)) ||
     (awal.length <= 3 && akhir.length > awal.length && akhir.startsWith(awal)) ||
     (awal.length <= 3 && akhir.length <= 3 && awal === akhir);
-  if (isDraftPrefill) return null;
+
+  // Typing-in-progress guard: jika digit akhir belum lengkap namun berpotensi valid saat selesai
+  const digitsAwal = awal.replace(/\D/g, "");
+  const digitsAkhir = akhir.replace(/\D/g, "");
+  let isTypingInProgress = false;
+  if (
+    digitsAwal.length >= 4 &&
+    digitsAkhir.length > 0 &&
+    digitsAkhir.length < digitsAwal.length &&
+    digitsAwal.slice(0, 3) === digitsAkhir.slice(0, Math.min(3, digitsAkhir.length))
+  ) {
+    const paddingLength = digitsAwal.length - digitsAkhir.length;
+    const maxPotentialNum = parseInt(digitsAkhir + "9".repeat(paddingLength), 10);
+    const numAwalPure = parseInt(digitsAwal, 10);
+    if (!isNaN(maxPotentialNum) && !isNaN(numAwalPure) && maxPotentialNum >= numAwalPure) {
+      isTypingInProgress = true;
+    }
+  }
+
+  if (isDraftPrefill || isTypingInProgress) return null;
 
   const numAwal = parseIndonesianNumber(awal, NaN);
   const numAkhir = parseIndonesianNumber(akhir, NaN);

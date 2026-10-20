@@ -154,6 +154,66 @@ export function useBusInputForm({
   const [bypassOdometerReset, setBypassOdometerReset] = useState<boolean>(false);
   const formId = useId();
 
+  // Revalidasi Reaktif (BUG-152-01 Fix): Saat formulir pernah submit dengan error,
+  // jika user memperbaiki input menjadi valid, bersihkan validationErrors agar tombol Simpan otomatis aktif kembali
+  useEffect(() => {
+    if (validationErrors.length > 0) {
+      const currentErrors = validateBusInputForm({
+        isSingleMode,
+        effectiveCategory,
+        tripPergi,
+        tripPulang,
+        toaShift1,
+        toaShift2,
+        totalToa,
+        manualShift1,
+        manualShift2,
+        showManual1,
+        showManual2,
+        kmAwal1,
+        kmAkhir1,
+        kmAwal2,
+        kmAkhir2,
+        bus,
+        bypassOdometerReset,
+        previousDayKmAkhir2,
+        previousDayDateLabel,
+        headerMap,
+      });
+
+      if (currentErrors.length === 0) {
+        setValidationErrors([]);
+      } else if (
+        currentErrors.length !== validationErrors.length ||
+        !currentErrors.every((err, idx) => err === validationErrors[idx])
+      ) {
+        setValidationErrors(currentErrors);
+      }
+    }
+  }, [
+    validationErrors.length,
+    isSingleMode,
+    effectiveCategory,
+    tripPergi,
+    tripPulang,
+    toaShift1,
+    toaShift2,
+    totalToa,
+    manualShift1,
+    manualShift2,
+    showManual1,
+    showManual2,
+    kmAwal1,
+    kmAkhir1,
+    kmAwal2,
+    kmAkhir2,
+    bypassOdometerReset,
+    previousDayKmAkhir2,
+    previousDayDateLabel,
+    headerMap,
+    bus,
+  ]);
+
   // Input refs for autofocus & autoselect
   const singlePrimaryInputRef = useRef<HTMLInputElement>(null);
   const toaS1InputRef = useRef<HTMLInputElement>(null);

@@ -400,6 +400,76 @@ describe("BusInputModalSingleFocus Component", () => {
     });
   });
 
+  describe("Realtime Validation Feedback (Refactor 152)", () => {
+    it("merender peringatan negatif merah saat kmLiveS1 berstatus negative pada kmAkhir1", () => {
+      const form = createMockForm({
+        effectiveCategory: "kmAkhir1",
+        kmAwal1: "150200",
+        kmAkhir1: "150100",
+        kmLiveS1: {
+          diff: -100,
+          status: "negative",
+          formattedText: TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-100),
+        },
+      });
+
+      renderComponent({ form, activeCategory: "kmAkhir1" });
+
+      expect(container.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-100));
+      const input = container.querySelector("#single-input-kmAkhir1") as HTMLInputElement;
+      expect(input.style.border).toMatch(/ef4444|239,\s*68,\s*68/);
+    });
+
+    it("merender peringatan negatif merah saat kmLiveS2 berstatus negative pada kmAkhir2", () => {
+      const form = createMockForm({
+        effectiveCategory: "kmAkhir2",
+        kmAwal2: "150200",
+        kmAkhir2: "150100",
+        kmLiveS2: {
+          diff: -100,
+          status: "negative",
+          formattedText: TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-100),
+        },
+      });
+
+      renderComponent({ form, activeCategory: "kmAkhir2" });
+
+      expect(container.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-100));
+      const input = container.querySelector("#single-input-kmAkhir2") as HTMLInputElement;
+      expect(input.style.border).toMatch(/ef4444|239,\s*68,\s*68/);
+    });
+
+    it("merender peringatan antar-shift saat kmAwal2 lebih kecil dari kmAkhir1", () => {
+      const form = createMockForm({
+        effectiveCategory: "kmAwal2",
+        kmAkhir1: "150200",
+        kmAwal2: "150100",
+        isKmAkhir1Valid: true,
+      });
+
+      renderComponent({ form, activeCategory: "kmAwal2" });
+
+      expect(container.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.KM_AWAL_S2_LESS_THAN_KM_AKHIR_S1("150100", "150200")
+      );
+    });
+
+    it("merender banner cross-day dan checkbox bypass saat kmAwal1 mundur dari kemarin", () => {
+      const form = createMockForm({
+        effectiveCategory: "kmAwal1",
+        kmAwal1: "292000",
+        previousDayKmAkhir2: "292990",
+        previousDayDateLabel: "Kemarin",
+        smartRolloverSuggestion: null,
+      });
+
+      renderComponent({ form, activeCategory: "kmAwal1" });
+
+      expect(container.textContent).toContain("tidak boleh lebih kecil dari Kemarin");
+      expect(container.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL);
+    });
+  });
+
   describe("Kelompok Catatan", () => {
     it("merender textarea catatan jika showKeterangan true", () => {
       const setKeterangan = vi.fn();

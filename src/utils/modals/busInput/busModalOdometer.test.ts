@@ -43,6 +43,17 @@ describe("busModalOdometer", () => {
       expect(res.status).toBe("negative");
       expect(res.formattedText).toBe(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-50));
     });
+    it("returns typing status when user is still typing matching prefix digits", () => {
+      // KM Awal is 185200 (6 digits), user has only typed 4 digits "1852" or 5 digits "18525"
+      const res4 = computeRealtimeDistance("185200", "1852");
+      expect(res4.status).toBe("typing");
+      expect(res4.diff).toBeNull();
+      expect(res4.formattedText).toBeNull();
+
+      const res5 = computeRealtimeDistance("185.200", "18525");
+      expect(res5.status).toBe("typing");
+      expect(res5.diff).toBeNull();
+    });
 
     it("returns extreme status when diff exceeds MAX_SHIFT_DISTANCE_KM", () => {
       const res = computeRealtimeDistance("145.800", "146.300");
