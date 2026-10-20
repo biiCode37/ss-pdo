@@ -1,6 +1,5 @@
 export const TEXT_PAGE_MANAGEMENT = {
-  TITLE: 'Manajemen Halaman & Fitur',
-  SUBTITLE: 'Kontrol ketersediaan halaman dan fitur aplikasi secara realtime',
+  TITLE: 'Manajemen Halaman',
   SUPERADMIN_BADGE: 'Superadmin Access Only',
   CATEGORIES: {
     ALL: 'Semua',
@@ -16,6 +15,7 @@ export const TEXT_PAGE_MANAGEMENT = {
     MAINTENANCE_DESC: 'Hanya dapat diakses oleh Superadmin',
     LOCKED_DESC: 'Halaman inti sistem tidak dapat dinonaktifkan',
   },
+  ACCESS_RESTRICTED_DESC: 'Akses terbatas. Halaman ini hanya dapat diakses oleh Koordinator / Pimpinan.',
   MAINTENANCE: {
     TITLE: 'Sedang Dalam Pemeliharaan',
     DEFAULT_MESSAGE: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',

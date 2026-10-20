@@ -72,7 +72,7 @@ describe('PageManagementPage', () => {
       );
     });
 
-    expect(container.textContent).toContain('Manajemen Halaman & Fitur');
+    expect(container.textContent).toContain('Manajemen Halaman');
     expect(container.textContent).toContain('Superadmin Access Only');
     expect(container.textContent).toContain('Form Input Bus SS PDO');
     expect(container.textContent).toContain('Monitoring 18 Rute Wilayah');

@@ -110,27 +110,16 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
             </button>
 
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h1
-                  style={{
-                    fontSize: '17px',
-                    fontWeight: 700,
-                    margin: 0,
-                    color: 'var(--text-primary)',
-                  }}
-                >
-                  {TEXT_PAGE_MANAGEMENT.TITLE}
-                </h1>
-              </div>
-              <p
+              <h1
                 style={{
-                  fontSize: '12px',
-                  color: 'var(--text-secondary, #94a3b8)',
-                  margin: '2px 0 0 0',
+                  fontSize: '17px',
+                  fontWeight: 700,
+                  margin: 0,
+                  color: 'var(--text-primary)',
                 }}
               >
-                {TEXT_PAGE_MANAGEMENT.SUBTITLE}
-              </p>
+                {TEXT_PAGE_MANAGEMENT.TITLE}
+              </h1>
             </div>
           </div>
 

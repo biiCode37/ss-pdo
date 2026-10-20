@@ -167,6 +167,7 @@ export function ProfileMenuSheet({
         />
 
         <ProfileFeaturesSection
+          role={userProfile.role}
           onDismiss={handleDismiss}
           onOpenRegionalMonitoring={onOpenRegionalMonitoring}
           onReturnToRouteView={onReturnToRouteView}

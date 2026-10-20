@@ -113,4 +113,27 @@ describe('PageAccessContext', () => {
 
     expect(contextValue.isUnderMaintenance('input')).toBe(true);
   });
+  it('melarang akses regional_monitoring untuk pdo meskipun halaman aktif', async () => {
+    let contextValue!: PageAccessContextType;
+
+    function TestConsumer() {
+      contextValue = usePageAccess();
+      return <div>Loaded</div>;
+    }
+
+    await act(async () => {
+      root.render(
+        <PageAccessProvider>
+          <TestConsumer />
+        </PageAccessProvider>
+      );
+    });
+
+    // Enabled tab 'input' can be accessed by pdo
+    expect(contextValue.canAccessPage('input', 'pdo')).toBe(true);
+
+    // regional_monitoring is strictly blocked for pdo and petugas
+    expect(contextValue.canAccessPage('regional_monitoring', 'pdo')).toBe(false);
+    expect(contextValue.canAccessPage('regional_monitoring', 'petugas')).toBe(false);
+  });
 });

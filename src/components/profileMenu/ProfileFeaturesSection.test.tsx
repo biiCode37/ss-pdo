@@ -35,6 +35,7 @@ describe("ProfileFeaturesSection Navigation Toggle", () => {
         <ProfileFeaturesSection
           onDismiss={onDismiss}
           onOpenRegionalMonitoring={onOpenRegionalMonitoring}
+          role="admin"
           isInMonitoringView={false}
           isDarkMode={false}
           onToggleTheme={vi.fn()}
@@ -104,5 +105,28 @@ describe("ProfileFeaturesSection Navigation Toggle", () => {
 
     expect(onDismiss).toHaveBeenCalledTimes(1);
     expect(onReturnToRouteView).toHaveBeenCalledTimes(1);
+  });
+  it("does not render 'Monitoring Wilayah' when role is pdo or petugas", async () => {
+    const onOpenRegionalMonitoring = vi.fn();
+    const onDismiss = vi.fn();
+
+    await act(async () => {
+      root.render(
+        <ProfileFeaturesSection
+          role="pdo"
+          onDismiss={onDismiss}
+          onOpenRegionalMonitoring={onOpenRegionalMonitoring}
+          isInMonitoringView={false}
+          isDarkMode={false}
+          onToggleTheme={vi.fn()}
+          isOnline={true}
+          offlineQueueCount={0}
+        />
+      );
+    });
+
+    expect(container.textContent).not.toContain(
+      TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING
+    );
   });
 });
