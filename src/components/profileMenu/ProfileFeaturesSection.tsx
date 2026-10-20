@@ -18,8 +18,10 @@ import {
 } from "@/utils/alertUtils";
 import { formatUserError } from "@/utils/errorFormatter";
 import { TEXT_DASHBOARD } from "@/constants/texts";
+import type { UserRole } from "@/utils/roleStorage";
 
 interface ProfileFeaturesSectionProps {
+  role?: UserRole | "petugas";
   onDismiss: () => void;
   onOpenRegionalMonitoring?: () => void;
   onReturnToRouteView?: () => void;
@@ -35,6 +37,7 @@ interface ProfileFeaturesSectionProps {
 }
 
 export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
+  role,
   onDismiss,
   onOpenRegionalMonitoring,
   onReturnToRouteView,
@@ -49,6 +52,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
   offlineQueueCount,
 }) => {
   const [isFormatting, setIsFormatting] = useState(false);
+  const isPdo = role === "pdo" || role === "petugas";
 
   const handleFormatSpreadsheetClick = async () => {
     if (!onFormatWholeSheet) return;
@@ -138,7 +142,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             </div>
             <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
           </button>
-        ) : (
+        ) : !isPdo && onOpenRegionalMonitoring ? (
           <button
             type="button"
             onClick={() => {
@@ -176,7 +180,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             </div>
             <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
           </button>
-        )}
+        ) : null}
 
         {/* Rekap Akumulasi Lintas Periode */}
         {/* BUG-59: Fitur sebelumnya hard-coded disabled "Coming Soon"

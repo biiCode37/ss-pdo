@@ -46,7 +46,7 @@ interface DashboardModalsProps {
   isProfileMenuOpen: boolean;
   onCloseProfileMenu: () => void;
   onOpenAccumulation: () => void;
-  onOpenRegionalMonitoring: () => void;
+  onOpenRegionalMonitoring?: () => void;
   onReturnToRouteView?: () => void;
   isInMonitoringView?: boolean;
   onOpenUserManagement: () => void;

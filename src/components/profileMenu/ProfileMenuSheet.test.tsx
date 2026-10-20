@@ -57,6 +57,7 @@ describe("ProfileMenuSheet", () => {
           onToggleTheme={vi.fn()}
           offlineQueueCount={0}
           isOnline={true}
+          onOpenRegionalMonitoring={vi.fn()}
           onLogout={vi.fn()}
         />
       );
@@ -82,6 +83,7 @@ describe("ProfileMenuSheet", () => {
           onToggleTheme={onToggleTheme}
           offlineQueueCount={0}
           isOnline={true}
+          onOpenRegionalMonitoring={vi.fn()}
           onLogout={vi.fn()}
         />
       );
@@ -98,7 +100,7 @@ describe("ProfileMenuSheet", () => {
 
     // Should see features section
     expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.FEATURES_SECTION);
-    expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING);
+    expect(overlay?.textContent).not.toContain(TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING);
     expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.CROSS_PERIOD);
     expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.THEME_MODE);
   });
@@ -112,6 +114,7 @@ describe("ProfileMenuSheet", () => {
         <ProfileMenuSheet
           isOpen={true}
           onClose={vi.fn()}
+          onOpenRegionalMonitoring={vi.fn()}
           isDarkMode={true}
           onToggleTheme={vi.fn()}
           offlineQueueCount={0}
@@ -125,6 +128,7 @@ describe("ProfileMenuSheet", () => {
     expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.ADMIN_SECTION);
     expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT);
     expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG);
+    expect(overlay?.textContent).toContain(TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING);
   });
 
   it("displays offline indicator when offline or offlineQueueCount > 0", async () => {

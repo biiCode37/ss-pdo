@@ -73,6 +73,17 @@ export const PageAccessProvider: React.FC<{ children: React.ReactNode }> = ({
     (pageKey: PageKey, userRole?: string | null): boolean => {
       // Superadmin memiliki kuasa penuh untuk mengakses seluruh halaman (bypass)
       if (userRole === 'superadmin') return true;
+
+      // Pembatasan RBAC: Petugas Data Operasional (PDO) dilarang mengakses Monitoring Wilayah
+      if (
+        (pageKey === 'regional_monitoring' ||
+          pageKey === 'regional_summary' ||
+          pageKey === 'regional_wa_report') &&
+        (userRole === 'pdo' || userRole === 'petugas')
+      ) {
+        return false;
+      }
+
       const setting = settingsMap[pageKey];
       return setting ? setting.is_enabled : true;
     },

@@ -449,7 +449,7 @@ describe('Centralized UI Text Dictionary', () => {
   });
 
   it('exports TEXT_PAGE_MANAGEMENT with page management strings and maintenance messages', () => {
-    expect(TEXT_PAGE_MANAGEMENT.TITLE).toBe('Manajemen Halaman & Fitur');
+    expect(TEXT_PAGE_MANAGEMENT.TITLE).toBe('Manajemen Halaman');
     expect(TEXT_PAGE_MANAGEMENT.SUPERADMIN_BADGE).toBe('Superadmin Access Only');
     expect(TEXT_PAGE_MANAGEMENT.MAINTENANCE.DEFAULT_MESSAGE).toBe(
       'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan'
@@ -459,6 +459,7 @@ describe('Centralized UI Text Dictionary', () => {
     );
     expect(TEXT_PAGE_MANAGEMENT.CATEGORIES.ALL).toBe('Semua');
     expect(TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT).toBe('Manajemen Halaman');
+    expect(TEXT_PAGE_MANAGEMENT.ACCESS_RESTRICTED_DESC).toContain('Akses terbatas');
   });
 });
 

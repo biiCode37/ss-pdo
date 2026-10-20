@@ -7,7 +7,7 @@ import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { usePreviousDayOdometer } from "@/hooks/usePreviousDayOdometer";
 import { getStoredUserRole } from "@/utils/roleStorage";
 import { showAuthExpiredAlert, showSuccessToast } from "@/utils/alertUtils";
-import { TEXT_DASHBOARD } from "@/constants/texts";
+import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
 
 import {
   DashboardHeader,
@@ -246,7 +246,14 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   if (currentView === "regional_monitoring") {
     if (!canAccessPage("regional_monitoring", currentUserRole)) {
       return (
-        <PageDisabledState onBack={() => setCurrentView("dashboard")} />
+        <PageDisabledState
+          message={
+            currentUserRole === "pdo"
+              ? TEXT_PAGE_MANAGEMENT.ACCESS_RESTRICTED_DESC
+              : undefined
+          }
+          onBack={() => setCurrentView("dashboard")}
+        />
       );
     }
     return (
@@ -434,10 +441,14 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           setIsProfileMenuOpen(false);
           setIsAccSheetOpen(true);
         }}
-        onOpenRegionalMonitoring={() => {
-          setIsProfileMenuOpen(false);
-          setCurrentView("regional_monitoring");
-        }}
+        onOpenRegionalMonitoring={
+          currentUserRole === "pdo"
+            ? undefined
+            : () => {
+                setIsProfileMenuOpen(false);
+                setCurrentView("regional_monitoring");
+              }
+        }
         isInMonitoringView={false}
         onOpenUserManagement={() => {
           setIsProfileMenuOpen(false);
