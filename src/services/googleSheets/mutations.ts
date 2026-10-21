@@ -33,7 +33,7 @@ export const updateBulkBusData = async (
       if (updates.tripPergi !== undefined) addUpdate('tripPergi', updates.tripPergi);
       if (updates.tripPulang !== undefined) addUpdate('tripPulang', updates.tripPulang);
       if (updates.toaShift1 !== undefined) addUpdate('toaShift1', updates.toaShift1);
-      if (updates.toaShift2 !== undefined) addUpdate('toaShift2', updates.toaShift2);
+      // ponytail: Strict No-Overwrite Formula Columns — toaShift2 dihitung otomatis oleh formula spreadsheet (=TOTAL_TOA - TOA_SHIFT_1). Dilarang mengirim mutasi statis ke kolom ini.
       if (updates.manualShift1 !== undefined) addUpdate('manualShift1', updates.manualShift1);
       if (updates.manualShift2 !== undefined) addUpdate('manualShift2', updates.manualShift2);
       if (updates.totalToa !== undefined) addUpdate('totalToa', updates.totalToa);

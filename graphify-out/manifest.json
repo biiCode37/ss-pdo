@@ -110,7 +110,7 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1792475684.2896135,
+    "mtime": 1792477128.9171972,
     "ast_hash": "884c25f1bd16586f49ddb7d654d0da2b",
     "semantic_hash": ""
   },
@@ -185,7 +185,7 @@
     "semantic_hash": "f9cb81ddcea69ffdab672fc8c48dca66"
   },
   "vite.config.ts": {
-    "mtime": 1792211138.2839837,
+    "mtime": 1792548827.9239385,
     "ast_hash": "7cf48760e63604177c5cfcfb7c00a42a",
     "semantic_hash": ""
   },
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   ".agents/AGENTS.md": {
-    "mtime": 1792288417.2043262,
-    "ast_hash": "706dac69017518e59ec9522fa7530348",
+    "mtime": 1792547620.283936,
+    "ast_hash": "8ea541e4d5505be2b529476f08d8f80c",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -955,8 +955,8 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/mutations.ts": {
-    "mtime": 1792211138.2317178,
-    "ast_hash": "9bd3f2ebd448c20724d861773151dad3",
+    "mtime": 1792547598.0588226,
+    "ast_hash": "f6a48a6d90d83f8d9fd178541b187eb4",
     "semantic_hash": ""
   },
   "src/services/googleSheets/types.ts": {
@@ -1125,8 +1125,8 @@
     "semantic_hash": ""
   },
   "src/services/routes/users.ts": {
-    "mtime": 1792211138.23835,
-    "ast_hash": "f33074479483e012a46a16746ca95e39",
+    "mtime": 1792547582.7157035,
+    "ast_hash": "996499700bf36a395639038e7bc7e9b1",
     "semantic_hash": ""
   },
   "src/utils/auditLogContext.test.ts": {
@@ -1160,8 +1160,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1792288417.2063007,
-    "ast_hash": "fadd23546aa4bc7db3c9c2b1dbb8176d",
+    "mtime": 1792547617.0590851,
+    "ast_hash": "40c5604f29138705ac3f5ffb55dce0bd",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_7/AUDIT_BUGS.md": {
@@ -1225,8 +1225,8 @@
     "semantic_hash": ""
   },
   "supabase/functions/sheets-proxy/index.ts": {
-    "mtime": 1788676457.0383995,
-    "ast_hash": "19bef4c5fbfe31bb96ea50b7b6b7d1f5",
+    "mtime": 1792547552.7173624,
+    "ast_hash": "52d7fc09fd42718a84538731116e20da",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_11/AUDIT_BUGS.md": {
@@ -1400,7 +1400,7 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1792476477.6658044,
+    "mtime": 1792477128.9241257,
     "ast_hash": "00cfaa34a41cfa36df1548e228f3ac75",
     "semantic_hash": ""
   },
@@ -1745,7 +1745,7 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardModals.tsx": {
-    "mtime": 1792475684.2951615,
+    "mtime": 1792477128.9181776,
     "ast_hash": "0861e0a3b0547b7ff2d018db339c26b4",
     "semantic_hash": ""
   },
@@ -1980,8 +1980,8 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileFeaturesSection.tsx": {
-    "mtime": 1792475012.8055744,
-    "ast_hash": "4fd773d50ffd77adaac66fc844cd5052",
+    "mtime": 1792477128.922139,
+    "ast_hash": "342018dd44d760123e16245c87b20099",
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuFooter.tsx": {
@@ -2545,12 +2545,12 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuSheet.test.tsx": {
-    "mtime": 1792475296.624431,
-    "ast_hash": "04411196beadb394787246058401cb64",
+    "mtime": 1792477128.922139,
+    "ast_hash": "1e4506dcadca51861e04670bfdc86c2a",
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuSheet.tsx": {
-    "mtime": 1792474982.5457017,
+    "mtime": 1792477128.923116,
     "ast_hash": "1d59497989ac6c245d27985290c86812",
     "semantic_hash": ""
   },
@@ -2955,8 +2955,8 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileFeaturesSection.test.tsx": {
-    "mtime": 1792475051.87149,
-    "ast_hash": "6596b6c1a75c51068323498a46303aac",
+    "mtime": 1792477128.9211614,
+    "ast_hash": "89826dc0334bcbac2e2df311ba0e8575",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_70/AUDIT_BUGS.md": {
@@ -5255,12 +5255,12 @@
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageManagementPage.test.tsx": {
-    "mtime": 1792476477.6615894,
+    "mtime": 1792477128.919195,
     "ast_hash": "380abd76786101dfff4abfd414ad536a",
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageManagementPage.tsx": {
-    "mtime": 1792476326.0502355,
+    "mtime": 1792477128.920183,
     "ast_hash": "64aed0eb6ecae1ecf1e88c490a21cfcc",
     "semantic_hash": ""
   },
@@ -5280,17 +5280,17 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_page_management.ts": {
-    "mtime": 1792476291.0498662,
-    "ast_hash": "6f8fd3c47274cfb724152fa25d88a16e",
+    "mtime": 1792477128.923116,
+    "ast_hash": "a00944551bb210d68d21ca148d5df3f1",
     "semantic_hash": ""
   },
   "src/context/PageAccessContext.test.tsx": {
-    "mtime": 1792475051.8758273,
-    "ast_hash": "5ce2eee39782cbba5ea468f68c394be4",
+    "mtime": 1792477128.9246595,
+    "ast_hash": "20888b09fbba37a6d9c3d568db2c8fc6",
     "semantic_hash": ""
   },
   "src/context/PageAccessContext.tsx": {
-    "mtime": 1792474740.9485826,
+    "mtime": 1792477128.9246595,
     "ast_hash": "c96fc3db8fb37623cad99d66ea6fa6a2",
     "semantic_hash": ""
   },
@@ -5300,8 +5300,8 @@
     "semantic_hash": ""
   },
   "src/services/pageManagementService.ts": {
-    "mtime": 1792392693.0393956,
-    "ast_hash": "5c263ba8846d9c5feb69131d0b79540e",
+    "mtime": 1792547582.727962,
+    "ast_hash": "894345b0c8a8941bd89060541a855983",
     "semantic_hash": ""
   },
   "src/types/pageManagement.ts": {
@@ -5345,23 +5345,38 @@
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_152/AUDIT_BUGS.md": {
-    "mtime": 1792475802.9504018,
-    "ast_hash": "be5c73d3e2a0f744c9853c7a4ac7ff64",
+    "mtime": 1792477128.9146445,
+    "ast_hash": "718a6cdbb010ad9836656304d16a5769",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_152/REPAIR_REPORT.md": {
-    "mtime": 1792475811.794457,
-    "ast_hash": "4c2039f8503b0ab16273075fcc1954d8",
+    "mtime": 1792477128.9146445,
+    "ast_hash": "ddda06d5b38c8bd5df96a420becbb2d1",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_153/AUDIT_BUGS.md": {
-    "mtime": 1792476692.1787682,
-    "ast_hash": "69a8c265fdd096e9ba36399e795c3718",
+    "mtime": 1792477128.915627,
+    "ast_hash": "05bd7072fd62821761d5e4d7adf0b3a0",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_153/REPAIR_REPORT.md": {
-    "mtime": 1792476705.5930815,
-    "ast_hash": "3512f424d3358376fe8c86ab6d951f43",
+    "mtime": 1792477128.916212,
+    "ast_hash": "b7f45e38ef69fc9864f12e28c3fc22e6",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_154/AUDIT_BUGS.md": {
+    "mtime": 1792540024.2364805,
+    "ast_hash": "4aadb7ebccbc96fd8adb7df5af2015f7",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_154/REPAIR_REPORT.md": {
+    "mtime": 1792547632.3102055,
+    "ast_hash": "0f9beeb0836b410d627d326e1580a5ed",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261021000001_security_critical_hardening.sql": {
+    "mtime": 1792547510.360153,
+    "ast_hash": "1b7bd0e993b76483f4599424985cd98c",
     "semantic_hash": ""
   }
 }

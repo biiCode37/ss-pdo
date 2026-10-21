@@ -275,10 +275,7 @@ Deno.serve(async (req: Request) => {
           client_email: creds ? creds.client_email : null,
           diagnostics: {
             has_env: !!raw,
-            raw_length: raw ? raw.length : 0,
-            starts_with: raw ? raw.substring(0, 15) : null,
-            parse_status: parseStatus,
-            error_detail: errorDetail,
+            configured: !!creds,
           },
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -295,9 +292,17 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    if (!spreadsheetId) {
+    const authHeader = req.headers.get("authorization") || req.headers.get("apikey");
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: "spreadsheetId diperlukan" }),
+        JSON.stringify({ error: "Otorisasi tidak valid atau tidak disertakan" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!spreadsheetId || typeof spreadsheetId !== "string" || !/^[a-zA-Z0-9-_]{15,100}$/.test(spreadsheetId.trim())) {
+      return new Response(
+        JSON.stringify({ error: "spreadsheetId tidak valid atau tidak disertakan" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
