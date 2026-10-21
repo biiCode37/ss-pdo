@@ -243,5 +243,35 @@ describe('useOfflineSync Hook', () => {
       expect(latestHookResult.queue.length).toBe(1);
       expect(latestHookResult.queue[0].status).toBe('conflict');
     });
+
+    it('does not trigger collision when only formula fields like toaShift2 differ (UX-154-02)', async () => {
+      vi.mocked(googleSheets.getBusRowData).mockResolvedValue({
+        unit: 'MB-01',
+        toaShift1: '100',
+        toaShift2: '80',
+      });
+
+      act(() => {
+        root.render(<TestHookComponent />);
+      });
+
+      act(() => {
+        latestHookResult.addToQueue({
+          sheetId: 'sheet-123',
+          tabName: '21',
+          rowIndex: 5,
+          updates: { toaShift1: '100' },
+          headerMap: mockHeaderMap,
+          originalSnapshot: { toaShift1: '100', toaShift2: '50' },
+        });
+      });
+
+      await act(async () => {
+        await latestHookResult.processQueue();
+      });
+
+      expect(latestHookResult.queue.length).toBe(0);
+      expect(googleSheets.updateBusData).toHaveBeenCalled();
+    });
   });
 });

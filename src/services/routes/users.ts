@@ -1,6 +1,8 @@
 import { supabase, isSupabaseConfigured } from '../supabase';
 import type { UserProfile, UserRole, Role } from '../../types/supabase';
 import { logActivity } from './audit';
+import { formatUserError } from '../../utils/errorFormatter';
+import { TEXT_USER_MANAGEMENT } from '../../constants/texts/text_user_management';
 
 export const ROLE_CODE_TO_ID: Record<string, number> = {
   superadmin: 1,
@@ -21,24 +23,94 @@ export const ROLE_ID_TO_CODE: Record<number, UserRole> = {
 
 const PENDING_PROFILE_SYNC_KEY = 'PDO_PROFILE_SYNC_PENDING';
 
+/**
+ * Menghasilkan checksum anti-tamper untuk cache profil offline (SEC-154-04).
+ * Mencegah manipulasi manual di localStorage untuk eskalasi hak akses offline.
+ */
+export function generateProfileChecksum(
+  email: string,
+  role: string,
+  roleId: number,
+  isActive: boolean,
+  verifiedAt: string
+): string {
+  const pepper = 'pusm_pdo_sec_v1_integrity_hash';
+  const str = `${email.trim().toLowerCase()}|${role}|${roleId}|${isActive}|${verifiedAt}|${pepper}`;
+  let h1 = 0xdeadbeef;
+  let h2 = 0x41c64e6d;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+}
+
+/**
+ * Sanitasi pesan error teknis database agar ramah pengguna (SEC-154-05).
+ */
+function sanitizeDatabaseError(error: unknown, fallbackMessage: string): string {
+  if (typeof error === 'object' && error !== null) {
+    const msg = (error as any).message;
+    if (typeof msg === 'string') {
+      if (msg.includes('Akses ditolak')) {
+        return msg;
+      }
+      if (msg.includes('duplicate key') || msg.includes('23505') || msg.includes('unique constraint')) {
+        return 'Email tersebut sudah terdaftar di sistem.';
+      }
+    }
+  }
+  return formatUserError(error, fallbackMessage) || fallbackMessage;
+}
+
+
 /** Fallback verifikasi via cache profil lokal (window 30 hari + status aktif) */
 export function tryOfflineProfileFallback(normalizedEmail: string): { isAllowed: true; profile: UserProfile } | null {
   if (!normalizedEmail) return null;
   try {
     const cachedRaw = localStorage.getItem(`PDO_LAST_VERIFIED_PROFILE_${normalizedEmail}`);
     if (!cachedRaw) return null;
-    const { profile, verifiedAt } = JSON.parse(cachedRaw);
+    const { profile, verifiedAt, checksum } = JSON.parse(cachedRaw);
+    if (!profile || !verifiedAt || !profile.email) return null;
+
     const daysSince = (Date.now() - new Date(verifiedAt).getTime()) / 86400000;
-    // Valid jika masih dalam window 30 hari dan status aktif
-    if (daysSince <= 30 && profile && profile.is_active) {
-      console.log('[RouteService] User profile verified via offline cache fallback.');
-      return {
-        isAllowed: true,
-        profile: profile as UserProfile,
-      };
+    if (daysSince > 30 || !profile.is_active) return null;
+
+    // SEC-154-04: Verifikasi checksum integritas data profil offline
+    const expectedChecksum = generateProfileChecksum(
+      profile.email,
+      profile.role || 'pdo',
+      profile.role_id || 5,
+      profile.is_active,
+      verifiedAt
+    );
+
+    if (checksum) {
+      if (checksum !== expectedChecksum) {
+        console.warn('[RouteService] Deteksi manipulasi cache profil offline (checksum mismatch). Akses ditolak.');
+        return null;
+      }
+    } else {
+      // Jika cache lama tanpa checksum mencoba mengklaim peran administratif, tolak demi keamanan
+      if (profile.role === 'superadmin' || profile.role === 'admin') {
+        console.warn('[RouteService] Cache profil tanpa tanda tangan mencoba klaim peran istimewa offline. Ditolak.');
+        return null;
+      }
     }
-  } catch (_cacheErr) {}
-  return null;
+
+    console.log('[RouteService] User profile verified via offline cache fallback.');
+    return {
+      isAllowed: true,
+      profile: profile as UserProfile,
+    };
+  } catch (_cacheErr) {
+    return null;
+  }
 }
 
 export async function verifyUserProfile(email: string): Promise<{ isAllowed: boolean; profile?: UserProfile; message?: string }> {
@@ -98,11 +170,20 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       role: roleCode,
     };
 
-    // Simpan cache profil yang berhasil diverifikasi untuk offline fallback
+    // Simpan cache profil yang berhasil diverifikasi untuk offline fallback dengan checksum (SEC-154-04)
     try {
+      const verifiedAt = new Date().toISOString();
+      const checksum = generateProfileChecksum(
+        profile.email,
+        profile.role || 'pdo',
+        profile.role_id,
+        profile.is_active ?? true,
+        verifiedAt
+      );
       localStorage.setItem(cacheKey, JSON.stringify({
         profile,
-        verifiedAt: new Date().toISOString(),
+        verifiedAt,
+        checksum,
       }));
     } catch (_e) {}
 
@@ -287,10 +368,7 @@ export async function addUserProfile(params: {
     ]).select('email');
 
     if (error) {
-      if (error.code === '23505') {
-        return { success: false, message: 'Email tersebut sudah terdaftar di sistem.' };
-      }
-      return { success: false, message: `Gagal menambahkan pengguna: ${error.message}` };
+      return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.ADD_FAILED_MSG) };
     }
 
     // BUG-65: Deteksi zero-row — RLS bisa memfilter INSERT tanpa error dan
@@ -368,7 +446,7 @@ export async function updateUserProfileRole(
         .select('email');
 
       if (error) {
-        return { success: false, message: `Gagal mengubah peran: ${error.message}` };
+        return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FAILED_MSG) };
       }
 
       // BUG-63: RLS bisa memfilter operasi TANPA error (PostgREST sukses
@@ -442,7 +520,7 @@ export async function toggleUserProfileStatus(
         .select('email');
 
       if (error) {
-        return { success: false, message: `Gagal mengubah status akun: ${error.message}` };
+        return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.TOGGLE_STATUS_FAILED_MSG) };
       }
 
       // BUG-63: Deteksi zero-row — blokir silent RLS tidak boleh tampil sukses
@@ -511,7 +589,7 @@ export async function revokeUserProfile(
         .select('email');
 
       if (error) {
-        return { success: false, message: `Gagal mencabut akses pengguna: ${error.message}` };
+        return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.DELETE_USER_FAILED_MSG) };
       }
 
       // Deteksi zero-row — RLS policy memblokir atau akun tidak ditemukan

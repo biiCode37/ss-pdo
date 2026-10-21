@@ -284,6 +284,10 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_USER_MANAGEMENT.TABS.PETUGAS).toBe('Petugas');
     expect(TEXT_USER_MANAGEMENT.MODAL_ADD.TITLE).toBe('Tambah Pengguna Baru');
     expect(TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED).toBe('Akses Terbatas');
+    expect(TEXT_USER_MANAGEMENT.ALERTS.ADD_FAILED_MSG).toBeDefined();
+    expect(TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FAILED_MSG).toBeDefined();
+    expect(TEXT_USER_MANAGEMENT.ALERTS.TOGGLE_STATUS_FAILED_MSG).toBeDefined();
+    expect(TEXT_USER_MANAGEMENT.ALERTS.DELETE_USER_FAILED_MSG).toBeDefined();
   });
 
   it('exports TEXT_UNIT_DETAIL with metrics and notes texts', () => {

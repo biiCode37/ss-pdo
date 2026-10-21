@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useOfflineSync.ts": {
-    "mtime": 1792211138.2174177,
-    "ast_hash": "e23f836d6abd1d78aa16b0f91e7a1b78",
+    "mtime": 1792551949.7261672,
+    "ast_hash": "9344e2ee1f4c3f106cdaa7708d8a6467",
     "semantic_hash": ""
   },
   "src/main.tsx": {
@@ -930,8 +930,8 @@
     "semantic_hash": ""
   },
   "src/hooks/__tests__/useOfflineSync.test.tsx": {
-    "mtime": 1787322418.5521939,
-    "ast_hash": "1b8ab216ab49a4e28490856965526424",
+    "mtime": 1792551809.4758766,
+    "ast_hash": "8abe9cfeab02a2f8bd1542a593116fc5",
     "semantic_hash": ""
   },
   "src/services/googleSheets/analytics.ts": {
@@ -1055,13 +1055,13 @@
     "semantic_hash": ""
   },
   "src/utils/roleStorage.test.ts": {
-    "mtime": 1792211138.2685823,
-    "ast_hash": "73f8efdbeb38fd4a603917f85c03e1ff",
+    "mtime": 1792551728.403967,
+    "ast_hash": "c7d649600518503a81865cddeb50d6e5",
     "semantic_hash": ""
   },
   "src/utils/roleStorage.ts": {
-    "mtime": 1792211138.2685823,
-    "ast_hash": "8368423ea7f558c14d30c5241dd30313",
+    "mtime": 1792551720.0855708,
+    "ast_hash": "4d4e9f2ed95f4d1a6c3a29ed7bf16e78",
     "semantic_hash": ""
   },
   "supabase/migrations/20260825000000_security_hardening.sql": {
@@ -1125,8 +1125,8 @@
     "semantic_hash": ""
   },
   "src/services/routes/users.ts": {
-    "mtime": 1792547582.7157035,
-    "ast_hash": "996499700bf36a395639038e7bc7e9b1",
+    "mtime": 1792551953.0366821,
+    "ast_hash": "59ad1da24b1317db036bb8a9101fd529",
     "semantic_hash": ""
   },
   "src/utils/auditLogContext.test.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1792477128.9241257,
-    "ast_hash": "00cfaa34a41cfa36df1548e228f3ac75",
+    "mtime": 1792551660.6093726,
+    "ast_hash": "9d4d9ccbd5391fa3da2b5a9f9f8ad35f",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -1585,8 +1585,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_user_management.ts": {
-    "mtime": 1792211138.2137249,
-    "ast_hash": "b96ebe42aae5f139244524ab5467fb09",
+    "mtime": 1792551626.752746,
+    "ast_hash": "4342f0df145123ee809fa8ab5d4860c1",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_29/AUDIT_BUGS.md": {
@@ -5370,13 +5370,18 @@
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_154/REPAIR_REPORT.md": {
-    "mtime": 1792547632.3102055,
-    "ast_hash": "0f9beeb0836b410d627d326e1580a5ed",
+    "mtime": 1792551853.0469482,
+    "ast_hash": "76710fa55be705b63eb25ae4b363a9ba",
     "semantic_hash": ""
   },
   "supabase/migrations/20261021000001_security_critical_hardening.sql": {
-    "mtime": 1792547510.360153,
-    "ast_hash": "1b7bd0e993b76483f4599424985cd98c",
+    "mtime": 1792550898.6420555,
+    "ast_hash": "ccf73325d3a4e3656666fb9c8f7082e1",
+    "semantic_hash": ""
+  },
+  "src/services/routes/users.test.ts": {
+    "mtime": 1792551958.890314,
+    "ast_hash": "660afea16ec5970873b6aa1c082e0ed7",
     "semantic_hash": ""
   }
 }
