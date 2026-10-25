@@ -6,6 +6,10 @@ import { resolveRouteContext } from '../../utils/auditLogContext';
 import type { BusData, HeaderMap } from './types';
 import { getTabGid, numberToColumnName } from './core';
 import { updateSheetValuesBatch, batchUpdateSpreadsheet } from './transport';
+import {
+  triggerRealtimeSheetSync,
+  broadcastBusUpdate,
+} from '../realtimeSyncService';
 
 export const updateBulkBusData = async (
   sheetId: string,
@@ -136,6 +140,30 @@ export const updateBulkBusData = async (
           day: bulkCtx.day,
         },
       }).catch(() => {});
+
+      // Pemicuan Realtime Dua Arah (Skenario A & B):
+      // Skenario A: Kirim Webhook ke Supabase Edge Function agar Monitoring Wilayah 18 rute ter-update realtime
+      if (bulkCtx.routeCode) {
+        const targetDate =
+          bulkCtx.year && bulkCtx.month && bulkCtx.day
+            ? `${bulkCtx.year}-${String(bulkCtx.month).padStart(2, '0')}-${String(bulkCtx.day).padStart(2, '0')}`
+            : undefined;
+        triggerRealtimeSheetSync(bulkCtx.routeCode, targetDate).catch((err) => {
+          console.warn('[GoogleSheets] Gagal memicu triggerRealtimeSheetSync:', err);
+        });
+      }
+
+      // Skenario B: Siarkan broadcast ke peranti lain yang sedang membuka sheetId & tabName yang sama
+      for (const item of updatesList) {
+        broadcastBusUpdate({
+          sheetId,
+          tabName,
+          rowIndex: item.rowIndex,
+          updates: item.updates,
+        }).catch((err) => {
+          console.warn('[GoogleSheets] Gagal menyiarkan broadcastBusUpdate:', err);
+        });
+      }
     } catch (error: any) {
       console.error('Error batch updating bulk bus data', error);
       if (isAuthError(error)) {

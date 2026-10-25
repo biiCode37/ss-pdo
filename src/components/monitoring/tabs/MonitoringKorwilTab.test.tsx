@@ -287,7 +287,7 @@ describe("MonitoringKorwilTab Component", () => {
     expect(container.textContent).toContain("87"); // Total realops
   });
 
-  it("expands route list accordion when button is clicked and triggers onSelectRoute", async () => {
+  it("expands route list accordion, opens bottom sheet on row click, and triggers onSelectRoute from sheet", async () => {
     const onSelectRoute = vi.fn();
     await renderTab({ onSelectRoute });
 
@@ -310,11 +310,36 @@ describe("MonitoringKorwilTab Component", () => {
     );
     expect(routeRow).toBeTruthy();
 
+    // Click route row opens bottom sheet
     await act(async () => {
       routeRow?.click();
     });
 
+    // Bottom sheet is now open
+    const sheet = container.querySelector<HTMLDivElement>(
+      '[data-testid="korwil-route-detail-bottom-sheet"]'
+    );
+    expect(sheet).toBeTruthy();
+    expect(sheet?.textContent).toContain(TEXT_MONITORING.KORWIL_ROUTE_SHEET.RECORD_BADGE);
+    expect(sheet?.textContent).toContain(TEXT_MONITORING.KORWIL_ROUTE_SHEET.SECTIONS.FLEET);
+    expect(sheet?.textContent).toContain(TEXT_MONITORING.KORWIL_ROUTE_SHEET.SECTIONS.SHIFT_BREAKDOWN);
+
+    // Click open dashboard button inside bottom sheet
+    const openDashboardBtn = sheet?.querySelector<HTMLButtonElement>(
+      '[data-testid="korwil-sheet-open-dashboard-btn"]'
+    );
+    expect(openDashboardBtn).toBeTruthy();
+
+    await act(async () => {
+      openDashboardBtn?.click();
+    });
+
     expect(onSelectRoute).toHaveBeenCalledWith("JAK.60");
+
+    // Sheet should now be closed
+    expect(
+      container.querySelector('[data-testid="korwil-route-detail-bottom-sheet"]')
+    ).toBeNull();
   });
 
   it("renders empty state when supervisorSummaries is empty and no routes exist", async () => {

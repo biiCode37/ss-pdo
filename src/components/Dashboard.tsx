@@ -184,6 +184,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     headerMap,
     handleLoadData,
     handleSetSheetUrl,
+    setSelectedRouteCode,
     handleSetSelectedTab,
     setCurrentView,
     monitoringDate,
@@ -210,12 +211,20 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   if (currentView === "page_management") {
     if (currentUserRole !== "superadmin") {
       return (
-        <PageDisabledState onBack={() => setCurrentView("dashboard")} />
+        <PageDisabledState
+          onBack={() =>
+            setCurrentView(
+              currentUserRole === "pdo" ? "dashboard" : "regional_monitoring",
+            )
+          }
+        />
       );
     }
     return (
       <Suspense fallback={<UserManagementSkeleton />}>
-        <PageManagementPage onBack={() => setCurrentView("dashboard")} />
+        <PageManagementPage
+          onBack={() => setCurrentView("regional_monitoring")}
+        />
       </Suspense>
     );
   }
@@ -223,7 +232,13 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   if (currentView === "user_management") {
     if (!canAccessPage("user_management", currentUserRole)) {
       return (
-        <PageDisabledState onBack={() => setCurrentView("dashboard")} />
+        <PageDisabledState
+          onBack={() =>
+            setCurrentView(
+              currentUserRole === "pdo" ? "dashboard" : "regional_monitoring",
+            )
+          }
+        />
       );
     }
     return (
@@ -234,7 +249,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           />
         )}
         <UserManagementPage
-          onBack={() => setCurrentView("dashboard")}
+          onBack={() =>
+            setCurrentView(
+              currentUserRole === "pdo" ? "dashboard" : "regional_monitoring",
+            )
+          }
           currentUserEmail={localStorage.getItem("PDO_USER_EMAIL") || ""}
           currentUserRole={currentUserRole}
           isDarkMode={theme === "dark"}
@@ -275,10 +294,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           isOpen={isProfileMenuOpen}
           onClose={() => setIsProfileMenuOpen(false)}
           isInMonitoringView={true}
-          onReturnToRouteView={() => {
-            setIsProfileMenuOpen(false);
-            setCurrentView("dashboard");
-          }}
           onOpenAccumulation={() => {
             setIsProfileMenuOpen(false);
             setCurrentView("dashboard");
@@ -353,6 +368,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onOpenReportModal={() => setIsReportModalOpen(true)}
         onRouteCodeChange={(code: string) => setSelectedRouteCode(code)}
         routeSelectorOpenTrigger={routeSelectorOpenTrigger}
+        onBackToMonitoring={
+          currentUserRole !== "pdo"
+            ? () => setCurrentView("regional_monitoring")
+            : undefined
+        }
       />
 
       {/* 2. Status Banners, Skeletons, & Alerts */}

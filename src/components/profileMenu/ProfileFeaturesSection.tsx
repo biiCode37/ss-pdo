@@ -7,7 +7,6 @@ import {
   Moon,
   CloudOff,
   ChevronRight,
-  RotateCcw,
 } from "lucide-react";
 import {
   showFormatSheetConfirm,
@@ -24,7 +23,6 @@ interface ProfileFeaturesSectionProps {
   role?: UserRole | "petugas";
   onDismiss: () => void;
   onOpenRegionalMonitoring?: () => void;
-  onReturnToRouteView?: () => void;
   isInMonitoringView?: boolean;
   onOpenAccumulation?: () => void;
   onFormatWholeSheet?: () => Promise<void>;
@@ -40,7 +38,6 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
   role,
   onDismiss,
   onOpenRegionalMonitoring,
-  onReturnToRouteView,
   isInMonitoringView,
   onOpenAccumulation,
   onFormatWholeSheet,
@@ -103,46 +100,8 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
         {TEXT_DASHBOARD.PROFILE_MENU.FEATURES_SECTION}
       </span>
       <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-        {/* Monitoring Wilayah & Laporan WA OR Kembali ke Operasi Rute */}
-        {isInMonitoringView ? (
-          <button
-            type="button"
-            onClick={() => {
-              onDismiss();
-              onReturnToRouteView?.();
-            }}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "12px 14px",
-              borderRadius: "12px",
-              background: "var(--bg-secondary, rgba(255,255,255,0.03))",
-              border: "1px solid var(--card-border)",
-              color: "var(--text-primary)",
-              fontWeight: 500,
-              fontSize: "13.5px",
-              cursor: "pointer",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <RotateCcw size={18} style={{ color: "var(--accent-color)" }} />
-              <div style={{ textAlign: "left" }}>
-                <div>{TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE}</div>
-                <div
-                  style={{
-                    fontSize: "11px",
-                    color: "var(--text-secondary)",
-                    marginTop: "1px",
-                  }}
-                >
-                  {TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE_DESC}
-                </div>
-              </div>
-            </div>
-            <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
-          </button>
-        ) : !isPdo && onOpenRegionalMonitoring ? (
+        {/* Monitoring Wilayah & Laporan WA (Hanya saat sedang berada di tampilan rute tunggal) */}
+        {!isInMonitoringView && !isPdo && onOpenRegionalMonitoring ? (
           <button
             type="button"
             onClick={() => {

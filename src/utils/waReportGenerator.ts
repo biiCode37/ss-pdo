@@ -347,7 +347,7 @@ export function generateWaReportFormat3(
       const offUnits = allNonSgo.filter((u) => u.isOff);
 
       if (kendalaUnits.length > 0) {
-        lines.push('*Rincian Tidak Ops:*');
+        lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_KENDALA_SUBHEADER);
         kendalaUnits.forEach((u) => {
           lines.push(`- ${u.unit} : ${u.note}`);
         });
@@ -361,7 +361,7 @@ export function generateWaReportFormat3(
       }
 
       if (shift === 2 && r.pelengkapUnits && r.pelengkapUnits.length > 0) {
-        lines.push('*Unit Pelengkap Renops (Shift 2):*');
+        lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_PELENGKAP_SUBHEADER);
         r.pelengkapUnits.forEach((u) => {
           lines.push(`- ${u.unit} : ${u.note}`);
         });

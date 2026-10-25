@@ -437,20 +437,27 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
 
             {/* Load All Button (Icon Only for Compact Row) */}
             {(onSync18Routes || onOpenMonthlySyncModal) && (() => {
-              const isDaily = !currentPeriod || currentPeriod.mode === "daily";
+              const isMonthly = currentPeriod?.mode === "monthly";
+              const isWeekly = currentPeriod?.mode === "weekly";
               const handleSyncClick = () => {
-                if (isDaily) {
-                  onSync18Routes?.();
-                } else {
+                if (isMonthly) {
                   onOpenMonthlySyncModal?.();
+                } else {
+                  onSync18Routes?.();
                 }
               };
-              const syncTitle = isDaily
-                ? TEXT_MONITORING.INGESTION.TOOLTIP
-                : TEXT_MONITORING.MONTHLY_SYNC.TOOLTIP_MONTHLY;
-              const syncAriaLabel = isDaily
-                ? TEXT_MONITORING.INGESTION.BUTTON_LABEL
-                : TEXT_MONITORING.MONTHLY_SYNC.BUTTON_LABEL_MONTHLY;
+              const syncTitle = isMonthly
+                ? TEXT_MONITORING.MONTHLY_SYNC.TOOLTIP_MONTHLY
+                : isWeekly
+                ? TEXT_MONITORING.INGESTION.TOOLTIP_WEEKLY
+                : currentPeriod?.mode === "custom"
+                ? TEXT_MONITORING.INGESTION.TOOLTIP_RANGE
+                : TEXT_MONITORING.INGESTION.TOOLTIP;
+              const syncAriaLabel = isMonthly
+                ? TEXT_MONITORING.MONTHLY_SYNC.BUTTON_LABEL_MONTHLY
+                : isWeekly
+                ? TEXT_MONITORING.INGESTION.BUTTON_LABEL_WEEKLY
+                : TEXT_MONITORING.INGESTION.BUTTON_LABEL;
 
               return (
                 <button

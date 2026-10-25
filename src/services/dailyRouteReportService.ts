@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import type { Route, DailyRouteReport, FleetStatusLog } from '../types/supabase';
 import { formatOperatorsDisplay } from '../constants/operators';
+import { sortRoutesByCode } from '../utils/routeSorting';
 
 /**
  * Mengambil daftar seluruh master rute aktif beserta konfigurasi spesifikasi
@@ -28,7 +29,7 @@ export async function fetchRouteMasterList(): Promise<Route[]> {
       };
     });
 
-    return formattedRoutes as Route[];
+    return sortRoutesByCode(formattedRoutes) as Route[];
   } catch (err) {
     console.warn('[dailyRouteReportService] Exception mengambil daftar rute:', err);
     return [];

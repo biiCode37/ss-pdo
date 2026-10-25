@@ -155,4 +155,52 @@ describe("useDashboardUiState Hook", () => {
     });
     expect(latestHookResult.isOnline).toBe(true);
   });
+
+  it("initializes with regional_monitoring view for non-pdo roles (superadmin, admin, korwil, korlap)", () => {
+    const nonPdoRoles = ["superadmin", "admin", "korwil", "korlap"];
+
+    for (const role of nonPdoRoles) {
+      act(() => {
+        root.unmount();
+      });
+      container.remove();
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      root = createRoot(container);
+
+      localStorage.setItem("PDO_USER_ROLE", role);
+
+      act(() => {
+        root.render(<TestHookComponent />);
+      });
+
+      expect(latestHookResult.currentView).toBe("regional_monitoring");
+    }
+  });
+
+  it("retains dashboard view when role is explicitly pdo", () => {
+    localStorage.setItem("PDO_USER_ROLE", "pdo");
+
+    act(() => {
+      root.render(<TestHookComponent />);
+    });
+
+    expect(latestHookResult.currentView).toBe("dashboard");
+  });
+
+  it("allows custom initialView to override role-based default", () => {
+    localStorage.setItem("PDO_USER_ROLE", "admin");
+
+    function CustomViewComponent() {
+      latestHookResult = useDashboardUiState({ initialView: "dashboard" });
+      return <div>View: {latestHookResult.currentView}</div>;
+    }
+
+    act(() => {
+      root.render(<CustomViewComponent />);
+    });
+
+    expect(latestHookResult.currentView).toBe("dashboard");
+  });
 });
+

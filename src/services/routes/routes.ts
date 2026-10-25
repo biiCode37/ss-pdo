@@ -8,6 +8,7 @@ import {
   validateRouteCode,
   validateGoogleSheetsUrl,
 } from '../../utils/routeValidation';
+import { sortRoutesByCode } from '../../utils/routeSorting';
 import { logActivity } from './audit';
 import type { CrossPeriodSummaryResult } from './types';
 
@@ -33,7 +34,7 @@ export async function fetchRoutesWithSheets(): Promise<Route[]> {
   // Jika Supabase belum dikonfigurasi, langsung fallback ke cache lokal
   if (!isSupabaseConfigured) {
     const cached = safeGetStorage(CACHE_KEY_ROUTES);
-    return cached ? JSON.parse(cached) : [];
+    return cached ? sortRoutesByCode(JSON.parse(cached)) : [];
   }
 
   try {
@@ -45,14 +46,15 @@ export async function fetchRoutesWithSheets(): Promise<Route[]> {
 
     if (error) throw error;
     if (data) {
-      safeSetStorage(CACHE_KEY_ROUTES, JSON.stringify(data));
+      const sorted = sortRoutesByCode(data);
+      safeSetStorage(CACHE_KEY_ROUTES, JSON.stringify(sorted));
       safeSetStorage('PDO_CACHE_ROUTES_TIMESTAMP', new Date().toISOString());
-      return data;
+      return sorted;
     }
   } catch (err) {
     console.warn('[RouteService] Offline/Error fetching from Supabase, loading local cache:', err);
     const cached = safeGetStorage(CACHE_KEY_ROUTES);
-    return cached ? JSON.parse(cached) : [];
+    return cached ? sortRoutesByCode(JSON.parse(cached)) : [];
   }
 
   return [];

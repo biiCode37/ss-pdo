@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef, memo } from "react";
+import { supabase } from "@/services/supabase";
 import {
   fetchRegionalMonitoringData,
   fetchRegionalPeriodMonitoringData,
@@ -10,11 +11,13 @@ import { fetchDailyFleetShiftsByDate } from "@/services/fleetStatusService";
 import { verifyDailyRouteReport } from "@/services/dailyRouteReportService";
 import {
   ingestRegionalRouteSummaries,
+  ingestRegionalRouteSummariesForRange,
   ingestSingleRouteSummary,
+  ingestSingleRouteSummaryForRange,
   type IngestionProgress,
 } from "@/services/regionalIngestionService";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
-import { showSuccessToast, showErrorAlert } from "@/utils/alertUtils";
+import { showSuccessToast, showErrorAlert, showConfirmDialog } from "@/utils/alertUtils";
 import { TEXT_ERRORS, TEXT_ALERTS, TEXT_MONITORING } from "@/constants/texts";
 
 import { MonitoringHeader } from "./MonitoringHeader";
@@ -52,8 +55,31 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   onDateChange,
   currentUserEmail,
 }: AllRouteMonitoringPageProps) {
-  // 1. Navigation Tab State
-  const [activeTab, setActiveTab] = useState<MonitoringTab>("dashboard");
+  // 1. Navigation Tab State (Persisten via sessionStorage agar tidak ter-reset)
+  const [activeTab, setActiveTabState] = useState<MonitoringTab>(() => {
+    try {
+      const saved = sessionStorage.getItem("SS_MONITORING_ACTIVE_TAB") as MonitoringTab;
+      if (
+        saved &&
+        ["dashboard", "routes", "fleet_status", "wa_report", "korwil"].includes(saved)
+      ) {
+        return saved;
+      }
+    } catch {
+      // Abaikan jika storage diblokir
+    }
+    return "dashboard";
+  });
+
+  const setActiveTab = useCallback((tab: MonitoringTab) => {
+    setActiveTabState(tab);
+    try {
+      sessionStorage.setItem("SS_MONITORING_ACTIVE_TAB", tab);
+    } catch {
+      // Abaikan jika storage diblokir
+    }
+  }, []);
+
   const { canAccessPage, isUnderMaintenance } = usePageAccess();
   const currentUserRole = getStoredUserRole();
 
@@ -103,12 +129,29 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [syncingRouteId, setSyncingRouteId] = useState<number | null>(null);
 
   // 4. Load Data Function
+  // Mendukung mode "initial" (skeleton awal), "refresh" (spinner header), dan "silent" (realtime in-place update)
   const loadData = useCallback(
-    async (showRefreshIndicator = false, periodOverride?: MonitoringPeriodFilter) => {
+    async (
+      modeOrRefreshIndicator: boolean | "initial" | "refresh" | "silent" = "initial",
+      periodOverride?: MonitoringPeriodFilter
+    ) => {
       const activePeriod = periodOverride || currentPeriod;
-      if (showRefreshIndicator) setRefreshing(true);
-      else setLoading(true);
-      setErrorMessage(null);
+      const isSilent = modeOrRefreshIndicator === "silent";
+      const isRefresh =
+        modeOrRefreshIndicator === true || modeOrRefreshIndicator === "refresh";
+      const isInitial =
+        modeOrRefreshIndicator === false || modeOrRefreshIndicator === "initial";
+
+      if (isRefresh) {
+        setRefreshing(true);
+      } else if (isInitial && !data) {
+        // Hanya tampilkan full skeleton loading jika data belum ada di memori
+        setLoading(true);
+      }
+
+      if (!isSilent) {
+        setErrorMessage(null);
+      }
 
       try {
         const regionalPromise =
@@ -127,18 +170,53 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         setFleetShifts(fleetRes);
       } catch (err: unknown) {
         console.warn("[AllRouteMonitoringPage] Gagal memuat data monitoring:", err);
-        setErrorMessage(TEXT_ERRORS.LOAD_REGIONAL_FAILED);
+        if (!data) {
+          setErrorMessage(TEXT_ERRORS.LOAD_REGIONAL_FAILED);
+        }
       } finally {
         setLoading(false);
         setRefreshing(false);
       }
     },
-    [selectedDate, currentPeriod],
+    [selectedDate, currentPeriod, data],
   );
 
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const loadDataRef = useRef(loadData);
+  useEffect(() => {
+    loadDataRef.current = loadData;
+  }, [loadData]);
+
+  // 4b. Realtime Subscription: Dengarkan perubahan tabel daily_route_reports secara hening (Silent In-place Update)
+  useEffect(() => {
+    const channel = supabase
+      .channel("monitoring-realtime-reports")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "daily_route_reports",
+        },
+        () => {
+          // Lakukan pembaruan latar belakang secara hening tanpa loading skeleton / unmounting
+          loadDataRef.current?.("silent");
+        }
+      )
+      .subscribe((status) => {
+        // Tangani fluktuasi koneksi secara hening tanpa unhandled websocket error
+        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          // Koneksi websocket terputus sementara, biarkan fallback ke manual refresh
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const handlePeriodChange = (newPeriod: MonitoringPeriodFilter) => {
     setCurrentPeriod(newPeriod);
@@ -241,29 +319,82 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     }
   };
 
-  // 9. Direct Ingestion 18 Rute Handler
-  const handleSync18Routes = async () => {
+  // 9. Direct Ingestion 18 Rute Handler (Mendukung Harian, Mingguan, & Rentang dengan Smart Incremental)
+  const handleSync18Routes = async (force: boolean = false) => {
     try {
       setSyncing18Routes(true);
       setIngestionProgress(null);
       setShowProgressModal(true);
 
-      const res = await ingestRegionalRouteSummaries(selectedDate, (prog) => {
-        setIngestionProgress(prog);
-      });
+      const isRangeMode = currentPeriod.mode === "weekly" || currentPeriod.mode === "custom" || currentPeriod.mode === "monthly";
+      const res = isRangeMode
+        ? await ingestRegionalRouteSummariesForRange(
+            currentPeriod.startDate,
+            currentPeriod.endDate,
+            (prog) => setIngestionProgress(prog),
+            { force }
+          )
+        : await ingestRegionalRouteSummaries(selectedDate, (prog) => {
+            setIngestionProgress(prog);
+          }, { force });
 
       if (res.success) {
-        // Tampilkan 100% dan sukses sejenak sebelum modal ditutup
-        setTimeout(() => {
-          setShowProgressModal(false);
-        }, 900);
+        setShowProgressModal(false);
 
-        showSuccessToast(
-          TEXT_MONITORING.INGESTION.SUCCESS_TOAST(
-            res.skippedFromApp,
-            res.syncedFromSheet
-          )
-        );
+        // Jika data sudah 100% lengkap di database (tanpa perlu request Google Sheets)
+        if (res.allUpToDate && !force) {
+          const rangeLabel = isRangeMode
+            ? `${currentPeriod.startDate} s.d. ${currentPeriod.endDate}`
+            : selectedDate;
+
+          const wantForce = await showConfirmDialog({
+            title: TEXT_MONITORING.INGESTION.CONFIRM_FORCE_TITLE,
+            text: TEXT_MONITORING.INGESTION.CONFIRM_FORCE_TEXT(rangeLabel),
+            confirmButtonText: TEXT_MONITORING.INGESTION.CONFIRM_FORCE_CONFIRM,
+            cancelButtonText: TEXT_MONITORING.INGESTION.CONFIRM_FORCE_CANCEL,
+            icon: "info",
+          });
+
+          if (wantForce) {
+            return handleSync18Routes(true);
+          } else {
+            showSuccessToast(TEXT_MONITORING.INGESTION.ALL_UP_TO_DATE_TOAST);
+            await loadData(true);
+            return;
+          }
+        }
+
+        // Tampilkan feedback toast yang akurat
+        if (res.skippedExisting !== undefined && res.skippedExisting > 0) {
+          showSuccessToast(
+            TEXT_MONITORING.INGESTION.INCREMENTAL_SUCCESS_TOAST(
+              res.syncedFromSheet,
+              (res.skippedFromApp || 0) + res.skippedExisting
+            )
+          );
+        } else if (isRangeMode) {
+          const daysCount =
+            Math.round(
+              (new Date(currentPeriod.endDate).getTime() -
+                new Date(currentPeriod.startDate).getTime()) /
+                (1000 * 60 * 60 * 24)
+            ) + 1;
+          showSuccessToast(
+            TEXT_MONITORING.INGESTION.RANGE_SUCCESS_TOAST(
+              daysCount > 0 ? daysCount : 7,
+              res.skippedFromApp,
+              res.syncedFromSheet
+            )
+          );
+        } else {
+          showSuccessToast(
+            TEXT_MONITORING.INGESTION.SUCCESS_TOAST(
+              res.skippedFromApp,
+              res.syncedFromSheet
+            )
+          );
+        }
+
         if (res.errors && res.errors.length > 0) {
           showSuccessToast(
             TEXT_MONITORING.INGESTION.PARTIAL_WARN(res.errors.length)
@@ -306,22 +437,44 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     await loadData(true);
   };
 
-  // 11. Single Route Ingestion Handler
+  // 11. Single Route Ingestion Handler (Mendukung Harian & Mingguan/Rentang)
   const handleSyncSingleRoute = async (route: any) => {
-    if (currentPeriod.mode !== "daily") return;
     setSyncingRouteId(route.id);
     try {
-      const res = await ingestSingleRouteSummary(selectedDate, route.id);
-      if (res.success) {
-        showSuccessToast(
-          TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_SUCCESS(route.routeCode)
+      const isRangeMode = currentPeriod.mode === "weekly" || currentPeriod.mode === "custom";
+      if (isRangeMode) {
+        const res = await ingestSingleRouteSummaryForRange(
+          currentPeriod.startDate,
+          currentPeriod.endDate,
+          route.id
         );
-        await loadData(true);
+        if (res.success) {
+          showSuccessToast(
+            TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_RANGE_SUCCESS(
+              route.routeCode,
+              res.syncedDays
+            )
+          );
+          await loadData(true);
+        } else {
+          showErrorAlert(
+            TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE,
+            res.errors.join("\n") || TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_FAILED(route.routeCode)
+          );
+        }
       } else {
-        showErrorAlert(
-          TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE,
-          res.error || TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_FAILED(route.routeCode)
-        );
+        const res = await ingestSingleRouteSummary(selectedDate, route.id);
+        if (res.success) {
+          showSuccessToast(
+            TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_SUCCESS(route.routeCode)
+          );
+          await loadData(true);
+        } else {
+          showErrorAlert(
+            TEXT_MONITORING.ROUTE_CARD.BTN_SYNC_ROUTE,
+            res.error || TEXT_MONITORING.ROUTE_CARD.SYNC_ROUTE_FAILED(route.routeCode)
+          );
+        }
       }
     } catch (err: unknown) {
       console.warn("[AllRouteMonitoringPage] Gagal sinkronisasi rute tunggal:", err);
@@ -369,12 +522,12 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         }}
       >
         <MonitoringStates
-          loading={loading}
+          loading={loading && !data}
           errorMessage={errorMessage}
-          onRetry={() => loadData(false)}
+          onRetry={() => loadData("initial")}
         />
 
-        {!loading && !errorMessage && data && (
+        {(!loading || data) && !errorMessage && data && (
           <>
             {activeTab === "dashboard" && (
               !canAccessPage("regional_summary", currentUserRole) ? (
@@ -459,6 +612,18 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         isOpen={showProgressModal}
         progress={ingestionProgress}
         onClose={() => setShowProgressModal(false)}
+        title={
+          currentPeriod.mode === "weekly"
+            ? TEXT_MONITORING.INGESTION.MODAL_TITLE_WEEKLY
+            : TEXT_MONITORING.INGESTION.MODAL_TITLE
+        }
+        subtitle={
+          currentPeriod.mode === "weekly" || currentPeriod.mode === "custom"
+            ? TEXT_MONITORING.INGESTION.MODAL_SUBTITLE_RANGE(
+                `${currentPeriod.startDate} s.d. ${currentPeriod.endDate}`
+              )
+            : TEXT_MONITORING.INGESTION.MODAL_SUBTITLE
+        }
       />
 
       {/* Monthly Sync Modal */}

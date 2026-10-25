@@ -138,7 +138,7 @@ describe("MonitoringRouteDetailModal", () => {
     expect(getActiveScrollLockCount()).toBe(0);
   });
 
-  it("renders route title, korlap, and tab Operasional by default", async () => {
+  it("renders route title, korwil, and tab Operasional by default", async () => {
     await act(async () => {
       root.render(
         <MonitoringRouteDetailModal
@@ -152,7 +152,7 @@ describe("MonitoringRouteDetailModal", () => {
     });
 
     expect(container.textContent).toContain("Detail Operasional Rute JAK.01");
-    expect(container.textContent).toContain("Ranto Lumban Toruan");
+    expect(container.textContent).toContain("Korwil: Ranto Lumban Toruan");
     expect(container.textContent).toContain("Operasional");
     expect(container.textContent).toContain("1.800"); // Total KM Tempuh
     expect(container.textContent).toContain("180"); // KM / Bus

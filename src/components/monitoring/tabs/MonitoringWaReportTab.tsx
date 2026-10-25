@@ -14,6 +14,7 @@ import {
 import { showSuccessToast } from "@/utils/alertUtils";
 import { FileSpreadsheet, Copy, Share2, Sun, Moon, AlertTriangle, PlusCircle } from "lucide-react";
 import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
+import { sortRoutesByCode } from "@/utils/routeSorting";
 
 export interface MonitoringWaReportTabProps {
   data: RegionalMonitoringResult;
@@ -32,9 +33,12 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
   const [format3Shift, setFormat3Shift] = useState<1 | 2>(1);
   const [quickRoute, setQuickRoute] = useState<{ routeCode: string; routeId: number; defaultRenops?: number } | null>(null);
 
+  // Urutkan rute secara natural alphanumeric
+  const sortedRoutes = useMemo(() => sortRoutesByCode(data.routes), [data.routes]);
+
   // Map RouteWaData for Format 1 & 2
   const routeWaData: RouteWaData[] = useMemo(() => {
-    return data.routes.map((r, idx) => ({
+    return sortedRoutes.map((r, idx) => ({
       no: idx + 1,
       routeCode: r.routeCode,
       routeName: r.routeName,
@@ -60,7 +64,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
       manualShift2: r.manualShift2,
       totalShift2: r.totalShift2,
     }));
-  }, [data.routes]);
+  }, [sortedRoutes]);
 
   // RegionTotals for Format 2
   const regionTotals: RegionTotals = useMemo(() => {
@@ -84,7 +88,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
 
   // RouteFleetReportItem for Format 3 (Menerapkan Hierarki 3 Jalur)
   const routeFleetData: RouteFleetReportItem[] = useMemo(() => {
-    return data.routes.map((r, idx) => {
+    return sortedRoutes.map((r, idx) => {
       // 1. Jalur 1 (Utama): Data di DB (Laporan A2 Petugas atau Input Korlap)
       const matchingShift = fleetShifts?.find(
         (s) => s.route_code === r.routeCode && s.shift === format3Shift,
@@ -98,12 +102,16 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
             isOff: u.status_code === "OFF",
           })) || [];
 
+        const dynamicRenops = r.defaultRenops || 0;
+        const isShiftTargetStale = matchingShift.target_renops === 30 && dynamicRenops > 0 && dynamicRenops !== 30;
+        const effectiveRenops = isShiftTargetStale ? dynamicRenops : (matchingShift.target_renops || dynamicRenops);
+
         return {
           no: idx + 1,
           routeCode: r.routeCode,
           routeName: r.routeName,
           operatorName: r.operatorName,
-          renops: matchingShift.target_renops || r.defaultRenops || 0,
+          renops: effectiveRenops,
           realops: matchingShift.realops ?? 0,
           hasData: true,
           sourceType: matchingShift.source_type || 'pdo_a2',

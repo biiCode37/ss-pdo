@@ -20,6 +20,7 @@ export interface Route {
   km_baku?: number;
   target_hk?: number;
   best_record?: number;
+  best_record_date?: string;
   default_renops?: number;
   renops_weekday?: number;
   renops_saturday?: number;

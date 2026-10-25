@@ -12,6 +12,7 @@ import {
   getRouteCodeForSheet,
   getRoutesFromCache,
 } from "@/utils/cacheUtils";
+import { subscribeToBusUpdates } from "@/services/realtimeSyncService";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
 export function useDashboardData() {
@@ -135,6 +136,10 @@ export function useDashboardData() {
     targetTab?: string,
     targetSheetUrl?: string,
   ) {
+    if (targetSheetUrl && targetSheetUrl !== sheetUrlRef.current) {
+      sheetUrlRef.current = targetSheetUrl;
+      setSheetUrl(targetSheetUrl);
+    }
     const currentSheetUrl = targetSheetUrl || sheetUrlRef.current;
     const activeTab = targetTab || selectedTabRef.current;
     if (!currentSheetUrl) {
@@ -267,6 +272,24 @@ export function useDashboardData() {
       );
     });
   };
+
+  // Realtime Broadcast Subscription: Menerima pembaruan kartu bus dari peranti lain (Skenario B)
+  useEffect(() => {
+    const targetSheetId = currentSheetId || extractSpreadsheetId(sheetUrl);
+    if (!targetSheetId || !selectedTab || selectedTab === "AKUMULASI") return;
+
+    const unsubscribe = subscribeToBusUpdates(
+      targetSheetId,
+      selectedTab,
+      ({ rowIndex, updates }) => {
+        handleUpdateBus(rowIndex, updates);
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [currentSheetId, sheetUrl, selectedTab]);
 
   const handleApplyAccumulation = async (
     sDay: number,

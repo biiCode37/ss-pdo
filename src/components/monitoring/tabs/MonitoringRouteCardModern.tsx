@@ -83,7 +83,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
         transition: "transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease",
       }}
     >
-      {/* 1. Header: Badge, Operator, Korlap, Status Badges */}
+      {/* 1. Header: Badge, Operator, Korwil, Status Badges */}
       <div
         style={{
           display: "flex",
@@ -129,7 +129,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 marginTop: "2px",
               }}
             >
-              {TEXT_MONITORING.ROUTE_CARD.KORLAP_PREFIX} {route.supervisorName}
+              {TEXT_MONITORING.ROUTE_CARD.KORWIL_PREFIX} {route.supervisorName}
             </div>
           </div>
         </div>

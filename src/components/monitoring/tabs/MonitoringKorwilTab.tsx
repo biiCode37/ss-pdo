@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Users,
   ChevronDown,
@@ -14,6 +14,8 @@ import type {
   RegionalRouteItem,
 } from "@/services/allRouteMonitoringService";
 import { formatNumber, formatDecimal } from "../monitoringUtils";
+import { KorwilRouteDetailBottomSheet } from "../modals/KorwilRouteDetailBottomSheet";
+import { sortRoutesByCode } from "@/utils/routeSorting";
 
 export interface MonitoringKorwilTabProps {
   data: RegionalMonitoringResult;
@@ -27,6 +29,17 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
   isEmbedded = false,
 }) => {
   const [expandedTeams, setExpandedTeams] = useState<Record<string, boolean>>({});
+  const [selectedRouteCode, setSelectedRouteCode] = useState<string | null>(null);
+
+  // Derived selected route dari data terbaru agar selalu sinkron secara realtime
+  const selectedRouteForSheet = useMemo(() => {
+    if (!selectedRouteCode) return null;
+    return (
+      data.routes.find(
+        (r) => r.routeCode.toLowerCase() === selectedRouteCode.toLowerCase(),
+      ) || null
+    );
+  }, [data.routes, selectedRouteCode]);
 
   const toggleTeamExpand = (teamId: string) => {
     setExpandedTeams((prev) => ({
@@ -475,7 +488,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   animation: "fadeIn 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
                 }}
               >
-                {team.routes.map((route: RegionalRouteItem) => {
+                {sortRoutesByCode(team.routes).map((route: RegionalRouteItem) => {
                   const routeRitasePp =
                     route.totalRitasePp ??
                     (route.kmBaku > 0 ? route.totalKm / route.kmBaku : (route.totalTrips ? route.totalTrips / 2 : 0));
@@ -484,7 +497,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                     <div
                       key={route.id}
                       data-testid={`korwil-route-row-${route.routeCode}`}
-                      onClick={() => onSelectRoute?.(route.routeCode)}
+                      onClick={() => setSelectedRouteCode(route.routeCode)}
                       style={{
                         padding: "8px 12px",
                         borderRadius: "8px",
@@ -493,7 +506,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        cursor: onSelectRoute ? "pointer" : "default",
+                        cursor: "pointer",
                         transition: "background-color 0.15s ease",
                       }}
                     >
@@ -545,6 +558,16 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
           </div>
         );
       })}
+      {/* Bottom Sheet Detail 22 Metrik Rute Korwil */}
+      <KorwilRouteDetailBottomSheet
+        route={selectedRouteForSheet}
+        isOpen={!!selectedRouteForSheet}
+        onClose={() => setSelectedRouteCode(null)}
+        onSelectRoute={(routeCode) => {
+          setSelectedRouteCode(null);
+          onSelectRoute?.(routeCode);
+        }}
+      />
     </div>
   );
 };

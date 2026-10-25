@@ -2,6 +2,8 @@ import { supabase } from './supabase';
 import { fetchRouteMasterList } from './dailyRouteReportService';
 import { fetchGlobalReportDailyMetrics } from './googleSheets';
 import { extractSpreadsheetId } from '../utils/sheetIdentity';
+import { getRenopsForDate } from '../utils/holidayUtils';
+import { sortRoutesByCode } from '../utils/routeSorting';
 import { TEXT_ERRORS } from '../constants/texts';
 import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail, DailyFleetShift } from '../types/supabase';
 
@@ -21,6 +23,7 @@ export interface RegionalRouteItem {
   kmBaku: number;
   targetHk: number;
   bestRecord: number;
+  bestRecordDate?: string;
   supervisorName: string;
   defaultRenops: number;
   // Daily input stats
@@ -110,7 +113,7 @@ export const SUPERVISOR_TEAMS = [
 
 export function calculateSupervisorSummaries(routes: RegionalRouteItem[]): SupervisorTeamSummary[] {
   return SUPERVISOR_TEAMS.map((team) => {
-    const teamRoutes = routes.filter((r) => team.match(r.supervisorName));
+    const teamRoutes = sortRoutesByCode(routes.filter((r) => team.match(r.supervisorName)));
     const totalRenops = teamRoutes.reduce((acc, r) => acc + (r.totalRenops || 0), 0);
     const totalRealops = teamRoutes.reduce((acc, r) => acc + (r.totalRealops || 0), 0);
     const totalKm = teamRoutes.reduce((acc, r) => acc + (r.totalKm || 0), 0);
@@ -222,48 +225,86 @@ export async function fetchRegionalMonitoringData(
   // 1. Ambil daftar master rute
   const routes = await fetchRouteMasterList();
 
-  // 2. Ambil daily_route_reports untuk 3 tanggal (H, H-1, H-7)
+  // 2. Ambil daily_route_reports untuk 3 tanggal (H, H-1, H-7) dengan silent retry (mitigasi fluktuasi QUIC/jaringan)
   let reports: DailyRouteReport[] = [];
-  try {
-    const { data: reportData } = await supabase
-      .from('daily_route_reports')
-      .select('*')
-      .in('date', [dateStr, yesterdayDate, lastWeekDate]);
-    if (reportData) reports = reportData as DailyRouteReport[];
-  } catch (err) {
-    console.warn('[allRouteMonitoringService] Gagal fetch daily_route_reports:', err);
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const { data: reportData, error } = await supabase
+        .from('daily_route_reports')
+        .select('*')
+        .in('date', [dateStr, yesterdayDate, lastWeekDate]);
+      if (!error && reportData) {
+        reports = reportData as DailyRouteReport[];
+        break;
+      }
+      if (error && attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+    } catch (err) {
+      if (attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      } else {
+        console.warn('[allRouteMonitoringService] Gagal fetch daily_route_reports:', err);
+      }
+    }
   }
 
-  // 3. Ambil daily_unit_summaries untuk 3 tanggal
+  // 3. Ambil daily_unit_summaries untuk 3 tanggal dengan field projection & silent retry (mitigasi QUIC UDP drop)
   const pToday = parseDateParts(dateStr);
   const pYest = parseDateParts(yesterdayDate);
   const pLast = parseDateParts(lastWeekDate);
 
   let summaries: DailyUnitSummary[] = [];
-  try {
-    const { data: summaryData } = await supabase
-      .from('daily_unit_summaries')
-      .select('*')
-      .or(
-        `and(year.eq.${pToday.year},month.eq.${pToday.month},day.eq.${pToday.day}),` +
-        `and(year.eq.${pYest.year},month.eq.${pYest.month},day.eq.${pYest.day}),` +
-        `and(year.eq.${pLast.year},month.eq.${pLast.month},day.eq.${pLast.day})`
-      );
-    if (summaryData) summaries = summaryData as DailyUnitSummary[];
-  } catch (err) {
-    console.warn('[allRouteMonitoringService] Gagal fetch daily_unit_summaries:', err);
+  const unitSummaryColumns = 'route_code, year, month, day, total_passengers, total_km, toa_shift1, manual_shift1, toa_shift2, manual_shift2';
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const { data: summaryData, error } = await supabase
+        .from('daily_unit_summaries')
+        .select(unitSummaryColumns)
+        .or(
+          `and(year.eq.${pToday.year},month.eq.${pToday.month},day.eq.${pToday.day}),` +
+          `and(year.eq.${pYest.year},month.eq.${pYest.month},day.eq.${pYest.day}),` +
+          `and(year.eq.${pLast.year},month.eq.${pLast.month},day.eq.${pLast.day})`
+        );
+      if (!error && summaryData) {
+        summaries = summaryData as DailyUnitSummary[];
+        break;
+      }
+      if (error && attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+    } catch (err) {
+      if (attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      } else {
+        console.warn('[allRouteMonitoringService] Gagal fetch daily_unit_summaries:', err);
+      }
+    }
   }
 
-  // 3b. Ambil daily_fleet_shifts untuk tanggal aktif (fallback defensif armada A2)
+  // 3b. Ambil daily_fleet_shifts untuk tanggal aktif (fallback defensif armada A2) dengan silent retry
   let fleetShifts: DailyFleetShift[] = [];
-  try {
-    const { data: fsData } = await supabase
-      .from('daily_fleet_shifts')
-      .select('*')
-      .eq('date', dateStr);
-    if (fsData) fleetShifts = fsData as DailyFleetShift[];
-  } catch (err) {
-    console.warn('[allRouteMonitoringService] Gagal fetch daily_fleet_shifts:', err);
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const { data: fsData, error } = await supabase
+        .from('daily_fleet_shifts')
+        .select('*')
+        .eq('date', dateStr);
+      if (!error && fsData) {
+        fleetShifts = fsData as DailyFleetShift[];
+        break;
+      }
+      if (error && attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+    } catch (err) {
+      if (attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      } else {
+        console.warn('[allRouteMonitoringService] Gagal fetch daily_fleet_shifts:', err);
+      }
+    }
   }
 
   // 4. Petakan dan gabungkan per rute
@@ -334,17 +375,30 @@ export async function fetchRegionalMonitoringData(
     const fsS1 = fleetShifts.find((fs) => fs.route_id === r.id && fs.shift === 1);
     const fsS2 = fleetShifts.find((fs) => fs.route_id === r.id && fs.shift === 2);
 
-    const renopsS1 = todayReport?.renops_shift1 ?? (fsS1?.target_renops ?? (r.default_renops || 0));
+    // ponytail: Target renops dinamis berdasarkan kalender operasional rute (Minggu, Sabtu, Libur, Hari Kerja)
+    const dynamicRenopsInfo = getRenopsForDate(r, dateStr);
+    const dynamicRenops = dynamicRenopsInfo.renops;
+
+    // Evaluasi renopsShift1 & renopsShift2:
+    // Deteksi jika report tersimpan nilai default_renops statis lama pada hari non-weekday (Sabtu/Minggu/Libur).
+    // Jika ya, gunakan dynamicRenops agar akurat sesuai kalender operasional.
+    const isReportS1StaleDefault = todayReport?.renops_shift1 === r.default_renops && dynamicRenops !== r.default_renops;
+    const renopsS1 = (todayReport?.renops_shift1 && !isReportS1StaleDefault)
+      ? todayReport.renops_shift1
+      : (fsS1?.target_renops ?? dynamicRenops);
     const realopsS1 = (todayReport?.realops_shift1 !== undefined && todayReport.realops_shift1 !== null && todayReport.realops_shift1 > 0)
       ? todayReport.realops_shift1
       : (fsS1?.realops ?? 0);
 
-    const renopsS2 = todayReport?.renops_shift2 ?? (fsS2?.target_renops ?? (r.default_renops || 0));
+    const isReportS2StaleDefault = todayReport?.renops_shift2 === r.default_renops && dynamicRenops !== r.default_renops;
+    const renopsS2 = (todayReport?.renops_shift2 && !isReportS2StaleDefault)
+      ? todayReport.renops_shift2
+      : (fsS2?.target_renops ?? dynamicRenops);
     const realopsS2 = (todayReport?.realops_shift2 !== undefined && todayReport.realops_shift2 !== null && todayReport.realops_shift2 > 0)
       ? todayReport.realops_shift2
       : (fsS2?.realops ?? 0);
 
-    const totalRenops = renopsS1 || renopsS2 ? Math.max(renopsS1, renopsS2) : (r.default_renops || 0);
+    const totalRenops = Math.max(renopsS1, renopsS2, dynamicRenops);
     const totalRealops = realopsS1 || realopsS2 ? Math.max(realopsS1, realopsS2) : 0;
 
     const achievementKm = (todayReport?.achievement_km !== undefined && todayReport.achievement_km !== null && Number(todayReport.achievement_km) > 0)
@@ -394,8 +448,9 @@ export async function fetchRegionalMonitoringData(
       kmBaku: Number(r.km_baku) || 0,
       targetHk,
       bestRecord: Number(r.best_record) || 0,
+      bestRecordDate: r.best_record_date || undefined,
       supervisorName: r.supervisor_name || 'Pengawas Wilayah',
-      defaultRenops: Number(r.default_renops) || 0,
+      defaultRenops: dynamicRenops,
       renopsShift1: renopsS1,
       realopsShift1: realopsS1,
       renopsShift2: renopsS2,
@@ -445,15 +500,18 @@ export async function fetchRegionalMonitoringData(
     };
   });
 
-  // 5. Hitung Agregat Wilayah
-  const totals = calculateRegionalTotals(routeItems, summaries, pYest, pLast, reports, yesterdayDate, lastWeekDate);
+  // 5. Urutkan rute secara natural alphanumeric
+  const sortedRouteItems = sortRoutesByCode(routeItems);
+
+  // 6. Hitung Agregat Wilayah
+  const totals = calculateRegionalTotals(sortedRouteItems, summaries, pYest, pLast, reports, yesterdayDate, lastWeekDate);
 
   return {
     date: dateStr,
     yesterdayDate,
     lastWeekDate,
-    routes: routeItems,
-    supervisorSummaries: calculateSupervisorSummaries(routeItems),
+    routes: sortedRouteItems,
+    supervisorSummaries: calculateSupervisorSummaries(sortedRouteItems),
     ...totals
   };
 }
@@ -472,17 +530,29 @@ export async function fetchRegionalPeriodMonitoringData(
   // 1. Ambil daftar master rute
   const routes = await fetchRouteMasterList();
 
-  // 2. Ambil daily_route_reports untuk rentang tanggal
+  // 2. Ambil daily_route_reports untuk rentang tanggal dengan silent retry
   let reports: DailyRouteReport[] = [];
-  try {
-    const { data: reportData } = await supabase
-      .from('daily_route_reports')
-      .select('*')
-      .gte('date', startDate)
-      .lte('date', endDate);
-    if (reportData) reports = reportData as DailyRouteReport[];
-  } catch (err) {
-    console.warn('[allRouteMonitoringService] Gagal fetch period daily_route_reports:', err);
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const { data: reportData, error } = await supabase
+        .from('daily_route_reports')
+        .select('*')
+        .gte('date', startDate)
+        .lte('date', endDate);
+      if (!error && reportData) {
+        reports = reportData as DailyRouteReport[];
+        break;
+      }
+      if (error && attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+    } catch (err) {
+      if (attempt === 1) {
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      } else {
+        console.warn('[allRouteMonitoringService] Gagal fetch period daily_route_reports:', err);
+      }
+    }
   }
 
   // 3. Petakan akumulasi per rute
@@ -540,6 +610,7 @@ export async function fetchRegionalPeriodMonitoringData(
       kmBaku,
       targetHk,
       bestRecord: Number(r.best_record) || 0,
+      bestRecordDate: r.best_record_date || undefined,
       supervisorName: r.supervisor_name || 'Pengawas Wilayah',
       defaultRenops: Number(r.default_renops) || 0,
       renopsShift1: renopsS1,
@@ -584,40 +655,41 @@ export async function fetchRegionalPeriodMonitoringData(
     };
   });
 
-  const supervisorSummaries = calculateSupervisorSummaries(routeItems);
+  const sortedRouteItems = sortRoutesByCode(routeItems);
+  const supervisorSummaries = calculateSupervisorSummaries(sortedRouteItems);
 
   // Hitung total regional untuk rentang periode
-  const totalRenops = routeItems.reduce((acc, r) => acc + r.totalRenops, 0);
-  const totalRealops = routeItems.reduce((acc, r) => acc + r.totalRealops, 0);
-  const totalTodayPassengers = routeItems.reduce((acc, r) => acc + r.todayPassengers, 0);
-  const totalTargetPassengers = routeItems.reduce((acc, r) => acc + r.targetHk, 0);
-  const totalKm = routeItems.reduce((acc, r) => acc + r.totalKm, 0);
+  const totalRenops = sortedRouteItems.reduce((acc, r) => acc + r.totalRenops, 0);
+  const totalRealops = sortedRouteItems.reduce((acc, r) => acc + r.totalRealops, 0);
+  const totalTodayPassengers = sortedRouteItems.reduce((acc, r) => acc + r.todayPassengers, 0);
+  const totalTargetPassengers = sortedRouteItems.reduce((acc, r) => acc + r.targetHk, 0);
+  const totalKm = sortedRouteItems.reduce((acc, r) => acc + r.totalKm, 0);
   const averageKmPerBus = totalRealops > 0 ? totalKm / totalRealops : 0;
-  const totalTrips = routeItems.reduce((acc, r) => acc + (r.totalTrips || 0), 0);
+  const totalTrips = sortedRouteItems.reduce((acc, r) => acc + (r.totalTrips || 0), 0);
   const averageTripsPerBus = totalRealops > 0 ? totalTrips / totalRealops : 0;
 
-  const tomShift1 = routeItems.reduce((acc, r) => acc + r.toaShift1, 0);
-  const manualShift1 = routeItems.reduce((acc, r) => acc + r.manualShift1, 0);
+  const tomShift1 = sortedRouteItems.reduce((acc, r) => acc + r.toaShift1, 0);
+  const manualShift1 = sortedRouteItems.reduce((acc, r) => acc + r.manualShift1, 0);
   const totalShift1 = tomShift1 + manualShift1;
 
-  const tomShift2 = routeItems.reduce((acc, r) => acc + r.toaShift2, 0);
-  const manualShift2 = routeItems.reduce((acc, r) => acc + r.manualShift2, 0);
+  const tomShift2 = sortedRouteItems.reduce((acc, r) => acc + r.toaShift2, 0);
+  const manualShift2 = sortedRouteItems.reduce((acc, r) => acc + r.manualShift2, 0);
   const totalShift2 = tomShift2 + manualShift2;
 
-  const submittedCount = routeItems.filter((r) => r.status === 'submitted' || r.status === 'verified').length;
-  const verifiedCount = routeItems.filter((r) => r.status === 'verified').length;
-  const draftCount = routeItems.filter((r) => r.status === 'draft').length;
-  const emptyCount = routeItems.filter((r) => r.status === 'empty').length;
+  const submittedCount = sortedRouteItems.filter((r) => r.status === 'submitted' || r.status === 'verified').length;
+  const verifiedCount = sortedRouteItems.filter((r) => r.status === 'verified').length;
+  const draftCount = sortedRouteItems.filter((r) => r.status === 'draft').length;
+  const emptyCount = sortedRouteItems.filter((r) => r.status === 'empty').length;
 
-  const appInputCount = routeItems.filter((r) => r.dataSource === 'app_input').length;
-  const sheetSyncCount = routeItems.filter((r) => r.dataSource === 'sheet_ingestion').length;
-  const emptySourceCount = routeItems.filter((r) => !r.dataSource || r.dataSource === 'empty').length;
+  const appInputCount = sortedRouteItems.filter((r) => r.dataSource === 'app_input').length;
+  const sheetSyncCount = sortedRouteItems.filter((r) => r.dataSource === 'sheet_ingestion').length;
+  const emptySourceCount = sortedRouteItems.filter((r) => !r.dataSource || r.dataSource === 'empty').length;
 
   return {
     date: `${startDate} s.d. ${endDate}`,
     yesterdayDate: '',
     lastWeekDate: '',
-    routes: routeItems,
+    routes: sortedRouteItems,
     supervisorSummaries,
     totalRenops,
     totalRealops,
@@ -794,13 +866,14 @@ export async function syncRegionalDailyFromGlobalSheet(
       }
 
       try {
+        const expectedRenops = metric.renops > 0 ? metric.renops : getRenopsForDate(route, dateStr).renops;
         const payload = {
           route_id: route.id,
           route_code: route.route_code,
           date: dateStr,
-          renops_shift1: metric.renops,
+          renops_shift1: expectedRenops,
           realops_shift1: metric.realops,
-          renops_shift2: metric.renops,
+          renops_shift2: expectedRenops,
           realops_shift2: metric.realops,
           toa_shift1: metric.toaShift1,
           manual_shift1: metric.manualShift1,

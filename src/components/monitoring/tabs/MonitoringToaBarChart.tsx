@@ -3,6 +3,7 @@ import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { BarChart3, ChevronDown, X } from "lucide-react";
 import { formatIndonesianDaySlashDate } from "../monitoringUtils";
+import { compareRouteCodes } from "@/utils/routeSorting";
 
 interface MonitoringToaBarChartProps {
   routes: RegionalRouteItem[];
@@ -63,7 +64,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
       const valA = (a.toaShift1 || 0) + (a.toaShift2 || 0) || a.todayPassengers;
       const valB = (b.toaShift1 || 0) + (b.toaShift2 || 0) || b.todayPassengers;
       if (valB !== valA) return valB - valA;
-      return a.routeCode.localeCompare(b.routeCode, undefined, { numeric: true });
+      return compareRouteCodes(a.routeCode, b.routeCode);
     });
   }, [routes]);
 
@@ -336,7 +337,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                   >
                     {selectedRoute.operatorName}
                     {selectedRoute.operatorName && selectedRoute.supervisorName ? " • " : ""}
-                    {selectedRoute.supervisorName ? `${TEXT_MONITORING.ROUTE_CARD.KORLAP_PREFIX} ${selectedRoute.supervisorName}` : ""}
+                    {selectedRoute.supervisorName ? `${TEXT_MONITORING.ROUTE_CARD.KORWIL_PREFIX} ${selectedRoute.supervisorName}` : ""}
                   </div>
                 )}
               </div>

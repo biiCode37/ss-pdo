@@ -13,5 +13,13 @@ export const isSupabaseConfigured = !!(
 // Gunakan URL dummy lokal yang aman jika belum dikonfigurasi, agar tidak mengirim request ke domain yang tidak dikenal
 export const supabase = createClient(
   isSupabaseConfigured ? SUPABASE_URL : 'http://localhost:54321',
-  isSupabaseConfigured ? SUPABASE_ANON_KEY : 'anon-key-unconfigured'
+  isSupabaseConfigured ? SUPABASE_ANON_KEY : 'anon-key-unconfigured',
+  {
+    realtime: {
+      params: {
+        eventsPerSecond: 10,
+      },
+      timeout: 20000, // Toleransi handshake 20 detik pada jaringan ISP dengan latensi tinggi
+    },
+  }
 );

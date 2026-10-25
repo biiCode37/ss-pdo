@@ -9,7 +9,15 @@ on:
   workflow_dispatch:
     inputs:
       target_date:
-        description: 'Tanggal Target (Format: YYYY-MM-DD, kosong = hari ini WIB)'
+        description: 'Tanggal Tunggal (Format: YYYY-MM-DD, kosong = hari ini WIB)'
+        required: false
+        default: ''
+      start_date:
+        description: 'Rentang Tanggal Mulai (Opsional, Format: YYYY-MM-DD)'
+        required: false
+        default: ''
+      end_date:
+        description: 'Rentang Tanggal Akhir (Opsional, Format: YYYY-MM-DD)'
         required: false
         default: ''
       force:
@@ -37,7 +45,9 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
         run: |
           CMD="node scripts/ingest-regional.mjs"
-          if [ -n "${{ github.event.inputs.target_date }}" ]; then
+          if [ -n "${{ github.event.inputs.start_date }}" ] && [ -n "${{ github.event.inputs.end_date }}" ]; then
+            CMD="$CMD --start-date=${{ github.event.inputs.start_date }} --end-date=${{ github.event.inputs.end_date }}"
+          elif [ -n "${{ github.event.inputs.target_date }}" ]; then
             CMD="$CMD --date=${{ github.event.inputs.target_date }}"
           fi
           if [ "${{ github.event.inputs.force }}" = "true" ]; then

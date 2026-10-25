@@ -9,12 +9,16 @@ export interface IngestionProgressModalProps {
   isOpen: boolean;
   progress: IngestionProgress | null;
   onClose?: () => void;
+  title?: string;
+  subtitle?: string;
 }
 
 export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
   isOpen,
   progress,
   onClose,
+  title,
+  subtitle,
 }) => {
   useEffect(() => {
     if (!isOpen) return;
@@ -172,7 +176,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             letterSpacing: "-0.2px",
           }}
         >
-          {TEXT_MONITORING.INGESTION.MODAL_TITLE}
+          {title || TEXT_MONITORING.INGESTION.MODAL_TITLE}
         </h3>
         <p
           style={{
@@ -182,7 +186,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             lineHeight: 1.4,
           }}
         >
-          {TEXT_MONITORING.INGESTION.MODAL_SUBTITLE}
+          {subtitle || TEXT_MONITORING.INGESTION.MODAL_SUBTITLE}
         </p>
 
         {/* Progress Bar Container */}
@@ -214,13 +218,25 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                 <>
                   <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} />
                   <span>
-                    {progress?.processedCount ?? 0} / {progress?.totalToSync ?? 18} Rute
+                    {progress?.totalDays && progress.totalDays > 1
+                      ? TEXT_MONITORING.INGESTION.PROGRESS_COUNT_RANGE(
+                          progress.processedCount ?? 0,
+                          progress.totalToSync ?? 18,
+                          progress.totalRoutes ?? 18,
+                          progress.totalDays,
+                        )
+                      : TEXT_MONITORING.INGESTION.PROGRESS_COUNT_SINGLE(
+                          progress?.processedCount ?? 0,
+                          progress?.totalToSync ?? 18,
+                        )}
                   </span>
                 </>
               ) : (
                 <>
                   <Sparkles size={13} style={{ color: "#10b981" }} />
-                  <span style={{ color: "#10b981" }}>Selesai</span>
+                  <span style={{ color: "#10b981" }}>
+                    {TEXT_MONITORING.INGESTION.PROGRESS_COMPLETE_LABEL}
+                  </span>
                 </>
               )}
             </span>

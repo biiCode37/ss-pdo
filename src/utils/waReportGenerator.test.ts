@@ -8,6 +8,7 @@ import {
   type RouteWaData,
   type RegionTotals
 } from './waReportGenerator';
+import { TEXT_WA_REPORT } from '../constants/texts';
 
 describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
   it('maps operator codes to official full names correctly', () => {
@@ -68,7 +69,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
 
     expect(report).toContain('*02. JAK.15 | TANJUNG PRIOK - BULAK TURI*');
     expect(report).toContain('- KOPERASI WAHANA KALPIKA (KWK)');
-    expect(report).toContain('*Unit Libur (OFF):*');
+    expect(report).toContain(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
     expect(report).toContain('- KWK-015-021 : OFF');
 
     // Closing
@@ -108,7 +109,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     expect(report).toContain('- LSG-087-009 : TO.EVDAL');
 
     // Unit Libur
-    expect(report).toContain('*Unit Libur (OFF):*');
+    expect(report).toContain(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
     expect(report).toContain('- LSG-087-015 : OFF');
 
     // Summary counts
@@ -134,7 +135,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
 
     expect(report).toContain('*Rincian Tidak Ops:*');
     expect(report).toContain('- TJ-001 : Per Patah');
-    expect(report).not.toContain('*Unit Libur (OFF):*');
+    expect(report).not.toContain(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
   });
 
   it('handles route without routeName gracefully', () => {

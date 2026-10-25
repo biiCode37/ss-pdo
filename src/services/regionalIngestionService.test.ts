@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ingestRegionalRouteSummaries } from './regionalIngestionService';
+import {
+  ingestRegionalRouteSummaries,
+  generateDateRange,
+  ingestRegionalRouteSummariesForRange,
+  ingestSingleRouteSummaryForRange,
+  extractRouteDailyMetrics,
+} from './regionalIngestionService';
 import { supabase } from './supabase';
 import { fetchRouteMasterList } from './dailyRouteReportService';
 import { getBusData } from './googleSheets/core';
@@ -141,4 +147,144 @@ describe('regionalIngestionService', () => {
     expect(result.errors.length).toBe(1);
     expect(result.errors[0]).toContain('JAK 05');
   });
+
+  describe('generateDateRange', () => {
+    it('generates array of 7 consecutive dates for a weekly range', () => {
+      const dates = generateDateRange('2026-10-18', '2026-10-24');
+      expect(dates).toHaveLength(7);
+      expect(dates[0]).toBe('2026-10-18');
+      expect(dates[6]).toBe('2026-10-24');
+    });
+
+    it('returns a single date when start and end dates are identical', () => {
+      const dates = generateDateRange('2026-10-24', '2026-10-24');
+      expect(dates).toEqual(['2026-10-24']);
+    });
+
+    it('returns empty array when dates are invalid', () => {
+      expect(generateDateRange('invalid', 'dates')).toEqual([]);
+    });
+  });
+
+  describe('ingestRegionalRouteSummariesForRange', () => {
+    it('returns failure when date range is invalid', async () => {
+      const res = await ingestRegionalRouteSummariesForRange('invalid', 'dates');
+      expect(res.success).toBe(false);
+      expect(res.errors[0]).toContain('Rentang tanggal tidak valid');
+    });
+
+    it('delegates to ingestRegionalRouteSummaries when start and end date are the same', async () => {
+      const mockRoutes = [
+        { id: 1, route_code: 'JAK 01', route_name: 'Tanjung Priok', default_renops: 20 },
+      ];
+      (fetchRouteMasterList as any).mockResolvedValue(mockRoutes);
+
+      const mockFrom = vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+            data: [],
+            error: null,
+          }),
+        }),
+        upsert: vi.fn().mockResolvedValue({ error: null }),
+      });
+      (supabase.from as any).mockImplementation(mockFrom);
+
+      const res = await ingestRegionalRouteSummariesForRange('2026-10-24', '2026-10-24');
+      expect(res).toBeDefined();
+    });
+
+    it('returns allUpToDate: true immediately without calling Google Sheets when all slots are fresh', async () => {
+      const mockRoutes = [
+        { id: 1, route_code: 'JAK 01', default_renops: 20 },
+        { id: 2, route_code: 'JAK 05', default_renops: 33 },
+      ];
+      (fetchRouteMasterList as any).mockResolvedValue(mockRoutes);
+
+      // 2 hari: 2026-10-18 dan 2026-10-19. Keduanya adalah tanggal lampau.
+      const mockExistingReports = [
+        { route_id: 1, date: '2026-10-18', status: 'submitted', total_passengers: 1000, total_km: 1500, last_synced_at: '2026-10-18T20:00:00Z' },
+        { route_id: 2, date: '2026-10-18', status: 'draft', total_passengers: 800, total_km: 1200, last_synced_at: '2026-10-18T20:00:00Z' },
+        { route_id: 1, date: '2026-10-19', status: 'verified', total_passengers: 1100, total_km: 1600, last_synced_at: '2026-10-19T20:00:00Z' },
+        { route_id: 2, date: '2026-10-19', status: 'draft', total_passengers: 950, total_km: 1300, last_synced_at: '2026-10-19T20:00:00Z' },
+      ];
+
+      const mockFrom = vi.fn((table: string) => {
+        if (table === 'daily_route_reports') {
+          return {
+            select: vi.fn().mockReturnValue({
+              gte: vi.fn().mockReturnValue({
+                lte: vi.fn().mockResolvedValue({ data: mockExistingReports, error: null }),
+              }),
+            }),
+          };
+        }
+        return { select: vi.fn() };
+      });
+      (supabase.from as any).mockImplementation(mockFrom);
+
+      const res = await ingestRegionalRouteSummariesForRange('2026-10-18', '2026-10-19');
+      expect(res.success).toBe(true);
+      expect(res.allUpToDate).toBe(true);
+      expect(res.syncedFromSheet).toBe(0);
+      expect(res.skippedFromApp).toBe(2); // 1 submitted + 1 verified
+      expect(res.skippedExisting).toBe(2); // 2 draft lampau yang lengkap
+      // Dilarang memanggil getBusData jika semua data sudah lengkap!
+      expect(getBusData).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('extractRouteDailyMetrics', () => {
+    it('sets dynamic renops for Sunday (JAK.115 uses renops_sunday = 23 instead of default_renops = 30)', () => {
+      const mockRoute = {
+        id: 115,
+        route_code: 'JAK.115',
+        route_name: 'TERMINAL TANJUNG PRIOK - IGI',
+        operator_name: 'KOMIDA',
+        is_looping: false,
+        km_baku: 20,
+        default_renops: 30,
+        renops_weekday: 30,
+        renops_saturday: 26,
+        renops_sunday: 23,
+        renops_holiday: 23,
+      } as any;
+
+      // 2026-10-25 adalah hari Minggu
+      const { payload } = extractRouteDailyMetrics(mockRoute, [], null, '2026-10-25');
+
+      expect(payload.renops_shift1).toBe(23);
+      expect(payload.renops_shift2).toBe(23);
+      expect(payload.route_code).toBe('JAK.115');
+    });
+
+    it('sets dynamic renops for Saturday and Weekday appropriately', () => {
+      const mockRoute = {
+        id: 115,
+        route_code: 'JAK.115',
+        default_renops: 30,
+        renops_weekday: 30,
+        renops_saturday: 26,
+        renops_sunday: 23,
+      } as any;
+
+      // 2026-10-24 adalah hari Sabtu
+      const sat = extractRouteDailyMetrics(mockRoute, [], null, '2026-10-24');
+      expect(sat.payload.renops_shift1).toBe(26);
+
+      // 2026-10-23 adalah hari Jumat (Weekday)
+      const fri = extractRouteDailyMetrics(mockRoute, [], null, '2026-10-23');
+      expect(fri.payload.renops_shift1).toBe(30);
+    });
+  });
+
+  describe('ingestSingleRouteSummaryForRange', () => {
+    it('returns failure when date range is invalid', async () => {
+      const res = await ingestSingleRouteSummaryForRange('invalid', 'dates', 1);
+      expect(res.success).toBe(false);
+      expect(res.errors[0]).toContain('Rentang tanggal tidak valid');
+    });
+  });
 });
+

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useMobileBackHandler } from "@/hooks/useMobileBackHandler";
 import { slugifyUnitId } from "@/utils/analytics";
+import { getStoredUserRole } from "@/utils/roleStorage";
 
 export type DashboardView =
   | "dashboard"
@@ -12,10 +13,11 @@ export type DashboardMainTab = "input" | "analytics" | "units";
 
 interface UseDashboardUiStateOptions {
   onClearError?: () => void;
+  initialView?: DashboardView;
 }
 
 export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
-  const { onClearError } = options;
+  const { onClearError, initialView } = options;
 
   // Global System & Connectivity States
   const [isOnline, setIsOnline] = useState(
@@ -29,8 +31,14 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
   const [isAccSheetOpen, setIsAccSheetOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  // View Navigation States
-  const [currentView, setCurrentView] = useState<DashboardView>("dashboard");
+  // View Navigation States:
+  // Selain peran 'pdo' (yaitu 'superadmin', 'admin', 'korwil', 'korlap'),
+  // halaman pembuka pertama aplikasi adalah 'regional_monitoring'.
+  const [currentView, setCurrentView] = useState<DashboardView>(() => {
+    if (initialView) return initialView;
+    const role = getStoredUserRole();
+    return role !== "pdo" ? "regional_monitoring" : "dashboard";
+  });
   const [monitoringDate, setMonitoringDate] = useState<string | null>(null);
 
   // Active Main Tab
@@ -100,23 +108,36 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
     }, 150);
   }, []);
 
+  const userRole = getStoredUserRole();
+  const isPdoRole = userRole === "pdo";
+
   // Hardware Back Navigation Interceptors
+  // Bagi user non-PDO: 'dashboard' rute tunggal adalah sub-view dari 'regional_monitoring'
+  useMobileBackHandler({
+    id: "route_dashboard_view",
+    isOpen: !isPdoRole && currentView === "dashboard",
+    onClose: () => setCurrentView("regional_monitoring"),
+  });
+
+  // Bagi user PDO: jika membuka regional_monitoring (fallback): kembali ke 'dashboard'
   useMobileBackHandler({
     id: "regional_monitoring_view",
-    isOpen: currentView === "regional_monitoring",
+    isOpen: isPdoRole && currentView === "regional_monitoring",
     onClose: () => setCurrentView("dashboard"),
   });
 
   useMobileBackHandler({
     id: "user_management_view",
     isOpen: currentView === "user_management",
-    onClose: () => setCurrentView("dashboard"),
+    onClose: () =>
+      setCurrentView(isPdoRole ? "dashboard" : "regional_monitoring"),
   });
 
   useMobileBackHandler({
     id: "page_management_view",
     isOpen: currentView === "page_management",
-    onClose: () => setCurrentView("dashboard"),
+    onClose: () =>
+      setCurrentView(isPdoRole ? "dashboard" : "regional_monitoring"),
   });
 
   useMobileBackHandler({
