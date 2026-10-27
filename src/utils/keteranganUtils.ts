@@ -170,10 +170,10 @@ export function normalizeKeterangan(raw?: string | null): string {
     return 'OFF';
   }
   if (/^NP\s*[-._:/]?\s*1$/i.test(trimmed)) {
-    return 'BA.02 NP1';
+    return 'NP1';
   }
   if (/^NP\s*[-._:/]?\s*2$/i.test(trimmed)) {
-    return 'BA.02 NP2';
+    return 'NP2';
   }
   if (/^TO\s*[-._:/]?\s*EVDAL$/i.test(trimmed)) {
     return 'TO EVDAL';
@@ -384,12 +384,47 @@ export function splitShiftKeterangan(combined?: string | null): {
     return { s1: single, s2: '' };
   }
 
-  // Khusus NP2: spesifik untuk Shift 2 saja
-  if (/\bNP2\b/i.test(single)) {
+  // Khusus NP2, OKB, dan Renop: spesifik untuk Shift 2 saja
+  if (/\bNP2\b/i.test(single) || /^(?:OKB|Renop)$/i.test(single)) {
     return { s1: '', s2: single };
   }
 
   return { s1: single, s2: single };
+}
+
+/**
+ * Mengecek apakah catatan keterangan mengindikasikan status armada OFF atau TO EVDAL
+ * (baik status murni, variasi penulisan, dengan prefix shift S1:/S2:, maupun catatan gabungan).
+ * Unit dengan status ini tidak beroperasi sehingga harus dikecualikan dari target bar progres.
+ */
+export function isUnitOffOrToEvdal(raw?: string | null): boolean {
+  if (!raw || typeof raw !== 'string') return false;
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+
+  // 1. Cek keberadaan kata OFF utuh (misal: "OFF", "S1: OFF", "S2: OFF", "OFF - BAN PECAH", "OFF (SPARE)")
+  if (/\bOFF\b/i.test(trimmed)) {
+    return true;
+  }
+
+  // 2. Cek variasi TO EVDAL / T.O EVDAL / TO-EVDAL / T.O. EVDAL
+  if (/\bT\.?O\.?\s*[-._:/]?\s*EVDAL\b/i.test(trimmed)) {
+    return true;
+  }
+
+  // 3. Cek status murni T.O / TO (standalone atau dengan prefix shift / tanda kurung / strip keterangan)
+  // Contoh: "TO", "T.O", "S1: TO", "S2: T.O", "TO (SANKSI)", "T.O - CADANGAN"
+  if (/^(?:S[12]\s*[:.-]\s*)?T\.?O\.?(?:\s*\(.*\)|\s*-\s*.*)?$/i.test(trimmed)) {
+    return true;
+  }
+
+  // 4. Jika memuat pemisah shift (|), evaluasi tiap bagian shift
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|').map((p) => p.trim());
+    return parts.some((part) => isUnitOffOrToEvdal(part));
+  }
+
+  return false;
 }
 
 /**

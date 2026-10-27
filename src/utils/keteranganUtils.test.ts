@@ -9,6 +9,7 @@ import {
   getCurrentOperationalShift,
   getDefaultModalTab,
   toSmartTitleCase,
+  isUnitOffOrToEvdal,
 } from './keteranganUtils';
 
 describe('keteranganUtils - normalizeKeterangan', () => {
@@ -36,15 +37,15 @@ describe('keteranganUtils - normalizeKeterangan', () => {
     expect(normalizeKeterangan('BA.04')).toBe('BA.04');
   });
 
-  it('normalizes BA.02 with NP1 and NP2 options', () => {
+  it('normalizes BA.02 with NP1 and NP2 options, and keeps standalone NP1/NP2 separate from BA.02', () => {
     expect(normalizeKeterangan('BA02 NP1')).toBe('BA.02 NP1');
     expect(normalizeKeterangan('ba 2 np 1')).toBe('BA.02 NP1');
     expect(normalizeKeterangan('BA.02 np-2')).toBe('BA.02 NP2');
-    expect(normalizeKeterangan('np 1')).toBe('BA.02 NP1');
-    expect(normalizeKeterangan('NP-1')).toBe('BA.02 NP1');
-    expect(normalizeKeterangan('NP1')).toBe('BA.02 NP1');
-    expect(normalizeKeterangan('np 2')).toBe('BA.02 NP2');
-    expect(normalizeKeterangan('NP.2')).toBe('BA.02 NP2');
+    expect(normalizeKeterangan('np 1')).toBe('NP1');
+    expect(normalizeKeterangan('NP-1')).toBe('NP1');
+    expect(normalizeKeterangan('NP1')).toBe('NP1');
+    expect(normalizeKeterangan('np 2')).toBe('NP2');
+    expect(normalizeKeterangan('NP.2')).toBe('NP2');
   });
 
   it('normalizes BA codes with follow-up details', () => {
@@ -101,12 +102,12 @@ describe('keteranganUtils - parseKeterangan', () => {
     expect(res.normalized).toBe('BA.01 Pecah Kaca');
   });
 
-  it('parses NP1 and NP2 as BA.02 sub-options', () => {
+  it('parses NP1 and NP2 as standalone notes, or as BA details when specified', () => {
     const res1 = parseKeterangan('np 1');
-    expect(res1.prefix).toBe('BA.02');
+    expect(res1.prefix).toBeNull();
     expect(res1.detail).toBe('NP1');
     expect(res1.isFixed).toBe(false);
-    expect(res1.normalized).toBe('BA.02 NP1');
+    expect(res1.normalized).toBe('NP1');
 
     const res2 = parseKeterangan('BA.02 NP2');
     expect(res2.prefix).toBe('BA.02');
@@ -387,6 +388,84 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(res.isFixed).toBe(true);
       expect(res.fixedValue).toBe('Renop');
       expect(res.normalized).toBe('Renop');
+    });
+  });
+
+  describe('isUnitOffOrToEvdal', () => {
+    it('returns true for pure OFF status in various casings and spaces', () => {
+      expect(isUnitOffOrToEvdal('OFF')).toBe(true);
+      expect(isUnitOffOrToEvdal('off')).toBe(true);
+      expect(isUnitOffOrToEvdal('Off')).toBe(true);
+      expect(isUnitOffOrToEvdal('  OFF  ')).toBe(true);
+    });
+
+    it('returns true for OFF with shift prefixes', () => {
+      expect(isUnitOffOrToEvdal('S1: OFF')).toBe(true);
+      expect(isUnitOffOrToEvdal('S2: OFF')).toBe(true);
+      expect(isUnitOffOrToEvdal('s1: off')).toBe(true);
+      expect(isUnitOffOrToEvdal('s2: off')).toBe(true);
+      expect(isUnitOffOrToEvdal('S1: OFF | S2: OFF')).toBe(true);
+    });
+
+    it('returns true for OFF with note descriptions or parentheses', () => {
+      expect(isUnitOffOrToEvdal('OFF - BAN PECAH')).toBe(true);
+      expect(isUnitOffOrToEvdal('OFF (SPARE)')).toBe(true);
+      expect(isUnitOffOrToEvdal('OFF - RUSAK RADIATOR')).toBe(true);
+    });
+
+    it('returns true for TO EVDAL in various formats and casings', () => {
+      expect(isUnitOffOrToEvdal('TO EVDAL')).toBe(true);
+      expect(isUnitOffOrToEvdal('to evdal')).toBe(true);
+      expect(isUnitOffOrToEvdal('To Evdal')).toBe(true);
+      expect(isUnitOffOrToEvdal('TO-EVDAL')).toBe(true);
+      expect(isUnitOffOrToEvdal('T.O EVDAL')).toBe(true);
+      expect(isUnitOffOrToEvdal('T.O. EVDAL')).toBe(true);
+      expect(isUnitOffOrToEvdal('TO EVDAL (SANKSI)')).toBe(true);
+    });
+
+    it('returns true for TO EVDAL with shift prefixes', () => {
+      expect(isUnitOffOrToEvdal('S1: TO EVDAL')).toBe(true);
+      expect(isUnitOffOrToEvdal('S2: TO EVDAL')).toBe(true);
+      expect(isUnitOffOrToEvdal('s1: to evdal')).toBe(true);
+      expect(isUnitOffOrToEvdal('S1: TO EVDAL | S2: TO EVDAL')).toBe(true);
+    });
+
+    it('returns true for standalone TO / T.O (pure non-operational)', () => {
+      expect(isUnitOffOrToEvdal('TO')).toBe(true);
+      expect(isUnitOffOrToEvdal('T.O')).toBe(true);
+      expect(isUnitOffOrToEvdal('to')).toBe(true);
+      expect(isUnitOffOrToEvdal('t.o')).toBe(true);
+      expect(isUnitOffOrToEvdal('S1: TO')).toBe(true);
+      expect(isUnitOffOrToEvdal('S2: T.O')).toBe(true);
+      expect(isUnitOffOrToEvdal('TO (SANKSI)')).toBe(true);
+    });
+
+    it('returns true if any shift contains OFF or TO EVDAL in multi-shift combination', () => {
+      expect(isUnitOffOrToEvdal('S1: BA.01 Bocor | S2: OFF')).toBe(true);
+      expect(isUnitOffOrToEvdal('S1: OFF | S2: BA.01 Bocor')).toBe(true);
+      expect(isUnitOffOrToEvdal('S1: BA.01 Bocor | S2: TO EVDAL')).toBe(true);
+      expect(isUnitOffOrToEvdal('S1: TO EVDAL | S2: BA.02 NP2')).toBe(true);
+    });
+
+    it('returns false for operating units (SGO, BA notes, OKB, Renop, empty)', () => {
+      expect(isUnitOffOrToEvdal('BA.01 Ban Bocor')).toBe(false);
+      expect(isUnitOffOrToEvdal('BA.02 NP1')).toBe(false);
+      expect(isUnitOffOrToEvdal('BA.02 NP2')).toBe(false);
+      expect(isUnitOffOrToEvdal('OKB')).toBe(false);
+      expect(isUnitOffOrToEvdal('Renop')).toBe(false);
+      expect(isUnitOffOrToEvdal('SGO')).toBe(false);
+      expect(isUnitOffOrToEvdal('Pramudi Meriang')).toBe(false);
+      expect(isUnitOffOrToEvdal('S1: BA.01 Bocor | S2: BA.02 NP2')).toBe(false);
+      expect(isUnitOffOrToEvdal('')).toBe(false);
+      expect(isUnitOffOrToEvdal('   ')).toBe(false);
+      expect(isUnitOffOrToEvdal(null)).toBe(false);
+      expect(isUnitOffOrToEvdal(undefined)).toBe(false);
+    });
+
+    it('does not falsely trigger on words containing off or to as substrings', () => {
+      expect(isUnitOffOrToEvdal('OFFICER TRANSJAKARTA')).toBe(false);
+      expect(isUnitOffOrToEvdal('TOKO SPAREPART')).toBe(false);
+      expect(isUnitOffOrToEvdal('FOTO KERUSAKAN')).toBe(false);
     });
   });
 });

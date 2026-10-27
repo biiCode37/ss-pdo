@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "src/utils/unitAnalytics.ts": {
-    "mtime": 1792392693.0568721,
-    "ast_hash": "25d7d0dc2dbc2f5146d57545b76df6d6",
+    "mtime": 1793102829.48667,
+    "ast_hash": "10c807c5f6c504b18c944abdcadb9ba9",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-06-unit-summary-page-plan.md": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "src/utils/keteranganUtils.test.ts": {
-    "mtime": 1793099169.0754912,
-    "ast_hash": "a735c6a349017b64b4133ec0fff0d95b",
+    "mtime": 1793103097.280965,
+    "ast_hash": "3db19fba5d09b5f6331a51ad068e69dd",
     "semantic_hash": ""
   },
   "src/utils/keteranganUtils.ts": {
-    "mtime": 1793099184.3394477,
-    "ast_hash": "0b1b451c2213aa13f5068b6bbf86a0c3",
+    "mtime": 1793103041.1008463,
+    "ast_hash": "01c1e821ed50bc5a8ec4d850e20e6adc",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-08-23-satset-mode-design.md": {
@@ -1950,8 +1950,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/busListUtils.ts": {
-    "mtime": 1792211138.1158128,
-    "ast_hash": "f489e8ca42b262a954392dfc5782adbd",
+    "mtime": 1793102915.902859,
+    "ast_hash": "f512d3886d8cf62d9530887d34ec7351",
     "semantic_hash": ""
   },
   "src/components/busList/index.ts": {
@@ -1960,8 +1960,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/useBulkOperations.ts": {
-    "mtime": 1792392692.9201667,
-    "ast_hash": "11eb5d78b61a71676ac406c621102970",
+    "mtime": 1793102829.48667,
+    "ast_hash": "34c39daac7282f32a59bd5788f00263a",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_43/AUDIT_BUGS.md": {
@@ -2375,8 +2375,8 @@
     "semantic_hash": ""
   },
   "src/utils/modals/busInput/busModalPreConfirm.ts": {
-    "mtime": 1792211138.26047,
-    "ast_hash": "4ebde5b5c06a9c44626d0a19c7f366e9",
+    "mtime": 1793103213.489264,
+    "ast_hash": "83c9934112df908e80357b393bb76940",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_54/AUDIT_BUGS.md": {
@@ -2480,8 +2480,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/BusList.test.tsx": {
-    "mtime": 1792392692.8994899,
-    "ast_hash": "d848525e9ddbaeba876b294d444e7976",
+    "mtime": 1793102942.0512068,
+    "ast_hash": "9940494504767699b71df4a359c81883",
     "semantic_hash": ""
   },
   "src/components/busList/BusList.tsx": {
@@ -5585,13 +5585,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/notes/KeteranganPresetBar.test.tsx": {
-    "mtime": 1793099318.4795845,
-    "ast_hash": "1e102b0ba0eac1686fef6a141a68c412",
+    "mtime": 1793103022.0057502,
+    "ast_hash": "11e0296abf93bcf87010327c0ed6692d",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/notes/KeteranganPresetBar.tsx": {
-    "mtime": 1793099209.7083824,
-    "ast_hash": "783c43cd17aa653d8183316e573a5fb1",
+    "mtime": 1793102994.7280252,
+    "ast_hash": "e4b8be953169ce194be92810f4e6c988",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-10-27-preset-keterangan-and-shift-split.md": {
@@ -5677,6 +5677,11 @@
   "refactor-ss-pdo/refact_169/REPAIR_REPORT.md": {
     "mtime": 1793099667.0442314,
     "ast_hash": "496a62885270d17eed82a6ae44b03ef7",
+    "semantic_hash": ""
+  },
+  "src/components/busList/busListUtils.test.ts": {
+    "mtime": 1793103338.3224635,
+    "ast_hash": "71fb3aa6bc07920eade33e006f68d68b",
     "semantic_hash": ""
   }
 }

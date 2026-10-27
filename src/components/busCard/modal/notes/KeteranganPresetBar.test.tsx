@@ -96,7 +96,7 @@ describe("KeteranganPresetBar Component", () => {
     expect(pill04).not.toBeNull();
   });
 
-  it("renders NP1 and NP2 shortcut buttons when BA.02 is active", () => {
+  it("does not render NP1 or NP2 shortcut buttons on BA.02 (not statically tied)", () => {
     const handleChange = vi.fn();
     act(() => {
       root.render(<KeteranganPresetBar value="BA.02 " onChange={handleChange} />);
@@ -105,22 +105,12 @@ describe("KeteranganPresetBar Component", () => {
     const np1Btn = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "NP1"
     );
-    expect(np1Btn).toBeDefined();
-
-    act(() => {
-      np1Btn!.click();
-    });
-    expect(handleChange).toHaveBeenCalledWith("BA.02 NP1");
+    expect(np1Btn).toBeUndefined();
 
     const np2Btn = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "NP2"
     );
-    expect(np2Btn).toBeDefined();
-
-    act(() => {
-      np2Btn!.click();
-    });
-    expect(handleChange).toHaveBeenCalledWith("BA.02 NP2");
+    expect(np2Btn).toBeUndefined();
   });
 
   it("replaces BA prefix without removing the existing custom reason when pill 03 is clicked", () => {

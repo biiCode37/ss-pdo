@@ -83,10 +83,6 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
     }
   };
 
-  const handleSelectNp = (np: "NP1" | "NP2") => {
-    onChange(`BA.02 ${np}`);
-  };
-
   const texts = TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS;
 
   return (
@@ -276,67 +272,6 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
               </button>
             );
           })}
-
-          {/* Sub-chips cepat NP1 & NP2 jika jenis BA adalah 02 */}
-          {currentBaCode === "02" && (
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "5px",
-                marginLeft: "auto",
-                paddingLeft: "6px",
-                borderLeft: "1px solid var(--border-color, rgba(255, 255, 255, 0.1))",
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => handleSelectNp("NP1")}
-                style={{
-                  padding: "3px 8px",
-                  borderRadius: "6px",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  border: parsed.detail.trim() === "NP1"
-                    ? "1px solid #10b981"
-                    : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-                  background: parsed.detail.trim() === "NP1"
-                    ? "rgba(16, 185, 129, 0.2)"
-                    : "rgba(255, 255, 255, 0.05)",
-                  color: parsed.detail.trim() === "NP1"
-                    ? "#10b981"
-                    : "var(--text-primary, #f8fafc)",
-                  transition: "all 0.15s ease",
-                }}
-              >
-                {texts.BTN_NP1}
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSelectNp("NP2")}
-                style={{
-                  padding: "3px 8px",
-                  borderRadius: "6px",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  border: parsed.detail.trim() === "NP2"
-                    ? "1px solid #10b981"
-                    : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-                  background: parsed.detail.trim() === "NP2"
-                    ? "rgba(16, 185, 129, 0.2)"
-                    : "rgba(255, 255, 255, 0.05)",
-                  color: parsed.detail.trim() === "NP2"
-                    ? "#10b981"
-                    : "var(--text-primary, #f8fafc)",
-                  transition: "all 0.15s ease",
-                }}
-              >
-                {texts.BTN_NP2}
-              </button>
-            </div>
-          )}
         </div>
       )}
     </div>

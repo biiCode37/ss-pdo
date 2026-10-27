@@ -163,4 +163,28 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     expect(container.querySelector('[data-testid="daily-progress-container"]')).toBeTruthy();
     expect(container.textContent).toContain('Progres Harian');
   });
+
+  it('excludes units with TO EVDAL and shift-prefixed OFF from progress bar target', async () => {
+    const mixedBuses = [
+      createMockBus({ rowIndex: 2, unit: 'JAK.15-01', keterangan: '' }),
+      createMockBus({ rowIndex: 3, unit: 'JAK.15-02', keterangan: 'TO EVDAL' }),
+      createMockBus({ rowIndex: 4, unit: 'JAK.15-03', keterangan: 'S1: OFF' }),
+      createMockBus({ rowIndex: 5, unit: 'JAK.15-04', keterangan: 'S2: TO EVDAL' }),
+    ];
+
+    await act(async () => {
+      root.render(
+        <BusList
+          {...defaultProps}
+          data={mixedBuses}
+          isShiftConfirmed={true}
+          activeShift={1}
+        />
+      );
+    });
+
+    // Dari 4 unit, hanya JAK.15-01 yang dihitung (3 lainnya berstatus OFF / TO EVDAL)
+    expect(container.textContent).toContain('/1 Unit');
+    expect(container.textContent).not.toContain('/4 Unit');
+  });
 });
