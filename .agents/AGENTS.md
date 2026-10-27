@@ -106,6 +106,10 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
   - **Klausul Keselamatan Wajib (Larangan Keputusan Mandiri):**
     - Jika ditemukan kendala/permasalahan dalam proses tugas-tugas itu (seperti merge conflict, test gagal, build gagal, git rejection, atau anomali jaringan), agent **DILARANG KERAS mengambil keputusan sendiri**.
     - Agent **WAJIB memberi konfirmasi kepada pengguna mengenai permasalahan yang ditemukan secara transparan dilengkapi dengan rekomendasi solusi**, lalu menunggu keputusan/arahan pengguna sebelum melanjutkan atau mengulangi tugas yang belum selesai/terganggu/terhenti.
+- **Perintah Cepat "PD" (Push Devmode Saja):**
+  - Ketika pengguna mengatakan/memberikan perintah `"PD"`, itu artinya **Push Devmode Saja**.
+  - Agent **WAJIB** hanya menjalankan perintah `git push origin devmode` langsung dari branch `devmode`.
+  - Agent **DILARANG KERAS menyentuh, checkout, merge, atau push ke branch `main` sama sekali**. Pekerjaan dan branch lokal tetap berada di `devmode`.
 
 ---
 

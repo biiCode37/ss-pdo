@@ -19,6 +19,10 @@ Setiap audit kode atau refactor SS_PDO wajib didokumentasikan di `refactor-ss-pd
    - Ketika pengguna mengatakan/memberikan perintah `"PA"` (Push All), agent wajib menjalankan rangkaian tugas berurutan ini:
      `commit > push devmode > switch branch main > merge devmode ke main > push main` (lalu kembali checkout ke `devmode`).
    - **Klausul Keselamatan Wajib:** Jika ditemukan permasalahan dalam proses tugas-tugas itu, agent **DILARANG KERAS mengambil keputusan sendiri**. Agent **WAJIB memberi konfirmasi kepada pengguna mengenai permasalahan yang ditemukan dilengkapi dengan rekomendasi solusi**, lalu menunggu keputusan pengguna sebelum melanjutkan atau mengulangi tugas yang belum selesai/terganggu/terhenti.
+5. **Perintah Cepat "PD" (Push Devmode Saja):**
+   - Ketika pengguna mengatakan/memberikan perintah `"PD"`, itu artinya **Push Devmode Saja**.
+   - Agent **WAJIB** hanya menjalankan perintah: `git push origin devmode` langsung dari branch `devmode`.
+   - Agent **DILARANG KERAS menyentuh, merge, switch, atau melakukan push ke branch `main` sama sekali**. Branch lokal dan seluruh pekerjaan tetap terisolasi di `devmode`.
 
 ## Standar Kamus Teks Sentral (`src/constants/texts/`)
 
