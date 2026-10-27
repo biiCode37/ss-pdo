@@ -1468,6 +1468,141 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       expect(onSave).toHaveBeenCalled();
     });
   });
+
+  describe("Shift 1 & Shift 2 KeteranganPresetBar Integration", () => {
+    it("renders KeteranganPresetBar inside collapsible notes of Shift 1", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ keterangan: "" })}
+            initialTab="shift1"
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Buka collapsible Catatan di Shift 1
+      const chipCatatan = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN),
+      );
+      expect(chipCatatan).toBeDefined();
+      await act(async () => {
+        chipCatatan!.click();
+      });
+
+      // Preset BA, OFF, TO EVDAL tampil
+      const baBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_BA,
+      );
+      const offBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_OFF,
+      );
+      expect(baBtn).not.toBeNull();
+      expect(offBtn).not.toBeNull();
+      expect(document.body.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT1_NOTE,
+      );
+    });
+
+    it("renders KeteranganPresetBar inside collapsible notes of Shift 2", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ keterangan: "" })}
+            initialTab="shift2"
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Buka collapsible Catatan di Shift 2
+      const chipCatatan = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN),
+      );
+      expect(chipCatatan).toBeDefined();
+      await act(async () => {
+        chipCatatan!.click();
+      });
+
+      // Preset BA, OFF, TO EVDAL tampil
+      const baBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_BA,
+      );
+      expect(baBtn).not.toBeNull();
+      expect(document.body.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT2_NOTE,
+      );
+    });
+
+    it("updates keteranganS1 via preset without modifying keteranganS2", async () => {
+      const onSave = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ keterangan: "" })}
+            initialTab="shift1"
+            onSave={onSave}
+          />,
+        );
+      });
+
+      // 1. Buka catatan Shift 1 dan klik preset [OFF]
+      const chipCatatanS1 = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN),
+      );
+      await act(async () => {
+        chipCatatanS1!.click();
+      });
+
+      const offBtnS1 = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_OFF,
+      );
+      expect(offBtnS1).toBeDefined();
+
+      await act(async () => {
+        offBtnS1!.click();
+      });
+
+      const inputS1 = document.body.querySelector<HTMLTextAreaElement>(
+        "#input-shift1-keterangan",
+      );
+      expect(inputS1?.value).toBe("OFF");
+
+      // 2. Switch ke Shift 2 tab
+      const tabButtons = document.body.querySelectorAll("button");
+      const shift2TabBtn = Array.from(tabButtons).find((b) =>
+        b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_2),
+      );
+      await act(async () => {
+        shift2TabBtn?.click();
+      });
+
+      // Notes collapsible section tetap terbuka, textarea Shift 2 sudah muncul
+      const inputS2 = document.body.querySelector<HTMLTextAreaElement>(
+        "#input-shift2-keterangan",
+      );
+      expect(inputS2).not.toBeNull();
+      // keteranganS2 tetap kosong, tidak ikut berubah menjadi OFF
+      expect(inputS2?.value).toBe("");
+
+      // 3. Simpan dan verifikasi payload menggabungkan kedua shift secara kanonik
+      const formEl = document.body.querySelector("form");
+      await act(async () => {
+        formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      });
+
+      expect(onSave).toHaveBeenCalled();
+      const savedUpdates = onSave.mock.calls[0][0];
+      // S1: OFF, S2: kosong -> canonical combine: "OFF | SGO"
+      expect(savedUpdates.keterangan).toBe("OFF | SGO");
+    });
+  });
 });
 
 
