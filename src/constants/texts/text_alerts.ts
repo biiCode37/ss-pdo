@@ -247,8 +247,8 @@ export const TEXT_ALERTS = {
       BTN_BA: "BA",
       BTN_OFF: "OFF",
       BTN_TO_EVDAL: "TO EVDAL",
-      BTN_CLEAR: "Normal (SGO)",
-      SELECT_BA_DEFAULT: "-- Pilih Jenis BA --",
+      EMPTY_PREVIEW: "- (Tanpa Catatan)",
+      BA_CODES: ["01", "02", "03", "04"],
       BA_TYPES: {
         "01": "01 - Gangguan Kendaraan / Teknis",
         "02": "02 - Kendala Pramudi / Layanan",

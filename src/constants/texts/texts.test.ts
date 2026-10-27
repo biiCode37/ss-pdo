@@ -494,8 +494,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect(modalTexts.PRESETS.BTN_BA).toBe('BA');
     expect(modalTexts.PRESETS.BTN_OFF).toBe('OFF');
     expect(modalTexts.PRESETS.BTN_TO_EVDAL).toBe('TO EVDAL');
-    expect(modalTexts.PRESETS.BTN_CLEAR).toBe('Normal (SGO)');
-    expect(modalTexts.PRESETS.SELECT_BA_DEFAULT).toBe('-- Pilih Jenis BA --');
+    expect(modalTexts.PRESETS.EMPTY_PREVIEW).toBe('- (Tanpa Catatan)');
+    expect(modalTexts.PRESETS.BA_CODES).toEqual(['01', '02', '03', '04']);
     expect(modalTexts.PRESETS.BA_TYPES['01']).toContain('01');
     expect(modalTexts.PRESETS.BA_TYPES['02']).toContain('02');
     expect(modalTexts.PRESETS.BA_TYPES['03']).toContain('03');

@@ -22,14 +22,14 @@ describe("KeteranganPresetBar Component", () => {
     container.remove();
   });
 
-  it("renders preset buttons: BA, OFF, TO EVDAL, and Normal", () => {
+  it("renders preset buttons: BA, OFF, and TO EVDAL without Normal (SGO)", () => {
     act(() => {
       root.render(<KeteranganPresetBar value="" onChange={vi.fn()} />);
     });
     expect(container.textContent).toContain("BA");
     expect(container.textContent).toContain("OFF");
     expect(container.textContent).toContain("TO EVDAL");
-    expect(container.textContent).toContain("Normal (SGO)");
+    expect(container.textContent).not.toContain("Normal (SGO)");
   });
 
   it("renders shiftLabel when provided", () => {
@@ -45,7 +45,7 @@ describe("KeteranganPresetBar Component", () => {
     expect(container.textContent).toContain("Catatan Shift 1");
   });
 
-  it("activates dropdown Pilih Jenis BA when BA button is clicked", () => {
+  it("activates compact BA pills [01, 02, 03, 04] when BA button is clicked", () => {
     const handleChange = vi.fn();
     act(() => {
       root.render(<KeteranganPresetBar value="" onChange={handleChange} />);
@@ -80,15 +80,20 @@ describe("KeteranganPresetBar Component", () => {
     expect(handleChange).toHaveBeenCalledWith("Radiator bocor");
   });
 
-  it("renders dropdown with options 01, 02, 03, 04 when value starts with BA", () => {
+  it("renders compact pills 01, 02, 03, 04 when value starts with BA", () => {
     act(() => {
       root.render(<KeteranganPresetBar value="BA.01 Radiator" onChange={vi.fn()} />);
     });
 
-    const select = container.querySelector<HTMLSelectElement>("select");
-    expect(select).not.toBeNull();
-    expect(select?.value).toBe("01");
-    expect(container.textContent).toContain("01 - Gangguan Kendaraan / Teknis");
+    const pill01 = container.querySelector<HTMLButtonElement>("button[data-ba-code='01']");
+    const pill02 = container.querySelector<HTMLButtonElement>("button[data-ba-code='02']");
+    const pill03 = container.querySelector<HTMLButtonElement>("button[data-ba-code='03']");
+    const pill04 = container.querySelector<HTMLButtonElement>("button[data-ba-code='04']");
+
+    expect(pill01).not.toBeNull();
+    expect(pill02).not.toBeNull();
+    expect(pill03).not.toBeNull();
+    expect(pill04).not.toBeNull();
   });
 
   it("renders NP1 and NP2 shortcut buttons when BA.02 is active", () => {
@@ -118,18 +123,17 @@ describe("KeteranganPresetBar Component", () => {
     expect(handleChange).toHaveBeenCalledWith("BA.02 NP2");
   });
 
-  it("replaces BA prefix without removing the existing custom reason when dropdown changes", () => {
+  it("replaces BA prefix without removing the existing custom reason when pill 03 is clicked", () => {
     const handleChange = vi.fn();
     act(() => {
       root.render(<KeteranganPresetBar value="BA.01 Radiator bocor" onChange={handleChange} />);
     });
 
-    const select = container.querySelector<HTMLSelectElement>("select");
-    expect(select).not.toBeNull();
+    const pill03 = container.querySelector<HTMLButtonElement>("button[data-ba-code='03']");
+    expect(pill03).not.toBeNull();
 
     act(() => {
-      select!.value = "03";
-      select!.dispatchEvent(new Event("change", { bubbles: true }));
+      pill03!.click();
     });
 
     expect(handleChange).toHaveBeenCalledWith("BA.03 Radiator bocor");
@@ -185,21 +189,6 @@ describe("KeteranganPresetBar Component", () => {
     );
     act(() => {
       evdalBtnActive!.click();
-    });
-    expect(handleChange).toHaveBeenCalledWith("");
-  });
-
-  it("clears value to empty string when Normal button is clicked", () => {
-    const handleChange = vi.fn();
-    act(() => {
-      root.render(<KeteranganPresetBar value="BA.01 Mogok" onChange={handleChange} />);
-    });
-
-    const clearBtn = Array.from(container.querySelectorAll("button")).find(
-      (b) => b.textContent?.includes("Normal")
-    );
-    act(() => {
-      clearBtn!.click();
     });
     expect(handleChange).toHaveBeenCalledWith("");
   });

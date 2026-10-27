@@ -262,7 +262,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             wordBreak: "break-all",
           }}
         >
-          {combinedPreview || texts.PRESETS.BTN_CLEAR}
+          {combinedPreview || texts.PRESETS.EMPTY_PREVIEW}
         </div>
       </div>
     </div>
