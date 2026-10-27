@@ -19,6 +19,7 @@ describe("BusInputModalSingleFocus Component", () => {
   const createMockForm = (overrides: Partial<BusInputFormReturn> = {}): BusInputFormReturn => ({
     isSingleMode: true,
     isSingleColumnEligible: true,
+    activeCategory: "toaShift1",
     isExpandedAll: false,
     setIsExpandedAll: vi.fn(),
     activeTab: "shift1",

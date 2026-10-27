@@ -1,5 +1,6 @@
 import React from "react";
 import { TEXT_ALERTS } from "@/constants/texts";
+import { KeteranganPresetBar } from "../notes/KeteranganPresetBar";
 import type { BusInputFormReturn } from "../useBusInputForm";
 
 interface SingleFocusNotesProps {
@@ -7,7 +8,39 @@ interface SingleFocusNotesProps {
 }
 
 export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
-  const { keterangan, setKeterangan, handleInputFocus } = form;
+  const {
+    keteranganS1,
+    setKeteranganS1,
+    keteranganS2,
+    setKeteranganS2,
+    keterangan,
+    setKeterangan,
+    handleInputFocus,
+  } = form;
+
+  const isShift2 = Boolean(
+    (form.activeCategory && form.activeCategory.toLowerCase().includes("2")) ||
+    (form.effectiveCategory && form.effectiveCategory.toLowerCase().includes("2"))
+  );
+
+  const shiftLabel = isShift2
+    ? TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT2_NOTE
+    : TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT1_NOTE;
+
+  const currentNote = isShift2
+    ? (keteranganS2 ?? keterangan ?? "")
+    : (keteranganS1 || keterangan || "");
+
+  const handleNoteChange = (val: string) => {
+    if (isShift2) {
+      if (setKeteranganS2) setKeteranganS2(val);
+    } else {
+      if (setKeteranganS1) setKeteranganS1(val);
+    }
+    if (setKeterangan) {
+      setKeterangan(val);
+    }
+  };
 
   return (
     <div
@@ -16,6 +49,11 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
         borderTop: "1px dashed var(--card-border, rgba(0, 0, 0, 0.1))",
       }}
     >
+      <KeteranganPresetBar
+        value={currentNote}
+        onChange={handleNoteChange}
+        shiftLabel={shiftLabel}
+      />
       <label
         htmlFor="single-input-keterangan"
         style={{
@@ -31,10 +69,11 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
       <textarea
         id="single-input-keterangan"
         rows={3}
-        value={keterangan}
-        onChange={(e) => setKeterangan(e.target.value)}
+        value={currentNote}
+        onChange={(e) => handleNoteChange(e.target.value)}
         onFocus={handleInputFocus}
         placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_PLACEHOLDER}
+        aria-label={shiftLabel}
         style={{
           width: "100%",
           padding: "10px 12px",
@@ -45,6 +84,7 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
           fontSize: "0.9rem",
           boxSizing: "border-box",
           resize: "none",
+          fontFamily: "inherit",
         }}
       />
     </div>

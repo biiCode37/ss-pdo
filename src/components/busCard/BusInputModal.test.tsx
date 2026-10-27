@@ -1396,9 +1396,9 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       const textarea = document.body.querySelector<HTMLTextAreaElement>("#input-keterangan");
       expect(textarea).not.toBeNull();
 
-      // Pastikan tidak ada tombol pill/chip cepat status (SGO, AP, TO, dsb.)
+      // Pastikan tidak ada tombol pill/chip cepat status obsolete (AP, TO dsb.)
       const pillButtons = Array.from(document.body.querySelectorAll("button")).filter(
-        (btn) => ["SGO", "AP", "TO", "BA", "OFF"].includes(btn.textContent?.trim() || "")
+        (btn) => ["AP", "TO"].includes(btn.textContent?.trim() || "")
       );
       expect(pillButtons.length).toBe(0);
 
@@ -1601,6 +1601,186 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       const savedUpdates = onSave.mock.calls[0][0];
       // S1: OFF, S2: kosong -> canonical combine: "OFF | SGO"
       expect(savedUpdates.keterangan).toBe("OFF | SGO");
+    });
+  });
+
+  describe("Tab Catatan & Single Focus KeteranganPresetBar Integration (Task 5)", () => {
+    it("renders segmented shift selector, preset bar, and live SSOT preview in Tab Catatan", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ keterangan: "BA.01 Ban bocor | SGO" })}
+            initialTab="notes"
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // 1. Cek keberadaan preview SSOT
+      expect(document.body.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.PREVIEW_SSOT_LABEL,
+      );
+      expect(document.body.textContent).toContain("BA.01 Ban bocor | SGO");
+
+      // 2. Cek segmented selector tombol Shift 1 dan Shift 2
+      const shiftButtons = Array.from(document.body.querySelectorAll("button")).filter(
+        (b) =>
+          b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.TAB_SHIFT_1 ||
+          b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.TAB_SHIFT_2,
+      );
+      expect(shiftButtons.length).toBeGreaterThanOrEqual(2);
+
+      // 3. Cek toggle "Terapkan ke Kedua Shift"
+      expect(document.body.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.APPLY_ALL_SHIFTS,
+      );
+
+      // 4. Cek preset buttons
+      const baBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_BA,
+      );
+      expect(baBtn).toBeDefined();
+    });
+
+    it("switches active shift in Tab Catatan and updates notes independently", async () => {
+      const onSave = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ keterangan: "" })}
+            initialTab="notes"
+            onSave={onSave}
+          />,
+        );
+      });
+
+      // Default active note shift adalah Shift 1. Klik preset OFF
+      const offBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_OFF,
+      );
+      expect(offBtn).toBeDefined();
+      await act(async () => {
+        offBtn!.click();
+      });
+
+      // Preview harus berubah menjadi "OFF | SGO"
+      expect(document.body.textContent).toContain("OFF | SGO");
+
+      // Beralih ke Shift 2 di segmented switch
+      const segmentedButtons = Array.from(
+        document.body.querySelectorAll("button"),
+      ).filter(
+        (b) => b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.TAB_SHIFT_2),
+      );
+      // Temukan segmented button di dalam tab catatan
+      const s2SegmentBtn = segmentedButtons[segmentedButtons.length - 1];
+      await act(async () => {
+        s2SegmentBtn.click();
+      });
+
+      // Klik preset TO EVDAL pada Shift 2
+      const toEvdalBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_TO_EVDAL,
+      );
+      await act(async () => {
+        toEvdalBtn!.click();
+      });
+
+      // Preview harus berubah menjadi "OFF | TO EVDAL"
+      expect(document.body.textContent).toContain("OFF | TO EVDAL");
+
+      // Submit modal dan pastikan payload kanonik
+      const formEl = document.body.querySelector("form");
+      await act(async () => {
+        formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      });
+
+      expect(onSave).toHaveBeenCalled();
+      expect(onSave.mock.calls[0][0].keterangan).toBe("OFF | TO EVDAL");
+    });
+
+    it("updates both shifts simultaneously when 'Terapkan ke Kedua Shift' is checked", async () => {
+      const onSave = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ keterangan: "" })}
+            initialTab="notes"
+            onSave={onSave}
+          />,
+        );
+      });
+
+      // Cari checkbox "Terapkan ke Kedua Shift"
+      const checkbox = document.body.querySelector<HTMLInputElement>(
+        'input[type="checkbox"]#toggle-apply-all-shifts',
+      );
+      expect(checkbox).not.toBeNull();
+      await act(async () => {
+        checkbox!.click();
+      });
+
+      // Klik preset OFF
+      const offBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_OFF,
+      );
+      await act(async () => {
+        offBtn!.click();
+      });
+
+      // Preview harus "OFF" (karena kedua shift sama persis)
+      expect(document.body.textContent).toContain("OFF");
+
+      // Simpan dan periksa payload
+      const formEl = document.body.querySelector("form");
+      await act(async () => {
+        formEl?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      });
+
+      expect(onSave).toHaveBeenCalled();
+      expect(onSave.mock.calls[0][0].keterangan).toBe("OFF");
+    });
+
+    it("renders KeteranganPresetBar connected to shift note in Single Focus mode", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ keterangan: "BA.01 Gangguan" })}
+            activeCategory="toaShift1"
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      // Buka chip + Catatan pada mode single focus
+      const chipCatatan = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN),
+      );
+      expect(chipCatatan).toBeDefined();
+      await act(async () => {
+        chipCatatan!.click();
+      });
+
+      // KeteranganPresetBar harus tampil di Single Focus
+      const baBtn = Array.from(document.body.querySelectorAll("button")).find(
+        (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_BA,
+      );
+      expect(baBtn).toBeDefined();
+      expect(baBtn?.textContent?.trim()).toBe(TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_BA);
+
+      const textarea = document.body.querySelector<HTMLTextAreaElement>(
+        "#single-input-keterangan",
+      );
+      expect(textarea).not.toBeNull();
+      expect(textarea?.value).toBe("BA.01 Gangguan");
     });
   });
 });

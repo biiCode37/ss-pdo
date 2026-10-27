@@ -512,6 +512,7 @@ export function useBusInputForm({
   return {
     isSingleMode,
     isSingleColumnEligible,
+    activeCategory,
     isExpandedAll,
     setIsExpandedAll,
     activeTab,
