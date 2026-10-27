@@ -168,7 +168,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_BAR_TITLE('JAK.01', '1.200')).toBe('JAK.01: 1.200 TOA');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_EXPAND_BTN(18)).toBe('Lihat Semua (18 Rute)');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_COLLAPSE_BTN).toBe('Tampilkan Top 5 Saja');
-    expect((TEXT_MONITORING as any).FLEET_TAB.TITLE).toBe('Status Armada Wilayah (Non-SGO)');
+    expect((TEXT_MONITORING as any).FLEET_TAB.TITLE).toBe('Status Kesiapan Armada Wilayah');
     expect((TEXT_MONITORING as any).FLEET_TAB.NO_DATA_TITLE).toBe('Belum Ada Data Status Armada');
     expect(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE).toBe('Kembali ke Operasi Rute');
     expect(TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PASSENGERS_SUFFIX).toBe('Org');
@@ -396,8 +396,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_FLEET_STATUS.MODAL.TARGET_RENOPS(60)).toBe('Target Renops: 60 Unit');
     expect(TEXT_FLEET_STATUS.MODAL.SHIFT_1_TAB).toContain('Shift 1');
     expect(TEXT_FLEET_STATUS.MODAL.SHIFT_2_TAB).toContain('Shift 2');
-    expect(TEXT_FLEET_STATUS.MODAL.SGO_ALL_BTN).toBe('SGO Semua Unit');
-    expect(TEXT_FLEET_STATUS.STATUS_CODES.SGO).toBe('SGO');
+        expect(TEXT_FLEET_STATUS.STATUS_CODES.SGO).toBe('SGO');
     expect(TEXT_FLEET_STATUS.STATUS_CODES.OFF).toBe('OFF');
     expect(TEXT_FLEET_STATUS.STATUS_CODES.TO).toBe('T.O');
     expect(TEXT_FLEET_STATUS.STATUS_CODES.SO).toBe('SO');

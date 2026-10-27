@@ -12,12 +12,10 @@ export const TEXT_FLEET_STATUS = {
     CLOSE_TITLE: 'Tutup',
     SHIFT_1_TAB: 'Shift 1 (Pagi)',
     SHIFT_2_TAB: 'Shift 2 (Siang)',
-    SGO_ALL_BTN: 'SGO Semua Unit',
     SAVING: 'Menyimpan Status Armada...',
     CONFIRM_CONTINUE_REPORT: 'Konfirmasi & Terapkan Status',
     CONFIRM_APPLY_SHIFT: (shift: number) => `Konfirmasi & Terapkan Status Shift ${shift}`,
     APPLY_STATUS_TITLE: (brush: string) => `Klik untuk menerapkan status ${brush}`,
-    SGO_FULL_LABEL: 'Siap Guna Operasi',
     LOCK_BANNER_MESSAGE: (shift: number) =>
       `Pengingat: Status armada Shift ${shift} belum dikonfirmasi. Anda tetap dapat mengisi data, namun disarankan untuk segera mengonfirmasi status armada.`,
     LOCK_CARD_TOOLTIP:

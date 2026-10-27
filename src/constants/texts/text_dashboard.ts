@@ -259,12 +259,6 @@ export const TEXT_DASHBOARD = {
   BUS_CARD_ACTIONS: {
     UNCONFIRMED_BADGE: '⚠️ Belum Konfirmasi',
     UNIT_STATUS_TOOLTIP: (status: string) => `Status unit: ${status}`,
-    SGO_CONFIRM_TITLE: 'Konfirmasi Operasional Bus',
-    SGO_CONFIRM_HTML: (unit: string, ket: string) =>
-      `Unit <strong>${unit}</strong> saat ini berstatus <strong>${ket}</strong>.<br><br>Apakah unit ini dioperasikan (SGO)?`,
-    SGO_CONFIRM_BTN: 'Jadikan SGO & Buka Form',
-    SGO_CANCEL_INPUT_BTN: 'Tetap Lanjut Input',
-    SGO_DENY_BTN: 'Batal',
     RITASE_DEFICIT_TOOLTIP: (p: string | number, q: string | number, tp: number, tq: number) =>
       `Kurang Ritase: ${p}/${q} Rit (Target Rute: ${tp}/${tq} Rit). Klik untuk edit Trip.`,
     FULL_TARGET_TOOLTIP: (p: string | number, q: string | number, tp: number, tq: number) =>
