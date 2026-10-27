@@ -135,30 +135,57 @@ describe("useDashboardSyncHandlers Hook", () => {
     expect(setIsReauthenticating).toHaveBeenCalledWith(false);
   });
 
-  it("selects monitoring route and switches to dashboard view", () => {
+  it("selects monitoring route and switches to dashboard view", async () => {
+    const setSelectedRouteCode = vi.fn();
     vi.mocked(cacheUtils.getRoutesFromCache).mockReturnValue([
       {
         route_code: "4E",
         name: "Rute 4E",
         route_sheets: [
-          { sheet_url: "https://docs.google.com/spreadsheets/d/abc" },
+          {
+            sheet_url: "https://docs.google.com/spreadsheets/d/abc",
+            year: 2026,
+            month: 9,
+          },
         ],
       } as any,
     ]);
 
     act(() => {
-      root.render(<TestHookComponent options={defaultProps} />);
+      root.render(
+        <TestHookComponent
+          options={{
+            ...defaultProps,
+            setSelectedRouteCode,
+          }}
+        />,
+      );
     });
 
-    act(() => {
-      latestHandlers.handleSelectMonitoringRoute("4E");
+    await act(async () => {
+      await latestHandlers.handleSelectMonitoringRoute("4E");
     });
 
+    expect(setSelectedRouteCode).toHaveBeenCalledWith("4E");
     expect(handleSetSheetUrl).toHaveBeenCalledWith(
       "https://docs.google.com/spreadsheets/d/abc",
     );
     expect(handleSetSelectedTab).toHaveBeenCalledWith("9");
     expect(setCurrentView).toHaveBeenCalledWith("dashboard");
+    expect(handleLoadData).toHaveBeenCalledWith(
+      true,
+      "9",
+      "https://docs.google.com/spreadsheets/d/abc",
+    );
+    expect(
+      JSON.parse(localStorage.getItem("PDO_LAST_VISITED") || "{}"),
+    ).toEqual({
+      sheetUrl: "https://docs.google.com/spreadsheets/d/abc",
+      selectedTab: "9",
+      routeCode: "4E",
+      month: 9,
+      year: 2026,
+    });
   });
 
   it("formats whole sheet successfully", async () => {

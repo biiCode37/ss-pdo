@@ -6,6 +6,8 @@ import type { BusInputFormReturn } from "./useBusInputForm";
 import { AlertTriangle, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
 import { ShiftOptionChip } from "./fields/ShiftOptionChip";
+import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
+import { normalizeKeterangan } from "@/utils/keteranganUtils";
 
 interface BusInputModalShift1Props {
   form: BusInputFormReturn;
@@ -28,8 +30,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
     setKmAkhir1,
     kmDistanceS1,
     kmLiveS1,
-    keterangan,
-    setKeterangan,
+    keteranganS1,
+    setKeteranganS1,
     showKeterangan,
     setShowKeterangan,
     handleInputFocus,
@@ -420,23 +422,18 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
           }}
         >
-          <label
-            htmlFor="input-shift1-keterangan"
-            style={{
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              color: "var(--text-secondary, #94a3b8)",
-              display: "block",
-              marginBottom: "4px",
-            }}
-          >
-            {TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_LABEL}
-          </label>
+          <KeteranganPresetBar
+            value={keteranganS1}
+            onChange={setKeteranganS1}
+            shift={1}
+            shiftLabel={TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT1_NOTE}
+          />
           <textarea
             id="input-shift1-keterangan"
             rows={2}
-            value={keterangan}
-            onChange={(e) => setKeterangan(e.target.value)}
+            value={keteranganS1}
+            onChange={(e) => setKeteranganS1(e.target.value)}
+            onBlur={() => setKeteranganS1(normalizeKeterangan(keteranganS1))}
             onFocus={handleInputFocus}
             placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_PLACEHOLDER}
             style={{
@@ -451,6 +448,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               resize: "none",
               fontFamily: "inherit",
             }}
+            aria-label={TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT1_NOTE}
           />
         </div>
       )}

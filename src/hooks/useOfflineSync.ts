@@ -50,18 +50,30 @@ function writeQueueToStorage(queue: SyncItem[]): void {
 import { isAuthError, isNetworkError } from '../utils/errorClassifier';
 export { isNetworkError };
 
+/**
+ * Kolom-kolom yang dihitung otomatis oleh formula spreadsheet (SSOT).
+ * Kolom ini TIDAK BOLEH disertakan dalam deteksi tabrakan offline (UX-154-02),
+ * karena perubahan nilai akibat evaluasi rumus spreadsheet bukan merupakan
+ * konflik perubahan data pengguna manual (mencegah false-positive collision).
+ */
+const FORMULA_FIELDS: ReadonlySet<keyof BusData> = new Set<keyof BusData>([
+  'toaShift2',
+]);
+
 /** Deteksi collision: bandingkan data server dengan snapshot asli secara ter-normalisasi pada kolom yang diubah */
-function detectCollision(
+export function detectCollision(
   remoteData: Partial<BusData>,
   originalSnapshot: Partial<BusData>
 ): boolean {
   const snapshotKeys = Object.keys(originalSnapshot) as (keyof BusData)[];
-  const fieldsToCheck: (keyof BusData)[] = snapshotKeys.length > 0
+  const rawFields: (keyof BusData)[] = snapshotKeys.length > 0
     ? snapshotKeys
     : [
-        'toaShift1', 'toaShift2', 'manualShift1', 'manualShift2', 'totalToa',
+        'toaShift1', 'manualShift1', 'manualShift2', 'totalToa',
         'kmAwal1', 'kmAkhir1', 'kmAwal2', 'kmAkhir2', 'keterangan'
       ];
+
+  const fieldsToCheck = rawFields.filter(f => !FORMULA_FIELDS.has(f));
 
   for (const field of fieldsToCheck) {
     const remoteNorm = normalizeFieldValue(remoteData[field]);

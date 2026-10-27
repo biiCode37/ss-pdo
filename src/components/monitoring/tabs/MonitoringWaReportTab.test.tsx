@@ -202,4 +202,95 @@ describe("MonitoringWaReportTab Component", () => {
       "_blank"
     );
   });
+
+  it("switches to Format 3 and displays route fleet status with unit details and fallbacks", async () => {
+    const dataWithFleetIssues: RegionalMonitoringResult = {
+      ...mockData,
+      routes: [
+        {
+          ...mockData.routes[0],
+          routeCode: "JAK.01",
+          renopsShift1: 10,
+          realopsShift1: 8,
+          operationalIssues: "Jalan macet di simpang Enggano",
+          fleetStatusShift1: [
+            { unit: "MB-001", note: "Mogok radiator bocor", isOff: false },
+            { unit: "MB-002", note: "Libur berkala", isOff: true },
+            { unit: "MB-003", note: "Tukar shift 2", isOff: false, isOperatingWithNote: true },
+          ],
+        },
+      ],
+    };
+
+    await act(async () => {
+      root.render(
+        <MonitoringWaReportTab
+          data={dataWithFleetIssues}
+          selectedDate="2026-09-21"
+        />
+      );
+    });
+
+    const format3Btn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="format-tab-3"]'
+    );
+    expect(format3Btn).toBeTruthy();
+
+    await act(async () => {
+      format3Btn?.click();
+    });
+
+    const previewBox = container.querySelector('[data-testid="wa-preview-box"]');
+    const text = previewBox?.textContent || "";
+
+    expect(text).toContain("STATUS KESIAPAN ARMADA");
+    expect(text).toContain("1 (Pagi)");
+    expect(text).toContain("TIDAK LENGKAP");
+    expect(text).toContain("MB-001");
+    expect(text).toContain("Mogok radiator bocor");
+    expect(text).toContain("MB-002");
+    expect(text).toContain("Libur berkala");
+    expect(text).toContain("MB-003");
+    expect(text).toContain("Tukar shift 2");
+    expect(text).toContain("Catatan Operasional Rute");
+    expect(text).toContain("Jalan macet di simpang Enggano");
+  });
+
+  it("switches to Format 3 and displays fallback when route is incomplete but lacks unit details", async () => {
+    const dataIncompleteNoUnits: RegionalMonitoringResult = {
+      ...mockData,
+      routes: [
+        {
+          ...mockData.routes[0],
+          routeCode: "JAK.15",
+          renopsShift1: 12,
+          realopsShift1: 10,
+          fleetStatusShift1: [],
+        },
+      ],
+    };
+
+    await act(async () => {
+      root.render(
+        <MonitoringWaReportTab
+          data={dataIncompleteNoUnits}
+          selectedDate="2026-09-21"
+        />
+      );
+    });
+
+    const format3Btn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="format-tab-3"]'
+    );
+    await act(async () => {
+      format3Btn?.click();
+    });
+
+    const previewBox = container.querySelector('[data-testid="wa-preview-box"]');
+    const text = previewBox?.textContent || "";
+
+    expect(text).toContain("JAK.15");
+    expect(text).toContain("TIDAK LENGKAP");
+    expect(text).toContain("Rincian unit belum dilengkapi (-2 unit)");
+  });
 });

@@ -6,6 +6,7 @@ import { TEXT_MONITORING } from "@/constants/texts";
 import { showConfirmDialog } from "@/utils/alertUtils";
 import { MonitoringRouteCardModern } from "./MonitoringRouteCardModern";
 import { MonitoringRouteDetailModal } from "../modals/MonitoringRouteDetailModal";
+import { sortRoutesByCode } from "@/utils/routeSorting";
 
 export interface MonitoringRoutesTabProps {
   routes: RegionalRouteItem[];
@@ -33,7 +34,17 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilterType>("all");
   const [selectedSupervisor, setSelectedSupervisor] = useState<string>("all");
-  const [selectedRouteForModal, setSelectedRouteForModal] = useState<RegionalRouteItem | null>(null);
+  const [selectedRouteCodeForModal, setSelectedRouteCodeForModal] = useState<string | null>(null);
+
+  // Derived selected route dari data terbaru agar reaktif realtime
+  const selectedRouteForModal = useMemo(() => {
+    if (!selectedRouteCodeForModal) return null;
+    return (
+      routes.find(
+        (r) => r.routeCode.toLowerCase() === selectedRouteCodeForModal.toLowerCase()
+      ) || null
+    );
+  }, [routes, selectedRouteCodeForModal]);
 
   // Submitted routes ready for bulk verification
   const submittedRoutes = useMemo(() => {
@@ -50,9 +61,9 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
     return { all: routes.length, submitted, verified, uncompleted };
   }, [routes]);
 
-  // Filtered routes list
+  // Filtered routes list (selalu terurut abjad natural)
   const filteredRoutes = useMemo(() => {
-    return routes.filter((route) => {
+    const list = routes.filter((route) => {
       // Search query filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
@@ -84,6 +95,8 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
 
       return true;
     });
+
+    return sortRoutesByCode(list);
   }, [routes, searchQuery, statusFilter, selectedSupervisor]);
 
   const handleBulkVerifyClick = async () => {
@@ -338,7 +351,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
           </button>
         </div>
 
-        {/* Korlap Filter Chips */}
+        {/* Korwil Filter Chips */}
         <div
           className="no-scrollbar"
           style={{
@@ -362,7 +375,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             }}
           >
             <Filter size={12} />
-            <span>{TEXT_MONITORING.ROUTES_TAB.KORLAP_LABEL}</span>
+            <span>{TEXT_MONITORING.ROUTES_TAB.KORWIL_LABEL}</span>
           </div>
 
           <button
@@ -387,7 +400,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               flexShrink: 0,
             }}
           >
-            {TEXT_MONITORING.ROUTES_TAB.KORLAP_ALL}
+            {TEXT_MONITORING.ROUTES_TAB.KORWIL_ALL}
           </button>
 
           {SUPERVISORS.map((spv) => (
@@ -448,7 +461,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             <MonitoringRouteCardModern
               key={route.routeCode}
               route={route}
-              onCardClick={(r) => setSelectedRouteForModal(r)}
+              onCardClick={(r) => setSelectedRouteCodeForModal(r.routeCode)}
               onVerify={onVerifyRoute}
               onSelectRoute={onSelectRoute}
               onSyncRoute={onSyncRoute}
@@ -463,9 +476,9 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
       <MonitoringRouteDetailModal
         route={selectedRouteForModal}
         isOpen={!!selectedRouteForModal}
-        onClose={() => setSelectedRouteForModal(null)}
+        onClose={() => setSelectedRouteCodeForModal(null)}
         onSelectRoute={(code) => {
-          setSelectedRouteForModal(null);
+          setSelectedRouteCodeForModal(null);
           onSelectRoute?.(code);
         }}
         onVerifyRoute={(id, status) => {

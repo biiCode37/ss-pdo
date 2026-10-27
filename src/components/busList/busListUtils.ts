@@ -1,5 +1,5 @@
 import type { BusData } from "@/services/googleSheets";
-import { splitShiftKeterangan, cleanShiftNote } from "@/utils/keteranganUtils";
+import { splitShiftKeterangan, cleanShiftNote, isUnitOffOrToEvdal } from "@/utils/keteranganUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
 export const BUS_CATEGORIES = [
@@ -15,8 +15,14 @@ export const BUS_CATEGORIES = [
 
 /**
  * Menentukan apakah unit diperbolehkan untuk diinput datanya berdasarkan status armada (SGO)
+ * dan secara ketat mengecualikan unit yang memiliki status/keterangan OFF atau TO EVDAL dari target bar progres.
  */
 export function isUnitAllowedForInput(bus: BusData, activeCategory: string): boolean {
+  // Unit yang memiliki keterangan OFF atau TO EVDAL tidak masuk ke target bar progres
+  if (isUnitOffOrToEvdal(bus.keterangan)) {
+    return false;
+  }
+
   const { s1, s2 } = splitShiftKeterangan(bus.keterangan);
   const isSgoS1 = !cleanShiftNote(s1);
   const isSgoS2 = !cleanShiftNote(s2);
@@ -30,8 +36,9 @@ export function isUnitAllowedForInput(bus: BusData, activeCategory: string): boo
     return isSgoS1;
   }
 
-  // Kategori khusus Shift 2: hanya unit yang berstatus SGO di Shift 2
+  // Kategori khusus Shift 2: hanya unit yang berstatus SGO di Shift 2 (termasuk totalToa / toaShift2)
   if (
+    activeCategory === "totalToa" ||
     activeCategory === "toaShift2" ||
     activeCategory === "kmAwal2" ||
     activeCategory === "kmAkhir2"
@@ -47,6 +54,9 @@ export function isUnitAllowedForInput(bus: BusData, activeCategory: string): boo
  * Logic kelengkapan data unit bergantung pada kategori yang aktif dan status operasional unit
  */
 export function isBusFilled(bus: BusData, activeCategory: string): boolean {
+  // Unit yang berstatus OFF atau TO EVDAL tidak perlu diisi (dianggap selesai/diabaikan)
+  if (isUnitOffOrToEvdal(bus.keterangan)) return true;
+
   const hasValue = (val: any) =>
     val !== undefined && val !== null && String(val).trim() !== "";
 

@@ -6,6 +6,7 @@ import {
 } from '@/utils/bulkRouteInspector';
 import { createBulkRoutesWithSheets } from '@/services/routeService';
 import { TEXT_DASHBOARD } from '@/constants/texts';
+import { sortRoutesByCode } from '@/utils/routeSorting';
 import type { FlatRouteSheet } from './types';
 
 interface UseBulkRouteFormOptions {
@@ -62,7 +63,7 @@ export function useBulkRouteForm({
         }
       );
 
-      setBulkItems(results);
+      setBulkItems(sortRoutesByCode(results));
     } catch (err: any) {
       setBulkFormError(err?.message || 'Gagal memeriksa daftar spreadsheet.');
     } finally {

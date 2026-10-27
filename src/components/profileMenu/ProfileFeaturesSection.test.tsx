@@ -67,15 +67,13 @@ describe("ProfileFeaturesSection Navigation Toggle", () => {
     expect(onOpenRegionalMonitoring).toHaveBeenCalledTimes(1);
   });
 
-  it("renders 'Kembali ke Operasi Rute' when isInMonitoringView is true", async () => {
-    const onReturnToRouteView = vi.fn();
+  it("does not render 'Kembali ke Operasi Rute' or 'Monitoring Wilayah' when isInMonitoringView is true", async () => {
     const onDismiss = vi.fn();
 
     await act(async () => {
       root.render(
         <ProfileFeaturesSection
           onDismiss={onDismiss}
-          onReturnToRouteView={onReturnToRouteView}
           isInMonitoringView={true}
           isDarkMode={false}
           onToggleTheme={vi.fn()}
@@ -85,26 +83,12 @@ describe("ProfileFeaturesSection Navigation Toggle", () => {
       );
     });
 
-    expect(container.textContent).toContain(
+    expect(container.textContent).not.toContain(
       TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE
     );
     expect(container.textContent).not.toContain(
       TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING
     );
-
-    // Find and click the button
-    const buttons = Array.from(container.querySelectorAll("button"));
-    const returnBtn = buttons.find((btn) =>
-      btn.textContent?.includes(TEXT_DASHBOARD.PROFILE_MENU.RETURN_TO_ROUTE)
-    );
-    expect(returnBtn).toBeDefined();
-
-    act(() => {
-      returnBtn?.click();
-    });
-
-    expect(onDismiss).toHaveBeenCalledTimes(1);
-    expect(onReturnToRouteView).toHaveBeenCalledTimes(1);
   });
   it("does not render 'Monitoring Wilayah' when role is pdo or petugas", async () => {
     const onOpenRegionalMonitoring = vi.fn();

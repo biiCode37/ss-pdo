@@ -1,5 +1,5 @@
 /**
- * Kamus teks antarmuka: Dashboard Monitoring Wilayah 18 Rute untuk Korlap / Pimpinan.
+ * Kamus teks antarmuka: Dashboard Monitoring Wilayah 18 Rute untuk Korwil / Pimpinan.
  */
 export const TEXT_MONITORING = {
   HEADER: {
@@ -102,7 +102,8 @@ export const TEXT_MONITORING = {
   ROUTE_CARD: {
     OPEN_ROUTE_TITLE: "Buka rute ini",
     HEADWAY_LABEL: (min: number, max: number) => `Headway: ${min} - ${max} mnt`,
-    KORLAP_PREFIX: "Korlap:",
+    KORWIL_PREFIX: "Korwil:",
+    KORLAP_PREFIX: "Korwil:", // alias kompatibilitas
     METRIC_ARMADA: "Armada",
     METRIC_PASSENGERS: "Pelanggan",
     METRIC_KM: "KM Tempuh",
@@ -131,6 +132,8 @@ export const TEXT_MONITORING = {
     BTN_SYNC_ROUTE: "Tarik Sheet",
     BTN_SYNC_ROUTE_TOOLTIP: (code: string) => `Tarik data terbaru dari spreadsheet rute ${code}`,
     SYNC_ROUTE_SUCCESS: (code: string) => `Data spreadsheet rute ${code} berhasil ditarik dan disinkronkan.`,
+    SYNC_ROUTE_RANGE_SUCCESS: (code: string, days: number) =>
+      `Data spreadsheet rute ${code} berhasil ditarik untuk ${days} hari.`,
     SYNC_ROUTE_FAILED: (code: string) => `Gagal menarik data spreadsheet rute ${code}.`,
   },
   ROUTES_TAB: {
@@ -139,8 +142,10 @@ export const TEXT_MONITORING = {
     FILTER_SUBMITTED: (count: number) => `Perlu Verifikasi (${count})`,
     FILTER_UNCOMPLETED: (count: number) => `Belum Lengkap (${count})`,
     FILTER_VERIFIED: (count: number) => `Terverifikasi (${count})`,
-    KORLAP_LABEL: "Korlap:",
-    KORLAP_ALL: "Semua",
+    KORWIL_LABEL: "Korwil:",
+    KORWIL_ALL: "Semua",
+    KORLAP_LABEL: "Korwil:", // alias kompatibilitas
+    KORLAP_ALL: "Semua", // alias kompatibilitas
     EMPTY_FILTER: "Tidak ada rute yang cocok dengan filter yang dipilih.",
   },
   NAV: {
@@ -282,20 +287,47 @@ export const TEXT_MONITORING = {
   },
   INGESTION: {
     BUTTON_LABEL: "Load All",
+    BUTTON_LABEL_WEEKLY: "Tarik Mingguan",
     BUTTON_LOADING: "Loading...",
     TOOLTIP: "Tarik otomatis data 18 sheet rute individu ke database",
+    TOOLTIP_WEEKLY: "Tarik otomatis data rentang mingguan (7 hari) 18 sheet rute ke database",
+    TOOLTIP_RANGE: "Tarik otomatis data rentang tanggal 18 sheet rute ke database",
     MODAL_TITLE: "Sinkronisasi 18 Rute (Load All)",
+    MODAL_TITLE_WEEKLY: "Sinkronisasi Mingguan (18 Rute)",
     MODAL_SUBTITLE:
       "Menarik ringkasan capaian langsung dari Google Sheets rute",
+    MODAL_SUBTITLE_RANGE: (rangeStr: string) =>
+      `Menarik ringkasan capaian 18 rute untuk periode ${rangeStr}`,
     PROGRESS_INIT: "Menghubungi konfigurasi spreadsheet rute...",
     PROGRESS_FETCHING: (route: string, current: number, total: number) =>
       `Menarik rute ${route} (${current} dari ${total})...`,
+    PROGRESS_RANGE_FETCHING: (date: string, route: string, cur: number, total: number) =>
+      `[${date}] Menarik ${route} (${cur}/${total})...`,
     PROGRESS_SAVING: (route: string) => `Menyimpan rekapitulasi ${route}...`,
     PROGRESS_COMPLETE: "Seluruh rute berhasil disinkronkan!",
+    PROGRESS_COMPLETE_LABEL: "Selesai",
+    PROGRESS_COUNT_SINGLE: (cur: number, total: number) => `${cur} / ${total} Rute`,
+    PROGRESS_COUNT_RANGE: (cur: number, total: number, routes: number, days: number) =>
+      `${cur} / ${total} Laporan (${routes} Rute × ${days} Hari)`,
     PROGRESS_PROCESSED_LABEL: "Rute Terproses",
     PROGRESS_SKIPPED_LABEL: "Dilewati (Input App)",
+    CHECKING_DATABASE: "Memeriksa kelengkapan data di database...",
+    ALL_UP_TO_DATE_TITLE: "Data Sudah Lengkap",
+    ALL_UP_TO_DATE_DESC: "Seluruh data 18 rute pada periode ini sudah lengkap tersimpan di database.",
+    ALL_UP_TO_DATE_TOAST: "Seluruh data periode ini telah lengkap di database!",
+    CONFIRM_FORCE_TITLE: "Semua Data Sudah Lengkap",
+    CONFIRM_FORCE_TEXT: (rangeStr: string) =>
+      `Seluruh laporan operasional untuk periode ${rangeStr} sudah lengkap tersimpan di database. Apakah Anda ingin tetap menarik ulang paksa dari seluruh spreadsheet Google?`,
+    CONFIRM_FORCE_CONFIRM: "Ya, Tarik Ulang Paksa",
+    CONFIRM_FORCE_CANCEL: "Gunakan Data Database",
+    INCREMENTAL_SUMMARY: (missing: number, total: number) =>
+      `Menemukan ${missing} laporan yang perlu ditarik dari total ${total} laporan.`,
+    INCREMENTAL_SUCCESS_TOAST: (pulled: number, skipped: number) =>
+      `Sinkronisasi selesai: ${pulled} laporan ditarik, ${skipped} laporan sudah lengkap di database.`,
     SUCCESS_TOAST: (appCount: number, sheetCount: number) =>
       `Berhasil menyinkronkan: ${appCount} rute dari App, ${sheetCount} rute dari Sheet.`,
+    RANGE_SUCCESS_TOAST: (days: number, appCount: number, sheetCount: number) =>
+      `Sinkronisasi ${days} hari selesai: ${sheetCount} laporan ditarik, ${appCount} dilewati (input app).`,
     PARTIAL_WARN: (errorCount: number) =>
       `Sinkronisasi selesai dengan ${errorCount} rute terkendala.`,
     FAILED_TITLE: "Gagal Menarik Data Rute",
@@ -308,7 +340,7 @@ export const TEXT_MONITORING = {
   ROUTE_DETAIL_MODAL: {
     DEFAULT_OPERATOR: "Mikrotrans",
     TITLE: (code: string) => `Detail Operasional Rute ${code}`,
-    SUBTITLE: (name: string, spv: string) => `${name} • Korlap: ${spv}`,
+    SUBTITLE: (name: string, spv: string) => `${name} • Korwil: ${spv}`,
     TABS: {
       OPERASIONAL: "Operasional",
       SHIFT: "Pelanggan & Shift",
@@ -356,6 +388,50 @@ export const TEXT_MONITORING = {
       BTN_VERIFY: "Verifikasi Rute",
       BTN_CLOSE: "Tutup",
       BTN_CLOSE_TITLE: "Tutup Modal",
+    },
+  },
+  KORWIL_ROUTE_SHEET: {
+    TITLE: (code: string) => `Detail Rute ${code}`,
+    SUBTITLE: (operator: string, spv: string) => `${operator} • Pengawas: ${spv}`,
+    RECORD_BADGE: "Rekor Pelanggan Tertinggi",
+    RECORD_FALLBACK: "Belum tercatat",
+    SECTIONS: {
+      FLEET: "Kesiapan Armada",
+      SHIFT_BREAKDOWN: "Rincian Pelanggan per Shift",
+      DISTANCE_RITASE: "Jarak & Ritase PP",
+      EFFICIENCY: "Rasio Efisiensi & Produktivitas",
+    },
+    LABELS: {
+      SHIFT_1: "Shift 1",
+      SHIFT_2: "Shift 2",
+      TOA: "TOA",
+      MANUAL: "Manual",
+      TOTAL: "Total",
+      RENOPS: "Renops",
+      REALOPS: "Realops",
+      FLEET_RATIO: "Kesiapan Armada",
+      TOTAL_PAX: "Total Pelanggan",
+      TARGET_PAX: "Target Pelanggan",
+      PAX_ACHIEVEMENT: "Capaian Target",
+      KM_TEMPUH: "KM Tempuh",
+      KM_PER_BUS: "KM / Bus",
+      TOTAL_RITASE_PP: "Total Ritase (PP)",
+      RITASE_PER_BUS: "Ritase / Bus",
+      PAX_PER_KM: "Pelanggan / KM",
+      TARGET_PAX_PER_KM: "Target Pelanggan / KM",
+      PAX_PER_KM_ACHIEVEMENT: "Capaian Pax / KM",
+      PAX_PER_BUS: "Pelanggan / Bus",
+      UNIT_BUS: "Bus",
+      UNIT_KM: "KM",
+      UNIT_PAX: "Org",
+      UNIT_RIT: "Rit",
+      UNIT_RIT_PER_BUS: "Rit/Bus",
+      UNIT_PAX_PER_BUS: "Org/Bus",
+      UNIT_PAX_PER_KM: "Org/KM",
+    },
+    ACTIONS: {
+      OPEN_DASHBOARD: "Buka Lembar Kerja Rute (Dashboard)",
+      CLOSE: "Tutup",
     },
   },
 } as const;

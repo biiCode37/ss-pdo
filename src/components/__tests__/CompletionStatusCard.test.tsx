@@ -61,7 +61,7 @@ describe('CompletionStatusCard Component', () => {
     expect(container.textContent).toContain('Unit Dengan Keterangan Tertentu');
     expect(container.textContent).toContain('2 Unit');
     expect(container.textContent).toContain('JAK.15-02');
-    expect(container.textContent).toContain('PRAMUDI MERIANG');
+    expect(container.textContent).toContain('Pramudi Meriang');
     expect(container.textContent).toContain('JAK.15-05');
     expect(container.textContent).toContain('BAN PECAH');
 

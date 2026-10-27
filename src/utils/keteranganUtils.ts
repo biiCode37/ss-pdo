@@ -5,6 +5,97 @@
  * Catatan "NP1" dan "NP2" distandarkan sebagai sub-pilihan dari "BA.02" ("BA.02 NP1", "BA.02 NP2").
  */
 
+/**
+ * Mendapatkan shift operasional default berdasarkan jam sistem:
+ * - Sebelum jam 14:00 -> Shift 1
+ * - Mulai jam 14:00 dan seterusnya -> Shift 2
+ */
+export function getCurrentOperationalShift(now: Date = new Date()): 1 | 2 {
+  return now.getHours() >= 14 ? 2 : 1;
+}
+
+/**
+ * Mendapatkan tab default untuk modal form "Semua Kolom":
+ * - Sebelum jam 14:00 -> "shift1"
+ * - Mulai jam 14:00 dan seterusnya -> "shift2"
+ */
+export function getDefaultModalTab(
+  now: Date = new Date(),
+  overrideShift?: 1 | 2
+): "shift1" | "shift2" {
+  const shift = overrideShift ?? getCurrentOperationalShift(now);
+  return shift === 2 ? "shift2" : "shift1";
+}
+
+/**
+ * Daftar singkatan/akronim umum armada & operasional yang dipertahankan dalam huruf kapital (Opsi B).
+ */
+export const FLEET_ACRONYMS = new Set([
+  'AC',
+  'TJ',
+  'AP',
+  'KSO',
+  'OKB',
+  'NP',
+  'NP1',
+  'NP2',
+  'SIM',
+  'KTP',
+  'STNK',
+  'KIR',
+  'BBM',
+  'SPBU',
+  'GPS',
+  'CCTV',
+  'TAP',
+  'TOA',
+  'PP',
+  'KM',
+  'H-1',
+  'H-7',
+  'SGO',
+  'SO',
+  'TO',
+  'EVDAL',
+]);
+
+/**
+ * Mengubah string teks menjadi format Capitalize Each Word (Title Case)
+ * dengan perlakuan cerdas terhadap akronim/singkatan operasional (Opsi B):
+ * - Mengkapitalkan huruf pertama setiap kata
+ * - Mempertahankan singkatan/akronim umum yang berhuruf kapital (seperti AC, TJ, AP, KSO, OKB, NP1, NP2, dll.)
+ * - Menjaga kode unit armada berformat khusus (seperti "TJ-0123", "MB-01")
+ */
+export function toSmartTitleCase(input?: string | null): string {
+  if (!input || typeof input !== 'string') return '';
+  const trimmed = input.trim();
+  if (!trimmed) return '';
+
+  return trimmed
+    .split(/\s+/)
+    .map((word) => {
+      if (!word) return '';
+
+      const upperWord = word.toUpperCase();
+
+      // 1. Cek jika kata terdaftar dalam daftar akronim operasional (misal: "ac" -> "AC", "okb" -> "OKB")
+      if (FLEET_ACRONYMS.has(upperWord)) {
+        return upperWord;
+      }
+
+      // 2. Cek jika kata adalah kode unit dengan tanda hubung/titik/angka (misal: "TJ-0123", "MB-01", "P-1")
+      if (/^[A-Za-z]+[-._]\w+$/.test(word) || /^[A-Za-z]+\d+$/.test(word)) {
+        return word.toUpperCase();
+      }
+
+      // 3. Kata reguler: kapital huruf pertama, sisanya lowercase
+      const firstChar = word.charAt(0).toUpperCase();
+      const rest = word.slice(1).toLowerCase();
+      return `${firstChar}${rest}`;
+    })
+    .join(' ');
+}
+
 export interface ParsedKeterangan {
   prefix: string | null; // e.g. "BA.01", "BA.02", "BA.03", "BA.04"
   detail: string;        // e.g. "NP1", "NP2", "Rusak transmisi"
@@ -26,15 +117,29 @@ const BA_PATTERN = /^\s*BA\s*[-._:/]?\s*0?([1-4])\b(?:\s*[-:]?\s*(.*))?$/i;
 export function normalizeKeterangan(raw?: string | null): string {
   if (!raw || typeof raw !== 'string') return '';
   const trimmed = raw.trim();
-  if (!trimmed) return '';
+  if (!trimmed || trimmed.toUpperCase() === 'SGO') return '';
 
-  // Dukungan keterangan berbeda per shift (" | ")
-  if (trimmed.includes(' | ')) {
-    return trimmed
-      .split(' | ')
-      .map(part => normalizeKeterangan(part))
-      .filter(Boolean)
-      .join(' | ');
+  // Dukungan keterangan berbeda per shift (" | " atau "|")
+  if (trimmed.includes('|')) {
+    const parts = trimmed
+      .split('|')
+      .map(part => normalizeKeterangan(part.trim()))
+      .filter(Boolean);
+
+    if (parts.length === 0) return '';
+    if (parts.length === 1) return parts[0];
+    if (parts[0] === parts[1] && (parts[0] === 'OFF' || parts[0] === 'TO EVDAL')) return parts[0];
+    return parts.join(' | ');
+  }
+
+  // Deteksi dan normalisasi prefix shift "S1:" atau "S2:"
+  const shiftMatch = trimmed.match(/^(S[12])\s*[:.-]\s*(.*)$/i);
+  if (shiftMatch) {
+    const shiftTag = shiftMatch[1].toUpperCase();
+    const rest = shiftMatch[2].trim();
+    if (!rest || rest.toUpperCase() === 'SGO') return '';
+    const normRest = normalizeKeterangan(rest);
+    return normRest ? `${shiftTag}: ${normRest}` : '';
   }
 
   // 1. Cek variasi BA.01 s/d BA.04
@@ -50,7 +155,11 @@ export function normalizeKeterangan(raw?: string | null): string {
         detail = 'NP1';
       } else if (/^NP\s*[-._:/]?\s*2$/i.test(detail)) {
         detail = 'NP2';
+      } else {
+        detail = toSmartTitleCase(detail);
       }
+    } else if (detail) {
+      detail = toSmartTitleCase(detail);
     }
     return detail ? `${prefix} ${detail}` : prefix;
   }
@@ -61,16 +170,22 @@ export function normalizeKeterangan(raw?: string | null): string {
     return 'OFF';
   }
   if (/^NP\s*[-._:/]?\s*1$/i.test(trimmed)) {
-    return 'BA.02 NP1';
+    return 'NP1';
   }
   if (/^NP\s*[-._:/]?\s*2$/i.test(trimmed)) {
-    return 'BA.02 NP2';
+    return 'NP2';
   }
   if (/^TO\s*[-._:/]?\s*EVDAL$/i.test(trimmed)) {
     return 'TO EVDAL';
   }
+  if (upper === 'OKB') {
+    return 'OKB';
+  }
+  if (upper === 'RENOP') {
+    return 'Renop';
+  }
 
-  return trimmed;
+  return toSmartTitleCase(trimmed);
 }
 
 /**
@@ -88,20 +203,24 @@ export function parseKeterangan(raw?: string | null): ParsedKeterangan {
     };
   }
 
-  // Cek Fixed Values (OFF, TO EVDAL)
-  const upper = normalized.toUpperCase();
-  if (['OFF', 'TO EVDAL'].includes(upper)) {
+  // Cek jika terdapat shift prefix (S1: atau S2:)
+  const shiftMatch = normalized.match(/^(S[12]):\s*(.*)$/i);
+  const core = shiftMatch ? shiftMatch[2].trim() : normalized;
+  const upper = core.toUpperCase();
+
+  // Cek Fixed Values (OFF, TO EVDAL, OKB, Renop)
+  if (['OFF', 'TO EVDAL', 'OKB', 'RENOP'].includes(upper)) {
     return {
       prefix: null,
       detail: '',
       isFixed: true,
-      fixedValue: upper,
-      normalized: upper,
+      fixedValue: upper === 'RENOP' ? 'Renop' : upper,
+      normalized,
     };
   }
 
   // Cek BA Prefix (termasuk BA.02 NP1 / BA.02 NP2)
-  const baMatch = normalized.match(/^(BA\.0[1-4])(?:\s*(.*))?$/i);
+  const baMatch = core.match(/^(BA\.0[1-4])(?:\s*(.*))?$/i);
   if (baMatch) {
     return {
       prefix: baMatch[1].toUpperCase(),
@@ -114,7 +233,7 @@ export function parseKeterangan(raw?: string | null): ParsedKeterangan {
 
   return {
     prefix: null,
-    detail: normalized,
+    detail: core,
     isFixed: false,
     fixedValue: null,
     normalized,
@@ -162,21 +281,28 @@ export function filterBusesForKmCopy<T extends { kmAkhir1?: string; keterangan?:
 /**
  * Helper untuk membersihkan nilai keterangan per shift.
  * Teks 'SGO' atau string kosong dianggap berstatus SGO (kosong di SSOT).
+ * Menghilangkan prefix "S1:" atau "S2:" yang mungkin sudah menempel agar tidak berulang.
  */
 export function cleanShiftNote(val?: string | null): string {
   if (!val || typeof val !== 'string') return '';
-  const trimmed = val.trim();
+  let trimmed = val.trim();
   if (!trimmed || trimmed.toUpperCase() === 'SGO') return '';
+
+  // Bersihkan prefix S1: atau S2: yang sudah menempel agar tidak duplikasi
+  trimmed = trimmed.replace(/^S[12]\s*[:.-]\s*/i, '').trim();
+  if (!trimmed || trimmed.toUpperCase() === 'SGO') return '';
+
   return normalizeKeterangan(trimmed);
 }
 
 /**
- * Menggabungkan keterangan Shift 1 dan Shift 2 dengan pemisah " | ".
- * - Jika kedua shift SGO (kosong): kembalikan ""
- * - Jika kedua shift memiliki keterangan identik: kembalikan 1 keterangan saja (misal "OFF")
- * - Jika Shift 1 berketerangan dan Shift 2 SGO: kembalikan "${note1} | SGO"
- * - Jika Shift 1 SGO dan Shift 2 berketerangan: kembalikan "SGO | ${note2}"
- * - Jika kedua shift memiliki keterangan berbeda: gabungkan dengan " | " (misal "OFF | TO EVDAL")
+ * Menggabungkan keterangan Shift 1 dan Shift 2 dengan pembeda "S1: " dan "S2: ".
+ * - Jika kedua shift kosong / SGO: kembalikan ""
+ * - Jika hanya Shift 1 yang berketerangan: kembalikan "S1: ${note1}"
+ * - Jika hanya Shift 2 yang berketerangan: kembalikan "S2: ${note2}"
+ * - Jika kedua shift memiliki keterangan identik dan status penuh (OFF / TO EVDAL):
+ *   kembalikan status kanonik tanpa prefix (misal "OFF")
+ * - Jika kedua shift memiliki catatan operasional: gabungkan "S1: ${note1} | S2: ${note2}"
  */
 export function combineShiftKeterangan(
   s1?: string | null,
@@ -186,11 +312,14 @@ export function combineShiftKeterangan(
   const note2 = cleanShiftNote(s2);
 
   if (!note1 && !note2) return '';
-  if (note1 && !note2) return `${note1} | SGO`;
-  if (!note1 && note2) return `SGO | ${note2}`;
-  if (note1 === note2) return note1;
+  if (note1 && !note2) return `S1: ${note1}`;
+  if (!note1 && note2) return `S2: ${note2}`;
 
-  return `${note1} | ${note2}`;
+  if (note1 === note2 && (note1 === 'OFF' || note1 === 'TO EVDAL')) {
+    return note1;
+  }
+
+  return `S1: ${note1} | S2: ${note2}`;
 }
 
 /**
@@ -205,19 +334,97 @@ export function splitShiftKeterangan(combined?: string | null): {
   }
 
   const trimmed = combined.trim();
-  if (!trimmed) {
+  if (!trimmed || trimmed.toUpperCase() === 'SGO') {
     return { s1: '', s2: '' };
   }
 
-  if (trimmed.includes(' | ')) {
-    const parts = trimmed.split(' | ');
-    const s1 = cleanShiftNote(parts[0]);
-    const s2 = cleanShiftNote(parts[1]);
-    return { s1, s2 };
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|').map((p) => p.trim());
+    let s1 = '';
+    let s2 = '';
+    let hasExplicitShift = false;
+
+    for (const part of parts) {
+      if (/^S1\s*[:.-]\s*/i.test(part)) {
+        s1 = cleanShiftNote(part);
+        hasExplicitShift = true;
+      } else if (/^S2\s*[:.-]\s*/i.test(part)) {
+        s2 = cleanShiftNote(part);
+        hasExplicitShift = true;
+      }
+    }
+
+    if (hasExplicitShift) {
+      return { s1, s2 };
+    }
+
+    // Jika tidak ada label S1/S2 eksplisit, gunakan urutan posisional (bagian 0 = Shift 1, bagian 1 = Shift 2)
+    return {
+      s1: cleanShiftNote(parts[0]),
+      s2: cleanShiftNote(parts[1]),
+    };
+  }
+
+  // Cek jika ada awalan S1: atau S2: pada string tunggal
+  if (/^S1\s*[:.-]\s*/i.test(trimmed)) {
+    return { s1: cleanShiftNote(trimmed), s2: '' };
+  }
+
+  if (/^S2\s*[:.-]\s*/i.test(trimmed)) {
+    return { s1: '', s2: cleanShiftNote(trimmed) };
   }
 
   const single = cleanShiftNote(trimmed);
+  if (!single) {
+    return { s1: '', s2: '' };
+  }
+
+  // Khusus NP1: spesifik untuk Shift 1 saja
+  if (/\bNP1\b/i.test(single)) {
+    return { s1: single, s2: '' };
+  }
+
+  // Khusus NP2, OKB, dan Renop: spesifik untuk Shift 2 saja
+  if (/\bNP2\b/i.test(single) || /^(?:OKB|Renop)$/i.test(single)) {
+    return { s1: '', s2: single };
+  }
+
   return { s1: single, s2: single };
+}
+
+/**
+ * Mengecek apakah catatan keterangan mengindikasikan status armada OFF atau TO EVDAL
+ * (baik status murni, variasi penulisan, dengan prefix shift S1:/S2:, maupun catatan gabungan).
+ * Unit dengan status ini tidak beroperasi sehingga harus dikecualikan dari target bar progres.
+ */
+export function isUnitOffOrToEvdal(raw?: string | null): boolean {
+  if (!raw || typeof raw !== 'string') return false;
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+
+  // 1. Cek keberadaan kata OFF utuh (misal: "OFF", "S1: OFF", "S2: OFF", "OFF - BAN PECAH", "OFF (SPARE)")
+  if (/\bOFF\b/i.test(trimmed)) {
+    return true;
+  }
+
+  // 2. Cek variasi TO EVDAL / T.O EVDAL / TO-EVDAL / T.O. EVDAL
+  if (/\bT\.?O\.?\s*[-._:/]?\s*EVDAL\b/i.test(trimmed)) {
+    return true;
+  }
+
+  // 3. Cek status murni T.O / TO (standalone atau dengan prefix shift / tanda kurung / strip keterangan)
+  // Contoh: "TO", "T.O", "S1: TO", "S2: T.O", "TO (SANKSI)", "T.O - CADANGAN"
+  if (/^(?:S[12]\s*[:.-]\s*)?T\.?O\.?(?:\s*\(.*\)|\s*-\s*.*)?$/i.test(trimmed)) {
+    return true;
+  }
+
+  // 4. Jika memuat pemisah shift (|), evaluasi tiap bagian shift
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|').map((p) => p.trim());
+    return parts.some((part) => isUnitOffOrToEvdal(part));
+  }
+
+  return false;
 }
 
 /**
@@ -232,7 +439,7 @@ export function hasMeaningfulNote(raw?: string | null): boolean {
   const trimmed = raw.trim();
   if (!trimmed) return false;
 
-  const PURE_STATUS_REGEX = /^(?:OFF|T\.?O(?:\s*EVDAL)?|SO|SGO)$/i;
+  const PURE_STATUS_REGEX = /^(?:S[12]:\s*)?(?:OFF|T\.?O(?:\s*EVDAL)?|SO|SGO)$/i;
 
   if (trimmed.includes('|')) {
     const parts = trimmed.split('|').map((p) => p.trim());

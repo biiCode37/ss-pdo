@@ -8,6 +8,7 @@ import {
   type RouteWaData,
   type RegionTotals
 } from './waReportGenerator';
+import { TEXT_WA_REPORT } from '../constants/texts';
 
 describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
   it('maps operator codes to official full names correctly', () => {
@@ -68,7 +69,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
 
     expect(report).toContain('*02. JAK.15 | TANJUNG PRIOK - BULAK TURI*');
     expect(report).toContain('- KOPERASI WAHANA KALPIKA (KWK)');
-    expect(report).toContain('*Unit Libur (OFF):*');
+    expect(report).toContain(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
     expect(report).toContain('- KWK-015-021 : OFF');
 
     // Closing
@@ -108,7 +109,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
     expect(report).toContain('- LSG-087-009 : TO.EVDAL');
 
     // Unit Libur
-    expect(report).toContain('*Unit Libur (OFF):*');
+    expect(report).toContain(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
     expect(report).toContain('- LSG-087-015 : OFF');
 
     // Summary counts
@@ -134,7 +135,7 @@ describe('waReportGenerator - Format 3 (Status Kesiapan Armada)', () => {
 
     expect(report).toContain('*Rincian Tidak Ops:*');
     expect(report).toContain('- TJ-001 : Per Patah');
-    expect(report).not.toContain('*Unit Libur (OFF):*');
+    expect(report).not.toContain(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER);
   });
 
   it('handles route without routeName gracefully', () => {
@@ -345,5 +346,54 @@ describe('waReportGenerator - Format 2 (Rincian Shift)', () => {
     expect(report).toContain('Ketercapaian    : 100,0%');
     expect(report).toContain('1 Lengkap | 0 Kurang | 1 Belum Ada Data');
     expect(report).toContain('Status        : BELUM ADA DATA ⏳');
+  });
+
+  it('shows missing unit placeholder and operational issues when route is incomplete with no unit list', () => {
+    const mockRoutes: RouteFleetReportItem[] = [
+      {
+        no: 1,
+        routeCode: 'JAK.15',
+        routeName: 'BULAK TURI - TG. PRIOK',
+        operatorName: 'TH',
+        renops: 60,
+        realops: 58,
+        hasData: true,
+        nonSgoUnits: [],
+        operationalIssues: 'Kemacetan parah di jembatan pelabuhan',
+      },
+    ];
+
+    const report = generateWaReportFormat3('2026-10-26', 1, mockRoutes);
+    expect(report).toContain('Status        : TIDAK LENGKAP ✖️');
+    expect(report).toContain('- Rincian unit belum dilengkapi (-2 unit)');
+    expect(report).toContain('*Catatan Operasional Rute:*');
+    expect(report).toContain('- Kemacetan parah di jembatan pelabuhan');
+  });
+
+  it('renders special operating unit notes section when units operated with specific notes', () => {
+    const mockRoutes: RouteFleetReportItem[] = [
+      {
+        no: 1,
+        routeCode: 'JAK.01',
+        routeName: 'TG. PRIOK - PLUIT',
+        operatorName: 'KWK',
+        renops: 20,
+        realops: 20,
+        hasData: true,
+        nonSgoUnits: [
+          {
+            unit: 'KWK 222177',
+            note: 'AC kurang dingin siang',
+            isOff: false,
+            isOperatingWithNote: true,
+          },
+        ],
+      },
+    ];
+
+    const report = generateWaReportFormat3('2026-10-26', 1, mockRoutes);
+    expect(report).toContain('Status        : LENGKAP ✅');
+    expect(report).toContain('*Catatan Khusus Unit (Beroperasi):*');
+    expect(report).toContain('- KWK 222177 : AC kurang dingin siang');
   });
 });

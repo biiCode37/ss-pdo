@@ -85,6 +85,22 @@ export async function updatePageSetting(
   if (!isSupabaseConfigured) return true;
 
   try {
+    // Coba eksekusi melalui secure RPC function (SECURITY DEFINER)
+    try {
+      if (typeof (supabase as any)?.rpc === 'function') {
+        const { data: rpcRes, error: rpcErr } = await (supabase as any).rpc('set_app_page_setting', {
+          p_acting_email: updatedBy,
+          p_page_key: pageKey,
+          p_is_enabled: isEnabled,
+        });
+        if (!rpcErr && rpcRes === true) {
+          return true;
+        }
+      }
+    } catch {
+      // Fallback ke direct update jika RPC belum tersedia
+    }
+
     const { error } = await supabase
       .from('app_page_settings')
       .update({

@@ -11,6 +11,7 @@ import {
 import type { RegionalMonitoringResult } from "@/services/allRouteMonitoringService";
 import { showSuccessToast } from "@/utils/alertUtils";
 import { TEXT_WA_REPORT } from "@/constants/texts";
+import { sortRoutesByCode } from "@/utils/routeSorting";
 import type { FormatType, SupervisorFilter } from "./types";
 
 interface UseWaReportDataOptions {
@@ -28,29 +29,33 @@ export function useWaReportData({
   const [supervisorFilter, setSupervisorFilter] = useState<SupervisorFilter>("ALL");
   const [copied, setCopied] = useState(false);
 
-  // Filter routes based on selected supervisor
+  // Filter routes based on selected supervisor (terurut natural)
   const filteredRoutes = useMemo(() => {
     if (!regionalData?.routes) return [];
-    if (supervisorFilter === "ALL") return regionalData.routes;
-    return regionalData.routes.filter((r) => {
-      const name = r.supervisorName.toUpperCase();
-      if (supervisorFilter === "RANTO") return name.includes("RANTO");
-      if (supervisorFilter === "ABDUL") return name.includes("ABDUL");
-      if (supervisorFilter === "MOAMAR") return name.includes("MOAMAR");
-      return true;
-    });
+    const list =
+      supervisorFilter === "ALL"
+        ? regionalData.routes
+        : regionalData.routes.filter((r) => {
+            const name = r.supervisorName.toUpperCase();
+            if (supervisorFilter === "RANTO") return name.includes("RANTO");
+            if (supervisorFilter === "ABDUL") return name.includes("ABDUL");
+            if (supervisorFilter === "MOAMAR") return name.includes("MOAMAR");
+            return true;
+          });
+    return sortRoutesByCode(list);
   }, [regionalData, supervisorFilter]);
 
-  // Check unconfirmed routes for Format 3 blocking (18 routes regional check)
+  // Check unconfirmed routes for Format 3 blocking (18 routes regional check, terurut natural)
   // Rute dianggap terisi/selesai jika sudah dikonfirmasi di DB ATAU memiliki data realops fisik > 0 dari spreadsheet
   const unconfirmedRoutes = useMemo(() => {
     if (formatType !== "format3") return [];
     const allRoutes = regionalData?.routes || [];
-    return allRoutes.filter((r) => {
+    const list = allRoutes.filter((r) => {
       const isConfirmed = selectedShift === 1 ? r.isFleetConfirmedS1 : r.isFleetConfirmedS2;
       const realops = selectedShift === 1 ? r.realopsShift1 : r.realopsShift2;
       return !isConfirmed && (!realops || realops === 0);
     });
+    return sortRoutesByCode(list);
   }, [formatType, regionalData?.routes, selectedShift]);
 
   const isFormat3Blocked = formatType === "format3" && unconfirmedRoutes.length > 0;
@@ -147,25 +152,23 @@ export function useWaReportData({
     if (formatType === "format3") {
       const fleetItems: RouteFleetReportItem[] = filteredRoutes.map((r, idx) => {
         const renops = (selectedShift === 1 ? r.renopsShift1 : r.renopsShift2) || r.defaultRenops || 0;
-        // Aturan kumulatif harian non-decreasing: Realops Shift 2 >= Realops Shift 1
-        const rawRealops =
-          selectedShift === 1
-            ? r.realopsShift1 || 0
-            : Math.max(r.realopsShift2 || 0, r.realopsShift1 || 0);
+        const realops = selectedShift === 1 ? (r.realopsShift1 ?? 0) : (r.realopsShift2 ?? 0);
 
-        const nonSgoUnits = selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2;
-        const kendalaCount = (nonSgoUnits || []).filter((u) => !u.isOff).length;
-        const realops =
-          kendalaCount > 0
-            ? Math.min(rawRealops, Math.max(0, renops - kendalaCount))
-            : rawRealops;
+        const nonSgoUnits = (selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2)?.map(
+          (u) => ({
+            unit: u.unit,
+            note: u.note,
+            isOff: u.isOff,
+            isOperatingWithNote: u.isOperatingWithNote,
+          })
+        ) || [];
 
         const hasData =
           r.status === "submitted" ||
           r.status === "verified" ||
           (r.todayPassengers && r.todayPassengers > 0) ||
           (r.totalTrips && r.totalTrips > 0) ||
-          (nonSgoUnits && nonSgoUnits.length > 0);
+          nonSgoUnits.length > 0;
 
         return {
           no: idx + 1,
@@ -175,7 +178,9 @@ export function useWaReportData({
           renops,
           realops,
           hasData: !!hasData,
+          sourceType: 'spreadsheet_auto',
           nonSgoUnits,
+          operationalIssues: r.operationalIssues,
         };
       });
       return generateWaReportFormat3(selectedDate, selectedShift, fleetItems);

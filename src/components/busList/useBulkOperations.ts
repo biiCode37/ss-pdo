@@ -3,7 +3,7 @@ import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { updateBulkBusData } from "@/services/googleSheets";
 import { parseIndonesianNumber } from "@/utils/numberUtils";
 import { detectTargetTrip } from "@/utils/unitAnalytics";
-import { filterBusesForKmCopy } from "@/utils/keteranganUtils";
+import { filterBusesForKmCopy, isUnitOffOrToEvdal } from "@/utils/keteranganUtils";
 import {
   showSuccessToast,
   showErrorAlert,
@@ -96,8 +96,7 @@ export function useBulkOperations({
 
     setIsSubmittingBulk(true);
     const updatesList = data.map((bus) => {
-      const isOff =
-        bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
+      const isOff = isUnitOffOrToEvdal(bus.keterangan);
       return {
         rowIndex: bus.rowIndex,
         updates: {
@@ -112,8 +111,7 @@ export function useBulkOperations({
         await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
       } else {
         data.forEach((bus) => {
-          const isOff =
-            bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
+          const isOff = isUnitOffOrToEvdal(bus.keterangan);
           addToQueue({
             sheetId,
             tabName,
@@ -129,8 +127,7 @@ export function useBulkOperations({
 
       if (onUpdateBus) {
         data.forEach((bus) => {
-          const isOff =
-            bus.keterangan && bus.keterangan.trim().toUpperCase() === "OFF";
+          const isOff = isUnitOffOrToEvdal(bus.keterangan);
           onUpdateBus(bus.rowIndex, {
             tripPergi: isOff ? "" : result.tripPergi,
             tripPulang: isOff ? "" : result.tripPulang,

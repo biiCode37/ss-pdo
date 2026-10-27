@@ -47,7 +47,6 @@ interface DashboardModalsProps {
   onCloseProfileMenu: () => void;
   onOpenAccumulation: () => void;
   onOpenRegionalMonitoring?: () => void;
-  onReturnToRouteView?: () => void;
   isInMonitoringView?: boolean;
   onOpenUserManagement: () => void;
   onOpenPageManagement?: () => void;
@@ -89,7 +88,6 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   onCloseProfileMenu,
   onOpenAccumulation,
   onOpenRegionalMonitoring,
-  onReturnToRouteView,
   isInMonitoringView,
   onOpenUserManagement,
   onOpenPageManagement,
@@ -180,7 +178,6 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
         onClose={onCloseProfileMenu}
         onOpenAccumulation={onOpenAccumulation}
         onOpenRegionalMonitoring={onOpenRegionalMonitoring}
-        onReturnToRouteView={onReturnToRouteView}
         isInMonitoringView={isInMonitoringView}
         onOpenUserManagement={onOpenUserManagement}
         onOpenPageManagement={onOpenPageManagement}

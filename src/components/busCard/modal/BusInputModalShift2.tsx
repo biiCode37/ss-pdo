@@ -6,6 +6,8 @@ import type { BusInputFormReturn } from "./useBusInputForm";
 import { AlertTriangle, Copy, ChevronDown, ChevronUp } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
 import { ShiftOptionChip } from "./fields/ShiftOptionChip";
+import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
+import { normalizeKeterangan } from "@/utils/keteranganUtils";
 
 interface BusInputModalShift2Props {
   form: BusInputFormReturn;
@@ -30,8 +32,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
     kmLiveS2,
     toaLiveS2,
     handleCopyKmAkhir1ToAwal2,
-    keterangan,
-    setKeterangan,
+    keteranganS2,
+    setKeteranganS2,
     showKeterangan,
     setShowKeterangan,
     handleInputFocus,
@@ -379,23 +381,18 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
           }}
         >
-          <label
-            htmlFor="input-shift2-keterangan"
-            style={{
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              color: "var(--text-secondary, #94a3b8)",
-              display: "block",
-              marginBottom: "4px",
-            }}
-          >
-            {TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_LABEL}
-          </label>
+          <KeteranganPresetBar
+            value={keteranganS2}
+            onChange={setKeteranganS2}
+            shift={2}
+            shiftLabel={TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT2_NOTE}
+          />
           <textarea
             id="input-shift2-keterangan"
             rows={2}
-            value={keterangan}
-            onChange={(e) => setKeterangan(e.target.value)}
+            value={keteranganS2}
+            onChange={(e) => setKeteranganS2(e.target.value)}
+            onBlur={() => setKeteranganS2(normalizeKeterangan(keteranganS2))}
             onFocus={handleInputFocus}
             placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_PLACEHOLDER}
             style={{
@@ -410,6 +407,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               resize: "none",
               fontFamily: "inherit",
             }}
+            aria-label={TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT2_NOTE}
           />
         </div>
       )}

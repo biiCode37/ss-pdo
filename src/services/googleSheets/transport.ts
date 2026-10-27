@@ -87,6 +87,49 @@ export function isUsingServiceAccount(): boolean {
 }
 
 /**
+ * Memanggil sheets-proxy Edge Function dengan dukungan Auto-Retry Exponential Backoff
+ * untuk menangani penolakan HTTP 429 (Too Many Requests) dari Google API / Supabase.
+ */
+async function invokeSheetsProxyWithRetry(
+  body: any,
+  maxRetries = 3
+): Promise<{ data: any; error: any }> {
+  let attempt = 0;
+  let delayMs = 1500;
+
+  while (attempt < maxRetries) {
+    attempt++;
+    const res = await supabase.functions.invoke('sheets-proxy', { body });
+
+    const errMsg = (res.error?.message || '').toLowerCase();
+    const dataErr = (typeof res.data?.error === 'string' ? res.data.error : '').toLowerCase();
+    const status = (res.error as any)?.context?.status || (res.data as any)?.status;
+
+    const isRateLimited =
+      status === 429 ||
+      errMsg.includes('429') ||
+      errMsg.includes('non-2xx') ||
+      dataErr.includes('429') ||
+      dataErr.includes('too many requests') ||
+      dataErr.includes('quota exceeded') ||
+      dataErr.includes('rate limit');
+
+    if (isRateLimited && attempt < maxRetries) {
+      console.warn(
+        `[Transport] sheets-proxy 429 Rate Limit (percobaan ${attempt}/${maxRetries}). Menunggu ${delayMs}ms sebelum retry...`
+      );
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      delayMs *= 2;
+      continue;
+    }
+
+    return res;
+  }
+
+  return await supabase.functions.invoke('sheets-proxy', { body });
+}
+
+/**
  * Mengambil metadata spreadsheet (nama lembar, properties, sheetId/gid)
  */
 export async function fetchSpreadsheetMeta(
@@ -95,12 +138,10 @@ export async function fetchSpreadsheetMeta(
 ): Promise<any> {
   const health = await checkProxyHealth();
   if (health.active) {
-    const { data, error } = await supabase.functions.invoke('sheets-proxy', {
-      body: {
-        action: 'spreadsheets.get',
-        spreadsheetId,
-        params: fields ? { fields } : undefined,
-      },
+    const { data, error } = await invokeSheetsProxyWithRetry({
+      action: 'spreadsheets.get',
+      spreadsheetId,
+      params: fields ? { fields } : undefined,
     });
     if (!error && data && !data.error) {
       return { result: data };
@@ -132,12 +173,10 @@ export async function fetchSheetValues(
 ): Promise<any> {
   const health = await checkProxyHealth();
   if (health.active) {
-    const { data, error } = await supabase.functions.invoke('sheets-proxy', {
-      body: {
-        action: 'values.get',
-        spreadsheetId,
-        params: { range, valueRenderOption },
-      },
+    const { data, error } = await invokeSheetsProxyWithRetry({
+      action: 'values.get',
+      spreadsheetId,
+      params: { range, valueRenderOption },
     });
     if (!error && data && !data.error) {
       return { result: data };
@@ -169,12 +208,10 @@ export async function fetchSheetValuesBatch(
 ): Promise<any> {
   const health = await checkProxyHealth();
   if (health.active) {
-    const { data, error } = await supabase.functions.invoke('sheets-proxy', {
-      body: {
-        action: 'values.batchGet',
-        spreadsheetId,
-        params: { ranges, valueRenderOption },
-      },
+    const { data, error } = await invokeSheetsProxyWithRetry({
+      action: 'values.batchGet',
+      spreadsheetId,
+      params: { ranges, valueRenderOption },
     });
     if (!error && data && !data.error) {
       return { result: data };
@@ -208,12 +245,10 @@ export async function updateSheetValuesBatch(
 ): Promise<any> {
   const health = await checkProxyHealth();
   if (health.active) {
-    const { data, error } = await supabase.functions.invoke('sheets-proxy', {
-      body: {
-        action: 'values.batchUpdate',
-        spreadsheetId,
-        payload,
-      },
+    const { data, error } = await invokeSheetsProxyWithRetry({
+      action: 'values.batchUpdate',
+      spreadsheetId,
+      payload,
     });
     if (!error && data && !data.error) {
       return { result: data };
@@ -243,12 +278,10 @@ export async function batchUpdateSpreadsheet(
 ): Promise<any> {
   const health = await checkProxyHealth();
   if (health.active) {
-    const { data, error } = await supabase.functions.invoke('sheets-proxy', {
-      body: {
-        action: 'batchUpdate',
-        spreadsheetId,
-        payload: { requests },
-      },
+    const { data, error } = await invokeSheetsProxyWithRetry({
+      action: 'batchUpdate',
+      spreadsheetId,
+      payload: { requests },
     });
     if (!error && data && !data.error) {
       return { result: data };

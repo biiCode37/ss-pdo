@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { fetchRoutesWithSheets } from "@/services/routeService";
 import { extractSpreadsheetId } from "@/utils/sheetIdentity";
+import { compareRouteCodes } from "@/utils/routeSorting";
 import type { Route } from "@/types/supabase";
 import type { FlatRouteSheet } from "./types";
 
@@ -88,9 +89,7 @@ export function useRouteCascade({
                 )
                 .map((f) => f.routeCode),
             ),
-          ).sort((a, b) =>
-            a.localeCompare(b, "id", { numeric: true, sensitivity: "base" }),
-          )
+          ).sort((a, b) => compareRouteCodes(a, b))
         : [],
     [flatSheets, selectedYear, selectedMonth],
   );

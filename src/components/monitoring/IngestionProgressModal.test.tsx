@@ -92,4 +92,25 @@ describe("IngestionProgressModal Component", () => {
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
+
+  it("renders multi-day range label accurately when totalDays > 1", async () => {
+    await act(async () => {
+      root.render(
+        <IngestionProgressModal
+          isOpen={true}
+          progress={{
+            processedCount: 44,
+            totalToSync: 126,
+            totalRoutes: 18,
+            totalDays: 7,
+            percent: 35,
+            stepMessage: "Mengambil data rute...",
+          }}
+        />
+      );
+    });
+
+    expect(container.textContent).toContain("44 / 126 Laporan (18 Rute × 7 Hari)");
+    expect(container.textContent).toContain("35%");
+  });
 });

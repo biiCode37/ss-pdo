@@ -14,7 +14,6 @@ export function ProfileMenuSheet({
   onClose,
   onOpenAccumulation,
   onOpenRegionalMonitoring,
-  onReturnToRouteView,
   isInMonitoringView,
   onOpenUserManagement,
   onOpenPageManagement,
@@ -170,7 +169,6 @@ export function ProfileMenuSheet({
           role={userProfile.role}
           onDismiss={handleDismiss}
           onOpenRegionalMonitoring={onOpenRegionalMonitoring}
-          onReturnToRouteView={onReturnToRouteView}
           isInMonitoringView={isInMonitoringView}
           onOpenAccumulation={onOpenAccumulation}
           onFormatWholeSheet={onFormatWholeSheet}

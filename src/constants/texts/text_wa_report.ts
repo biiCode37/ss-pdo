@@ -36,7 +36,7 @@ export const TEXT_WA_REPORT = {
   BLOCKING_DESC: (count: number, _routes?: string[]) =>
     `Sebanyak ${count} rute belum mengonfirmasi status armada. Laporan dapat disalin setelah seluruh rute terkonfirmasi.`,
   UNCONFIRMED_ROUTES_BADGE: (count: number) => `${count} Rute Belum Konfirmasi`,
-  FILTER_ALL: "Semua Korlap",
+  FILTER_ALL: "Semua Korwil",
   WARNING_UNSUBMITTED: (unsubmitted: number, total: number) =>
     `Perhatian: ${unsubmitted} dari ${total} rute belum mengirim laporan operasional harian. Laporan tetap dapat di-generate dengan data yang tersedia.`,
   COPY_BTN: "Salin Teks",
@@ -79,8 +79,14 @@ export const TEXT_WA_REPORT = {
       "_Demikian laporan status kesiapan armada dibuat untuk diketahui pimpinan. Terima kasih._",
     FORMAT_3_SUMMARY_TITLE: "RINGKASAN STATUS KESIAPAN ARMADA",
     FORMAT_3_ROUTE_DETAIL_TITLE: "RINCIAN STATUS ARMADA PER RUTE",
-    FORMAT_3_OFF_SUBHEADER: "*Unit Libur (OFF):*",
+    FORMAT_3_OFF_SUBHEADER: "*Unit Libur (OFF) / Keterangan Khusus:*",
+    FORMAT_3_KENDALA_SUBHEADER: "*Rincian Tidak Ops:*",
+    FORMAT_3_SPECIAL_NOTES_SUBHEADER: "*Catatan Khusus Unit (Beroperasi):*",
+    FORMAT_3_PELENGKAP_SUBHEADER: "*Unit Pelengkap Renops (Shift 2):*",
     FORMAT_3_NO_DATA_STATUS: "BELUM ADA DATA ⏳",
+    FORMAT_3_NO_UNIT_DETAILS: (missingCount: number) =>
+      `- Rincian unit belum dilengkapi (-${missingCount} unit)`,
+    FORMAT_3_OPERATIONAL_ISSUES_LABEL: "*Catatan Operasional Rute:*",
     FORMAT_3_NO_DATA_SUMMARY: (
       lengkap: number,
       kurang: number,

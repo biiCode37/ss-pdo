@@ -12,6 +12,9 @@ import { TEXT_MONITORING } from '@/constants/texts/text_monitoring';
 
 vi.mock('@/services/regionalIngestionService', () => ({
   ingestRegionalRouteSummaries: vi.fn(),
+  ingestRegionalRouteSummariesForRange: vi.fn().mockResolvedValue({ success: true, syncedFromSheet: 5, skippedFromApp: 1, errors: [] }),
+  ingestSingleRouteSummary: vi.fn(),
+  ingestSingleRouteSummaryForRange: vi.fn().mockResolvedValue({ success: true, syncedDays: 7, errors: [] }),
 }));
 
 vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
@@ -397,7 +400,8 @@ describe('AllRouteMonitoringPage Component', () => {
 
     expect(regionalIngestionService.ingestRegionalRouteSummaries).toHaveBeenCalledWith(
       '2026-09-02',
-      expect.any(Function)
+      expect.any(Function),
+      { force: false }
     );
   });
 
@@ -520,5 +524,39 @@ describe('AllRouteMonitoringPage Component', () => {
     const modalDialog = container.querySelector('[role="dialog"]');
     expect(modalDialog).toBeTruthy();
     expect(modalDialog?.textContent).toContain(TEXT_MONITORING.MONTHLY_SYNC.TITLE);
+  });
+
+  it('triggers weekly ingestion when sync button is clicked in weekly period mode', async () => {
+    (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue(mockData);
+    (regionalService.fetchRegionalPeriodMonitoringData as any).mockResolvedValue(mockData);
+
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+    });
+
+    // Switch to weekly
+    const weeklyBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="period-btn-weekly"]'
+    );
+    expect(weeklyBtn).toBeTruthy();
+
+    await act(async () => {
+      weeklyBtn?.click();
+    });
+
+    // Sync button should now have weekly label
+    const syncBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-load-all-btn"]'
+    );
+    expect(syncBtn).toBeTruthy();
+    expect(syncBtn?.getAttribute('aria-label')).toBe(TEXT_MONITORING.INGESTION.BUTTON_LABEL_WEEKLY);
+
+    // Click sync button
+    await act(async () => {
+      syncBtn?.click();
+    });
+
+    // Should call ingestRegionalRouteSummariesForRange
+    expect(regionalIngestionService.ingestRegionalRouteSummariesForRange).toHaveBeenCalled();
   });
 });

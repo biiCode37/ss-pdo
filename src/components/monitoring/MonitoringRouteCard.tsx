@@ -219,9 +219,9 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
           {route.routeName}
         </h3>
 
-        {/* Korlap Info */}
+        {/* Korwil Info */}
         <div style={{ fontSize: "11px", color: "var(--text-secondary, #8b8b8b)" }}>
-          {TEXT_MONITORING.ROUTE_CARD.KORLAP_PREFIX}{" "}
+          {TEXT_MONITORING.ROUTE_CARD.KORWIL_PREFIX}{" "}
           <strong
             style={{
               color: "var(--text-primary, #ededed)",

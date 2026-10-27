@@ -14,6 +14,8 @@ import {
 import { showSuccessToast } from "@/utils/alertUtils";
 import { FileSpreadsheet, Copy, Share2, Sun, Moon, AlertTriangle, PlusCircle } from "lucide-react";
 import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
+import { sortRoutesByCode } from "@/utils/routeSorting";
+import { normalizeRouteCode } from "@/services/googleSheets/globalReportReader";
 
 export interface MonitoringWaReportTabProps {
   data: RegionalMonitoringResult;
@@ -32,9 +34,12 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
   const [format3Shift, setFormat3Shift] = useState<1 | 2>(1);
   const [quickRoute, setQuickRoute] = useState<{ routeCode: string; routeId: number; defaultRenops?: number } | null>(null);
 
+  // Urutkan rute secara natural alphanumeric
+  const sortedRoutes = useMemo(() => sortRoutesByCode(data.routes), [data.routes]);
+
   // Map RouteWaData for Format 1 & 2
   const routeWaData: RouteWaData[] = useMemo(() => {
-    return data.routes.map((r, idx) => ({
+    return sortedRoutes.map((r, idx) => ({
       no: idx + 1,
       routeCode: r.routeCode,
       routeName: r.routeName,
@@ -60,7 +65,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
       manualShift2: r.manualShift2,
       totalShift2: r.totalShift2,
     }));
-  }, [data.routes]);
+  }, [sortedRoutes]);
 
   // RegionTotals for Format 2
   const regionTotals: RegionTotals = useMemo(() => {
@@ -84,34 +89,8 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
 
   // RouteFleetReportItem for Format 3 (Menerapkan Hierarki 3 Jalur)
   const routeFleetData: RouteFleetReportItem[] = useMemo(() => {
-    return data.routes.map((r, idx) => {
-      // 1. Jalur 1 (Utama): Data di DB (Laporan A2 Petugas atau Input Korlap)
-      const matchingShift = fleetShifts?.find(
-        (s) => s.route_code === r.routeCode && s.shift === format3Shift,
-      );
-
-      if (matchingShift) {
-        const nonSgoUnits =
-          matchingShift.non_sgo_units?.map((u) => ({
-            unit: u.unit_body,
-            note: u.note || u.status_code,
-            isOff: u.status_code === "OFF",
-          })) || [];
-
-        return {
-          no: idx + 1,
-          routeCode: r.routeCode,
-          routeName: r.routeName,
-          operatorName: r.operatorName,
-          renops: matchingShift.target_renops || r.defaultRenops || 0,
-          realops: matchingShift.realops ?? 0,
-          hasData: true,
-          sourceType: matchingShift.source_type || 'pdo_a2',
-          nonSgoUnits,
-        };
-      }
-
-      // 2. Jalur 2 (Fallback Otomatis Spreadsheet): Ritase / Unit Beroperasi di Sheet Asli
+    return sortedRoutes.map((r, idx) => {
+      // 0. Siapkan data fallback non-SGO dari spreadsheet
       const ssRenops = (format3Shift === 1 ? r.renopsShift1 : r.renopsShift2) || r.defaultRenops || 0;
       const ssRawRealops = format3Shift === 1 ? r.realopsShift1 : r.realopsShift2;
       const ssNonSgo =
@@ -120,9 +99,50 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
             unit: u.unit,
             note: u.note,
             isOff: u.isOff,
+            isOperatingWithNote: u.isOperatingWithNote,
           })
         ) || [];
 
+      // 1. Jalur 1 (Utama): Data di DB (Laporan A2 Petugas atau Input Korlap)
+      const matchingShift = fleetShifts?.find(
+        (s) =>
+          s.shift === format3Shift &&
+          ((s.route_id && s.route_id === r.id) ||
+            s.route_code === r.routeCode ||
+            normalizeRouteCode(s.route_code) === normalizeRouteCode(r.routeCode)),
+      );
+
+      if (matchingShift) {
+        const dbUnits =
+          matchingShift.non_sgo_units?.map((u) => ({
+            unit: u.unit_body,
+            note: u.note || u.status_code,
+            isOff: u.status_code === "OFF",
+            isOperatingWithNote: false,
+          })) || [];
+
+        // Fallback unit cerdas: Jika DB belum ada rincian unit non-SGO tapi spreadsheet punya, gunakan data spreadsheet
+        const nonSgoUnits = dbUnits.length > 0 ? dbUnits : ssNonSgo;
+
+        const dynamicRenops = r.defaultRenops || 0;
+        const isShiftTargetStale = matchingShift.target_renops === 30 && dynamicRenops > 0 && dynamicRenops !== 30;
+        const effectiveRenops = isShiftTargetStale ? dynamicRenops : (matchingShift.target_renops || dynamicRenops);
+
+        return {
+          no: idx + 1,
+          routeCode: r.routeCode,
+          routeName: r.routeName,
+          operatorName: r.operatorName,
+          renops: effectiveRenops,
+          realops: matchingShift.realops ?? 0,
+          hasData: true,
+          sourceType: matchingShift.source_type || 'pdo_a2',
+          nonSgoUnits,
+          operationalIssues: r.operationalIssues,
+        };
+      }
+
+      // 2. Jalur 2 (Fallback Otomatis Spreadsheet): Ritase / Unit Beroperasi di Sheet Asli
       // Validasi aktivitas nyata: ada trip > 0, penumpang > 0, ada unit non-SGO terdeteksi, atau status submitted/verified
       const hasActualActivity =
         (r.totalTrips && r.totalTrips > 0) ||
@@ -132,22 +152,17 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
         r.status === "verified";
 
       if (hasActualActivity) {
-        const kendalaCount = ssNonSgo.filter((u) => !u.isOff).length;
-        const calculatedRealops =
-          kendalaCount > 0
-            ? Math.min(ssRawRealops, Math.max(0, ssRenops - kendalaCount))
-            : ssRawRealops;
-
         return {
           no: idx + 1,
           routeCode: r.routeCode,
           routeName: r.routeName,
           operatorName: r.operatorName,
           renops: ssRenops,
-          realops: calculatedRealops,
+          realops: ssRawRealops ?? 0,
           hasData: true,
           sourceType: 'spreadsheet_auto',
           nonSgoUnits: ssNonSgo,
+          operationalIssues: r.operationalIssues,
         };
       }
 
@@ -162,6 +177,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
         hasData: false,
         sourceType: 'empty',
         nonSgoUnits: [],
+        operationalIssues: r.operationalIssues,
       };
     });
   }, [data.routes, fleetShifts, format3Shift]);

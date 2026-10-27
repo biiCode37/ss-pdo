@@ -3,6 +3,7 @@ import type { DailyFleetShiftWithUnits, DailyFleetNonSgoUnit } from "@/types/sup
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING, TEXT_FLEET_STATUS } from "@/constants/texts";
 import { Bus, CheckCircle2, AlertTriangle, ShieldCheck } from "lucide-react";
+import { sortRoutesByCode } from "@/utils/routeSorting";
 import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
 
 export interface MonitoringFleetStatusTabProps {
@@ -99,12 +100,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
       }
     }
 
-    // Convert map to sorted list
-    return Array.from(routeMap.entries()).map(([routeCode, units]) => ({
+    // Convert map to sorted list by natural alphanumeric route code
+    const list = Array.from(routeMap.entries()).map(([routeCode, units]) => ({
       routeCode,
       operatorName: operatorMap.get(routeCode) || "Mikrotrans",
       units,
     }));
+    return sortRoutesByCode(list);
   }, [relevantShifts, statusFilter, operatorMap]);
 
   return (

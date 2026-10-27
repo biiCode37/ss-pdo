@@ -3,6 +3,7 @@ import {
   sanitizeKmAwal,
   sanitizeKmAkhir,
 } from "@/utils/modals/busInput/busModalOdometer";
+import { combineShiftKeterangan } from "@/utils/keteranganUtils";
 
 export interface BuildBusInputPayloadParams {
   isSingleMode: boolean;
@@ -26,6 +27,8 @@ export interface BuildBusInputPayloadParams {
   showKmAkhir1InSingle: boolean;
   showKmAkhir2InSingle: boolean;
   keterangan: string;
+  keteranganS1?: string;
+  keteranganS2?: string;
   showKeterangan: boolean;
   bus: BusData;
   previousDayKmAkhir2?: string;
@@ -73,12 +76,18 @@ export function buildBusInputPayload(params: BuildBusInputPayloadParams): Partia
     showKmAkhir1InSingle,
     showKmAkhir2InSingle,
     keterangan,
+    keteranganS1,
+    keteranganS2,
     showKeterangan,
     bus,
     previousDayKmAkhir2,
   } = params;
 
   const effectiveTotalToa = totalToa.trim();
+  const resolvedKeterangan =
+    keteranganS1 !== undefined || keteranganS2 !== undefined
+      ? combineShiftKeterangan(keteranganS1, keteranganS2)
+      : (keterangan || "").trim();
 
   const updates: Partial<BusData> = {};
 
@@ -129,12 +138,12 @@ export function buildBusInputPayload(params: BuildBusInputPayloadParams): Partia
         updates.kmAkhir2 = sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2);
       }
     } else if (effectiveCategory === "keterangan") {
-      updates.keterangan = keterangan.trim();
+      updates.keterangan = resolvedKeterangan;
     }
 
     // Jika chip keterangan dibuka pada mode single focus, sertakan keterangan
     if (showKeterangan) {
-      updates.keterangan = keterangan.trim();
+      updates.keterangan = resolvedKeterangan;
     }
   } else {
     // Mode All (Semua Kolom): kirim seluruh kolom yang berhak diisi
@@ -160,7 +169,7 @@ export function buildBusInputPayload(params: BuildBusInputPayloadParams): Partia
       ? sanitizeKmAkhir(kmAkhir2, kmAwal2, bus.kmAkhir2)
       : "";
     updates.totalToa = effectiveTotalToa;
-    updates.keterangan = keterangan.trim();
+    updates.keterangan = resolvedKeterangan;
   }
 
   return updates;

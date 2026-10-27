@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, useId } from "react";
+import { useState, useMemo, useRef, useEffect, useId, useCallback } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import {
   getSatsetMode,
@@ -15,6 +15,11 @@ import {
   getCrossDayValidationErrors,
 } from "./busInputValidation";
 import { buildBusInputPayload } from "./busInputPayload";
+import {
+  splitShiftKeterangan,
+  combineShiftKeterangan,
+  getDefaultModalTab,
+} from "@/utils/keteranganUtils";
 import { TEXT_ALERTS } from "@/constants/texts";
 
 export type ModalTab = "shift1" | "shift2" | "trip" | "notes";
@@ -24,6 +29,7 @@ export interface UseBusInputFormProps {
   headerMap?: HeaderMap;
   activeCategory?: string;
   initialTab?: ModalTab;
+  activeShift?: 1 | 2;
   onSave: (updates: Partial<BusData>) => void | Promise<void>;
   onDismiss: () => void;
   isOpen: boolean;
@@ -36,7 +42,8 @@ export function useBusInputForm({
   bus,
   headerMap,
   activeCategory = "all",
-  initialTab = "shift1",
+  initialTab,
+  activeShift,
   onSave,
   onDismiss,
   isOpen,
@@ -65,11 +72,17 @@ export function useBusInputForm({
     if (activeCategory.toLowerCase().includes("2")) {
       return "shift2";
     }
+    if (activeCategory.toLowerCase().includes("1")) {
+      return "shift1";
+    }
     if (activeCategory === "keterangan") {
       return "notes";
     }
-    return initialTab || "shift1";
-  }, [activeCategory, initialTab]);
+    if (initialTab) {
+      return initialTab;
+    }
+    return getDefaultModalTab(undefined, activeShift);
+  }, [activeCategory, initialTab, activeShift]);
 
   const [activeTab, setActiveTab] = useState<ModalTab>(resolvedInitialTab);
   const [isSatset, setIsSatsetState] = useState<boolean>(getSatsetMode());
@@ -133,7 +146,38 @@ export function useBusInputForm({
     smartRolloverSuggestion,
   } = odometer;
 
-  const [keterangan, setKeterangan] = useState(bus.keterangan || "");
+  const initialNotes = splitShiftKeterangan(bus.keterangan || "");
+  const [keteranganS1, setKeteranganS1] = useState(initialNotes.s1);
+  const [keteranganS2, setKeteranganS2] = useState(initialNotes.s2);
+
+  // ponytail: backward-compatible keterangan sync dengan active tab / combined shift notes
+  const keterangan =
+    activeTab === "shift1"
+      ? keteranganS1
+      : activeTab === "shift2"
+        ? keteranganS2
+        : combineShiftKeterangan(keteranganS1, keteranganS2);
+
+  const setKeterangan = useCallback(
+    (action: React.SetStateAction<string>) => {
+      const nextVal = typeof action === "function" ? action(keterangan) : action;
+      if (nextVal.includes(" | ")) {
+        const split = splitShiftKeterangan(nextVal);
+        setKeteranganS1(split.s1);
+        setKeteranganS2(split.s2);
+      } else if (activeTab === "shift2") {
+        setKeteranganS2(nextVal);
+      } else if (activeTab === "shift1") {
+        setKeteranganS1(nextVal);
+      } else {
+        const split = splitShiftKeterangan(nextVal);
+        setKeteranganS1(split.s1);
+        setKeteranganS2(split.s2);
+      }
+    },
+    [activeTab, keterangan]
+  );
+
   const [showKeterangan, setShowKeterangan] = useState(
     isSingleMode
       ? activeCategory === "keterangan"
@@ -466,6 +510,8 @@ export function useBusInputForm({
       showKmAkhir1InSingle,
       showKmAkhir2InSingle,
       keterangan,
+      keteranganS1,
+      keteranganS2,
       showKeterangan,
       bus,
       previousDayKmAkhir2,
@@ -478,6 +524,7 @@ export function useBusInputForm({
   return {
     isSingleMode,
     isSingleColumnEligible,
+    activeCategory,
     isExpandedAll,
     setIsExpandedAll,
     activeTab,
@@ -521,6 +568,10 @@ export function useBusInputForm({
     setKmAwal2,
     kmAkhir2,
     setKmAkhir2,
+    keteranganS1,
+    setKeteranganS1,
+    keteranganS2,
+    setKeteranganS2,
     keterangan,
     setKeterangan,
     showKeterangan,
@@ -548,6 +599,7 @@ export function useBusInputForm({
     handleApplyRollover,
     // Cascading & Single Mode Redirection Flags (SSOT)
     effectiveCategory,
+    activeShift,
     guideMessage,
     isKmAwal1Valid,
     isKmAkhir1Valid,

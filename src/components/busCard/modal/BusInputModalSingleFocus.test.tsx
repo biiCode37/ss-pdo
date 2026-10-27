@@ -19,6 +19,8 @@ describe("BusInputModalSingleFocus Component", () => {
   const createMockForm = (overrides: Partial<BusInputFormReturn> = {}): BusInputFormReturn => ({
     isSingleMode: true,
     isSingleColumnEligible: true,
+    activeCategory: "toaShift1",
+    activeShift: undefined,
     isExpandedAll: false,
     setIsExpandedAll: vi.fn(),
     activeTab: "shift1",
@@ -61,6 +63,10 @@ describe("BusInputModalSingleFocus Component", () => {
     setKmAwal2: vi.fn(),
     kmAkhir2: "",
     setKmAkhir2: vi.fn(),
+    keteranganS1: overrides.keteranganS1 ?? (overrides.keterangan || ""),
+    setKeteranganS1: vi.fn(),
+    keteranganS2: "",
+    setKeteranganS2: vi.fn(),
     keterangan: "",
     setKeterangan: vi.fn(),
     showKeterangan: false,
@@ -489,6 +495,7 @@ describe("BusInputModalSingleFocus Component", () => {
 
     it("merender textarea catatan jika kategori adalah murni keterangan", () => {
       const form = createMockForm({
+        activeShift: 1,
         effectiveCategory: "keterangan",
         showKeterangan: false,
         keterangan: "AC kurang dingin",
@@ -499,6 +506,37 @@ describe("BusInputModalSingleFocus Component", () => {
       const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
       expect(textarea).not.toBeNull();
       expect(textarea.value).toBe("AC kurang dingin");
+    });
+
+    it("merender textarea catatan Shift 2 jika kategori adalah murni keterangan pada Shift 2", () => {
+      const form = createMockForm({
+        activeShift: 2,
+        effectiveCategory: "keterangan",
+        showKeterangan: false,
+        keteranganS2: "AC panas di S2",
+      });
+
+      renderComponent({ form, activeCategory: "keterangan" });
+
+      const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
+      expect(textarea).not.toBeNull();
+      expect(textarea.value).toBe("AC panas di S2");
+    });
+
+    it("menampilkan string kosong pada Shift 1 jika keteranganS1 kosong dan tidak membocorkan catatan Shift 2", () => {
+      const form = createMockForm({
+        effectiveCategory: "toaShift1",
+        showKeterangan: true,
+        keteranganS1: "",
+        keteranganS2: "BA.02 Sakit",
+        keterangan: "SGO | BA.02 Sakit",
+      });
+
+      renderComponent({ form, activeCategory: "toaShift1" });
+
+      const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
+      expect(textarea).not.toBeNull();
+      expect(textarea.value).toBe("");
     });
   });
 });

@@ -5,7 +5,6 @@ export interface ProfileMenuSheetProps {
   onClose: () => void;
   onOpenAccumulation?: () => void;
   onOpenRegionalMonitoring?: () => void;
-  onReturnToRouteView?: () => void;
   isInMonitoringView?: boolean;
   onOpenUserManagement?: () => void;
   onOpenPageManagement?: () => void;

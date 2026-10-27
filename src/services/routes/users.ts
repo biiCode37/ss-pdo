@@ -1,6 +1,8 @@
 import { supabase, isSupabaseConfigured } from '../supabase';
 import type { UserProfile, UserRole, Role } from '../../types/supabase';
 import { logActivity } from './audit';
+import { formatUserError } from '../../utils/errorFormatter';
+import { TEXT_USER_MANAGEMENT } from '../../constants/texts/text_user_management';
 
 export const ROLE_CODE_TO_ID: Record<string, number> = {
   superadmin: 1,
@@ -21,24 +23,94 @@ export const ROLE_ID_TO_CODE: Record<number, UserRole> = {
 
 const PENDING_PROFILE_SYNC_KEY = 'PDO_PROFILE_SYNC_PENDING';
 
+/**
+ * Menghasilkan checksum anti-tamper untuk cache profil offline (SEC-154-04).
+ * Mencegah manipulasi manual di localStorage untuk eskalasi hak akses offline.
+ */
+export function generateProfileChecksum(
+  email: string,
+  role: string,
+  roleId: number,
+  isActive: boolean,
+  verifiedAt: string
+): string {
+  const pepper = 'pusm_pdo_sec_v1_integrity_hash';
+  const str = `${email.trim().toLowerCase()}|${role}|${roleId}|${isActive}|${verifiedAt}|${pepper}`;
+  let h1 = 0xdeadbeef;
+  let h2 = 0x41c64e6d;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+}
+
+/**
+ * Sanitasi pesan error teknis database agar ramah pengguna (SEC-154-05).
+ */
+function sanitizeDatabaseError(error: unknown, fallbackMessage: string): string {
+  if (typeof error === 'object' && error !== null) {
+    const msg = (error as any).message;
+    if (typeof msg === 'string') {
+      if (msg.includes('Akses ditolak')) {
+        return msg;
+      }
+      if (msg.includes('duplicate key') || msg.includes('23505') || msg.includes('unique constraint')) {
+        return 'Email tersebut sudah terdaftar di sistem.';
+      }
+    }
+  }
+  return formatUserError(error, fallbackMessage) || fallbackMessage;
+}
+
+
 /** Fallback verifikasi via cache profil lokal (window 30 hari + status aktif) */
 export function tryOfflineProfileFallback(normalizedEmail: string): { isAllowed: true; profile: UserProfile } | null {
   if (!normalizedEmail) return null;
   try {
     const cachedRaw = localStorage.getItem(`PDO_LAST_VERIFIED_PROFILE_${normalizedEmail}`);
     if (!cachedRaw) return null;
-    const { profile, verifiedAt } = JSON.parse(cachedRaw);
+    const { profile, verifiedAt, checksum } = JSON.parse(cachedRaw);
+    if (!profile || !verifiedAt || !profile.email) return null;
+
     const daysSince = (Date.now() - new Date(verifiedAt).getTime()) / 86400000;
-    // Valid jika masih dalam window 30 hari dan status aktif
-    if (daysSince <= 30 && profile && profile.is_active) {
-      console.log('[RouteService] User profile verified via offline cache fallback.');
-      return {
-        isAllowed: true,
-        profile: profile as UserProfile,
-      };
+    if (daysSince > 30 || !profile.is_active) return null;
+
+    // SEC-154-04: Verifikasi checksum integritas data profil offline
+    const expectedChecksum = generateProfileChecksum(
+      profile.email,
+      profile.role || 'pdo',
+      profile.role_id || 5,
+      profile.is_active,
+      verifiedAt
+    );
+
+    if (checksum) {
+      if (checksum !== expectedChecksum) {
+        console.warn('[RouteService] Deteksi manipulasi cache profil offline (checksum mismatch). Akses ditolak.');
+        return null;
+      }
+    } else {
+      // Jika cache lama tanpa checksum mencoba mengklaim peran administratif, tolak demi keamanan
+      if (profile.role === 'superadmin' || profile.role === 'admin') {
+        console.warn('[RouteService] Cache profil tanpa tanda tangan mencoba klaim peran istimewa offline. Ditolak.');
+        return null;
+      }
     }
-  } catch (_cacheErr) {}
-  return null;
+
+    console.log('[RouteService] User profile verified via offline cache fallback.');
+    return {
+      isAllowed: true,
+      profile: profile as UserProfile,
+    };
+  } catch (_cacheErr) {
+    return null;
+  }
 }
 
 export async function verifyUserProfile(email: string): Promise<{ isAllowed: boolean; profile?: UserProfile; message?: string }> {
@@ -58,7 +130,7 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
     const { data, error } = await supabase
       .from('user_profiles')
       .select('*, roles(id, uuid, code, name, description)')
-      .eq('email', email)
+      .eq('email', normalizedEmail)
       .single();
 
     // BUG-45: Bedakan "belum terdaftar" (PGRST116 = no rows) dari error
@@ -98,11 +170,20 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       role: roleCode,
     };
 
-    // Simpan cache profil yang berhasil diverifikasi untuk offline fallback
+    // Simpan cache profil yang berhasil diverifikasi untuk offline fallback dengan checksum (SEC-154-04)
     try {
+      const verifiedAt = new Date().toISOString();
+      const checksum = generateProfileChecksum(
+        profile.email,
+        profile.role || 'pdo',
+        profile.role_id,
+        profile.is_active ?? true,
+        verifiedAt
+      );
       localStorage.setItem(cacheKey, JSON.stringify({
         profile,
-        verifiedAt: new Date().toISOString(),
+        verifiedAt,
+        checksum,
       }));
     } catch (_e) {}
 
@@ -111,7 +192,7 @@ export async function verifyUserProfile(email: string): Promise<{ isAllowed: boo
       await supabase
         .from('user_profiles')
         .update({ last_login_at: new Date().toISOString() })
-        .eq('email', email);
+        .eq('email', normalizedEmail);
     } catch (_e) {
       console.warn('[RouteService] last_login_at update failed (non-blocking):', _e);
     }
@@ -180,12 +261,13 @@ export async function upsertUserProfile(profile: Partial<UserProfile> & { email:
 
 export async function sendUserHeartbeat(userEmail: string, secondsInterval: number = 180): Promise<void> {
   if (!isSupabaseConfigured || !userEmail) return;
+  const cleanEmail = userEmail.trim().toLowerCase();
 
   try {
     const { data } = await supabase
       .from('user_profiles')
       .select('total_active_seconds')
-      .eq('email', userEmail)
+      .eq('email', cleanEmail)
       .single();
 
     const currentSeconds = Number(data?.total_active_seconds || 0);
@@ -197,7 +279,7 @@ export async function sendUserHeartbeat(userEmail: string, secondsInterval: numb
         total_active_seconds: currentSeconds + secondsInterval,
         updated_at: new Date().toISOString(),
       })
-      .eq('email', userEmail);
+      .eq('email', cleanEmail);
   } catch (_err) {
     /* Non-blocking fail-safe */
   }
@@ -286,10 +368,7 @@ export async function addUserProfile(params: {
     ]).select('email');
 
     if (error) {
-      if (error.code === '23505') {
-        return { success: false, message: 'Email tersebut sudah terdaftar di sistem.' };
-      }
-      return { success: false, message: `Gagal menambahkan pengguna: ${error.message}` };
+      return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.ADD_FAILED_MSG) };
     }
 
     // BUG-65: Deteksi zero-row — RLS bisa memfilter INSERT tanpa error dan
@@ -333,28 +412,51 @@ export async function updateUserProfileRole(
 ): Promise<{ success: boolean; message?: string }> {
   if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
   try {
+    const cleanTarget = targetEmail.trim().toLowerCase();
+    const cleanUpdatedBy = updatedBy.trim().toLowerCase();
     const roleId = typeof newRole === 'number' ? newRole : (ROLE_CODE_TO_ID[newRole] || 5);
 
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .update({
-        role_id: roleId,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('email', targetEmail)
-      .select('email');
-
-    if (error) {
-      return { success: false, message: `Gagal mengubah peran: ${error.message}` };
+    // Coba eksekusi melalui secure RPC function (SECURITY DEFINER)
+    let rpcSuccess = false;
+    try {
+      if (typeof (supabase as any)?.rpc === 'function') {
+        const { data: rpcData, error: rpcError } = await (supabase as any).rpc('admin_update_user_role', {
+          p_acting_email: cleanUpdatedBy,
+          p_target_email: cleanTarget,
+          p_new_role_id: roleId,
+        });
+        if (!rpcError && rpcData === true) {
+          rpcSuccess = true;
+        } else if (rpcError && rpcError.message && rpcError.message.includes('Akses ditolak')) {
+          return { success: false, message: rpcError.message };
+        }
+      }
+    } catch {
+      // Fallback ke direct update jika RPC belum tersedia
     }
 
-    // BUG-63: RLS bisa memfilter operasi TANPA error (PostgREST sukses
-    // dengan 0 baris). Tanpa cek ini, UI menampilkan sukses palsu.
-    if (!data || data.length === 0) {
-      return {
-        success: false,
-        message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
-      };
+    if (!rpcSuccess) {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({
+          role_id: roleId,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('email', cleanTarget)
+        .select('email');
+
+      if (error) {
+        return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FAILED_MSG) };
+      }
+
+      // BUG-63: RLS bisa memfilter operasi TANPA error (PostgREST sukses
+      // dengan 0 baris). Tanpa cek ini, UI menampilkan sukses palsu.
+      if (!data || data.length === 0) {
+        return {
+          success: false,
+          message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
+        };
+      }
     }
 
     const assignedRoleCode = ROLE_ID_TO_CODE[roleId] || 'pdo';
@@ -363,7 +465,7 @@ export async function updateUserProfileRole(
       user_email: updatedBy,
       action: 'USER_ROLE_CHANGED',
       details: {
-        target_email: targetEmail,
+        target_email: cleanTarget,
         new_role: assignedRoleCode,
         new_role_id: roleId,
       },
@@ -385,32 +487,56 @@ export async function toggleUserProfileStatus(
 ): Promise<{ success: boolean; message?: string }> {
   if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
   try {
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .update({
-        is_active: isActive,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('email', targetEmail)
-      .select('email');
+    const cleanTarget = targetEmail.trim().toLowerCase();
+    const cleanUpdatedBy = updatedBy.trim().toLowerCase();
 
-    if (error) {
-      return { success: false, message: `Gagal mengubah status akun: ${error.message}` };
+    // Coba eksekusi melalui secure RPC function (SECURITY DEFINER)
+    let rpcSuccess = false;
+    try {
+      if (typeof (supabase as any)?.rpc === 'function') {
+        const { data: rpcData, error: rpcError } = await (supabase as any).rpc('admin_toggle_user_status', {
+          p_acting_email: cleanUpdatedBy,
+          p_target_email: cleanTarget,
+          p_is_active: isActive,
+        });
+        if (!rpcError && rpcData === true) {
+          rpcSuccess = true;
+        } else if (rpcError && rpcError.message && rpcError.message.includes('Akses ditolak')) {
+          return { success: false, message: rpcError.message };
+        }
+      }
+    } catch {
+      // Fallback
     }
 
-    // BUG-63: Deteksi zero-row — blokir silent RLS tidak boleh tampil sukses
-    if (!data || data.length === 0) {
-      return {
-        success: false,
-        message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
-      };
+    if (!rpcSuccess) {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({
+          is_active: isActive,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('email', cleanTarget)
+        .select('email');
+
+      if (error) {
+        return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.TOGGLE_STATUS_FAILED_MSG) };
+      }
+
+      // BUG-63: Deteksi zero-row — blokir silent RLS tidak boleh tampil sukses
+      if (!data || data.length === 0) {
+        return {
+          success: false,
+          message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
+        };
+      }
     }
 
     await logActivity({
       user_email: updatedBy,
       action: 'USER_STATUS_CHANGED',
       details: {
-        target_email: targetEmail,
+        target_email: cleanTarget,
         new_status: isActive ? 'active' : 'inactive',
       },
     });
@@ -430,32 +556,56 @@ export async function revokeUserProfile(
 ): Promise<{ success: boolean; message?: string }> {
   if (!isSupabaseConfigured) return { success: false, message: 'Koneksi database tidak terkonfigurasi.' };
   try {
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .update({
-        is_active: false,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('email', targetEmail)
-      .select('email');
+    const cleanTarget = targetEmail.trim().toLowerCase();
+    const cleanRevokedBy = revokedBy.trim().toLowerCase();
 
-    if (error) {
-      return { success: false, message: `Gagal mencabut akses pengguna: ${error.message}` };
+    // Coba eksekusi melalui secure RPC function (SECURITY DEFINER)
+    let rpcSuccess = false;
+    try {
+      if (typeof (supabase as any)?.rpc === 'function') {
+        const { data: rpcData, error: rpcError } = await (supabase as any).rpc('admin_toggle_user_status', {
+          p_acting_email: cleanRevokedBy,
+          p_target_email: cleanTarget,
+          p_is_active: false,
+        });
+        if (!rpcError && rpcData === true) {
+          rpcSuccess = true;
+        } else if (rpcError && rpcError.message && rpcError.message.includes('Akses ditolak')) {
+          return { success: false, message: rpcError.message };
+        }
+      }
+    } catch {
+      // Fallback
     }
 
-    // Deteksi zero-row — RLS policy memblokir atau akun tidak ditemukan
-    if (!data || data.length === 0) {
-      return {
-        success: false,
-        message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
-      };
+    if (!rpcSuccess) {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({
+          is_active: false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('email', cleanTarget)
+        .select('email');
+
+      if (error) {
+        return { success: false, message: sanitizeDatabaseError(error, TEXT_USER_MANAGEMENT.ALERTS.DELETE_USER_FAILED_MSG) };
+      }
+
+      // Deteksi zero-row — RLS policy memblokir atau akun tidak ditemukan
+      if (!data || data.length === 0) {
+        return {
+          success: false,
+          message: `Tidak dapat menemukan akun dengan email ${targetEmail} atau akses ditolak. Silakan coba lagi.`,
+        };
+      }
     }
 
     await logActivity({
       user_email: revokedBy,
       action: 'USER_REVOKED',
       details: {
-        target_email: targetEmail,
+        target_email: cleanTarget,
       },
     });
 

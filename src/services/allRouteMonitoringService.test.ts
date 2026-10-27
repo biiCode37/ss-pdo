@@ -130,7 +130,13 @@ describe('allRouteMonitoringService', () => {
           or: vi.fn().mockResolvedValue({ data: mockSummaries, error: null })
         };
       }
-      return { select: vi.fn().mockReturnThis() };
+      const defaultMock = {
+        select: vi.fn().mockReturnThis(),
+        in: vi.fn().mockResolvedValue({ data: [], error: null }),
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+        or: vi.fn().mockResolvedValue({ data: [], error: null }),
+      };
+      return defaultMock;
     });
 
     const result = await fetchRegionalMonitoringData('2026-09-02');
@@ -209,7 +215,13 @@ describe('allRouteMonitoringService', () => {
           or: vi.fn().mockResolvedValue({ data: [], error: null })
         };
       }
-      return { select: vi.fn().mockReturnThis() };
+      const defaultMock = {
+        select: vi.fn().mockReturnThis(),
+        in: vi.fn().mockResolvedValue({ data: [], error: null }),
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+        or: vi.fn().mockResolvedValue({ data: [], error: null }),
+      };
+      return defaultMock;
     });
 
     const result = await fetchRegionalMonitoringData('2026-09-02');
@@ -347,6 +359,8 @@ describe('allRouteMonitoringService', () => {
       return {
         select: vi.fn().mockReturnThis(),
         or: vi.fn().mockResolvedValue({ data: [], error: null }),
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+        in: vi.fn().mockResolvedValue({ data: [], error: null }),
       };
     });
 
@@ -590,6 +604,73 @@ describe('allRouteMonitoringService', () => {
       const ranto = result.supervisorSummaries?.find((s) => s.id === 'RANTO');
       expect(ranto?.totalTodayPassengers).toBe(10200);
       expect(ranto?.totalKm).toBe(13300);
+    });
+
+    it('applies dynamic renops on Sunday (JAK.115 uses renops_sunday = 23 instead of stale default_renops = 30)', async () => {
+      const mockRoutes = [
+        {
+          id: 115,
+          route_code: 'JAK.115',
+          route_name: 'TERMINAL TANJUNG PRIOK - IGI',
+          operator_name: 'KOMIDA',
+          is_looping: false,
+          km_baku: 20,
+          target_hk: 4000,
+          default_renops: 30,
+          renops_weekday: 30,
+          renops_saturday: 26,
+          renops_sunday: 23,
+          renops_holiday: 23,
+          supervisor_name: 'Abdul Manan',
+        },
+      ];
+      vi.mocked(dailyReportService.fetchRouteMasterList).mockResolvedValue(mockRoutes as any);
+
+      // Simulasi todayReport yang terlanjur menyimpan renops_shift1: 30 lama
+      const mockReports = [
+        {
+          id: 999,
+          route_id: 115,
+          route_code: 'JAK.115',
+          date: '2026-10-25', // Hari Minggu
+          renops_shift1: 30, // Stale default
+          realops_shift1: 23,
+          renops_shift2: 30, // Stale default
+          realops_shift2: 23,
+          total_passengers: 3500,
+          total_km: 2500,
+          total_trip: 125,
+          status: 'submitted',
+        },
+      ];
+
+      vi.mocked(supabase.from).mockImplementation((table: string) => {
+        if (table === 'daily_route_reports') {
+          return {
+            select: vi.fn().mockReturnValue({
+              in: vi.fn().mockResolvedValue({ data: mockReports, error: null }),
+            }),
+          } as any;
+        }
+        return {
+          select: vi.fn().mockReturnValue({
+            in: vi.fn().mockResolvedValue({ data: [], error: null }),
+            eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+            or: vi.fn().mockResolvedValue({ data: [], error: null }),
+          }),
+        } as any;
+      });
+
+      // 2026-10-25 adalah hari Minggu (Sunday)
+      const result = await fetchRegionalMonitoringData('2026-10-25');
+      const jak115 = result.routes.find((r) => r.routeCode === 'JAK.115');
+
+      expect(jak115).toBeDefined();
+      expect(jak115?.defaultRenops).toBe(23); // Dinamis hari Minggu
+      expect(jak115?.renopsShift1).toBe(23); // Menolak stale 30
+      expect(jak115?.renopsShift2).toBe(23);
+      expect(jak115?.totalRenops).toBe(23);
+      expect(jak115?.totalRealops).toBe(23);
     });
   });
 });

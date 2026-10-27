@@ -203,6 +203,8 @@ function matchColumn(headers, keywordList) {
 // --- 7. CLI Argument Parsing ---
 const args = process.argv.slice(2);
 let targetDate = '';
+let startDate = '';
+let endDate = '';
 let targetRoute = '';
 let isDryRun = false;
 let isForce = false;
@@ -210,6 +212,10 @@ let isForce = false;
 for (const arg of args) {
   if (arg.startsWith('--date=')) {
     targetDate = arg.split('=')[1].trim();
+  } else if (arg.startsWith('--start-date=')) {
+    startDate = arg.split('=')[1].trim();
+  } else if (arg.startsWith('--end-date=')) {
+    endDate = arg.split('=')[1].trim();
   } else if (arg.startsWith('--route=')) {
     targetRoute = arg.split('=')[1].trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
   } else if (arg === '--dry-run') {
@@ -219,8 +225,30 @@ for (const arg of args) {
   }
 }
 
-// Default ke tanggal hari ini (WIB / Asia/Jakarta) jika tidak diberikan
-if (!targetDate) {
+function generateDateRange(startStr, endStr) {
+  const [sY, sM, sD] = startStr.split('-').map(Number);
+  const [eY, eM, eD] = endStr.split('-').map(Number);
+  const start = new Date(Date.UTC(sY, sM - 1, sD));
+  const end = new Date(Date.UTC(eY, eM - 1, eD));
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return [];
+  const from = start <= end ? start : end;
+  const to = start <= end ? end : start;
+  const dates = [];
+  const cur = new Date(from.getTime());
+  while (cur <= to) {
+    const y = cur.getUTCFullYear();
+    const m = String(cur.getUTCMonth() + 1).padStart(2, '0');
+    const d = String(cur.getUTCDate()).padStart(2, '0');
+    dates.push(`${y}-${m}-${d}`);
+    cur.setUTCDate(cur.getUTCDate() + 1);
+  }
+  return dates;
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Default ke tanggal hari ini (WIB / Asia/Jakarta) jika tidak ada parameter tanggal
+if (!targetDate && (!startDate || !endDate)) {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Asia/Jakarta',
     year: 'numeric',
@@ -234,21 +262,42 @@ if (!targetDate) {
   targetDate = `${y}-${m}-${d}`;
 }
 
-const [yearStr, monthStr, dayStr] = targetDate.split('-');
-const year = parseInt(yearStr, 10);
-const month = parseInt(monthStr, 10);
-const day = parseInt(dayStr, 10);
-const tabName = String(day);
+const datesToProcess = (startDate && endDate)
+  ? generateDateRange(startDate, endDate)
+  : [targetDate];
 
 console.log('='.repeat(65));
 console.log('🚌 SS_PDO REGIONAL INGESTION RUNNER (AUTOMATED CRON/CLI)');
 console.log('='.repeat(65));
-console.log(`📅 Tanggal Target : ${targetDate} (Tab Sheet: "${tabName}")`);
+if (startDate && endDate) {
+  console.log(`📅 Rentang Target : ${startDate} s.d. ${endDate} (${datesToProcess.length} Hari)`);
+} else {
+  console.log(`📅 Tanggal Target : ${targetDate}`);
+}
 console.log(`🤖 Service Account: ${serviceAccount.client_email}`);
 console.log(`⚙️  Mode Eksekusi : ${isDryRun ? 'DRY RUN (Simulasi, Tanpa Tulis DB)' : 'LIVE (Upsert Supabase)'}`);
 if (targetRoute) console.log(`🎯 Filter Rute   : ${targetRoute}`);
 if (isForce) console.log(`⚠️  Force Mode    : Mengabaikan status submitted/verified`);
-console.log('-'.repeat(65));
+// --- 7b. Helper Renops Dinamis (Kategori Hari) ---
+function getDynamicRenops(route, dateStr) {
+  if (!dateStr || !route) return route?.default_renops || 0;
+  const parts = dateStr.split('-');
+  if (parts.length < 3) return route.default_renops || 0;
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const day = parseInt(parts[2], 10);
+  const dateObj = new Date(year, month - 1, day);
+  const dayOfWeek = dateObj.getDay(); // 0 = Minggu, 6 = Sabtu
+
+  const defaultRenops = route.default_renops || 0;
+  if (dayOfWeek === 0) {
+    return route.renops_sunday ?? defaultRenops;
+  }
+  if (dayOfWeek === 6) {
+    return route.renops_saturday ?? defaultRenops;
+  }
+  return route.renops_weekday ?? defaultRenops;
+}
 
 // --- 8. Core Ingestion Execution ---
 async function run() {
@@ -260,203 +309,236 @@ async function run() {
     throw new Error('Daftar master rute di Supabase tidak ditemukan.');
   }
 
-  // 2. Ambil pemetaan route_sheets untuk bulan & tahun bersangkutan
-  const routeSheets = await supabaseRest(
-    `route_sheets?select=*&year=eq.${year}&month=eq.${month}`
-  );
-  const sheetMap = new Map();
-  (routeSheets || []).forEach((s) => sheetMap.set(s.route_id, s));
+  let totalSynced = 0;
+  let totalSkipped = 0;
+  let totalErrors = 0;
 
-  // 3. Ambil laporan existing di Supabase untuk Smart Skip
-  const existingReports = await supabaseRest(
-    `daily_route_reports?select=route_id,route_code,status&date=eq.${targetDate}`
-  );
-  const statusMap = new Map();
-  (existingReports || []).forEach((r) => statusMap.set(r.route_id, r.status));
+  console.log(`Menemukan ${routes.length} master rute terdaftar.`);
 
-  let synced = 0;
-  let skipped = 0;
-  let errors = 0;
+  for (let d = 0; d < datesToProcess.length; d++) {
+    const curDate = datesToProcess[d];
+    const [yearStr, monthStr, dayStr] = curDate.split('-');
+    const year = parseInt(yearStr, 10);
+    const month = parseInt(monthStr, 10);
+    const day = parseInt(dayStr, 10);
+    const tabName = String(day);
 
-  console.log(`Menemukan ${routes.length} rute terdaftar.`);
+    console.log(`\n📅 [PROSES TANGGAL] ${curDate} (${d + 1}/${datesToProcess.length}) - Tab Sheet: "${tabName}"`);
+    console.log('-'.repeat(65));
 
-  for (const route of routes) {
-    const cleanCode = route.route_code.toUpperCase().replace(/[^A-Z0-9]/g, '');
-    if (targetRoute && cleanCode !== targetRoute) {
-      continue;
-    }
+    // 2. Ambil pemetaan route_sheets untuk bulan & tahun bersangkutan
+    const routeSheets = await supabaseRest(
+      `route_sheets?select=*&year=eq.${year}&month=eq.${month}`
+    );
+    const sheetMap = new Map();
+    (routeSheets || []).forEach((s) => sheetMap.set(s.route_id, s));
 
-    const currentStatus = statusMap.get(route.id);
-    if (!isForce && (currentStatus === 'submitted' || currentStatus === 'verified')) {
-      console.log(`⏩ [SKIP] ${route.route_code.padEnd(8)}: Sudah berstatus "${currentStatus}" dari aplikasi.`);
-      skipped++;
-      continue;
-    }
+    // 3. Ambil laporan existing di Supabase untuk Smart Skip
+    const existingReports = await supabaseRest(
+      `daily_route_reports?select=route_id,route_code,status&date=eq.${curDate}`
+    );
+    const statusMap = new Map();
+    (existingReports || []).forEach((r) => statusMap.set(r.route_id, r.status));
 
-    const sheetConfig = sheetMap.get(route.id);
-    if (!sheetConfig || !sheetConfig.spreadsheet_id) {
-      console.log(`⚠️  [MISS] ${route.route_code.padEnd(8)}: Belum ada konfigurasi spreadsheet_id di route_sheets.`);
-      errors++;
-      continue;
-    }
+    let daySynced = 0;
+    let daySkipped = 0;
+    let dayErrors = 0;
 
-    try {
-      // Ambil data tab harian (A1:W50)
-      const range = encodeURIComponent(`'${tabName}'!A1:W50`);
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetConfig.spreadsheet_id}/values/${range}?valueRenderOption=FORMATTED_VALUE`;
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-
-      if (!res.ok) {
-        if (res.status === 404) {
-          console.log(`❌ [FAIL] ${route.route_code.padEnd(8)}: Tab "${tabName}" tidak ditemukan di spreadsheet.`);
-        } else {
-          console.log(`❌ [FAIL] ${route.route_code.padEnd(8)}: Google Sheets error (${res.status}).`);
-        }
-        errors++;
+    for (const route of routes) {
+      const cleanCode = route.route_code.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (targetRoute && cleanCode !== targetRoute) {
         continue;
       }
 
-      const sheetData = await res.json();
-      const rows = sheetData.values || [];
-      if (rows.length < 2) {
-        console.log(`⚠️  [EMPTY] ${route.route_code.padEnd(8)}: Data baris kosong pada tab "${tabName}".`);
+      const currentStatus = statusMap.get(route.id);
+      if (!isForce && (currentStatus === 'submitted' || currentStatus === 'verified')) {
+        console.log(`⏩ [SKIP] ${route.route_code.padEnd(8)}: Sudah berstatus "${currentStatus}" dari aplikasi.`);
+        daySkipped++;
+        totalSkipped++;
         continue;
       }
 
-      // Deteksi baris header
-      let headerRowIndex = 0;
-      for (let i = 0; i < Math.min(5, rows.length); i++) {
-        if (matchColumn(rows[i], KEYWORDS.unit) !== -1) {
-          headerRowIndex = i;
-          break;
+      const sheetConfig = sheetMap.get(route.id);
+      if (!sheetConfig || !sheetConfig.spreadsheet_id) {
+        console.log(`⚠️  [MISS] ${route.route_code.padEnd(8)}: Belum ada konfigurasi spreadsheet_id di route_sheets.`);
+        dayErrors++;
+        totalErrors++;
+        continue;
+      }
+
+      try {
+        // Ambil data tab harian (A1:W50)
+        const range = encodeURIComponent(`'${tabName}'!A1:W50`);
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetConfig.spreadsheet_id}/values/${range}?valueRenderOption=FORMATTED_VALUE`;
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+
+        if (!res.ok) {
+          if (res.status === 404) {
+            console.log(`❌ [FAIL] ${route.route_code.padEnd(8)}: Tab "${tabName}" tidak ditemukan di spreadsheet.`);
+          } else {
+            console.log(`❌ [FAIL] ${route.route_code.padEnd(8)}: Google Sheets error (${res.status}).`);
+          }
+          dayErrors++;
+          totalErrors++;
+          continue;
         }
-      }
 
-      const headers = rows[headerRowIndex] || [];
-      const colMap = {
-        unit: matchColumn(headers, KEYWORDS.unit),
-        trip1: matchColumn(headers, KEYWORDS.tripPergi),
-        trip2: matchColumn(headers, KEYWORDS.tripPulang),
-        toaS1: matchColumn(headers, KEYWORDS.toaShift1),
-        manS1: matchColumn(headers, KEYWORDS.manualShift1),
-        toaS2: matchColumn(headers, KEYWORDS.toaShift2),
-        manS2: matchColumn(headers, KEYWORDS.manualShift2),
-        ket: matchColumn(headers, KEYWORDS.keterangan),
-        kmA1: matchColumn(headers, KEYWORDS.kmAwal1),
-        kmAkh1: matchColumn(headers, KEYWORDS.kmAkhir1),
-        kmA2: matchColumn(headers, KEYWORDS.kmAwal2),
-        kmAkh2: matchColumn(headers, KEYWORDS.kmAkhir2),
-        totalKm: matchColumn(headers, KEYWORDS.totalKm),
-      };
-
-      let calcKm = 0;
-      let calcToaS1 = 0;
-      let calcManS1 = 0;
-      let calcToaS2 = 0;
-      let calcManS2 = 0;
-      let calcTrips = 0;
-      let activeBuses = 0;
-
-      for (let r = headerRowIndex + 1; r < rows.length; r++) {
-        const row = rows[r];
-        if (!row || row.length === 0) continue;
-        const unitName = colMap.unit !== -1 ? String(row[colMap.unit] || '').trim() : '';
-
-        // Abaikan baris subtotal / footer
-        if (!unitName || /jumlah|total|rekap/i.test(unitName)) continue;
-
-        const kmA1 = colMap.kmA1 !== -1 ? parseIndonesianNumber(row[colMap.kmA1]) : 0;
-        const kmAkh1 = colMap.kmAkh1 !== -1 ? parseIndonesianNumber(row[colMap.kmAkh1]) : 0;
-        const kmA2 = colMap.kmA2 !== -1 ? parseIndonesianNumber(row[colMap.kmA2]) : 0;
-        const kmAkh2 = colMap.kmAkh2 !== -1 ? parseIndonesianNumber(row[colMap.kmAkh2]) : 0;
-
-        const km1 = kmAkh1 > kmA1 ? kmAkh1 - kmA1 : 0;
-        const km2 = kmAkh2 > kmA2 ? kmAkh2 - kmA2 : 0;
-        const kmRow = colMap.totalKm !== -1 ? parseIndonesianNumber(row[colMap.totalKm]) : 0;
-        const kmBus = (km1 + km2 > 0) ? (km1 + km2) : kmRow;
-        calcKm += kmBus;
-
-        const toaS1 = colMap.toaS1 !== -1 ? parseIndonesianNumber(row[colMap.toaS1]) : 0;
-        const manS1 = colMap.manS1 !== -1 ? parseIndonesianNumber(row[colMap.manS1]) : 0;
-        const toaS2 = colMap.toaS2 !== -1 ? parseIndonesianNumber(row[colMap.toaS2]) : 0;
-        const manS2 = colMap.manS2 !== -1 ? parseIndonesianNumber(row[colMap.manS2]) : 0;
-
-        calcToaS1 += toaS1;
-        calcManS1 += manS1;
-        calcToaS2 += toaS2;
-        calcManS2 += manS2;
-
-        const t1 = colMap.trip1 !== -1 ? parseIndonesianNumber(row[colMap.trip1]) : 0;
-        const t2 = colMap.trip2 !== -1 ? parseIndonesianNumber(row[colMap.trip2]) : 0;
-        calcTrips += (t1 + t2);
-
-        const ket = colMap.ket !== -1 ? String(row[colMap.ket] || '').toUpperCase() : '';
-        const isOff = ket.includes('OFF');
-        const hasActivity = (kmBus > 0) || (toaS1 + toaS2 > 0) || (t1 + t2 > 0);
-        if (!isOff && hasActivity) {
-          activeBuses++;
+        const sheetData = await res.json();
+        const rows = sheetData.values || [];
+        if (rows.length < 2) {
+          console.log(`⚠️  [EMPTY] ${route.route_code.padEnd(8)}: Data baris kosong pada tab "${tabName}".`);
+          continue;
         }
+
+        // Deteksi baris header
+        let headerRowIndex = 0;
+        for (let i = 0; i < Math.min(5, rows.length); i++) {
+          if (matchColumn(rows[i], KEYWORDS.unit) !== -1) {
+            headerRowIndex = i;
+            break;
+          }
+        }
+
+        const headers = rows[headerRowIndex] || [];
+        const colMap = {
+          unit: matchColumn(headers, KEYWORDS.unit),
+          trip1: matchColumn(headers, KEYWORDS.tripPergi),
+          trip2: matchColumn(headers, KEYWORDS.tripPulang),
+          toaS1: matchColumn(headers, KEYWORDS.toaShift1),
+          manS1: matchColumn(headers, KEYWORDS.manualShift1),
+          toaS2: matchColumn(headers, KEYWORDS.toaShift2),
+          manS2: matchColumn(headers, KEYWORDS.manualShift2),
+          ket: matchColumn(headers, KEYWORDS.keterangan),
+          kmA1: matchColumn(headers, KEYWORDS.kmAwal1),
+          kmAkh1: matchColumn(headers, KEYWORDS.kmAkhir1),
+          kmA2: matchColumn(headers, KEYWORDS.kmAwal2),
+          kmAkh2: matchColumn(headers, KEYWORDS.kmAkhir2),
+          totalKm: matchColumn(headers, KEYWORDS.totalKm),
+        };
+
+        let calcKm = 0;
+        let calcToaS1 = 0;
+        let calcManS1 = 0;
+        let calcToaS2 = 0;
+        let calcManS2 = 0;
+        let calcTrips = 0;
+        let activeBuses = 0;
+
+        for (let r = headerRowIndex + 1; r < rows.length; r++) {
+          const row = rows[r];
+          if (!row || row.length === 0) continue;
+          const unitName = colMap.unit !== -1 ? String(row[colMap.unit] || '').trim() : '';
+
+          // Abaikan baris subtotal / footer
+          if (!unitName || /jumlah|total|rekap/i.test(unitName)) continue;
+
+          const kmA1 = colMap.kmA1 !== -1 ? parseIndonesianNumber(row[colMap.kmA1]) : 0;
+          const kmAkh1 = colMap.kmAkh1 !== -1 ? parseIndonesianNumber(row[colMap.kmAkh1]) : 0;
+          const kmA2 = colMap.kmA2 !== -1 ? parseIndonesianNumber(row[colMap.kmA2]) : 0;
+          const kmAkh2 = colMap.kmAkh2 !== -1 ? parseIndonesianNumber(row[colMap.kmAkh2]) : 0;
+
+          const km1 = kmAkh1 > kmA1 ? kmAkh1 - kmA1 : 0;
+          const km2 = kmAkh2 > kmA2 ? kmAkh2 - kmA2 : 0;
+          const kmRow = colMap.totalKm !== -1 ? parseIndonesianNumber(row[colMap.totalKm]) : 0;
+          const kmBus = (km1 + km2 > 0) ? (km1 + km2) : kmRow;
+          calcKm += kmBus;
+
+          const toaS1 = colMap.toaS1 !== -1 ? parseIndonesianNumber(row[colMap.toaS1]) : 0;
+          const manS1 = colMap.manS1 !== -1 ? parseIndonesianNumber(row[colMap.manS1]) : 0;
+          const toaS2 = colMap.toaS2 !== -1 ? parseIndonesianNumber(row[colMap.toaS2]) : 0;
+          const manS2 = colMap.manS2 !== -1 ? parseIndonesianNumber(row[colMap.manS2]) : 0;
+
+          calcToaS1 += toaS1;
+          calcManS1 += manS1;
+          calcToaS2 += toaS2;
+          calcManS2 += manS2;
+
+          const t1 = colMap.trip1 !== -1 ? parseIndonesianNumber(row[colMap.trip1]) : 0;
+          const t2 = colMap.trip2 !== -1 ? parseIndonesianNumber(row[colMap.trip2]) : 0;
+          calcTrips += (t1 + t2);
+
+          const ket = colMap.ket !== -1 ? String(row[colMap.ket] || '').toUpperCase() : '';
+          const isOff = ket.includes('OFF');
+          const hasActivity = (kmBus > 0) || (toaS1 + toaS2 > 0) || (t1 + t2 > 0);
+          if (!isOff && hasActivity) {
+            activeBuses++;
+          }
+        }
+
+        const totalPassengers = calcToaS1 + calcManS1 + calcToaS2 + calcManS2;
+        const dynamicRenops = getDynamicRenops(route, curDate);
+        const realops = activeBuses > 0 ? activeBuses : dynamicRenops;
+        const achievementKm = realops > 0 ? Number((calcKm / realops).toFixed(2)) : 0;
+
+        // Sesuai Standar Domain SS_PDO:
+        // 1 Ritase = 2 Trip (PP / Pulang-Pergi). Total Ritase = totalKm / km_baku. Fallback: calcTrips / 2.
+        const kmBaku = Number(route.km_baku) || 0;
+        const totalRitase = kmBaku > 0 && calcKm > 0
+          ? Number((calcKm / kmBaku).toFixed(1))
+          : Number((calcTrips / 2).toFixed(1));
+
+        const payload = {
+          route_id: route.id,
+          route_code: route.route_code,
+          date: curDate,
+          renops_shift1: dynamicRenops,
+          realops_shift1: realops,
+          renops_shift2: dynamicRenops,
+          realops_shift2: realops,
+          toa_shift1: calcToaS1,
+          manual_shift1: calcManS1,
+          toa_shift2: calcToaS2,
+          manual_shift2: calcManS2,
+          total_passengers: totalPassengers,
+          total_km: Number(calcKm.toFixed(2)),
+          achievement_km: achievementKm,
+          total_trip: totalRitase,
+          status: 'draft',
+          data_source: 'sheet_ingestion',
+          last_synced_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        if (!isDryRun) {
+          await supabaseRest('daily_route_reports?on_conflict=route_id,date', {
+            method: 'POST',
+            headers: {
+              Prefer: 'resolution=merge-duplicates,return=representation',
+            },
+            body: JSON.stringify(payload),
+          });
+        }
+
+        console.log(
+          `✅ [SYNC] ${route.route_code.padEnd(8)}: Ops=${String(realops).padStart(2)} | ` +
+          `Pax=${String(totalPassengers).padStart(4)} | ` +
+          `KM=${String(calcKm.toFixed(0)).padStart(5)} | ` +
+          `Rit PP=${String(totalRitase).padStart(4)} | ` +
+          `TOA S1/S2=${calcToaS1}/${calcToaS2}`
+        );
+        daySynced++;
+        totalSynced++;
+
+        // Jeda halus antar rute untuk perlindungan kuota Google API
+        await sleep(250);
+      } catch (routeErr) {
+        console.log(`❌ [ERR]  ${route.route_code.padEnd(8)}: ${routeErr.message}`);
+        dayErrors++;
+        totalErrors++;
       }
+    }
 
-      const totalPassengers = calcToaS1 + calcManS1 + calcToaS2 + calcManS2;
-      const realops = activeBuses > 0 ? activeBuses : (route.default_renops || 0);
-      const achievementKm = realops > 0 ? Number((calcKm / realops).toFixed(2)) : 0;
+    console.log(`Ringkasan ${curDate}: ${daySynced} synced | ${daySkipped} skipped | ${dayErrors} error`);
 
-      // Sesuai Standar Domain SS_PDO:
-      // 1 Ritase = 2 Trip (PP / Pulang-Pergi). Total Ritase = totalKm / km_baku. Fallback: calcTrips / 2.
-      const kmBaku = Number(route.km_baku) || 0;
-      const totalRitase = kmBaku > 0 && calcKm > 0
-        ? Number((calcKm / kmBaku).toFixed(1))
-        : Number((calcTrips / 2).toFixed(1));
-
-      const payload = {
-        route_id: route.id,
-        route_code: route.route_code,
-        date: targetDate,
-        renops_shift1: route.default_renops || 0,
-        realops_shift1: realops,
-        renops_shift2: route.default_renops || 0,
-        realops_shift2: realops,
-        toa_shift1: calcToaS1,
-        manual_shift1: calcManS1,
-        toa_shift2: calcToaS2,
-        manual_shift2: calcManS2,
-        total_passengers: totalPassengers,
-        total_km: Number(calcKm.toFixed(2)),
-        achievement_km: achievementKm,
-        total_trip: totalRitase,
-        status: 'draft',
-        data_source: 'sheet_ingestion',
-        last_synced_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
-      if (!isDryRun) {
-        await supabaseRest('daily_route_reports?on_conflict=route_id,date', {
-          method: 'POST',
-          headers: {
-            Prefer: 'resolution=merge-duplicates,return=representation',
-          },
-          body: JSON.stringify(payload),
-        });
-      }
-
-      console.log(
-        `✅ [SYNC] ${route.route_code.padEnd(8)}: Ops=${String(realops).padStart(2)} | ` +
-        `Pax=${String(totalPassengers).padStart(4)} | ` +
-        `KM=${String(calcKm.toFixed(0)).padStart(5)} | ` +
-        `Rit PP=${String(totalRitase).padStart(4)} | ` +
-        `TOA S1/S2=${calcToaS1}/${calcToaS2}`
-      );
-      synced++;
-    } catch (routeErr) {
-      console.log(`❌ [ERR]  ${route.route_code.padEnd(8)}: ${routeErr.message}`);
-      errors++;
+    // Jeda napas antar tanggal jika memproses multi-hari
+    if (d < datesToProcess.length - 1) {
+      console.log(`⏳ Jeda 1.2 detik sebelum memproses tanggal berikutnya...`);
+      await sleep(1200);
     }
   }
 
-  console.log('-'.repeat(65));
-  console.log(`📊 RINGKASAN: ${synced} Berhasil Disinkronkan | ${skipped} Dilewati (App) | ${errors} Gagal/Error`);
+  console.log('='.repeat(65));
+  console.log(`📊 TOTAL RINGKASAN: ${totalSynced} Berhasil Disinkronkan | ${totalSkipped} Dilewati (App) | ${totalErrors} Gagal/Error`);
   console.log('='.repeat(65));
 }
 

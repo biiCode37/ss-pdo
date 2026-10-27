@@ -212,7 +212,7 @@ export function WaReportFormatTabs({
         </div>
       )}
 
-      {/* Filter Lingkup Korlap - Only for Format 1 & 2 */}
+      {/* Filter Lingkup Korwil - Only for Format 1 & 2 */}
       {formatType !== "format3" && (
         <div
           style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "8px", marginBottom: "10px" }}

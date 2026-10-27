@@ -1,5 +1,11 @@
 import React from "react";
-import { MapPin, ChevronDown, AlertTriangle, CloudOff } from "lucide-react";
+import {
+  MapPin,
+  ChevronDown,
+  ChevronLeft,
+  AlertTriangle,
+  CloudOff,
+} from "lucide-react";
 import { UserProfileHeader } from "@/components/UserProfileHeader";
 import { RouteSelectorCard } from "@/components/RouteSelectorCard";
 import { TEXT_DASHBOARD } from "@/constants/texts";
@@ -37,6 +43,7 @@ interface DashboardHeaderProps {
   onOpenReportModal: () => void;
   onRouteCodeChange: (code: string) => void;
   routeSelectorOpenTrigger: number;
+  onBackToMonitoring?: () => void;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -64,6 +71,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onOpenReportModal,
   onRouteCodeChange,
   routeSelectorOpenTrigger,
+  onBackToMonitoring,
 }) => {
   const hasConflictOrFailedQueue = queue.some(
     (q) => q.status === "failed" || q.status === "conflict",
@@ -100,7 +108,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           textAlign: "left",
         }}
       >
-        {/* POJOK KIRI: Badge Kode Rute Aktif + Status Antrean Offline */}
+        {/* POJOK KIRI: Tombol Kembali ke Wilayah (Non-PDO) + Badge Kode Rute Aktif + Status Antrean Offline */}
         <div
           style={{
             display: "flex",
@@ -109,6 +117,33 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             flexShrink: 0,
           }}
         >
+          {onBackToMonitoring && (
+            <button
+              type="button"
+              onClick={onBackToMonitoring}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
+                padding: "6px 9px",
+                borderRadius: "10px",
+                background: "var(--card-bg, rgba(255, 255, 255, 0.06))",
+                border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
+                color: "var(--text-secondary, #a0aec0)",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+              }}
+              title={TEXT_DASHBOARD.SWITCHER.TITLE}
+              aria-label={TEXT_DASHBOARD.SWITCHER.TITLE}
+              data-testid="back-to-monitoring-btn"
+            >
+              <ChevronLeft size={14} style={{ flexShrink: 0 }} />
+              <span>{TEXT_DASHBOARD.SWITCHER.REGIONAL_MONITORING}</span>
+            </button>
+          )}
+
           {/* Badge Kode Rute Aktif */}
           <button
             type="button"

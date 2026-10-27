@@ -156,8 +156,12 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).ROUTES_TAB.FILTER_SUBMITTED(16)).toBe('Perlu Verifikasi (16)');
     expect((TEXT_MONITORING as any).ROUTES_TAB.FILTER_UNCOMPLETED(0)).toBe('Belum Lengkap (0)');
     expect((TEXT_MONITORING as any).ROUTES_TAB.FILTER_VERIFIED(2)).toBe('Terverifikasi (2)');
-    expect((TEXT_MONITORING as any).ROUTES_TAB.KORLAP_LABEL).toBe('Korlap:');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.KORWIL_LABEL).toBe('Korwil:');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.KORWIL_ALL).toBe('Semua');
+    expect((TEXT_MONITORING as any).ROUTES_TAB.KORLAP_LABEL).toBe('Korwil:');
     expect((TEXT_MONITORING as any).ROUTES_TAB.KORLAP_ALL).toBe('Semua');
+    expect(TEXT_MONITORING.ROUTE_CARD.KORWIL_PREFIX).toBe('Korwil:');
+    expect(TEXT_MONITORING.ROUTE_CARD.KORLAP_PREFIX).toBe('Korwil:');
     expect((TEXT_MONITORING as any).ROUTES_TAB.EMPTY_FILTER).toContain('Tidak ada rute yang cocok');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_PCT('85.5')).toBe('85.5% dari Target');
     expect((TEXT_MONITORING as any).DASHBOARD.CHART_TARGET_ZERO).toBe('Target 0');
@@ -201,6 +205,11 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).MONTHLY_SYNC.AUTO_DETECTED_BADGE('September', 2026)).toBe('Terdeteksi: September 2026');
     expect((TEXT_MONITORING as any).MONTHLY_SYNC.FUTURE_MONTH_ERR('November', 2026)).toContain('masa depan');
     expect((TEXT_MONITORING as any).MONTHLY_SYNC.ERR_NETWORK).toContain('Koneksi internet');
+    expect((TEXT_MONITORING as any).KORWIL_ROUTE_SHEET).toBeDefined();
+    expect((TEXT_MONITORING as any).KORWIL_ROUTE_SHEET.TITLE('JAK 60')).toBe('Detail Rute JAK 60');
+    expect((TEXT_MONITORING as any).KORWIL_ROUTE_SHEET.SECTIONS.FLEET).toBe('Kesiapan Armada');
+    expect((TEXT_MONITORING as any).KORWIL_ROUTE_SHEET.SECTIONS.SHIFT_BREAKDOWN).toBe('Rincian Pelanggan per Shift');
+    expect((TEXT_MONITORING as any).KORWIL_ROUTE_SHEET.ACTIONS.OPEN_DASHBOARD).toContain('Buka Lembar Kerja Rute');
   });
 
   it('exports TEXT_MONITORING ingestion, provenance, and detailed readiness tokens', () => {
@@ -208,6 +217,15 @@ describe('Centralized UI Text Dictionary', () => {
     expect((TEXT_MONITORING as any).INGESTION.BUTTON_LOADING).toBe('Loading...');
     expect((TEXT_MONITORING as any).INGESTION.MODAL_TITLE).toContain('Load All');
     expect((TEXT_MONITORING as any).INGESTION.PROGRESS_FETCHING('JAK.01', 1, 18)).toContain('JAK.01');
+    expect((TEXT_MONITORING as any).INGESTION.PROGRESS_COUNT_SINGLE(5, 18)).toBe('5 / 18 Rute');
+    expect((TEXT_MONITORING as any).INGESTION.PROGRESS_COUNT_RANGE(44, 126, 18, 7)).toBe('44 / 126 Laporan (18 Rute × 7 Hari)');
+    expect((TEXT_MONITORING as any).INGESTION.PROGRESS_COMPLETE_LABEL).toBe('Selesai');
+    expect((TEXT_MONITORING as any).INGESTION.ALL_UP_TO_DATE_TITLE).toBe('Data Sudah Lengkap');
+    expect((TEXT_MONITORING as any).INGESTION.ALL_UP_TO_DATE_TOAST).toContain('lengkap di database');
+    expect((TEXT_MONITORING as any).INGESTION.CONFIRM_FORCE_TITLE).toBe('Semua Data Sudah Lengkap');
+    expect((TEXT_MONITORING as any).INGESTION.CONFIRM_FORCE_TEXT('01/10/2026 s.d. 07/10/2026')).toContain('01/10/2026 s.d. 07/10/2026');
+    expect((TEXT_MONITORING as any).INGESTION.INCREMENTAL_SUMMARY(5, 126)).toBe('Menemukan 5 laporan yang perlu ditarik dari total 126 laporan.');
+    expect((TEXT_MONITORING as any).INGESTION.INCREMENTAL_SUCCESS_TOAST(5, 121)).toContain('5 laporan ditarik, 121 laporan sudah lengkap');
     expect((TEXT_MONITORING as any).INGESTION.SUCCESS_TOAST(11, 7)).toContain('11 rute dari App, 7 rute dari Sheet');
     expect((TEXT_MONITORING as any).INGESTION.PARTIAL_WARN(2)).toContain('2 rute terkendala');
     expect((TEXT_MONITORING as any).PROVENANCE.APP_INPUT).toBe('Input App');
@@ -226,6 +244,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_WA_REPORT.SHIFT_SELECTOR.SHIFT_2).toContain('Shift 2');
     expect(TEXT_WA_REPORT.BLOCKING_TITLE(1)).toContain('Shift 1');
     expect(TEXT_WA_REPORT.BLOCKING_DESC(2)).toContain('2 rute');
+    expect(TEXT_WA_REPORT.FILTER_ALL).toBe('Semua Korwil');
     expect(TEXT_WA_REPORT.UNCONFIRMED_ROUTES_BADGE(3)).toContain('3');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_HEADER('Kamis', '10 September 2026', 1, 'Pagi')).toContain('1 (Pagi)');
     expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_CLOSING).toContain('diketahui');
@@ -284,6 +303,10 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_USER_MANAGEMENT.TABS.PETUGAS).toBe('Petugas');
     expect(TEXT_USER_MANAGEMENT.MODAL_ADD.TITLE).toBe('Tambah Pengguna Baru');
     expect(TEXT_USER_MANAGEMENT.ALERTS.ACCESS_RESTRICTED).toBe('Akses Terbatas');
+    expect(TEXT_USER_MANAGEMENT.ALERTS.ADD_FAILED_MSG).toBeDefined();
+    expect(TEXT_USER_MANAGEMENT.ALERTS.EDIT_ROLE_FAILED_MSG).toBeDefined();
+    expect(TEXT_USER_MANAGEMENT.ALERTS.TOGGLE_STATUS_FAILED_MSG).toBeDefined();
+    expect(TEXT_USER_MANAGEMENT.ALERTS.DELETE_USER_FAILED_MSG).toBeDefined();
   });
 
   it('exports TEXT_UNIT_DETAIL with metrics and notes texts', () => {
@@ -406,7 +429,7 @@ describe('Centralized UI Text Dictionary', () => {
 
     // ROUTE_DETAIL_MODAL
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TITLE('JAK.01')).toContain('JAK.01');
-    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.SUBTITLE('Rute A', 'Korlap B')).toContain('Rute A');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.SUBTITLE('Rute A', 'Korwil B')).toContain('Korwil: Korwil B');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TABS.OPERASIONAL).toBe('Operasional');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TABS.SHIFT).toBe('Pelanggan & Shift');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.TABS.PRODUKTIVITAS).toBe('Produktivitas & Rit');
@@ -436,6 +459,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_WA_REPORT.ACTIONS.COPY).toBe('Salin Teks');
     expect(TEXT_WA_REPORT.ACTIONS.SHARE).toBe('Kirim ke WhatsApp');
     expect(TEXT_WA_REPORT.ACTIONS.COPY_SUCCESS).toContain('berhasil disalin');
+    expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OFF_SUBHEADER).toBe('*Unit Libur (OFF) / Keterangan Khusus:*');
+    expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_KENDALA_SUBHEADER).toBe('*Rincian Tidak Ops:*');
+    expect(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_PELENGKAP_SUBHEADER).toBe('*Unit Pelengkap Renops (Shift 2):*');
   });
 
   it('exports TEXT_PDO_FORM with A2 report labels and Renops/Realops clean text', () => {
@@ -461,6 +487,27 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT).toBe('Manajemen Halaman');
     expect(TEXT_PAGE_MANAGEMENT.ACCESS_RESTRICTED_DESC).toContain('Akses terbatas');
   });
+
+  it('contains all required text entries for Keterangan Presets & Shift Notes', () => {
+    const modalTexts = TEXT_ALERTS.BUS_INPUT_MODAL;
+    expect(modalTexts.PRESETS).toBeDefined();
+    expect(modalTexts.PRESETS.BTN_BA).toBe('BA');
+    expect(modalTexts.PRESETS.BTN_OFF).toBe('OFF');
+    expect(modalTexts.PRESETS.BTN_TO_EVDAL).toBe('TO EVDAL');
+    expect(modalTexts.PRESETS.BTN_OKB).toBe('OKB');
+    expect(modalTexts.PRESETS.BTN_RENOP).toBe('Renop');
+    expect(modalTexts.PRESETS.EMPTY_PREVIEW).toBe('- (Tanpa Catatan)');
+    expect(modalTexts.PRESETS.BA_CODES).toEqual(['01', '02', '03', '04']);
+    expect(modalTexts.PRESETS.BA_TYPES['01']).toContain('01');
+    expect(modalTexts.PRESETS.BA_TYPES['02']).toContain('02');
+    expect(modalTexts.PRESETS.BA_TYPES['03']).toContain('03');
+    expect(modalTexts.PRESETS.BA_TYPES['04']).toContain('04');
+    expect(modalTexts.PRESETS.BTN_NP1).toBe('NP1');
+    expect(modalTexts.PRESETS.BTN_NP2).toBe('NP2');
+    expect(modalTexts.PRESETS.LABEL_SHIFT1_NOTE).toBe('Catatan Shift 1');
+    expect(modalTexts.PRESETS.LABEL_SHIFT2_NOTE).toBe('Catatan Shift 2');
+    expect(modalTexts.PRESETS.PREVIEW_SSOT_LABEL).toBe('Hasil Format Spreadsheet:');
+    expect(modalTexts.PRESETS.APPLY_ALL_SHIFTS).toBe('Terapkan ke Kedua Shift');
+    expect(modalTexts.PRESETS.ARIA_SELECT_NOTE_SHIFT).toBe('Pilih Shift Catatan');
+  });
 });
-
-

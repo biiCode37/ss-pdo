@@ -877,6 +877,81 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
       expect(latestForm?.validationErrors.length).toBe(1);
     });
   });
+
+  describe("Task 3: Split Shift Notes State & Form Submission", () => {
+    it("initializes keteranganS1 and keteranganS2 by splitting bus.keterangan", () => {
+      renderForm({
+        bus: {
+          ...mockBus,
+          keterangan: "BA.01 Mogok | SGO",
+        },
+      });
+
+      expect(latestForm?.keteranganS1).toBe("BA.01 Mogok");
+      expect(latestForm?.keteranganS2).toBe("");
+    });
+
+    it("initializes identical notes for all-day status like OFF", () => {
+      renderForm({
+        bus: {
+          ...mockBus,
+          keterangan: "OFF",
+        },
+      });
+
+      expect(latestForm?.keteranganS1).toBe("OFF");
+      expect(latestForm?.keteranganS2).toBe("OFF");
+    });
+
+    it("allows updating keteranganS1 and keteranganS2 independently and submits canonical combined format", () => {
+      const onSave = vi.fn();
+      renderForm({
+        bus: {
+          ...mockBus,
+          keterangan: "",
+        },
+        onSave,
+      });
+
+      act(() => {
+        latestForm?.setKeteranganS1("BA.01 Radiator bocor");
+      });
+
+      expect(latestForm?.keteranganS1).toBe("BA.01 Radiator bocor");
+      expect(latestForm?.keteranganS2).toBe("");
+
+      act(() => {
+        const dummyEvent = { preventDefault: vi.fn() } as unknown as React.FormEvent;
+        latestForm?.handleFormSubmit(dummyEvent);
+      });
+
+      expect(onSave).toHaveBeenCalledTimes(1);
+      const submitted = onSave.mock.calls[0][0];
+      expect(submitted.keterangan).toBe("S1: BA.01 Radiator Bocor");
+    });
+
+    it("auto-selects shift2 tab when activeShift === 2 in 'all' mode", () => {
+      renderForm({
+        ...defaultProps,
+        activeCategory: "ALL",
+        activeShift: 2,
+        initialTab: undefined,
+      });
+
+      expect(latestForm?.activeTab).toBe("shift2");
+    });
+
+    it("auto-selects shift1 tab when activeShift === 1 in 'all' mode", () => {
+      renderForm({
+        ...defaultProps,
+        activeCategory: "ALL",
+        activeShift: 1,
+        initialTab: undefined,
+      });
+
+      expect(latestForm?.activeTab).toBe("shift1");
+    });
+  });
 });
 
 

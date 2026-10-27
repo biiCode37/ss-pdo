@@ -1,5 +1,6 @@
 import type { BusData } from '../services/googleSheets';
 import { parseIndonesianNumber } from './numberUtils';
+import { isUnitOffOrToEvdal } from './keteranganUtils';
 
 export type UnitShiftStatus = 'FULL_COMPLETE' | 'SHIFT_1_ONLY' | 'SHIFT_2_ONLY' | 'INCOMPLETE' | 'EMPTY';
 
@@ -257,7 +258,7 @@ export function detectTargetTrip(data: BusData[] | null | undefined): { pergi: n
   let maxTrip = { pergi: 0, pulang: 0 };
 
   data.forEach((b) => {
-    const isOff = (b.keterangan || '').trim().toUpperCase() === 'OFF';
+    const isOff = isUnitOffOrToEvdal(b.keterangan);
     if (isOff) return;
     const bp = parseInt(b.tripPergi || '0', 10);
     const bq = parseInt(b.tripPulang || '0', 10);

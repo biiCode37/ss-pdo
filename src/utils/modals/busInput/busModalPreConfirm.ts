@@ -10,6 +10,7 @@ import {
   validateTripCount,
 } from "./busModalValidation";
 import { extractKeteranganFromForm } from "./busModalKeterangan";
+import { isUnitOffOrToEvdal } from "@/utils/keteranganUtils";
 
 interface SingleColumnMeta {
   label: string;
@@ -402,7 +403,7 @@ export function handleModalPreConfirm(
 
   const resolvedKeterangan = extractKeteranganFromForm(popup);
   const upperKet = resolvedKeterangan.toUpperCase();
-  const isOffUnit = upperKet === "OFF";
+  const isOffUnit = isUnitOffOrToEvdal(resolvedKeterangan);
   const isNp1Unit = /\bNP1\b/i.test(upperKet);
   const isNp2Unit = /\bNP2\b/i.test(upperKet);
 

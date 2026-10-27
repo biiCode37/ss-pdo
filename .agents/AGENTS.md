@@ -106,6 +106,10 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
   - **Klausul Keselamatan Wajib (Larangan Keputusan Mandiri):**
     - Jika ditemukan kendala/permasalahan dalam proses tugas-tugas itu (seperti merge conflict, test gagal, build gagal, git rejection, atau anomali jaringan), agent **DILARANG KERAS mengambil keputusan sendiri**.
     - Agent **WAJIB memberi konfirmasi kepada pengguna mengenai permasalahan yang ditemukan secara transparan dilengkapi dengan rekomendasi solusi**, lalu menunggu keputusan/arahan pengguna sebelum melanjutkan atau mengulangi tugas yang belum selesai/terganggu/terhenti.
+- **Perintah Cepat "PD" (Push Devmode Saja):**
+  - Ketika pengguna mengatakan/memberikan perintah `"PD"`, itu artinya **Push Devmode Saja**.
+  - Agent **WAJIB** hanya menjalankan perintah `git push origin devmode` langsung dari branch `devmode`.
+  - Agent **DILARANG KERAS menyentuh, checkout, merge, atau push ke branch `main` sama sekali**. Pekerjaan dan branch lokal tetap berada di `devmode`.
 
 ---
 
@@ -152,3 +156,11 @@ Aturan di bawah ini dirumuskan berdasarkan evaluasi menyeluruh dari siklus **Ref
   - `text_wa_report.ts`: Generator laporan format WhatsApp.
 - **Interpolasi Dinamis:** Gunakan fungsi template murni jika teks membutuhkan parameter dinamis (contoh: `(count: number) => `...``).
 - **Verifikasi Unit Test:** Setiap penambahan teks kamus baru wajib disertakan uji pada `src/constants/texts/texts.test.ts`.
+
+---
+
+## 🛡️ 11. Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation)
+
+- **Aturan Emas Anti-Privilege Escalation:** Dilarang keras membuat policy RLS `FOR ALL TO anon USING (true)` atau memberikan `GRANT UPDATE/DELETE TO anon` pada tabel sensitif dan kolom identitas peran/status (`user_profiles.role_id`, `user_profiles.is_active`, `app_page_settings`, `daily_route_reports`, `daily_fleet_shifts`, `route_sheets`).
+- **Mutasi Administratif via SECURITY DEFINER:** Seluruh operasi administratif yang mengubah peran pengguna, status keaktifan akun, atau ketersediaan halaman aplikasi **WAJIB** dijalankan melalui fungsi PostgreSQL `SECURITY DEFINER` (RPC) yang memvalidasi hak peran pemanggil (`superadmin`/`admin`) secara ketat di sisi server database.
+- **Proteksi Boundary Edge Function:** Setiap Supabase Edge Function yang mengeksekusi mutasi atau mengakses kredensial Google Service Account WAJIB memvalidasi header otorisasi pemanggil dan memvalidasi `spreadsheetId` terhadap daftar rute terdaftar (whitelist). Dilarang membocorkan potongan kredensial atau informasi diagnostik internal server pada respons endpoint publik.
