@@ -1,7 +1,7 @@
 # Audit Bugs: Refactor 171 — Solusi Komprehensif Status Kesiapan Armada 18 Rute & Redesain Mobile-First
 
 ## Ringkasan Eksekutif
-Audit ini dilakukan berdasarkan temuan anomali tampilan pada tab **Status Armada** di halaman **Monitoring Wilayah & Laporan WA**. Pada tanggal 27 Oktober 2026, aplikasi hanya menampilkan rute **JAK.87**, sementara 17 rute lainnya tidak tampil sama sekali. Selain itu, tata letak visual sangat boros ruang vertikal ponsel di mana 1 rute dengan 6 bus menyita hampir 100% tinggi layar.
+Audit ini dilakukan berdasarkan temuan anomali tampilan pada tab **Status Armada** di halaman **Monitoring Wilayah & Laporan WA**. Pada tanggal 27 Oktober 2026, aplikasi hanya menampilkan rute **JAK.87**, sementara 17 rute lainnya tidak tampil sama sekali. Selain itu, tata letak visual sangat boros ruang vertikal ponsel di mana 1 rute dengan 6 bus menyita hampir 100% tinggi layar. Tahap audit lanjutan menemukan 5 masalah tambahan terkait pengalaman pengguna di mobile, termasuk modal koreksi yang menghapus catatan eksisting dan kartu rute yang default terbuka penuh.
 
 ---
 
@@ -35,7 +35,7 @@ Audit ini dilakukan berdasarkan temuan anomali tampilan pada tab **Status Armada
 - **Lokasi Kode:** `src/components/monitoring/tabs/MonitoringFleetStatusTab.tsx` (baris 689–750).
 - **Keparahan:** 🟢 Rendah (Low Severity - Information Hierarchy).
 - **Deskripsi:** 
-  Seluruh unit kendala yang bukan bertatus murni `TO`, `OFF`, atau `SO` diberi label badge abu-abu bertuliskan `[CATATAN]`, tepat di atas teks kendala `Kendala: BA.02 PROGRAM KEUR`.
+  Seluruh unit kendala yang bukan berstatus murni `TO`, `OFF`, atau `SO` diberi label badge abu-abu bertuliskan `[CATATAN]`, tepat di atas teks kendala `Kendala: BA.02 PROGRAM KEUR`.
 - **Dampak Pengguna:** 
   Pengguna tidak mendapatkan informasi cepat mengenai jenis masalah bus karena semua tertulis "CATATAN".
 - **Mitigasi:** 
@@ -51,7 +51,7 @@ Audit ini dilakukan berdasarkan temuan anomali tampilan pada tab **Status Armada
 - **Dampak Pengguna:** 
   Kebingungan di tingkat pengawas dan korwil wilayah mengenai status rute-rute yang tidak muncul.
 - **Mitigasi:** 
-  Menambahkan seksi khusus di bawah rute terkendala: **"Rute Beroperasi Penuh (Tanpa Kendala)"** yang menyajikan daftar chip ringkas hijau (`[JAK.01]`, `[JAK.02]`, dll.) sehingga pengawas mengetahui dengan pasti bahwa rute-rute tersebut 100% aman dan beroperasi normal.
+  Menambahkan seksi khusus di bawah rute terkendala: **"Rute Beroperasi Penuh (Tanpa Kendala)"** yang menyajikan daftar chip ringkas hijau (`[JAK.01]`, `[JAK.02]`, dll.) serta seksi terpisah **"Menunggu Laporan / Sinkronisasi"** untuk rute yang belum ada data.
 
 ---
 
@@ -64,3 +64,63 @@ Audit ini dilakukan berdasarkan temuan anomali tampilan pada tab **Status Armada
   Ketidakkonsistenan istilah di antarmuka dan potensi kebingungan pengguna non-teknis.
 - **Mitigasi:** 
   Pembersihan total dead-code dan peremajaan kamus teks sentral menjadi istilah ramah operasional: *"Status Kesiapan Armada Wilayah"*, *"Armada Beroperasi"*, dan *"Armada Terkendala"*.
+
+---
+
+### 6. BUG-171-06: Tombol Koreksi Memakan Ruang Horizontal Header Kartu
+- **Lokasi Kode:** `src/components/monitoring/tabs/MonitoringFleetStatusTab.tsx` (baris 1236–1271).
+- **Keparahan:** 🟡 Sedang (Medium Severity - Mobile Space Waste).
+- **Deskripsi:** 
+  Tombol koreksi modal korlap menampilkan teks lengkap `Koreksi` di samping badge kendala dan chevron. Pada layar berukuran 360px–390px, teks ini mendesak nama operator rute sehingga terpotong atau wrap ke baris baru secara tidak rapi.
+- **Dampak Pengguna:** 
+  Header kartu terlihat padat, sempit, dan terkesan AI slop yang tidak memprioritaskan kerapian mobile viewport.
+- **Mitigasi:** 
+  Menghapus teks `"Koreksi"` dan menggantinya murni dengan icon edit persegi ramping (`<Edit3 size={12} />`) berukuran 25x25px dengan tooltip dan `aria-label`.
+
+---
+
+### 7. BUG-171-07: Format Badge Kendala Memuat Ikon Bus Berlebihan
+- **Lokasi Kode:** `src/components/monitoring/tabs/MonitoringFleetStatusTab.tsx` (baris 1273–1290).
+- **Keparahan:** 🟢 Rendah (Low Severity - Visual Clutter).
+- **Deskripsi:** 
+  Badge unit kendala sempat menampilkan icon bus tambahan bersama angka dan icon warning, menghasilkan tumpukan icon yang redundant di samping judul rute.
+- **Dampak Pengguna:** 
+  Informasi visual terpecah dan memakan ruang horizontal yang berharga di layar ponsel.
+- **Mitigasi:** 
+  Menstandarkan badge kendala menjadi format presisi murni: `[jumlah] + icon warning` (contoh: `6 ⚠️`), tanpa icon bus.
+
+---
+
+### 8. BUG-171-08: Default Card Expanded Memenuhi Layar Sejak Awal
+- **Lokasi Kode:** `src/components/monitoring/tabs/MonitoringFleetStatusTab.tsx` (baris 209–212).
+- **Keparahan:** 🟡 Sedang (Medium Severity - UX Friction).
+- **Deskripsi:** 
+  Ketika state awal accordion diset terbuka (*expanded*), begitu pengguna membuka tab Status Armada, seluruh bus kendala langsung terbuka lebar. Pengguna harus scroll sangat jauh ke bawah untuk mengetahui rute lain yang ada.
+- **Dampak Pengguna:** 
+  Kehilangan gambaran besar (*high-level view*) dari kondisi wilayah saat pertama kali masuk halaman.
+- **Mitigasi:** 
+  Menetapkan default kartu dalam mode **terlipat (collapsed)** (`expandedRoutes = new Set()`). Pengguna dapat membuka kartu rute yang ingin diperiksa secara spesifik atau menggunakan tombol "Buka Semua".
+
+---
+
+### 9. BUG-171-09: Data-Wiping & Ketiadaan Pilihan Shift pada `QuickKorlapFleetModal`
+- **Lokasi Kode:** `src/components/fleetStatus/QuickKorlapFleetModal.tsx` (baris 92–180).
+- **Keparahan:** 🔴 Tinggi (High Severity - Data Overwrite / Loss).
+- **Deskripsi:** 
+  Saat modal koreksi korlap dibuka dari tab Status Armada: 1) `rawNotes` selalu diset kosong string `''`, sehingga jika user menyimpan, catatan kendala unit yang sudah ada sebelumnya terhapus bersih; 2) `targetRenops` selalu default ke 30 (bukan renops rute aktual); 3) Modal terkunci pada Shift 1 tanpa opsi beralih ke Shift 2.
+- **Dampak Pengguna:** 
+  Catatan kendala yang sudah diinput hilang secara diam-diam (*silent data loss*), dan korlap tidak bisa memperbarui data Shift 2.
+- **Mitigasi:** 
+  Menambahkan tombol segmented Shift 1 (Pagi) / Shift 2 (Siang), mengoper `initialNotes` dari unit yang ada sehingga teks kendala terisi otomatis, dan mengoper `defaultRenops` serta `initialRealops` aktual rute.
+
+---
+
+### 10. BUG-171-10: Redundansi Baris Unit pada Mode Filter "Semua Shift"
+- **Lokasi Kode:** `src/components/monitoring/tabs/MonitoringFleetStatusTab.tsx` (baris 416–458).
+- **Keparahan:** 🟡 Sedang (Medium Severity - Data Duplicate).
+- **Deskripsi:** 
+  Jika bus yang sama (misal `SAF 05`) mengalami kendala di Shift 1 dan Shift 2, mode "Semua Shift" menampilkannya dua kali dalam dua baris terpisah.
+- **Dampak Pengguna:** 
+  Daftar terasa panjang dan membingungkan karena unit fisik yang sama muncul berkali-kali.
+- **Mitigasi:** 
+  Mengimplementasikan **Smart Unit Deduplication** berbasis map nomor bodi bus. Jika unit muncul di kedua shift, baris digabungkan menjadi satu dengan badge shift ganda `S1 • S2`.

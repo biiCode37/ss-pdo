@@ -1,10 +1,18 @@
 # Repair Report: Refactor 171 — Solusi Komprehensif Status Kesiapan Armada 18 Rute & Redesain Mobile-First
 
 ## Ringkasan Perbaikan
-Refactor 171 menuntaskan dua permasalahan besar pada halaman **Monitoring Wilayah (Tab Status Armada)**:
+Refactor 171 menuntaskan serangkaian permasalahan pada halaman **Monitoring Wilayah (Tab Status Armada)**:
 1. **Penyatuan Data 18 Rute Otomatis (Dual-Source Resolution):** Memastikan seluruh 18 rute terdeteksi otomatis dengan memadukan data tabel `daily_fleet_shifts` (input manual A2/Korlap) dan fallback ke data `daily_route_reports` (hasil penarikan otomatis Google Sheets 18 rute).
-2. **Redesain Mobile-First Compact List & Akordeon:** Menghemat ruang layar hingga **>65%**, mengeliminasi badge redundan `[CATATAN]`, dan menambahkan transparansi rute-rute yang 100% normal beroperasi.
-3. **Pembersihan Istilah SGO/Non-SGO & Dead-Code:** Menghilangkan sisa modal konfirmasi usang di `text_dashboard.ts` dan `text_fleet_status.ts`, serta meremajakan kamus `text_monitoring.ts` dengan bahasa Indonesia operasional yang ramah pengguna.
+2. **Redesain Mobile-First Compact List & Akordeon:** Menghemat ruang layar hingga **>70%**, mengeliminasi badge redundan `[CATATAN]`, dan menetapkan default kartu dalam mode **terlipat (collapsed)** agar gambaran umum wilayah langsung terbaca tanpa scroll panjang.
+3. **Penyempurnaan Header & Badge Kendala Sesuai Standar Operasional:**
+   - Menghapus teks `"Koreksi"`, diganti murni dengan icon edit persegi ramping (`<Edit3 size={12} />`).
+   - Standarisasi badge kendala menjadi format presisi: `[jumlah] + icon warning` (contoh: `6 ⚠️`), **tanpa icon bus**.
+4. **Pencegahan Data-Loss pada `QuickKorlapFleetModal`:**
+   - Menambahkan segmented tabs Shift 1 / Shift 2.
+   - Mengoper catatan eksisting (`initialNotes`) agar pembukaan modal tidak mengosongkan/menghapus catatan unit bus yang sudah tercatat.
+   - Mengoper `defaultRenops` dan `initialRealops` aktual rute bersangkutan.
+5. **Deduplikasi Cerdas Unit Bus Antar-Shift:** Menggabungkan unit bus fisik yang sama pada filter "Semua Shift" menjadi satu baris berbadge `S1 • S2`.
+6. **Pembersihan Istilah SGO/Non-SGO & Dead-Code:** Menghapus sisa modal konfirmasi usang di `text_dashboard.ts` dan `text_fleet_status.ts`, serta meremajakan kamus `text_monitoring.ts` dengan bahasa Indonesia operasional yang ramah pengguna.
 
 ---
 
@@ -13,29 +21,70 @@ Refactor 171 menuntaskan dua permasalahan besar pada halaman **Monitoring Wilaya
 ### 1. Dual-Source Resolution pada `MonitoringFleetStatusTab.tsx`
 - Mengumpulkan seluruh 18 rute unik dari prop `routes` (dari `data.routes`).
 - Memeriksa ketersediaan shift pada `fleetShifts` (DB). Jika belum ada, sistem membaca rincian unit kendala dari `r.fleetStatusShift1` dan `r.fleetStatusShift2` hasil sinkronisasi spreadsheet.
-- Mengklasifikasikan rute menjadi dua kelompok:
+- Mengklasifikasikan rute menjadi tiga kelompok:
   - `troubledRoutes`: Rute dengan bus kendala (ditampilkan lengkap dengan akordeon).
-  - `normalRoutes`: Rute dengan 0 kendala (ditampilkan sebagai chip hijau ringkas).
-- Menghitung agregat makro 18 rute (Total Armada, Beroperasi, Terkendala) secara presisi.
+  - `normalRoutes`: Rute dengan 0 kendala & ada aktivitas/realops (ditampilkan sebagai chip hijau ringkas `100% Siap Jalan`).
+  - `pendingRoutes`: Rute yang belum ada aktivitas atau menunggu sinkronisasi sheet.
 
-### 2. Helper Cerdas `inferStatusCode()` & Formatting
-- Menganalisis catatan unit secara otomatis:
-  - Kode BA (`BA.01` s/d `BA.06`) diberi badge warna orange `#FB923C`.
-  - Uji Kir (`KEUR`) diberi badge warna cyan `#38BDF8`.
-  - Kendala Bengkel / Mesin (`TEKNIS`) diberi badge warna ungu `#C084FC`.
-  - Operasional Khusus (`OKB` / `RENOP`) diberi badge warna biru/hijau.
-  - Off Pramudi / Libur (`OFF`) diberi badge merah `#F43F5E`.
-  - Tidak Operasi (`T.O` / `TO EVDAL`) diberi badge kuning `#F59E0B`.
+### 2. Header Kompak, Icon Edit & Badge Kendala
+- Tombol Koreksi:
+  ```tsx
+  <button
+    type="button"
+    onClick={...}
+    style={{
+      width: "25px",
+      height: "25px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: "6px",
+      border: "1px solid rgba(56, 189, 248, 0.25)",
+      background: "rgba(56, 189, 248, 0.12)",
+      color: "#38bdf8",
+      cursor: "pointer",
+      padding: 0,
+      flexShrink: 0,
+    }}
+    title={TEXT_FLEET_STATUS.QUICK_KORLAP.MODAL_TITLE}
+    aria-label="Koreksi Data Rute"
+  >
+    <Edit3 size={12} />
+  </button>
+  ```
+- Badge Kendala:
+  ```tsx
+  <span
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "3px",
+      fontSize: "10.5px",
+      fontWeight: 700,
+      color: "#F59E0B",
+      background: "rgba(245, 158, 11, 0.12)",
+      padding: "2px 6px",
+      borderRadius: "5px",
+      border: "1px solid rgba(245, 158, 11, 0.25)",
+    }}
+  >
+    <span>{group.units.length}</span>
+    <AlertTriangle size={11} style={{ color: "#F59E0B" }} />
+  </span>
+  ```
 
-### 3. Redesain Tata Letak Mobile-First
-- Mengubah struktur kartu bus dari kotak besar terpisah (`minmax(280px, 1fr)`) menjadi baris daftar kompak (**Compact List Rows**).
-- Menambahkan interaksi **Akordeon Lipat** pada setiap header rute, dilengkapi tombol *Tutup Semua / Buka Semua*.
-- Memberikan safe-area padding bawah (`calc(90px + env(safe-area-inset-bottom, 16px))`) agar elemen terbawah tidak terpotong oleh floating bottom navigation.
+### 3. Akordeon Lipat Default Collapsed
+- State inisialisasi:
+  ```tsx
+  // Default: Seluruh kartu rute tertutup (COLLAPSED)
+  const [expandedRoutes, setExpandedRoutes] = useState<Set<string>>(new Set());
+  ```
+- Pengguna dapat melipat/membuka per kartu rute atau menggunakan tombol toggle global `Buka Semua / Tutup Semua`.
 
-### 4. Peremajaan Kamus Teks Sentral
-- `text_dashboard.ts`: Menghapus sisa dead-code `SGO_CONFIRM_TITLE`, `SGO_CONFIRM_HTML`, `SGO_CONFIRM_BTN`, `SGO_CANCEL_INPUT_BTN`, `SGO_DENY_BTN`.
-- `text_fleet_status.ts`: Menghapus dead-code `SGO_ALL_BTN` dan `SGO_FULL_LABEL`.
-- `text_monitoring.ts`: Memperbarui token `TITLE`, `SGO_LABEL`, `NON_SGO_LABEL`, `EMPTY_DESC`, dan menambahkan token untuk rute normal dan kontrol akordeon.
+### 4. Perbaikan `QuickKorlapFleetModal.tsx`
+- Menambahkan state `currentShift` yang dapat dipindahkan antara Shift 1 dan Shift 2 secara reaktif.
+- Menerima prop `initialNotes?: string` dan mem-prefill `rawNotes` dengan unit dan catatan kendala yang sedang aktif.
+- Menjaga integritas regex pemisah bodi dan catatan (`^([A-Z]{2,4}[\s.\-_]?\d+|\d+)\s*[:\-–]?\s*(.*)$`) agar nama bodi majemuk seperti `KWK 222177` atau `SAF 05` terbaca akurat.
 
 ---
 
@@ -44,24 +93,26 @@ Refactor 171 menuntaskan dua permasalahan besar pada halaman **Monitoring Wilaya
 | Aspek | Sebelum (Before) | Sesudah (After) |
 | :--- | :--- | :--- |
 | **Cakupan Rute yang Tampil** | Hanya rute yang diisi manual di modal A2/Korlap (contoh: JAK.87 saja). 17 rute lain hilang. | Seluruh 18 rute terdata otomatis via Dual-Source Resolution (DB + Spreadsheet Fallback). |
-| **Rute Normal (0 Kendala)** | Disembunyikan diam-diam tanpa ada info apa pun di layar (*silent filter*). | Ditampilkan jelas di seksi khusus: *"Rute Beroperasi Penuh"* dengan chip hijau informatif. |
-| **Konsumsi Ruang Layar** | 1 rute dengan 6 bus memakan tinggi >420px (hampir seluruh layar HP habis). | 1 rute dengan 6 bus hanya memakan ~150px (**hemat ruang >65%**). |
+| **Status Default Kartu** | Langsung terbuka lebar (*expanded*), memenuhi seluruh tinggi layar ponsel. | **Collapsed (Terlipat)** secara default, menyajikan ringkasan rute instan. |
+| **Tombol Koreksi** | Memakai teks `"Koreksi"` yang memakan horizontal space. | Murni icon edit ramping (`<Edit3 size={12} />`) tanpa teks. |
+| **Badge Unit Kendala** | Memuat icon bus dan teks yang berjejal. | Format presisi: `[jumlah] + icon warning` (contoh: `6 ⚠️`), **tanpa icon bus**. |
+| **Konsumsi Ruang Layar** | 1 rute dengan 6 bus memakan tinggi >420px (hampir seluruh layar HP habis). | 1 rute dalam mode collapsed hanya memakan ~42px (**hemat ruang >85%**). |
 | **Model Tampilan Bus** | Kotak terpisah raksasa dengan padding tebal yang kaku. | Compact List Rows ramping dengan informasi jelas (Bodi, Status, Shift, Catatan). |
-| **Badge Status Kendala** | Tertulis generik `[CATATAN] [S1]` untuk semua kendala non-TO/OFF. | Menampilkan kode masalah spesifik: `[BA.02]`, `[KEUR]`, `[TEKNIS]`, `[OFF]`, `[T.O]`. |
-| **Interaksi Rute** | Semua terbuka terus tanpa opsi melipat. | Fitur Akordeon: Bisa dilipat/dibuka per rute, atau serentak via tombol *Tutup/Buka Semua*. |
+| **Dukungan Shift Modal Korlap** | Terkunci di Shift 1, menghapus catatan lama (`rawNotes = ''`). | Segmented selector Shift 1 / Shift 2, prefill catatan eksisting (`initialNotes`). |
+| **Duplikasi Unit "Semua Shift"** | Bus yang sama di Shift 1 & 2 muncul di 2 baris terpisah. | Digabung menjadi 1 baris terpadu dengan badge `S1 • S2`. |
+| **Rute Normal (0 Kendala)** | Disembunyikan diam-diam tanpa ada info apa pun di layar (*silent filter*). | Ditampilkan jelas di seksi: *"Rute Beroperasi Penuh (100% Siap Jalan)"*. |
 | **Bahasa Antarmuka** | Istilah teknis: `(Non-SGO)`, `Siap Guna (SGO)`, `Kendala (Non-SGO)`. | Bahasa operasional ramah: *"Status Kesiapan Armada Wilayah"*, *"Armada Beroperasi"*, *"Armada Terkendala"*. |
-| **Bottom Navigation Safe Area** | Kartu terbawah tertutup floating bottom menu. | Padding aman responsif memperhitungkan tinggi bottom navigation bar. |
 
 ---
 
 ## Case: Skenario Lapangan
 
-### Skenario 1: Pengawas Wilayah Memantau Kesiapan Armada Pagi Hari
-- **Kondisi:** Pengawas membuka Tab Status Armada pada tanggal 27 Oktober setelah operator melakukan sinkronisasi Load All. Baru Korlap JAK.87 yang sempat menginput data lewat modal korlap.
-- **Sebelum Perbaikan:** Pengawas bingung karena hanya kartu JAK.87 yang muncul dengan 6 bus memenuhi seluruh layar. Pengawas mengira 17 rute lain belum masuk atau aplikasinya rusak.
-- **Setelah Perbaikan:** Pengawas langsung melihat ringkasan makro 18 rute di atas: *"Total Armada: 310 Unit • Beroperasi: 290 Unit (93.5%) • Terkendala: 20 Unit"*. Di bawahnya, rute yang ada kendala muncul rapi dan terlipat/terbuka proporsional, sementara 15 rute yang 100% jalan tampil hijau di seksi rute normal.
+### Skenario 1: Pengawas Wilayah Membuka Halaman Status Armada di Pagi Hari
+- **Kondisi:** Pengawas membuka Tab Status Armada pada jam 06:00 WIB untuk memantau 18 rute.
+- **Sebelum Perbaikan:** Layar langsung penuh oleh kartu rute pertama yang terbuka lebar dengan kotak-kotak besar. Pengawas harus scroll terus-menerus dan mengira hanya ada 1 rute di sistem.
+- **Setelah Perbaikan:** Pengawas langsung melihat KPI ringkasan 18 rute di atas, diikuti daftar rute terkendala yang tersusun rapi dalam mode ringkas (terlipat). Badge `[jumlah] ⚠️` langsung memberi tahu rute mana yang paling banyak kendala. Rute yang 100% normal berbaris rapi sebagai chip hijau di bawah.
 
-### Skenario 2: Korlap Memeriksa Detail Kendala JAK.87 di Layar HP
-- **Kondisi:** Korlap ingin melihat unit apa saja di JAK.87 yang terkena BA dan Keur di Shift 1.
-- **Sebelum Perbaikan:** Setiap bus memakan satu kotak raksasa dengan badge abu-abu `[CATATAN]`. Korlap harus scroll berulang kali untuk melihat 6 bus.
-- **Setelah Perbaikan:** Keenam bus tampil ringkas dalam 1 kotak rute JAK.87: `LSG 230043` dengan badge orange `[BA.02]` dan catatan `PROGRAM KEUR`. Korlap langsung paham jenis masalahnya dalam sekali lihat tanpa perlu scroll panjang.
+### Skenario 2: Korlap Menyesuaikan Catatan Kendala Shift 2 pada Siang Hari
+- **Kondisi:** Korlap JAK.87 hendak menambahkan 1 bus mogok di Shift 2.
+- **Sebelum Perbaikan:** Saat membuka modal koreksi, modal terkunci di Shift 1 dan seluruh catatan bus mogok yang sudah diinput paginya hilang terhapus karena textarea kosong.
+- **Setelah Perbaikan:** Korlap menekan icon pensil edit pada header JAK.87. Modal terbuka dengan catatan Shift 1 yang sudah terisi lengkap. Korlap cukup mengetuk tab `Shift 2 (Siang)` dan menambahkan catatan baru tanpa khawatir menghapus data Shift 1.

@@ -10,6 +10,7 @@ import {
   ChevronDown,
   ChevronUp,
   Edit3,
+  Clock,
 } from "lucide-react";
 import { sortRoutesByCode } from "@/utils/routeSorting";
 import { normalizeRouteCode } from "@/services/googleSheets/globalReportReader";
@@ -23,7 +24,7 @@ export interface MonitoringFleetStatusTabProps {
 }
 
 type ShiftFilter = "all" | 1 | 2;
-type StatusFilter = "all" | "TO" | "OFF" | "SO";
+type StatusFilter = "all" | "BA" | "TEKNIS" | "TO" | "OFF" | "SO";
 
 export interface TroubledUnitItem {
   unit: string;
@@ -32,7 +33,7 @@ export interface TroubledUnitItem {
   badgeBg: string;
   badgeColor: string;
   isOff: boolean;
-  shift: 1 | 2;
+  shifts: (1 | 2)[];
   routeCode: string;
 }
 
@@ -55,8 +56,16 @@ export interface NormalRouteGroup {
   totalRealops: number;
 }
 
+export interface PendingRouteGroup {
+  routeCode: string;
+  routeName: string;
+  operatorName: string;
+  routeId: number;
+  defaultRenops: number;
+}
+
 /**
- * Infer status code dan warna badge dari teks kendala
+ * Infer status code dan styling badge dari teks kendala
  */
 export function inferStatusCode(
   rawNote: string,
@@ -66,7 +75,7 @@ export function inferStatusCode(
   const note = (rawNote || "").trim();
   const hint = (statusCodeHint || "").toUpperCase().trim();
 
-  // 1. OFF
+  // 1. OFF (Libur)
   if (isOff || hint === "OFF" || /\bOFF\b/i.test(note)) {
     return {
       code: "OFF",
@@ -144,7 +153,7 @@ export function inferStatusCode(
     };
   }
 
-  // 9. Jika ada hint selain generic
+  // 9. Hint selain generic
   if (hint && hint !== "CATATAN" && hint !== "OTHER" && hint.length <= 8) {
     return {
       code: hint,
@@ -192,32 +201,45 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
     routeCode: string;
     routeId: number;
     shift: 1 | 2;
+    defaultRenops?: number;
+    initialRealops?: number;
+    initialNotes?: string;
   } | null>(null);
 
-  // Status buka/tutup akordeon rute (default: semua rute bermasalah terbuka)
-  const [collapsedRoutes, setCollapsedRoutes] = useState<Record<string, boolean>>({});
+  // Default: Seluruh kartu rute tertutup (COLLAPSED) sesuai instruksi user
+  const [expandedRoutes, setExpandedRoutes] = useState<Set<string>>(new Set());
 
   const toggleRouteCollapse = useCallback((routeCode: string) => {
-    setCollapsedRoutes((prev) => ({
-      ...prev,
-      [routeCode]: !prev[routeCode],
-    }));
+    setExpandedRoutes((prev) => {
+      const next = new Set(prev);
+      if (next.has(routeCode)) {
+        next.delete(routeCode);
+      } else {
+        next.add(routeCode);
+      }
+      return next;
+    });
   }, []);
 
-  const toggleAllCollapse = useCallback((collapsed: boolean, routeCodes: string[]) => {
-    const update: Record<string, boolean> = {};
-    for (const code of routeCodes) {
-      update[code] = collapsed;
-    }
-    setCollapsedRoutes(update);
+  const expandAllRoutes = useCallback((routeCodes: string[]) => {
+    setExpandedRoutes(new Set(routeCodes));
   }, []);
 
-  // 1. DUAL-SOURCE RESOLUTION: Memadukan DB (fleetShifts) dan Spreadsheet (routes)
+  const collapseAllRoutes = useCallback(() => {
+    setExpandedRoutes(new Set());
+  }, []);
+
+  // 1. DUAL-SOURCE RESOLUTION & DEDUPLIKASI CERDAS
   const resolvedFleetData = useMemo(() => {
-    // Kumpulkan daftar kode rute unik: prioritas dari routes (18 rute), fallback ke fleetShifts
     const targetRouteMap = new Map<
       string,
-      { routeCode: string; routeName: string; operatorName: string; routeId: number; routeItem?: RegionalRouteItem }
+      {
+        routeCode: string;
+        routeName: string;
+        operatorName: string;
+        routeId: number;
+        routeItem?: RegionalRouteItem;
+      }
     >();
 
     if (routes && routes.length > 0) {
@@ -248,23 +270,40 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
 
     const troubledList: RouteTroubledGroup[] = [];
     const normalList: NormalRouteGroup[] = [];
+    const pendingList: PendingRouteGroup[] = [];
 
     let aggTotalRenops = 0;
     let aggTotalRealops = 0;
     let aggTotalTo = 0;
     let aggTotalOff = 0;
     let aggTotalSo = 0;
+    let aggTotalBa = 0;
+    let aggTotalTeknis = 0;
     let aggTotalOther = 0;
 
     for (const [routeCode, meta] of targetRouteMap.entries()) {
       const r = meta.routeItem;
       let routeRenops = 0;
       let routeRealops = 0;
-      const routeUnits: TroubledUnitItem[] = [];
-      let hasAnyData = false;
+
+      // Peta unit per bodi untuk deduplikasi cerdas antar shift
+      const unitMap = new Map<
+        string,
+        {
+          unit: string;
+          notes: string[];
+          shifts: (1 | 2)[];
+          statusCode: string;
+          badgeBg: string;
+          badgeColor: string;
+          isOff: boolean;
+        }
+      >();
+
+      let hasDbShift = false;
+      let hasSsActivity = false;
 
       for (const sh of shiftsToInspect) {
-        // Cari data shift di DB (Laporan A2 atau Input Korlap)
         const dbShift = fleetShifts.find(
           (s) =>
             s.shift === sh &&
@@ -272,7 +311,6 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               normalizeRouteCode(s.route_code) === normalizeRouteCode(routeCode))
         );
 
-        // Ambil data dari spreadsheet jika ada
         const ssRenops =
           (sh === 1 ? r?.renopsShift1 : r?.renopsShift2) ||
           r?.defaultRenops ||
@@ -282,78 +320,151 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           (sh === 1 ? r?.fleetStatusShift1 : r?.fleetStatusShift2) || [];
 
         if (dbShift) {
-          hasAnyData = true;
+          hasDbShift = true;
           const ren = dbShift.target_renops || ssRenops;
           const real = dbShift.realops ?? (ssRealops ?? 0);
-          routeRenops += ren;
-          routeRealops += real;
 
-          // Ambil unit kendala dari DB
+          if (shiftFilter === "all") {
+            routeRenops = Math.max(routeRenops, ren);
+            routeRealops = Math.max(routeRealops, real);
+          } else {
+            routeRenops += ren;
+            routeRealops += real;
+          }
+
           const dbUnits = dbShift.non_sgo_units || [];
           if (dbUnits.length > 0) {
             for (const u of dbUnits) {
-              const parsed = inferStatusCode(u.note || "", u.status_code === "OFF", u.status_code);
-              routeUnits.push({
-                unit: u.unit_body,
-                note: formatUnitNote(u.note || u.status_code),
-                statusCode: parsed.code,
-                badgeBg: parsed.bg,
-                badgeColor: parsed.color,
-                isOff: u.status_code === "OFF",
-                shift: sh,
-                routeCode,
-              });
+              const body = u.unit_body.trim().toUpperCase();
+              const parsed = inferStatusCode(
+                u.note || "",
+                u.status_code === "OFF",
+                u.status_code
+              );
+              const formattedNote = formatUnitNote(u.note || u.status_code);
+
+              if (unitMap.has(body)) {
+                const existing = unitMap.get(body)!;
+                if (!existing.shifts.includes(sh)) existing.shifts.push(sh);
+                if (
+                  formattedNote !== "-" &&
+                  !existing.notes.includes(formattedNote)
+                ) {
+                  existing.notes.push(formattedNote);
+                }
+              } else {
+                unitMap.set(body, {
+                  unit: body,
+                  notes: formattedNote !== "-" ? [formattedNote] : [],
+                  shifts: [sh],
+                  statusCode: parsed.code,
+                  badgeBg: parsed.bg,
+                  badgeColor: parsed.color,
+                  isOff: u.status_code === "OFF",
+                });
+              }
             }
           } else if (ssRawUnits.length > 0) {
-            // Fallback ke spreadsheet jika DB belum punya rincian unit
             for (const u of ssRawUnits) {
+              const body = u.unit.trim().toUpperCase();
               const parsed = inferStatusCode(u.note || "", u.isOff);
-              routeUnits.push({
-                unit: u.unit,
-                note: formatUnitNote(u.note),
-                statusCode: parsed.code,
-                badgeBg: parsed.bg,
-                badgeColor: parsed.color,
-                isOff: u.isOff,
-                shift: sh,
-                routeCode,
-              });
+              const formattedNote = formatUnitNote(u.note);
+
+              if (unitMap.has(body)) {
+                const existing = unitMap.get(body)!;
+                if (!existing.shifts.includes(sh)) existing.shifts.push(sh);
+                if (
+                  formattedNote !== "-" &&
+                  !existing.notes.includes(formattedNote)
+                ) {
+                  existing.notes.push(formattedNote);
+                }
+              } else {
+                unitMap.set(body, {
+                  unit: body,
+                  notes: formattedNote !== "-" ? [formattedNote] : [],
+                  shifts: [sh],
+                  statusCode: parsed.code,
+                  badgeBg: parsed.bg,
+                  badgeColor: parsed.color,
+                  isOff: u.isOff,
+                });
+              }
             }
           }
         } else if (r) {
-          // Jalur Fallback: Spreadsheet Ingestion
           const hasActivity =
-            (r.totalTrips && r.totalTrips > 0) ||
-            (r.todayPassengers && r.todayPassengers > 0) ||
+            Boolean(r.totalTrips && r.totalTrips > 0) ||
+            Boolean(r.todayPassengers && r.todayPassengers > 0) ||
+            Boolean(ssRealops && ssRealops > 0) ||
             ssRawUnits.length > 0 ||
             r.status === "submitted" ||
             r.status === "verified";
 
+          if (hasActivity) {
+            hasSsActivity = true;
+          }
+
           if (hasActivity || ssRenops > 0) {
-            hasAnyData = true;
-            routeRenops += ssRenops;
-            routeRealops += ssRealops ?? 0;
+            if (shiftFilter === "all") {
+              routeRenops = Math.max(routeRenops, ssRenops);
+              routeRealops = Math.max(routeRealops, ssRealops ?? 0);
+            } else {
+              routeRenops += ssRenops;
+              routeRealops += ssRealops ?? 0;
+            }
 
             for (const u of ssRawUnits) {
+              const body = u.unit.trim().toUpperCase();
               const parsed = inferStatusCode(u.note || "", u.isOff);
-              routeUnits.push({
-                unit: u.unit,
-                note: formatUnitNote(u.note),
-                statusCode: parsed.code,
-                badgeBg: parsed.bg,
-                badgeColor: parsed.color,
-                isOff: u.isOff,
-                shift: sh,
-                routeCode,
-              });
+              const formattedNote = formatUnitNote(u.note);
+
+              if (unitMap.has(body)) {
+                const existing = unitMap.get(body)!;
+                if (!existing.shifts.includes(sh)) existing.shifts.push(sh);
+                if (
+                  formattedNote !== "-" &&
+                  !existing.notes.includes(formattedNote)
+                ) {
+                  existing.notes.push(formattedNote);
+                }
+              } else {
+                unitMap.set(body, {
+                  unit: body,
+                  notes: formattedNote !== "-" ? [formattedNote] : [],
+                  shifts: [sh],
+                  statusCode: parsed.code,
+                  badgeBg: parsed.bg,
+                  badgeColor: parsed.color,
+                  isOff: u.isOff,
+                });
+              }
             }
           }
         }
       }
 
-      // Filter unit berdasarkan status kendala jika ada filter aktif
-      const filteredUnits = routeUnits.filter((u) => {
+      // Convert unitMap ke array terurut
+      const allRouteUnits: TroubledUnitItem[] = Array.from(
+        unitMap.values()
+      ).map((item) => ({
+        unit: item.unit,
+        note: item.notes.length > 0 ? item.notes.join(" • ") : "-",
+        statusCode: item.statusCode,
+        badgeBg: item.badgeBg,
+        badgeColor: item.badgeColor,
+        isOff: item.isOff,
+        shifts: item.shifts,
+        shift: item.shifts[0],
+        routeCode,
+      }));
+
+      // Filter berdasarkan status kendala
+      const filteredUnits = allRouteUnits.filter((u) => {
         if (statusFilter === "all") return true;
+        if (statusFilter === "BA") return u.statusCode.startsWith("BA");
+        if (statusFilter === "TEKNIS")
+          return ["KEUR", "TEKNIS"].includes(u.statusCode);
         if (statusFilter === "TO") return u.statusCode.includes("TO");
         if (statusFilter === "OFF") return u.statusCode === "OFF" || u.isOff;
         if (statusFilter === "SO") return u.statusCode === "SO";
@@ -363,14 +474,19 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
       // Akumulasi statistik makro
       aggTotalRenops += routeRenops;
       aggTotalRealops += routeRealops;
+
       for (const u of filteredUnits) {
-        if (u.statusCode.includes("TO")) aggTotalTo++;
+        if (u.statusCode.startsWith("BA")) aggTotalBa++;
+        else if (["KEUR", "TEKNIS"].includes(u.statusCode)) aggTotalTeknis++;
+        else if (u.statusCode.includes("TO")) aggTotalTo++;
         else if (u.statusCode === "OFF" || u.isOff) aggTotalOff++;
         else if (u.statusCode === "SO") aggTotalSo++;
         else aggTotalOther++;
       }
 
-      // Klasifikasi rute: Terkendala vs Normal
+      // Klasifikasi rute: 1) Terkendala, 2) Normal, 3) Menunggu Laporan
+      const hasRealReport = hasDbShift || hasSsActivity;
+
       if (filteredUnits.length > 0) {
         troubledList.push({
           routeCode,
@@ -381,7 +497,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           totalRealops: routeRealops,
           units: filteredUnits,
         });
-      } else if (hasAnyData) {
+      } else if (hasRealReport) {
         normalList.push({
           routeCode,
           routeName: meta.routeName,
@@ -390,10 +506,25 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           totalRenops: routeRenops,
           totalRealops: routeRealops,
         });
+      } else {
+        pendingList.push({
+          routeCode,
+          routeName: meta.routeName,
+          operatorName: meta.operatorName,
+          routeId: meta.routeId,
+          defaultRenops: r?.defaultRenops || 0,
+        });
       }
     }
 
-    const totalTerkendala = aggTotalTo + aggTotalOff + aggTotalSo + aggTotalOther;
+    const totalTerkendala =
+      aggTotalBa +
+      aggTotalTeknis +
+      aggTotalTo +
+      aggTotalOff +
+      aggTotalSo +
+      aggTotalOther;
+
     const persentase =
       aggTotalRenops > 0
         ? ((aggTotalRealops / aggTotalRenops) * 100).toFixed(1)
@@ -402,10 +533,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
     return {
       troubledRoutes: sortRoutesByCode(troubledList),
       normalRoutes: sortRoutesByCode(normalList),
+      pendingRoutes: sortRoutesByCode(pendingList),
       stats: {
         totalFleet: aggTotalRenops,
         totalBeroperasi: aggTotalRealops,
         totalTerkendala,
+        totalBa: aggTotalBa,
+        totalTeknis: aggTotalTeknis,
         totalTo: aggTotalTo,
         totalOff: aggTotalOff,
         totalSo: aggTotalSo,
@@ -414,24 +548,27 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
     };
   }, [routes, fleetShifts, shiftFilter, statusFilter]);
 
-  const { troubledRoutes, normalRoutes, stats } = resolvedFleetData;
+  const { troubledRoutes, normalRoutes, pendingRoutes, stats } = resolvedFleetData;
   const troubledRouteCodes = useMemo(
     () => troubledRoutes.map((r) => r.routeCode),
     [troubledRoutes]
   );
 
   const areAllCollapsed = useMemo(() => {
-    if (troubledRouteCodes.length === 0) return false;
-    return troubledRouteCodes.every((code) => !!collapsedRoutes[code]);
-  }, [troubledRouteCodes, collapsedRoutes]);
+    return troubledRouteCodes.every((code) => !expandedRoutes.has(code));
+  }, [troubledRouteCodes, expandedRoutes]);
 
-  const hasAnyFleetData = stats.totalFleet > 0 || troubledRoutes.length > 0 || normalRoutes.length > 0;
+  const hasAnyFleetData =
+    stats.totalFleet > 0 ||
+    troubledRoutes.length > 0 ||
+    normalRoutes.length > 0 ||
+    pendingRoutes.length > 0;
 
   return (
     <div
       className="monitoring-fleet-status-tab"
       style={{
-        padding: "16px 14px calc(90px + env(safe-area-inset-bottom, 16px)) 14px",
+        padding: "14px 12px calc(90px + env(safe-area-inset-bottom, 16px)) 12px",
         maxWidth: "900px",
         margin: "0 auto",
       }}
@@ -441,10 +578,10 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
         className="monitoring-card"
         style={{
           background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
-          borderRadius: "16px",
+          borderRadius: "14px",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-          padding: "14px",
-          marginBottom: "12px",
+          padding: "12px 14px",
+          marginBottom: "10px",
         }}
       >
         <div
@@ -452,14 +589,14 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "12px",
+            marginBottom: "10px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Bus size={18} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+            <Bus size={17} style={{ color: "var(--accent-color, #3ECF8E)" }} />
             <h3
               style={{
-                fontSize: "14px",
+                fontSize: "13.5px",
                 fontWeight: 700,
                 margin: 0,
                 color: "var(--text-primary)",
@@ -471,16 +608,16 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           </div>
           <span
             style={{
-              fontSize: "10.5px",
+              fontSize: "10px",
               fontWeight: 600,
               color: "var(--text-secondary)",
               background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              padding: "2px 8px",
-              borderRadius: "6px",
+              padding: "2px 7px",
+              borderRadius: "5px",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
             }}
           >
-            18 Rute Wilayah
+            18 Rute
           </span>
         </div>
 
@@ -489,21 +626,21 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "8px",
+            gap: "7px",
           }}
         >
-          {/* Total Armada (Renops) */}
+          {/* Total Armada */}
           <div
             style={{
               background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-              borderRadius: "12px",
-              padding: "8px 10px",
+              borderRadius: "10px",
+              padding: "7px 9px",
             }}
           >
             <span
               style={{
-                fontSize: "10.5px",
+                fontSize: "10px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 display: "block",
@@ -513,7 +650,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </span>
             <div
               style={{
-                fontSize: "17px",
+                fontSize: "16px",
                 fontWeight: 800,
                 color: "var(--text-primary)",
                 marginTop: "2px",
@@ -525,13 +662,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
           </div>
 
-          {/* Armada Beroperasi (Realops) */}
+          {/* Armada Beroperasi */}
           <div
             style={{
               background: "rgba(16, 185, 129, 0.06)",
               border: "1px solid rgba(16, 185, 129, 0.2)",
-              borderRadius: "12px",
-              padding: "8px 10px",
+              borderRadius: "10px",
+              padding: "7px 9px",
             }}
           >
             <div
@@ -543,18 +680,18 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             >
               <span
                 style={{
-                  fontSize: "10.5px",
+                  fontSize: "10px",
                   fontWeight: 600,
                   color: "#10B981",
                 }}
               >
                 {TEXT_MONITORING.FLEET_TAB.SGO_LABEL}
               </span>
-              <CheckCircle2 size={12} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={11} style={{ color: "#10B981" }} />
             </div>
             <div
               style={{
-                fontSize: "17px",
+                fontSize: "16px",
                 fontWeight: 800,
                 color: "#10B981",
                 marginTop: "2px",
@@ -564,7 +701,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               {stats.totalBeroperasi}{" "}
               <span
                 style={{
-                  fontSize: "10px",
+                  fontSize: "9.5px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
                 }}
@@ -585,8 +722,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 stats.totalTerkendala > 0
                   ? "1px solid rgba(245, 158, 11, 0.25)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-              borderRadius: "12px",
-              padding: "8px 10px",
+              borderRadius: "10px",
+              padding: "7px 9px",
             }}
           >
             <div
@@ -598,7 +735,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             >
               <span
                 style={{
-                  fontSize: "10.5px",
+                  fontSize: "10px",
                   fontWeight: 600,
                   color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-secondary)",
                 }}
@@ -606,12 +743,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 {TEXT_MONITORING.FLEET_TAB.NON_SGO_LABEL}
               </span>
               {stats.totalTerkendala > 0 && (
-                <AlertTriangle size={12} style={{ color: "#F59E0B" }} />
+                <AlertTriangle size={11} style={{ color: "#F59E0B" }} />
               )}
             </div>
             <div
               style={{
-                fontSize: "17px",
+                fontSize: "16px",
                 fontWeight: 800,
                 color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-primary)",
                 marginTop: "2px",
@@ -623,7 +760,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
             <div
               style={{
-                fontSize: "9px",
+                fontSize: "8.5px",
                 color: "var(--text-secondary)",
                 marginTop: "2px",
                 whiteSpace: "nowrap",
@@ -631,7 +768,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 textOverflow: "ellipsis",
               }}
             >
-              TO:{stats.totalTo} • OFF:{stats.totalOff} • SO:{stats.totalSo}
+              BA:{stats.totalBa} • TO:{stats.totalTo} • OFF:{stats.totalOff}
             </div>
           </div>
         </div>
@@ -642,8 +779,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "6px",
-          marginBottom: "12px",
+          gap: "5px",
+          marginBottom: "10px",
         }}
       >
         {/* Shift Filter */}
@@ -659,9 +796,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setShiftFilter("all")}
             style={{
-              padding: "5px 10px",
-              borderRadius: "8px",
-              fontSize: "11px",
+              padding: "4px 9px",
+              borderRadius: "7px",
+              fontSize: "10.5px",
               fontWeight: shiftFilter === "all" ? 700 : 500,
               background:
                 shiftFilter === "all"
@@ -680,9 +817,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setShiftFilter(1)}
             style={{
-              padding: "5px 10px",
-              borderRadius: "8px",
-              fontSize: "11px",
+              padding: "4px 9px",
+              borderRadius: "7px",
+              fontSize: "10.5px",
               fontWeight: shiftFilter === 1 ? 700 : 500,
               background:
                 shiftFilter === 1
@@ -701,9 +838,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setShiftFilter(2)}
             style={{
-              padding: "5px 10px",
-              borderRadius: "8px",
-              fontSize: "11px",
+              padding: "4px 9px",
+              borderRadius: "7px",
+              fontSize: "10.5px",
               fontWeight: shiftFilter === 2 ? 700 : 500,
               background:
                 shiftFilter === 2
@@ -719,7 +856,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           </button>
         </div>
 
-        {/* Status Type Filter */}
+        {/* Status Type Filter (Lengkap dengan BA & Keur/Teknis) */}
         <div
           className="no-scrollbar"
           style={{
@@ -732,9 +869,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setStatusFilter("all")}
             style={{
-              padding: "4px 9px",
-              borderRadius: "7px",
-              fontSize: "10.5px",
+              padding: "3px 8px",
+              borderRadius: "6px",
+              fontSize: "10px",
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
@@ -754,11 +891,53 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
 
           <button
             type="button"
+            onClick={() => setStatusFilter("BA")}
+            style={{
+              padding: "3px 8px",
+              borderRadius: "6px",
+              fontSize: "10px",
+              fontWeight: statusFilter === "BA" ? 700 : 500,
+              background:
+                statusFilter === "BA"
+                  ? "rgba(251, 146, 60, 0.2)"
+                  : "transparent",
+              color: statusFilter === "BA" ? "#FB923C" : "var(--text-secondary)",
+              border: "1px solid rgba(251, 146, 60, 0.25)",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+            }}
+          >
+            BA
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setStatusFilter("TEKNIS")}
+            style={{
+              padding: "3px 8px",
+              borderRadius: "6px",
+              fontSize: "10px",
+              fontWeight: statusFilter === "TEKNIS" ? 700 : 500,
+              background:
+                statusFilter === "TEKNIS"
+                  ? "rgba(56, 189, 248, 0.2)"
+                  : "transparent",
+              color: statusFilter === "TEKNIS" ? "#38BDF8" : "var(--text-secondary)",
+              border: "1px solid rgba(56, 189, 248, 0.25)",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Keur / Teknis
+          </button>
+
+          <button
+            type="button"
             onClick={() => setStatusFilter("TO")}
             style={{
-              padding: "4px 9px",
-              borderRadius: "7px",
-              fontSize: "10.5px",
+              padding: "3px 8px",
+              borderRadius: "6px",
+              fontSize: "10px",
               fontWeight: statusFilter === "TO" ? 700 : 500,
               background:
                 statusFilter === "TO"
@@ -770,16 +949,16 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               whiteSpace: "nowrap",
             }}
           >
-            TO (Tidak Operasi)
+            TO
           </button>
 
           <button
             type="button"
             onClick={() => setStatusFilter("OFF")}
             style={{
-              padding: "4px 9px",
-              borderRadius: "7px",
-              fontSize: "10.5px",
+              padding: "3px 8px",
+              borderRadius: "6px",
+              fontSize: "10px",
               fontWeight: statusFilter === "OFF" ? 700 : 500,
               background:
                 statusFilter === "OFF"
@@ -791,16 +970,16 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               whiteSpace: "nowrap",
             }}
           >
-            OFF (Libur)
+            OFF
           </button>
 
           <button
             type="button"
             onClick={() => setStatusFilter("SO")}
             style={{
-              padding: "4px 9px",
-              borderRadius: "7px",
-              fontSize: "10.5px",
+              padding: "3px 8px",
+              borderRadius: "6px",
+              fontSize: "10px",
               fontWeight: statusFilter === "SO" ? 700 : 500,
               background:
                 statusFilter === "SO"
@@ -812,31 +991,31 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               whiteSpace: "nowrap",
             }}
           >
-            SO (Stop Operasi)
+            SO
           </button>
         </div>
       </div>
 
-      {/* 3. Empty States / Loading Indicator */}
+      {/* 3. Empty State Total */}
       {!hasAnyFleetData ? (
         <div
           style={{
             background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-            borderRadius: "16px",
-            padding: "36px 16px",
+            borderRadius: "14px",
+            padding: "32px 14px",
             textAlign: "center",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "8px",
+            gap: "7px",
           }}
         >
           <div
             style={{
-              width: "44px",
-              height: "44px",
+              width: "40px",
+              height: "40px",
               borderRadius: "50%",
               background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
               display: "flex",
@@ -846,12 +1025,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               marginBottom: "2px",
             }}
           >
-            <Bus size={22} />
+            <Bus size={20} />
           </div>
           <h4
             style={{
               margin: 0,
-              fontSize: "14px",
+              fontSize: "13.5px",
               fontWeight: 800,
               color: "var(--text-primary)",
             }}
@@ -861,9 +1040,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: 0,
-              fontSize: "12px",
+              fontSize: "11.5px",
               color: "var(--text-secondary)",
-              maxWidth: "360px",
+              maxWidth: "340px",
               lineHeight: 1.4,
             }}
           >
@@ -876,21 +1055,21 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           style={{
             background: "rgba(16, 185, 129, 0.05)",
             border: "1px solid rgba(16, 185, 129, 0.25)",
-            borderRadius: "16px",
-            padding: "24px 16px",
+            borderRadius: "14px",
+            padding: "20px 14px",
             textAlign: "center",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "8px",
-            marginBottom: "14px",
+            gap: "7px",
+            marginBottom: "12px",
           }}
         >
           <div
             style={{
-              width: "44px",
-              height: "44px",
+              width: "40px",
+              height: "40px",
               borderRadius: "50%",
               background: "rgba(16, 185, 129, 0.15)",
               display: "flex",
@@ -899,12 +1078,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               color: "#10B981",
             }}
           >
-            <ShieldCheck size={26} />
+            <ShieldCheck size={24} />
           </div>
           <h4
             style={{
               margin: 0,
-              fontSize: "14px",
+              fontSize: "13.5px",
               fontWeight: 800,
               color: "var(--text-primary)",
             }}
@@ -914,9 +1093,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: 0,
-              fontSize: "12px",
+              fontSize: "11.5px",
               color: "var(--text-secondary)",
-              maxWidth: "380px",
+              maxWidth: "360px",
               lineHeight: 1.4,
             }}
           >
@@ -927,20 +1106,20 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
 
       {/* 4. Troubled Routes Section (Rute Terkendala) */}
       {troubledRoutes.length > 0 && (
-        <div style={{ marginBottom: "14px" }}>
+        <div style={{ marginBottom: "12px" }}>
           {/* Header Action Bar */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: "8px",
+              marginBottom: "7px",
               padding: "0 2px",
             }}
           >
             <span
               style={{
-                fontSize: "12px",
+                fontSize: "11.5px",
                 fontWeight: 700,
                 color: "#F59E0B",
                 display: "flex",
@@ -949,20 +1128,26 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               }}
             >
               <span>⚠️</span>
-              <span>{TEXT_MONITORING.FLEET_TAB.TROUBLED_ROUTES_COUNT(troubledRoutes.length)}</span>
+              <span>
+                {TEXT_MONITORING.FLEET_TAB.TROUBLED_ROUTES_COUNT(troubledRoutes.length)}
+              </span>
             </span>
 
             <button
               type="button"
-              onClick={() => toggleAllCollapse(!areAllCollapsed, troubledRouteCodes)}
+              onClick={() =>
+                areAllCollapsed
+                  ? expandAllRoutes(troubledRouteCodes)
+                  : collapseAllRoutes()
+              }
               style={{
-                fontSize: "11px",
+                fontSize: "10.5px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
-                padding: "2px 6px",
+                padding: "2px 5px",
               }}
             >
               {areAllCollapsed
@@ -972,9 +1157,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           </div>
 
           {/* Rute List Cards */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {troubledRoutes.map((group) => {
-              const isCollapsed = !!collapsedRoutes[group.routeCode];
+              const isExpanded = expandedRoutes.has(group.routeCode);
 
               return (
                 <div
@@ -982,13 +1167,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   className="monitoring-card"
                   style={{
                     background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
-                    borderRadius: "14px",
+                    borderRadius: "12px",
                     border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-                    padding: "10px 12px",
-                    transition: "all 0.2s ease",
+                    padding: "9px 11px",
+                    transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
                   }}
                 >
-                  {/* Route Header (Akordeon Trigger) */}
+                  {/* Route Header (Tap to Expand/Collapse) */}
                   <div
                     onClick={() => toggleRouteCollapse(group.routeCode)}
                     style={{
@@ -996,7 +1181,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       alignItems: "center",
                       justifyContent: "space-between",
                       cursor: "pointer",
-                      gap: "8px",
+                      gap: "6px",
                       userSelect: "none",
                     }}
                   >
@@ -1005,16 +1190,16 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "8px",
+                        gap: "7px",
                         minWidth: 0,
                         flex: 1,
                       }}
                     >
                       <span
                         style={{
-                          padding: "3px 8px",
-                          borderRadius: "7px",
-                          fontSize: "11.5px",
+                          padding: "2px 7px",
+                          borderRadius: "6px",
+                          fontSize: "11px",
                           fontWeight: 800,
                           background: "rgba(62, 207, 142, 0.12)",
                           color: "var(--accent-color, #3ECF8E)",
@@ -1026,12 +1211,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       </span>
                       <span
                         style={{
-                          fontSize: "11.5px",
+                          fontSize: "11px",
                           color: "var(--text-secondary)",
                           fontWeight: 600,
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
+                          maxWidth: "140px",
                         }}
                         title={group.operatorName}
                       >
@@ -1039,7 +1225,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       </span>
                     </div>
 
-                    {/* Right: Actions & Counter */}
+                    {/* Right: Actions & Badges */}
                     <div
                       style={{
                         display: "flex",
@@ -1048,6 +1234,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         flexShrink: 0,
                       }}
                     >
+                      {/* Icon Edit Button (Tanpa teks 'Koreksi') */}
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1056,41 +1243,53 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             routeCode: group.routeCode,
                             routeId: group.routeId,
                             shift: shiftFilter === "all" ? 1 : shiftFilter,
+                            defaultRenops: group.totalRenops,
+                            initialRealops: group.totalRealops,
+                            initialNotes: group.units
+                              .map((u) => `${u.unit} ${u.note}`)
+                              .join("\n"),
                           });
                         }}
                         style={{
-                          fontSize: "10px",
-                          fontWeight: 700,
-                          color: "#38bdf8",
-                          background: "rgba(56, 189, 248, 0.12)",
-                          padding: "3px 7px",
-                          borderRadius: "6px",
-                          border: "1px solid rgba(56, 189, 248, 0.25)",
-                          cursor: "pointer",
+                          width: "25px",
+                          height: "25px",
                           display: "flex",
                           alignItems: "center",
-                          gap: "3px",
+                          justifyContent: "center",
+                          borderRadius: "6px",
+                          border: "1px solid rgba(56, 189, 248, 0.25)",
+                          background: "rgba(56, 189, 248, 0.12)",
+                          color: "#38bdf8",
+                          cursor: "pointer",
+                          padding: 0,
+                          flexShrink: 0,
                         }}
                         title={TEXT_FLEET_STATUS.QUICK_KORLAP.MODAL_TITLE}
+                        aria-label="Koreksi Data Rute"
                       >
-                        <Edit3 size={11} />
-                        <span>{TEXT_MONITORING.FLEET_TAB.EDIT_ROUTE_BTN}</span>
+                        <Edit3 size={12} />
                       </button>
 
+                      {/* Badge Kendala: [Jumlah] + Icon Warning (Tanpa Icon Bus) */}
                       <span
                         style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "3px",
                           fontSize: "10.5px",
                           fontWeight: 700,
                           color: "#F59E0B",
                           background: "rgba(245, 158, 11, 0.12)",
-                          padding: "3px 7px",
-                          borderRadius: "6px",
+                          padding: "2px 6px",
+                          borderRadius: "5px",
                           border: "1px solid rgba(245, 158, 11, 0.25)",
                         }}
                       >
-                        {TEXT_MONITORING.FLEET_TAB.ROUTE_ISSUES_COUNT(group.units.length)}
+                        <span>{group.units.length}</span>
+                        <AlertTriangle size={11} style={{ color: "#F59E0B" }} />
                       </span>
 
+                      {/* Chevron Toggle */}
                       <div
                         style={{
                           color: "var(--text-secondary)",
@@ -1098,41 +1297,45 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           alignItems: "center",
                         }}
                       >
-                        {isCollapsed ? <ChevronDown size={15} /> : <ChevronUp size={15} />}
+                        {isExpanded ? (
+                          <ChevronUp size={14} />
+                        ) : (
+                          <ChevronDown size={14} />
+                        )}
                       </div>
                     </div>
                   </div>
 
-                  {/* Units List (Compact Rows) */}
-                  {!isCollapsed && (
+                  {/* Units List (Compact Rows, Only when expanded) */}
+                  {isExpanded && (
                     <div
                       style={{
                         display: "flex",
                         flexDirection: "column",
-                        gap: "6px",
-                        marginTop: "10px",
-                        paddingTop: "8px",
+                        gap: "5px",
+                        marginTop: "8px",
+                        paddingTop: "7px",
                         borderTop:
                           "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
                       }}
                     >
                       {group.units.map((unit, idx) => (
                         <div
-                          key={`${unit.unit}-${unit.shift}-${idx}`}
+                          key={`${unit.unit}-${unit.shifts.join("-")}-${idx}`}
                           style={{
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
-                            padding: "6px 10px",
-                            borderRadius: "8px",
+                            padding: "5px 8px",
+                            borderRadius: "7px",
                             background:
                               "var(--input-bg, rgba(255, 255, 255, 0.03))",
                             border:
                               "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-                            gap: "8px",
+                            gap: "6px",
                           }}
                         >
-                          {/* Unit Body & Detail */}
+                          {/* Unit Body & Note */}
                           <div
                             style={{
                               display: "flex",
@@ -1143,7 +1346,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           >
                             <span
                               style={{
-                                fontSize: "12px",
+                                fontSize: "11.5px",
                                 fontWeight: 800,
                                 color: "var(--text-primary)",
                                 letterSpacing: "0.2px",
@@ -1153,7 +1356,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             </span>
                             <span
                               style={{
-                                fontSize: "11px",
+                                fontSize: "10.5px",
                                 color: "var(--text-secondary)",
                                 marginTop: "1px",
                                 overflow: "hidden",
@@ -1166,7 +1369,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             </span>
                           </div>
 
-                          {/* Status Badge & Shift */}
+                          {/* Status Badge & Shifts */}
                           <div
                             style={{
                               display: "flex",
@@ -1177,12 +1380,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           >
                             <span
                               style={{
-                                fontSize: "9.5px",
+                                fontSize: "9px",
                                 fontWeight: 700,
                                 background: unit.badgeBg,
                                 color: unit.badgeColor,
-                                padding: "2px 6px",
-                                borderRadius: "5px",
+                                padding: "2px 5px",
+                                borderRadius: "4px",
                                 letterSpacing: "0.2px",
                               }}
                             >
@@ -1190,15 +1393,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             </span>
                             <span
                               style={{
-                                fontSize: "9.5px",
+                                fontSize: "9px",
                                 fontWeight: 600,
                                 color: "var(--text-secondary)",
-                                padding: "2px 5px",
-                                borderRadius: "5px",
+                                padding: "2px 4px",
+                                borderRadius: "4px",
                                 background: "rgba(255, 255, 255, 0.06)",
                               }}
                             >
-                              S{unit.shift}
+                              {unit.shifts.map((s) => `S${s}`).join(" • ")}
                             </span>
                           </div>
                         </div>
@@ -1212,15 +1415,16 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
         </div>
       )}
 
-      {/* 5. Normal Routes Section (Rute Beroperasi Penuh / Tanpa Kendala) */}
+      {/* 5. Normal Routes Section (Rute Beroperasi Penuh / 100% Siap Jalan) */}
       {normalRoutes.length > 0 && (
         <div
           className="monitoring-card"
           style={{
             background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
-            borderRadius: "14px",
+            borderRadius: "12px",
             border: "1px solid rgba(16, 185, 129, 0.2)",
-            padding: "12px 14px",
+            padding: "10px 12px",
+            marginBottom: "10px",
           }}
         >
           <div
@@ -1228,14 +1432,14 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: "8px",
+              marginBottom: "6px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <ShieldCheck size={16} style={{ color: "#10B981" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+              <ShieldCheck size={15} style={{ color: "#10B981" }} />
               <span
                 style={{
-                  fontSize: "12px",
+                  fontSize: "11.5px",
                   fontWeight: 700,
                   color: "var(--text-primary)",
                 }}
@@ -1245,12 +1449,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
             <span
               style={{
-                fontSize: "10.5px",
+                fontSize: "10px",
                 fontWeight: 700,
                 color: "#10B981",
                 background: "rgba(16, 185, 129, 0.12)",
-                padding: "2px 7px",
-                borderRadius: "6px",
+                padding: "2px 6px",
+                borderRadius: "5px",
                 border: "1px solid rgba(16, 185, 129, 0.25)",
               }}
             >
@@ -1260,8 +1464,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
 
           <p
             style={{
-              margin: "0 0 10px 0",
-              fontSize: "11px",
+              margin: "0 0 8px 0",
+              fontSize: "10.5px",
               color: "var(--text-secondary)",
               lineHeight: 1.3,
             }}
@@ -1274,23 +1478,23 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: "5px",
+              gap: "4px",
             }}
           >
             {normalRoutes.map((nr) => (
               <span
                 key={nr.routeCode}
                 style={{
-                  padding: "3px 8px",
-                  borderRadius: "6px",
-                  fontSize: "11px",
+                  padding: "2px 7px",
+                  borderRadius: "5px",
+                  fontSize: "10.5px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.08)",
                   color: "#10B981",
                   border: "1px solid rgba(16, 185, 129, 0.2)",
                   cursor: "default",
                 }}
-                title={`${nr.routeCode} - ${nr.operatorName}`}
+                title={`${nr.routeCode} - ${nr.operatorName} (100% Siap Jalan)`}
               >
                 {nr.routeCode}
               </span>
@@ -1299,7 +1503,82 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
         </div>
       )}
 
-      {/* 6. Quick Korlap Fleet Modal */}
+      {/* 6. Pending Routes Section (Menunggu Laporan / Belum Ada Data) */}
+      {pendingRoutes.length > 0 && (
+        <div
+          className="monitoring-card"
+          style={{
+            background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
+            borderRadius: "12px",
+            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
+            padding: "9px 12px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "5px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+              <Clock size={13} style={{ color: "var(--text-secondary)" }} />
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  color: "var(--text-secondary)",
+                }}
+              >
+                Menunggu Laporan / Sinkronisasi
+              </span>
+            </div>
+            <span
+              style={{
+                fontSize: "9.5px",
+                fontWeight: 600,
+                color: "var(--text-secondary)",
+                background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                padding: "1px 5px",
+                borderRadius: "4px",
+              }}
+            >
+              {pendingRoutes.length} Rute
+            </span>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "4px",
+              marginTop: "5px",
+            }}
+          >
+            {pendingRoutes.map((pr) => (
+              <span
+                key={pr.routeCode}
+                style={{
+                  padding: "2px 6px",
+                  borderRadius: "5px",
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
+                  color: "var(--text-secondary)",
+                  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
+                  cursor: "default",
+                }}
+                title={`${pr.routeCode} - ${pr.operatorName} (Belum Ada Data)`}
+              >
+                {pr.routeCode}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 7. Quick Korlap Fleet Modal */}
       {quickRoute && (
         <QuickKorlapFleetModal
           isOpen={true}
@@ -1308,6 +1587,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           routeCode={quickRoute.routeCode}
           selectedDate={selectedDate}
           shift={quickRoute.shift}
+          defaultRenops={quickRoute.defaultRenops}
+          initialRealops={quickRoute.initialRealops}
+          initialNotes={quickRoute.initialNotes}
           onSaveSuccess={() => {
             setQuickRoute(null);
             onRefresh?.();

@@ -137,6 +137,20 @@ describe("MonitoringFleetStatusTab Component", () => {
       );
     });
 
+    // Default: kartu dalam mode collapsed sehingga detail unit belum ter-render
+    expect(container.textContent).toContain("JAK.01");
+    expect(container.textContent).not.toContain("KWK 222177");
+
+    // Klik Buka Semua (Expand All)
+    const expandAllBtn = Array.from(container.querySelectorAll("button")).find((btn) =>
+      btn.textContent?.includes(TEXT_MONITORING.FLEET_TAB.EXPAND_ALL)
+    );
+    expect(expandAllBtn).toBeDefined();
+
+    await act(async () => {
+      expandAllBtn?.click();
+    });
+
     // JAK.01 has non-SGO units -> should be visible in troubled routes
     expect(container.textContent).toContain("JAK.01");
     expect(container.textContent).toContain("KWK 222177");
@@ -168,6 +182,14 @@ describe("MonitoringFleetStatusTab Component", () => {
 
     await act(async () => {
       shift2Btn?.click();
+    });
+
+    // Expand all cards
+    const expandAllBtn = Array.from(container.querySelectorAll("button")).find((btn) =>
+      btn.textContent?.includes(TEXT_MONITORING.FLEET_TAB.EXPAND_ALL)
+    );
+    await act(async () => {
+      expandAllBtn?.click();
     });
 
     // In Shift 2, only JAK.03 has issue (BMP 210123)
@@ -253,6 +275,14 @@ describe("MonitoringFleetStatusTab Component", () => {
           routes={mockRegionalRoutes as RegionalRouteItem[]}
         />
       );
+    });
+
+    // Expand all cards
+    const expandAllBtn = Array.from(container.querySelectorAll("button")).find((btn) =>
+      btn.textContent?.includes(TEXT_MONITORING.FLEET_TAB.EXPAND_ALL)
+    );
+    await act(async () => {
+      expandAllBtn?.click();
     });
 
     // JAK.87 should show up with its troubled units from spreadsheet fallback
