@@ -240,4 +240,71 @@ describe("busInputPayload - Pure Payload Module", () => {
       expect(payload.kmAwal2).toBe("");
     });
   });
+
+  describe("Split Shift Notes & Canonical Combine in Payload", () => {
+    it("combines keteranganS1 and keteranganS2 using canonical combineShiftKeterangan (S1 note, S2 empty -> S1 | SGO)", () => {
+      const params = createBaseParams({
+        isSingleMode: false,
+        keteranganS1: "BA.01 Radiator bocor",
+        keteranganS2: "",
+      });
+      const result = buildBusInputPayload(params);
+      expect(result.keterangan).toBe("BA.01 Radiator bocor | SGO");
+    });
+
+    it("combines identical notes into single note for all-day status (OFF, OFF -> OFF)", () => {
+      const params = createBaseParams({
+        isSingleMode: false,
+        keteranganS1: "OFF",
+        keteranganS2: "OFF",
+      });
+      const result = buildBusInputPayload(params);
+      expect(result.keterangan).toBe("OFF");
+    });
+
+    it("combines empty shift notes into empty string", () => {
+      const params = createBaseParams({
+        isSingleMode: false,
+        keteranganS1: "",
+        keteranganS2: "",
+      });
+      const result = buildBusInputPayload(params);
+      expect(result.keterangan).toBe("");
+    });
+
+    it("combines S1 empty and S2 note into SGO | S2 (empty, BA.02 NP2 -> SGO | BA.02 NP2)", () => {
+      const params = createBaseParams({
+        isSingleMode: false,
+        keteranganS1: "",
+        keteranganS2: "BA.02 NP2",
+      });
+      const result = buildBusInputPayload(params);
+      expect(result.keterangan).toBe("SGO | BA.02 NP2");
+    });
+
+    it("combines notes in single focus mode when effectiveCategory === 'keterangan'", () => {
+      const params = createBaseParams({
+        isSingleMode: true,
+        effectiveCategory: "keterangan",
+        keteranganS1: "BA.01 Mogok",
+        keteranganS2: "",
+      });
+      const result = buildBusInputPayload(params);
+      expect(result.keterangan).toBe("BA.01 Mogok | SGO");
+    });
+
+    it("combines notes in single focus mode when showKeterangan is true", () => {
+      const params = createBaseParams({
+        isSingleMode: true,
+        effectiveCategory: "trip",
+        tripPergi: "4",
+        tripPulang: "4",
+        showKeterangan: true,
+        keteranganS1: "BA.03 Macet",
+        keteranganS2: "BA.02 NP1",
+      });
+      const result = buildBusInputPayload(params);
+      expect(result.keterangan).toBe("BA.03 Macet | BA.02 NP1");
+    });
+  });
 });
