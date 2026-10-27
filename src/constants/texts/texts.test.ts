@@ -506,5 +506,6 @@ describe('Centralized UI Text Dictionary', () => {
     expect(modalTexts.PRESETS.LABEL_SHIFT2_NOTE).toBe('Catatan Shift 2');
     expect(modalTexts.PRESETS.PREVIEW_SSOT_LABEL).toBe('Hasil Format Spreadsheet:');
     expect(modalTexts.PRESETS.APPLY_ALL_SHIFTS).toBe('Terapkan ke Kedua Shift');
+    expect(modalTexts.PRESETS.ARIA_SELECT_NOTE_SHIFT).toBe('Pilih Shift Catatan');
   });
 });

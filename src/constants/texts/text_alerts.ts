@@ -261,6 +261,7 @@ export const TEXT_ALERTS = {
       LABEL_SHIFT2_NOTE: "Catatan Shift 2",
       PREVIEW_SSOT_LABEL: "Hasil Format Spreadsheet:",
       APPLY_ALL_SHIFTS: "Terapkan ke Kedua Shift",
+      ARIA_SELECT_NOTE_SHIFT: "Pilih Shift Catatan",
     },
   },
   MODAL_COMMON: {

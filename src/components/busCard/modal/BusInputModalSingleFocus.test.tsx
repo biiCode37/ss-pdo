@@ -62,7 +62,7 @@ describe("BusInputModalSingleFocus Component", () => {
     setKmAwal2: vi.fn(),
     kmAkhir2: "",
     setKmAkhir2: vi.fn(),
-    keteranganS1: "",
+    keteranganS1: overrides.keteranganS1 ?? (overrides.keterangan || ""),
     setKeteranganS1: vi.fn(),
     keteranganS2: "",
     setKeteranganS2: vi.fn(),
@@ -504,6 +504,22 @@ describe("BusInputModalSingleFocus Component", () => {
       const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
       expect(textarea).not.toBeNull();
       expect(textarea.value).toBe("AC kurang dingin");
+    });
+
+    it("menampilkan string kosong pada Shift 1 jika keteranganS1 kosong dan tidak membocorkan catatan Shift 2", () => {
+      const form = createMockForm({
+        effectiveCategory: "toaShift1",
+        showKeterangan: true,
+        keteranganS1: "",
+        keteranganS2: "BA.02 Sakit",
+        keterangan: "SGO | BA.02 Sakit",
+      });
+
+      renderComponent({ form, activeCategory: "toaShift1" });
+
+      const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
+      expect(textarea).not.toBeNull();
+      expect(textarea.value).toBe("");
     });
   });
 });

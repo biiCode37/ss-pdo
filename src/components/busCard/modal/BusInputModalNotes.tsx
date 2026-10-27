@@ -66,7 +66,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
         {/* Segmented Switch Buttons */}
         <div
           role="group"
-          aria-label="Pilih Shift Catatan"
+          aria-label={texts.PRESETS.ARIA_SELECT_NOTE_SHIFT}
           style={{
             display: "inline-flex",
             padding: "3px",
@@ -87,7 +87,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
               cursor: "pointer",
               border:
                 activeNoteShift === 1
-                  ? "1px solid rgba(56, 189, 248, 0.3)"
+                  ? "1px solid var(--shift1-border, rgba(56, 189, 248, 0.3))"
                   : "1px solid transparent",
               background:
                 activeNoteShift === 1
@@ -95,7 +95,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
                   : "transparent",
               color:
                 activeNoteShift === 1
-                  ? "var(--accent-color, #38bdf8)"
+                  ? "var(--shift1-color, #38bdf8)"
                   : "var(--text-secondary, #94a3b8)",
               display: "inline-flex",
               alignItems: "center",
@@ -110,7 +110,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
                   width: "6px",
                   height: "6px",
                   borderRadius: "50%",
-                  background: "#38bdf8",
+                  background: "var(--shift1-color, #38bdf8)",
                   display: "inline-block",
                 }}
               />
@@ -128,7 +128,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
               cursor: "pointer",
               border:
                 activeNoteShift === 2
-                  ? "1px solid rgba(168, 85, 247, 0.3)"
+                  ? "1px solid var(--shift2-border, rgba(168, 85, 247, 0.3))"
                   : "1px solid transparent",
               background:
                 activeNoteShift === 2
@@ -136,7 +136,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
                   : "transparent",
               color:
                 activeNoteShift === 2
-                  ? "#c084fc"
+                  ? "var(--shift2-color, #c084fc)"
                   : "var(--text-secondary, #94a3b8)",
               display: "inline-flex",
               alignItems: "center",
@@ -151,7 +151,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
                   width: "6px",
                   height: "6px",
                   borderRadius: "50%",
-                  background: "#c084fc",
+                  background: "var(--shift2-color, #c084fc)",
                   display: "inline-block",
                 }}
               />
@@ -219,7 +219,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             borderRadius: "12px",
             border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
             background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
-            color: "var(--text-main, #f8fafc)",
+            color: "var(--text-primary, #ededed)",
             fontSize: "0.9rem",
             lineHeight: 1.5,
             boxSizing: "border-box",

@@ -29,16 +29,21 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
 
   const currentNote = isShift2
     ? (keteranganS2 ?? keterangan ?? "")
-    : (keteranganS1 || keterangan || "");
+    : (keteranganS1 ?? keterangan ?? "");
 
   const handleNoteChange = (val: string) => {
     if (isShift2) {
-      if (setKeteranganS2) setKeteranganS2(val);
+      if (setKeteranganS2) {
+        setKeteranganS2(val);
+      } else if (setKeterangan) {
+        setKeterangan(val);
+      }
     } else {
-      if (setKeteranganS1) setKeteranganS1(val);
-    }
-    if (setKeterangan) {
-      setKeterangan(val);
+      if (setKeteranganS1) {
+        setKeteranganS1(val);
+      } else if (setKeterangan) {
+        setKeterangan(val);
+      }
     }
   };
 
