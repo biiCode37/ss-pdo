@@ -160,6 +160,7 @@ describe("KeteranganPresetBar Component", () => {
     const offBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "OFF"
     );
+    expect(offBtnActive?.style.color).toContain("#eab308");
     act(() => {
       offBtnActive!.click();
     });
@@ -187,6 +188,7 @@ describe("KeteranganPresetBar Component", () => {
     const evdalBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "TO EVDAL"
     );
+    expect(evdalBtnActive?.style.color).toContain("#ef4444");
     act(() => {
       evdalBtnActive!.click();
     });

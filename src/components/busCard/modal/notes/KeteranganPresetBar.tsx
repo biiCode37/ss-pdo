@@ -111,7 +111,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           {texts.BTN_BA}
         </button>
 
-        {/* Tombol Preset OFF */}
+        {/* Tombol Preset OFF (Kuning) */}
         <button
           type="button"
           onClick={handleSelectOff}
@@ -122,19 +122,19 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             fontWeight: 700,
             cursor: "pointer",
             border: isOffActive
-              ? "1px solid #ef4444"
+              ? "1px solid #eab308"
               : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
             background: isOffActive
-              ? "rgba(239, 68, 68, 0.2)"
+              ? "rgba(234, 179, 8, 0.2)"
               : "rgba(255, 255, 255, 0.05)",
-            color: isOffActive ? "#ef4444" : "var(--text-primary, #f8fafc)",
+            color: isOffActive ? "#eab308" : "var(--text-primary, #f8fafc)",
             transition: "all 0.15s ease",
           }}
         >
           {texts.BTN_OFF}
         </button>
 
-        {/* Tombol Preset TO EVDAL */}
+        {/* Tombol Preset TO EVDAL (Merah) */}
         <button
           type="button"
           onClick={handleSelectToEvdal}
@@ -145,12 +145,12 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             fontWeight: 700,
             cursor: "pointer",
             border: isToEvdalActive
-              ? "1px solid #f59e0b"
+              ? "1px solid #ef4444"
               : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
             background: isToEvdalActive
-              ? "rgba(245, 158, 11, 0.2)"
+              ? "rgba(239, 68, 68, 0.2)"
               : "rgba(255, 255, 255, 0.05)",
-            color: isToEvdalActive ? "#f59e0b" : "var(--text-primary, #f8fafc)",
+            color: isToEvdalActive ? "#ef4444" : "var(--text-primary, #f8fafc)",
             transition: "all 0.15s ease",
           }}
         >
