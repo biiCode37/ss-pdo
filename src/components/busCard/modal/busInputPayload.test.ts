@@ -242,14 +242,14 @@ describe("busInputPayload - Pure Payload Module", () => {
   });
 
   describe("Split Shift Notes & Canonical Combine in Payload", () => {
-    it("combines keteranganS1 and keteranganS2 using canonical combineShiftKeterangan (S1 note, S2 empty -> S1 | SGO)", () => {
+    it("combines keteranganS1 and keteranganS2 using canonical combineShiftKeterangan (S1 note, S2 empty -> S1)", () => {
       const params = createBaseParams({
         isSingleMode: false,
         keteranganS1: "BA.01 Radiator bocor",
         keteranganS2: "",
       });
       const result = buildBusInputPayload(params);
-      expect(result.keterangan).toBe("BA.01 Radiator bocor | SGO");
+      expect(result.keterangan).toBe("BA.01 Radiator bocor");
     });
 
     it("combines identical notes into single note for all-day status (OFF, OFF -> OFF)", () => {
@@ -272,14 +272,14 @@ describe("busInputPayload - Pure Payload Module", () => {
       expect(result.keterangan).toBe("");
     });
 
-    it("combines S1 empty and S2 note into SGO | S2 (empty, BA.02 NP2 -> SGO | BA.02 NP2)", () => {
+    it("combines S1 empty and S2 note into S2 without SGO (empty, BA.02 NP2 -> BA.02 NP2)", () => {
       const params = createBaseParams({
         isSingleMode: false,
         keteranganS1: "",
         keteranganS2: "BA.02 NP2",
       });
       const result = buildBusInputPayload(params);
-      expect(result.keterangan).toBe("SGO | BA.02 NP2");
+      expect(result.keterangan).toBe("BA.02 NP2");
     });
 
     it("combines notes in single focus mode when effectiveCategory === 'keterangan'", () => {
@@ -290,7 +290,7 @@ describe("busInputPayload - Pure Payload Module", () => {
         keteranganS2: "",
       });
       const result = buildBusInputPayload(params);
-      expect(result.keterangan).toBe("BA.01 Mogok | SGO");
+      expect(result.keterangan).toBe("BA.01 Mogok");
     });
 
     it("combines notes in single focus mode when showKeterangan is true", () => {

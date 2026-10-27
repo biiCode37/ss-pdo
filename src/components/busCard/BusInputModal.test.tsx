@@ -1599,8 +1599,8 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
 
       expect(onSave).toHaveBeenCalled();
       const savedUpdates = onSave.mock.calls[0][0];
-      // S1: OFF, S2: kosong -> canonical combine: "OFF | SGO"
-      expect(savedUpdates.keterangan).toBe("OFF | SGO");
+      // S1: OFF, S2: kosong -> canonical combine: "OFF"
+      expect(savedUpdates.keterangan).toBe("OFF");
     });
   });
 
@@ -1611,7 +1611,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
           <BusInputModal
             isOpen={true}
             onClose={vi.fn()}
-            bus={createMockBus({ keterangan: "BA.01 Ban bocor | SGO" })}
+            bus={createMockBus({ keterangan: "BA.01 Ban bocor" })}
             initialTab="notes"
             onSave={vi.fn()}
           />,
@@ -1622,7 +1622,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       expect(document.body.textContent).toContain(
         TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.PREVIEW_SSOT_LABEL,
       );
-      expect(document.body.textContent).toContain("BA.01 Ban bocor | SGO");
+      expect(document.body.textContent).toContain("BA.01 Ban bocor");
 
       // 2. Cek segmented selector tombol Shift 1 dan Shift 2
       const shiftButtons = Array.from(document.body.querySelectorAll("button")).filter(
@@ -1667,8 +1667,8 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
         offBtn!.click();
       });
 
-      // Preview harus berubah menjadi "OFF | SGO"
-      expect(document.body.textContent).toContain("OFF | SGO");
+      // Preview harus berubah menjadi "OFF" (tanpa SGO)
+      expect(document.body.textContent).toContain("OFF");
 
       // Beralih ke Shift 2 di segmented switch
       const segmentedButtons = Array.from(

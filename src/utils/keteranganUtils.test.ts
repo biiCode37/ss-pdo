@@ -59,6 +59,16 @@ describe('keteranganUtils - normalizeKeterangan', () => {
     expect(normalizeKeterangan('TO-EVDAL')).toBe('TO EVDAL');
   });
 
+  it('strips standalone SGO or SGO in pipe-separated notes', () => {
+    expect(normalizeKeterangan('SGO')).toBe('');
+    expect(normalizeKeterangan('sgo')).toBe('');
+    expect(normalizeKeterangan('BA.02 NP1 | SGO')).toBe('BA.02 NP1');
+    expect(normalizeKeterangan('SGO | BA.02 NP2')).toBe('BA.02 NP2');
+    expect(normalizeKeterangan('SGO | SGO')).toBe('');
+    expect(normalizeKeterangan('OFF | SGO')).toBe('OFF');
+    expect(normalizeKeterangan('SGO | OFF')).toBe('OFF');
+  });
+
   it('preserves non-BA free text notes intact', () => {
     expect(normalizeKeterangan('Servis AC berkala')).toBe('Servis AC berkala');
     expect(normalizeKeterangan('Baterai lemah')).toBe('Baterai lemah');
@@ -193,11 +203,11 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(combineShiftKeterangan('ba 02 np 1', 'BA.02 NP1')).toBe('BA.02 NP1');
     });
 
-    it('preserves single shift note with explicit SGO when other shift is SGO', () => {
-      expect(combineShiftKeterangan('', 'BA.02 NP1')).toBe('SGO | BA.02 NP1');
-      expect(combineShiftKeterangan('SGO', 'OFF')).toBe('SGO | OFF');
-      expect(combineShiftKeterangan('BA.01 Radiator', '')).toBe('BA.01 Radiator | SGO');
-      expect(combineShiftKeterangan('TO EVDAL', 'SGO')).toBe('TO EVDAL | SGO');
+    it('returns clean single note without SGO when only one shift has note', () => {
+      expect(combineShiftKeterangan('', 'BA.02 NP1')).toBe('BA.02 NP1');
+      expect(combineShiftKeterangan('SGO', 'OFF')).toBe('OFF');
+      expect(combineShiftKeterangan('BA.01 Radiator', '')).toBe('BA.01 Radiator');
+      expect(combineShiftKeterangan('TO EVDAL', 'SGO')).toBe('TO EVDAL');
     });
 
     it('combines differing notes using pipe separator with normalization', () => {
@@ -227,6 +237,16 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       const res = splitShiftKeterangan('OFF');
       expect(res.s1).toBe('OFF');
       expect(res.s2).toBe('OFF');
+    });
+
+    it('routes NP1 note to Shift 1 only and NP2 note to Shift 2 only when single', () => {
+      const res1 = splitShiftKeterangan('BA.02 NP1');
+      expect(res1.s1).toBe('BA.02 NP1');
+      expect(res1.s2).toBe('');
+
+      const res2 = splitShiftKeterangan('BA.02 NP2');
+      expect(res2.s1).toBe('');
+      expect(res2.s2).toBe('BA.02 NP2');
     });
 
     it('returns empty for both shifts if string is empty', () => {

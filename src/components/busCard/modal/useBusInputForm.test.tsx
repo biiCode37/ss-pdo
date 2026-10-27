@@ -927,7 +927,7 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
 
       expect(onSave).toHaveBeenCalledTimes(1);
       const submitted = onSave.mock.calls[0][0];
-      expect(submitted.keterangan).toBe("BA.01 Radiator bocor | SGO");
+      expect(submitted.keterangan).toBe("BA.01 Radiator bocor");
     });
   });
 });

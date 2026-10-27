@@ -26,15 +26,19 @@ const BA_PATTERN = /^\s*BA\s*[-._:/]?\s*0?([1-4])\b(?:\s*[-:]?\s*(.*))?$/i;
 export function normalizeKeterangan(raw?: string | null): string {
   if (!raw || typeof raw !== 'string') return '';
   const trimmed = raw.trim();
-  if (!trimmed) return '';
+  if (!trimmed || trimmed.toUpperCase() === 'SGO') return '';
 
-  // Dukungan keterangan berbeda per shift (" | ")
-  if (trimmed.includes(' | ')) {
-    return trimmed
-      .split(' | ')
-      .map(part => normalizeKeterangan(part))
-      .filter(Boolean)
-      .join(' | ');
+  // Dukungan keterangan berbeda per shift (" | " atau "|")
+  if (trimmed.includes('|')) {
+    const parts = trimmed
+      .split('|')
+      .map(part => normalizeKeterangan(part.trim()))
+      .filter(Boolean);
+
+    if (parts.length === 0) return '';
+    if (parts.length === 1) return parts[0];
+    if (parts[0] === parts[1]) return parts[0];
+    return parts.join(' | ');
   }
 
   // 1. Cek variasi BA.01 s/d BA.04
@@ -174,9 +178,9 @@ export function cleanShiftNote(val?: string | null): string {
  * Menggabungkan keterangan Shift 1 dan Shift 2 dengan pemisah " | ".
  * - Jika kedua shift SGO (kosong): kembalikan ""
  * - Jika kedua shift memiliki keterangan identik: kembalikan 1 keterangan saja (misal "OFF")
- * - Jika Shift 1 berketerangan dan Shift 2 SGO: kembalikan "${note1} | SGO"
- * - Jika Shift 1 SGO dan Shift 2 berketerangan: kembalikan "SGO | ${note2}"
- * - Jika kedua shift memiliki keterangan berbeda: gabungkan dengan " | " (misal "OFF | TO EVDAL")
+ * - Jika hanya Shift 1 yang berketerangan: kembalikan keterangan Shift 1 saja (tanpa embel-embel SGO)
+ * - Jika hanya Shift 2 yang berketerangan: kembalikan keterangan Shift 2 saja (tanpa embel-embel SGO)
+ * - Jika kedua shift memiliki keterangan berbeda: gabungkan dengan " | " (misal "BA.01 | BA.02" atau "OFF | TO EVDAL")
  */
 export function combineShiftKeterangan(
   s1?: string | null,
@@ -186,8 +190,8 @@ export function combineShiftKeterangan(
   const note2 = cleanShiftNote(s2);
 
   if (!note1 && !note2) return '';
-  if (note1 && !note2) return `${note1} | SGO`;
-  if (!note1 && note2) return `SGO | ${note2}`;
+  if (note1 && !note2) return note1;
+  if (!note1 && note2) return note2;
   if (note1 === note2) return note1;
 
   return `${note1} | ${note2}`;
@@ -205,18 +209,32 @@ export function splitShiftKeterangan(combined?: string | null): {
   }
 
   const trimmed = combined.trim();
-  if (!trimmed) {
+  if (!trimmed || trimmed.toUpperCase() === 'SGO') {
     return { s1: '', s2: '' };
   }
 
-  if (trimmed.includes(' | ')) {
-    const parts = trimmed.split(' | ');
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|').map((p) => p.trim());
     const s1 = cleanShiftNote(parts[0]);
     const s2 = cleanShiftNote(parts[1]);
     return { s1, s2 };
   }
 
   const single = cleanShiftNote(trimmed);
+  if (!single) {
+    return { s1: '', s2: '' };
+  }
+
+  // Khusus NP1: spesifik untuk Shift 1 saja
+  if (/\bNP1\b/i.test(single)) {
+    return { s1: single, s2: '' };
+  }
+
+  // Khusus NP2: spesifik untuk Shift 2 saja
+  if (/\bNP2\b/i.test(single)) {
+    return { s1: '', s2: single };
+  }
+
   return { s1: single, s2: single };
 }
 
