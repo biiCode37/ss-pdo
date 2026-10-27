@@ -15,4 +15,4 @@
 **Status:** Completed successfully on `devmode`.
 
 ## Findings & Minor Notes
-- None yet.
+- Commit `bb5bf26`: Menghapus tombol `[Normal (SGO)]` dan mengubah dropdown jenis BA menjadi deretan pill ringkas `[01, 02, 03, 04]` dengan shortcut `[NP1]` dan `[NP2]` khusus BA.02.
