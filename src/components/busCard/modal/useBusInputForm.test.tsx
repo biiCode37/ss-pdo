@@ -927,7 +927,29 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
 
       expect(onSave).toHaveBeenCalledTimes(1);
       const submitted = onSave.mock.calls[0][0];
-      expect(submitted.keterangan).toBe("BA.01 Radiator bocor");
+      expect(submitted.keterangan).toBe("S1: BA.01 Radiator bocor");
+    });
+
+    it("auto-selects shift2 tab when activeShift === 2 in 'all' mode", () => {
+      renderForm({
+        ...defaultProps,
+        activeCategory: "ALL",
+        activeShift: 2,
+        initialTab: undefined,
+      });
+
+      expect(latestForm?.activeTab).toBe("shift2");
+    });
+
+    it("auto-selects shift1 tab when activeShift === 1 in 'all' mode", () => {
+      renderForm({
+        ...defaultProps,
+        activeCategory: "ALL",
+        activeShift: 1,
+        initialTab: undefined,
+      });
+
+      expect(latestForm?.activeTab).toBe("shift1");
     });
   });
 });

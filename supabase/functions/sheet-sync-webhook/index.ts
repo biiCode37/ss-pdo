@@ -274,7 +274,15 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // 2. Ambil spreadsheet_id terdaftar dari route_sheets
+    // 2. Ambil data laporan eksisting di Supabase (Safe Realtime Guard)
+    const { data: existingReport } = await supabase
+      .from("daily_route_reports")
+      .select("id, status, data_source, renops_shift1, realops_shift1, renops_shift2, realops_shift2, is_fleet_confirmed_s1, is_fleet_confirmed_s2, fleet_status_shift1, fleet_status_shift2")
+      .eq("route_id", routeData.id)
+      .eq("date", targetDateStr)
+      .maybeSingle();
+
+    // 3. Ambil spreadsheet_id terdaftar dari route_sheets
     const { data: sheetConfig, error: sheetError } = await supabase
       .from("route_sheets")
       .select("spreadsheet_id")
@@ -409,6 +417,8 @@ Deno.serve(async (req: Request) => {
     let calcTrips = 0;
     let activeBusesS1 = 0;
     let activeBusesS2 = 0;
+    const nonSgoUnitsS1: Array<{ unit: string; note: string; isOff: boolean; isOperatingWithNote?: boolean }> = [];
+    const nonSgoUnitsS2: Array<{ unit: string; note: string; isOff: boolean; isOperatingWithNote?: boolean }> = [];
 
     const sheetSummary: Record<string, number> = {};
 
@@ -443,22 +453,55 @@ Deno.serve(async (req: Request) => {
         const t2 = colTrip2 >= 0 ? parseIndonesianNumber(row[colTrip2]) : 0;
         calcTrips += t1 + t2;
 
-        const ket = colKet >= 0 ? String(row[colKet] || "").toUpperCase() : "";
-        const isOff =
-          ket.includes("OFF") ||
-          ket.includes("LIBUR") ||
-          ket.includes("MOGOK") ||
-          ket.includes("RUSAK") ||
-          ket.includes("LAKA") ||
-          ket.includes("BAP") ||
-          ket.includes("SERVICE") ||
-          ket.includes("PERBAIKAN");
+        const rawKet = colKet >= 0 && row[colKet] !== undefined && row[colKet] !== null ? String(row[colKet]).trim() : "";
+        const ketUpper = rawKet.toUpperCase();
+        const hasWord = (regex: RegExp) => regex.test(ketUpper);
+        const isExplicitOff = hasWord(/(^|[^A-Z])(OFF|LIBUR|SPARE|CADANGAN)([^A-Z]|$)/);
+        const isExplicitKendala = hasWord(
+          /(^|[^A-Z])(MOGOK|RUSAK|LAKA|BAP|SERVICE|PERBAIKAN|TROUBLE|RADIATOR|BAN|BOCOR|DEREK|STUT|SO|TO|EVDAL)([^A-Z]|$)/
+        );
+        const hasExplicitNote = ketUpper.length > 0 && ketUpper !== "-" && ketUpper !== "0";
 
-        if (!isOff && (km1 > 0 || toaS1 > 0 || manS1 > 0 || t1 > 0)) {
+        // Unit aktif Shift 1: memiliki ritase/trip fisik di Shift 1, atau jika total trip > 0 & ada pergerakan KM/TOA, dan bukan status off/kendala
+        const hasActivityS1 = (t1 > 0 || (calcTrips > 0 && km1 > 0) || toaS1 > 0 || manS1 > 0) && !isExplicitOff && !isExplicitKendala;
+        if (hasActivityS1) {
           activeBusesS1++;
+          if (hasExplicitNote) {
+            nonSgoUnitsS1.push({
+              unit: unitVal,
+              note: rawKet,
+              isOff: false,
+              isOperatingWithNote: true,
+            });
+          }
+        } else {
+          const isOffStatus = isExplicitOff || (!isExplicitKendala && !hasExplicitNote);
+          nonSgoUnitsS1.push({
+            unit: unitVal,
+            note: hasExplicitNote ? rawKet : (isOffStatus ? "OFF" : "TIDAK OPERASI"),
+            isOff: isOffStatus,
+          });
         }
-        if (!isOff && (km2 > 0 || toaS2 > 0 || manS2 > 0 || t2 > 0)) {
+
+        // Unit aktif Shift 2
+        const hasActivityS2 = (t2 > 0 || (calcTrips > 0 && km2 > 0) || toaS2 > 0 || manS2 > 0) && !isExplicitOff && !isExplicitKendala;
+        if (hasActivityS2) {
           activeBusesS2++;
+          if (hasExplicitNote) {
+            nonSgoUnitsS2.push({
+              unit: unitVal,
+              note: rawKet,
+              isOff: false,
+              isOperatingWithNote: true,
+            });
+          }
+        } else {
+          const isOffStatus = isExplicitOff || (!isExplicitKendala && !hasExplicitNote);
+          nonSgoUnitsS2.push({
+            unit: unitVal,
+            note: hasExplicitNote ? rawKet : (isOffStatus ? "OFF" : "TIDAK OPERASI"),
+            isOff: isOffStatus,
+          });
         }
       } else {
         // Baris rangkuman rumus di bawah tabel (SSOT)
@@ -521,15 +564,36 @@ Deno.serve(async (req: Request) => {
       ? Number((finalKm / kmBaku).toFixed(1))
       : Number((calcTrips / 2).toFixed(1));
 
+    // Safe Realtime Guard: Lindungi data unit jika sudah dikonfirmasi resmi oleh Korlap di aplikasi
+    const isS1Confirmed = Boolean(existingReport?.is_fleet_confirmed_s1);
+    const isS2Confirmed = Boolean(existingReport?.is_fleet_confirmed_s2);
+    const isAppManual = existingReport?.data_source === "app_input" && (existingReport?.status === "submitted" || existingReport?.status === "verified");
+
+    const finalFleetStatusS1 = (isS1Confirmed || isAppManual) && existingReport?.fleet_status_shift1 && existingReport.fleet_status_shift1.length > 0
+      ? existingReport.fleet_status_shift1
+      : nonSgoUnitsS1;
+
+    const finalFleetStatusS2 = (isS2Confirmed || isAppManual) && existingReport?.fleet_status_shift2 && existingReport.fleet_status_shift2.length > 0
+      ? existingReport.fleet_status_shift2
+      : nonSgoUnitsS2;
+
+    const finalRealopsS1 = isS1Confirmed && existingReport?.realops_shift1 !== undefined
+      ? existingReport.realops_shift1
+      : activeBusesS1;
+
+    const finalRealopsS2 = isS2Confirmed && existingReport?.realops_shift2 !== undefined
+      ? existingReport.realops_shift2
+      : activeBusesS2;
+
     // 4. Upsert ke daily_route_reports
     const payload = {
       route_id: routeData.id,
       route_code: routeData.route_code,
       date: targetDateStr,
       renops_shift1: renops,
-      realops_shift1: activeBusesS1,
+      realops_shift1: finalRealopsS1,
       renops_shift2: renops,
-      realops_shift2: activeBusesS2,
+      realops_shift2: finalRealopsS2,
       toa_shift1: finalToaS1,
       manual_shift1: finalManS1,
       toa_shift2: finalToaS2,
@@ -538,8 +602,14 @@ Deno.serve(async (req: Request) => {
       total_km: finalKm,
       achievement_km: kmPerBus,
       total_trip: totalRitase,
-      status: "submitted",
-      data_source: "sheet_ingestion",
+      fleet_status_shift1: finalFleetStatusS1,
+      fleet_status_shift2: finalFleetStatusS2,
+      status: (isAppManual || isS1Confirmed || isS2Confirmed)
+        ? (existingReport?.status || "submitted")
+        : (existingReport?.status === "verified" ? "verified" : "draft"),
+      data_source: isAppManual
+        ? (existingReport?.data_source || "app_input")
+        : (existingReport?.data_source || "sheet_ingestion"),
       last_synced_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -565,8 +635,10 @@ Deno.serve(async (req: Request) => {
           totalPassengers: finalTotalPax,
           totalKm: finalKm,
           totalTrips: totalRitase,
-          realopsS1: activeBusesS1,
-          realopsS2: activeBusesS2,
+          realopsS1: finalRealopsS1,
+          realopsS2: finalRealopsS2,
+          nonSgoCountS1: finalFleetStatusS1.length,
+          nonSgoCountS2: finalFleetStatusS2.length,
         },
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }

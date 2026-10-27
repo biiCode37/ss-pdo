@@ -1,5 +1,6 @@
 import React from "react";
 import { TEXT_ALERTS } from "@/constants/texts";
+import { getCurrentOperationalShift } from "@/utils/keteranganUtils";
 import { KeteranganPresetBar } from "../notes/KeteranganPresetBar";
 import type { BusInputFormReturn } from "../useBusInputForm";
 
@@ -20,7 +21,9 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
 
   const isShift2 = Boolean(
     (form.activeCategory && form.activeCategory.toLowerCase().includes("2")) ||
-    (form.effectiveCategory && form.effectiveCategory.toLowerCase().includes("2"))
+    (form.effectiveCategory && form.effectiveCategory.toLowerCase().includes("2")) ||
+    ((form.activeCategory === "keterangan" || form.effectiveCategory === "keterangan") &&
+      (form.activeShift ?? getCurrentOperationalShift()) === 2)
   );
 
   const shiftLabel = isShift2

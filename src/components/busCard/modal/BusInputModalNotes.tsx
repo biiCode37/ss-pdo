@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TEXT_ALERTS } from "@/constants/texts";
-import { combineShiftKeterangan } from "@/utils/keteranganUtils";
+import { combineShiftKeterangan, getCurrentOperationalShift } from "@/utils/keteranganUtils";
 import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
 import type { BusInputFormReturn } from "./useBusInputForm";
 
@@ -18,7 +18,9 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
     handleInputFocus,
   } = form;
 
-  const [activeNoteShift, setActiveNoteShift] = useState<1 | 2>(1);
+  // Rentang waktu penentu opsi shift default: < 14.00 -> Shift 1, >= 14.00 -> Shift 2
+  const defaultNoteShift: 1 | 2 = form.activeShift ?? getCurrentOperationalShift();
+  const [activeNoteShift, setActiveNoteShift] = useState<1 | 2>(defaultNoteShift);
   const [applyAllShifts, setApplyAllShifts] = useState<boolean>(false);
 
   const currentNote = activeNoteShift === 1 ? keteranganS1 : keteranganS2;

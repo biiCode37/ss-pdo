@@ -57,6 +57,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
           isOpen={false}
           onClose={vi.fn()}
           bus={createMockBus()}
+          initialTab="shift1"
           onSave={vi.fn()}
         />,
       );
@@ -92,6 +93,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
           isOpen={true}
           onClose={vi.fn()}
           bus={createMockBus()}
+          initialTab="shift1"
           onSave={vi.fn()}
         />,
       );
@@ -149,6 +151,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
             kmAwal1: "12000.5",
             kmAkhir1: "12045.5",
           })}
+          initialTab="shift1"
           onSave={vi.fn()}
         />,
       );
@@ -209,6 +212,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
           isOpen={true}
           onClose={vi.fn()}
           bus={createMockBus()}
+          initialTab="shift1"
           onSave={vi.fn()}
         />,
       );
@@ -275,6 +279,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
           isOpen={true}
           onClose={vi.fn()}
           bus={createMockBus()}
+          initialTab="shift1"
           onSave={vi.fn()}
           isShiftConfirmed={false}
           activeShift={1}
@@ -1599,8 +1604,8 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
 
       expect(onSave).toHaveBeenCalled();
       const savedUpdates = onSave.mock.calls[0][0];
-      // S1: OFF, S2: kosong -> canonical combine: "OFF"
-      expect(savedUpdates.keterangan).toBe("OFF");
+      // S1: OFF, S2: kosong -> canonical combine: "S1: OFF"
+      expect(savedUpdates.keterangan).toBe("S1: OFF");
     });
   });
 
@@ -1611,8 +1616,9 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
           <BusInputModal
             isOpen={true}
             onClose={vi.fn()}
-            bus={createMockBus({ keterangan: "BA.01 Ban bocor" })}
+            bus={createMockBus({ keterangan: "S1: BA.01 Ban bocor" })}
             initialTab="notes"
+            activeShift={1}
             onSave={vi.fn()}
           />,
         );
@@ -1622,7 +1628,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       expect(document.body.textContent).toContain(
         TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.PREVIEW_SSOT_LABEL,
       );
-      expect(document.body.textContent).toContain("BA.01 Ban bocor");
+      expect(document.body.textContent).toContain("S1: BA.01 Ban bocor");
 
       // 2. Cek segmented selector tombol Shift 1 dan Shift 2
       const shiftButtons = Array.from(document.body.querySelectorAll("button")).filter(
@@ -1653,12 +1659,13 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
             onClose={vi.fn()}
             bus={createMockBus({ keterangan: "" })}
             initialTab="notes"
+            activeShift={1}
             onSave={onSave}
           />,
         );
       });
 
-      // Default active note shift adalah Shift 1. Klik preset OFF
+      // Default active note shift adalah Shift 1 (karena activeShift=1). Klik preset OFF
       const offBtn = Array.from(document.body.querySelectorAll("button")).find(
         (b) => b.textContent?.trim() === TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.BTN_OFF,
       );
@@ -1667,8 +1674,8 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
         offBtn!.click();
       });
 
-      // Preview harus berubah menjadi "OFF" (tanpa SGO)
-      expect(document.body.textContent).toContain("OFF");
+      // Preview harus berubah menjadi "S1: OFF"
+      expect(document.body.textContent).toContain("S1: OFF");
 
       // Beralih ke Shift 2 di segmented switch
       const segmentedButtons = Array.from(
@@ -1690,8 +1697,8 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
         toEvdalBtn!.click();
       });
 
-      // Preview harus berubah menjadi "OFF | TO EVDAL"
-      expect(document.body.textContent).toContain("OFF | TO EVDAL");
+      // Preview harus berubah menjadi "S1: OFF | S2: TO EVDAL"
+      expect(document.body.textContent).toContain("S1: OFF | S2: TO EVDAL");
 
       // Submit modal dan pastikan payload kanonik
       const formEl = document.body.querySelector("form");
@@ -1700,7 +1707,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       });
 
       expect(onSave).toHaveBeenCalled();
-      expect(onSave.mock.calls[0][0].keterangan).toBe("OFF | TO EVDAL");
+      expect(onSave.mock.calls[0][0].keterangan).toBe("S1: OFF | S2: TO EVDAL");
     });
 
     it("updates both shifts simultaneously when 'Terapkan ke Kedua Shift' is checked", async () => {

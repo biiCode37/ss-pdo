@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
-import { splitShiftKeterangan } from "@/utils/keteranganUtils";
+import { splitShiftKeterangan, getDefaultModalTab } from "@/utils/keteranganUtils";
 import { showWarningToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
@@ -48,8 +48,10 @@ export function useBusCardModal({
       return;
     }
 
-    // ponytail: bebas input tanpa pemblokiran status armada, status armada hanya indikator visual
-    setModalInitialTab(initialTab || "shift1");
+    // Rentang waktu penentu tab aktif form mode "semua kolom":
+    // Sebelum jam 14.00 -> auto aktif "shift1", Mulai jam 14.00 -> auto aktif "shift2"
+    const defaultTab = getDefaultModalTab(undefined, relevantShift);
+    setModalInitialTab(initialTab || defaultTab);
     setIsModalOpen(true);
   };
 

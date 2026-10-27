@@ -6,6 +6,8 @@ import {
   combineShiftKeterangan,
   splitShiftKeterangan,
   hasMeaningfulNote,
+  getCurrentOperationalShift,
+  getDefaultModalTab,
 } from './keteranganUtils';
 
 describe('keteranganUtils - normalizeKeterangan', () => {
@@ -198,29 +200,51 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(combineShiftKeterangan('sgo', '')).toBe('');
     });
 
-    it('returns single note if both shifts have identical notes', () => {
+    it('returns single note if both shifts have identical notes and status is OFF or TO EVDAL', () => {
       expect(combineShiftKeterangan('OFF', 'OFF')).toBe('OFF');
-      expect(combineShiftKeterangan('ba 02 np 1', 'BA.02 NP1')).toBe('BA.02 NP1');
+      expect(combineShiftKeterangan('TO EVDAL', 'TO EVDAL')).toBe('TO EVDAL');
+      expect(combineShiftKeterangan('ba 02 np 1', 'BA.02 NP1')).toBe('S1: BA.02 NP1 | S2: BA.02 NP1');
     });
 
-    it('returns clean single note without SGO when only one shift has note', () => {
-      expect(combineShiftKeterangan('', 'BA.02 NP1')).toBe('BA.02 NP1');
-      expect(combineShiftKeterangan('SGO', 'OFF')).toBe('OFF');
-      expect(combineShiftKeterangan('BA.01 Radiator', '')).toBe('BA.01 Radiator');
-      expect(combineShiftKeterangan('TO EVDAL', 'SGO')).toBe('TO EVDAL');
+    it('returns note with S1: prefix when only shift 1 has note, and S2: when only shift 2 has note', () => {
+      expect(combineShiftKeterangan('', 'BA.02 NP1')).toBe('S2: BA.02 NP1');
+      expect(combineShiftKeterangan('SGO', 'OFF')).toBe('S2: OFF');
+      expect(combineShiftKeterangan('BA.01 Radiator', '')).toBe('S1: BA.01 Radiator');
+      expect(combineShiftKeterangan('TO EVDAL', 'SGO')).toBe('S1: TO EVDAL');
     });
 
-    it('combines differing notes using pipe separator with normalization', () => {
-      expect(combineShiftKeterangan('ba01 bocor', 'to evdal')).toBe('BA.01 bocor | TO EVDAL');
-      expect(combineShiftKeterangan('OFF', 'ba 02 np 1')).toBe('OFF | BA.02 NP1');
+    it('combines differing notes using pipe separator with S1: and S2: prefix', () => {
+      expect(combineShiftKeterangan('ba01 bocor', 'to evdal')).toBe('S1: BA.01 bocor | S2: TO EVDAL');
+      expect(combineShiftKeterangan('OFF', 'ba 02 np 1')).toBe('S1: OFF | S2: BA.02 NP1');
     });
   });
 
   describe('splitShiftKeterangan', () => {
-    it('splits combined string by pipe separator', () => {
+    it('splits combined string with S1: and S2: prefixes', () => {
+      const res = splitShiftKeterangan('S1: BA.01 bocor | S2: TO EVDAL');
+      expect(res.s1).toBe('BA.01 bocor');
+      expect(res.s2).toBe('TO EVDAL');
+
+      // Dukungan urutan terbalik
+      const resRev = splitShiftKeterangan('S2: TO EVDAL | S1: BA.01 bocor');
+      expect(resRev.s1).toBe('BA.01 bocor');
+      expect(resRev.s2).toBe('TO EVDAL');
+    });
+
+    it('splits combined string without S1/S2 prefixes (legacy pipe separator)', () => {
       const res = splitShiftKeterangan('BA.01 bocor | TO EVDAL');
       expect(res.s1).toBe('BA.01 bocor');
       expect(res.s2).toBe('TO EVDAL');
+    });
+
+    it('correctly parses single string with S1: or S2: prefix', () => {
+      const res1 = splitShiftKeterangan('S1: BA.01 Radiator bocor');
+      expect(res1.s1).toBe('BA.01 Radiator bocor');
+      expect(res1.s2).toBe('');
+
+      const res2 = splitShiftKeterangan('S2: BA.02 NP2');
+      expect(res2.s1).toBe('');
+      expect(res2.s2).toBe('BA.02 NP2');
     });
 
     it('correctly parses SGO in pipe separated string', () => {
@@ -233,7 +257,7 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(res2.s2).toBe('');
     });
 
-    it('returns identical value for both shifts if no pipe separator', () => {
+    it('returns identical value for both shifts if no pipe separator and no shift prefix', () => {
       const res = splitShiftKeterangan('OFF');
       expect(res.s1).toBe('OFF');
       expect(res.s2).toBe('OFF');
@@ -253,6 +277,36 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       const res = splitShiftKeterangan('');
       expect(res.s1).toBe('');
       expect(res.s2).toBe('');
+    });
+  });
+
+  describe('operational shift and default tab based on hour', () => {
+    it('returns shift 1 before 14:00', () => {
+      const morning = new Date('2026-10-27T08:30:00');
+      expect(getCurrentOperationalShift(morning)).toBe(1);
+      expect(getDefaultModalTab(morning)).toBe('shift1');
+
+      const beforeCutoff = new Date('2026-10-27T13:59:59');
+      expect(getCurrentOperationalShift(beforeCutoff)).toBe(1);
+      expect(getDefaultModalTab(beforeCutoff)).toBe('shift1');
+    });
+
+    it('returns shift 2 starting at 14:00 and onwards', () => {
+      const cutoff = new Date('2026-10-27T14:00:00');
+      expect(getCurrentOperationalShift(cutoff)).toBe(2);
+      expect(getDefaultModalTab(cutoff)).toBe('shift2');
+
+      const evening = new Date('2026-10-27T20:15:00');
+      expect(getCurrentOperationalShift(evening)).toBe(2);
+      expect(getDefaultModalTab(evening)).toBe('shift2');
+    });
+
+    it('honors overrideShift when provided to getDefaultModalTab', () => {
+      const morning = new Date('2026-10-27T09:00:00');
+      expect(getDefaultModalTab(morning, 2)).toBe('shift2');
+
+      const afternoon = new Date('2026-10-27T15:00:00');
+      expect(getDefaultModalTab(afternoon, 1)).toBe('shift1');
     });
   });
 

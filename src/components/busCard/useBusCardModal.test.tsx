@@ -171,6 +171,27 @@ describe("useBusCardModal Hook", () => {
     expect(latestHookResult.isModalOpen).toBe(false);
   });
 
+  it("defaults modalInitialTab to shift2 when activeShift is 2 in mode all", async () => {
+    await act(async () => {
+      root.render(
+        <TestHookComponent
+          options={{
+            ...defaultOptions,
+            activeShift: 2,
+            activeCategory: "all",
+          }}
+        />,
+      );
+    });
+
+    await act(async () => {
+      await latestHookResult.handleOpenModal();
+    });
+
+    expect(latestHookResult.isModalOpen).toBe(true);
+    expect(latestHookResult.modalInitialTab).toBe("shift2");
+  });
+
   it("delegates handleSaveModalUpdates to handleSaveUpdates", async () => {
     const handleSaveUpdatesMock = vi.fn().mockResolvedValue(undefined);
     await act(async () => {

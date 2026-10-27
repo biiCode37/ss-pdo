@@ -62,15 +62,21 @@ export function isReportCompleteAndFresh(
     total_km?: number | null;
     realops_shift1?: number | null;
     realops_shift2?: number | null;
+    is_fleet_confirmed_s1?: boolean;
+    is_fleet_confirmed_s2?: boolean;
   } | undefined,
   dateStr: string,
   todayStr: string
 ): boolean {
   if (!report) return false;
-  // Status final submitted atau verified dari aplikasi selalu di-skip
-  if (report.status === 'submitted' || report.status === 'verified') return true;
+  // Status final verified selalu di-skip (sudah disahkan Pengawas Wilayah)
+  if (report.status === 'verified') return true;
 
-  // Untuk tanggal lampau (< todayStr), jika sudah ada data operasional valid
+  // Status submitted hanya di-skip jika BUKAN dari sheet_ingestion (artinya berasal dari input manual aplikasi / korlap)
+  const isFromSheet = report.data_source === 'sheet_ingestion';
+  if (report.status === 'submitted' && !isFromSheet) return true;
+
+  // Untuk tanggal lampau (< todayStr), jika sudah ada data operasional valid dari tarikan sheet
   const isPastDate = dateStr < todayStr;
   const hasActivity =
     (report.total_passengers !== null && report.total_passengers !== undefined && Number(report.total_passengers) > 0) ||
@@ -108,7 +114,8 @@ export function extractRouteDailyMetrics(
   route: Route,
   busDataList: BusData[] | null,
   sheetSummary: Record<string, number> | null,
-  dateStr: string
+  dateStr: string,
+  existingReport?: any
 ): {
   payload: any;
   activeBusesS1: number;
@@ -148,44 +155,49 @@ export function extractRouteDailyMetrics(
     calcToaS2 += toaS2;
     calcManualS2 += manS2;
 
-    const trip1 = parseIndonesianNumber(bus.tripPergi);
-    const trip2 = parseIndonesianNumber(bus.tripPulang);
-    const tripTotal = trip1 + trip2;
-    calcTrips += tripTotal;
+    const tripPergi = parseIndonesianNumber(bus.tripPergi);
+    const tripPulang = parseIndonesianNumber(bus.tripPulang);
+    const totalTrip = tripPergi + tripPulang;
+    calcTrips += totalTrip;
 
-    const ketUpper = (bus.keterangan || '').toUpperCase().trim();
-    const isExplicitOff =
-      ketUpper.includes('OFF') ||
-      ketUpper.includes('LIBUR') ||
-      ketUpper.includes('MOGOK') ||
-      ketUpper.includes('RUSAK') ||
-      ketUpper.includes('LAKA') ||
-      ketUpper.includes('BAP') ||
-      ketUpper.includes('SERVICE') ||
-      ketUpper.includes('PERBAIKAN');
+    const rawNote = (bus.keterangan || '').trim();
+    const ketUpper = rawNote.toUpperCase();
+    const hasExplicitNote = rawNote.length > 0 && rawNote !== '-' && rawNote !== '0';
+    const isExplicitOff = /(^|[^A-Z])(OFF|LIBUR|SPARE|CADANGAN)([^A-Z]|$)/.test(ketUpper);
 
-    // Unit aktif Shift 1: memiliki ritase/trip fisik di Shift 1, atau jika total trip > 0 & ada pergerakan KM/TOA, dan bukan status off/kendala
-    const hasActivityS1 = (trip1 > 0 || (tripTotal > 0 && km1 > 0) || toaS1 > 0 || manS1 > 0) && !isExplicitOff;
-    if (hasActivityS1) {
+    // ponytail: Penentu mutlak status operasi bus adalah akumulasi kolom trip fisik 1 hari (tripPergi + tripPulang).
+    // Jika totalTrip > 0 (atau ada pergerakan KM/penumpang), unit BEROPERASI.
+    // Dilarang keras mencap unit beroperasi sebagai 'OFF' hanya karena input Shift 2 belum masuk.
+    const isOperating = totalTrip > 0 || km1 > 0 || km2 > 0 || toaS1 > 0 || toaS2 > 0 || manS1 > 0 || manS2 > 0;
+
+    if (isOperating) {
       activeBusesS1++;
-    } else {
-      nonSgoUnitsS1.push({
-        unit: bus.unit,
-        note: bus.keterangan ? bus.keterangan.trim() : (isExplicitOff ? 'OFF' : 'TIDAK OPERASI'),
-        isOff: true,
-      });
-    }
-
-    // Unit aktif Shift 2
-    const hasActivityS2 = (trip2 > 0 || (tripTotal > 0 && km2 > 0) || toaS2 > 0 || manS2 > 0) && !isExplicitOff;
-    if (hasActivityS2) {
       activeBusesS2++;
+
+      // Catat jika unit beroperasi namun memiliki keterangan khusus di spreadsheet
+      if (hasExplicitNote) {
+        const operatingItem: FleetUnitStatusDetail = {
+          unit: bus.unit,
+          note: rawNote,
+          isOff: false,
+          isOperatingWithNote: true,
+        };
+        nonSgoUnitsS1.push(operatingItem);
+        nonSgoUnitsS2.push(operatingItem);
+      }
     } else {
-      nonSgoUnitsS2.push({
+      // Unit tidak beroperasi: jika eksplisit OFF/LIBUR atau tidak ada keterangan -> isOff: true (Unit Libur)
+      // Jika memiliki catatan kendala/alasan lain -> isOff: false (Rincian Tidak Ops)
+      const isOffStatus = isExplicitOff || !hasExplicitNote;
+      const nonOperatingItem: FleetUnitStatusDetail = {
         unit: bus.unit,
-        note: bus.keterangan ? bus.keterangan.trim() : (isExplicitOff ? 'OFF' : 'TIDAK OPERASI'),
-        isOff: true,
-      });
+        note: hasExplicitNote ? rawNote : 'OFF',
+        isOff: isOffStatus,
+        isOperatingWithNote: false,
+      };
+
+      nonSgoUnitsS1.push(nonOperatingItem);
+      nonSgoUnitsS2.push(nonOperatingItem);
     }
   });
 
@@ -219,9 +231,7 @@ export function extractRouteDailyMetrics(
   const renopsShift2 = targetRenops;
 
   const realopsShift1 = rawBuses.length > 0 ? activeBusesS1 : 0;
-  // Shift 2 dihitung aktif jika ada aktivitas atau penumpang di Shift 2
-  const isShift2Started = (calcToaS2 + calcManualS2 + calcTrips) > 0 && activeBusesS2 > 0;
-  const realopsShift2 = isShift2Started ? activeBusesS2 : (rawBuses.length > 0 && activeBusesS1 > 0 ? activeBusesS1 : 0);
+  const realopsShift2 = rawBuses.length > 0 ? activeBusesS2 : 0;
 
   const maxRealops = Math.max(realopsShift1, realopsShift2);
   const achievementKm = (sheetSummary?.kmPerBus !== undefined && sheetSummary.kmPerBus > 0)
@@ -234,14 +244,43 @@ export function extractRouteDailyMetrics(
     ? Number((totalKm / kmBaku).toFixed(1))
     : Number((calcTrips / 2).toFixed(1));
 
+  // Safe Realtime Guard: Lindungi data unit jika sudah dikonfirmasi resmi oleh Korlap di aplikasi
+  const isS1Confirmed = Boolean(existingReport?.is_fleet_confirmed_s1);
+  const isS2Confirmed = Boolean(existingReport?.is_fleet_confirmed_s2);
+  const isAppManual = existingReport?.data_source === 'app_input' && (existingReport?.status === 'submitted' || existingReport?.status === 'verified');
+
+  const finalFleetStatusS1 = (isS1Confirmed || isAppManual) && existingReport?.fleet_status_shift1 && existingReport.fleet_status_shift1.length > 0
+    ? existingReport.fleet_status_shift1
+    : nonSgoUnitsS1;
+
+  const finalFleetStatusS2 = (isS2Confirmed || isAppManual) && existingReport?.fleet_status_shift2 && existingReport.fleet_status_shift2.length > 0
+    ? existingReport.fleet_status_shift2
+    : nonSgoUnitsS2;
+
+  const finalRealopsS1 = isS1Confirmed && existingReport?.realops_shift1 !== undefined
+    ? existingReport.realops_shift1
+    : realopsShift1;
+
+  const finalRealopsS2 = isS2Confirmed && existingReport?.realops_shift2 !== undefined
+    ? existingReport.realops_shift2
+    : realopsShift2;
+
+  const finalStatus = (isAppManual || isS1Confirmed || isS2Confirmed)
+    ? (existingReport?.status || 'submitted')
+    : (existingReport?.status === 'verified' ? 'verified' : 'draft');
+
+  const finalDataSource = isAppManual
+    ? (existingReport?.data_source || 'app_input')
+    : (existingReport?.data_source || 'sheet_ingestion');
+
   const payload = {
     route_id: route.id,
     route_code: route.route_code,
     date: dateStr,
     renops_shift1: renopsShift1,
-    realops_shift1: realopsShift1,
+    realops_shift1: finalRealopsS1,
     renops_shift2: renopsShift2,
-    realops_shift2: realopsShift2,
+    realops_shift2: finalRealopsS2,
     toa_shift1: toaS1,
     manual_shift1: manS1,
     toa_shift2: toaS2,
@@ -250,10 +289,10 @@ export function extractRouteDailyMetrics(
     total_km: totalKm,
     achievement_km: achievementKm,
     total_trip: totalRitase,
-    status: 'draft',
-    data_source: 'sheet_ingestion',
-    fleet_status_shift1: nonSgoUnitsS1,
-    fleet_status_shift2: nonSgoUnitsS2,
+    status: finalStatus,
+    data_source: finalDataSource,
+    fleet_status_shift1: finalFleetStatusS1,
+    fleet_status_shift2: finalFleetStatusS2,
     last_synced_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };
@@ -302,7 +341,7 @@ export async function ingestRegionalRouteSummaries(
     // 2. Ambil laporan tanggal aktif di Supabase untuk Smart Skip
     const { data: existingReports } = await supabase
       .from('daily_route_reports')
-      .select('id, route_id, route_code, status, date, data_source, last_synced_at, total_passengers, total_km, realops_shift1, realops_shift2')
+      .select('id, route_id, route_code, status, date, data_source, last_synced_at, total_passengers, total_km, realops_shift1, realops_shift2, is_fleet_confirmed_s1, is_fleet_confirmed_s2, fleet_status_shift1, fleet_status_shift2')
       .eq('date', dateStr);
 
     const reportMap = new Map<number, any>();
@@ -328,8 +367,10 @@ export async function ingestRegionalRouteSummaries(
     for (const route of routes) {
       const rep = reportMap.get(route.id);
       const status = rep?.status;
+      const isFromSheet = rep?.data_source === 'sheet_ingestion';
 
-      if (!isForce && (status === 'submitted' || status === 'verified')) {
+      // Hanya skip jika verified atau (submitted bukan dari sheet ingestion)
+      if (!isForce && (status === 'verified' || (status === 'submitted' && !isFromSheet))) {
         skippedFromApp++;
       } else if (!isForce && isReportCompleteAndFresh(rep, dateStr, todayWib)) {
         skippedExisting++;
@@ -405,11 +446,13 @@ export async function ingestRegionalRouteSummaries(
 
             const { data: busDataList, sheetSummary } = busResult;
 
+            const rep = reportMap.get(route.id);
             const { payload } = extractRouteDailyMetrics(
               route,
               busDataList,
               sheetSummary,
-              dateStr
+              dateStr,
+              rep
             );
 
             const { error: upsertError } = await supabase
@@ -503,12 +546,20 @@ export async function ingestSingleRouteSummary(
       return { success: false, error: `Konfigurasi spreadsheet rute ${route.route_code} belum terdaftar` };
     }
 
+    const { data: existingReport } = await supabase
+      .from('daily_route_reports')
+      .select('id, status, data_source, is_fleet_confirmed_s1, is_fleet_confirmed_s2, fleet_status_shift1, fleet_status_shift2, realops_shift1, realops_shift2')
+      .eq('route_id', routeId)
+      .eq('date', dateStr)
+      .maybeSingle();
+
     const { data: busDataList, sheetSummary } = await getBusData(sheetData.spreadsheet_id, tabName);
     const { payload, activeBusesS1, nonSgoUnitsS1 } = extractRouteDailyMetrics(
       route,
       busDataList,
       sheetSummary,
-      dateStr
+      dateStr,
+      existingReport
     );
 
     const { error: upsertError } = await supabase
@@ -601,7 +652,7 @@ export async function ingestRegionalRouteSummariesForRange(
   try {
     const { data: repData } = await supabase
       .from('daily_route_reports')
-      .select('route_id, date, status, data_source, last_synced_at, total_passengers, total_km, realops_shift1, realops_shift2')
+      .select('route_id, date, status, data_source, last_synced_at, total_passengers, total_km, realops_shift1, realops_shift2, is_fleet_confirmed_s1, is_fleet_confirmed_s2, fleet_status_shift1, fleet_status_shift2')
       .gte('date', startDate)
       .lte('date', endDate);
     if (repData) existingReports = repData;
@@ -623,8 +674,10 @@ export async function ingestRegionalRouteSummariesForRange(
     for (const route of routes) {
       const rep = existingMap.get(`${dateStr}_${route.id}`);
       const status = rep?.status;
+      const isFromSheet = rep?.data_source === 'sheet_ingestion';
 
-      if (!isForce && (status === 'submitted' || status === 'verified')) {
+      // Hanya skip jika verified atau (submitted bukan dari sheet ingestion)
+      if (!isForce && (status === 'verified' || (status === 'submitted' && !isFromSheet))) {
         skippedFromApp++;
       } else if (!isForce && isReportCompleteAndFresh(rep, dateStr, todayWib)) {
         skippedExisting++;
@@ -724,11 +777,13 @@ export async function ingestRegionalRouteSummariesForRange(
           }
 
           const { data: busDataList, sheetSummary } = busResult;
+          const rep = existingMap.get(`${dateStr}_${route.id}`);
           const { payload } = extractRouteDailyMetrics(
             route,
             busDataList,
             sheetSummary,
-            dateStr
+            dateStr,
+            rep
           );
 
           const { error: upsertError } = await supabase

@@ -33,13 +33,20 @@ interface UnitNoteItem {
 // ponytail: inferensi status dari teks catatan agar selaras dengan master fleet_statuses (1=SGO, 2=TO, 3=OFF, 4=SO)
 const resolveStatusFromNote = (noteText: string): { status_id: number | null; status_code: string } => {
   const upper = noteText.toUpperCase().trim();
-  if (upper.includes('OFF') || upper.includes('LIBUR')) {
+  const hasWord = (regex: RegExp) => regex.test(upper);
+
+  if (hasWord(/(^|[^A-Z])(OFF|LIBUR|SPARE|CADANGAN)([^A-Z]|$)/)) {
     return { status_id: 3, status_code: 'OFF' };
   }
-  if (upper.includes('TO') || upper.includes('EVDAL') || upper.includes('TUKAR')) {
+  if (
+    hasWord(/(^|[^A-Z])(MOGOK|RUSAK|LAKA|TROUBLE|SERVICE|PERBAIKAN|BAP|BOCOR|RADIATOR|DEREK|STUT|BAN)([^A-Z]|$)/)
+  ) {
+    return { status_id: 2, status_code: 'KENDALA' };
+  }
+  if (hasWord(/(^|[^A-Z])(TO|EVDAL|TUKAR)([^A-Z]|$)/)) {
     return { status_id: 2, status_code: 'TO' };
   }
-  if (upper.includes('SO') || upper.includes('STOP')) {
+  if (hasWord(/(^|[^A-Z])(SO|STOP)([^A-Z]|$)/)) {
     return { status_id: 4, status_code: 'SO' };
   }
   return { status_id: null, status_code: 'CATATAN' };

@@ -20,6 +20,7 @@ describe("BusInputModalSingleFocus Component", () => {
     isSingleMode: true,
     isSingleColumnEligible: true,
     activeCategory: "toaShift1",
+    activeShift: undefined,
     isExpandedAll: false,
     setIsExpandedAll: vi.fn(),
     activeTab: "shift1",
@@ -494,6 +495,7 @@ describe("BusInputModalSingleFocus Component", () => {
 
     it("merender textarea catatan jika kategori adalah murni keterangan", () => {
       const form = createMockForm({
+        activeShift: 1,
         effectiveCategory: "keterangan",
         showKeterangan: false,
         keterangan: "AC kurang dingin",
@@ -504,6 +506,21 @@ describe("BusInputModalSingleFocus Component", () => {
       const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
       expect(textarea).not.toBeNull();
       expect(textarea.value).toBe("AC kurang dingin");
+    });
+
+    it("merender textarea catatan Shift 2 jika kategori adalah murni keterangan pada Shift 2", () => {
+      const form = createMockForm({
+        activeShift: 2,
+        effectiveCategory: "keterangan",
+        showKeterangan: false,
+        keteranganS2: "AC panas di S2",
+      });
+
+      renderComponent({ form, activeCategory: "keterangan" });
+
+      const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
+      expect(textarea).not.toBeNull();
+      expect(textarea.value).toBe("AC panas di S2");
     });
 
     it("menampilkan string kosong pada Shift 1 jika keteranganS1 kosong dan tidak membocorkan catatan Shift 2", () => {

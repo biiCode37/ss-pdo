@@ -93,6 +93,58 @@ describe('regionalIngestionService', () => {
     expect(getBusData).toHaveBeenCalledWith('sheet-jak05', '21');
   });
 
+  it('does NOT skip routes that have status submitted when data_source is sheet_ingestion (allows Load All to re-sync)', async () => {
+    const mockRoutes = [
+      { id: 1, route_code: 'JAK 01', route_name: 'Tanjung Priok', default_renops: 20 },
+    ];
+    (fetchRouteMasterList as any).mockResolvedValue(mockRoutes);
+
+    // Mock existing report with status submitted but data_source: 'sheet_ingestion'
+    const mockExistingReports = [
+      { id: 101, route_id: 1, route_code: 'JAK 01', date: '2026-10-26', status: 'submitted', data_source: 'sheet_ingestion' },
+    ];
+
+    const mockRouteSheets = [
+      { id: 501, route_id: 1, year: 2026, month: 10, spreadsheet_id: 'sheet-jak01' },
+    ];
+
+    const mockFrom = vi.fn((table: string) => {
+      if (table === 'daily_route_reports') {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ data: mockExistingReports, error: null }),
+          }),
+          upsert: vi.fn().mockResolvedValue({ error: null }),
+        };
+      }
+      if (table === 'route_sheets') {
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({ data: mockRouteSheets, error: null }),
+            }),
+          }),
+        };
+      }
+      return { select: vi.fn() };
+    });
+    (supabase.from as any).mockImplementation(mockFrom);
+
+    (getBusData as any).mockResolvedValue({
+      data: [{ unit: '01', tripPergi: '2', tripPulang: '2' }],
+      headerMap: {} as any,
+      missingColumns: [],
+      sheetSummary: { totalKm: 1500, totalPassengers: 2500 },
+    });
+
+    const result = await ingestRegionalRouteSummaries('2026-10-26');
+
+    expect(result.success).toBe(true);
+    expect(result.skippedFromApp).toBe(0); // NOT skipped!
+    expect(result.syncedFromSheet).toBe(1); // Synced from sheet!
+    expect(getBusData).toHaveBeenCalledTimes(1);
+  });
+
   it('tolerates partial sheet fetch errors without failing entire batch', async () => {
     const mockRoutes = [
       { id: 1, route_code: 'JAK 01', route_name: 'Tanjung Priok', default_renops: 20 },
@@ -276,6 +328,112 @@ describe('regionalIngestionService', () => {
       // 2026-10-23 adalah hari Jumat (Weekday)
       const fri = extractRouteDailyMetrics(mockRoute, [], null, '2026-10-23');
       expect(fri.payload.renops_shift1).toBe(30);
+    });
+
+    it('classifies unit status accurately into kendala, off, and operating with note', () => {
+      const mockRoute = {
+        id: 1,
+        route_code: 'JAK.01',
+        default_renops: 20,
+      } as any;
+
+      const mockBuses = [
+        // Bus 1: Operating with note
+        {
+          unit: 'KLM 101',
+          tripPergi: '3',
+          tripPulang: '3',
+          kmAwal1: '100',
+          kmAkhir1: '150',
+          toaShift1: '50',
+          keterangan: 'AC mati siang hari',
+        },
+        // Bus 2: Kendala (Mogok)
+        {
+          unit: 'KLM 102',
+          tripPergi: '0',
+          tripPulang: '0',
+          keterangan: 'Mogok di Plumpang',
+        },
+        // Bus 3: Explicit OFF
+        {
+          unit: 'KLM 103',
+          tripPergi: '0',
+          tripPulang: '0',
+          keterangan: 'Libur (OFF)',
+        },
+        // Bus 4: Free-form dynamic note with 0 trips (classified as tidak ops)
+        {
+          unit: 'KLM 104',
+          tripPergi: '0',
+          tripPulang: '0',
+          keterangan: 'Supir izin pulang kampung',
+        },
+        // Bus 5: Had trips > 0 but with trouble note (operating with note, counts towards realops)
+        {
+          unit: 'KLM 105',
+          tripPergi: '2',
+          tripPulang: '2',
+          kmAwal1: '200',
+          kmAkhir1: '250',
+          toaShift1: '40',
+          keterangan: 'Mogok di jalur sore',
+        },
+      ] as any[];
+
+      const res = extractRouteDailyMetrics(mockRoute, mockBuses, null, '2026-10-26');
+      const unitsS1 = res.nonSgoUnitsS1;
+
+      // Bus 1: operating with note
+      const b1 = unitsS1.find((u) => u.unit === 'KLM 101');
+      expect(b1).toBeDefined();
+      expect(b1?.isOperatingWithNote).toBe(true);
+      expect(b1?.isOff).toBe(false);
+      expect(b1?.note).toBe('AC mati siang hari');
+
+      // Bus 2: kendala mogok trip 0 (isOff should be false -> Rincian Tidak Ops)
+      const b2 = unitsS1.find((u) => u.unit === 'KLM 102');
+      expect(b2).toBeDefined();
+      expect(b2?.isOff).toBe(false);
+      expect(b2?.isOperatingWithNote).toBe(false);
+      expect(b2?.note).toBe('Mogok di Plumpang');
+
+      // Bus 3: explicit off (isOff should be true -> Unit Libur)
+      const b3 = unitsS1.find((u) => u.unit === 'KLM 103');
+      expect(b3).toBeDefined();
+      expect(b3?.isOff).toBe(true);
+      expect(b3?.isOperatingWithNote).toBe(false);
+      expect(b3?.note).toBe('Libur (OFF)');
+
+      // Bus 4: free-form note trip 0 without keywords (isOff false -> Rincian Tidak Ops)
+      const b4 = unitsS1.find((u) => u.unit === 'KLM 104');
+      expect(b4).toBeDefined();
+      expect(b4?.isOff).toBe(false);
+      expect(b4?.isOperatingWithNote).toBe(false);
+      expect(b4?.note).toBe('Supir izin pulang kampung');
+
+      // Bus 5: operated 4 trips with trouble note (isOperatingWithNote true -> Catatan Khusus Unit Beroperasi)
+      const b5 = unitsS1.find((u) => u.unit === 'KLM 105');
+      expect(b5).toBeDefined();
+      expect(b5?.isOperatingWithNote).toBe(true);
+      expect(b5?.isOff).toBe(false);
+      expect(b5?.note).toBe('Mogok di jalur sore');
+
+      // Realops S1 and S2 should count Bus 1 and Bus 5 (2 operating buses)
+      expect(res.activeBusesS1).toBe(2);
+      expect(res.payload.realops_shift1).toBe(2);
+      expect(res.activeBusesS2).toBe(2);
+      expect(res.payload.realops_shift2).toBe(2);
+
+      // S2 non-SGO units should match S1 and never mark operating buses as OFF
+      const unitsS2 = res.nonSgoUnitsS2;
+      const b1_s2 = unitsS2.find((u) => u.unit === 'KLM 101');
+      expect(b1_s2?.isOff).toBe(false);
+      expect(b1_s2?.isOperatingWithNote).toBe(true);
+
+      const b5_s2 = unitsS2.find((u) => u.unit === 'KLM 105');
+      expect(b5_s2?.isOff).toBe(false);
+      expect(b5_s2?.isOperatingWithNote).toBe(true);
     });
   });
 

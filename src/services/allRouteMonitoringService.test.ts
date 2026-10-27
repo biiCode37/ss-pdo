@@ -130,7 +130,13 @@ describe('allRouteMonitoringService', () => {
           or: vi.fn().mockResolvedValue({ data: mockSummaries, error: null })
         };
       }
-      return { select: vi.fn().mockReturnThis() };
+      const defaultMock = {
+        select: vi.fn().mockReturnThis(),
+        in: vi.fn().mockResolvedValue({ data: [], error: null }),
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+        or: vi.fn().mockResolvedValue({ data: [], error: null }),
+      };
+      return defaultMock;
     });
 
     const result = await fetchRegionalMonitoringData('2026-09-02');
@@ -209,7 +215,13 @@ describe('allRouteMonitoringService', () => {
           or: vi.fn().mockResolvedValue({ data: [], error: null })
         };
       }
-      return { select: vi.fn().mockReturnThis() };
+      const defaultMock = {
+        select: vi.fn().mockReturnThis(),
+        in: vi.fn().mockResolvedValue({ data: [], error: null }),
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+        or: vi.fn().mockResolvedValue({ data: [], error: null }),
+      };
+      return defaultMock;
     });
 
     const result = await fetchRegionalMonitoringData('2026-09-02');
@@ -347,6 +359,8 @@ describe('allRouteMonitoringService', () => {
       return {
         select: vi.fn().mockReturnThis(),
         or: vi.fn().mockResolvedValue({ data: [], error: null }),
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+        in: vi.fn().mockResolvedValue({ data: [], error: null }),
       };
     });
 
@@ -642,6 +656,7 @@ describe('allRouteMonitoringService', () => {
           select: vi.fn().mockReturnValue({
             in: vi.fn().mockResolvedValue({ data: [], error: null }),
             eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+            or: vi.fn().mockResolvedValue({ data: [], error: null }),
           }),
         } as any;
       });

@@ -15,7 +15,11 @@ import {
   getCrossDayValidationErrors,
 } from "./busInputValidation";
 import { buildBusInputPayload } from "./busInputPayload";
-import { splitShiftKeterangan, combineShiftKeterangan } from "@/utils/keteranganUtils";
+import {
+  splitShiftKeterangan,
+  combineShiftKeterangan,
+  getDefaultModalTab,
+} from "@/utils/keteranganUtils";
 import { TEXT_ALERTS } from "@/constants/texts";
 
 export type ModalTab = "shift1" | "shift2" | "trip" | "notes";
@@ -25,6 +29,7 @@ export interface UseBusInputFormProps {
   headerMap?: HeaderMap;
   activeCategory?: string;
   initialTab?: ModalTab;
+  activeShift?: 1 | 2;
   onSave: (updates: Partial<BusData>) => void | Promise<void>;
   onDismiss: () => void;
   isOpen: boolean;
@@ -37,7 +42,8 @@ export function useBusInputForm({
   bus,
   headerMap,
   activeCategory = "all",
-  initialTab = "shift1",
+  initialTab,
+  activeShift,
   onSave,
   onDismiss,
   isOpen,
@@ -66,11 +72,17 @@ export function useBusInputForm({
     if (activeCategory.toLowerCase().includes("2")) {
       return "shift2";
     }
+    if (activeCategory.toLowerCase().includes("1")) {
+      return "shift1";
+    }
     if (activeCategory === "keterangan") {
       return "notes";
     }
-    return initialTab || "shift1";
-  }, [activeCategory, initialTab]);
+    if (initialTab) {
+      return initialTab;
+    }
+    return getDefaultModalTab(undefined, activeShift);
+  }, [activeCategory, initialTab, activeShift]);
 
   const [activeTab, setActiveTab] = useState<ModalTab>(resolvedInitialTab);
   const [isSatset, setIsSatsetState] = useState<boolean>(getSatsetMode());
@@ -587,6 +599,7 @@ export function useBusInputForm({
     handleApplyRollover,
     // Cascading & Single Mode Redirection Flags (SSOT)
     effectiveCategory,
+    activeShift,
     guideMessage,
     isKmAwal1Valid,
     isKmAkhir1Valid,

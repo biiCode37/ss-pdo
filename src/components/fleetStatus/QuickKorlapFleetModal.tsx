@@ -1,7 +1,75 @@
 import { useState, useEffect, memo } from 'react';
 import { upsertDailyFleetShift } from '../../services/fleetStatusService';
+import { fetchDailyRouteReport, upsertDailyRouteReport } from '../../services/dailyRouteReportService';
 import { TEXT_FLEET_STATUS } from '../../constants/texts/text_fleet_status';
 import { TEXT_COMMON } from '../../constants/texts/text_common';
+
+/**
+ * Parser cerdas untuk input teks bebas nomor bodi dan catatan unit oleh Korlap.
+ * Mendukung format:
+ * - "KWK 222177 OFF" -> unit: "KWK 222177", note: "OFF"
+ * - "TS.02 Radiator bocor" -> unit: "TS.02", note: "Radiator bocor"
+ * - "BA 01 - EVDAL" -> unit: "BA 01", note: "EVDAL"
+ * - "SAF 05 : Mogok di lampu merah" -> unit: "SAF 05", note: "Mogok di lampu merah"
+ * - "222180 Libur" -> unit: "222180", note: "Libur"
+ */
+export function parseKorlapUnitNote(p: string): {
+  unit_body: string;
+  status_id: number | null;
+  status_code: string;
+  note: string;
+} {
+  const trimmed = p.trim();
+  // Regex: Tangkap kode operator Mikrotrans (KWK, KLM, TS, BA, SAF, TJ, BMP, dll) beserta nomor, atau nomor bodi murni
+  const match = trimmed.match(/^([A-Z]{2,4}[\s.\-_]?\d+|\d+)\s*[:\-–]?\s*(.*)$/i);
+  let unitBody = 'UNIT';
+  let noteText = trimmed;
+
+  if (match) {
+    unitBody = match[1].trim().toUpperCase();
+    noteText = match[2].trim() || 'TIDAK OPERASI';
+  } else {
+    // Fallback: split berdasarkan tanda titik dua, strip, atau spasi pertama
+    const splitColon = trimmed.split(/[:\-–]/);
+    if (splitColon.length > 1) {
+      unitBody = splitColon[0].trim().toUpperCase();
+      noteText = splitColon.slice(1).join('-').trim() || trimmed;
+    } else {
+      const splitSpace = trimmed.split(/\s+/);
+      unitBody = (splitSpace[0] || 'UNIT').toUpperCase();
+      noteText = splitSpace.slice(1).join(' ') || trimmed;
+    }
+  }
+
+  const upperNote = noteText.toUpperCase();
+  let statusId: number | null = null;
+  let statusCode = 'CATATAN';
+
+  const hasWord = (regex: RegExp) => regex.test(upperNote);
+
+  if (hasWord(/(^|[^A-Z])(OFF|LIBUR|SPARE|CADANGAN)([^A-Z]|$)/)) {
+    statusId = 3;
+    statusCode = 'OFF';
+  } else if (
+    hasWord(/(^|[^A-Z])(MOGOK|RUSAK|LAKA|TROUBLE|SERVICE|PERBAIKAN|BAP|BOCOR|RADIATOR|DEREK|STUT|BAN)([^A-Z]|$)/)
+  ) {
+    statusId = 2;
+    statusCode = 'KENDALA';
+  } else if (hasWord(/(^|[^A-Z])(TO|EVDAL|TUKAR)([^A-Z]|$)/)) {
+    statusId = 2;
+    statusCode = 'TO';
+  } else if (hasWord(/(^|[^A-Z])(SO|STOP)([^A-Z]|$)/)) {
+    statusId = 4;
+    statusCode = 'SO';
+  }
+
+  return {
+    unit_body: unitBody,
+    status_id: statusId,
+    status_code: statusCode,
+    note: noteText,
+  };
+}
 
 export interface QuickKorlapFleetModalProps {
   isOpen: boolean;
@@ -45,7 +113,7 @@ function QuickKorlapFleetModalComponent({
     try {
       setIsSubmitting(true);
 
-      // Parsing catatan unit jika dimasukkan teks bebas (cth: "TS.02 BA.01 Radiator, TS.05 EVDAL")
+      // Parsing catatan unit dengan parser cerdas
       const nonSgoUnitsPayload: Array<{
         unit_body: string;
         status_id?: number | null;
@@ -60,30 +128,7 @@ function QuickKorlapFleetModalComponent({
           .filter((s) => s.length > 0);
 
         parts.forEach((p) => {
-          const splitSpace = p.split(/\s+/);
-          const unitBody = splitSpace[0] || 'UNIT';
-          const noteText = splitSpace.slice(1).join(' ') || p;
-          const upperNote = noteText.toUpperCase();
-          let statusId: number | null = null;
-          let statusCode = 'CATATAN';
-
-          if (upperNote.includes('OFF') || upperNote.includes('LIBUR')) {
-            statusId = 3;
-            statusCode = 'OFF';
-          } else if (upperNote.includes('TO') || upperNote.includes('EVDAL') || upperNote.includes('TUKAR')) {
-            statusId = 2;
-            statusCode = 'TO';
-          } else if (upperNote.includes('SO') || upperNote.includes('STOP')) {
-            statusId = 4;
-            statusCode = 'SO';
-          }
-
-          nonSgoUnitsPayload.push({
-            unit_body: unitBody,
-            status_id: statusId,
-            status_code: statusCode,
-            note: noteText,
-          });
+          nonSgoUnitsPayload.push(parseKorlapUnitNote(p));
         });
       }
 
@@ -92,6 +137,7 @@ function QuickKorlapFleetModalComponent({
       const soCount = nonSgoUnitsPayload.filter((u) => u.status_code === 'SO').length;
       const otherCount = nonSgoUnitsPayload.filter((u) => !['TO', 'OFF', 'SO'].includes(u.status_code)).length;
 
+      // 1. Simpan ke daily_fleet_shifts & daily_fleet_non_sgo_units
       await upsertDailyFleetShift(
         {
           route_id: routeId,
@@ -113,6 +159,43 @@ function QuickKorlapFleetModalComponent({
         },
         nonSgoUnitsPayload
       );
+
+      // 2. Sinkronkan ke daily_route_reports agar monitoring 18 rute & generator WA report langsung konsisten
+      try {
+        const existingReport = await fetchDailyRouteReport(routeId, selectedDate);
+        const nonSgoFleetDetails = nonSgoUnitsPayload.map((u) => ({
+          unit: u.unit_body,
+          note: u.note,
+          isOff: u.status_code === 'OFF',
+        }));
+
+        const nowIso = new Date().toISOString();
+        await upsertDailyRouteReport({
+          ...(existingReport || {}),
+          route_id: routeId,
+          route_code: routeCode,
+          date: selectedDate,
+          ...(shift === 1
+            ? {
+                renops_shift1: targetRenops,
+                realops_shift1: realops,
+                is_fleet_confirmed_s1: true,
+                fleet_confirmed_s1_at: nowIso,
+                fleet_status_shift1: nonSgoFleetDetails,
+              }
+            : {
+                renops_shift2: targetRenops,
+                realops_shift2: realops,
+                is_fleet_confirmed_s2: true,
+                fleet_confirmed_s2_at: nowIso,
+                fleet_status_shift2: nonSgoFleetDetails,
+              }),
+          status: existingReport?.status === 'verified' ? 'verified' : 'submitted',
+          data_source: existingReport?.data_source || 'app_input',
+        });
+      } catch (syncErr) {
+        console.warn('[QuickKorlapFleetModal] Sinkronisasi ke daily_route_reports dilewati:', syncErr);
+      }
 
       onSaveSuccess();
       onClose();

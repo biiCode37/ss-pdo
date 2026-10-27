@@ -13,6 +13,7 @@ export interface RouteFleetReportItem {
   sourceType?: 'pdo_a2' | 'spreadsheet_auto' | 'korlap_manual' | 'empty';
   nonSgoUnits?: FleetUnitStatusDetail[];
   pelengkapUnits?: FleetUnitStatusDetail[];
+  operationalIssues?: string;
 }
 
 export interface RouteWaData {
@@ -341,10 +342,11 @@ export function generateWaReportFormat3(
       lines.push(`Status        : ${isLengkap ? 'LENGKAP ✅' : 'TIDAK LENGKAP ✖️'}`);
       lines.push('```');
 
-      // Filter unit non-SGO
+      // Filter unit non-SGO & catatan khusus
       const allNonSgo = r.nonSgoUnits || [];
-      const kendalaUnits = allNonSgo.filter((u) => !u.isOff);
-      const offUnits = allNonSgo.filter((u) => u.isOff);
+      const kendalaUnits = allNonSgo.filter((u) => !u.isOff && !u.isOperatingWithNote);
+      const offUnits = allNonSgo.filter((u) => u.isOff && !u.isOperatingWithNote);
+      const specialOperatingUnits = allNonSgo.filter((u) => !!u.isOperatingWithNote);
 
       if (kendalaUnits.length > 0) {
         lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_KENDALA_SUBHEADER);
@@ -358,6 +360,24 @@ export function generateWaReportFormat3(
         offUnits.forEach((u) => {
           lines.push(`- ${u.unit} : ${u.note}`);
         });
+      }
+
+      if (specialOperatingUnits.length > 0) {
+        lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_SPECIAL_NOTES_SUBHEADER);
+        specialOperatingUnits.forEach((u) => {
+          lines.push(`- ${u.unit} : ${u.note}`);
+        });
+      }
+
+      // Jika rute TIDAK LENGKAP namun belum ada rincian unit kendala/off yang terdata
+      if (!isLengkap && kendalaUnits.length === 0 && offUnits.length === 0) {
+        lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_NO_UNIT_DETAILS(routeTidakOps));
+      }
+
+      // Jika ada catatan operasional rute dari korlap/pengawas
+      if (r.operationalIssues && r.operationalIssues.trim()) {
+        lines.push(TEXT_WA_REPORT.TEMPLATE.FORMAT_3_OPERATIONAL_ISSUES_LABEL);
+        lines.push(`- ${r.operationalIssues.trim()}`);
       }
 
       if (shift === 2 && r.pelengkapUnits && r.pelengkapUnits.length > 0) {

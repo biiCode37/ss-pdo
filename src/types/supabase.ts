@@ -37,6 +37,7 @@ export interface FleetUnitStatusDetail {
   unit: string;
   note: string;
   isOff: boolean;
+  isOperatingWithNote?: boolean;
 }
 
 export interface DailyRouteReport {

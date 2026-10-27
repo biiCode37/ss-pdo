@@ -15,6 +15,7 @@ import { showSuccessToast } from "@/utils/alertUtils";
 import { FileSpreadsheet, Copy, Share2, Sun, Moon, AlertTriangle, PlusCircle } from "lucide-react";
 import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
 import { sortRoutesByCode } from "@/utils/routeSorting";
+import { normalizeRouteCode } from "@/services/googleSheets/globalReportReader";
 
 export interface MonitoringWaReportTabProps {
   data: RegionalMonitoringResult;
@@ -89,18 +90,39 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
   // RouteFleetReportItem for Format 3 (Menerapkan Hierarki 3 Jalur)
   const routeFleetData: RouteFleetReportItem[] = useMemo(() => {
     return sortedRoutes.map((r, idx) => {
+      // 0. Siapkan data fallback non-SGO dari spreadsheet
+      const ssRenops = (format3Shift === 1 ? r.renopsShift1 : r.renopsShift2) || r.defaultRenops || 0;
+      const ssRawRealops = format3Shift === 1 ? r.realopsShift1 : r.realopsShift2;
+      const ssNonSgo =
+        (format3Shift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2)?.map(
+          (u) => ({
+            unit: u.unit,
+            note: u.note,
+            isOff: u.isOff,
+            isOperatingWithNote: u.isOperatingWithNote,
+          })
+        ) || [];
+
       // 1. Jalur 1 (Utama): Data di DB (Laporan A2 Petugas atau Input Korlap)
       const matchingShift = fleetShifts?.find(
-        (s) => s.route_code === r.routeCode && s.shift === format3Shift,
+        (s) =>
+          s.shift === format3Shift &&
+          ((s.route_id && s.route_id === r.id) ||
+            s.route_code === r.routeCode ||
+            normalizeRouteCode(s.route_code) === normalizeRouteCode(r.routeCode)),
       );
 
       if (matchingShift) {
-        const nonSgoUnits =
+        const dbUnits =
           matchingShift.non_sgo_units?.map((u) => ({
             unit: u.unit_body,
             note: u.note || u.status_code,
             isOff: u.status_code === "OFF",
+            isOperatingWithNote: false,
           })) || [];
+
+        // Fallback unit cerdas: Jika DB belum ada rincian unit non-SGO tapi spreadsheet punya, gunakan data spreadsheet
+        const nonSgoUnits = dbUnits.length > 0 ? dbUnits : ssNonSgo;
 
         const dynamicRenops = r.defaultRenops || 0;
         const isShiftTargetStale = matchingShift.target_renops === 30 && dynamicRenops > 0 && dynamicRenops !== 30;
@@ -116,21 +138,11 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
           hasData: true,
           sourceType: matchingShift.source_type || 'pdo_a2',
           nonSgoUnits,
+          operationalIssues: r.operationalIssues,
         };
       }
 
       // 2. Jalur 2 (Fallback Otomatis Spreadsheet): Ritase / Unit Beroperasi di Sheet Asli
-      const ssRenops = (format3Shift === 1 ? r.renopsShift1 : r.renopsShift2) || r.defaultRenops || 0;
-      const ssRawRealops = format3Shift === 1 ? r.realopsShift1 : r.realopsShift2;
-      const ssNonSgo =
-        (format3Shift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2)?.map(
-          (u) => ({
-            unit: u.unit,
-            note: u.note,
-            isOff: u.isOff,
-          })
-        ) || [];
-
       // Validasi aktivitas nyata: ada trip > 0, penumpang > 0, ada unit non-SGO terdeteksi, atau status submitted/verified
       const hasActualActivity =
         (r.totalTrips && r.totalTrips > 0) ||
@@ -140,22 +152,17 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
         r.status === "verified";
 
       if (hasActualActivity) {
-        const kendalaCount = ssNonSgo.filter((u) => !u.isOff).length;
-        const calculatedRealops =
-          kendalaCount > 0
-            ? Math.min(ssRawRealops, Math.max(0, ssRenops - kendalaCount))
-            : ssRawRealops;
-
         return {
           no: idx + 1,
           routeCode: r.routeCode,
           routeName: r.routeName,
           operatorName: r.operatorName,
           renops: ssRenops,
-          realops: calculatedRealops,
+          realops: ssRawRealops ?? 0,
           hasData: true,
           sourceType: 'spreadsheet_auto',
           nonSgoUnits: ssNonSgo,
+          operationalIssues: r.operationalIssues,
         };
       }
 
@@ -170,6 +177,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
         hasData: false,
         sourceType: 'empty',
         nonSgoUnits: [],
+        operationalIssues: r.operationalIssues,
       };
     });
   }, [data.routes, fleetShifts, format3Shift]);

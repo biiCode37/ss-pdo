@@ -81,8 +81,12 @@ export const TEXT_WA_REPORT = {
     FORMAT_3_ROUTE_DETAIL_TITLE: "RINCIAN STATUS ARMADA PER RUTE",
     FORMAT_3_OFF_SUBHEADER: "*Unit Libur (OFF) / Keterangan Khusus:*",
     FORMAT_3_KENDALA_SUBHEADER: "*Rincian Tidak Ops:*",
+    FORMAT_3_SPECIAL_NOTES_SUBHEADER: "*Catatan Khusus Unit (Beroperasi):*",
     FORMAT_3_PELENGKAP_SUBHEADER: "*Unit Pelengkap Renops (Shift 2):*",
     FORMAT_3_NO_DATA_STATUS: "BELUM ADA DATA ⏳",
+    FORMAT_3_NO_UNIT_DETAILS: (missingCount: number) =>
+      `- Rincian unit belum dilengkapi (-${missingCount} unit)`,
+    FORMAT_3_OPERATIONAL_ISSUES_LABEL: "*Catatan Operasional Rute:*",
     FORMAT_3_NO_DATA_SUMMARY: (
       lengkap: number,
       kurang: number,

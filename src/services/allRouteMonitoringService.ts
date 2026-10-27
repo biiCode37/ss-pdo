@@ -5,7 +5,7 @@ import { extractSpreadsheetId } from '../utils/sheetIdentity';
 import { getRenopsForDate } from '../utils/holidayUtils';
 import { sortRoutesByCode } from '../utils/routeSorting';
 import { TEXT_ERRORS } from '../constants/texts';
-import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail, DailyFleetShift } from '../types/supabase';
+import type { Route, DailyRouteReport, DailyUnitSummary, FleetUnitStatusDetail, DailyFleetNonSgoUnit, DailyFleetShiftWithUnits } from '../types/supabase';
 
 export const SUPERVISORS = [
   'Ranto Lumban Toruan',
@@ -283,8 +283,8 @@ export async function fetchRegionalMonitoringData(
     }
   }
 
-  // 3b. Ambil daily_fleet_shifts untuk tanggal aktif (fallback defensif armada A2) dengan silent retry
-  let fleetShifts: DailyFleetShift[] = [];
+  // 3b. Ambil daily_fleet_shifts untuk tanggal aktif (fallback defensif armada A2) beserta non_sgo_units dengan silent retry
+  let fleetShifts: DailyFleetShiftWithUnits[] = [];
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
       const { data: fsData, error } = await supabase
@@ -292,7 +292,26 @@ export async function fetchRegionalMonitoringData(
         .select('*')
         .eq('date', dateStr);
       if (!error && fsData) {
-        fleetShifts = fsData as DailyFleetShift[];
+        const shiftIds = fsData.map((s: any) => s.id);
+        const unitsByShiftId: Record<number, DailyFleetNonSgoUnit[]> = {};
+        if (shiftIds.length > 0) {
+          const { data: unitsData, error: unitsError } = await supabase
+            .from('daily_fleet_non_sgo_units')
+            .select('*')
+            .in('fleet_shift_id', shiftIds);
+          if (!unitsError && unitsData) {
+            for (const u of unitsData) {
+              if (!unitsByShiftId[u.fleet_shift_id]) {
+                unitsByShiftId[u.fleet_shift_id] = [];
+              }
+              unitsByShiftId[u.fleet_shift_id].push(u as DailyFleetNonSgoUnit);
+            }
+          }
+        }
+        fleetShifts = fsData.map((s: any) => ({
+          ...s,
+          non_sgo_units: unitsByShiftId[s.id] || [],
+        })) as DailyFleetShiftWithUnits[];
         break;
       }
       if (error && attempt === 1) {
@@ -462,8 +481,22 @@ export async function fetchRegionalMonitoringData(
       trafficJamSpots: todayReport?.traffic_jam_spots || r.default_traffic_jam_spots || [],
       operationalIssues: todayReport?.operational_issues || '',
       status,
-      fleetStatusShift1: todayReport?.fleet_status_shift1 || [],
-      fleetStatusShift2: todayReport?.fleet_status_shift2 || [],
+      fleetStatusShift1: (todayReport?.fleet_status_shift1 && todayReport.fleet_status_shift1.length > 0)
+        ? todayReport.fleet_status_shift1
+        : (fsS1?.non_sgo_units?.map((u) => ({
+            unit: u.unit_body,
+            note: u.note || u.status_code,
+            isOff: u.status_code === 'OFF',
+            isOperatingWithNote: false,
+          })) || []),
+      fleetStatusShift2: (todayReport?.fleet_status_shift2 && todayReport.fleet_status_shift2.length > 0)
+        ? todayReport.fleet_status_shift2
+        : (fsS2?.non_sgo_units?.map((u) => ({
+            unit: u.unit_body,
+            note: u.note || u.status_code,
+            isOff: u.status_code === 'OFF',
+            isOperatingWithNote: false,
+          })) || []),
       isFleetConfirmedS1,
       isFleetConfirmedS2,
       fleetConfirmedS1At: todayReport?.fleet_confirmed_s1_at || fsS1?.confirmed_at,

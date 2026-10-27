@@ -152,25 +152,23 @@ export function useWaReportData({
     if (formatType === "format3") {
       const fleetItems: RouteFleetReportItem[] = filteredRoutes.map((r, idx) => {
         const renops = (selectedShift === 1 ? r.renopsShift1 : r.renopsShift2) || r.defaultRenops || 0;
-        // Aturan kumulatif harian non-decreasing: Realops Shift 2 >= Realops Shift 1
-        const rawRealops =
-          selectedShift === 1
-            ? r.realopsShift1 || 0
-            : Math.max(r.realopsShift2 || 0, r.realopsShift1 || 0);
+        const realops = selectedShift === 1 ? (r.realopsShift1 ?? 0) : (r.realopsShift2 ?? 0);
 
-        const nonSgoUnits = selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2;
-        const kendalaCount = (nonSgoUnits || []).filter((u) => !u.isOff).length;
-        const realops =
-          kendalaCount > 0
-            ? Math.min(rawRealops, Math.max(0, renops - kendalaCount))
-            : rawRealops;
+        const nonSgoUnits = (selectedShift === 1 ? r.fleetStatusShift1 : r.fleetStatusShift2)?.map(
+          (u) => ({
+            unit: u.unit,
+            note: u.note,
+            isOff: u.isOff,
+            isOperatingWithNote: u.isOperatingWithNote,
+          })
+        ) || [];
 
         const hasData =
           r.status === "submitted" ||
           r.status === "verified" ||
           (r.todayPassengers && r.todayPassengers > 0) ||
           (r.totalTrips && r.totalTrips > 0) ||
-          (nonSgoUnits && nonSgoUnits.length > 0);
+          nonSgoUnits.length > 0;
 
         return {
           no: idx + 1,
@@ -180,7 +178,9 @@ export function useWaReportData({
           renops,
           realops,
           hasData: !!hasData,
+          sourceType: 'spreadsheet_auto',
           nonSgoUnits,
+          operationalIssues: r.operationalIssues,
         };
       });
       return generateWaReportFormat3(selectedDate, selectedShift, fleetItems);
