@@ -243,6 +243,25 @@ export const TEXT_ALERTS = {
     PREFILL_FROM_YESTERDAY: (km: string | number) => `Kemarin: ${km}`,
     PREFILL_DYNAMIC: (km: string | number, dateLabel: string) =>
       `${dateLabel}: ${km}`,
+    PRESETS: {
+      BTN_BA: "BA",
+      BTN_OFF: "OFF",
+      BTN_TO_EVDAL: "TO EVDAL",
+      BTN_CLEAR: "Normal (SGO)",
+      SELECT_BA_DEFAULT: "-- Pilih Jenis BA --",
+      BA_TYPES: {
+        "01": "01 - Gangguan Kendaraan / Teknis",
+        "02": "02 - Kendala Pramudi / Layanan",
+        "03": "03 - Gangguan Jalur / Operasional",
+        "04": "04 - Lain-lain / Force Majeure",
+      },
+      BTN_NP1: "NP1",
+      BTN_NP2: "NP2",
+      LABEL_SHIFT1_NOTE: "Catatan Shift 1",
+      LABEL_SHIFT2_NOTE: "Catatan Shift 2",
+      PREVIEW_SSOT_LABEL: "Hasil Format Spreadsheet:",
+      APPLY_ALL_SHIFTS: "Terapkan ke Kedua Shift",
+    },
   },
   MODAL_COMMON: {
     UNDERSTAND: "Mengerti",

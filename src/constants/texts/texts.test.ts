@@ -487,6 +487,24 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT).toBe('Manajemen Halaman');
     expect(TEXT_PAGE_MANAGEMENT.ACCESS_RESTRICTED_DESC).toContain('Akses terbatas');
   });
+
+  it('contains all required text entries for Keterangan Presets & Shift Notes', () => {
+    const modalTexts = TEXT_ALERTS.BUS_INPUT_MODAL;
+    expect(modalTexts.PRESETS).toBeDefined();
+    expect(modalTexts.PRESETS.BTN_BA).toBe('BA');
+    expect(modalTexts.PRESETS.BTN_OFF).toBe('OFF');
+    expect(modalTexts.PRESETS.BTN_TO_EVDAL).toBe('TO EVDAL');
+    expect(modalTexts.PRESETS.BTN_CLEAR).toBe('Normal (SGO)');
+    expect(modalTexts.PRESETS.SELECT_BA_DEFAULT).toBe('-- Pilih Jenis BA --');
+    expect(modalTexts.PRESETS.BA_TYPES['01']).toContain('01');
+    expect(modalTexts.PRESETS.BA_TYPES['02']).toContain('02');
+    expect(modalTexts.PRESETS.BA_TYPES['03']).toContain('03');
+    expect(modalTexts.PRESETS.BA_TYPES['04']).toContain('04');
+    expect(modalTexts.PRESETS.BTN_NP1).toBe('NP1');
+    expect(modalTexts.PRESETS.BTN_NP2).toBe('NP2');
+    expect(modalTexts.PRESETS.LABEL_SHIFT1_NOTE).toBe('Catatan Shift 1');
+    expect(modalTexts.PRESETS.LABEL_SHIFT2_NOTE).toBe('Catatan Shift 2');
+    expect(modalTexts.PRESETS.PREVIEW_SSOT_LABEL).toBe('Hasil Format Spreadsheet:');
+    expect(modalTexts.PRESETS.APPLY_ALL_SHIFTS).toBe('Terapkan ke Kedua Shift');
+  });
 });
-
-
