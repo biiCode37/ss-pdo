@@ -1628,7 +1628,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       expect(document.body.textContent).toContain(
         TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.PREVIEW_SSOT_LABEL,
       );
-      expect(document.body.textContent).toContain("S1: BA.01 Ban bocor");
+      expect(document.body.textContent).toContain("S1: BA.01 Ban Bocor");
 
       // 2. Cek segmented selector tombol Shift 1 dan Shift 2
       const shiftButtons = Array.from(document.body.querySelectorAll("button")).filter(

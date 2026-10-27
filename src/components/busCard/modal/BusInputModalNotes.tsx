@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TEXT_ALERTS } from "@/constants/texts";
-import { combineShiftKeterangan, getCurrentOperationalShift } from "@/utils/keteranganUtils";
+import { combineShiftKeterangan, getCurrentOperationalShift, normalizeKeterangan } from "@/utils/keteranganUtils";
 import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
 import type { BusInputFormReturn } from "./useBusInputForm";
 
@@ -196,6 +196,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
         <KeteranganPresetBar
           value={currentNote}
           onChange={handleNoteChange}
+          shift={activeNoteShift}
           shiftLabel={
             activeNoteShift === 1
               ? texts.PRESETS.LABEL_SHIFT1_NOTE
@@ -208,6 +209,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
           rows={3}
           value={currentNote}
           onChange={(e) => handleNoteChange(e.target.value)}
+          onBlur={() => handleNoteChange(normalizeKeterangan(currentNote))}
           onFocus={handleInputFocus}
           placeholder={texts.NOTES_DETAIL_PLACEHOLDER}
           aria-label={

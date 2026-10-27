@@ -249,7 +249,7 @@ describe("busInputPayload - Pure Payload Module", () => {
         keteranganS2: "",
       });
       const result = buildBusInputPayload(params);
-      expect(result.keterangan).toBe("S1: BA.01 Radiator bocor");
+      expect(result.keterangan).toBe("S1: BA.01 Radiator Bocor");
     });
 
     it("combines identical notes into single note for all-day status (OFF, OFF -> OFF)", () => {

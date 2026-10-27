@@ -77,7 +77,7 @@ describe("KeteranganPresetBar Component", () => {
       baBtn!.click();
     });
 
-    expect(handleChange).toHaveBeenCalledWith("Radiator bocor");
+    expect(handleChange).toHaveBeenCalledWith("Radiator Bocor");
   });
 
   it("renders compact pills 01, 02, 03, 04 when value starts with BA", () => {
@@ -136,7 +136,7 @@ describe("KeteranganPresetBar Component", () => {
       pill03!.click();
     });
 
-    expect(handleChange).toHaveBeenCalledWith("BA.03 Radiator bocor");
+    expect(handleChange).toHaveBeenCalledWith("BA.03 Radiator Bocor");
   });
 
   it("sets value to OFF when OFF button is clicked, and toggles off when clicked again", () => {
@@ -191,6 +191,82 @@ describe("KeteranganPresetBar Component", () => {
     expect(evdalBtnActive?.style.color).toContain("#ef4444");
     act(() => {
       evdalBtnActive!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("");
+  });
+
+  it("does not render OKB and Renop buttons on Shift 1", () => {
+    act(() => {
+      root.render(<KeteranganPresetBar value="" onChange={vi.fn()} shift={1} />);
+    });
+    expect(container.textContent).not.toContain("OKB");
+    expect(container.textContent).not.toContain("Renop");
+  });
+
+  it("renders OKB and Renop buttons on Shift 2", () => {
+    act(() => {
+      root.render(<KeteranganPresetBar value="" onChange={vi.fn()} shift={2} />);
+    });
+    expect(container.textContent).toContain("OKB");
+    expect(container.textContent).toContain("Renop");
+  });
+
+  it("sets value to OKB on Shift 2 when clicked, and toggles off when clicked again", () => {
+    const handleChange = vi.fn();
+    act(() => {
+      root.render(<KeteranganPresetBar value="" onChange={handleChange} shift={2} />);
+    });
+
+    const okbBtn = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.trim() === "OKB"
+    );
+    expect(okbBtn).toBeDefined();
+
+    act(() => {
+      okbBtn!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("OKB");
+
+    // Toggle off
+    act(() => {
+      root.render(<KeteranganPresetBar value="OKB" onChange={handleChange} shift={2} />);
+    });
+    const okbBtnActive = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.trim() === "OKB"
+    );
+    expect(okbBtnActive?.style.color).toContain("#a855f7");
+    act(() => {
+      okbBtnActive!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("");
+  });
+
+  it("sets value to Renop on Shift 2 when clicked, and toggles off when clicked again", () => {
+    const handleChange = vi.fn();
+    act(() => {
+      root.render(<KeteranganPresetBar value="" onChange={handleChange} shift={2} />);
+    });
+
+    const renopBtn = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.trim() === "Renop"
+    );
+    expect(renopBtn).toBeDefined();
+
+    act(() => {
+      renopBtn!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("Renop");
+
+    // Toggle off
+    act(() => {
+      root.render(<KeteranganPresetBar value="Renop" onChange={handleChange} shift={2} />);
+    });
+    const renopBtnActive = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.trim() === "Renop"
+    );
+    expect(renopBtnActive?.style.color).toContain("#10b981");
+    act(() => {
+      renopBtnActive!.click();
     });
     expect(handleChange).toHaveBeenCalledWith("");
   });

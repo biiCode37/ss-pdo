@@ -8,6 +8,7 @@ import {
   hasMeaningfulNote,
   getCurrentOperationalShift,
   getDefaultModalTab,
+  toSmartTitleCase,
 } from './keteranganUtils';
 
 describe('keteranganUtils - normalizeKeterangan', () => {
@@ -47,18 +48,22 @@ describe('keteranganUtils - normalizeKeterangan', () => {
   });
 
   it('normalizes BA codes with follow-up details', () => {
-    expect(normalizeKeterangan('BA01 Rusak transmisi')).toBe('BA.01 Rusak transmisi');
-    expect(normalizeKeterangan('ba 2 ban pecah')).toBe('BA.02 ban pecah');
-    expect(normalizeKeterangan('BA-03: mogok pul')).toBe('BA.03 mogok pul');
-    expect(normalizeKeterangan('ba04 - overhaul mesin')).toBe('BA.04 overhaul mesin');
+    expect(normalizeKeterangan('BA01 Rusak transmisi')).toBe('BA.01 Rusak Transmisi');
+    expect(normalizeKeterangan('ba 2 ban pecah')).toBe('BA.02 Ban Pecah');
+    expect(normalizeKeterangan('BA-03: mogok pul')).toBe('BA.03 Mogok Pul');
+    expect(normalizeKeterangan('ba04 - overhaul mesin')).toBe('BA.04 Overhaul Mesin');
     expect(normalizeKeterangan('BA.01 Supir Sakit')).toBe('BA.01 Supir Sakit');
   });
 
-  it('normalizes fixed status presets (OFF, TO EVDAL)', () => {
+  it('normalizes fixed status presets (OFF, TO EVDAL, OKB, Renop)', () => {
     expect(normalizeKeterangan('off')).toBe('OFF');
     expect(normalizeKeterangan('OFF')).toBe('OFF');
     expect(normalizeKeterangan('to evdal')).toBe('TO EVDAL');
     expect(normalizeKeterangan('TO-EVDAL')).toBe('TO EVDAL');
+    expect(normalizeKeterangan('okb')).toBe('OKB');
+    expect(normalizeKeterangan('OKB')).toBe('OKB');
+    expect(normalizeKeterangan('renop')).toBe('Renop');
+    expect(normalizeKeterangan('RENOP')).toBe('Renop');
   });
 
   it('strips standalone SGO or SGO in pipe-separated notes', () => {
@@ -71,18 +76,18 @@ describe('keteranganUtils - normalizeKeterangan', () => {
     expect(normalizeKeterangan('SGO | OFF')).toBe('OFF');
   });
 
-  it('preserves non-BA free text notes intact', () => {
-    expect(normalizeKeterangan('Servis AC berkala')).toBe('Servis AC berkala');
-    expect(normalizeKeterangan('Baterai lemah')).toBe('Baterai lemah');
+  it('formats non-BA free text notes with Title Case', () => {
+    expect(normalizeKeterangan('Servis AC berkala')).toBe('Servis AC Berkala');
+    expect(normalizeKeterangan('Baterai lemah')).toBe('Baterai Lemah');
     expect(normalizeKeterangan('')).toBe('');
     expect(normalizeKeterangan(null)).toBe('');
     expect(normalizeKeterangan(undefined)).toBe('');
   });
 
   it('does not incorrectly match non-BA words starting with BA (e.g. BATAL, BAIK, BANDARA)', () => {
-    expect(normalizeKeterangan('BATAL JALAN')).toBe('BATAL JALAN');
-    expect(normalizeKeterangan('BAIK')).toBe('BAIK');
-    expect(normalizeKeterangan('BANDARA SOETTA')).toBe('BANDARA SOETTA');
+    expect(normalizeKeterangan('BATAL JALAN')).toBe('Batal Jalan');
+    expect(normalizeKeterangan('BAIK')).toBe('Baik');
+    expect(normalizeKeterangan('BANDARA SOETTA')).toBe('Bandara Soetta');
     expect(normalizeKeterangan('BA05')).toBe('BA05'); // Only 1-4 are valid BA codes
   });
 });
@@ -91,9 +96,9 @@ describe('keteranganUtils - parseKeterangan', () => {
   it('parses un-normalized BA raw strings into structured prefix and detail', () => {
     const res = parseKeterangan('ba01 pecah kaca');
     expect(res.prefix).toBe('BA.01');
-    expect(res.detail).toBe('pecah kaca');
+    expect(res.detail).toBe('Pecah Kaca');
     expect(res.isFixed).toBe(false);
-    expect(res.normalized).toBe('BA.01 pecah kaca');
+    expect(res.normalized).toBe('BA.01 Pecah Kaca');
   });
 
   it('parses NP1 and NP2 as BA.02 sub-options', () => {
@@ -214,7 +219,7 @@ describe('keteranganUtils - multi-shift combine and split', () => {
     });
 
     it('combines differing notes using pipe separator with S1: and S2: prefix', () => {
-      expect(combineShiftKeterangan('ba01 bocor', 'to evdal')).toBe('S1: BA.01 bocor | S2: TO EVDAL');
+      expect(combineShiftKeterangan('ba01 bocor', 'to evdal')).toBe('S1: BA.01 Bocor | S2: TO EVDAL');
       expect(combineShiftKeterangan('OFF', 'ba 02 np 1')).toBe('S1: OFF | S2: BA.02 NP1');
     });
   });
@@ -222,24 +227,24 @@ describe('keteranganUtils - multi-shift combine and split', () => {
   describe('splitShiftKeterangan', () => {
     it('splits combined string with S1: and S2: prefixes', () => {
       const res = splitShiftKeterangan('S1: BA.01 bocor | S2: TO EVDAL');
-      expect(res.s1).toBe('BA.01 bocor');
+      expect(res.s1).toBe('BA.01 Bocor');
       expect(res.s2).toBe('TO EVDAL');
 
       // Dukungan urutan terbalik
       const resRev = splitShiftKeterangan('S2: TO EVDAL | S1: BA.01 bocor');
-      expect(resRev.s1).toBe('BA.01 bocor');
+      expect(resRev.s1).toBe('BA.01 Bocor');
       expect(resRev.s2).toBe('TO EVDAL');
     });
 
     it('splits combined string without S1/S2 prefixes (legacy pipe separator)', () => {
       const res = splitShiftKeterangan('BA.01 bocor | TO EVDAL');
-      expect(res.s1).toBe('BA.01 bocor');
+      expect(res.s1).toBe('BA.01 Bocor');
       expect(res.s2).toBe('TO EVDAL');
     });
 
     it('correctly parses single string with S1: or S2: prefix', () => {
       const res1 = splitShiftKeterangan('S1: BA.01 Radiator bocor');
-      expect(res1.s1).toBe('BA.01 Radiator bocor');
+      expect(res1.s1).toBe('BA.01 Radiator Bocor');
       expect(res1.s2).toBe('');
 
       const res2 = splitShiftKeterangan('S2: BA.02 NP2');
@@ -340,6 +345,48 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(hasMeaningfulNote('OFF | Rusak Ban')).toBe(true);
       expect(hasMeaningfulNote('BA.01')).toBe(true);
       expect(hasMeaningfulNote('Cadangan')).toBe(true);
+      expect(hasMeaningfulNote('OKB')).toBe(true);
+      expect(hasMeaningfulNote('Renop')).toBe(true);
+    });
+  });
+
+  describe('toSmartTitleCase', () => {
+    it('capitalizes the first letter of each word for manual user notes', () => {
+      expect(toSmartTitleCase('ban bocor di tol rawamangun')).toBe('Ban Bocor Di Tol Rawamangun');
+      expect(toSmartTitleCase('pramudi sakit tiba tiba')).toBe('Pramudi Sakit Tiba Tiba');
+      expect(toSmartTitleCase('oli rem bocor')).toBe('Oli Rem Bocor');
+    });
+
+    it('converts ALL CAPS sentences into Title Case while preserving known acronyms', () => {
+      expect(toSmartTitleCase('BAN BOCOR DI TOL')).toBe('Ban Bocor Di Tol');
+      expect(toSmartTitleCase('MOGOK RADIATOR PANAS')).toBe('Mogok Radiator Panas');
+    });
+
+    it('preserves operational fleet acronyms in all caps (Opsi B)', () => {
+      expect(toSmartTitleCase('ac kurang dingin')).toBe('AC Kurang Dingin');
+      expect(toSmartTitleCase('AC mati total')).toBe('AC Mati Total');
+      expect(toSmartTitleCase('cctv mati dan spbu tutup')).toBe('CCTV Mati Dan SPBU Tutup');
+      expect(toSmartTitleCase('pramudi belum sim')).toBe('Pramudi Belum SIM');
+      expect(toSmartTitleCase('kso arimbi')).toBe('KSO Arimbi');
+      expect(toSmartTitleCase('ganti unit tj-0123')).toBe('Ganti Unit TJ-0123');
+      expect(toSmartTitleCase('okb')).toBe('OKB');
+      expect(toSmartTitleCase('renop')).toBe('Renop');
+    });
+  });
+
+  describe('parseKeterangan - OKB and Renop presets', () => {
+    it('parses OKB as fixed preset', () => {
+      const res = parseKeterangan('okb');
+      expect(res.isFixed).toBe(true);
+      expect(res.fixedValue).toBe('OKB');
+      expect(res.normalized).toBe('OKB');
+    });
+
+    it('parses Renop as fixed preset', () => {
+      const res = parseKeterangan('renop');
+      expect(res.isFixed).toBe(true);
+      expect(res.fixedValue).toBe('Renop');
+      expect(res.normalized).toBe('Renop');
     });
   });
 });

@@ -927,7 +927,7 @@ describe("useBusInputForm - Cascading Odometer Logic (SSOT)", () => {
 
       expect(onSave).toHaveBeenCalledTimes(1);
       const submitted = onSave.mock.calls[0][0];
-      expect(submitted.keterangan).toBe("S1: BA.01 Radiator bocor");
+      expect(submitted.keterangan).toBe("S1: BA.01 Radiator Bocor");
     });
 
     it("auto-selects shift2 tab when activeShift === 2 in 'all' mode", () => {

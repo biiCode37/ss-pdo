@@ -8,13 +8,16 @@ export interface KeteranganPresetBarProps {
   value: string;
   onChange: (newValue: string) => void;
   shiftLabel?: string;
+  shift?: 1 | 2;
 }
 
 export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
   value,
   onChange,
   shiftLabel,
+  shift,
 }) => {
+  const isShift2 = shift === 2 || Boolean(shiftLabel && shiftLabel.includes("2"));
   const parsed = parseKeterangan(value);
   const trimmed = (value || "").trim();
 
@@ -28,6 +31,8 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
 
   const isOffActive = trimmed.toUpperCase() === "OFF";
   const isToEvdalActive = trimmed.toUpperCase() === "TO EVDAL";
+  const isOkbActive = trimmed.toUpperCase() === "OKB";
+  const isRenopActive = trimmed.toUpperCase() === "RENOP";
 
   const handleToggleBa = () => {
     if (isBaActive) {
@@ -59,6 +64,22 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
       onChange("");
     } else {
       onChange("TO EVDAL");
+    }
+  };
+
+  const handleSelectOkb = () => {
+    if (isOkbActive) {
+      onChange("");
+    } else {
+      onChange("OKB");
+    }
+  };
+
+  const handleSelectRenop = () => {
+    if (isRenopActive) {
+      onChange("");
+    } else {
+      onChange("Renop");
     }
   };
 
@@ -156,6 +177,56 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
         >
           {texts.BTN_TO_EVDAL}
         </button>
+
+        {/* Khusus Shift 2: Tombol Preset OKB (Ungu) */}
+        {isShift2 && (
+          <button
+            type="button"
+            onClick={handleSelectOkb}
+            style={{
+              padding: "5px 12px",
+              borderRadius: "8px",
+              fontSize: "0.78rem",
+              fontWeight: 700,
+              cursor: "pointer",
+              border: isOkbActive
+                ? "1px solid #a855f7"
+                : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
+              background: isOkbActive
+                ? "rgba(168, 85, 247, 0.2)"
+                : "rgba(255, 255, 255, 0.05)",
+              color: isOkbActive ? "#a855f7" : "var(--text-primary, #f8fafc)",
+              transition: "all 0.15s ease",
+            }}
+          >
+            {texts.BTN_OKB}
+          </button>
+        )}
+
+        {/* Khusus Shift 2: Tombol Preset Renop (Emerald / Hijau) */}
+        {isShift2 && (
+          <button
+            type="button"
+            onClick={handleSelectRenop}
+            style={{
+              padding: "5px 12px",
+              borderRadius: "8px",
+              fontSize: "0.78rem",
+              fontWeight: 700,
+              cursor: "pointer",
+              border: isRenopActive
+                ? "1px solid #10b981"
+                : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
+              background: isRenopActive
+                ? "rgba(16, 185, 129, 0.2)"
+                : "rgba(255, 255, 255, 0.05)",
+              color: isRenopActive ? "#10b981" : "var(--text-primary, #f8fafc)",
+              transition: "all 0.15s ease",
+            }}
+          >
+            {texts.BTN_RENOP}
+          </button>
+        )}
       </div>
 
       {/* Baris 2: Pill Ringkas Jenis BA [01, 02, 03, 04] (Hanya muncul jika BA aktif) */}

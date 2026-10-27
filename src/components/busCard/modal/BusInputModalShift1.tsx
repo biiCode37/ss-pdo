@@ -7,6 +7,7 @@ import { AlertTriangle, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
 import { ShiftOptionChip } from "./fields/ShiftOptionChip";
 import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
+import { normalizeKeterangan } from "@/utils/keteranganUtils";
 
 interface BusInputModalShift1Props {
   form: BusInputFormReturn;
@@ -424,6 +425,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
           <KeteranganPresetBar
             value={keteranganS1}
             onChange={setKeteranganS1}
+            shift={1}
             shiftLabel={TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT1_NOTE}
           />
           <textarea
@@ -431,6 +433,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             rows={2}
             value={keteranganS1}
             onChange={(e) => setKeteranganS1(e.target.value)}
+            onBlur={() => setKeteranganS1(normalizeKeterangan(keteranganS1))}
             onFocus={handleInputFocus}
             placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_PLACEHOLDER}
             style={{

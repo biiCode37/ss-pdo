@@ -247,6 +247,8 @@ export const TEXT_ALERTS = {
       BTN_BA: "BA",
       BTN_OFF: "OFF",
       BTN_TO_EVDAL: "TO EVDAL",
+      BTN_OKB: "OKB",
+      BTN_RENOP: "Renop",
       EMPTY_PREVIEW: "- (Tanpa Catatan)",
       BA_CODES: ["01", "02", "03", "04"],
       BA_TYPES: {

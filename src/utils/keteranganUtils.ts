@@ -27,6 +27,75 @@ export function getDefaultModalTab(
   return shift === 2 ? "shift2" : "shift1";
 }
 
+/**
+ * Daftar singkatan/akronim umum armada & operasional yang dipertahankan dalam huruf kapital (Opsi B).
+ */
+export const FLEET_ACRONYMS = new Set([
+  'AC',
+  'TJ',
+  'AP',
+  'KSO',
+  'OKB',
+  'NP',
+  'NP1',
+  'NP2',
+  'SIM',
+  'KTP',
+  'STNK',
+  'KIR',
+  'BBM',
+  'SPBU',
+  'GPS',
+  'CCTV',
+  'TAP',
+  'TOA',
+  'PP',
+  'KM',
+  'H-1',
+  'H-7',
+  'SGO',
+  'SO',
+  'TO',
+  'EVDAL',
+]);
+
+/**
+ * Mengubah string teks menjadi format Capitalize Each Word (Title Case)
+ * dengan perlakuan cerdas terhadap akronim/singkatan operasional (Opsi B):
+ * - Mengkapitalkan huruf pertama setiap kata
+ * - Mempertahankan singkatan/akronim umum yang berhuruf kapital (seperti AC, TJ, AP, KSO, OKB, NP1, NP2, dll.)
+ * - Menjaga kode unit armada berformat khusus (seperti "TJ-0123", "MB-01")
+ */
+export function toSmartTitleCase(input?: string | null): string {
+  if (!input || typeof input !== 'string') return '';
+  const trimmed = input.trim();
+  if (!trimmed) return '';
+
+  return trimmed
+    .split(/\s+/)
+    .map((word) => {
+      if (!word) return '';
+
+      const upperWord = word.toUpperCase();
+
+      // 1. Cek jika kata terdaftar dalam daftar akronim operasional (misal: "ac" -> "AC", "okb" -> "OKB")
+      if (FLEET_ACRONYMS.has(upperWord)) {
+        return upperWord;
+      }
+
+      // 2. Cek jika kata adalah kode unit dengan tanda hubung/titik/angka (misal: "TJ-0123", "MB-01", "P-1")
+      if (/^[A-Za-z]+[-._]\w+$/.test(word) || /^[A-Za-z]+\d+$/.test(word)) {
+        return word.toUpperCase();
+      }
+
+      // 3. Kata reguler: kapital huruf pertama, sisanya lowercase
+      const firstChar = word.charAt(0).toUpperCase();
+      const rest = word.slice(1).toLowerCase();
+      return `${firstChar}${rest}`;
+    })
+    .join(' ');
+}
+
 export interface ParsedKeterangan {
   prefix: string | null; // e.g. "BA.01", "BA.02", "BA.03", "BA.04"
   detail: string;        // e.g. "NP1", "NP2", "Rusak transmisi"
@@ -86,7 +155,11 @@ export function normalizeKeterangan(raw?: string | null): string {
         detail = 'NP1';
       } else if (/^NP\s*[-._:/]?\s*2$/i.test(detail)) {
         detail = 'NP2';
+      } else {
+        detail = toSmartTitleCase(detail);
       }
+    } else if (detail) {
+      detail = toSmartTitleCase(detail);
     }
     return detail ? `${prefix} ${detail}` : prefix;
   }
@@ -105,8 +178,14 @@ export function normalizeKeterangan(raw?: string | null): string {
   if (/^TO\s*[-._:/]?\s*EVDAL$/i.test(trimmed)) {
     return 'TO EVDAL';
   }
+  if (upper === 'OKB') {
+    return 'OKB';
+  }
+  if (upper === 'RENOP') {
+    return 'Renop';
+  }
 
-  return trimmed;
+  return toSmartTitleCase(trimmed);
 }
 
 /**
@@ -129,13 +208,13 @@ export function parseKeterangan(raw?: string | null): ParsedKeterangan {
   const core = shiftMatch ? shiftMatch[2].trim() : normalized;
   const upper = core.toUpperCase();
 
-  // Cek Fixed Values (OFF, TO EVDAL)
-  if (['OFF', 'TO EVDAL'].includes(upper)) {
+  // Cek Fixed Values (OFF, TO EVDAL, OKB, Renop)
+  if (['OFF', 'TO EVDAL', 'OKB', 'RENOP'].includes(upper)) {
     return {
       prefix: null,
       detail: '',
       isFixed: true,
-      fixedValue: upper,
+      fixedValue: upper === 'RENOP' ? 'Renop' : upper,
       normalized,
     };
   }

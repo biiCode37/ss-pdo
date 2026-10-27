@@ -7,6 +7,7 @@ import { AlertTriangle, Copy, ChevronDown, ChevronUp } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
 import { ShiftOptionChip } from "./fields/ShiftOptionChip";
 import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
+import { normalizeKeterangan } from "@/utils/keteranganUtils";
 
 interface BusInputModalShift2Props {
   form: BusInputFormReturn;
@@ -383,6 +384,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           <KeteranganPresetBar
             value={keteranganS2}
             onChange={setKeteranganS2}
+            shift={2}
             shiftLabel={TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS.LABEL_SHIFT2_NOTE}
           />
           <textarea
@@ -390,6 +392,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             rows={2}
             value={keteranganS2}
             onChange={(e) => setKeteranganS2(e.target.value)}
+            onBlur={() => setKeteranganS2(normalizeKeterangan(keteranganS2))}
             onFocus={handleInputFocus}
             placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_PLACEHOLDER}
             style={{
