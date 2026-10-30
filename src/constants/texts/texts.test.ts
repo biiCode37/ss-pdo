@@ -485,6 +485,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PAGE_MANAGEMENT.CATEGORIES.ALL).toBe('Semua');
     expect(TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT).toBe('Manajemen Halaman');
     expect(TEXT_PAGE_MANAGEMENT.ACCESS_RESTRICTED_DESC).toContain('Akses terbatas');
+    expect(TEXT_PAGE_MANAGEMENT.TOAST.FALLBACK_TO_DASHBOARD).toBeDefined();
+    expect(TEXT_PAGE_MANAGEMENT.TOAST.MONITORING_UNDER_MAINTENANCE).toBeDefined();
   });
 
   it('contains all required text entries for Keterangan Presets & Shift Notes', () => {

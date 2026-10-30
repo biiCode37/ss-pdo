@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1793104751.4596992,
-    "ast_hash": "a1ddded195b0d6210021d2af63b28dcc",
+    "mtime": 1793319680.310154,
+    "ast_hash": "5049fece7d286d5580560e073fa3f3b4",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1793317646.5781434,
-    "ast_hash": "3157cc4aaf50826bdcf65ee9a44fad11",
+    "mtime": 1793319509.4529195,
+    "ast_hash": "6bd4f15bd5d175c40cf87669baf230cf",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -1745,8 +1745,8 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardModals.tsx": {
-    "mtime": 1793104751.4751463,
-    "ast_hash": "bbc9bacd1963c259616828bcc8a83cfc",
+    "mtime": 1793319806.3133316,
+    "ast_hash": "0c521bed6ce9b3d0e8dc4b77efe44576",
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardStatusBanners.tsx": {
@@ -1980,8 +1980,8 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileFeaturesSection.tsx": {
-    "mtime": 1793104751.4952483,
-    "ast_hash": "d5186621d0ba18789b9b873fc1960eef",
+    "mtime": 1793319789.7586193,
+    "ast_hash": "d2f0453e92ec6d2e869aa82b7ac845ff",
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuFooter.tsx": {
@@ -2000,8 +2000,8 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/types.ts": {
-    "mtime": 1793104751.4989827,
-    "ast_hash": "54a3c8ba432d85a5eaa24e0171dcb333",
+    "mtime": 1793319565.4804902,
+    "ast_hash": "ed88ed6289e72c45f489a37fd454fc7b",
     "semantic_hash": ""
   },
   "src/components/profileMenu/useProfileData.ts": {
@@ -2335,13 +2335,13 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/useDashboardUiState.test.tsx": {
-    "mtime": 1793104751.4772694,
-    "ast_hash": "464c70470bff953315e812b8bb5f9c9b",
+    "mtime": 1793319551.2735655,
+    "ast_hash": "cdc547b51603a0cdf7d1d12cfa52f5fd",
     "semantic_hash": ""
   },
   "src/components/dashboard/useDashboardUiState.ts": {
-    "mtime": 1793104751.4785554,
-    "ast_hash": "3075f8a0d64343a8f6db74678f8409c5",
+    "mtime": 1793319527.8964987,
+    "ast_hash": "83570edcad80166e31e3413b789cecfe",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_53/AUDIT_BUGS.md": {
@@ -2545,13 +2545,13 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuSheet.test.tsx": {
-    "mtime": 1792477128.922139,
-    "ast_hash": "1e4506dcadca51861e04670bfdc86c2a",
+    "mtime": 1793319635.3576355,
+    "ast_hash": "5361acdea094e91184476ae24f610a27",
     "semantic_hash": ""
   },
   "src/components/profileMenu/ProfileMenuSheet.tsx": {
-    "mtime": 1793104751.4958858,
-    "ast_hash": "ed9f511dfaefb6f27012ba2807fd90da",
+    "mtime": 1793319581.106482,
+    "ast_hash": "e3de8bd3a1a7b20effa979fe587a4f13",
     "semantic_hash": ""
   },
   "src/components/profileMenu/UserProfileHeader.test.tsx": {
@@ -5280,8 +5280,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_page_management.ts": {
-    "mtime": 1792477128.923116,
-    "ast_hash": "a00944551bb210d68d21ca148d5df3f1",
+    "mtime": 1793319490.8381689,
+    "ast_hash": "06d9210e2bb0113f48d06bc3cec94a44",
     "semantic_hash": ""
   },
   "src/context/PageAccessContext.test.tsx": {
@@ -5702,6 +5702,16 @@
   "refactor-ss-pdo/refact_171/REPAIR_REPORT.md": {
     "mtime": 1793128187.3692923,
     "ast_hash": "ad636fc89701395d32ddd99efe51f274",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_172/AUDIT_BUGS.md": {
+    "mtime": 1793318117.4305706,
+    "ast_hash": "700018fa3d1ad84f7c19f3440fcf5cb3",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_172/REPAIR_REPORT.md": {
+    "mtime": 1793318125.1434946,
+    "ast_hash": "95c16d4d796fca9f504c144db7d35f22",
     "semantic_hash": ""
   }
 }

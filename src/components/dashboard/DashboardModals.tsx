@@ -48,6 +48,7 @@ interface DashboardModalsProps {
   onOpenAccumulation: () => void;
   onOpenRegionalMonitoring?: () => void;
   isInMonitoringView?: boolean;
+  isMonitoringUnderMaintenance?: boolean;
   onOpenUserManagement: () => void;
   onOpenPageManagement?: () => void;
   theme: "light" | "dark";
@@ -89,6 +90,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
   onOpenAccumulation,
   onOpenRegionalMonitoring,
   isInMonitoringView,
+  isMonitoringUnderMaintenance,
   onOpenUserManagement,
   onOpenPageManagement,
   theme,
@@ -179,6 +181,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = ({
         onOpenAccumulation={onOpenAccumulation}
         onOpenRegionalMonitoring={onOpenRegionalMonitoring}
         isInMonitoringView={isInMonitoringView}
+        isMonitoringUnderMaintenance={isMonitoringUnderMaintenance}
         onOpenUserManagement={onOpenUserManagement}
         onOpenPageManagement={onOpenPageManagement}
         isDarkMode={theme === "dark"}

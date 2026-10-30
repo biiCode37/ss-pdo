@@ -202,5 +202,46 @@ describe("useDashboardUiState Hook", () => {
 
     expect(latestHookResult.currentView).toBe("dashboard");
   });
-});
 
+  it("falls back to dashboard view when non-pdo role cannot access regional_monitoring (under maintenance)", () => {
+    localStorage.setItem("PDO_USER_ROLE", "admin");
+
+    const canAccessPage = vi.fn((pageKey: string) => {
+      if (pageKey === "regional_monitoring") return false;
+      return true;
+    });
+
+    function MaintenanceFallbackComponent() {
+      latestHookResult = useDashboardUiState({
+        canAccessPage: canAccessPage as any,
+      });
+      return <div>View: {latestHookResult.currentView}</div>;
+    }
+
+    act(() => {
+      root.render(<MaintenanceFallbackComponent />);
+    });
+
+    expect(latestHookResult.currentView).toBe("dashboard");
+    expect(canAccessPage).toHaveBeenCalledWith("regional_monitoring", "admin");
+  });
+
+  it("initializes with regional_monitoring when canAccessPage allows it", () => {
+    localStorage.setItem("PDO_USER_ROLE", "admin");
+
+    const canAccessPage = vi.fn(() => true);
+
+    function NormalAccessComponent() {
+      latestHookResult = useDashboardUiState({
+        canAccessPage: canAccessPage as any,
+      });
+      return <div>View: {latestHookResult.currentView}</div>;
+    }
+
+    act(() => {
+      root.render(<NormalAccessComponent />);
+    });
+
+    expect(latestHookResult.currentView).toBe("regional_monitoring");
+  });
+});

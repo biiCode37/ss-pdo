@@ -211,4 +211,29 @@ describe("ProfileMenuSheet", () => {
       overlay?.querySelector('[data-testid="profile-menu-page-management-btn"]')
     ).toBeNull();
   });
+
+  it("displays maintenance badge on regional monitoring when isMonitoringUnderMaintenance is true", async () => {
+    localStorage.setItem("PDO_USER_NAME", "Regular Admin");
+    localStorage.setItem("PDO_USER_ROLE", "admin");
+
+    await act(async () => {
+      root.render(
+        <ProfileMenuSheet
+          isOpen={true}
+          onClose={vi.fn()}
+          isDarkMode={false}
+          onToggleTheme={vi.fn()}
+          offlineQueueCount={0}
+          isOnline={true}
+          onOpenRegionalMonitoring={vi.fn()}
+          isInMonitoringView={false}
+          isMonitoringUnderMaintenance={true}
+          onLogout={vi.fn()}
+        />
+      );
+    });
+
+    const overlay = document.body.querySelector(".profile-menu-overlay");
+    expect(overlay?.textContent).toContain("Pemeliharaan");
+  });
 });
