@@ -551,6 +551,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
             {activeTab === "routes" && (
               <MonitoringRoutesTab
                 routes={data.routes}
+                fleetShifts={fleetShifts}
                 onVerifyRoute={(routeId) =>
                   handleVerifyRoute(routeId, "submitted")
                 }

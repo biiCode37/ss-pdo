@@ -447,6 +447,12 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.REALOPS_SHIFT_SUBTEXT(10, 9)).toBe('S1: 10 • S2: 9');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TARGET_CAP_SUBTEXT('1.11', '107.2')).toBe('Target: 1.11 • Cap: 107.2%');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.ACHIEVEMENT_PCT('107.5')).toBe('Capaian: 107.5%');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.TITLE).toBe('Status Kesiapan Armada Bus');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.BADGE_TROUBLED(2)).toBe('2 Unit Kendala');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.BADGE_ALL_READY).toBe('100% Siap Jalan');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.ALL_READY_TITLE).toBe('Seluruh Armada Beroperasi Normal');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.ALL_READY_DESC).toContain('Luar biasa');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.NO_DATA_DESC).toContain('Belum ada laporan');
   });
 
   it('exports TEXT_WA_REPORT with studio title, format labels, and actions', () => {

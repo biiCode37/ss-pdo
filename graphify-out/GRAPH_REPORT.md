@@ -1,16 +1,16 @@
 # Graph Report - SS_PDO  (2026-10-30)
 
 ## Corpus Check
-- 971 files · ~886,007 words
+- 974 files · ~889,583 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6475 nodes · 7982 edges · 621 communities (576 shown, 45 thin omitted)
+- 6496 nodes · 8018 edges · 610 communities (566 shown, 44 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 26 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1d84e9ae`
+- Built from commit: `9939d899`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,7 +21,7 @@
 - Test-Driven Development (TDD)
 - plugins
 - compilerOptions
-- core.ts
+- historyNavigation.ts
 - compilerOptions
 - Testing Skills With Subagents
 - helper.js
@@ -278,7 +278,7 @@
 - AUDIT BUGS — Refactor 35: Isolasi Penuh State Form Tanggal dan Pencegahan Kedipan Refresh
 - react
 - 1. Perbaikan Bug & Implementasi
-- formatDecimal
+- monitoringUtils.ts
 - Temuan Masalah
 - REPAIR REPORT: Perbaikan Akumulasi Total Ritase per Unit Armada (Refact 145)
 - 1. Daftar Temuan Bug
@@ -290,13 +290,13 @@
 - dailyToaTrend/DailyToaTrendCard.tsx
 - Repair Report Refact 41: Modularisasi & Dekomposisi Halaman Manajemen Pengguna (UserManagementPage)
 - 1. Rincian Implementasi
-- transport.ts
+- core.ts
 - 1. Implementasi Teknis
 - 1. Daftar Temuan Masalah & Risiko Arsitektur
 - 1. Daftar Temuan Masalah & Risiko Arsitektur
 - odometerRegistry.ts
 - routeSelector/RouteSelectorCard.tsx
-- types/supabase.ts
+- users.ts
 - Repair Report Refact 42: Modularisasi & Dekomposisi Formulir Laporan Operasional Rute (RouteOperationalReportCard)
 - 🛠️ Repair Report: Refactor 69 — Penentuan Status Armada Harian Per Shift (Daily Fleet Status)
 - 1. Daftar Temuan Masalah & Risiko Arsitektur
@@ -320,7 +320,7 @@
 - 1. Daftar Temuan Masalah & Risiko Arsitektur
 - Repair Report Refact 51: Modularisasi & Dekomposisi Modal Kesiapan Armada (FleetStatusModal)
 - 1. Daftar Temuan Masalah & Risiko Arsitektur
-- login/LoginScreen.tsx
+- texts/index.ts
 - Repair Report Refact 53: Modularisasi & Dekomposisi Header Daftar Armada (BusListHeader)
 - A2ReportModal.tsx
 - 1. Daftar Temuan Masalah & Risiko Arsitektur
@@ -341,7 +341,7 @@
 - 1. Daftar Temuan Masalah & Risiko Arsitektur
 - monitoring/AllRouteMonitoringPage.tsx
 - BusInputFormReturn
-- LoginInfoModal.tsx
+- Repair Report: Refactor 173 — Integrasi Status Kesiapan Armada Bus pada Tab Operasional Bottom Sheet Rute & Standarisasi Ketelitian Global
 - App.tsx
 - Repair Report - Refact 60
 - Audit Report - Refact 60
@@ -373,7 +373,7 @@
 - REPAIR REPORT: Bottom Dock Clearance & Standarisasi Perintah "PA" (Push All)
 - Laporan Perbaikan — Fase 3, Batch 3.1: Keamanan State & Helper KM
 - Daftar Temuan Masalah
-- texts/index.ts
+- Daftar Temuan Masalah
 - Daftar Temuan Masalah
 - Case: Skenario Lapangan
 - Daftar Temuan Masalah
@@ -529,7 +529,7 @@
 - Audit Report - Refact 147: Pembersihan Komponen Usang Status Armada (Dead Component Cleanup)
 - Audit Bugs & Errata: Revisi Shell Modal Bus (Fase 3 Batch 3.5)
 - Daftar Temuan
-- mutations.ts
+- useOfflineSync.ts
 - 3. Rincian Temuan Teknis: R80-10 (Bus Input Shell)
 - GEMINI_PHASE_03_BATCH_04_BANNER_REVISION.md
 - Laporan Keputusan Review — Batch 3.5 Masih Tertahan
@@ -538,7 +538,6 @@
 - Instruksi Revisi untuk Gemini — Fase 3 Batch 3.5
 - Audit Codex — Revisi Fase 3 Batch 3.5 (`refact_125`)
 - Instruksi Gemini — Revisi Riwayat Back Batch 3.5
-- monthlyMasterIngestionService.ts
 - Laporan Perbaikan Riwayat Back Batch 3.5 — `refact_127`
 - Analisis Mendalam Akar Masalah (Root Cause Analysis)
 - sheet-sync-webhook/index.ts
@@ -569,7 +568,6 @@
 - Rincian Temuan Bug
 - auth.ts
 - Temuan Audit
-- MonitoringFleetStatusTab.tsx
 - PageAccessContext.tsx
 - Repair Report: Implementasi Fitur Manajemen Halaman Superadmin (Realtime Access Control)
 - pageManagement.ts
@@ -577,7 +575,6 @@
 - 1. Daftar Temuan Audit & Kebutuhan Fitur
 - Laporan Perbaikan (Refactor 153)
 - RouteSheetRealtimeSync.js
-- globalReportReader.ts
 - Audit Temuan Bug (Refactor 153)
 - 2. Pemeriksaan Rinci terhadap 5 Kriteria Utama
 - Task 4 Review: Integrasi Form Shift 1 & Shift 2 dengan KeteranganPresetBar
@@ -590,7 +587,7 @@
 - Laporan Perbaikan: Penyesuaian Nomenklatur Subheader Unit Libur/Keterangan Khusus & Mitigasi ERR_QUIC_PROTOCOL_ERROR (Refactor 162)
 - Temuan Audit
 - Temuan Masalah & Analisis Risiko
-- monitoringUtils.ts
+- MonitoringHeader.tsx
 - Audit Temuan: Penyesuaian Nomenklatur Subheader Unit Libur/Keterangan Khusus & Mitigasi ERR_QUIC_PROTOCOL_ERROR (Refactor 162)
 - REPAIR REPORT — Refactor 164: QUIC Payload Projection & Realtime WebSocket Stabilization
 - Rincian Perbaikan (Implementation & Before vs After)
@@ -603,7 +600,6 @@
 - AUDIT BUGS: Refactor 165 - Generator Laporan WA Format 3 & Rincian Unit Kesiapan Armada
 - AUDIT BUGS — Refactor 164: QUIC Payload Projection & Realtime WebSocket Stabilization
 - Evaluation and iteration
-- bulkRouteInspector.ts
 - Global Constraints
 - ID Temuan: BUG-166-01
 - Laporan Perbaikan: Refactor 167
@@ -611,12 +607,10 @@
 - 2. Review Findings & Rubric Checklist
 - 2. Review Findings & Rubric Checklist
 - Task 5 Report: Integrasi Tab Catatan Penuh (BusInputModalNotes) & Single Focus (SingleFocusNotes)
-- BusData
-- MonitoringRoutesTab.tsx
+- parseIndonesianNumber
 - Task 1 Report: Kamus Teks Sentral & Definisi Opsi BA
 - Task 2 Report: Komponen Reusable `KeteranganPresetBar`
 - Task 3 Report: State Pemisahan Shift & Payload Builder
-- PageDisabledState.tsx
 - BusInputModal.tsx
 - Progress Ledger: Preset Keterangan & Pemisahan Catatan per Shift
 - regionalIngestionService.ts
@@ -628,12 +622,7 @@
 - Daftar Temuan Masalah & Celah
 - Daftar Temuan Masalah & Celah
 - Daftar Temuan Masalah & Celah
-- parseIndonesianNumber
 - routes.ts
-- Skeletons.tsx
-- MonitoringSupervisorTabs.tsx
-- MonthlySyncModal.tsx
-- 1. THE THREE DIALS (Core Configuration)
 
 ## God Nodes (most connected - your core abstractions)
 1. `react` - 212 edges
@@ -654,16 +643,16 @@
   src/components/busCard/modal/BusInputModalShift1.tsx → package.json
 - `BusInputModalShift2()` --references--> `react`  [EXTRACTED]
   src/components/busCard/modal/BusInputModalShift2.tsx → package.json
-- `Props` --references--> `BusData`  [EXTRACTED]
-  src/components/AnalyticsDashboard.tsx → src/services/googleSheets/types.ts
 - `BusInputModalNotesProps` --references--> `BusInputFormReturn`  [EXTRACTED]
   src/components/busCard/modal/BusInputModalNotes.tsx → src/components/busCard/modal/useBusInputForm.ts
+- `BusInputModalShift1Props` --references--> `BusInputFormReturn`  [EXTRACTED]
+  src/components/busCard/modal/BusInputModalShift1.tsx → src/components/busCard/modal/useBusInputForm.ts
 
 ## Import Cycles
 - 3-file cycle: `src/services/googleSheets/auth.ts -> src/services/googleSheets/authSession.ts -> src/services/googleSheets/transport.ts -> src/services/googleSheets/auth.ts`
 - 4-file cycle: `src/services/googleSheets.ts -> src/services/googleSheets/index.ts -> src/services/googleSheets/analytics.ts -> src/utils/analytics.ts -> src/services/googleSheets.ts`
 
-## Communities (621 total, 45 thin omitted)
+## Communities (610 total, 44 thin omitted)
 
 ### Community 0 - "server.cjs"
 Cohesion: 0.06
@@ -689,9 +678,9 @@ Nodes (8): plugins, rules, react/only-export-components, react/rules-of-hooks, $
 Cohesion: 0.08
 Nodes (25): DOM, src, vite/client, compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, erasableSyntaxOnly, jsx (+17 more)
 
-### Community 6 - "core.ts"
+### Community 6 - "historyNavigation.ts"
 Cohesion: 0.21
-Nodes (16): extractSheetId(), tabGidCache, Route, RouteSheet, BusNote, extractMonthYearLabel(), checkAndMigrateCache(), CURRENT_CACHE_VERSION (+8 more)
+Nodes (11): RouteSelectorSheet(), RouteSelectorSheetProps, useMobileBackHandler(), UseMobileBackHandlerOptions, BackNavigationEntry, handlePopState(), isRunningStandalone(), navigationStack (+3 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.10
@@ -874,8 +863,8 @@ Cohesion: 0.22
 Nodes (8): 1. Tujuan, 2. Catatan: BUG-18 Dicabut, 3. Urutan Prioritas, 4. Prinsip Kerja Utama (melanjutkan v1), 5. Batasan Teknis Tambahan, 6. Kapan Harus Berhenti dan Bertanya ke Manusia (tambahan), 7. Pelaporan Progres, Aturan & Ketentuan Kerja untuk AI Coding Agent v2 — Proyek SS_PDO
 
 ### Community 60 - "🛡️ Aturan, Ketetapan, & Batasan Proyek SS_PDO"
-Cohesion: 0.15
-Nodes (12): 📖 10. Standar Kamus Teks Sentral (`src/constants/texts/`), 🛡️ 11. Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation), 📱 1. Layout & Tampilan (Mobile-First Priority), 📊 2. Integritas Data (Single Source of Truth - SSOT), 🔐 3. Autentikasi & Sesi Login, 🛠️ 4. Tooling & Paket Manager (Wajib PNPM), 🎨 5. Standar UI/UX & Animasi Fluid (iOS Style), 💬 6. Komunikasi & Workflow Kerja (+4 more)
+Cohesion: 0.14
+Nodes (13): 📖 10. Standar Kamus Teks Sentral (`src/constants/texts/`), 🛡️ 11. Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation), 🎯 12. Standar Ketelitian & Optimalisasi Multi-Dimensi Skala Industri Global (Zero-Mistake Quality Gates), 📱 1. Layout & Tampilan (Mobile-First Priority), 📊 2. Integritas Data (Single Source of Truth - SSOT), 🔐 3. Autentikasi & Sesi Login, 🛠️ 4. Tooling & Paket Manager (Wajib PNPM), 🎨 5. Standar UI/UX & Animasi Fluid (iOS Style) (+5 more)
 
 ### Community 61 - "Core Architecture"
 Cohesion: 0.25
@@ -994,8 +983,8 @@ Cohesion: 0.50
 Nodes (3): Pi Tool Mapping, Subagents, Task lists
 
 ### Community 90 - "AI Agent Rules"
-Cohesion: 0.25
-Nodes (7): AI Agent Rules, Dokumentasi Audit dan Refactor, Kebijakan Branch (Wajib `devmode`), Proteksi Kolom Berumus Spreadsheet (Strict No-Overwrite Formula Columns), Standar Kamus Teks Sentral (`src/constants/texts/`), Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation), Standar Terminologi Domain (Ritase vs Trip & `km_baku`)
+Cohesion: 0.22
+Nodes (8): AI Agent Rules, Dokumentasi Audit dan Refactor, Kebijakan Branch (Wajib `devmode`), Proteksi Kolom Berumus Spreadsheet (Strict No-Overwrite Formula Columns), Standar Kamus Teks Sentral (`src/constants/texts/`), Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation), Standar Ketelitian & Optimalisasi Multi-Dimensi Skala Industri Global (Zero-Mistake Quality Gates), Standar Terminologi Domain (Ritase vs Trip & `km_baku`)
 
 ### Community 91 - "Checklist for effective Skills"
 Cohesion: 0.50
@@ -1126,8 +1115,8 @@ Cohesion: 0.20
 Nodes (10): 10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know), Animation Library Choice, Cards & Containers, Galleries & Media, Hero Paradigms, Layout & Grids, Micro-Interactions & Effects, Navigation & Menus (+2 more)
 
 ### Community 131 - "tasteskill: Anti-Slop Frontend Skill"
-Cohesion: 0.18
-Nodes (11): 0.A Read these signals first, 0.B Output a one-line "Design Read" before generating, 0. BRIEF INFERENCE (Read the Room Before Anything Else), 0.C If the brief is ambiguous, ask one question, do not guess, 0.D Anti-Default Discipline, 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 2.A When to reach for a real design system (use official packages) (+3 more)
+Cohesion: 0.13
+Nodes (15): 0.A Read these signals first, 0.B Output a one-line "Design Read" before generating, 0. BRIEF INFERENCE (Read the Room Before Anything Else), 0.C If the brief is ambiguous, ask one question, do not guess, 0.D Anti-Default Discipline, 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 1.A Dial Inference (design read → dial values) (+7 more)
 
 ### Community 132 - "Daftar Masalah v4 — Proyek SS_PDO / SPUM"
 Cohesion: 0.20
@@ -1414,8 +1403,8 @@ Cohesion: 0.17
 Nodes (11): 1. Arsitektur Komponen Modal, 2. Layout Akumulasi Total (Row 2), 3. Shift 1 & Shift 2 Symmetrical Cards (Row 1), Case: Skenario Lapangan, Fase 5: Modernisasi Antarmuka Modal Detail Armada (UnitDetailModal), Implementasi Detail & Perbandingan (Before vs After), Kasus A: Petugas Lapangan Memeriksa Target Ritase Armada di Ponsel, Kasus B: Navigasi Tombol Back Fisik pada Ponsel Android (+3 more)
 
 ### Community 211 - "useBusInputForm.ts"
-Cohesion: 0.14
-Nodes (17): buildBusInputPayload(), BuildBusInputPayloadParams, computeEffectiveTotalToa(), CrossDayValidationParams, getCrossDayValidationErrors(), validateBusInputForm(), ValidateBusInputFormParams, FormEnterHarness() (+9 more)
+Cohesion: 0.15
+Nodes (16): buildBusInputPayload(), BuildBusInputPayloadParams, computeEffectiveTotalToa(), CrossDayValidationParams, getCrossDayValidationErrors(), validateBusInputForm(), ValidateBusInputFormParams, FormTestComponent() (+8 more)
 
 ### Community 212 - "REPAIR REPORT: MODULAR LOGIN SCREEN & COMPLIANCE BOTTOM SHEET (REFACTOR 21)"
 Cohesion: 0.18
@@ -1443,7 +1432,7 @@ Nodes (12): 🔹 1.1 Pembersihan Ikon Redundan pada Kartu Armada (`BusCard.tsx` 
 
 ### Community 218 - "alertUtils.ts"
 Cohesion: 0.07
-Nodes (60): showAuthExpiredAlert(), showConfirmDialog(), showDeleteQueueConfirm(), showErrorToast(), showInfoToast(), showLogoutConfirm(), showQueueConflictDialog(), showSuccessToast() (+52 more)
+Nodes (61): TEXT_ALERTS, showAuthExpiredAlert(), showConfirmDialog(), showDeleteQueueConfirm(), showErrorToast(), showInfoToast(), showLogoutConfirm(), showQueueConflictDialog() (+53 more)
 
 ### Community 219 - "RINCIAN TEMUAN"
 Cohesion: 0.22
@@ -1570,8 +1559,8 @@ Cohesion: 0.20
 Nodes (9): 1. Tujuan & Sasaran Fitur, 2. Struktur Modul & Komponen, 3. Spesifikasi Teknis & Data Flow, 4. Rencana Implementasi Bertahap, A. Model Data Periode (`MonitoringPeriodType`), B. Model Data Subtotal Korwil (`SupervisorTeamSummary`), C. Service Layer (`allRouteMonitoringService.ts`), D. Tab Rekap Korwil (`MonitoringKorwilTab.tsx`) (+1 more)
 
 ### Community 250 - "waReportGenerator.ts"
-Cohesion: 0.08
-Nodes (35): FormatType, SupervisorFilter, WaReportModalProps, useWaReportData(), UseWaReportDataOptions, WaReportFormatTabs(), WaReportFormatTabsProps, WaReportHeader() (+27 more)
+Cohesion: 0.06
+Nodes (44): QuickKorlapFleetModal, LoginInfoAboutSection(), LoginInfoComparisonSection(), LoginInfoHeader(), LoginInfoHeaderProps, LoginInfoModal, LoginInfoModalProps, LoginInfoPermissionsSection() (+36 more)
 
 ### Community 251 - "pdoReport/RouteOperationalReportCard.tsx"
 Cohesion: 0.06
@@ -1623,15 +1612,15 @@ Nodes (3): AUDIT BUGS — Refactor 35: Isolasi Penuh State Form Tanggal dan Penc
 
 ### Community 263 - "react"
 Cohesion: 0.05
-Nodes (17): react, mockData, mockRoutes, mockFleetShifts, mockRoute, mockRouteItems, mockData, FilterCategory (+9 more)
+Nodes (22): react, MonitoringReadinessBannerProps, mockData, mockRoutes, mockFleetShifts, mockRoute, mockRouteItems, mockData (+14 more)
 
 ### Community 264 - "1. Perbaikan Bug & Implementasi"
 Cohesion: 0.20
 Nodes (9): 1. Perbaikan Bug & Implementasi, 2. Case: Skenario Lapangan, A. Perbaikan Query Join Relasi Many-to-Many Route Operators (REF38-DB-001), B. Perbaikan Date Navigator & Eliminasi Timezone Shift (REF38-UI-001), Before vs After:, Before vs After:, Laporan Perbaikan Refact 38: Relasi Many-to-Many Route Operators & Date Navigator Monitoring, Skenario 1: Petugas/Korlap Membuka Monitoring Wilayah Utara (+1 more)
 
-### Community 265 - "formatDecimal"
-Cohesion: 0.28
-Nodes (10): KorwilRouteDetailBottomSheet(), KorwilRouteDetailBottomSheetProps, MonitoringKpiCards(), MonitoringKpiCardsProps, MonitoringRouteCard(), MonitoringRouteCardProps, formatDecimal(), formatNumber() (+2 more)
+### Community 265 - "monitoringUtils.ts"
+Cohesion: 0.08
+Nodes (35): KorwilRouteDetailBottomSheet(), KorwilRouteDetailBottomSheetProps, MonitoringRouteDetailModal(), MonitoringRouteDetailModalProps, TabType, mockRoute, MonitoringKpiCards(), MonitoringKpiCardsProps (+27 more)
 
 ### Community 266 - "Temuan Masalah"
 Cohesion: 0.29
@@ -1677,9 +1666,9 @@ Nodes (7): 1. Implementasi & Detail Perubahan, 2. Perbandingan Before vs After, 
 Cohesion: 0.17
 Nodes (11): 1. Rincian Implementasi, 2. Before vs After, 3. Case: Skenario Lapangan, 4. Status Quality Gates, A. Migrasi Database Supabase (`public.daily_route_reports`), B. Pembuatan Tabel Konfigurasi Terpusat (`public.app_settings`), C. Layer Servis Konfigurasi (`src/services/appSettingsService.ts`), D. Integrasi Modal Sinkronisasi Wilayah (`src/utils/modals/regionalSyncModal.ts`) (+3 more)
 
-### Community 277 - "transport.ts"
-Cohesion: 0.28
-Nodes (15): withAuthRetry(), batchUpdateSpreadsheet(), cachedProxyStatus, checkProxyHealth(), fetchSheetValues(), fetchSheetValuesBatch(), fetchSpreadsheetMeta(), getGapiSheets() (+7 more)
+### Community 277 - "core.ts"
+Cohesion: 0.10
+Nodes (40): getAccumulatedBusData(), getMonthlyToaTrend(), inspectSpreadsheetHeader(), monthlyToaTrendCache, withAuthRetry(), detectHeaderRowAndBuildComposite(), findColumnIndex(), getTabGid() (+32 more)
 
 ### Community 278 - "1. Implementasi Teknis"
 Cohesion: 0.13
@@ -1698,12 +1687,12 @@ Cohesion: 0.57
 Nodes (5): getAllStoredOdometers(), getStoredOdometerForUnit(), ODOMETER_REGISTRY_STORAGE_KEY, saveStoredOdometers(), StoredOdometerEntry
 
 ### Community 282 - "routeSelector/RouteSelectorCard.tsx"
-Cohesion: 0.09
-Nodes (30): AddRouteModal(), AddRouteModalProps, BulkRouteSection(), BulkRouteSectionProps, INDO_DAYS, INDO_MONTHS_SHORT, MONTH_NAMES_ID, RouteSelectorCard (+22 more)
+Cohesion: 0.14
+Nodes (19): AddRouteModal(), AddRouteModalProps, BulkRouteSection(), BulkRouteSectionProps, INDO_DAYS, INDO_MONTHS_SHORT, MONTH_NAMES_ID, RouteSelectorCard (+11 more)
 
-### Community 283 - "types/supabase.ts"
-Cohesion: 0.11
-Nodes (33): getAppSetting(), getRegionalGlobalSheetUrl(), setAppSetting(), setRegionalGlobalSheetUrl(), SETTING_KEYS, fetchPageSettings(), getCachedSettings(), subscribeToPageSettings() (+25 more)
+### Community 283 - "users.ts"
+Cohesion: 0.07
+Nodes (52): RFC-4180, getAppSetting(), getRegionalGlobalSheetUrl(), setAppSetting(), setRegionalGlobalSheetUrl(), SETTING_KEYS, DayBlock, DetectedMonthYear (+44 more)
 
 ### Community 284 - "Repair Report Refact 42: Modularisasi & Dekomposisi Formulir Laporan Operasional Rute (RouteOperationalReportCard)"
 Cohesion: 0.25
@@ -1793,17 +1782,17 @@ Nodes (7): 1. Implementasi & Detail Perubahan, 2. Perbandingan Before vs After, 
 Cohesion: 0.50
 Nodes (3): 1. Daftar Temuan Masalah & Risiko Arsitektur, Audit Temuan Refact 50: Dekomposisi Generator Laporan WhatsApp `WaReportModal.tsx` (~621 baris), REF50-ARCH-001: God File `src/components/WaReportModal.tsx` (621 baris)
 
-### Community 307 - "login/LoginScreen.tsx"
-Cohesion: 0.16
-Nodes (14): LegalModals(), LegalModalsProps, LegalModalType, LoginFeatureCards(), LoginFooter(), LoginFooterProps, LoginHeroCard(), LoginHeroCardProps (+6 more)
+### Community 307 - "texts/index.ts"
+Cohesion: 0.09
+Nodes (21): BottomNav, BottomNavProps, LegalModals(), LegalModalsProps, LegalModalType, LoginFeatureCards(), LoginFooter(), LoginFooterProps (+13 more)
 
 ### Community 308 - "Repair Report Refact 53: Modularisasi & Dekomposisi Header Daftar Armada (BusListHeader)"
 Cohesion: 0.25
 Nodes (7): 1. Implementasi & Detail Perubahan, 2. Perbandingan Before vs After, 3. Skenario Lapangan (Field Cases), A. Pembagian Submodul Modular (`src/components/busList/`), Case 1: Pengawas Lapangan Membuka Rute yang Shift-nya Belum Dikonfirmasi, Case 2: Petugas Ingin Menyalin KM Akhir Shift 1 ke KM Awal Shift 2 Secara Massal, Repair Report Refact 53: Modularisasi & Dekomposisi Header Daftar Armada (BusListHeader)
 
 ### Community 309 - "A2ReportModal.tsx"
-Cohesion: 0.11
-Nodes (26): parseKorlapUnitNote(), QuickKorlapFleetModal, QuickKorlapFleetModalComponent(), QuickKorlapFleetModalProps, A2ReportModal, A2ReportModalComponent(), resolveStatusFromNote(), UnitNoteItem (+18 more)
+Cohesion: 0.12
+Nodes (24): parseKorlapUnitNote(), QuickKorlapFleetModalComponent(), QuickKorlapFleetModalProps, A2ReportModal, A2ReportModalComponent(), resolveStatusFromNote(), UnitNoteItem, TEXT_COMMON (+16 more)
 
 ### Community 310 - "1. Daftar Temuan Masalah & Risiko Arsitektur"
 Cohesion: 0.50
@@ -1871,19 +1860,19 @@ Nodes (3): 1. Daftar Temuan Masalah & Risiko Arsitektur, Audit Temuan Refact 56:
 
 ### Community 326 - "monitoring/AllRouteMonitoringPage.tsx"
 Cohesion: 0.11
-Nodes (15): AllRouteMonitoringPage, AllRouteMonitoringPageProps, mockData, IngestionProgressModal(), IngestionProgressModalProps, MonitoringBottomNav, MonitoringBottomNavProps, MonitoringTab (+7 more)
+Nodes (16): AllRouteMonitoringPage, AllRouteMonitoringPageProps, mockData, IngestionProgressModal(), IngestionProgressModalProps, MonitoringBottomNav, MonitoringBottomNavProps, MonitoringTab (+8 more)
 
 ### Community 327 - "BusInputFormReturn"
-Cohesion: 0.13
-Nodes (26): BusInputModalShift1Props, BusInputModalShift2Props, BusInputModalSingleFocus(), BusInputModalSingleFocusProps, BusInputModalTrip(), BusInputModalTripProps, SingleFocusKm(), SingleFocusKmProps (+18 more)
+Cohesion: 0.15
+Nodes (24): BusInputModalSingleFocus(), BusInputModalSingleFocusProps, SingleFocusKm(), SingleFocusKmProps, SingleFocusKmRolloverBanner(), SingleFocusKmRolloverBannerProps, SingleFocusKmShift1(), SingleFocusKmShift1Props (+16 more)
 
-### Community 328 - "LoginInfoModal.tsx"
-Cohesion: 0.18
-Nodes (8): LoginInfoAboutSection(), LoginInfoComparisonSection(), LoginInfoHeader(), LoginInfoHeaderProps, LoginInfoModal, LoginInfoModalProps, LoginInfoPermissionsSection(), LoginInfoPermissionsSectionProps
+### Community 328 - "Repair Report: Refactor 173 — Integrasi Status Kesiapan Armada Bus pada Tab Operasional Bottom Sheet Rute & Standarisasi Ketelitian Global"
+Cohesion: 0.20
+Nodes (9): 1. Ekstraksi Utilitas Sentral di `src/components/monitoring/monitoringUtils.ts`, 2. Seksi Kesiapan Armada di `MonitoringRouteDetailModal.tsx`, Case: Skenario Lapangan, Implementasi Kode, Perbandingan: Before vs After, Repair Report: Refactor 173 — Integrasi Status Kesiapan Armada Bus pada Tab Operasional Bottom Sheet Rute & Standarisasi Ketelitian Global, Ringkasan Perbaikan, Skenario 1: Evaluasi Mendalam Rute JAK.87 oleh Korwil (+1 more)
 
 ### Community 329 - "App.tsx"
-Cohesion: 0.27
-Nodes (9): App(), LoginScreen(), TestComponent(), useUserActivityTracking(), signOut(), sendUserHeartbeat(), verifyUserProfile(), formatUserError() (+1 more)
+Cohesion: 0.23
+Nodes (10): App(), LoginScreen(), LoginScreenProps, TestComponent(), useUserActivityTracking(), signOut(), sendUserHeartbeat(), verifyUserProfile() (+2 more)
 
 ### Community 330 - "Repair Report - Refact 60"
 Cohesion: 0.29
@@ -1997,9 +1986,9 @@ Nodes (7): 1. Ringkasan Implementasi, 2. Before vs After, 3. Case: Skenario Lapa
 Cohesion: 0.29
 Nodes (6): 1. BUG-140-01: Layout Kotak Bertingkat Kuno dan Hierarki Visual Rendah pada `KPICard`, 2. BUG-140-02: Kurangnya Visualisasi Komparasi Relatif pada `ShiftComparisonCard`, 3. BUG-140-03: Kerapian dan Konsistensi Visual pada `CompletionStatusCard`, AUDIT BUGS: Perombakan Konsep UI Minimalis & Dashboard KPI Eksekutif (Fase 2), Daftar Temuan Masalah, Informasi Refactor
 
-### Community 360 - "texts/index.ts"
-Cohesion: 0.13
-Nodes (9): BottomNav, BottomNavProps, TEXT_ALERTS, TEXT_ERRORS, TEXT_FLEET_STATUS, TEXT_MONITORING, TEXT_PAGE_MANAGEMENT, TEXT_UNIT_DETAIL (+1 more)
+### Community 360 - "Daftar Temuan Masalah"
+Cohesion: 0.29
+Nodes (6): 1. BUG-173-01: Ketiadaan Rincian Unit Kendala pada Tab Operasional Modal Rute (Information Blind-Spot), 2. BUG-173-02: Duplikasi Logika Ekstraksi Unit Kendala & Potensi Divergensi Kode, 3. BUG-173-03: Kerapuhan Regex Parsing BA Code pada Format Spasi Lapangan (`BA 01` vs `BA.01`), Audit Bugs: Refactor 173 — Integrasi Status Kesiapan Armada Bus pada Tab Operasional Bottom Sheet Rute & Standarisasi Ketelitian Global, Daftar Temuan Masalah, Ringkasan Eksekutif
 
 ### Community 361 - "Daftar Temuan Masalah"
 Cohesion: 0.40
@@ -2581,9 +2570,9 @@ Nodes (6): 1. ID: R124-01 (Koordinasi Back Berulang Selama Animasi Keluar 220 ms
 Cohesion: 0.40
 Nodes (4): 1. ID: R118-01, 2. ID: R116-04 (Koreksi Narasi & Batasan Perilaku), Audit Bugs: Revisi Kontras & Errata Single Focus (Fase 3 Batch 3.4), Daftar Temuan
 
-### Community 516 - "mutations.ts"
-Cohesion: 0.11
-Nodes (33): TestHookComponent(), detectCollision(), FORMULA_FIELDS, readQueueFromStorage(), SyncItem, useOfflineSync(), writeQueueToStorage(), getBusRowData() (+25 more)
+### Community 516 - "useOfflineSync.ts"
+Cohesion: 0.15
+Nodes (22): TestHookComponent(), detectCollision(), FORMULA_FIELDS, readQueueFromStorage(), useOfflineSync(), writeQueueToStorage(), getBusRowData(), updateBusData() (+14 more)
 
 ### Community 517 - "3. Rincian Temuan Teknis: R80-10 (Bus Input Shell)"
 Cohesion: 0.20
@@ -2612,10 +2601,6 @@ Nodes (4): Audit Codex — Revisi Fase 3 Batch 3.5 (`refact_125`), Gerbang indep
 ### Community 524 - "Instruksi Gemini — Revisi Riwayat Back Batch 3.5"
 Cohesion: 0.40
 Nodes (4): Gerbang penyerahan, Instruksi Gemini — Revisi Riwayat Back Batch 3.5, Kontrak penerimaan, Masalah yang harus diperbaiki
-
-### Community 525 - "monthlyMasterIngestionService.ts"
-Cohesion: 0.22
-Nodes (12): RFC-4180, DayBlock, DetectedMonthYear, INDONESIAN_MONTH_MAP, INDONESIAN_MONTH_NAMES, ingestMonthlyMasterSheet(), MonthlyMasterIngestionProgress, MonthlyMasterIngestionResult (+4 more)
 
 ### Community 526 - "Laporan Perbaikan Riwayat Back Batch 3.5 — `refact_127`"
 Cohesion: 0.15
@@ -2713,10 +2698,6 @@ Nodes (15): getGapi(), getGoogleCreds(), getTokenClient(), hasGoogleCreds(), ini
 Cohesion: 0.29
 Nodes (6): AUDIT BUGS — REFACTOR 157, BUG-157-01: Static Initial Landing Page Mengabaikan Hirarki Peran Pengguna (RBAC), BUG-157-02: Disorientasi Navigasi Tombol Back Fisik/Gesture pada Peran Non-PDO, BUG-157-03: Menu "Kembali ke Operasi Rute" yang Tidak Sesuai pada Akun Non-PDO di Monitoring Wilayah, BUG-157-04: Navigasi Kartu Rute Monitoring Tidak Memuat Sheet & Kode Rute Terpilih di Dashboard Operasi Rute, Temuan Audit
 
-### Community 556 - "MonitoringFleetStatusTab.tsx"
-Cohesion: 0.22
-Nodes (10): formatUnitNote(), inferStatusCode(), MonitoringFleetStatusTab(), MonitoringFleetStatusTabProps, NormalRouteGroup, PendingRouteGroup, RouteTroubledGroup, ShiftFilter (+2 more)
-
 ### Community 557 - "PageAccessContext.tsx"
 Cohesion: 0.33
 Nodes (7): defaultFallbackContext, defaultFallbackSettingsMap, PageAccessContext, PageAccessContextType, PageAccessProvider(), TestConsumer(), usePageAccess()
@@ -2744,10 +2725,6 @@ Nodes (12): 1.1 Penyingkatan Judul Utama pada Kamus Teks Sentral, 1.2 Penyederha
 ### Community 563 - "RouteSheetRealtimeSync.js"
 Cohesion: 0.80
 Nodes (4): getTargetDateFromSheet(), getTargetRouteCode(), onSpreadsheetEditTrigger(), testManualSync()
-
-### Community 564 - "globalReportReader.ts"
-Cohesion: 0.60
-Nodes (4): fetchGlobalReportDailyMetrics(), GlobalRouteDailyMetrics, normalizeRouteCode(), parseGlobalSheetDateBlock()
 
 ### Community 565 - "Audit Temuan Bug (Refactor 153)"
 Cohesion: 0.40
@@ -2797,9 +2774,9 @@ Nodes (4): AUDIT BUGS — REFACTOR 158, BUG-158-01: Ambigu Penamaan Progress Bar
 Cohesion: 0.29
 Nodes (6): 1. BUG-159-01: Inefisiensi Brute-Force Multi-Day Ingestion pada Frontend, 2. BUG-159-02: Ketiadaan Dukungan Rentang Tanggal pada Server-Side Runner (`scripts/ingest-regional.mjs`), 3. BUG-159-03: Ketiadaan Konfirmasi Cerdas Saat Data Database Sudah 100% Lengkap, Audit Temuan: Penanganan Bottleneck Multi-Hari (Smart Incremental Sync & Bulk Ingestion Server-Side), Ringkasan Eksekutif, Temuan Masalah & Analisis Risiko
 
-### Community 577 - "monitoringUtils.ts"
-Cohesion: 0.29
-Nodes (10): MonitoringHeader(), MonitoringHeaderProps, MonitoringMonthPickerModal(), MonitoringMonthPickerModalProps, MONTH_NAMES, MonitoringPeriodSelector(), MonitoringPeriodSelectorProps, formatIndonesianDateLabel() (+2 more)
+### Community 577 - "MonitoringHeader.tsx"
+Cohesion: 0.32
+Nodes (9): MonitoringHeader(), MonitoringHeaderProps, MonitoringMonthPickerModal(), MonitoringMonthPickerModalProps, MONTH_NAMES, MonitoringPeriodSelector(), MonitoringPeriodSelectorProps, formatIndonesianDateLabel() (+1 more)
 
 ### Community 578 - "Audit Temuan: Penyesuaian Nomenklatur Subheader Unit Libur/Keterangan Khusus & Mitigasi ERR_QUIC_PROTOCOL_ERROR (Refactor 162)"
 Cohesion: 0.33
@@ -2818,8 +2795,8 @@ Cohesion: 0.25
 Nodes (7): 1. BUG-172-01: Destructive Single-Value Overwrite pada Preset Form Keterangan Bus, 2. BUG-172-02: Inkonsistensi Visual Warna Tombol OKB (Ungu/Kendala vs Hijau/Operasi), 3. BUG-172-03: Ketiadaan Tombol Reset untuk Membersihkan Catatan Keterangan, 4. BUG-172-04: Friksi Ketikan Spasi Setelah Preset BA Diaktifkan, Audit Bugs: Refactor 172 — Penyempurnaan Form Input Keterangan Bus: Multi-Select Presets, OKB Hijau, & Tombol Reset, Daftar Temuan Masalah, Ringkasan Eksekutif
 
 ### Community 582 - "allRouteMonitoringService.ts"
-Cohesion: 0.11
-Nodes (26): calculateRegionalTotals(), calculateSupervisorSummaries(), fetchRegionalMonitoringData(), fetchRegionalPeriodMonitoringData(), getRelativeDate(), MonitoringPeriodFilter, MonitoringPeriodMode, parseDateParts() (+18 more)
+Cohesion: 0.08
+Nodes (40): calculateRegionalTotals(), calculateSupervisorSummaries(), fetchRegionalMonitoringData(), fetchRegionalPeriodMonitoringData(), getRelativeDate(), MonitoringPeriodFilter, MonitoringPeriodMode, parseDateParts() (+32 more)
 
 ### Community 583 - "Laporan Perbaikan: Smart Incremental Sync & Server-Side Batch Ingestion (Refactor 159)"
 Cohesion: 0.22
@@ -2840,10 +2817,6 @@ Nodes (3): AUDIT BUGS: Refactor 165 - Generator Laporan WA Format 3 & Rincian Un
 ### Community 589 - "Evaluation and iteration"
 Cohesion: 0.50
 Nodes (4): Build evaluations first, Develop Skills iteratively with the agent, Evaluation and iteration, Observe how agents navigate Skills
-
-### Community 590 - "bulkRouteInspector.ts"
-Cohesion: 0.53
-Nodes (4): BulkRouteItem, extractRoutePeriodFromTitle(), inspectBulkRoutesWithConcurrency(), MONTH_MAP
 
 ### Community 591 - "Global Constraints"
 Cohesion: 0.22
@@ -2873,13 +2846,9 @@ Nodes (8): 1. Review Status, 2. Review Findings & Rubric Checklist, 3. Catatan &
 Cohesion: 0.33
 Nodes (5): 1. Ringkasan Implementasi, 2. File yang Dimodifikasi, 3. Hasil Pengujian & Verifikasi, Status: DONE, Task 5 Report: Integrasi Tab Catatan Penuh (BusInputModalNotes) & Single Focus (SingleFocusNotes)
 
-### Community 598 - "BusData"
-Cohesion: 0.12
-Nodes (23): A2ReportModalProps, Props, UnitDetailModal(), Props, UnitSummaryDashboard, UnitSummaryDashboardComponent(), UseOfflineSyncOptions, BusData (+15 more)
-
-### Community 599 - "MonitoringRoutesTab.tsx"
-Cohesion: 0.18
-Nodes (9): MonitoringRouteDetailModal(), MonitoringRouteDetailModalProps, TabType, mockRoute, MonitoringRouteCardModern(), MonitoringRouteCardModernProps, MonitoringRoutesTab(), MonitoringRoutesTabProps (+1 more)
+### Community 598 - "parseIndonesianNumber"
+Cohesion: 0.05
+Nodes (51): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, KPICard, KPICardComponent(), Props (+43 more)
 
 ### Community 600 - "Task 1 Report: Kamus Teks Sentral & Definisi Opsi BA"
 Cohesion: 0.40
@@ -2893,13 +2862,9 @@ Nodes (4): Hasil Verifikasi:, Perubahan File:, Status: DONE, Task 2 Report: Komp
 Cohesion: 0.40
 Nodes (4): Hasil Verifikasi:, Perubahan File:, Status: DONE, Task 3 Report: State Pemisahan Shift & Payload Builder
 
-### Community 603 - "PageDisabledState.tsx"
-Cohesion: 0.33
-Nodes (4): PageDisabledState(), Props, Props, SuperadminMaintenanceBanner()
-
 ### Community 604 - "BusInputModal.tsx"
-Cohesion: 0.09
-Nodes (23): react, react, BusInputModal(), BusInputModalProps, BusInputModalFooter(), BusInputModalFooterProps, BusInputModalHeader(), BusInputModalHeaderProps (+15 more)
+Cohesion: 0.08
+Nodes (26): react, react, BusInputModal(), BusInputModalProps, BusInputModalFooter(), BusInputModalFooterProps, BusInputModalHeader(), BusInputModalHeaderProps (+18 more)
 
 ### Community 605 - "Progress Ledger: Preset Keterangan & Pemisahan Catatan per Shift"
 Cohesion: 0.50
@@ -2941,42 +2906,26 @@ Nodes (4): Audit Bugs - Refactor 169, BUG-169-01: Format Catatan Bebas Manual Ti
 Cohesion: 0.40
 Nodes (4): Audit Bugs - Refactor 170, BUG-170-01: Unit dengan Keterangan OFF dan TO EVDAL Masih Terhitung ke dalam Target Bar Progres Harian, BUG-170-02: Keterikatan Statis Quick Pill NP1 & NP2 pada BA.02, Daftar Temuan Masalah & Celah
 
-### Community 615 - "parseIndonesianNumber"
-Cohesion: 0.08
-Nodes (25): AnalyticsDashboard, AnalyticsDashboardComponent(), Props, CompletionStatusCard, Props, KPICard, KPICardComponent(), Props (+17 more)
-
 ### Community 616 - "routes.ts"
-Cohesion: 0.16
-Nodes (21): getAccumulatedBusData(), getMonthlyToaTrend(), inspectSpreadsheetHeader(), monthlyToaTrendCache, detectHeaderRowAndBuildComposite(), findColumnIndex(), HEADER_KEYWORDS, normalizeString() (+13 more)
-
-### Community 617 - "Skeletons.tsx"
-Cohesion: 0.18
-Nodes (4): AnalyticsDashboardSkeleton(), DailyToaTrendSkeleton(), SkeletonBoxProps, UnitCardSkeleton()
-
-### Community 619 - "MonitoringSupervisorTabs.tsx"
-Cohesion: 0.50
-Nodes (4): MonitoringSupervisorTabs(), MonitoringSupervisorTabsProps, matchesSupervisorTab(), SUPERVISOR_TABS
-
-### Community 621 - "1. THE THREE DIALS (Core Configuration)"
-Cohesion: 0.50
-Nodes (4): 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration)
+Cohesion: 0.24
+Nodes (12): createBulkRoutesWithSheets(), createRouteWithSheet(), deleteRouteSheet(), fetchRoutesWithSheets(), getCrossPeriodAccumulation(), safeGetStorage(), safeSetStorage(), upsertDailyUnitSummaries() (+4 more)
 
 ## Knowledge Gaps
-- **3506 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+3501 more)
+- **3516 isolated node(s):** `crypto`, `http`, `fs`, `path`, `OPCODES` (+3511 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `plugins`, `mutations.ts`, `formatDecimal`, `Dashboard.tsx`, `dailyToaTrend/DailyToaTrendCard.tsx`, `routeSelector/RouteSelectorCard.tsx`, `ModalShell.test.tsx`, `MonitoringDashboardTab.tsx`, `busCard/BusCard.tsx`, `MonitoringFleetStatusTab.tsx`, `PageAccessContext.tsx`, `login/LoginScreen.tsx`, `A2ReportModal.tsx`, `busList/BusList.tsx`, `monitoringUtils.ts`, `profileMenu/UserProfileHeader.tsx`, `monitoring/AllRouteMonitoringPage.tsx`, `BusInputFormReturn`, `LoginInfoModal.tsx`, `App.tsx`, `profileMenu/ProfileMenuSheet.tsx`, `usePreviousDayOdometer.ts`, `useBusInputForm.ts`, `BusData`, `MonitoringRoutesTab.tsx`, `PageDisabledState.tsx`, `BusInputModal.tsx`, `keteranganUtils.ts`, `parseIndonesianNumber`, `texts/index.ts`, `Skeletons.tsx`, `MonitoringSupervisorTabs.tsx`, `MonthlySyncModal.tsx`, `accumulation/AccumulationSheet.tsx`, `userManagement/UserManagementPage.tsx`, `waReportGenerator.ts`, `pdoReport/RouteOperationalReportCard.tsx`?**
+- **Why does `react` connect `react` to `plugins`, `useOfflineSync.ts`, `historyNavigation.ts`, `monitoringUtils.ts`, `Dashboard.tsx`, `dailyToaTrend/DailyToaTrendCard.tsx`, `routeSelector/RouteSelectorCard.tsx`, `ModalShell.test.tsx`, `MonitoringDashboardTab.tsx`, `busCard/BusCard.tsx`, `PageAccessContext.tsx`, `texts/index.ts`, `A2ReportModal.tsx`, `busList/BusList.tsx`, `MonitoringHeader.tsx`, `profileMenu/UserProfileHeader.tsx`, `monitoring/AllRouteMonitoringPage.tsx`, `BusInputFormReturn`, `App.tsx`, `profileMenu/ProfileMenuSheet.tsx`, `usePreviousDayOdometer.ts`, `useBusInputForm.ts`, `parseIndonesianNumber`, `BusInputModal.tsx`, `keteranganUtils.ts`, `accumulation/AccumulationSheet.tsx`, `userManagement/UserManagementPage.tsx`, `waReportGenerator.ts`, `pdoReport/RouteOperationalReportCard.tsx`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
 - **Why does `react` connect `BusInputModal.tsx` to `Dashboard.tsx`, `devDependencies`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `devDependencies` to `BusInputModal.tsx`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `crypto`, `http`, `fs` to the rest of the system?**
-  _3506 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _3516 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `server.cjs` be split into smaller, more focused modules?**
   _Cohesion score 0.05868118572292801 - nodes in this community are weakly interconnected._
 - **Should `design_system.py` be split into smaller, more focused modules?**

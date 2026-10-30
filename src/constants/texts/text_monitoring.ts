@@ -392,6 +392,16 @@ export const TEXT_MONITORING = {
         `Target: ${target} • Cap: ${cap}%`,
       ACHIEVEMENT_PCT: (pct: string | number) => `Capaian: ${pct}%`,
     },
+    FLEET_SECTION: {
+      TITLE: "Status Kesiapan Armada Bus",
+      BADGE_TROUBLED: (count: number) => `${count} Unit Kendala`,
+      BADGE_ALL_READY: "100% Siap Jalan",
+      ALL_READY_TITLE: "Seluruh Armada Beroperasi Normal",
+      ALL_READY_DESC: "Luar biasa! Tidak ada catatan unit kendala untuk rute ini.",
+      NO_DATA_DESC: "Belum ada laporan data kesiapan armada untuk rute ini.",
+      NOTE_PREFIX: "Kendala:",
+      SHIFTS_LABEL: (shifts: string) => shifts,
+    },
     ACTIONS: {
       BTN_OPEN_SHEET: "Buka Lembar Kerja Rute",
       BTN_VERIFY: "Verifikasi Rute",

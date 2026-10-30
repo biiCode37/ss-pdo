@@ -15,6 +15,11 @@ import {
 import { sortRoutesByCode } from "@/utils/routeSorting";
 import { normalizeRouteCode } from "@/services/googleSheets/globalReportReader";
 import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
+import {
+  type TroubledUnitItem,
+  inferStatusCode,
+  formatUnitNote,
+} from "../monitoringUtils";
 
 export interface MonitoringFleetStatusTabProps {
   selectedDate: string;
@@ -25,17 +30,6 @@ export interface MonitoringFleetStatusTabProps {
 
 type ShiftFilter = "all" | 1 | 2;
 type StatusFilter = "all" | "BA" | "TEKNIS" | "TO" | "OFF" | "SO";
-
-export interface TroubledUnitItem {
-  unit: string;
-  note: string;
-  statusCode: string;
-  badgeBg: string;
-  badgeColor: string;
-  isOff: boolean;
-  shifts: (1 | 2)[];
-  routeCode: string;
-}
 
 export interface RouteTroubledGroup {
   routeCode: string;
@@ -62,131 +56,6 @@ export interface PendingRouteGroup {
   operatorName: string;
   routeId: number;
   defaultRenops: number;
-}
-
-/**
- * Infer status code dan styling badge dari teks kendala
- */
-export function inferStatusCode(
-  rawNote: string,
-  isOff?: boolean,
-  statusCodeHint?: string
-): { code: string; color: string; bg: string } {
-  const note = (rawNote || "").trim();
-  const hint = (statusCodeHint || "").toUpperCase().trim();
-
-  // 1. OFF (Libur)
-  if (isOff || hint === "OFF" || /\bOFF\b/i.test(note)) {
-    return {
-      code: "OFF",
-      color: "#F43F5E",
-      bg: "rgba(244, 63, 94, 0.15)",
-    };
-  }
-
-  // 2. TO / TO EVDAL
-  if (
-    hint === "TO" ||
-    /\bT\.?O(?:\s*EVDAL)?\b/i.test(note) ||
-    /EVDAL/i.test(note)
-  ) {
-    const isEvdal = /EVDAL/i.test(note);
-    return {
-      code: isEvdal ? "TO EVDAL" : "T.O",
-      color: "#F59E0B",
-      bg: "rgba(245, 158, 11, 0.15)",
-    };
-  }
-
-  // 3. SO (Stop Operasi)
-  if (hint === "SO" || /\bSO\b/i.test(note) || /STOP\s*OPS?/i.test(note)) {
-    return {
-      code: "SO",
-      color: "#A855F7",
-      bg: "rgba(168, 85, 247, 0.15)",
-    };
-  }
-
-  // 4. BA Code (Berita Acara / Laka / Sakit / Kendala Operasi)
-  const baMatch = note.match(/\bBA\.?0?([1-6])\b/i);
-  if (baMatch) {
-    return {
-      code: `BA.0${baMatch[1]}`,
-      color: "#FB923C",
-      bg: "rgba(251, 146, 60, 0.15)",
-    };
-  }
-
-  // 5. KEUR
-  if (/PROGRAM\s*KEUR/i.test(note) || /\bKEUR\b/i.test(note)) {
-    return {
-      code: "KEUR",
-      color: "#38BDF8",
-      bg: "rgba(56, 189, 248, 0.15)",
-    };
-  }
-
-  // 6. TEKNIS / PERBAIKAN / BENGKEL
-  if (/PERBAIKAN|BENGKEL|MOGOK|RADIATOR|AC\s*PANAS/i.test(note)) {
-    return {
-      code: "TEKNIS",
-      color: "#C084FC",
-      bg: "rgba(192, 132, 252, 0.15)",
-    };
-  }
-
-  // 7. OKB
-  if (/\bOKB\b/i.test(note)) {
-    return {
-      code: "OKB",
-      color: "#60A5FA",
-      bg: "rgba(96, 165, 250, 0.15)",
-    };
-  }
-
-  // 8. RENOP
-  if (/\bRENOP\b/i.test(note)) {
-    return {
-      code: "RENOP",
-      color: "#34D399",
-      bg: "rgba(52, 211, 153, 0.15)",
-    };
-  }
-
-  // 9. Hint selain generic
-  if (hint && hint !== "CATATAN" && hint !== "OTHER" && hint.length <= 8) {
-    return {
-      code: hint,
-      color: "#FBBF24",
-      bg: "rgba(251, 191, 36, 0.15)",
-    };
-  }
-
-  // 10. Fallback first word or KENDALA
-  if (note) {
-    const firstWord = note.split(/[\s:-]+/)[0].toUpperCase().slice(0, 8);
-    if (firstWord && !["CATATAN", "KENDALA"].includes(firstWord)) {
-      return {
-        code: firstWord,
-        color: "#FBBF24",
-        bg: "rgba(251, 191, 36, 0.15)",
-      };
-    }
-  }
-
-  return {
-    code: "KENDALA",
-    color: "#FBBF24",
-    bg: "rgba(251, 191, 36, 0.15)",
-  };
-}
-
-/**
- * Format catatan agar bersih tanpa prefix shift redundan
- */
-export function formatUnitNote(note: string): string {
-  if (!note) return "-";
-  return note.replace(/^S[12]:\s*/i, "").trim() || "-";
 }
 
 export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> = ({

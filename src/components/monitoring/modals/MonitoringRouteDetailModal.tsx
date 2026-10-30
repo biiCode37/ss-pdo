@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { X, ExternalLink, Check, CheckCircle2, Send, Clock, AlertTriangle } from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { X, ExternalLink, Check, CheckCircle2, Send, Clock, AlertTriangle, Bus, ShieldCheck } from "lucide-react";
+import type { DailyFleetShiftWithUnits } from "@/types/supabase";
+import { extractRouteTroubledUnits } from "../monitoringUtils";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
@@ -11,6 +13,7 @@ export interface MonitoringRouteDetailModalProps {
   onSelectRoute?: (routeCode: string) => void;
   onVerifyRoute?: (routeId: number, status: "verified") => void;
   isVerifying?: boolean;
+  fleetShifts?: DailyFleetShiftWithUnits[];
 }
 
 type TabType = "operasional" | "shift" | "produktivitas";
@@ -22,6 +25,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
   onSelectRoute,
   onVerifyRoute,
   isVerifying,
+  fleetShifts,
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>("operasional");
 
@@ -33,6 +37,11 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
       releaseLock();
     };
   }, [isOpen]);
+
+  const troubledUnits = useMemo(() => {
+    if (!isOpen || !route) return [];
+    return extractRouteTroubledUnits(route, fleetShifts);
+  }, [isOpen, route, fleetShifts]);
 
   if (!isOpen || !route) return null;
 
@@ -109,6 +118,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
     : 0;
 
   const tMetrics = TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS;
+  const tFleet = TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION;
 
   return (
     <div
@@ -545,7 +555,240 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   </div>
                   <div style={{ fontSize: "10px", color: "var(--text-secondary)", marginTop: "2px" }}>
                     {tMetrics.TARGET_CAP_SUBTEXT(targetPaxPerKm, paxPerKmPct)}
+      
+              {/* Status Kesiapan Armada Bus */}
+              <div
+                data-testid="route-modal-fleet-section"
+                style={{
+                  background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
+                  borderRadius: "12px",
+                  padding: "12px",
+                  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                }}
+              >
+                {/* Header Section */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <Bus
+                      size={15}
+                      style={{
+                        color:
+                          troubledUnits.length > 0
+                            ? "#F59E0B"
+                            : realops > 0
+                            ? "#10B981"
+                            : "var(--text-secondary)",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        color: "var(--text-primary)",
+                      }}
+                    >
+                      {tFleet.TITLE}
+                    </span>
                   </div>
+
+                  {troubledUnits.length > 0 ? (
+                    <span
+                      data-testid="route-modal-fleet-badge-troubled"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        fontSize: "10.5px",
+                        fontWeight: 700,
+                        color: "#F59E0B",
+                        background: "rgba(245, 158, 11, 0.12)",
+                        padding: "2px 7px",
+                        borderRadius: "6px",
+                        border: "1px solid rgba(245, 158, 11, 0.25)",
+                      }}
+                    >
+                      <AlertTriangle size={11} />
+                      {tFleet.BADGE_TROUBLED(troubledUnits.length)}
+                    </span>
+                  ) : realops > 0 ? (
+                    <span
+                      data-testid="route-modal-fleet-badge-ready"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        fontSize: "10.5px",
+                        fontWeight: 700,
+                        color: "#10B981",
+                        background: "rgba(16, 185, 129, 0.12)",
+                        padding: "2px 7px",
+                        borderRadius: "6px",
+                        border: "1px solid rgba(16, 185, 129, 0.25)",
+                      }}
+                    >
+                      <ShieldCheck size={12} />
+                      {tFleet.BADGE_ALL_READY}
+                    </span>
+                  ) : null}
+                </div>
+
+                {/* Content: Troubled Units List / Clean State / Empty */}
+                {troubledUnits.length > 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "6px",
+                    }}
+                  >
+                    {troubledUnits.map((u, idx) => (
+                      <div
+                        key={`${u.unit}-${idx}`}
+                        data-testid="route-modal-troubled-unit-item"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "6px 8px",
+                          borderRadius: "8px",
+                          background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
+                          border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
+                          gap: "8px",
+                        }}
+                      >
+                        {/* Unit Body & Note */}
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            minWidth: 0,
+                            flex: 1,
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: "12px",
+                              fontWeight: 800,
+                              color: "var(--text-primary)",
+                              letterSpacing: "0.2px",
+                            }}
+                          >
+                            {u.unit}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "10.5px",
+                              color: "var(--text-secondary)",
+                              marginTop: "1px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                            title={u.note}
+                          >
+                            {u.note}
+                          </span>
+                        </div>
+
+                        {/* Status Badge & Shifts */}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: "9.5px",
+                              fontWeight: 700,
+                              background: u.badgeBg,
+                              color: u.badgeColor,
+                              padding: "2px 6px",
+                              borderRadius: "4px",
+                              letterSpacing: "0.2px",
+                            }}
+                          >
+                            {u.statusCode}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "9.5px",
+                              fontWeight: 600,
+                              color: "var(--text-secondary)",
+                              padding: "2px 5px",
+                              borderRadius: "4px",
+                              background: "rgba(255, 255, 255, 0.06)",
+                            }}
+                          >
+                            {u.shifts.map((s) => `S${s}`).join(" • ")}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : realops > 0 ? (
+                  <div
+                    data-testid="route-modal-fleet-clean"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      padding: "8px 10px",
+                      borderRadius: "8px",
+                      background: "rgba(16, 185, 129, 0.06)",
+                      border: "1px solid rgba(16, 185, 129, 0.15)",
+                    }}
+                  >
+                    <ShieldCheck size={16} style={{ color: "#10B981", flexShrink: 0 }} />
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        color: "var(--text-secondary)",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {tFleet.ALL_READY_DESC}
+                    </span>
+                  </div>
+                ) : (
+                  <div
+                    data-testid="route-modal-fleet-empty"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      padding: "8px 10px",
+                      borderRadius: "8px",
+                      background: "var(--card-bg, rgba(255, 255, 255, 0.02))",
+                      border: "1px solid var(--card-border, rgba(255, 255, 255, 0.04))",
+                    }}
+                  >
+                    <Clock size={14} style={{ color: "var(--text-secondary)", flexShrink: 0 }} />
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        color: "var(--text-secondary)",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {tFleet.NO_DATA_DESC}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+            </div>
                 </div>
               </div>
             </div>

@@ -164,3 +164,22 @@ Aturan di bawah ini dirumuskan berdasarkan evaluasi menyeluruh dari siklus **Ref
 - **Aturan Emas Anti-Privilege Escalation:** Dilarang keras membuat policy RLS `FOR ALL TO anon USING (true)` atau memberikan `GRANT UPDATE/DELETE TO anon` pada tabel sensitif dan kolom identitas peran/status (`user_profiles.role_id`, `user_profiles.is_active`, `app_page_settings`, `daily_route_reports`, `daily_fleet_shifts`, `route_sheets`).
 - **Mutasi Administratif via SECURITY DEFINER:** Seluruh operasi administratif yang mengubah peran pengguna, status keaktifan akun, atau ketersediaan halaman aplikasi **WAJIB** dijalankan melalui fungsi PostgreSQL `SECURITY DEFINER` (RPC) yang memvalidasi hak peran pemanggil (`superadmin`/`admin`) secara ketat di sisi server database.
 - **Proteksi Boundary Edge Function:** Setiap Supabase Edge Function yang mengeksekusi mutasi atau mengakses kredensial Google Service Account WAJIB memvalidasi header otorisasi pemanggil dan memvalidasi `spreadsheetId` terhadap daftar rute terdaftar (whitelist). Dilarang membocorkan potongan kredensial atau informasi diagnostik internal server pada respons endpoint publik.
+
+
+---
+
+## 🎯 12. Standar Ketelitian & Optimalisasi Multi-Dimensi Skala Industri Global (Zero-Mistake Quality Gates)
+
+- **Prinsip Kerja Ekstra Teliti & Hati-Hati:** Agent wajib bekerja dengan ketelitian tinggi, cermat, penuh kehati-hatian, dan pantang terburu-buru dalam setiap analisis, penulisan kode, refactoring, maupun migrasi arsitektur.
+- **Optimalisasi Lintas Bidang (360° Industrial Grade):**
+  - **Keamanan (Security):** Terapkan sanitasi input ketat, anti-XSS (escape HTML pada SweetAlert2/modal), validasi hak akses & RLS database, cegah privilege escalation, zero credential leak, dan lindungi boundary API/Edge Function.
+  - **Performa (Performance):** Minimalkan re-render dengan memoization reaktif (`useMemo`/`useCallback`), eliminasi query berulang/N+1, efisiensi payload, lazy-loading komponen berat, dan pastikan animasi berjalan mulus di 60fps mobile.
+  - **UI/UX & Mobile-First Excellence:** Tampilan mobile-first yang proporsional, ergonomis, interaksi sentuh alami (kurva pegas iOS `cubic-bezier(0.32, 0.72, 0, 1)`), kontras sempurna di 2 tema (Light & Dark Mode), serta status UX lengkap (loading skeleton, empty state informatif, error ramah non-teknis, success feedback).
+  - **Integritas Data (Data Integrity):** Pertahankan Single Source of Truth (SSOT), lindungi rumus spreadsheet dari penimpaan nilai statis, gunakan parser desimal/ribuan lokal yang presisi (`parseIndonesianNumber`), dan pastikan normalisasi terminologi domain (ritase PP = 2 trip, `km_baku`).
+  - **Kamus Teks Sentral:** Dilarang keras hardcode string antarmuka; seluruh teks wajib melalui `src/constants/texts/`.
+- **Klausul Zero-Mistake & Verifikasi Wajib Sebelum Selesai:**
+  - Wajib menjalankan dan memastikan lulus 100%:
+    1. `pnpm vitest run src/` ➔ Seluruh unit test lulus 100% tanpa kegagalan.
+    2. `pnpm run build` ➔ TypeScript Strict Mode (`tsc -b`) dan Vite build lulus 0 error.
+    3. `graphify update .` ➔ Graf pengetahuan kode terbarukan.
+  - Dilarang membuat asumsi tanpa pembuktian nyata (*evidence before assertions*).

@@ -538,5 +538,82 @@ describe("MonitoringRouteDetailModal", () => {
       ).toBe("3.33 Rit/Bus");
     });
   });
+  describe("Fleet Readiness Section in Tab Operasional", () => {
+    it("renders troubled fleet units when present in route", async () => {
+      const routeWithIssues: RegionalRouteItem = {
+        ...mockRoute,
+        fleetStatusShift1: [
+          {
+            unit: "KWK 222177",
+            note: "T.O Radiator Panas",
+            isOff: false,
+          },
+        ],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithIssues}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(container.textContent).toContain("Status Kesiapan Armada Bus");
+      expect(container.textContent).toContain("1 Unit Kendala");
+      expect(container.textContent).toContain("KWK 222177");
+      expect(container.textContent).toContain("T.O Radiator Panas");
+      expect(container.textContent).toContain("T.O");
+    });
+
+    it("renders 100% Siap Jalan when 0 troubled units and realops > 0", async () => {
+      const cleanRoute: RegionalRouteItem = {
+        ...mockRoute,
+        totalRealops: 10,
+        fleetStatusShift1: [],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={cleanRoute}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(container.textContent).toContain("Status Kesiapan Armada Bus");
+      expect(container.textContent).toContain("100% Siap Jalan");
+      expect(container.textContent).toContain("Tidak ada catatan unit kendala");
+    });
+
+    it("renders no data message when 0 troubled units and realops is 0", async () => {
+      const emptyRoute: RegionalRouteItem = {
+        ...mockRoute,
+        totalRealops: 0,
+        fleetStatusShift1: [],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={emptyRoute}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(container.textContent).toContain("Status Kesiapan Armada Bus");
+      expect(container.textContent).toContain("Belum ada laporan data kesiapan armada");
+    });
+  });
+
 });
 

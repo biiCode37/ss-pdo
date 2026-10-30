@@ -1,5 +1,5 @@
 // ponytail: Implementasi modal bottom sheet mandiri berbasis vanilla CSS variables tanpa dependency modal eksternal
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   X,
   ExternalLink,
@@ -12,7 +12,7 @@ import {
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
-import { formatNumber, formatDecimal } from "../monitoringUtils";
+import { formatNumber, formatDecimal, extractRouteTroubledUnits } from "../monitoringUtils";
 import { getRoutePeakRecord } from "@/constants/routeRecords";
 
 export interface KorwilRouteDetailBottomSheetProps {
@@ -28,6 +28,11 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
   onClose,
   onSelectRoute,
 }) => {
+  const troubledUnits = useMemo(() => {
+    if (!isOpen || !route) return [];
+    return extractRouteTroubledUnits(route);
+  }, [isOpen, route]);
+
   // Coordinated body scroll lock saat sheet terbuka
   useEffect(() => {
     if (!isOpen) return;
@@ -388,6 +393,70 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 </span>
               </div>
             </div>
+            {troubledUnits.length > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "10px" }}>
+                {troubledUnits.map((u, idx) => (
+                  <div
+                    key={`${u.unit}-${idx}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "5px 8px",
+                      borderRadius: "8px",
+                      background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
+                      border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
+                      gap: "8px",
+                    }}
+                  >
+                    <div style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
+                      <span style={{ fontSize: "11.5px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
+                        {u.unit}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "10.5px",
+                          color: "var(--text-secondary, #888)",
+                          marginTop: "1px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                        title={u.note}
+                      >
+                        {u.note}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+                      <span
+                        style={{
+                          fontSize: "9px",
+                          fontWeight: 700,
+                          background: u.badgeBg,
+                          color: u.badgeColor,
+                          padding: "2px 5px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {u.statusCode}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "9px",
+                          fontWeight: 600,
+                          color: "var(--text-secondary, #888)",
+                          padding: "2px 4px",
+                          borderRadius: "4px",
+                          background: "rgba(255, 255, 255, 0.06)",
+                        }}
+                      >
+                        {u.shifts.map((s) => `S${s}`).join(" • ")}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* GRUP 2: Rincian Penumpang per Shift & Target Capaian */}
