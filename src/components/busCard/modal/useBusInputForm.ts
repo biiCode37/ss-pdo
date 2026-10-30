@@ -608,6 +608,7 @@ export function useBusInputForm({
     isKmAkhir1Locked,
     isKmAwal2Locked,
     isKmAkhir2Locked,
+    headerMap,
   };
 }
 

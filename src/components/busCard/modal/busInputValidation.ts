@@ -142,7 +142,22 @@ export function validateBusInputForm(params: ValidateBusInputFormParams): string
   const errors: string[] = [];
 
   if (isSingleMode) {
-    if (effectiveCategory === "toaShift1") {
+    if (
+      effectiveCategory === "trip" ||
+      effectiveCategory === "tripPergi" ||
+      effectiveCategory === "tripPulang"
+    ) {
+      const errTp = validateTripCount(
+        tripPergi,
+        headerMap?.tripPergiLabel || TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PERGI,
+      );
+      if (errTp) errors.push(errTp);
+      const errTpl = validateTripCount(
+        tripPulang,
+        headerMap?.tripPulangLabel || TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG,
+      );
+      if (errTpl) errors.push(errTpl);
+    } else if (effectiveCategory === "toaShift1") {
       const err = validateToaValue(
         toaShift1,
         TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S1,

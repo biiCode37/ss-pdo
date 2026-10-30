@@ -49,6 +49,11 @@ export const SINGLE_COLUMN_META: Record<
   string,
   { label: string; placeholder: string; key: keyof BusData }
 > = {
+  trip: {
+    label: TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_TRIP_CARD,
+    placeholder: "0",
+    key: "tripPergi",
+  },
   toaShift1: {
     label: TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S1,
     placeholder: TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.TOA_S1,

@@ -115,6 +115,7 @@ describe("BusInputModalSingleFocus Component", () => {
     isKmAkhir1Locked: false,
     isKmAwal2Locked: true,
     isKmAkhir2Locked: true,
+    headerMap: undefined,
     ...overrides,
   });
 
@@ -537,6 +538,43 @@ describe("BusInputModalSingleFocus Component", () => {
       const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
       expect(textarea).not.toBeNull();
       expect(textarea.value).toBe("");
+    });
+  });
+
+  describe("Kategori Trip / Ritase (SingleFocusTrip)", () => {
+    it("merender form fokus Trip Pergi dan Trip Pulang beserta Total Ritase PP saat activeCategory adalah trip", () => {
+      const form = createMockForm({
+        effectiveCategory: "trip",
+        tripPergi: "5",
+        tripPulang: "3",
+      });
+
+      renderComponent({ form, activeCategory: "trip" });
+
+      const pergiInput = container.querySelector("#single-input-tripPergi") as HTMLInputElement;
+      const pulangInput = container.querySelector("#single-input-tripPulang") as HTMLInputElement;
+
+      expect(pergiInput).not.toBeNull();
+      expect(pulangInput).not.toBeNull();
+      expect(pergiInput.value).toBe("5");
+      expect(pulangInput.value).toBe("3");
+      expect(container.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TRIP_LABEL);
+      expect(container.textContent).toContain("4"); // (5+3)/2 = 4 Rit PP
+    });
+
+    it("menampilkan input catatan saat showKeterangan aktif pada mode trip", () => {
+      const form = createMockForm({
+        effectiveCategory: "trip",
+        tripPergi: "2",
+        tripPulang: "2",
+        showKeterangan: true,
+        keterangan: "Pagi lancar",
+      });
+
+      renderComponent({ form, activeCategory: "trip" });
+
+      const textarea = container.querySelector("#single-input-keterangan") as HTMLTextAreaElement;
+      expect(textarea).not.toBeNull();
     });
   });
 });

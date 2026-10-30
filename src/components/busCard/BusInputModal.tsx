@@ -302,6 +302,7 @@ export function BusInputModal({
                 form={form}
                 activeCategory={activeCategory}
                 busKmAwal1={bus.kmAwal1 || previousDayKmAkhir2}
+                headerMap={headerMap}
               />
             )}
 
