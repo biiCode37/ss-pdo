@@ -1,8 +1,12 @@
 import React from "react";
+import { RotateCcw } from "lucide-react";
 import { TEXT_ALERTS } from "@/constants/texts";
-import { parseKeterangan } from "@/utils/keteranganUtils";
+import {
+  extractKeteranganTokens,
+  formatKeteranganTokens,
+} from "@/utils/keteranganUtils";
 
-// ponytail: Komponen preset keterangan terisolasi dan modular, reusable untuk S1, S2, dan Full Form
+// ponytail: Komponen preset keterangan terisolasi, modular, dan mendukung multi-select non-destruktif
 
 export interface KeteranganPresetBarProps {
   value: string;
@@ -18,72 +22,64 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
   shift,
 }) => {
   const isShift2 = shift === 2 || Boolean(shiftLabel && shiftLabel.includes("2"));
-  const parsed = parseKeterangan(value);
-  const trimmed = (value || "").trim();
+  const tokens = extractKeteranganTokens(value);
 
-  const isBaActive = Boolean(
-    (parsed.prefix && parsed.prefix.startsWith("BA.")) ||
-    /^BA(?:\.|$|\s)/i.test(trimmed)
-  );
-  const currentBaCode = parsed.prefix
-    ? parsed.prefix.replace("BA.", "")
-    : (trimmed.match(/^BA\.?0?([1-4])/i)?.[1]?.padStart(2, "0") || "");
-
-  const isOffActive = trimmed.toUpperCase() === "OFF";
-  const isToEvdalActive = trimmed.toUpperCase() === "TO EVDAL";
-  const isOkbActive = trimmed.toUpperCase() === "OKB";
-  const isRenopActive = trimmed.toUpperCase() === "RENOP";
+  const isBaActive = Boolean(tokens.baCode);
+  const currentBaCode = tokens.baCode || "";
+  const isOffActive = tokens.isOff;
+  const isToEvdalActive = tokens.isToEvdal;
+  const isOkbActive = tokens.isOkb;
+  const isRenopActive = tokens.isRenop;
 
   const handleToggleBa = () => {
-    if (isBaActive) {
-      // Toggle off BA: hilangkan prefix BA jika ada detail, atau kosongkan
-      const cleanDetail = parsed.detail.trim();
-      onChange(cleanDetail);
+    const next = extractKeteranganTokens(value);
+    if (next.baCode) {
+      next.baCode = null;
+      onChange(formatKeteranganTokens(next));
     } else {
-      // Aktifkan BA dengan default 01
-      const detail = trimmed ? ` ${trimmed}` : "";
-      onChange(detail ? `BA.01${detail}` : "BA.01 ");
+      next.baCode = "01";
+      const formatted = formatKeteranganTokens(next);
+      onChange(next.detail ? formatted : `${formatted} `);
     }
   };
 
-  const handleSelectBaCode = (newCode: string) => {
-    const detail = parsed.detail.trim();
-    onChange(detail ? `BA.${newCode} ${detail}` : `BA.${newCode} `);
+  const handleSelectBaCode = (newCode: "01" | "02" | "03" | "04") => {
+    const next = extractKeteranganTokens(value);
+    next.baCode = newCode;
+    const formatted = formatKeteranganTokens(next);
+    onChange(next.detail ? formatted : `${formatted} `);
   };
 
-  const handleSelectOff = () => {
-    if (isOffActive) {
-      onChange("");
-    } else {
-      onChange("OFF");
-    }
+  const handleToggleOff = () => {
+    const next = extractKeteranganTokens(value);
+    next.isOff = !next.isOff;
+    onChange(formatKeteranganTokens(next));
   };
 
-  const handleSelectToEvdal = () => {
-    if (isToEvdalActive) {
-      onChange("");
-    } else {
-      onChange("TO EVDAL");
-    }
+  const handleToggleToEvdal = () => {
+    const next = extractKeteranganTokens(value);
+    next.isToEvdal = !next.isToEvdal;
+    onChange(formatKeteranganTokens(next));
   };
 
-  const handleSelectOkb = () => {
-    if (isOkbActive) {
-      onChange("");
-    } else {
-      onChange("OKB");
-    }
+  const handleToggleOkb = () => {
+    const next = extractKeteranganTokens(value);
+    next.isOkb = !next.isOkb;
+    onChange(formatKeteranganTokens(next));
   };
 
-  const handleSelectRenop = () => {
-    if (isRenopActive) {
-      onChange("");
-    } else {
-      onChange("Renop");
-    }
+  const handleToggleRenop = () => {
+    const next = extractKeteranganTokens(value);
+    next.isRenop = !next.isRenop;
+    onChange(formatKeteranganTokens(next));
+  };
+
+  const handleReset = () => {
+    onChange("");
   };
 
   const texts = TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS;
+  const hasValue = Boolean(value && value.trim());
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "8px" }}>
@@ -101,9 +97,9 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
         </span>
       )}
 
-      {/* Baris 1: Preset Buttons Utama: [BA] [OFF] [TO EVDAL] */}
+      {/* Baris 1: Preset Buttons Utama [BA] [OFF] [TO EVDAL] [OKB] [Renop] dan Tombol [Reset] */}
       <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-        {/* Tombol Preset BA */}
+        {/* Tombol Preset BA (Multi-select) */}
         <button
           type="button"
           onClick={handleToggleBa}
@@ -128,10 +124,10 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           {texts.BTN_BA}
         </button>
 
-        {/* Tombol Preset OFF (Kuning) */}
+        {/* Tombol Preset OFF (Kuning, Multi-select) */}
         <button
           type="button"
-          onClick={handleSelectOff}
+          onClick={handleToggleOff}
           style={{
             padding: "5px 12px",
             borderRadius: "8px",
@@ -151,10 +147,10 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           {texts.BTN_OFF}
         </button>
 
-        {/* Tombol Preset TO EVDAL (Merah) */}
+        {/* Tombol Preset TO EVDAL (Merah, Multi-select) */}
         <button
           type="button"
-          onClick={handleSelectToEvdal}
+          onClick={handleToggleToEvdal}
           style={{
             padding: "5px 12px",
             borderRadius: "8px",
@@ -174,11 +170,11 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           {texts.BTN_TO_EVDAL}
         </button>
 
-        {/* Khusus Shift 2: Tombol Preset OKB (Ungu) */}
+        {/* Khusus Shift 2: Tombol Preset OKB (HIJAU saat aktif, Multi-select) */}
         {isShift2 && (
           <button
             type="button"
-            onClick={handleSelectOkb}
+            onClick={handleToggleOkb}
             style={{
               padding: "5px 12px",
               borderRadius: "8px",
@@ -186,12 +182,12 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
               fontWeight: 700,
               cursor: "pointer",
               border: isOkbActive
-                ? "1px solid #a855f7"
+                ? "1px solid #10b981"
                 : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
               background: isOkbActive
-                ? "rgba(168, 85, 247, 0.2)"
+                ? "rgba(16, 185, 129, 0.2)"
                 : "rgba(255, 255, 255, 0.05)",
-              color: isOkbActive ? "#a855f7" : "var(--text-primary, #f8fafc)",
+              color: isOkbActive ? "#10b981" : "var(--text-primary, #f8fafc)",
               transition: "all 0.15s ease",
             }}
           >
@@ -199,11 +195,11 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           </button>
         )}
 
-        {/* Khusus Shift 2: Tombol Preset Renop (Emerald / Hijau) */}
+        {/* Khusus Shift 2: Tombol Preset Renop (Emerald / Hijau, Multi-select) */}
         {isShift2 && (
           <button
             type="button"
-            onClick={handleSelectRenop}
+            onClick={handleToggleRenop}
             style={{
               padding: "5px 12px",
               borderRadius: "8px",
@@ -223,6 +219,39 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             {texts.BTN_RENOP}
           </button>
         )}
+
+        {/* Tombol Reset (Membersihkan semua teks & preset) */}
+        <button
+          type="button"
+          data-testid="reset-keterangan-btn"
+          onClick={handleReset}
+          disabled={!hasValue}
+          style={{
+            marginLeft: "auto",
+            padding: "5px 11px",
+            borderRadius: "8px",
+            fontSize: "0.76rem",
+            fontWeight: 600,
+            cursor: hasValue ? "pointer" : "default",
+            border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
+            background: hasValue
+              ? "rgba(255, 255, 255, 0.08)"
+              : "rgba(255, 255, 255, 0.03)",
+            color: hasValue
+              ? "var(--text-secondary, #94a3b8)"
+              : "rgba(255, 255, 255, 0.2)",
+            opacity: hasValue ? 1 : 0.4,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "5px",
+            transition: "all 0.15s ease",
+          }}
+          title={texts.RESET_TOOLTIP}
+          aria-label={texts.RESET_TOOLTIP}
+        >
+          <RotateCcw size={12} />
+          <span>{texts.BTN_RESET}</span>
+        </button>
       </div>
 
       {/* Baris 2: Pill Ringkas Jenis BA [01, 02, 03, 04] (Hanya muncul jika BA aktif) */}
@@ -249,7 +278,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
                 type="button"
                 data-ba-code={code}
                 title={title}
-                onClick={() => handleSelectBaCode(code)}
+                onClick={() => handleSelectBaCode(code as "01" | "02" | "03" | "04")}
                 style={{
                   padding: "4px 10px",
                   borderRadius: "6px",

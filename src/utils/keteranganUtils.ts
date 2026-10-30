@@ -96,6 +96,113 @@ export function toSmartTitleCase(input?: string | null): string {
     .join(' ');
 }
 
+export interface KeteranganMultiTokens {
+  isOkb: boolean;
+  isRenop: boolean;
+  baCode: '01' | '02' | '03' | '04' | null;
+  isOff: boolean;
+  isToEvdal: boolean;
+  detail: string;
+}
+
+/**
+ * Ekstraksi token-token preset (OKB, Renop, BA, OFF, TO EVDAL) dan detail teks bebas.
+ * Mendukung pencatatan multi-select / multi-status secara non-destruktif.
+ */
+export function extractKeteranganTokens(raw?: string | null): KeteranganMultiTokens {
+  if (!raw || typeof raw !== 'string') {
+    return { isOkb: false, isRenop: false, baCode: null, isOff: false, isToEvdal: false, detail: '' };
+  }
+  let trimmed = raw.trim();
+  if (!trimmed || trimmed.toUpperCase() === 'SGO') {
+    return { isOkb: false, isRenop: false, baCode: null, isOff: false, isToEvdal: false, detail: '' };
+  }
+
+  // Hilangkan prefix shift S1: atau S2: jika ada agar tidak mengotori detail
+  trimmed = trimmed.replace(/^S[12]\s*[:.-]\s*/i, '').trim();
+
+  const isOkb = /\bOKB\b/i.test(trimmed);
+  const isRenop = /\bRENOP\b/i.test(trimmed);
+  const isOff = /\bOFF\b/i.test(trimmed);
+  const isToEvdal = /\bTO\s*[-._:/]?\s*EVDAL\b/i.test(trimmed);
+
+  const baMatch = trimmed.match(/\bBA\s*[-._:/]?\s*0?([1-4])\b/i);
+  const baCode = baMatch ? (('0' + baMatch[1]).slice(-2) as '01' | '02' | '03' | '04') : null;
+
+  let detail = trimmed
+    .replace(/\bOKB\b/gi, '')
+    .replace(/\bRENOP\b/gi, '')
+    .replace(/\bTO\s*[-._:/]?\s*EVDAL\b/gi, '')
+    .replace(/\bOFF\b/gi, '')
+    .replace(/\bBA\s*[-._:/]?\s*0?[1-4]\b/gi, '')
+    .replace(/^[\s-:;,|/.]+/, '')
+    .replace(/[\s-:;,|/.]+$/, '')
+    .trim();
+
+  // Khusus NP1 / NP2 jika terkait BA.02 atau berdiri sendiri
+  if (/^NP\s*[-._:/]?\s*1$/i.test(detail)) {
+    detail = 'NP1';
+  } else if (/^NP\s*[-._:/]?\s*2$/i.test(detail)) {
+    detail = 'NP2';
+  } else if (detail) {
+    detail = toSmartTitleCase(detail);
+  }
+
+  return { isOkb, isRenop, baCode, isOff, isToEvdal, detail };
+}
+
+/**
+ * Merangkai token-token preset dan detail teks bebas menjadi string terstruktur baku.
+ */
+export function formatKeteranganTokens(tokens: KeteranganMultiTokens): string {
+  const parts: string[] = [];
+
+  // 1. Status lifecycle operasional awal (OKB / Renop)
+  if (tokens.isOkb) parts.push('OKB');
+  if (tokens.isRenop) parts.push('Renop');
+
+  // 2. Kode kendala / jenis insiden
+  if (tokens.baCode) {
+    parts.push(`BA.${tokens.baCode}`);
+  }
+  if (tokens.isToEvdal) parts.push('TO EVDAL');
+  if (tokens.isOff) parts.push('OFF');
+
+  let cleanDetail = (tokens.detail || '').trim();
+  if (tokens.baCode === '02' && cleanDetail) {
+    if (/^NP\s*[-._:/]?\s*1$/i.test(cleanDetail)) {
+      cleanDetail = 'NP1';
+    } else if (/^NP\s*[-._:/]?\s*2$/i.test(cleanDetail)) {
+      cleanDetail = 'NP2';
+    } else {
+      cleanDetail = toSmartTitleCase(cleanDetail);
+    }
+  } else if (cleanDetail) {
+    cleanDetail = toSmartTitleCase(cleanDetail);
+  }
+
+  if (parts.length === 0) {
+    return cleanDetail || '';
+  }
+
+  if (cleanDetail) {
+    const lastPart = parts[parts.length - 1];
+    // Khusus BA jika berada di posisi terakhir: "BA.02 NP1" atau "OKB - BA.02 NP1"
+    if (lastPart.startsWith('BA.')) {
+      const beforeBa = parts.slice(0, -1);
+      const baWithDetail = `${lastPart} ${cleanDetail}`;
+      if (beforeBa.length > 0) {
+        return `${beforeBa.join(' - ')} - ${baWithDetail}`;
+      }
+      return baWithDetail;
+    }
+
+    return `${parts.join(' - ')} - ${cleanDetail}`;
+  }
+
+  return parts.join(' - ');
+}
+
 export interface ParsedKeterangan {
   prefix: string | null; // e.g. "BA.01", "BA.02", "BA.03", "BA.04"
   detail: string;        // e.g. "NP1", "NP2", "Rusak transmisi"
@@ -103,12 +210,6 @@ export interface ParsedKeterangan {
   fixedValue: string | null;
   normalized: string;    // Full canonical string e.g. "BA.02 NP1" or "OFF"
 }
-
-/**
- * Regex untuk mendeteksi seluruh variasi penulisan BA 01 s/d 04:
- * Mendukung: "BA01", "ba01", "BA 1", "ba-1", "BA.01", "BA_02", "ba:03", "BA/4", dll.
- */
-const BA_PATTERN = /^\s*BA\s*[-._:/]?\s*0?([1-4])\b(?:\s*[-:]?\s*(.*))?$/i;
 
 /**
  * Normalisasi format keterangan menjadi format baku kanonik.
@@ -142,48 +243,14 @@ export function normalizeKeterangan(raw?: string | null): string {
     return normRest ? `${shiftTag}: ${normRest}` : '';
   }
 
-  // 1. Cek variasi BA.01 s/d BA.04
-  const baMatch = trimmed.match(BA_PATTERN);
-  if (baMatch) {
-    const digit = baMatch[1]; // '1', '2', '3', atau '4'
-    const prefix = `BA.0${digit}`;
-    let detail = baMatch[2] ? baMatch[2].trim() : '';
-
-    // Khusus BA.02: rapikan detail jika berisi variasi penulisan NP1 / NP2
-    if (digit === '2' && detail) {
-      if (/^NP\s*[-._:/]?\s*1$/i.test(detail)) {
-        detail = 'NP1';
-      } else if (/^NP\s*[-._:/]?\s*2$/i.test(detail)) {
-        detail = 'NP2';
-      } else {
-        detail = toSmartTitleCase(detail);
-      }
-    } else if (detail) {
-      detail = toSmartTitleCase(detail);
-    }
-    return detail ? `${prefix} ${detail}` : prefix;
+  const tokens = extractKeteranganTokens(trimmed);
+  if (tokens.isOkb || tokens.isRenop || tokens.baCode || tokens.isOff || tokens.isToEvdal) {
+    return formatKeteranganTokens(tokens);
   }
 
-  // 2. Cek variasi preset tetap (Fixed Values) & Migrasi NP1/NP2 ke BA.02
-  const upper = trimmed.toUpperCase();
-  if (upper === 'OFF' || /^OFF(?:\s*\(.*\))?$/i.test(trimmed)) {
-    return 'OFF';
-  }
-  if (/^NP\s*[-._:/]?\s*1$/i.test(trimmed)) {
-    return 'NP1';
-  }
-  if (/^NP\s*[-._:/]?\s*2$/i.test(trimmed)) {
-    return 'NP2';
-  }
-  if (/^TO\s*[-._:/]?\s*EVDAL$/i.test(trimmed)) {
-    return 'TO EVDAL';
-  }
-  if (upper === 'OKB') {
-    return 'OKB';
-  }
-  if (upper === 'RENOP') {
-    return 'Renop';
-  }
+  // Standalone NP1 / NP2
+  if (/^NP\s*[-._:/]?\s*1$/i.test(trimmed)) return 'NP1';
+  if (/^NP\s*[-._:/]?\s*2$/i.test(trimmed)) return 'NP2';
 
   return toSmartTitleCase(trimmed);
 }
@@ -191,6 +258,7 @@ export function normalizeKeterangan(raw?: string | null): string {
 /**
  * Memecah string keterangan menjadi komponen terstruktur untuk modal input & visualisasi badge.
  */
+
 export function parseKeterangan(raw?: string | null): ParsedKeterangan {
   const normalized = normalizeKeterangan(raw);
   if (!normalized) {

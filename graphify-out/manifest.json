@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "src/utils/keteranganUtils.test.ts": {
-    "mtime": 1793104751.5231938,
-    "ast_hash": "a9a37319036d9fff960bc21c00eb680f",
+    "mtime": 1793317746.1295,
+    "ast_hash": "ebd34162f629e01e0621dd978e3b8c15",
     "semantic_hash": ""
   },
   "src/utils/keteranganUtils.ts": {
-    "mtime": 1793104751.5242033,
-    "ast_hash": "9aeb9efd8c80a6e1996246eb6d01bd08",
+    "mtime": 1793318006.8504157,
+    "ast_hash": "a646e1446eccafbdaa1f5e8a8055faba",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-08-23-satset-mode-design.md": {
@@ -1360,8 +1360,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1793104751.50438,
-    "ast_hash": "ac035307053c8a6b0ad0e4a0dc154932",
+    "mtime": 1793317626.5295117,
+    "ast_hash": "c3a20d36923724c8f78c60b3e278f4e1",
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1793116240.497943,
-    "ast_hash": "1ce355e5db83c30a948fe336b28679c6",
+    "mtime": 1793317646.5781434,
+    "ast_hash": "3157cc4aaf50826bdcf65ee9a44fad11",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -5585,13 +5585,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/notes/KeteranganPresetBar.test.tsx": {
-    "mtime": 1793104751.4679604,
-    "ast_hash": "ff5ad92da4a1c194f6285265cd4b2294",
+    "mtime": 1793317802.5273461,
+    "ast_hash": "b0f74fc551327ece71a26236946542b4",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/notes/KeteranganPresetBar.tsx": {
-    "mtime": 1793104751.468921,
-    "ast_hash": "c6f6604b3b8a02741e3e25507b2dbb1e",
+    "mtime": 1793317791.9605625,
+    "ast_hash": "5f495c32a531052020edb4325907c6cc",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-10-27-preset-keterangan-and-shift-split.md": {

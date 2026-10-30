@@ -224,7 +224,7 @@ describe("KeteranganPresetBar Component", () => {
     const okbBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "OKB"
     );
-    expect(okbBtnActive?.style.color).toContain("#a855f7");
+    expect(okbBtnActive?.style.color).toContain("#10b981");
     act(() => {
       okbBtnActive!.click();
     });
@@ -257,6 +257,79 @@ describe("KeteranganPresetBar Component", () => {
     expect(renopBtnActive?.style.color).toContain("#10b981");
     act(() => {
       renopBtnActive!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("");
+  });
+  it("supports multi-select presets and preserves free text details (Case: OKB + Pramudi Sakit / BA.02)", () => {
+    const handleChange = vi.fn();
+
+    // Skenario 1: Sudah ada teks "Pramudi Sakit", klik OKB -> "OKB - Pramudi Sakit"
+    act(() => {
+      root.render(<KeteranganPresetBar value="Pramudi Sakit" onChange={handleChange} shift={2} />);
+    });
+    const okbBtn = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.trim() === "OKB"
+    );
+    act(() => {
+      okbBtn!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("OKB - Pramudi Sakit");
+
+    // Skenario 2: Dari "OKB - Pramudi Sakit", klik BA -> "OKB - BA.01 Pramudi Sakit"
+    act(() => {
+      root.render(<KeteranganPresetBar value="OKB - Pramudi Sakit" onChange={handleChange} shift={2} />);
+    });
+    const baBtn = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.trim() === "BA"
+    );
+    act(() => {
+      baBtn!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("OKB - BA.01 Pramudi Sakit");
+
+    // Skenario 3: Klik pill 02 -> "OKB - BA.02 Pramudi Sakit"
+    act(() => {
+      root.render(<KeteranganPresetBar value="OKB - BA.01 Pramudi Sakit" onChange={handleChange} shift={2} />);
+    });
+    const pill02 = container.querySelector<HTMLButtonElement>("button[data-ba-code='02']");
+    act(() => {
+      pill02!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("OKB - BA.02 Pramudi Sakit");
+
+    // Skenario 4: Toggle off OKB -> menyisakan "BA.02 Pramudi Sakit"
+    act(() => {
+      root.render(<KeteranganPresetBar value="OKB - BA.02 Pramudi Sakit" onChange={handleChange} shift={2} />);
+    });
+    const okbActiveBtn = Array.from(container.querySelectorAll("button")).find(
+      (b) => b.textContent?.trim() === "OKB"
+    );
+    act(() => {
+      okbActiveBtn!.click();
+    });
+    expect(handleChange).toHaveBeenCalledWith("BA.02 Pramudi Sakit");
+  });
+
+  it("renders Reset button, disables when empty, and resets value to empty when clicked", () => {
+    const handleChange = vi.fn();
+
+    // Saat kosong, tombol reset disabled
+    act(() => {
+      root.render(<KeteranganPresetBar value="" onChange={handleChange} />);
+    });
+    const resetBtnDisabled = container.querySelector<HTMLButtonElement>("button[data-testid='reset-keterangan-btn']");
+    expect(resetBtnDisabled).not.toBeNull();
+    expect(resetBtnDisabled?.disabled).toBe(true);
+
+    // Saat berisi nilai, tombol reset aktif dan mengosongkan teks saat diklik
+    act(() => {
+      root.render(<KeteranganPresetBar value="OKB - BA.02 Pramudi Sakit" onChange={handleChange} shift={2} />);
+    });
+    const resetBtn = container.querySelector<HTMLButtonElement>("button[data-testid='reset-keterangan-btn']");
+    expect(resetBtn?.disabled).toBe(false);
+
+    act(() => {
+      resetBtn!.click();
     });
     expect(handleChange).toHaveBeenCalledWith("");
   });
