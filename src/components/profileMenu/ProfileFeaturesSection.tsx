@@ -16,7 +16,7 @@ import {
   showErrorAlert,
 } from "@/utils/alertUtils";
 import { formatUserError } from "@/utils/errorFormatter";
-import { TEXT_DASHBOARD } from "@/constants/texts";
+import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
 import type { UserRole } from "@/utils/roleStorage";
 
 interface ProfileFeaturesSectionProps {
@@ -24,6 +24,7 @@ interface ProfileFeaturesSectionProps {
   onDismiss: () => void;
   onOpenRegionalMonitoring?: () => void;
   isInMonitoringView?: boolean;
+  isMonitoringUnderMaintenance?: boolean;
   onOpenAccumulation?: () => void;
   onFormatWholeSheet?: () => Promise<void>;
   currentTabName?: string;
@@ -39,6 +40,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
   onDismiss,
   onOpenRegionalMonitoring,
   isInMonitoringView,
+  isMonitoringUnderMaintenance,
   onOpenAccumulation,
   onFormatWholeSheet,
   currentTabName,
@@ -120,12 +122,30 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
               fontWeight: 500,
               fontSize: "13.5px",
               cursor: "pointer",
+              opacity: isMonitoringUnderMaintenance ? 0.85 : 1,
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <Globe size={18} style={{ color: "var(--accent-color)" }} />
               <div style={{ textAlign: "left" }}>
-                <div>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <span>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</span>
+                  {isMonitoringUnderMaintenance && (
+                    <span
+                      style={{
+                        fontSize: "10px",
+                        padding: "1px 6px",
+                        borderRadius: "6px",
+                        background: "rgba(234, 179, 8, 0.15)",
+                        color: "var(--warning-color, #eab308)",
+                        border: "1px solid rgba(234, 179, 8, 0.3)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {TEXT_PAGE_MANAGEMENT.STATUS.MAINTENANCE}
+                    </span>
+                  )}
+                </div>
                 <div
                   style={{
                     fontSize: "11px",

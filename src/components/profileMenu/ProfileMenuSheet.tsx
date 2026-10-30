@@ -15,6 +15,7 @@ export function ProfileMenuSheet({
   onOpenAccumulation,
   onOpenRegionalMonitoring,
   isInMonitoringView,
+  isMonitoringUnderMaintenance,
   onOpenUserManagement,
   onOpenPageManagement,
   isDarkMode,
@@ -170,6 +171,7 @@ export function ProfileMenuSheet({
           onDismiss={handleDismiss}
           onOpenRegionalMonitoring={onOpenRegionalMonitoring}
           isInMonitoringView={isInMonitoringView}
+          isMonitoringUnderMaintenance={isMonitoringUnderMaintenance}
           onOpenAccumulation={onOpenAccumulation}
           onFormatWholeSheet={onFormatWholeSheet}
           currentTabName={currentTabName}

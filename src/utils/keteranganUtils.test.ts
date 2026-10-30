@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   normalizeKeterangan,
+  extractKeteranganTokens,
+  formatKeteranganTokens,
   parseKeterangan,
   filterBusesForKmCopy,
   combineShiftKeterangan,
@@ -468,6 +470,126 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(isUnitOffOrToEvdal('FOTO KERUSAKAN')).toBe(false);
     });
   });
+  describe('extractKeteranganTokens & formatKeteranganTokens (Multi-Select Presets)', () => {
+    it('extracts single tokens accurately', () => {
+      expect(extractKeteranganTokens('OKB')).toEqual({
+        isOkb: true,
+        isRenop: false,
+        baCode: null,
+        isOff: false,
+        isToEvdal: false,
+        detail: '',
+      });
+      expect(extractKeteranganTokens('Renop')).toEqual({
+        isOkb: false,
+        isRenop: true,
+        baCode: null,
+        isOff: false,
+        isToEvdal: false,
+        detail: '',
+      });
+      expect(extractKeteranganTokens('OFF')).toEqual({
+        isOkb: false,
+        isRenop: false,
+        baCode: null,
+        isOff: true,
+        isToEvdal: false,
+        detail: '',
+      });
+      expect(extractKeteranganTokens('TO EVDAL')).toEqual({
+        isOkb: false,
+        isRenop: false,
+        baCode: null,
+        isOff: false,
+        isToEvdal: true,
+        detail: '',
+      });
+      expect(extractKeteranganTokens('BA.02 NP1')).toEqual({
+        isOkb: false,
+        isRenop: false,
+        baCode: '02',
+        isOff: false,
+        isToEvdal: false,
+        detail: 'NP1',
+      });
+    });
+
+    it('extracts multi-tokens combinations (e.g. OKB + BA.02 NP1, OKB + Pramudi Sakit)', () => {
+      const case1 = extractKeteranganTokens('OKB - Pramudi Sakit');
+      expect(case1.isOkb).toBe(true);
+      expect(case1.detail).toBe('Pramudi Sakit');
+
+      const case2 = extractKeteranganTokens('OKB - BA.02 NP1');
+      expect(case2.isOkb).toBe(true);
+      expect(case2.baCode).toBe('02');
+      expect(case2.detail).toBe('NP1');
+
+      const case3 = extractKeteranganTokens('OKB - OFF');
+      expect(case3.isOkb).toBe(true);
+      expect(case3.isOff).toBe(true);
+      expect(case3.detail).toBe('');
+
+      const case4 = extractKeteranganTokens('Renop - BA.01 Pintu Rusak');
+      expect(case4.isRenop).toBe(true);
+      expect(case4.baCode).toBe('01');
+      expect(case4.detail).toBe('Pintu Rusak');
+    });
+
+    it('formats tokens into canonical string with proper ordering', () => {
+      expect(
+        formatKeteranganTokens({
+          isOkb: true,
+          isRenop: false,
+          baCode: null,
+          isOff: false,
+          isToEvdal: false,
+          detail: 'Pramudi Sakit',
+        })
+      ).toBe('OKB - Pramudi Sakit');
+
+      expect(
+        formatKeteranganTokens({
+          isOkb: true,
+          isRenop: false,
+          baCode: '02',
+          isOff: false,
+          isToEvdal: false,
+          detail: 'NP1',
+        })
+      ).toBe('OKB - BA.02 NP1');
+
+      expect(
+        formatKeteranganTokens({
+          isOkb: true,
+          isRenop: false,
+          baCode: null,
+          isOff: true,
+          isToEvdal: false,
+          detail: '',
+        })
+      ).toBe('OKB - OFF');
+
+      expect(
+        formatKeteranganTokens({
+          isOkb: false,
+          isRenop: true,
+          baCode: '01',
+          isOff: false,
+          isToEvdal: false,
+          detail: 'Pintu Rusak',
+        })
+      ).toBe('Renop - BA.01 Pintu Rusak');
+
+      expect(
+        formatKeteranganTokens({
+          isOkb: false,
+          isRenop: false,
+          baCode: null,
+          isOff: false,
+          isToEvdal: false,
+          detail: '',
+        })
+      ).toBe('');
+    });
+  });
 });
-
-

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useMobileBackHandler } from "@/hooks/useMobileBackHandler";
 import { slugifyUnitId } from "@/utils/analytics";
 import { getStoredUserRole } from "@/utils/roleStorage";
+import type { PageKey } from "@/types/pageManagement";
 
 export type DashboardView =
   | "dashboard"
@@ -14,10 +15,11 @@ export type DashboardMainTab = "input" | "analytics" | "units";
 interface UseDashboardUiStateOptions {
   onClearError?: () => void;
   initialView?: DashboardView;
+  canAccessPage?: (pageKey: PageKey, userRole?: string | null) => boolean;
 }
 
 export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
-  const { onClearError, initialView } = options;
+  const { onClearError, initialView, canAccessPage } = options;
 
   // Global System & Connectivity States
   const [isOnline, setIsOnline] = useState(
@@ -33,11 +35,19 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
 
   // View Navigation States:
   // Selain peran 'pdo' (yaitu 'superadmin', 'admin', 'korwil', 'korlap'),
-  // halaman pembuka pertama aplikasi adalah 'regional_monitoring'.
+  // halaman pembuka pertama aplikasi adalah 'regional_monitoring'
+  // KECUALI jika halaman regional_monitoring sedang dinonaktifkan (maintenance)
+  // maka dialihkan (fallback cerdas) ke 'dashboard' rute tunggal.
   const [currentView, setCurrentView] = useState<DashboardView>(() => {
     if (initialView) return initialView;
     const role = getStoredUserRole();
-    return role !== "pdo" ? "regional_monitoring" : "dashboard";
+    if (role !== "pdo") {
+      if (canAccessPage && !canAccessPage("regional_monitoring", role)) {
+        return "dashboard";
+      }
+      return "regional_monitoring";
+    }
+    return "dashboard";
   });
   const [monitoringDate, setMonitoringDate] = useState<string | null>(null);
 
@@ -111,11 +121,31 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
   const userRole = getStoredUserRole();
   const isPdoRole = userRole === "pdo";
 
+  // Fallback adaptif dinamis: jika sedang berada di 'regional_monitoring' namun
+  // status halaman ditutup oleh superadmin di background/realtime,
+  // alihkan secara otomatis ke 'dashboard' rute tunggal jika tersedia.
+  useEffect(() => {
+    if (
+      currentView === "regional_monitoring" &&
+      canAccessPage &&
+      !canAccessPage("regional_monitoring", userRole)
+    ) {
+      if (canAccessPage("dashboard", userRole)) {
+        setCurrentView("dashboard");
+      }
+    }
+  }, [currentView, canAccessPage, userRole]);
+
+  const canAccessMonitoring =
+    !isPdoRole &&
+    (!canAccessPage || canAccessPage("regional_monitoring", userRole));
+
   // Hardware Back Navigation Interceptors
   // Bagi user non-PDO: 'dashboard' rute tunggal adalah sub-view dari 'regional_monitoring'
+  // Hanya aktif jika regional_monitoring memang aktif dan dapat diakses.
   useMobileBackHandler({
     id: "route_dashboard_view",
-    isOpen: !isPdoRole && currentView === "dashboard",
+    isOpen: canAccessMonitoring && currentView === "dashboard",
     onClose: () => setCurrentView("regional_monitoring"),
   });
 
@@ -130,14 +160,18 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
     id: "user_management_view",
     isOpen: currentView === "user_management",
     onClose: () =>
-      setCurrentView(isPdoRole ? "dashboard" : "regional_monitoring"),
+      setCurrentView(
+        isPdoRole || !canAccessMonitoring ? "dashboard" : "regional_monitoring",
+      ),
   });
 
   useMobileBackHandler({
     id: "page_management_view",
     isOpen: currentView === "page_management",
     onClose: () =>
-      setCurrentView(isPdoRole ? "dashboard" : "regional_monitoring"),
+      setCurrentView(
+        isPdoRole || !canAccessMonitoring ? "dashboard" : "regional_monitoring",
+      ),
   });
 
   useMobileBackHandler({

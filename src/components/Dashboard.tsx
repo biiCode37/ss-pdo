@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense, useMemo, useEffect, useRef } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { UserManagementSkeleton } from "@/components/Skeletons";
 import { AllRouteMonitoringPage } from "@/components/AllRouteMonitoringPage";
@@ -6,7 +6,7 @@ import { ProfileMenuSheet } from "@/components/ProfileMenuSheet";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { usePreviousDayOdometer } from "@/hooks/usePreviousDayOdometer";
 import { getStoredUserRole } from "@/utils/roleStorage";
-import { showAuthExpiredAlert, showSuccessToast } from "@/utils/alertUtils";
+import { showAuthExpiredAlert, showSuccessToast, showWarningToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
 
 import {
@@ -110,6 +110,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     handleSelectUnit,
   } = useDashboardUiState({
     onClearError: () => setError(null),
+    canAccessPage,
   });
 
   // 3. Fleet Status & Operational Report Hook
@@ -207,6 +208,27 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     onError: (msg: string) => setError(msg),
   });
 
+    const isMonitoringActive = canAccessPage("regional_monitoring", currentUserRole);
+  const isDashboardActive = canAccessPage("dashboard", currentUserRole);
+
+  // Fallback cerdas: Beri tahu user non-PDO jika Monitoring Wilayah dialihkan ke Dashboard karena pemeliharaan
+  const fallbackToastShownRef = useRef(false);
+  useEffect(() => {
+    if (isMonitoringActive) {
+      fallbackToastShownRef.current = false;
+      return;
+    }
+    if (
+      currentUserRole !== "pdo" &&
+      !isMonitoringActive &&
+      isDashboardActive &&
+      !fallbackToastShownRef.current
+    ) {
+      fallbackToastShownRef.current = true;
+      showWarningToast(TEXT_PAGE_MANAGEMENT.TOAST.FALLBACK_TO_DASHBOARD);
+    }
+  }, [currentUserRole, isMonitoringActive, isDashboardActive]);
+
   // 7. Dynamic Administration & Regional Views
   if (currentView === "page_management") {
     if (currentUserRole !== "superadmin") {
@@ -263,7 +285,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   }
 
   if (currentView === "regional_monitoring") {
-    if (!canAccessPage("regional_monitoring", currentUserRole)) {
+    if (!isMonitoringActive) {
+      if (isDashboardActive) {
+        setCurrentView("dashboard");
+        return null;
+      }
       return (
         <PageDisabledState
           message={
@@ -369,7 +395,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         onRouteCodeChange={(code: string) => setSelectedRouteCode(code)}
         routeSelectorOpenTrigger={routeSelectorOpenTrigger}
         onBackToMonitoring={
-          currentUserRole !== "pdo"
+          currentUserRole !== "pdo" && isMonitoringActive
             ? () => setCurrentView("regional_monitoring")
             : undefined
         }
@@ -466,9 +492,14 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
             ? undefined
             : () => {
                 setIsProfileMenuOpen(false);
+                if (!isMonitoringActive) {
+                  showWarningToast(TEXT_PAGE_MANAGEMENT.TOAST.MONITORING_UNDER_MAINTENANCE);
+                  return;
+                }
                 setCurrentView("regional_monitoring");
               }
         }
+        isMonitoringUnderMaintenance={!isMonitoringActive}
         isInMonitoringView={false}
         onOpenUserManagement={() => {
           setIsProfileMenuOpen(false);

@@ -29,6 +29,8 @@ export const TEXT_PAGE_MANAGEMENT = {
     UPDATE_SUCCESS: 'Status halaman berhasil diperbarui',
     UPDATE_FAILED: 'Gagal memperbarui status halaman',
     FETCH_FAILED: 'Gagal memuat konfigurasi halaman',
+    FALLBACK_TO_DASHBOARD: 'Monitoring Wilayah sedang dalam pemeliharaan. Anda dialihkan ke Dashboard Operasional Rute.',
+    MONITORING_UNDER_MAINTENANCE: 'Fitur Monitoring Wilayah saat ini sedang dalam pemeliharaan berkala oleh Administrator.',
   },
   PROFILE_MENU: {
     PAGE_MANAGEMENT: 'Manajemen Halaman',

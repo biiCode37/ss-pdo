@@ -6,6 +6,7 @@ export interface ProfileMenuSheetProps {
   onOpenAccumulation?: () => void;
   onOpenRegionalMonitoring?: () => void;
   isInMonitoringView?: boolean;
+  isMonitoringUnderMaintenance?: boolean;
   onOpenUserManagement?: () => void;
   onOpenPageManagement?: () => void;
   isDarkMode: boolean;

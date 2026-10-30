@@ -80,6 +80,7 @@ export interface QuickKorlapFleetModalProps {
   shift: 1 | 2;
   defaultRenops?: number;
   initialRealops?: number;
+  initialNotes?: string;
   onSaveSuccess: () => void;
 }
 
@@ -92,20 +93,23 @@ function QuickKorlapFleetModalComponent({
   shift,
   defaultRenops = 30,
   initialRealops,
+  initialNotes,
   onSaveSuccess,
 }: QuickKorlapFleetModalProps) {
+  const [currentShift, setCurrentShift] = useState<1 | 2>(shift);
   const [targetRenops, setTargetRenops] = useState<number>(defaultRenops);
   const [realops, setRealops] = useState<number>(initialRealops ?? defaultRenops);
-  const [rawNotes, setRawNotes] = useState<string>('');
+  const [rawNotes, setRawNotes] = useState<string>(initialNotes || '');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen) {
+      setCurrentShift(shift);
       setTargetRenops(defaultRenops);
       setRealops(initialRealops ?? defaultRenops);
-      setRawNotes('');
+      setRawNotes(initialNotes || '');
     }
-  }, [isOpen, defaultRenops, initialRealops]);
+  }, [isOpen, shift, defaultRenops, initialRealops, initialNotes]);
 
   if (!isOpen) return null;
 
@@ -143,7 +147,7 @@ function QuickKorlapFleetModalComponent({
           route_id: routeId,
           route_code: routeCode,
           date: selectedDate,
-          shift,
+          shift: currentShift,
           target_renops: targetRenops,
           realops,
           total_units: targetRenops,
@@ -175,7 +179,7 @@ function QuickKorlapFleetModalComponent({
           route_id: routeId,
           route_code: routeCode,
           date: selectedDate,
-          ...(shift === 1
+          ...(currentShift === 1
             ? {
                 renops_shift1: targetRenops,
                 realops_shift1: realops,
@@ -257,7 +261,7 @@ function QuickKorlapFleetModalComponent({
                 color: 'var(--color-text-muted, #94a3b8)',
               }}
             >
-              {TEXT_FLEET_STATUS.QUICK_KORLAP.SUBTITLE(routeCode, shift)}
+              {TEXT_FLEET_STATUS.QUICK_KORLAP.SUBTITLE(routeCode, currentShift)}
             </p>
           </div>
           <button
@@ -284,6 +288,59 @@ function QuickKorlapFleetModalComponent({
             gap: '16px',
           }}
         >
+          {/* Shift Segmented Tabs */}
+          <div>
+            <label
+              style={{
+                display: 'block',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                marginBottom: '6px',
+                color: 'var(--color-text-muted, #94a3b8)',
+              }}
+            >
+              Pilih Shift:
+            </label>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                onClick={() => setCurrentShift(1)}
+                style={{
+                  flex: 1,
+                  padding: '7px 12px',
+                  borderRadius: '8px',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  border: currentShift === 1 ? '1px solid var(--accent-color, #3ECF8E)' : '1px solid var(--color-border, #334155)',
+                  background: currentShift === 1 ? 'rgba(62, 207, 142, 0.15)' : 'rgba(0, 0, 0, 0.15)',
+                  color: currentShift === 1 ? 'var(--accent-color, #3ECF8E)' : 'var(--color-text-muted, #94a3b8)',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                Shift 1 (Pagi)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentShift(2)}
+                style={{
+                  flex: 1,
+                  padding: '7px 12px',
+                  borderRadius: '8px',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  border: currentShift === 2 ? '1px solid var(--accent-color, #3ECF8E)' : '1px solid var(--color-border, #334155)',
+                  background: currentShift === 2 ? 'rgba(62, 207, 142, 0.15)' : 'rgba(0, 0, 0, 0.15)',
+                  color: currentShift === 2 ? 'var(--accent-color, #3ECF8E)' : 'var(--color-text-muted, #94a3b8)',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                Shift 2 (Siang)
+              </button>
+            </div>
+          </div>
+
           <div
             style={{
               display: 'grid',
@@ -369,11 +426,11 @@ function QuickKorlapFleetModalComponent({
               {TEXT_FLEET_STATUS.QUICK_KORLAP.NOTES_LABEL}
             </label>
             <textarea
-              rows={3}
+              rows={4}
               data-testid="korlap-notes-input"
               value={rawNotes}
-              placeholder={TEXT_FLEET_STATUS.QUICK_KORLAP.NOTES_PLACEHOLDER}
               onChange={(e) => setRawNotes(e.target.value)}
+              placeholder={TEXT_FLEET_STATUS.QUICK_KORLAP.NOTES_PLACEHOLDER}
               style={{
                 width: '100%',
                 padding: '10px 12px',
@@ -381,11 +438,21 @@ function QuickKorlapFleetModalComponent({
                 border: '1px solid var(--color-border, #334155)',
                 backgroundColor: 'rgba(0, 0, 0, 0.2)',
                 color: '#fff',
-                fontSize: '0.85rem',
+                fontSize: '0.9rem',
                 boxSizing: 'border-box',
-                resize: 'none',
+                resize: 'vertical',
+                lineHeight: 1.4,
               }}
             />
+            <p
+              style={{
+                margin: '4px 0 0',
+                fontSize: '0.75rem',
+                color: 'var(--color-text-muted, #94a3b8)',
+              }}
+            >
+              Format: <em>Nomor Unit Catatan</em> (dipisah baris baru atau koma). Contoh: <code>TS.02 BA.01 Radiator</code>, <code>TS.05 EVDAL</code>, <code>KWK 222177 OFF</code>.
+            </p>
           </div>
         </div>
 
@@ -425,11 +492,12 @@ function QuickKorlapFleetModalComponent({
               padding: '10px 20px',
               borderRadius: '8px',
               border: 'none',
-              background: '#2563eb',
-              color: '#fff',
+              background: 'var(--accent-color, #3ECF8E)',
+              color: '#000',
               fontSize: '0.9rem',
-              fontWeight: 600,
-              cursor: 'pointer',
+              fontWeight: 700,
+              cursor: isSubmitting ? 'not-allowed' : 'pointer',
+              opacity: isSubmitting ? 0.7 : 1,
             }}
           >
             {isSubmitting

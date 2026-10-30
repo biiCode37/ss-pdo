@@ -249,6 +249,8 @@ export const TEXT_ALERTS = {
       BTN_TO_EVDAL: "TO EVDAL",
       BTN_OKB: "OKB",
       BTN_RENOP: "Renop",
+      BTN_RESET: "Reset",
+      RESET_TOOLTIP: "Kosongkan teks dan batalkan semua pilihan preset",
       EMPTY_PREVIEW: "- (Tanpa Catatan)",
       BA_CODES: ["01", "02", "03", "04"],
       BA_TYPES: {
