@@ -144,6 +144,19 @@ describe("busInputValidation - Pure Validation Module", () => {
       expect(errors.length).toBe(1);
       expect(errors[0]).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_SHIFT_2);
     });
+
+    it("kategori trip: memvalidasi batas maksimum tripPergi dan tripPulang", () => {
+      const params = createBaseParams({
+        isSingleMode: true,
+        effectiveCategory: "trip",
+        tripPergi: "25", // Melebihi MAX_TRIP_COUNT (20)
+        tripPulang: "-2", // Negatif
+      });
+      const errors = validateBusInputForm(params);
+      expect(errors.length).toBe(2);
+      expect(errors.some((e) => e.includes(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PERGI))).toBe(true);
+      expect(errors.some((e) => e.includes(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG))).toBe(true);
+    });
   });
 
   describe("Mode All Validation", () => {

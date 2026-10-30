@@ -1,6 +1,8 @@
 import React from "react";
 import { Info } from "lucide-react";
+import type { HeaderMap } from "@/services/googleSheets";
 import type { BusInputFormReturn } from "./useBusInputForm";
+import { SingleFocusTrip } from "./singleFocus/SingleFocusTrip";
 import { SingleFocusToa } from "./singleFocus/SingleFocusToa";
 import { SingleFocusKm } from "./singleFocus/SingleFocusKm";
 import { SingleFocusNotes } from "./singleFocus/SingleFocusNotes";
@@ -9,14 +11,17 @@ export interface BusInputModalSingleFocusProps {
   form: BusInputFormReturn;
   activeCategory: string;
   busKmAwal1?: string;
+  headerMap?: HeaderMap;
 }
 
 export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> = ({
   form,
   activeCategory,
   busKmAwal1,
+  headerMap,
 }) => {
   const currentCategory = form.effectiveCategory || activeCategory;
+  const isTripCategory = currentCategory === "trip";
   const isToaCategory =
     currentCategory === "toaShift1" || currentCategory === "totalToa";
   const isKmCategory =
@@ -47,6 +52,11 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
           <Info size={16} style={{ flexShrink: 0 }} />
           <span>{form.guideMessage}</span>
         </div>
+      )}
+
+      {/* Kelompok Input Trip */}
+      {isTripCategory && (
+        <SingleFocusTrip form={form} headerMap={headerMap || form.headerMap} />
       )}
 
       {/* Kelompok Input TOA */}
