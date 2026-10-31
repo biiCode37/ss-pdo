@@ -33,7 +33,11 @@ import { MonitoringWaReportTab } from "./tabs/MonitoringWaReportTab";
 import { SUPERVISOR_TABS, matchesSupervisorTab } from "./monitoringUtils";
 import { usePageAccess } from "@/context/PageAccessContext";
 import { getStoredUserRole } from "@/utils/roleStorage";
-import { PageDisabledState, SuperadminMaintenanceBanner } from "@/components/pageManagement";
+import {
+  PageDisabledState,
+  SuperadminMaintenanceBanner,
+  AccessRestrictedState,
+} from "@/components/pageManagement";
 
 // Re-export untuk kompatibilitas penuh (Zero Breaking Change)
 export { SUPERVISOR_TABS, matchesSupervisorTab };
@@ -531,7 +535,11 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
           <>
             {activeTab === "dashboard" && (
               !canAccessPage("regional_summary", currentUserRole) ? (
-                <PageDisabledState />
+                isUnderMaintenance("regional_summary") ? (
+                  <PageDisabledState />
+                ) : (
+                  <AccessRestrictedState />
+                )
               ) : (
                 <>
                   {currentUserRole === "superadmin" &&
@@ -582,7 +590,11 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
 
             {activeTab === "wa_report" && (
               !canAccessPage("regional_wa_report", currentUserRole) ? (
-                <PageDisabledState />
+                isUnderMaintenance("regional_wa_report") ? (
+                  <PageDisabledState />
+                ) : (
+                  <AccessRestrictedState />
+                )
               ) : (
                 <>
                   {currentUserRole === "superadmin" &&

@@ -8,7 +8,11 @@ import { extractMonthYearLabel } from "@/utils/analytics";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import { usePageAccess } from "@/context/PageAccessContext";
 import { getStoredUserRole } from "@/utils/roleStorage";
-import { PageDisabledState, SuperadminMaintenanceBanner } from "@/components/pageManagement";
+import {
+  PageDisabledState,
+  SuperadminMaintenanceBanner,
+  AccessRestrictedState,
+} from "@/components/pageManagement";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import type { SyncItem } from "@/hooks/useOfflineSync";
 
@@ -89,7 +93,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
       {/* TAB 1: Entri Data Bus */}
       <div style={{ display: mainTab === "input" ? "block" : "none" }}>
         {!canAccessPage("input", currentUserRole) ? (
-          <PageDisabledState />
+          isUnderMaintenance("input") ? <PageDisabledState /> : <AccessRestrictedState />
         ) : (
           <>
             {currentUserRole === "superadmin" && isUnderMaintenance("input") && (
@@ -100,8 +104,8 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
                 className="card"
                 style={{
                   marginBottom: "16px",
-                  backgroundColor: "var(--warning-bg, rgba(245, 158, 11, 0.1))",
-                  borderColor: "var(--warning-border, #f59e0b)",
+                  backgroundColor: "var(--color-warning-bg, rgba(245, 158, 11, 0.1))",
+                  borderColor: "var(--color-warning-border, #f59e0b)",
                 }}
               >
                 <div
@@ -109,7 +113,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",
-                    color: "var(--warning-text, #d97706)",
+                    color: "var(--color-warning-fg, #d97706)",
                     fontWeight: 600,
                   }}
                 >
@@ -153,7 +157,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
       {/* TAB 2: Dashboard Analitik */}
       <div style={{ display: mainTab === "analytics" ? "block" : "none" }}>
         {!canAccessPage("analytics", currentUserRole) ? (
-          <PageDisabledState />
+          isUnderMaintenance("analytics") ? <PageDisabledState /> : <AccessRestrictedState />
         ) : (
           <>
             {currentUserRole === "superadmin" && isUnderMaintenance("analytics") && (
@@ -180,7 +184,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
       {/* TAB 3: Rekap Armada (Units) */}
       <div style={{ display: mainTab === "units" ? "block" : "none" }}>
         {!canAccessPage("units", currentUserRole) ? (
-          <PageDisabledState />
+          isUnderMaintenance("units") ? <PageDisabledState /> : <AccessRestrictedState />
         ) : (
           <>
             {currentUserRole === "superadmin" && isUnderMaintenance("units") && (
