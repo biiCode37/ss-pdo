@@ -13,20 +13,20 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess })
         position: 'sticky',
         top: 0,
         zIndex: 900,
-        backgroundColor: '#78350f',
-        color: '#fef3c7',
-        borderBottom: '1px solid #b45309',
+        backgroundColor: 'var(--color-warning-bg)',
+        color: 'var(--color-warning-fg)',
+        borderBottom: '1px solid var(--color-warning-border)',
         padding: '10px 16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         fontSize: '12.5px',
-        fontWeight: 500,
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+        fontWeight: 600,
+        boxShadow: '0 2px 8px var(--color-shadow, rgba(0, 0, 0, 0.15))',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-        <AlertTriangle size={16} style={{ color: '#fbbf24', flexShrink: 0 }} />
+        <AlertTriangle size={16} style={{ color: 'var(--color-warning-fg)', flexShrink: 0 }} />
         <span
           style={{
             whiteSpace: 'nowrap',
@@ -48,8 +48,8 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess })
             gap: '6px',
             padding: '5px 12px',
             borderRadius: '8px',
-            backgroundColor: '#b45309',
-            color: '#ffffff',
+            backgroundColor: 'var(--color-warning-fg)',
+            color: 'var(--color-surface-default)',
             border: 'none',
             fontSize: '11.5px',
             fontWeight: 600,

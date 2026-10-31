@@ -61,7 +61,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
         position: 'fixed',
         inset: 0,
         zIndex: 1050,
-        backgroundColor: 'rgba(0, 0, 0, 0.65)',
+        backgroundColor: 'var(--color-overlay, rgba(0, 0, 0, 0.65))',
         backdropFilter: 'blur(6px)',
         WebkitBackdropFilter: 'blur(6px)',
         display: 'flex',
@@ -81,7 +81,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
           backgroundColor: 'var(--color-surface-default)',
           borderRadius: '20px',
           border: '1px solid var(--color-border-subtle)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
+          boxShadow: '0 20px 40px var(--color-shadow, rgba(0, 0, 0, 0.3))',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -153,9 +153,8 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
               const isLocked = role.required;
 
               return (
-                <div
+                <label
                   key={role.code}
-                  onClick={() => !isLocked && toggleRole(role.code)}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -166,9 +165,10 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
                       ? 'var(--color-surface-subtle)'
                       : 'var(--color-surface-default)',
                     border: isChecked
-                      ? '1px solid var(--color-border-default)'
+                      ? '1.5px solid var(--color-action-primary-bg)'
                       : '1px solid var(--color-border-subtle)',
                     cursor: isLocked ? 'not-allowed' : 'pointer',
+                    userSelect: 'none',
                     transition: 'all 0.18s cubic-bezier(0.32, 0.72, 0, 1)',
                   }}
                 >
@@ -216,7 +216,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
                   ) : (
                     <RoleBadge role={role.code} size="xs" />
                   )}
-                </div>
+                </label>
               );
             })}
           </div>
@@ -252,7 +252,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
 
           <button
             type="button"
-            data-testid="btn-save-bulk-roles"
+            data-testid="btn-bulk-save-roles"
             disabled={isSaving}
             onClick={handleSave}
             style={{
@@ -267,6 +267,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
               fontSize: '12.5px',
               fontWeight: 600,
               cursor: isSaving ? 'wait' : 'pointer',
+              opacity: isSaving ? 0.7 : 1,
             }}
           >
             <Check size={14} />
@@ -277,4 +278,3 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
     </div>
   );
 };
-

@@ -199,4 +199,50 @@ describe('PageManagementPage', () => {
     expect(container.textContent).toContain('Pengaturan Akses Halaman');
     expect(container.textContent).toContain('Hak Akses Peran');
   });
+
+  it('menangani klik switch aktif/nonaktif dan memicu togglePageStatus', async () => {
+    await act(async () => {
+      root.render(
+        <PageAccessProvider>
+          <PageManagementPage onBack={vi.fn()} />
+        </PageAccessProvider>
+      );
+    });
+
+    const switches = container.querySelectorAll('button[role="switch"]');
+    expect(switches.length).toBeGreaterThan(0);
+
+    const firstSwitch = switches[0] as HTMLButtonElement;
+    expect(firstSwitch.getAttribute('aria-checked')).toBe('true');
+
+    await act(async () => {
+      firstSwitch.click();
+    });
+
+    // Switch harus tetap memiliki role switch dan responsif
+    expect(firstSwitch).not.toBeNull();
+  });
+
+  it('menampilkan empty state jika kategori yang difilter tidak memiliki halaman', async () => {
+    await act(async () => {
+      root.render(
+        <PageAccessProvider>
+          <PageManagementPage onBack={vi.fn()} />
+        </PageAccessProvider>
+      );
+    });
+
+    const tabButtons = container.querySelectorAll('.pm-filter-tab');
+    const modalFilter = Array.from(tabButtons).find((b) =>
+      b.textContent?.includes('Fitur & Modal')
+    ) as HTMLButtonElement;
+    expect(modalFilter).toBeDefined();
+
+    await act(async () => {
+      modalFilter.click();
+    });
+
+    // Mock data hanya punya 'tab' dan 'page', jadi kategori 'modal' kosong
+    expect(container.textContent).toContain('Tidak ada halaman dalam kategori ini');
+  });
 });

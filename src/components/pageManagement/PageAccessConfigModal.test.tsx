@@ -144,5 +144,37 @@ describe('PageAccessConfigModal', () => {
       ['denied@transjakarta.co.id']
     );
   });
+
+  it('dapat mencentang dan menghapus centang peran tanpa double trigger', async () => {
+    const handleSave = vi.fn().mockResolvedValue(true);
+
+    await act(async () => {
+      root.render(
+        <PageAccessConfigModal
+          isOpen={true}
+          setting={mockSetting}
+          onClose={() => {}}
+          onSave={handleSave}
+        />
+      );
+    });
+
+    const adminCheckbox = container.querySelector('input[data-role="admin"]') as HTMLInputElement;
+    expect(adminCheckbox.checked).toBe(true);
+
+    // Klik langsung pada checkbox admin untuk uncheck
+    await act(async () => {
+      adminCheckbox.click();
+    });
+
+    expect(adminCheckbox.checked).toBe(false);
+
+    // Klik kedua kali untuk check kembali
+    await act(async () => {
+      adminCheckbox.click();
+    });
+
+    expect(adminCheckbox.checked).toBe(true);
+  });
 });
 

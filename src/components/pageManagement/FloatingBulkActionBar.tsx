@@ -42,7 +42,7 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
         backgroundColor: 'var(--color-surface-default)',
         border: '1px solid var(--color-border-subtle)',
         borderRadius: '20px',
-        boxShadow: '0 12px 36px rgba(0, 0, 0, 0.28)',
+        boxShadow: '0 12px 36px var(--color-shadow, rgba(0, 0, 0, 0.28))',
         padding: '12px 16px',
         display: 'flex',
         alignItems: 'center',
@@ -111,9 +111,9 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
             gap: '5px',
             padding: '7px 11px',
             borderRadius: '10px',
-            backgroundColor: 'var(--color-success-bg, rgba(16, 185, 129, 0.14))',
-            border: '1px solid var(--color-success-border, rgba(16, 185, 129, 0.3))',
-            color: 'var(--color-success-fg, #10b981)',
+            backgroundColor: 'var(--color-success-bg)',
+            border: '1px solid var(--color-success-border)',
+            color: 'var(--color-success-fg)',
             fontSize: '12px',
             fontWeight: 600,
             cursor: isLoading ? 'wait' : 'pointer',
@@ -137,9 +137,9 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
             gap: '5px',
             padding: '7px 11px',
             borderRadius: '10px',
-            backgroundColor: 'var(--color-warning-bg, rgba(245, 158, 11, 0.14))',
-            border: '1px solid var(--color-warning-border, rgba(245, 158, 11, 0.3))',
-            color: 'var(--color-warning-fg, #f59e0b)',
+            backgroundColor: 'var(--color-warning-bg)',
+            border: '1px solid var(--color-warning-border)',
+            color: 'var(--color-warning-fg)',
             fontSize: '12px',
             fontWeight: 600,
             cursor: isLoading ? 'wait' : 'pointer',
@@ -206,4 +206,3 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
     </div>
   );
 };
-

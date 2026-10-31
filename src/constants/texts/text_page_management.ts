@@ -6,6 +6,7 @@ export const TEXT_PAGE_MANAGEMENT = {
     PAGE: 'Halaman Utama',
     TAB: 'Sub-Halaman & Tab',
     MODAL: 'Fitur & Modal',
+    EMPTY_FILTER: 'Tidak ada halaman dalam kategori ini',
   },
   STATUS: {
     ACTIVE: 'Aktif',
@@ -44,6 +45,8 @@ export const TEXT_PAGE_MANAGEMENT = {
   },
   USER_PICKER: {
     TITLE: 'Pilih Pengguna',
+    TITLE_WHITELIST: 'Pilih Akun untuk Izin Tambahan',
+    TITLE_BLACKLIST: 'Pilih Akun untuk Pembatasan Khusus',
     SEARCH_PLACEHOLDER: 'Cari berdasarkan nama atau email...',
     NO_USERS_FOUND: 'Tidak ada pengguna yang cocok',
     EMPTY_LIST: 'Tidak ada pengguna aktif tersedia',
@@ -66,6 +69,7 @@ export const TEXT_PAGE_MANAGEMENT = {
     SELECTED_COUNT: (count: number) => `${count} Halaman Dipilih`,
     SELECT_ALL: 'Pilih Semua',
     DESELECT_ALL: 'Batalkan Pilihan',
+    SELECT_HINT: 'Klik kartu untuk memilih',
     ACTION_ENABLE_ALL: 'Aktifkan',
     ACTION_DISABLE_ALL: 'Nonaktifkan',
     ACTION_SET_ROLES: 'Izin Role',

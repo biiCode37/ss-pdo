@@ -501,7 +501,11 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.WHITELIST_TAB).toBe('Izin Tambahan (Whitelist)');
     expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.BLACKLIST_TAB).toBe('Pembatasan Khusus (Blacklist)');
     expect(TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE).toBe('Pilih Pengguna');
+    expect(TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE_WHITELIST).toBe('Pilih Akun untuk Izin Tambahan');
+    expect(TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE_BLACKLIST).toBe('Pilih Akun untuk Pembatasan Khusus');
     expect(TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_MODE_BTN).toBe('Pilih Banyak');
+    expect(TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_HINT).toBe('Klik kartu untuk memilih');
+    expect(TEXT_PAGE_MANAGEMENT.CATEGORIES.EMPTY_FILTER).toBe('Tidak ada halaman dalam kategori ini');
     expect(TEXT_PAGE_MANAGEMENT.ACCESS_DENIED.TITLE).toBe('Akses Halaman Dibatasi');
 
     const wlMsg = TEXT_PAGE_MANAGEMENT.SAFETY_DIALOGS.WHITELIST_WARNING_MSG(

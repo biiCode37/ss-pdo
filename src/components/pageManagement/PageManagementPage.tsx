@@ -45,15 +45,15 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
     return Object.values(pageSettings);
   }, [pageSettings]);
 
+  // filteredSettings specifically excludes the pinned system card page_management
   const filteredSettings = useMemo(() => {
-    if (activeCategory === 'all') return settingsList;
-    return settingsList.filter((s) => s.category === activeCategory);
+    const list = settingsList.filter((s) => s.page_key !== ('page_management' as PageKey));
+    if (activeCategory === 'all') return list;
+    return list.filter((s) => s.category === activeCategory);
   }, [settingsList, activeCategory]);
 
   const selectableKeys = useMemo(() => {
-    return filteredSettings
-      .filter((s) => s.page_key !== ('page_management' as PageKey))
-      .map((s) => s.page_key);
+    return filteredSettings.map((s) => s.page_key);
   }, [filteredSettings]);
 
   const handleToggle = async (setting: AppPageSetting) => {
@@ -83,7 +83,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
   };
 
   const handleSelectAll = () => {
-    setSelectedKeys(selectableKeys);
+    setSelectedKeys((prev) => Array.from(new Set([...prev, ...selectableKeys])));
   };
 
   const handleDeselectAll = () => {
@@ -207,6 +207,12 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
         paddingBottom: selectedKeys.length > 0 ? '110px' : '80px',
       }}
     >
+      <style>{`
+        @keyframes pmSpin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+
       {/* 1. Header Bar */}
       <div
         style={{
@@ -273,7 +279,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     display: 'block',
                   }}
                 >
-                  {selectedKeys.length} / {selectableKeys.length} Dipilih
+                  {selectedKeys.length} Dipilih
                 </span>
               )}
             </div>
@@ -384,7 +390,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
             </div>
 
             <span style={{ fontSize: '11.5px', color: 'var(--color-text-muted)' }}>
-              Klik kartu untuk memilih
+              {TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_HINT}
             </span>
           </div>
         )}
@@ -524,16 +530,19 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
               {/* Locked Switch Indicator */}
               <div
                 style={{
-                  width: '46px',
-                  height: '26px',
-                  borderRadius: '13px',
-                  backgroundColor: 'var(--color-success-fg, #10b981)',
+                  width: '50px',
+                  height: '30px',
+                  borderRadius: '15px',
+                  backgroundColor: 'var(--color-success-fg)',
+                  border: '2px solid var(--color-success-fg)',
+                  boxSizing: 'border-box',
                   opacity: 0.5,
                   cursor: 'not-allowed',
                   position: 'relative',
                   display: 'flex',
                   alignItems: 'center',
                   padding: '2px',
+                  flexShrink: 0,
                 }}
                 title={TEXT_PAGE_MANAGEMENT.STATUS.LOCKED_DESC}
               >
@@ -543,10 +552,30 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     height: '22px',
                     borderRadius: '50%',
                     backgroundColor: 'var(--color-surface-default)',
+                    border: '0.5px solid var(--color-border-subtle)',
+                    boxShadow: '0 2px 5px var(--color-shadow, rgba(0, 0, 0, 0.25))',
                     transform: 'translateX(20px)',
                   }}
                 />
               </div>
+            </div>
+          )}
+
+          {/* Empty State when filtered category has 0 items */}
+          {filteredSettings.length === 0 && (
+            <div
+              style={{
+                padding: '48px 20px',
+                textAlign: 'center',
+                color: 'var(--color-text-secondary)',
+                backgroundColor: 'var(--color-surface-default)',
+                borderRadius: '16px',
+                border: '1px dashed var(--color-border-subtle)',
+              }}
+            >
+              <p style={{ margin: 0, fontSize: '13.5px', fontWeight: 500 }}>
+                {TEXT_PAGE_MANAGEMENT.CATEGORIES.EMPTY_FILTER}
+              </p>
             </div>
           )}
 
@@ -575,12 +604,12 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     ? 'var(--color-surface-subtle)'
                     : isEnabled
                     ? 'var(--color-surface-default)'
-                    : 'var(--color-warning-bg, rgba(245, 158, 11, 0.04))',
+                    : 'var(--color-warning-bg)',
                   border: isSelected
                     ? '1.5px solid var(--color-action-primary-bg)'
                     : isEnabled
                     ? '1px solid var(--color-border-subtle)'
-                    : '1px solid var(--color-warning-border, rgba(245, 158, 11, 0.2))',
+                    : '1px solid var(--color-warning-border)',
                   cursor: isSelectMode ? 'pointer' : 'default',
                   transition: 'all 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
                 }}
@@ -593,22 +622,29 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     minWidth: 0,
                   }}
                 >
-                  {/* Select Mode Checkbox */}
+                  {/* Select Mode Checkbox with Click Isolation */}
                   {isSelectMode && (
-                    <input
-                      type="checkbox"
-                      data-card-key={setting.page_key}
-                      checked={isSelected}
-                      onChange={() => handleToggleSelectCard(setting.page_key)}
-                      onClick={(e) => e.stopPropagation()}
-                      style={{
-                        width: '18px',
-                        height: '18px',
-                        accentColor: 'var(--color-action-primary-bg)',
-                        cursor: 'pointer',
-                        flexShrink: 0,
+                    <div
+                      style={{ display: 'flex', alignItems: 'center', paddingRight: '2px' }}
+                      onClick={(e) => {
+                        // Prevent bubbling so clicking the checkbox does not trigger card's onClick twice
+                        e.stopPropagation();
                       }}
-                    />
+                    >
+                      <input
+                        type="checkbox"
+                        data-card-key={setting.page_key}
+                        checked={isSelected}
+                        onChange={() => handleToggleSelectCard(setting.page_key)}
+                        style={{
+                          width: '20px',
+                          height: '20px',
+                          accentColor: 'var(--color-action-primary-bg)',
+                          cursor: 'pointer',
+                          flexShrink: 0,
+                        }}
+                      />
+                    </div>
                   )}
 
                   {/* Icon */}
@@ -618,14 +654,14 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       height: '38px',
                       borderRadius: '10px',
                       backgroundColor: isEnabled
-                        ? 'var(--color-success-bg, rgba(16, 185, 129, 0.12))'
-                        : 'var(--color-warning-bg, rgba(245, 158, 11, 0.12))',
+                        ? 'var(--color-success-bg)'
+                        : 'var(--color-warning-bg)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: isEnabled
-                        ? 'var(--color-success-fg, #10b981)'
-                        : 'var(--color-warning-fg, #f59e0b)',
+                        ? 'var(--color-success-fg)'
+                        : 'var(--color-warning-fg)',
                       flexShrink: 0,
                     }}
                   >
@@ -664,11 +700,11 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                           padding: '2px 7px',
                           borderRadius: '6px',
                           backgroundColor: isEnabled
-                            ? 'var(--color-success-bg, rgba(16, 185, 129, 0.16))'
-                            : 'var(--color-warning-bg, rgba(245, 158, 11, 0.16))',
+                            ? 'var(--color-success-bg)'
+                            : 'var(--color-warning-bg)',
                           color: isEnabled
-                            ? 'var(--color-success-fg, #10b981)'
-                            : 'var(--color-warning-fg, #fbbf24)',
+                            ? 'var(--color-success-fg)'
+                            : 'var(--color-warning-fg)',
                         }}
                       >
                         {isEnabled ? (
@@ -719,8 +755,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                             fontWeight: 700,
                             padding: '1px 6px',
                             borderRadius: '6px',
-                            backgroundColor: 'var(--color-success-bg, rgba(16, 185, 129, 0.14))',
-                            color: 'var(--color-success-fg, #10b981)',
+                            backgroundColor: 'var(--color-success-bg)',
+                            color: 'var(--color-success-fg)',
                           }}
                         >
                           +{whitelistCount} Akun Khusus
@@ -734,8 +770,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                             fontWeight: 700,
                             padding: '1px 6px',
                             borderRadius: '6px',
-                            backgroundColor: 'var(--color-error-bg, rgba(239, 68, 68, 0.14))',
-                            color: 'var(--color-error-fg, #ef4444)',
+                            backgroundColor: 'var(--color-error-bg)',
+                            color: 'var(--color-error-fg)',
                           }}
                         >
                           -{blacklistCount} Dibatasi
@@ -779,28 +815,37 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     type="button"
                     role="switch"
                     aria-checked={isEnabled}
+                    aria-label={
+                      isEnabled
+                        ? `Nonaktifkan ${setting.page_name}`
+                        : `Aktifkan ${setting.page_name}`
+                    }
                     disabled={isToggling || isSelectMode}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleToggle(setting);
                     }}
                     style={{
-                      width: '48px',
-                      height: '28px',
-                      borderRadius: '14px',
+                      width: '50px',
+                      height: '30px',
+                      borderRadius: '15px',
                       backgroundColor: isEnabled
-                        ? 'var(--color-success-fg, #10b981)'
+                        ? 'var(--color-success-fg)'
                         : 'var(--color-surface-subtle)',
-                      border: 'none',
+                      border: isEnabled
+                        ? '2px solid var(--color-success-fg)'
+                        : '2px solid var(--color-border-control)',
+                      boxSizing: 'border-box',
                       position: 'relative',
                       cursor: isToggling || isSelectMode ? 'default' : 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       padding: '2px',
                       flexShrink: 0,
-                      opacity: isToggling || isSelectMode ? 0.6 : 1,
+                      opacity: isSelectMode ? 0.35 : isToggling ? 0.75 : 1,
+                      pointerEvents: isSelectMode ? 'none' : 'auto',
                       transition:
-                        'background-color 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+                        'background-color 0.25s cubic-bezier(0.32, 0.72, 0, 1), border-color 0.25s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s',
                     }}
                     title={
                       isEnabled
@@ -810,18 +855,32 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                   >
                     <div
                       style={{
-                        width: '24px',
-                        height: '24px',
+                        width: '22px',
+                        height: '22px',
                         borderRadius: '50%',
-                        backgroundColor: '#ffffff',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                        transform: isEnabled
-                          ? 'translateX(20px)'
-                          : 'translateX(0px)',
-                        transition:
-                          'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+                        backgroundColor: 'var(--color-surface-default)',
+                        border: '0.5px solid var(--color-border-subtle)',
+                        boxShadow: '0 2px 5px var(--color-shadow, rgba(0, 0, 0, 0.25))',
+                        transform: isEnabled ? 'translateX(20px)' : 'translateX(0px)',
+                        transition: 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
-                    />
+                    >
+                      {isToggling && (
+                        <div
+                          style={{
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%',
+                            border: '2px solid var(--color-text-secondary)',
+                            borderTopColor: 'transparent',
+                            animation: 'pmSpin 0.6s linear infinite',
+                          }}
+                        />
+                      )}
+                    </div>
                   </button>
                 </div>
               </div>

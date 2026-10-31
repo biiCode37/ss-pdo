@@ -146,7 +146,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
           position: 'fixed',
           inset: 0,
           zIndex: 1000,
-          backgroundColor: 'rgba(0, 0, 0, 0.65)',
+          backgroundColor: 'var(--color-overlay, rgba(0, 0, 0, 0.65))',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
           display: 'flex',
@@ -167,7 +167,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
             borderTopLeftRadius: '24px',
             borderTopRightRadius: '24px',
             border: '1px solid var(--color-border-subtle)',
-            boxShadow: '0 -10px 40px rgba(0, 0, 0, 0.35)',
+            boxShadow: '0 -10px 40px var(--color-shadow, rgba(0, 0, 0, 0.35))',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
@@ -288,7 +288,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                     alignItems: 'center',
                     gap: '6px',
                     whiteSpace: 'nowrap',
-                    boxShadow: isActive ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
+                    boxShadow: isActive ? '0 2px 6px var(--color-shadow, rgba(0,0,0,0.08))' : 'none',
                     transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
                   }}
                 >
@@ -343,9 +343,8 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                   const isLocked = role.required;
 
                   return (
-                    <div
+                    <label
                       key={role.code}
-                      onClick={() => !isLocked && toggleRole(role.code)}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -356,9 +355,10 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                           ? 'var(--color-surface-subtle)'
                           : 'var(--color-surface-default)',
                         border: isChecked
-                          ? '1px solid var(--color-border-default)'
+                          ? '1.5px solid var(--color-action-primary-bg)'
                           : '1px solid var(--color-border-subtle)',
                         cursor: isLocked ? 'not-allowed' : 'pointer',
+                        userSelect: 'none',
                         transition: 'all 0.18s cubic-bezier(0.32, 0.72, 0, 1)',
                       }}
                     >
@@ -410,7 +410,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       ) : (
                         <RoleBadge role={role.code} size="xs" />
                       )}
-                    </div>
+                    </label>
                   );
                 })}
               </div>
@@ -534,9 +534,9 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       gap: '6px',
                       padding: '8px 12px',
                       borderRadius: '10px',
-                      background: 'var(--color-warning-border, #f59e0b)',
+                      background: 'var(--color-danger-bg)',
                       border: 'none',
-                      color: '#ffffff',
+                      color: 'var(--color-danger-fg)',
                       fontSize: '12px',
                       fontWeight: 600,
                       cursor: 'pointer',
@@ -670,11 +670,10 @@ export const PageAccessConfigModal: React.FC<Props> = ({
         excludedEmails={pickerTarget === 'whitelist' ? whitelistEmails : blacklistEmails}
         title={
           pickerTarget === 'whitelist'
-            ? 'Pilih Akun untuk Izin Tambahan'
-            : 'Pilih Akun untuk Pembatasan Khusus'
+            ? TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE_WHITELIST
+            : TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE_BLACKLIST
         }
       />
     </>
   );
 };
-

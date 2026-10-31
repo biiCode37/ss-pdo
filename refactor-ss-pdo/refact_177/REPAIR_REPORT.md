@@ -108,6 +108,34 @@ Refactor 177 memperluas kemampuan modul **Manajemen Halaman** khusus Superadmin 
 
 ---
 
+### Perbaikan 5: Pencegahan Double-Trigger Event pada Checkbox/Checklist (BUG-177-06)
+* **Before:**
+  Di `PageAccessConfigModal.tsx` dan `BulkRoleConfigModal.tsx`, baris peran dibungkus `div` dengan `onClick={() => toggleRole(role.code)}`, sementara elemen anak `<input type="checkbox">` memiliki `onChange={() => toggleRole(role.code)}`. Saat pengguna mengklik langsung kotak centang (checkbox), kedua event terpanggil berurutan, menyebabkan status peran ter-toggle dua kali (checked lalu langsung unchecked kembali, atau sebaliknya). Checkbox terasa macet.
+* **After:**
+  Baris peran diubah menggunakan elemen semantik `<label>` murni tanpa event `onClick` pada kontainer. Hanya elemen `<input type="checkbox">` yang mendengarkan event `onChange`. Klik pada kotak centang maupun label teks/badge kini hanya memicu mutasi status tepat 1 kali. Di `PageManagementPage.tsx`, checkbox kartu multi-select dibungkus dengan isolasi `onClick={(e) => e.stopPropagation()}` agar tidak bertabrakan dengan klik seleksi kartu.
+* **Case: Skenario Lapangan:**
+  Superadmin yang membuka modal penetapan izin peran di layar ponsel berukuran kecil sering mengetuk tepat di kotak centang checkbox. Sebelumnya kotak centang tampak tidak merespons. Setelah perbaikan, checkbox mencentang secara instan dan mulus pada ketukan pertama.
+
+---
+
+### Perbaikan 6: Redesain UI/UX iOS Toggle Switch & Eliminasi Hardcoded Colors (BUG-177-07)
+* **Before:**
+  * Toggle switch saat non-aktif memiliki warna latar `var(--color-surface-subtle)` tanpa border penegas dengan tombol bulat knob putih `#ffffff`. Pada tema Light Mode, track dan knob membaur (*blend-in*) tanpa kontras visual yang memadai.
+  * Tidak ada feedback transisi/loading mikro saat mutasi status ke Supabase sedang berlangsung.
+  * Saat mode multi-select aktif, switch individu terlihat identik dan tidak terisolasi dari seleksi kartu.
+  * File `SuperadminMaintenanceBanner.tsx` dan `PageDisabledState.tsx` memiliki warna mentah *hardcoded hex* (`#78350f`, `#b45309`, `#f59e0b`, dll).
+* **After:**
+  * Switch didesain ulang mengikuti standar iOS: saat mati (non-aktif), track memiliki border tegas `2px solid var(--color-border-control)` dan latar `var(--color-surface-subtle)`. Knob memiliki bayangan elevasi `0 2px 5px var(--color-shadow)` dan garis tepi halus, menghasilkan kontras tajam di Light Mode maupun Dark Mode.
+  * Indikator *mini-spinner* berputar (`@keyframes pmSpin`) muncul di dalam knob saat `togglingKey === setting.page_key` untuk memberi umpan balik visual instan selama request berlangsung.
+  * Pada mode multi-select, switch individu otomatis diberi `opacity: 0.35` dan `pointerEvents: 'none'`, sehingga mengetuk area switch secara aman dan konsisten memilih kartu tersebut.
+  * Kartu sistem yang terkunci (`page_management`) kini dikecualikan secara ketat dari `filteredSettings` agar tidak pernah terduplikasi atau muncul sebagai kartu yang bisa di-toggle.
+  * Empty state elegan ditambahkan jika filter kategori yang dipilih menghasilkan 0 halaman.
+  * Seluruh *hardcoded hex* pada banner dan disabled state dimigrasikan ke token semantik CSS (`var(--color-warning-*)`, `var(--color-surface-*)`).
+* **Case: Skenario Lapangan:**
+  Superadmin yang sedang berada di luar ruangan dengan pencahayaan matahari terik dapat dengan mudah melihat posisi aktif/nonaktif setiap saklar halaman berkat border penegas berstandar WCAG. Saat saklar ditekan, animasi putaran mikro langsung mengonfirmasi bahwa permintaan sedang dikirim ke server.
+
+---
+
 ## 3. Daftar File yang Dibuat & Dimodifikasi
 
 ### File Baru:
@@ -139,9 +167,11 @@ Refactor 177 memperluas kemampuan modul **Manajemen Halaman** khusus Superadmin 
 8. `src/components/pageManagement/index.ts`
 9. `src/components/pageManagement/PageManagementPage.tsx`
 10. `src/components/pageManagement/PageManagementPage.test.tsx`
-11. `src/components/Dashboard.tsx`
-12. `src/components/dashboard/DashboardContentTabs.tsx`
-13. `src/components/monitoring/AllRouteMonitoringPage.tsx`
+11. `src/components/pageManagement/SuperadminMaintenanceBanner.tsx`
+12. `src/components/pageManagement/PageDisabledState.tsx`
+13. `src/components/Dashboard.tsx`
+14. `src/components/dashboard/DashboardContentTabs.tsx`
+15. `src/components/monitoring/AllRouteMonitoringPage.tsx`
 
 ---
 
@@ -152,10 +182,11 @@ Refactor 177 memperluas kemampuan modul **Manajemen Halaman** khusus Superadmin 
    * Hasil: **114 passed (114 tests) — 100% PASS**.
 2. **Uji Keseluruhan Test Suite Vitest:**
    * Perintah: `pnpm vitest run src/`
-   * Hasil: **131 passed (131 test files), 1,126 passed (1,126 tests) — 100% PASS**.
+   * Hasil: **131 passed (131 test files), 1,129 passed (1,129 tests) — 100% PASS**.
 3. **TypeScript Strict Mode & Production Build:**
    * Perintah: `pnpm run build` (`tsc -b && vite build`)
    * Hasil: **0 error — Build produksi sukses**.
 4. **Pembaruan Knowledge Graph (Graphify):**
    * Perintah: `graphify update .`
-   * Hasil: **6,685 nodes, 8,248 edges, 632 communities terbarui**.
+   * Hasil: **6,701 nodes, 8,262 edges, 638 communities terbarui**.
+
