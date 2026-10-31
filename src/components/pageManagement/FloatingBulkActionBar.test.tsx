@@ -102,3 +102,4 @@ describe('FloatingBulkActionBar', () => {
     expect(handleDeselect).toHaveBeenCalledTimes(1);
   });
 });
+

@@ -206,3 +206,4 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
     </div>
   );
 };
+

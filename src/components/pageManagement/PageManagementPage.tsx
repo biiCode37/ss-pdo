@@ -10,7 +10,6 @@ import {
   AlertCircle,
   SlidersHorizontal,
   CheckSquare,
-  Square,
   Check,
 } from 'lucide-react';
 import { usePageAccess } from '@/context/PageAccessContext';

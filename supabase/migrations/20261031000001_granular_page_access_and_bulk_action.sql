@@ -186,3 +186,4 @@ VALUES ('20261031000001', 'granular_page_access_and_bulk_action')
 ON CONFLICT (version) DO NOTHING;
 
 NOTIFY pgrst, 'reload schema';
+

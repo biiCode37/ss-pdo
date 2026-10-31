@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
   X,
-  Shield,
   UserPlus,
   Trash2,
   Check,
   Lock,
-  Users,
   ShieldCheck,
   Ban,
 } from 'lucide-react';
@@ -679,3 +677,4 @@ export const PageAccessConfigModal: React.FC<Props> = ({
     </>
   );
 };
+

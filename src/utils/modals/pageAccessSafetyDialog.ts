@@ -82,3 +82,4 @@ export async function confirmResetPageSettings(count: number): Promise<boolean> 
 
   return result.isConfirmed === true;
 }
+

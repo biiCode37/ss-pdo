@@ -69,3 +69,4 @@ describe('pageAccessSafetyDialog', () => {
     expect(callArgs.confirmButtonText).toBe('Ya, Kembalikan');
   });
 });
+
