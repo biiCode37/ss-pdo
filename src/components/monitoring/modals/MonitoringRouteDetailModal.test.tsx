@@ -613,6 +613,31 @@ describe("MonitoringRouteDetailModal", () => {
       expect(container.textContent).toContain("Status Kesiapan Armada Bus");
       expect(container.textContent).toContain("Belum ada laporan data kesiapan armada");
     });
+
+    it("renders fleet section as top-level full-width block, not nested in 2-col metric grid", async () => {
+      const cleanRoute: RegionalRouteItem = {
+        ...mockRoute,
+        totalRealops: 10,
+        fleetStatusShift1: [],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={cleanRoute}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const fleetSection = container.querySelector('[data-testid="route-modal-fleet-section"]');
+      expect(fleetSection).toBeTruthy();
+      const parentDisplay = (fleetSection?.parentElement as HTMLElement)?.style?.display;
+      expect(parentDisplay).not.toBe("grid");
+      expect((fleetSection as HTMLElement)?.style?.width).toBe("100%");
+    });
   });
 
 });
