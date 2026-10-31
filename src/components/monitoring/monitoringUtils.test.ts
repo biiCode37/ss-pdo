@@ -11,14 +11,20 @@ import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 
 describe("monitoringUtils - Fleet Extraction & Formatting", () => {
   describe("inferStatusCode", () => {
-    it("identifies OFF status correctly", () => {
-      expect(inferStatusCode("Jadwal Libur", true).code).toBe("OFF");
+    it("identifies OFF status correctly with yellow warning theme", () => {
+      const res = inferStatusCode("Jadwal Libur", true);
+      expect(res.code).toBe("OFF");
+      expect(res.color).toBe("var(--color-warning-fg)");
+      expect(res.bg).toBe("var(--color-warning-bg)");
       expect(inferStatusCode("Pramudi OFF").code).toBe("OFF");
       expect(inferStatusCode("", false, "OFF").code).toBe("OFF");
     });
 
-    it("identifies TO and TO EVDAL status", () => {
-      expect(inferStatusCode("T.O Radiator Panas").code).toBe("T.O");
+    it("identifies TO and TO EVDAL status with red error theme", () => {
+      const resTo = inferStatusCode("T.O Radiator Panas");
+      expect(resTo.code).toBe("T.O");
+      expect(resTo.color).toBe("var(--color-error-fg)");
+      expect(resTo.bg).toBe("var(--color-error-bg)");
       expect(inferStatusCode("TO EVDAL").code).toBe("TO EVDAL");
       expect(inferStatusCode("Evdal mogok").code).toBe("TO EVDAL");
     });
@@ -31,6 +37,14 @@ describe("monitoringUtils - Fleet Extraction & Formatting", () => {
     it("identifies BA codes", () => {
       expect(inferStatusCode("BA.02 Kecelakaan").code).toBe("BA.02");
       expect(inferStatusCode("BA 01 Sakit").code).toBe("BA.01");
+      const baRes = inferStatusCode("BA.02 Kecelakaan");
+      expect(baRes.color).toBe("var(--color-badge-ba-fg)");
+      expect(baRes.bg).toBe("var(--color-badge-ba-bg)");
+      expect(baRes.border).toBe("var(--color-badge-ba-border)");
+      // Verifikasi bahwa BA berbeda jelas dengan OFF (OFF tetap kuning)
+      const offRes = inferStatusCode("OFF");
+      expect(offRes.color).toBe("var(--color-warning-fg)");
+      expect(baRes.color).not.toBe(offRes.color);
     });
 
     it("identifies KEUR, TEKNIS, OKB, and RENOP", () => {

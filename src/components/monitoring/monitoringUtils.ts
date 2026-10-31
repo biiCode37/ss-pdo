@@ -147,6 +147,7 @@ export interface TroubledUnitItem {
   statusCode: string;
   badgeBg: string;
   badgeColor: string;
+  badgeBorder?: string;
   isOff: boolean;
   shifts: (1 | 2)[];
   routeCode: string;
@@ -159,7 +160,7 @@ export function inferStatusCode(
   rawNote: string,
   isOff?: boolean,
   statusCodeHint?: string
-): { code: string; color: string; bg: string } {
+): { code: string; color: string; bg: string; border?: string } {
   const note = (rawNote || "").trim();
   const hint = (statusCodeHint || "").toUpperCase().trim();
 
@@ -167,8 +168,9 @@ export function inferStatusCode(
   if (isOff || hint === "OFF" || /\bOFF\b/i.test(note)) {
     return {
       code: "OFF",
-      color: "#F43F5E",
-      bg: "rgba(244, 63, 94, 0.15)",
+      color: "var(--color-warning-fg)",
+      bg: "var(--color-warning-bg)",
+      border: "var(--color-warning-border)",
     };
   }
 
@@ -181,8 +183,9 @@ export function inferStatusCode(
     const isEvdal = /EVDAL/i.test(note);
     return {
       code: isEvdal ? "TO EVDAL" : "T.O",
-      color: "#F59E0B",
-      bg: "rgba(245, 158, 11, 0.15)",
+      color: "var(--color-error-fg)",
+      bg: "var(--color-error-bg)",
+      border: "var(--color-error-border)",
     };
   }
 
@@ -190,18 +193,20 @@ export function inferStatusCode(
   if (hint === "SO" || /\bSO\b/i.test(note) || /STOP\s*OPS?/i.test(note)) {
     return {
       code: "SO",
-      color: "#A855F7",
-      bg: "rgba(168, 85, 247, 0.15)",
+      color: "var(--color-shift-2-fg)",
+      bg: "var(--color-shift-2-bg)",
+      border: "var(--color-shift-2-border)",
     };
   }
 
-  // 4. BA Code (Berita Acara / Laka / Sakit / Kendala Operasi)
+  // 4. BA Code (Berita Acara / Laka / Sakit / Kendala Operasi) - Oranye Khas Berita Acara
   const baMatch = note.match(/\bBA[\s.]?0?([1-6])\b/i);
   if (baMatch) {
     return {
       code: `BA.0${baMatch[1]}`,
-      color: "#FB923C",
-      bg: "rgba(251, 146, 60, 0.15)",
+      color: "var(--color-badge-ba-fg)",
+      bg: "var(--color-badge-ba-bg)",
+      border: "var(--color-badge-ba-border)",
     };
   }
 
@@ -209,8 +214,9 @@ export function inferStatusCode(
   if (/PROGRAM\s*KEUR/i.test(note) || /\bKEUR\b/i.test(note)) {
     return {
       code: "KEUR",
-      color: "#38BDF8",
-      bg: "rgba(56, 189, 248, 0.15)",
+      color: "var(--color-shift-1-fg)",
+      bg: "var(--color-shift-1-bg)",
+      border: "var(--color-shift-1-border)",
     };
   }
 
@@ -218,8 +224,9 @@ export function inferStatusCode(
   if (/PERBAIKAN|BENGKEL|MOGOK|RADIATOR|AC\s*PANAS/i.test(note)) {
     return {
       code: "TEKNIS",
-      color: "#C084FC",
-      bg: "rgba(192, 132, 252, 0.15)",
+      color: "var(--color-shift-2-fg)",
+      bg: "var(--color-shift-2-bg)",
+      border: "var(--color-shift-2-border)",
     };
   }
 
@@ -227,8 +234,9 @@ export function inferStatusCode(
   if (/\bOKB\b/i.test(note)) {
     return {
       code: "OKB",
-      color: "#60A5FA",
-      bg: "rgba(96, 165, 250, 0.15)",
+      color: "var(--color-info-fg)",
+      bg: "var(--color-info-bg)",
+      border: "var(--color-info-border)",
     };
   }
 
@@ -236,17 +244,22 @@ export function inferStatusCode(
   if (/\bRENOP\b/i.test(note)) {
     return {
       code: "RENOP",
-      color: "#34D399",
-      bg: "rgba(52, 211, 153, 0.15)",
+      color: "var(--color-success-fg)",
+      bg: "var(--color-success-bg)",
+      border: "var(--color-success-border)",
     };
   }
 
   // 9. Hint selain generic
   if (hint && hint !== "CATATAN" && hint !== "OTHER" && hint.length <= 8) {
+    const isBaHint = /^BA[\s.]?0?[1-6]$/i.test(hint);
     return {
       code: hint,
-      color: "#FBBF24",
-      bg: "rgba(251, 191, 36, 0.15)",
+      color: isBaHint ? "var(--color-badge-ba-fg)" : "var(--color-warning-fg)",
+      bg: isBaHint ? "var(--color-badge-ba-bg)" : "var(--color-warning-bg)",
+      border: isBaHint
+        ? "var(--color-badge-ba-border)"
+        : "var(--color-warning-border)",
     };
   }
 
@@ -254,18 +267,23 @@ export function inferStatusCode(
   if (note) {
     const firstWord = note.split(/[\s:-]+/)[0].toUpperCase().slice(0, 8);
     if (firstWord && !["CATATAN", "KENDALA"].includes(firstWord)) {
+      const isBaWord = /^BA[\s.]?0?[1-6]$/i.test(firstWord);
       return {
         code: firstWord,
-        color: "#FBBF24",
-        bg: "rgba(251, 191, 36, 0.15)",
+        color: isBaWord ? "var(--color-badge-ba-fg)" : "var(--color-warning-fg)",
+        bg: isBaWord ? "var(--color-badge-ba-bg)" : "var(--color-warning-bg)",
+        border: isBaWord
+          ? "var(--color-badge-ba-border)"
+          : "var(--color-warning-border)",
       };
     }
   }
 
   return {
     code: "KENDALA",
-    color: "#FBBF24",
-    bg: "rgba(251, 191, 36, 0.15)",
+    color: "var(--color-warning-fg)",
+    bg: "var(--color-warning-bg)",
+    border: "var(--color-warning-border)",
   };
 }
 
@@ -294,6 +312,7 @@ export function extractRouteTroubledUnits(
       statusCode: string;
       badgeBg: string;
       badgeColor: string;
+      badgeBorder?: string;
       isOff: boolean;
     }
   >();
@@ -339,6 +358,7 @@ export function extractRouteTroubledUnits(
             statusCode: parsed.code,
             badgeBg: parsed.bg,
             badgeColor: parsed.color,
+            badgeBorder: parsed.border,
             isOff: u.status_code === "OFF",
           });
         }
@@ -367,6 +387,7 @@ export function extractRouteTroubledUnits(
             statusCode: parsed.code,
             badgeBg: parsed.bg,
             badgeColor: parsed.color,
+            badgeBorder: parsed.border,
             isOff: Boolean(u.isOff),
           });
         }
@@ -380,6 +401,7 @@ export function extractRouteTroubledUnits(
     statusCode: item.statusCode,
     badgeBg: item.badgeBg,
     badgeColor: item.badgeColor,
+    badgeBorder: item.badgeBorder,
     isOff: item.isOff,
     shifts: item.shifts,
     routeCode,

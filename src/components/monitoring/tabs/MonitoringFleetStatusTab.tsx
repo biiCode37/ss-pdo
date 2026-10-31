@@ -165,6 +165,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           statusCode: string;
           badgeBg: string;
           badgeColor: string;
+          badgeBorder?: string;
           isOff: boolean;
         }
       >();
@@ -229,6 +230,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   statusCode: parsed.code,
                   badgeBg: parsed.bg,
                   badgeColor: parsed.color,
+                  badgeBorder: parsed.border,
                   isOff: u.status_code === "OFF",
                 });
               }
@@ -256,6 +258,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   statusCode: parsed.code,
                   badgeBg: parsed.bg,
                   badgeColor: parsed.color,
+                  badgeBorder: parsed.border,
                   isOff: u.isOff,
                 });
               }
@@ -305,6 +308,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   statusCode: parsed.code,
                   badgeBg: parsed.bg,
                   badgeColor: parsed.color,
+                  badgeBorder: parsed.border,
                   isOff: u.isOff,
                 });
               }
@@ -322,6 +326,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
         statusCode: item.statusCode,
         badgeBg: item.badgeBg,
         badgeColor: item.badgeColor,
+        badgeBorder: item.badgeBorder,
         isOff: item.isOff,
         shifts: item.shifts,
         shift: item.shifts[0],
@@ -1253,6 +1258,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                                 fontWeight: 700,
                                 background: unit.badgeBg,
                                 color: unit.badgeColor,
+                                border: unit.badgeBorder ? `1px solid ${unit.badgeBorder}` : "none",
                                 padding: "2px 5px",
                                 borderRadius: "4px",
                                 letterSpacing: "0.2px",

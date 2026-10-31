@@ -783,6 +783,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                               fontWeight: 700,
                               background: u.badgeBg,
                               color: u.badgeColor,
+                              border: u.badgeBorder ? `1px solid ${u.badgeBorder}` : "none",
                               padding: "2px 7px",
                               borderRadius: "5px",
                               letterSpacing: "0.2px",
