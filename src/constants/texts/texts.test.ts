@@ -495,6 +495,37 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PAGE_MANAGEMENT.TOAST.MONITORING_UNDER_MAINTENANCE).toBeDefined();
   });
 
+  it('exports TEXT_PAGE_MANAGEMENT granular permissions and bulk action texts', () => {
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.TITLE).toBe('Pengaturan Akses Halaman');
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.ROLE_TAB).toBe('Hak Akses Peran');
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.WHITELIST_TAB).toBe('Izin Tambahan (Whitelist)');
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.BLACKLIST_TAB).toBe('Pembatasan Khusus (Blacklist)');
+    expect(TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE).toBe('Pilih Pengguna');
+    expect(TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_MODE_BTN).toBe('Pilih Banyak');
+    expect(TEXT_PAGE_MANAGEMENT.ACCESS_DENIED.TITLE).toBe('Akses Halaman Dibatasi');
+
+    const wlMsg = TEXT_PAGE_MANAGEMENT.SAFETY_DIALOGS.WHITELIST_WARNING_MSG(
+      'Budi',
+      'PDO',
+      'Monitoring Wilayah'
+    );
+    expect(wlMsg).toContain('Budi');
+    expect(wlMsg).toContain('PDO');
+    expect(wlMsg).toContain('Monitoring Wilayah');
+
+    const blMsg = TEXT_PAGE_MANAGEMENT.SAFETY_DIALOGS.BLACKLIST_WARNING_MSG(
+      'Ani',
+      'Admin',
+      'Dashboard'
+    );
+    expect(blMsg).toContain('Ani');
+    expect(blMsg).toContain('Admin');
+    expect(blMsg).toContain('Dashboard');
+
+    const selCount = TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECTED_COUNT(3);
+    expect(selCount).toBe('3 Halaman Dipilih');
+  });
+
   it('contains all required text entries for Keterangan Presets & Shift Notes', () => {
     const modalTexts = TEXT_ALERTS.BUS_INPUT_MODAL;
     expect(modalTexts.PRESETS).toBeDefined();
