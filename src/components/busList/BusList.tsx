@@ -7,6 +7,7 @@ import { showSuccessToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import type { SyncItem } from "@/hooks/useOfflineSync";
 import type { OdometerRefInfo } from "@/hooks/usePreviousDayOdometer";
+import type { DailyRoutePlotting, UnitPlottingItem } from "@/types/supabase";
 
 import { isUnitAllowedForInput, isBusFilled } from "./busListUtils";
 import { useBulkOperations } from "./useBulkOperations";
@@ -34,6 +35,7 @@ export interface BusListProps {
   activeShift?: 1 | 2;
   previousDayKmMap?: Record<string, string>;
   previousDayRefMap?: Record<string, OdometerRefInfo>;
+  plotting?: DailyRoutePlotting | null;
 }
 
 function BusListComponent({
@@ -51,7 +53,18 @@ function BusListComponent({
   activeShift = 1,
   previousDayKmMap,
   previousDayRefMap,
+  plotting,
 }: BusListProps) {
+  const plottingMap = useMemo(() => {
+    const map = new Map<string, UnitPlottingItem>();
+    if (plotting?.units_data) {
+      plotting.units_data.forEach((item) => {
+        map.set(item.unit.trim().toUpperCase(), item);
+      });
+    }
+    return map;
+  }, [plotting]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [activeCategory, setActiveCategory] = useState("ALL");
@@ -229,6 +242,9 @@ function BusListComponent({
                   activeShift={activeShift}
                   previousDayKmAkhir2={prevKm}
                   previousDayDateLabel={prevDateLabel}
+                  plottingItem={plottingMap.get(normUnit)}
+                  endpointAName={plotting?.endpoint_a_name}
+                  endpointBName={plotting?.endpoint_b_name}
                 />
               );
             })

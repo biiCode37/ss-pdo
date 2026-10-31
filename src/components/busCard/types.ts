@@ -1,4 +1,5 @@
 import type { BusData, HeaderMap } from "@/services/googleSheets";
+import type { UnitPlottingItem } from "@/types/supabase";
 
 export interface BusCardProps {
   bus: BusData;
@@ -15,4 +16,7 @@ export interface BusCardProps {
   activeShift?: 1 | 2;
   previousDayKmAkhir2?: string;
   previousDayDateLabel?: string;
+  plottingItem?: UnitPlottingItem | null;
+  endpointAName?: string;
+  endpointBName?: string;
 }

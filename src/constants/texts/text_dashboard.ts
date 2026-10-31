@@ -15,6 +15,8 @@ export const TEXT_DASHBOARD = {
     DASHBOARD_SHORT: 'Dashboard',
     UNIT_LIST: 'Armada',
     UNIT_SHORT: 'Armada',
+    PLOTTING: 'Plotting Harian',
+    PLOTTING_SHORT: 'Plotting',
     ACCUMULATION: 'Akumulasi',
     MORE: 'Lainnya',
     MORE_SHORT: 'Menu',
@@ -302,4 +304,3 @@ export const TEXT_DASHBOARD = {
     CLOSE_MODAL_ARIA: 'Tutup sheet rekap akumulasi',
   },
 } as const;
-

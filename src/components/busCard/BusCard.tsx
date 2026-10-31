@@ -28,6 +28,9 @@ function BusCardComponent({
   activeShift = 1,
   previousDayKmAkhir2,
   previousDayDateLabel,
+  plottingItem,
+  endpointAName,
+  endpointBName,
 }: BusCardProps) {
   const { formData, isLoading, saveStatus, handleSaveUpdates } = useBusCardSave({
     bus,
@@ -89,6 +92,26 @@ function BusCardComponent({
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             <span className="bus-card-unit" style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
+            {plottingItem && (
+              <span
+                data-testid={`plotting-badge-${bus.unit}`}
+                title={`Urutan #${plottingItem.order} • Start ${plottingItem.start_point === 'A' ? (endpointAName || 'A') : (endpointBName || 'B')}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "2px 7px",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  background: plottingItem.start_point === 'A' ? "rgba(56, 189, 248, 0.12)" : "rgba(245, 158, 11, 0.12)",
+                  color: plottingItem.start_point === 'A' ? "#38bdf8" : "#fbbf24",
+                  border: plottingItem.start_point === 'A' ? "1px solid rgba(56, 189, 248, 0.3)" : "1px solid rgba(245, 158, 11, 0.3)",
+                }}
+              >
+                #{plottingItem.order} • 📍 {plottingItem.start_point === 'A' ? (endpointAName || 'A') : (endpointBName || 'B')}
+              </span>
+            )}
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
                 {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}
@@ -196,6 +219,9 @@ function BusCardComponent({
           activeShift={activeShift}
           previousDayKmAkhir2={previousDayKmAkhir2}
           previousDayDateLabel={previousDayDateLabel}
+          plottingItem={plottingItem}
+          endpointAName={endpointAName}
+          endpointBName={endpointBName}
         />
       )}
     </>

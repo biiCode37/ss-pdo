@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useEffect, useRef } from "react";
+import { lazy, Suspense, useMemo, useEffect, useRef, useState } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { UserManagementSkeleton } from "@/components/Skeletons";
 import { AllRouteMonitoringPage } from "@/components/AllRouteMonitoringPage";
@@ -8,6 +8,8 @@ import { usePreviousDayOdometer } from "@/hooks/usePreviousDayOdometer";
 import { getStoredUserRole } from "@/utils/roleStorage";
 import { showAuthExpiredAlert, showSuccessToast, showWarningToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
+import type { DailyRoutePlotting } from "@/types/supabase";
+import { fetchDailyPlotting } from "@/services/dailyPlottingService";
 
 import {
   DashboardHeader,
@@ -135,6 +137,29 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     headerMap,
     setBusData,
   });
+
+  // 4. Daily Route Plotting State & Effect
+  const [currentPlotting, setCurrentPlotting] = useState<DailyRoutePlotting | null>(null);
+
+  useEffect(() => {
+    if (!matchedRoute?.id || !operationalReportDate) {
+      setCurrentPlotting(null);
+      return;
+    }
+    let isCancelled = false;
+    fetchDailyPlotting(matchedRoute.id, operationalReportDate)
+      .then((data) => {
+        if (!isCancelled) {
+          setCurrentPlotting(data);
+        }
+      })
+      .catch((err) => {
+        console.warn("[Dashboard] Gagal memuat data plotting:", err);
+      });
+    return () => {
+      isCancelled = true;
+    };
+  }, [matchedRoute?.id, operationalReportDate]);
 
   // 4. Offline Queue & Background Sync
   const {
@@ -469,6 +494,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           missingColumns={missingColumns}
           previousDayKmMap={previousDayKmMap}
           previousDayRefMap={previousDayRefMap}
+          matchedRoute={matchedRoute}
+          operationalReportDate={operationalReportDate}
+          plotting={currentPlotting}
+          onPlottingChange={setCurrentPlotting}
         />
       )}
 

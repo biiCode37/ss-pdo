@@ -2,6 +2,7 @@ import React from "react";
 import { Info } from "lucide-react";
 import type { HeaderMap } from "@/services/googleSheets";
 import type { BusInputFormReturn } from "./useBusInputForm";
+import type { UnitPlottingItem } from "@/types/supabase";
 import { SingleFocusTrip } from "./singleFocus/SingleFocusTrip";
 import { SingleFocusToa } from "./singleFocus/SingleFocusToa";
 import { SingleFocusKm } from "./singleFocus/SingleFocusKm";
@@ -12,6 +13,9 @@ export interface BusInputModalSingleFocusProps {
   activeCategory: string;
   busKmAwal1?: string;
   headerMap?: HeaderMap;
+  plottingItem?: UnitPlottingItem | null;
+  endpointAName?: string;
+  endpointBName?: string;
 }
 
 export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> = ({
@@ -19,6 +23,9 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
   activeCategory,
   busKmAwal1,
   headerMap,
+  plottingItem,
+  endpointAName,
+  endpointBName,
 }) => {
   const currentCategory = form.effectiveCategory || activeCategory;
   const isTripCategory = currentCategory === "trip";
@@ -56,7 +63,13 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
 
       {/* Kelompok Input Trip */}
       {isTripCategory && (
-        <SingleFocusTrip form={form} headerMap={headerMap || form.headerMap} />
+        <SingleFocusTrip
+          form={form}
+          headerMap={headerMap || form.headerMap}
+          plottingItem={plottingItem}
+          endpointAName={endpointAName}
+          endpointBName={endpointBName}
+        />
       )}
 
       {/* Kelompok Input TOA */}
@@ -73,8 +86,8 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
         />
       )}
 
-      {/* Kelompok Catatan: jika chip catatan aktif atau kategori murni catatan */}
-      {(form.showKeterangan || isNotesOnlyCategory) && (
+      {/* Kelompok Input Catatan Murni atau Progressive Disclosure Catatan */}
+      {(isNotesOnlyCategory || form.showKeterangan) && (
         <SingleFocusNotes form={form} />
       )}
     </div>

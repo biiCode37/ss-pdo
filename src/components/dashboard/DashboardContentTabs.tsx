@@ -15,9 +15,11 @@ import {
 } from "@/components/pageManagement";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import type { SyncItem } from "@/hooks/useOfflineSync";
+import { DailyPlottingPage } from "@/components/plotting";
+import type { DailyRoutePlotting, Route } from "@/types/supabase";
 
 interface DashboardContentTabsProps {
-  mainTab: "input" | "analytics" | "units";
+  mainTab: "input" | "analytics" | "units" | "plotting";
   onSwipeNext: () => void;
   onSwipePrev: () => void;
   onOpenPageManagement?: () => void;
@@ -51,6 +53,10 @@ interface DashboardContentTabsProps {
   missingColumns: string[];
   previousDayKmMap?: Record<string, string>;
   previousDayRefMap?: Record<string, import("@/hooks/usePreviousDayOdometer").OdometerRefInfo>;
+  matchedRoute?: Route | null;
+  operationalReportDate?: string;
+  plotting?: DailyRoutePlotting | null;
+  onPlottingChange?: (plotting: DailyRoutePlotting) => void;
 }
 
 export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
@@ -81,6 +87,10 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
   missingColumns,
   previousDayKmMap,
   previousDayRefMap,
+  matchedRoute,
+  operationalReportDate,
+  plotting,
+  onPlottingChange,
 }) => {
   const { canAccessPage, isUnderMaintenance } = usePageAccess();
   const currentUserRole = getStoredUserRole();
@@ -149,6 +159,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               activeShift={activeShift}
               previousDayKmMap={previousDayKmMap}
               previousDayRefMap={previousDayRefMap}
+              plotting={plotting}
             />
           </>
         )}
@@ -198,6 +209,26 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               activeMonth={activeMonth}
               activeYear={activeYear}
               accRange={accRangeDetails}
+            />
+          </>
+        )}
+      </div>
+      {/* TAB 4: Plotting Harian */}
+      <div style={{ display: mainTab === "plotting" ? "block" : "none" }}>
+        {!canAccessPage("plotting", currentUserRole) ? (
+          isUnderMaintenance("plotting") ? <PageDisabledState /> : <AccessRestrictedState />
+        ) : (
+          <>
+            {currentUserRole === "superadmin" && isUnderMaintenance("plotting") && (
+              <SuperadminMaintenanceBanner onManageAccess={onOpenPageManagement} />
+            )}
+            <DailyPlottingPage
+              routeId={matchedRoute?.id || 0}
+              routeCode={matchedRoute?.route_code || ""}
+              date={operationalReportDate || selectedTab}
+              buses={busData}
+              headerMap={headerMap}
+              onPlottingChange={onPlottingChange}
             />
           </>
         )}

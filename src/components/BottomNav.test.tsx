@@ -25,7 +25,7 @@ describe("BottomNav Component", () => {
     container.remove();
   });
 
-  it("renders 3 tabs correctly, highlights active tab, and does not render redundant more tab", () => {
+  it("renders 4 tabs correctly, highlights active tab, and does not render redundant more tab", () => {
     act(() => {
       root.render(
         <BottomNav
@@ -38,24 +38,48 @@ describe("BottomNav Component", () => {
     const inputBtn = container.querySelector('[data-testid="bottom-nav-input"]');
     const analyticsBtn = container.querySelector('[data-testid="bottom-nav-analytics"]');
     const unitsBtn = container.querySelector('[data-testid="bottom-nav-units"]');
+    const plottingBtn = container.querySelector('[data-testid="bottom-nav-plotting"]');
     const moreBtn = container.querySelector('[data-testid="bottom-nav-more"]');
 
     expect(inputBtn).not.toBeNull();
     expect(analyticsBtn).not.toBeNull();
     expect(unitsBtn).not.toBeNull();
+    expect(plottingBtn).not.toBeNull();
     expect(moreBtn).toBeNull();
 
     expect(inputBtn?.classList.contains("active")).toBe(true);
     expect(analyticsBtn?.classList.contains("active")).toBe(false);
     expect(unitsBtn?.classList.contains("active")).toBe(false);
+    expect(plottingBtn?.classList.contains("active")).toBe(false);
 
     expect(inputBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.INPUT_SHORT);
     expect(analyticsBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.DASHBOARD_SHORT);
     expect(unitsBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.UNIT_SHORT);
+    expect(plottingBtn?.textContent).toContain(TEXT_DASHBOARD.TABS.PLOTTING_SHORT);
 
     expect(inputBtn?.getAttribute('title')).toBe('Input SS');
     expect(analyticsBtn?.getAttribute('title')).toBe('Dashboard');
     expect(unitsBtn?.getAttribute('title')).toBe('Armada');
+    expect(plottingBtn?.getAttribute('title')).toBe(TEXT_DASHBOARD.TABS.PLOTTING);
+  });
+
+  it("calls onSelectTab when plotting tab is clicked", () => {
+    const handleSelectTab = vi.fn();
+    act(() => {
+      root.render(
+        <BottomNav
+          activeTab="input"
+          onSelectTab={handleSelectTab}
+        />
+      );
+    });
+
+    const plottingBtn = container.querySelector('[data-testid="bottom-nav-plotting"]') as HTMLButtonElement;
+    act(() => {
+      plottingBtn.click();
+    });
+
+    expect(handleSelectTab).toHaveBeenCalledWith("plotting");
   });
 
   it("calls onSelectTab when an inactive tab is clicked", () => {

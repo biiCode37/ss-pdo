@@ -12,6 +12,7 @@ import {
   TEXT_USER_MANAGEMENT,
   TEXT_UNIT_DETAIL,
   TEXT_PAGE_MANAGEMENT,
+  TEXT_PLOTTING,
 } from './index';
 
 describe('Centralized UI Text Dictionary', () => {
@@ -553,5 +554,13 @@ describe('Centralized UI Text Dictionary', () => {
     expect(modalTexts.PRESETS.PREVIEW_SSOT_LABEL).toBe('Hasil Format Spreadsheet:');
     expect(modalTexts.PRESETS.APPLY_ALL_SHIFTS).toBe('Terapkan ke Kedua Shift');
     expect(modalTexts.PRESETS.ARIA_SELECT_NOTE_SHIFT).toBe('Pilih Shift Catatan');
+  });
+  it('exports TEXT_PLOTTING with labels, tabs, and actions', () => {
+    expect(TEXT_DASHBOARD.TABS.PLOTTING).toBe('Plotting Harian');
+    expect(TEXT_DASHBOARD.TABS.PLOTTING_SHORT).toBe('Plotting');
+    expect(TEXT_PLOTTING.TITLE).toBe('Plotting Armada Harian');
+    expect(TEXT_PLOTTING.ACTIONS.START_REORDER).toBe('Atur Urutan');
+    expect(TEXT_PLOTTING.ACTIONS.APPLY_ROLLING).toBe('Rolling Kemarin');
+    expect(TEXT_PLOTTING.UNIT_CARD.STATUS_READY).toBe('Siap');
   });
 });

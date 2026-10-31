@@ -232,3 +232,28 @@ export interface DailyFleetShiftWithUnits extends DailyFleetShift {
   non_sgo_units: DailyFleetNonSgoUnit[];
 }
 
+
+
+export type PlottingStartPoint = 'A' | 'B';
+export type PlottingUnitStatus = 'READY' | 'TROUBLE' | 'OFF';
+
+export interface UnitPlottingItem {
+  unit: string;
+  order: number;
+  start_point: PlottingStartPoint;
+  target_ritase: number;
+  status: PlottingUnitStatus;
+  note?: string;
+}
+
+export interface DailyRoutePlotting {
+  id?: number;
+  route_id: number;
+  route_code: string;
+  date: string;
+  endpoint_a_name?: string;
+  endpoint_b_name?: string;
+  units_data: UnitPlottingItem[];
+  created_at?: string;
+  updated_at?: string;
+}

@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "src/components/BottomNav.tsx": {
-    "mtime": 1792211224.4196544,
-    "ast_hash": "8278815d90b10e8d5e1da10aabfc0381",
+    "mtime": 1793458073.2225943,
+    "ast_hash": "4415eacdab8501ecdb26bfa0944b674b",
     "semantic_hash": ""
   },
   "src/components/BusCard.tsx": {
@@ -110,13 +110,13 @@
     "semantic_hash": ""
   },
   "src/components/Dashboard.tsx": {
-    "mtime": 1793414817.7312162,
-    "ast_hash": "5290063294c417d4ae4b65b41eb1e9a5",
+    "mtime": 1793458903.5896075,
+    "ast_hash": "76bdf5cf3b25654d1e6dfe7f6b9717f5",
     "semantic_hash": ""
   },
   "src/components/KPICard.tsx": {
-    "mtime": 1793407169.975936,
-    "ast_hash": "8a590590dfce286a6f425dce33ce9879",
+    "mtime": 1793429226.273493,
+    "ast_hash": "e0560afc77843e54ed8716696677f1cb",
     "semantic_hash": ""
   },
   "src/components/LoginScreen.tsx": {
@@ -130,8 +130,8 @@
     "semantic_hash": ""
   },
   "src/components/ShiftComparisonCard.tsx": {
-    "mtime": 1793407170.1770446,
-    "ast_hash": "4aa2c15063fb399be7bb63e0a9e0a331",
+    "mtime": 1793429226.2759635,
+    "ast_hash": "18cd983aa22e61c15e7de318e190f33c",
     "semantic_hash": ""
   },
   "src/hooks/useOfflineSync.ts": {
@@ -170,7 +170,7 @@
     "semantic_hash": ""
   },
   "tsconfig.app.json": {
-    "mtime": 1793405975.5407977,
+    "mtime": 1793429226.7784088,
     "ast_hash": "61132bd0ba9f0cd55c5ebcba3ff48c7f",
     "semantic_hash": ""
   },
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   ".agents/AGENTS.md": {
-    "mtime": 1793409548.1372964,
-    "ast_hash": "b3e13b5bf69c1d13e485f1395d1c8ee3",
+    "mtime": 1793429225.8620768,
+    "ast_hash": "3c9c4d5396471510bff09973c6f70751",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -560,8 +560,8 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1793407580.4005263,
-    "ast_hash": "60ab633b6f7e9207fc511c37c447942c",
+    "mtime": 1793429226.1182575,
+    "ast_hash": "3429294bba8e23d08af4608dce4a2d6d",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_1/01-daftar-masalah.md": {
@@ -600,8 +600,8 @@
     "semantic_hash": ""
   },
   "public/favicon.svg": {
-    "mtime": 1793408172.5402372,
-    "ast_hash": "d6d3fc353882928f5fc1dd5ead194688",
+    "mtime": 1793429226.1202269,
+    "ast_hash": "4dd024146b18ad270f27fe8be0f47e39",
     "semantic_hash": ""
   },
   "public/icons.svg": {
@@ -630,8 +630,8 @@
     "semantic_hash": ""
   },
   "src/types/supabase.ts": {
-    "mtime": 1793104751.5231938,
-    "ast_hash": "12c36638fe298595d1ff42c96afe74b4",
+    "mtime": 1793457883.3761263,
+    "ast_hash": "9931fc6409b854c0c2f48d109251bf4a",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-04-supabase-integration.md": {
@@ -690,7 +690,7 @@
     "semantic_hash": ""
   },
   "src/components/UnitCard.tsx": {
-    "mtime": 1793411269.9374106,
+    "mtime": 1793429226.2815783,
     "ast_hash": "4043e24112163937cba5362a4897b6b1",
     "semantic_hash": ""
   },
@@ -710,7 +710,7 @@
     "semantic_hash": ""
   },
   "src/utils/unitAnalytics.ts": {
-    "mtime": 1793411269.91292,
+    "mtime": 1793429226.7750602,
     "ast_hash": "6effe66cb5d7bfaae1e034639d6210ae",
     "semantic_hash": ""
   },
@@ -725,7 +725,7 @@
     "semantic_hash": ""
   },
   "src/components/Skeletons.tsx": {
-    "mtime": 1793405976.812455,
+    "mtime": 1793429226.2801862,
     "ast_hash": "6f1c368157c79fd38a05456ff43dae5b",
     "semantic_hash": ""
   },
@@ -920,8 +920,8 @@
     "semantic_hash": ""
   },
   "src/components/login/LegalModals.tsx": {
-    "mtime": 1793405981.9563541,
-    "ast_hash": "0ba7038d1410c49d6d3b1970eddd36c2",
+    "mtime": 1793429226.3532426,
+    "ast_hash": "a8cb74390ad4f49c8eed26e6ff78eef6",
     "semantic_hash": ""
   },
   "src/utils/modals/busInputModal.ts": {
@@ -1020,12 +1020,12 @@
     "semantic_hash": ""
   },
   "src/utils/keteranganUtils.test.ts": {
-    "mtime": 1793410415.9523256,
+    "mtime": 1793429226.751825,
     "ast_hash": "4d1c962fa97a0416ddb194bf1d215da0",
     "semantic_hash": ""
   },
   "src/utils/keteranganUtils.ts": {
-    "mtime": 1793410324.559024,
+    "mtime": 1793429226.766487,
     "ast_hash": "2f673adcc197bf2dc1a0bb88a70a3028",
     "semantic_hash": ""
   },
@@ -1160,8 +1160,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1793409548.297441,
-    "ast_hash": "e4438d57654e05594e6e1d12cc8945de",
+    "mtime": 1793429225.8635247,
+    "ast_hash": "2e8f76c110564fb19f67ebcc6d6ee158",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_7/AUDIT_BUGS.md": {
@@ -1355,12 +1355,12 @@
     "semantic_hash": ""
   },
   "src/constants/texts/index.ts": {
-    "mtime": 1792392692.9789777,
-    "ast_hash": "8ab594d7fdb34de86f4c9e8c7874d794",
+    "mtime": 1793457975.355491,
+    "ast_hash": "cd5db1abe3a1fd52d0f47da53ee040ba",
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1793408173.3707728,
+    "mtime": 1793429226.6218634,
     "ast_hash": "7bf94bb7eacd59fb1f92e4933d7d85b7",
     "semantic_hash": ""
   },
@@ -1375,8 +1375,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_dashboard.ts": {
-    "mtime": 1793320898.1280258,
-    "ast_hash": "7634bd502c733cdabe72f47fd55b761b",
+    "mtime": 1793457969.3060238,
+    "ast_hash": "543fb30a5a040b893585ba0d336e28c5",
     "semantic_hash": ""
   },
   "src/constants/texts/text_errors.ts": {
@@ -1385,8 +1385,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_monitoring.ts": {
-    "mtime": 1793363277.1165233,
-    "ast_hash": "84df16d18e1131206ce9f7885784f521",
+    "mtime": 1793429226.6236088,
+    "ast_hash": "cc7925a50174451a85eb6fe3805e1087",
     "semantic_hash": ""
   },
   "src/constants/texts/text_pdo_form.ts": {
@@ -1400,8 +1400,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1793415277.0064979,
-    "ast_hash": "d52b39368541dc47dc4b9ce89f575d5c",
+    "mtime": 1793458004.422742,
+    "ast_hash": "868fc757f9e81ff582ed7306947f048e",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -1430,8 +1430,8 @@
     "semantic_hash": ""
   },
   "src/components/BottomNav.test.tsx": {
-    "mtime": 1792211224.418678,
-    "ast_hash": "2a91f54b71b8859ce6912a04a40def5b",
+    "mtime": 1793458085.6027644,
+    "ast_hash": "25b95029a399858a09c3787318c7f5af",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_20/AUDIT_BUGS.md": {
@@ -1475,8 +1475,8 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/AddRouteModal.tsx": {
-    "mtime": 1793406005.789556,
-    "ast_hash": "0216e31f9fdf7c417837aaf76c9773ef",
+    "mtime": 1793429226.5775301,
+    "ast_hash": "04f70ad73d5163b571b023bcb654e944",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_22/AUDIT_BUGS.md": {
@@ -1490,8 +1490,8 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/RouteSelectorSheet.tsx": {
-    "mtime": 1793406010.700469,
-    "ast_hash": "4ac912bd78e9afa9bf64c611854d060d",
+    "mtime": 1793429226.5983107,
+    "ast_hash": "21f049385936552c5dd07bc241281283",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_23/AUDIT_BUGS.md": {
@@ -1735,12 +1735,12 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardContentTabs.tsx": {
-    "mtime": 1793414818.4194088,
-    "ast_hash": "ebe819be66611a63507bc2b53b59c25a",
+    "mtime": 1793460169.9973001,
+    "ast_hash": "16d6cf7318d100e4d4544957ce1312a2",
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardHeader.tsx": {
-    "mtime": 1793408400.0130923,
+    "mtime": 1793429226.3148587,
     "ast_hash": "e6c81af34113e5df1639ca52cb1b8f0b",
     "semantic_hash": ""
   },
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/DashboardStatusBanners.tsx": {
-    "mtime": 1793406488.5830228,
-    "ast_hash": "45e5ba856ee36c6d1e68a33eb33dd905",
+    "mtime": 1793458838.808957,
+    "ast_hash": "f4ef06b4cb7307a638f73ea14ee67021",
     "semantic_hash": ""
   },
   "src/utils/modals/busInput/busModalHandlers.ts": {
@@ -1790,8 +1790,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringRouteCard.tsx": {
-    "mtime": 1793406886.1277864,
-    "ast_hash": "8f91c845ea2a91ac095ea3466fea2b1b",
+    "mtime": 1793429226.4006946,
+    "ast_hash": "afc666714ec9bff4332611684ad69565",
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringStates.tsx": {
@@ -1805,8 +1805,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/monitoringUtils.ts": {
-    "mtime": 1793425490.5376534,
-    "ast_hash": "10cd1a0286430563d9dac9c4c688e915",
+    "mtime": 1793429226.428048,
+    "ast_hash": "cdd874e74eb519d0b38330c8c81f4e81",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_39/AUDIT_BUGS.md": {
@@ -1885,13 +1885,13 @@
     "semantic_hash": ""
   },
   "src/components/pdoReport/ReportModalLayout.tsx": {
-    "mtime": 1793405996.3163843,
-    "ast_hash": "2ef95267fb176ed69d1486ceb5989489",
+    "mtime": 1793429226.5567577,
+    "ast_hash": "7b14317d5923720890855822492cb324",
     "semantic_hash": ""
   },
   "src/components/pdoReport/ReportStatusBadge.tsx": {
-    "mtime": 1793407175.5427015,
-    "ast_hash": "b3cb89a3d6b745d4336a7845aa78c5ca",
+    "mtime": 1793429226.5587263,
+    "ast_hash": "99b655513ed2759ea49ef489d6f3036f",
     "semantic_hash": ""
   },
   "src/components/pdoReport/ReportTrafficJamsSection.tsx": {
@@ -2025,8 +2025,8 @@
     "semantic_hash": ""
   },
   "src/components/dailyToaTrend/ToaBarChart.tsx": {
-    "mtime": 1793408859.6038246,
-    "ast_hash": "1c1cda7cbdad0b5c7ef60e687ad2435d",
+    "mtime": 1793429226.309918,
+    "ast_hash": "6c2f62c2a0985da050bb1df80d07922e",
     "semantic_hash": ""
   },
   "src/components/dailyToaTrend/ToaExecutiveStats.tsx": {
@@ -2080,7 +2080,7 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/UnifiedRouteControlBar.tsx": {
-    "mtime": 1793408400.0148003,
+    "mtime": 1793429226.6000395,
     "ast_hash": "f4a0f2620d2b10968876b3cefa8ac3d5",
     "semantic_hash": ""
   },
@@ -2120,7 +2120,7 @@
     "semantic_hash": ""
   },
   "src/components/accumulation/AccumulationFooter.tsx": {
-    "mtime": 1793406487.9782767,
+    "mtime": 1793429226.2840967,
     "ast_hash": "a5d40805a978b18a7330721c727abac0",
     "semantic_hash": ""
   },
@@ -2165,7 +2165,7 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusCardSummary.tsx": {
-    "mtime": 1793416744.3841968,
+    "mtime": 1793429226.291073,
     "ast_hash": "774da0e5a008f8c5c70d8cfb2f448547",
     "semantic_hash": ""
   },
@@ -2180,8 +2180,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/types.ts": {
-    "mtime": 1792392692.894074,
-    "ast_hash": "5d55c255e64a116962dee98e69acea40",
+    "mtime": 1793458321.9712844,
+    "ast_hash": "90e4d4e69e1cd33dc61414e762adbf63",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.ts": {
@@ -2205,8 +2205,8 @@
     "semantic_hash": ""
   },
   "src/components/waReport/WaReportFormatTabs.tsx": {
-    "mtime": 1793407450.7030199,
-    "ast_hash": "a3a8e312b396e1342bac4bb1fc9d484f",
+    "mtime": 1793429226.6183348,
+    "ast_hash": "2c4af98a462cae4f9d0d4b5afd2d68ba",
     "semantic_hash": ""
   },
   "src/components/waReport/WaReportHeader.tsx": {
@@ -2215,7 +2215,7 @@
     "semantic_hash": ""
   },
   "src/components/waReport/WaReportPreview.tsx": {
-    "mtime": 1793406489.5010455,
+    "mtime": 1793429226.6201901,
     "ast_hash": "b462e5f6ecdae1da5ec94fb190fb4709",
     "semantic_hash": ""
   },
@@ -2260,13 +2260,13 @@
     "semantic_hash": ""
   },
   "src/components/login/LoginInfoAboutSection.tsx": {
-    "mtime": 1793407524.8978438,
-    "ast_hash": "fd58bb3a5b061dbc8f0a7fca75f2903f",
+    "mtime": 1793429226.3618693,
+    "ast_hash": "cf420d456622be03719888eafd7149d8",
     "semantic_hash": ""
   },
   "src/components/login/LoginInfoComparisonSection.tsx": {
-    "mtime": 1793407524.89949,
-    "ast_hash": "91e1e861b11e816e7a9d76e34f775f4b",
+    "mtime": 1793429226.3638556,
+    "ast_hash": "ba270e15e8e848e427d4f885e3ee3332",
     "semantic_hash": ""
   },
   "src/components/login/LoginInfoHeader.tsx": {
@@ -2335,13 +2335,13 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/useDashboardUiState.test.tsx": {
-    "mtime": 1793320898.116131,
-    "ast_hash": "1b7f76a67952ba5edcc39285380546c4",
+    "mtime": 1793458540.8583996,
+    "ast_hash": "de7c026f79832b9ee8fc6158a0339842",
     "semantic_hash": ""
   },
   "src/components/dashboard/useDashboardUiState.ts": {
-    "mtime": 1793408172.8132539,
-    "ast_hash": "332a1fb9904db764525cbd3c20349da4",
+    "mtime": 1793458073.2179205,
+    "ast_hash": "a15c1673d9b20759d644716c2a97581b",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_53/AUDIT_BUGS.md": {
@@ -2470,13 +2470,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.test.tsx": {
-    "mtime": 1793417262.5836508,
-    "ast_hash": "2d7fcc40e03648c15b72745c67e77fdb",
+    "mtime": 1793458424.6885662,
+    "ast_hash": "cb2983aa9d85c53dc66b736c0ed3c074",
     "semantic_hash": ""
   },
   "src/components/busCard/BusCard.tsx": {
-    "mtime": 1793417228.682662,
-    "ast_hash": "ef6204d093bbd5276aa7847658b1df3d",
+    "mtime": 1793458405.4267678,
+    "ast_hash": "6534309530ac7ca0a6ac0f8777e868c4",
     "semantic_hash": ""
   },
   "src/components/busList/BusList.test.tsx": {
@@ -2485,8 +2485,8 @@
     "semantic_hash": ""
   },
   "src/components/busList/BusList.tsx": {
-    "mtime": 1792392692.900993,
-    "ast_hash": "12c5f7148bf378ebc018f5a8cf50ab0d",
+    "mtime": 1793458444.6795423,
+    "ast_hash": "222e966735feae49e00abecddf919fca",
     "semantic_hash": ""
   },
   "src/components/dailyToaTrend/DailyToaTrendCard.test.tsx": {
@@ -2500,7 +2500,7 @@
     "semantic_hash": ""
   },
   "src/components/dashboard/QueueModal.tsx": {
-    "mtime": 1793405978.116183,
+    "mtime": 1793429226.3471868,
     "ast_hash": "d99001814331b9f18f83fdbe312a9dde",
     "semantic_hash": ""
   },
@@ -2525,8 +2525,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.tsx": {
-    "mtime": 1793414819.364477,
-    "ast_hash": "8b743630c409cf46ca5ef83182821223",
+    "mtime": 1793429226.3782825,
+    "ast_hash": "126e4196e2eefeafc067ac4c19b3eec6",
     "semantic_hash": ""
   },
   "src/components/monitoring/index.ts": {
@@ -2560,7 +2560,7 @@
     "semantic_hash": ""
   },
   "src/components/profileMenu/UserProfileHeader.tsx": {
-    "mtime": 1793408400.0136325,
+    "mtime": 1793429226.5656145,
     "ast_hash": "6030b085f88410f0c5698b119cebfdc9",
     "semantic_hash": ""
   },
@@ -2580,12 +2580,12 @@
     "semantic_hash": ""
   },
   "src/components/userManagement/RoleBadge.tsx": {
-    "mtime": 1793408564.5781202,
-    "ast_hash": "b6cbfad749fc569247bdaa749b42f47a",
+    "mtime": 1793429226.6120894,
+    "ast_hash": "4bb0e11c1efd3b2db9a23a03f4fd5e9f",
     "semantic_hash": ""
   },
   "src/components/userManagement/UserManagementPage.tsx": {
-    "mtime": 1793406015.5329518,
+    "mtime": 1793429226.6149282,
     "ast_hash": "77125af05fc614a1d4d66c9f16fe5f72",
     "semantic_hash": ""
   },
@@ -2615,8 +2615,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/BusInputModal.tsx": {
-    "mtime": 1793333476.4157133,
-    "ast_hash": "6eb993a0aff66f2482faf474e1032f4b",
+    "mtime": 1793458394.9776666,
+    "ast_hash": "e512ed2894a7df5ade476176f59e5b42",
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardModal.test.tsx": {
@@ -2685,7 +2685,7 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalFooter.tsx": {
-    "mtime": 1793406488.2669694,
+    "mtime": 1793429226.293027,
     "ast_hash": "621bcad3a9ed0cd718539cfe789e1dfa",
     "semantic_hash": ""
   },
@@ -2705,13 +2705,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalShift2.tsx": {
-    "mtime": 1793406927.796014,
-    "ast_hash": "7e6534094dcac0c0221595b0b4d82d65",
+    "mtime": 1793429226.294003,
+    "ast_hash": "4e2a0c0aadc3d42773f5db03e62dadc8",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalSingleFocus.tsx": {
-    "mtime": 1793408859.08365,
-    "ast_hash": "c2e9e8587f66f943ac9b7f641d70b780",
+    "mtime": 1793458665.9742255,
+    "ast_hash": "3c7f22078ec42f93e40585799250348b",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalTabs.tsx": {
@@ -2720,8 +2720,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalTrip.tsx": {
-    "mtime": 1792392692.889642,
-    "ast_hash": "92c2dc48e89a39598de893918782f352",
+    "mtime": 1793458240.135264,
+    "ast_hash": "a6afe52e539a53a28695c93e676ac586",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/useBusInputForm.ts": {
@@ -2900,13 +2900,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringFleetStatusTab.test.tsx": {
-    "mtime": 1793363717.9701686,
+    "mtime": 1793429226.4620311,
     "ast_hash": "5489b2b996b764b0ee42a9c382f8ef00",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringFleetStatusTab.tsx": {
-    "mtime": 1793428657.6674888,
-    "ast_hash": "c8397ec756f48a82f0651cecf8735732",
+    "mtime": 1793429226.464977,
+    "ast_hash": "5474d9ff7baa6871eac7e95db79c1ea5",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringLeaderboard.tsx": {
@@ -2915,13 +2915,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringMacroKpiGrid.tsx": {
-    "mtime": 1793408172.9940536,
+    "mtime": 1793429226.47085,
     "ast_hash": "b91b483eb97d279f28a17b8da997706a",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRouteCardModern.tsx": {
-    "mtime": 1793406858.9459636,
-    "ast_hash": "3d725369abee7837ed9dc406c59c0706",
+    "mtime": 1793429226.4728076,
+    "ast_hash": "a77361e1411776e39f09113debc97630",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRoutesTab.test.tsx": {
@@ -2930,8 +2930,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRoutesTab.tsx": {
-    "mtime": 1793363515.4945478,
-    "ast_hash": "c449fe741bc7ad230dd6128ba4632803",
+    "mtime": 1793429226.4962437,
+    "ast_hash": "d2dcda0e6a8666fcbb9d7598cf38c729",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringShiftSplitBar.tsx": {
@@ -3100,13 +3100,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/modals/MonitoringRouteDetailModal.test.tsx": {
-    "mtime": 1793428674.0304885,
-    "ast_hash": "2b758f7409157e503ef9da32c559232c",
+    "mtime": 1793429226.413015,
+    "ast_hash": "31e59aaa79cec69fa43b2be195eb5752",
     "semantic_hash": ""
   },
   "src/components/monitoring/modals/MonitoringRouteDetailModal.tsx": {
-    "mtime": 1793428601.3693504,
-    "ast_hash": "95955326ec280f75213f2cc535f41f6b",
+    "mtime": 1793429226.416513,
+    "ast_hash": "bd03fcd29a820e8c030ecbffd404b02d",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringRouteCardModern.test.tsx": {
@@ -4345,13 +4345,13 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/singleFocus/SingleFocusKmShift1.tsx": {
-    "mtime": 1793406927.796014,
-    "ast_hash": "56b525dedd97bea7a4b80764457d806b",
+    "mtime": 1793429226.300294,
+    "ast_hash": "e1ee9d48a51a2ae26c04e93edfeecf94",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/singleFocus/SingleFocusKmShift2.tsx": {
-    "mtime": 1793406927.7970064,
-    "ast_hash": "930fdaa4495d776c954e4cbb99b848ba",
+    "mtime": 1793429226.3022537,
+    "ast_hash": "b90c6657428cce04e0fbb6cfee552d9f",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_115/AUDIT_BUGS.md": {
@@ -4700,7 +4700,7 @@
     "semantic_hash": ""
   },
   "src/components/routeSelector/BulkRouteSection.tsx": {
-    "mtime": 1793408400.0141902,
+    "mtime": 1793429226.5826805,
     "ast_hash": "b5556d804f8600f56771bbac2d49cc99",
     "semantic_hash": ""
   },
@@ -4925,7 +4925,7 @@
     "semantic_hash": ""
   },
   "src/components/fleetStatus/QuickKorlapFleetModal.tsx": {
-    "mtime": 1793405979.3958745,
+    "mtime": 1793429226.3496943,
     "ast_hash": "e9fbb1679229b76dcb8e9b953a9a54ee",
     "semantic_hash": ""
   },
@@ -4935,7 +4935,7 @@
     "semantic_hash": ""
   },
   "src/components/pdoReport/A2ReportModal.tsx": {
-    "mtime": 1793405990.694873,
+    "mtime": 1793429226.5518236,
     "ast_hash": "9bd4ecb057f9b121a7fbd18441dd5158",
     "semantic_hash": ""
   },
@@ -4965,8 +4965,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/MonitoringPeriodSelector.tsx": {
-    "mtime": 1793407469.4671748,
-    "ast_hash": "e701258ea294dcd2b0c3e714f0eb1a06",
+    "mtime": 1793429226.3812294,
+    "ast_hash": "06ce38f9947649232c9f2fba682d0c71",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringKorwilTab.test.tsx": {
@@ -4975,8 +4975,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringKorwilTab.tsx": {
-    "mtime": 1793407172.8888667,
-    "ast_hash": "343c387caf87f2c0c66df9051bc6fb88",
+    "mtime": 1793429226.4688983,
+    "ast_hash": "d7b344971a8ffb5ddb7e11722edfa1d7",
     "semantic_hash": ""
   },
   "docs/adr/0003-regional-monitoring-and-korwil-recap.md": {
@@ -5080,7 +5080,7 @@
     "semantic_hash": ""
   },
   "src/components/__tests__/UnitCard.test.tsx": {
-    "mtime": 1793411320.4302847,
+    "mtime": 1793429226.2831233,
     "ast_hash": "947001d98869590016a111ab9ff8fae0",
     "semantic_hash": ""
   },
@@ -5140,8 +5140,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/BusInputModalTrip.test.tsx": {
-    "mtime": 1792392692.8876894,
-    "ast_hash": "d97cdd23569ae2e2e3f8ec5e3e8084d8",
+    "mtime": 1793458254.9905925,
+    "ast_hash": "f6e71f6dee783ddf49b05db2434a99bc",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_142/AUDIT_BUGS.md": {
@@ -5250,18 +5250,18 @@
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageDisabledState.tsx": {
-    "mtime": 1793415652.0237048,
-    "ast_hash": "29cfdc04d655b54cdda4ccd9bd010bd3",
+    "mtime": 1793429226.5115283,
+    "ast_hash": "c2820301fb000a613b89a0af844992bf",
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageManagementPage.test.tsx": {
-    "mtime": 1793415413.0644443,
-    "ast_hash": "5a5a54f43152b8f49dc1065f7efaf27d",
+    "mtime": 1793429226.5130405,
+    "ast_hash": "4c78100185416721bfa5c8ba2cb77102",
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageManagementPage.tsx": {
-    "mtime": 1793415654.067696,
-    "ast_hash": "f307cb4c6940bc2ff71ccc6c99ef9388",
+    "mtime": 1793429226.5150135,
+    "ast_hash": "b5020738fbed6206408c9c4cab012dfa",
     "semantic_hash": ""
   },
   "src/components/pageManagement/SuperadminMaintenanceBanner.test.tsx": {
@@ -5270,43 +5270,43 @@
     "semantic_hash": ""
   },
   "src/components/pageManagement/SuperadminMaintenanceBanner.tsx": {
-    "mtime": 1793415655.5472064,
-    "ast_hash": "24808b4745d61f16fb0e1b5a663fa55d",
+    "mtime": 1793429226.5169625,
+    "ast_hash": "b42e0166812290cec751e38ae6133a4f",
     "semantic_hash": ""
   },
   "src/components/pageManagement/index.ts": {
-    "mtime": 1793414091.9221528,
-    "ast_hash": "756809d4c62aa49642e884fe4df945d1",
+    "mtime": 1793429226.520542,
+    "ast_hash": "deb7f6953f2c8062678563179331f67c",
     "semantic_hash": ""
   },
   "src/constants/texts/text_page_management.ts": {
-    "mtime": 1793415273.5565622,
-    "ast_hash": "488279d629808ffbc04528f8ab928ffb",
+    "mtime": 1793429226.62622,
+    "ast_hash": "9a97acd698eaa21adad84506b062592b",
     "semantic_hash": ""
   },
   "src/context/PageAccessContext.test.tsx": {
-    "mtime": 1793413994.0897977,
-    "ast_hash": "322a560140a624f4888e0164aba66935",
+    "mtime": 1793460204.7393534,
+    "ast_hash": "573195b532fbbb46137b29537cca1ebb",
     "semantic_hash": ""
   },
   "src/context/PageAccessContext.tsx": {
-    "mtime": 1793414831.1478033,
-    "ast_hash": "d3106e5f97830f3f349da69658ecbdcb",
+    "mtime": 1793429226.632305,
+    "ast_hash": "69f40337e0cad4072ac4cd50cb3d76ea",
     "semantic_hash": ""
   },
   "src/services/pageManagementService.test.ts": {
-    "mtime": 1793413934.6374414,
-    "ast_hash": "65660eba82f0814edc457297679ddbd6",
+    "mtime": 1793429226.73316,
+    "ast_hash": "ff584c9f8c5924e456dcbc2e5d4379d8",
     "semantic_hash": ""
   },
   "src/services/pageManagementService.ts": {
-    "mtime": 1793414832.5864317,
-    "ast_hash": "d25b44e899f4de3ebc24dcb97f6eda1d",
+    "mtime": 1793429226.7351108,
+    "ast_hash": "9e7d5588cb0e0b7a6d37d29b82e4144c",
     "semantic_hash": ""
   },
   "src/types/pageManagement.ts": {
-    "mtime": 1793413949.0571299,
-    "ast_hash": "d919ebab9c02c48e96ebbe7a7f8d3ac9",
+    "mtime": 1793460169.9936953,
+    "ast_hash": "2f6f6193abc082f6447fa8f8952e37c5",
     "semantic_hash": ""
   },
   "supabase/migrations/20261019000001_create_app_page_settings.sql": {
@@ -5390,8 +5390,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/modals/KorwilRouteDetailBottomSheet.tsx": {
-    "mtime": 1793363563.9967618,
-    "ast_hash": "82793d6851f64da737d8b1619ede983d",
+    "mtime": 1793429226.4110594,
+    "ast_hash": "969986605b5e34e1940c3ce99c9ad8bd",
     "semantic_hash": ""
   },
   "src/constants/routeRecords.test.ts": {
@@ -5715,203 +5715,293 @@
     "semantic_hash": ""
   },
   "src/components/busCard/modal/singleFocus/SingleFocusTrip.test.tsx": {
-    "mtime": 1793333476.423051,
-    "ast_hash": "c6c1a624f0f72e41babb0cf5af184e43",
+    "mtime": 1793458309.5830805,
+    "ast_hash": "fc8d56f66061092d90e84e0ce3485a18",
     "semantic_hash": ""
   },
   "src/components/busCard/modal/singleFocus/SingleFocusTrip.tsx": {
-    "mtime": 1793333476.423051,
-    "ast_hash": "c08386853c169219ba1869caee0b0c51",
+    "mtime": 1793458298.3903043,
+    "ast_hash": "60cceca15d9c312491bd0d2f8e6a4591",
     "semantic_hash": ""
   },
   "src/components/monitoring/monitoringUtils.test.ts": {
-    "mtime": 1793422993.999615,
-    "ast_hash": "f221656d7f8da92b914798445336bb99",
+    "mtime": 1793429226.4247172,
+    "ast_hash": "c94527fda8653581b3506070287deaf5",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_173/AUDIT_BUGS.md": {
-    "mtime": 1793363598.6048055,
-    "ast_hash": "1da64fdbea0f60d2616f0f40fcd98963",
+    "mtime": 1793429226.1274812,
+    "ast_hash": "20bf06e0be91d7e00b40d2c46f5be8ce",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_173/REPAIR_REPORT.md": {
-    "mtime": 1793363606.5326397,
-    "ast_hash": "c3a8cfb4b63047916b25a7b3c5497e59",
+    "mtime": 1793429226.128838,
+    "ast_hash": "0f40890bf91f860333beb1dc51db96b2",
     "semantic_hash": ""
   },
   "src/styles/tokens/color-contract.test.ts": {
-    "mtime": 1793422768.0409274,
-    "ast_hash": "85131bb066005481c20757faacd1db10",
+    "mtime": 1793429226.7469091,
+    "ast_hash": "eaadf752feda5fa58c571a07ffeb59bf",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_174/AUDIT_BUGS.md": {
-    "mtime": 1793408858.7392225,
-    "ast_hash": "53766b558cb9f45a50868bff6b9ed481",
+    "mtime": 1793429226.151353,
+    "ast_hash": "3069a6979ad8bd8010da41a864ca1c51",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_174/REPAIR_REPORT.md": {
-    "mtime": 1793408858.9262815,
-    "ast_hash": "c9f027f86fae4b25053efc6b7911de8f",
+    "mtime": 1793429226.208362,
+    "ast_hash": "a78d53146598812ac620f2445f2875be",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_174/UI_COLOR_AUDIT_SS_PDO.md": {
-    "mtime": 1793402556.389549,
-    "ast_hash": "4d076f2fe566414f838ae47df0294193",
+    "mtime": 1793429226.2133822,
+    "ast_hash": "32af09cde2f76c19f04e37871e419d2d",
     "semantic_hash": ""
   },
   "src/utils/themeUtils.test.ts": {
-    "mtime": 1793408174.3729014,
-    "ast_hash": "f29904050344ba2215ae153aee3dcb4a",
+    "mtime": 1793429226.770817,
+    "ast_hash": "5e51b4ec0c20fbfb5c7feefd21f4863d",
     "semantic_hash": ""
   },
   "src/utils/themeUtils.ts": {
-    "mtime": 1793408174.5189874,
-    "ast_hash": "dd05463e80658bcad7afd3bfb2c230b9",
+    "mtime": 1793429226.7717927,
+    "ast_hash": "4f6e5d0b7384cba0982c6dc1aa0df054",
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1793409461.03142,
-    "ast_hash": "2bac18fc8622fd6fc7ad5fba7ea0636e",
+    "mtime": 1793429225.864874,
+    "ast_hash": "1b989bdb8e1add22ec72b1f835833fef",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_175/AUDIT_BUGS.md": {
-    "mtime": 1793410613.9101467,
-    "ast_hash": "a6d92487cda8f592b8546ed6b14c7e3b",
+    "mtime": 1793429226.2158957,
+    "ast_hash": "322d1617888e880342a2bcbaee225e05",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_175/REPAIR_REPORT.md": {
-    "mtime": 1793410623.6819236,
-    "ast_hash": "5a08389e5c86364ccfbc4239bb23dfac",
+    "mtime": 1793429226.216874,
+    "ast_hash": "e823f255ef3f7c6d00bcfdb4c1b6de28",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_176/AUDIT_BUGS.md": {
-    "mtime": 1793411497.472775,
-    "ast_hash": "49cf22bafa401809993f30379bb9846c",
+    "mtime": 1793429226.2178512,
+    "ast_hash": "b78675d7eeb1c35a1ccaa74df0bf01ca",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_176/REPAIR_REPORT.md": {
-    "mtime": 1793411507.2401493,
-    "ast_hash": "39d6d41ff13765db1527f1b562ff9c35",
+    "mtime": 1793429226.219806,
+    "ast_hash": "66ba9b12f5140d8076ab1ea7c10252b1",
     "semantic_hash": ""
   },
   "src/components/pageManagement/AccessRestrictedState.test.tsx": {
-    "mtime": 1793414819.633393,
-    "ast_hash": "1775217f09a0fc51ebab0ca1111b2447",
+    "mtime": 1793429226.4967813,
+    "ast_hash": "b771258bd4c18b29e948b7d557155abf",
     "semantic_hash": ""
   },
   "src/components/pageManagement/AccessRestrictedState.tsx": {
-    "mtime": 1793414431.3726983,
-    "ast_hash": "ba9d7471ab988d69f68ae36bab855556",
+    "mtime": 1793429226.49875,
+    "ast_hash": "a4a3efcd8bb3f3e761fe8e989f41df88",
     "semantic_hash": ""
   },
   "src/components/pageManagement/BulkRoleConfigModal.tsx": {
-    "mtime": 1793415646.9040406,
-    "ast_hash": "ec103b9601ac21b0a2e85c4ca6e2a1d7",
+    "mtime": 1793429226.5007076,
+    "ast_hash": "74f7ba4b9b545d6ce6377fd764382b09",
     "semantic_hash": ""
   },
   "src/components/pageManagement/FloatingBulkActionBar.test.tsx": {
-    "mtime": 1793414820.931212,
-    "ast_hash": "668963e0c2e774561a0cda29cdc912b2",
+    "mtime": 1793429226.5007076,
+    "ast_hash": "dac6f2aaaa725dab1445effb78840b29",
     "semantic_hash": ""
   },
   "src/components/pageManagement/FloatingBulkActionBar.tsx": {
-    "mtime": 1793415647.4549465,
-    "ast_hash": "e906d3bdba91758fe71f02691d7a2463",
+    "mtime": 1793429226.5016763,
+    "ast_hash": "e60df4c8ae366fe8f9afd3c548ad6c15",
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageAccessConfigModal.test.tsx": {
-    "mtime": 1793415403.713412,
-    "ast_hash": "81cb291f6cd1aa77cf8e6e54fd2e9767",
+    "mtime": 1793429226.5080364,
+    "ast_hash": "90899d8a4254c4633b3c3d40d8970a47",
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageAccessConfigModal.tsx": {
-    "mtime": 1793415651.1089919,
-    "ast_hash": "abbc3d0ee7db41416fc703d0a0feeeff",
+    "mtime": 1793429226.5105374,
+    "ast_hash": "aebcbb47240be96ecebcad8bb350ca93",
     "semantic_hash": ""
   },
   "src/components/pageManagement/UserPickerModal.test.tsx": {
-    "mtime": 1793414827.5974123,
-    "ast_hash": "ef6380c09a3fbb10dd40d6a145b19638",
+    "mtime": 1793429226.517977,
+    "ast_hash": "ca4c0e865f705e4c8b54107a4d03c06c",
     "semantic_hash": ""
   },
   "src/components/pageManagement/UserPickerModal.tsx": {
-    "mtime": 1793414828.7615106,
-    "ast_hash": "168db1317b7cb0f2db1072b6d36a41c5",
+    "mtime": 1793429226.5185359,
+    "ast_hash": "dd88b0fe422e68e3d2489b2cddeb4710",
     "semantic_hash": ""
   },
   "src/utils/modals/pageAccessSafetyDialog.test.ts": {
-    "mtime": 1793414833.559632,
-    "ast_hash": "1d5a16d47765fa1e306d57a898b9ad62",
+    "mtime": 1793429226.7674637,
+    "ast_hash": "65ce06df967c87d0d5f957efa32fd3fc",
     "semantic_hash": ""
   },
   "src/utils/modals/pageAccessSafetyDialog.ts": {
-    "mtime": 1793414835.079456,
-    "ast_hash": "6eb77840835c68da8963767fa2ac50df",
+    "mtime": 1793429226.7698336,
+    "ast_hash": "78d96634f76b145a45916764f6c46187",
     "semantic_hash": ""
   },
   "supabase/migrations/20261031000001_granular_page_access_and_bulk_action.sql": {
-    "mtime": 1793414835.4992728,
-    "ast_hash": "ea16c0e6b02fb47ee3f7253795349cdc",
+    "mtime": 1793429226.776896,
+    "ast_hash": "6de03be2abb7a52b83c35facfaceb29a",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-10-31-granular-page-access-and-bulk-action.md": {
-    "mtime": 1793413718.7843552,
-    "ast_hash": "ff5af836af8acf4e9b77a92f39ac8eda",
+    "mtime": 1793429225.8668566,
+    "ast_hash": "32512c453a7a95bd5c06616118e07f1c",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-10-31-granular-page-access-and-bulk-action-design.md": {
-    "mtime": 1793413602.0600705,
-    "ast_hash": "8ea54dd8fa36ac406614f9149681c786",
+    "mtime": 1793429225.8678336,
+    "ast_hash": "c656a040df1a877441eda4f3ed241322",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_177/AUDIT_BUGS.md": {
-    "mtime": 1793421935.3527348,
+    "mtime": 1793429226.2217562,
     "ast_hash": "5f1612718bfaa5d8bce4e20ca124af44",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_177/REPAIR_REPORT.md": {
-    "mtime": 1793421935.3538568,
+    "mtime": 1793429226.2237594,
     "ast_hash": "d8f4da32b7c0a5e7d45c359f0772aa83",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_178/AUDIT_BUGS.md": {
-    "mtime": 1793417299.8165064,
-    "ast_hash": "0d6e13c591a1087bae7a079921d77ba5",
+    "mtime": 1793429226.2273145,
+    "ast_hash": "15f7efa55559591397a3b94034fd5e2f",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_178/REPAIR_REPORT.md": {
-    "mtime": 1793417308.69055,
-    "ast_hash": "21016ead7ff1f533c9b4e3da185d82c1",
+    "mtime": 1793429226.2292888,
+    "ast_hash": "23858009a2b20af6506262e9c591a957",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_179/AUDIT_BUGS.md": {
-    "mtime": 1793422093.4265924,
-    "ast_hash": "17e3b8fb26f5d43aa889c466815f5091",
+    "mtime": 1793429226.231452,
+    "ast_hash": "c89a2cf72001ddb967c0fe0d76114d5a",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_179/REPAIR_REPORT.md": {
-    "mtime": 1793422093.6534479,
-    "ast_hash": "886162c0857154aea7e6d342b7e2cbbc",
+    "mtime": 1793429226.2324219,
+    "ast_hash": "0d6198e951a755f008dfcf51cb7ba72e",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_180/AUDIT_BUGS.md": {
-    "mtime": 1793423076.173998,
-    "ast_hash": "68c03bdda49b2d7b10caa63bf5d05853",
+    "mtime": 1793429226.2410836,
+    "ast_hash": "d0579e68d64a2b74ec9a5abfa3200c2b",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_180/REPAIR_REPORT.md": {
-    "mtime": 1793423076.4035318,
-    "ast_hash": "7ba5a9b88579199392cdd83ad82385db",
+    "mtime": 1793429226.2442062,
+    "ast_hash": "f80400f3a13f6fad0d8c6251cdf531f0",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_181/AUDIT_BUGS.md": {
-    "mtime": 1793428726.7673583,
-    "ast_hash": "b1fc16cb91fc7b3e5bd8775a9805061a",
+    "mtime": 1793429226.247658,
+    "ast_hash": "b33b63eee04a5ab7d73db32095f4f44b",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_181/REPAIR_REPORT.md": {
-    "mtime": 1793428726.947111,
-    "ast_hash": "3c5491db3903e7d4fed34bb359b0bcd1",
+    "mtime": 1793429226.2492125,
+    "ast_hash": "0b9997cc4bd6dc23d07daa64bd809513",
+    "semantic_hash": ""
+  },
+  "src/components/plotting/DailyPlottingPage.test.tsx": {
+    "mtime": 1793458857.368208,
+    "ast_hash": "9300ce6aad834fd74b607a338cc007a5",
+    "semantic_hash": ""
+  },
+  "src/components/plotting/DailyPlottingPage.tsx": {
+    "mtime": 1793458147.7289066,
+    "ast_hash": "426de53dfda911bba23ec78f517a0c46",
+    "semantic_hash": ""
+  },
+  "src/components/plotting/PlottingBaseTabs.tsx": {
+    "mtime": 1793458857.368208,
+    "ast_hash": "6ec97f21bb8d1cf8accc49ffe76cfa40",
+    "semantic_hash": ""
+  },
+  "src/components/plotting/PlottingHeader.tsx": {
+    "mtime": 1793458857.370984,
+    "ast_hash": "bb3a3971763bbadb3c5b3f5505fc9e54",
+    "semantic_hash": ""
+  },
+  "src/components/plotting/PlottingUnitCard.tsx": {
+    "mtime": 1793458857.3715272,
+    "ast_hash": "636ef04fd88a2843952fee957bf4ea07",
+    "semantic_hash": ""
+  },
+  "src/components/plotting/index.ts": {
+    "mtime": 1793458151.1420555,
+    "ast_hash": "25e7c6dbb89bb0af17525be003faa3db",
+    "semantic_hash": ""
+  },
+  "src/constants/texts/text_plotting.ts": {
+    "mtime": 1793457922.2227926,
+    "ast_hash": "2c7c48bfdcb0e6632402dfad1439a20a",
+    "semantic_hash": ""
+  },
+  "src/services/dailyPlottingService.test.ts": {
+    "mtime": 1793458040.9419582,
+    "ast_hash": "5724533ab136b42b70bed58084d10df7",
+    "semantic_hash": ""
+  },
+  "src/services/dailyPlottingService.ts": {
+    "mtime": 1793458027.1678357,
+    "ast_hash": "4312b1b6c16931d370cb96d343b2f665",
+    "semantic_hash": ""
+  },
+  "src/utils/routeEndpointUtils.test.ts": {
+    "mtime": 1793457895.2468634,
+    "ast_hash": "84d6d9d83c73f2e4ba0950644c2979d1",
+    "semantic_hash": ""
+  },
+  "src/utils/routeEndpointUtils.ts": {
+    "mtime": 1793457913.1136131,
+    "ast_hash": "08792bbfee8e2e7517f6f1069f7e41c9",
+    "semantic_hash": ""
+  },
+  "src/utils/smartRitaseUtils.test.ts": {
+    "mtime": 1793458212.1548405,
+    "ast_hash": "65f34b74978d3439b1fc6f14d650de83",
+    "semantic_hash": ""
+  },
+  "src/utils/smartRitaseUtils.ts": {
+    "mtime": 1793458219.9015546,
+    "ast_hash": "3ea0abbed9bcb5dab6a8ab22c5f3f45f",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261031000002_create_daily_route_plottings.sql": {
+    "mtime": 1793457845.2134717,
+    "ast_hash": "9fd69230c4ee18b9af5abbb1d3daafc1",
+    "semantic_hash": ""
+  },
+  "docs/adr/0004-daily-fleet-plotting-and-smart-ritase.md": {
+    "mtime": 1793457452.8997626,
+    "ast_hash": "44e96c0437abfd79fc8ae6a549f7898b",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261031000003_add_plotting_to_app_page_settings.sql": {
+    "mtime": 1793460116.2031558,
+    "ast_hash": "d629e028ce0a1588794c54c163501968",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_182/AUDIT_BUGS.md": {
+    "mtime": 1793461874.2364511,
+    "ast_hash": "0ab9133c5e517780f66caa96267b53d7",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_182/REPAIR_REPORT.md": {
+    "mtime": 1793461883.47095,
+    "ast_hash": "46f8f559a59ca34f9d9612210944a502",
     "semantic_hash": ""
   }
 }
