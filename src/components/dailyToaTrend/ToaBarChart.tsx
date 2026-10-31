@@ -44,7 +44,7 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
         }}
       >
         <defs>
-          {/* Active Highlighted Tapped Pill Bar Gradient (Vibrant Electric Blue) */}
+          {/* Active Highlighted Tapped Pill Bar Gradient (High-Contrast Electric Blue) */}
           <linearGradient
             id={`${idPrefix}activePillGradient`}
             x1="0"
@@ -52,12 +52,11 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
             x2="0"
             y2="1"
           >
-            <stop offset="0%" stopColor="#60a5fa" stopOpacity="1" />
-            <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.85" />
+            <stop offset="0%" stopColor="#38bdf8" stopOpacity="1" />
+            <stop offset="100%" stopColor="#0284c7" stopOpacity="0.95" />
           </linearGradient>
 
-          {/* Increase Trend Pill Bar Gradient (Emerald Green) */}
+          {/* Increase Trend Pill Bar Gradient (Emerald Green - Fully Opaque) */}
           <linearGradient
             id={`${idPrefix}upPillGradient`}
             x1="0"
@@ -65,12 +64,11 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
             x2="0"
             y2="1"
           >
-            <stop offset="0%" stopColor="#4ade80" stopOpacity="0.85" />
-            <stop offset="50%" stopColor="#22c55e" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#059669" stopOpacity="0.25" />
+            <stop offset="0%" stopColor="#4ade80" stopOpacity="1" />
+            <stop offset="100%" stopColor="#16a34a" stopOpacity="0.85" />
           </linearGradient>
 
-          {/* Slight Decrease Pill Bar Gradient (Coral / Amber Red) */}
+          {/* Slight Decrease Pill Bar Gradient (Coral / Amber Red - Fully Opaque) */}
           <linearGradient
             id={`${idPrefix}slightDownPillGradient`}
             x1="0"
@@ -78,12 +76,11 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
             x2="0"
             y2="1"
           >
-            <stop offset="0%" stopColor="#fb923c" stopOpacity="0.85" />
-            <stop offset="50%" stopColor="#ef4444" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#b91c1c" stopOpacity="0.25" />
+            <stop offset="0%" stopColor="#fb923c" stopOpacity="1" />
+            <stop offset="100%" stopColor="#ea580c" stopOpacity="0.85" />
           </linearGradient>
 
-          {/* Drastic Decrease Pill Bar Gradient (Deep Crimson Red) */}
+          {/* Drastic Decrease Pill Bar Gradient (Deep Crimson Red - Fully Opaque) */}
           <linearGradient
             id={`${idPrefix}drasticDownPillGradient`}
             x1="0"
@@ -91,12 +88,11 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
             x2="0"
             y2="1"
           >
-            <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.9" />
-            <stop offset="50%" stopColor="#dc2626" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0.3" />
+            <stop offset="0%" stopColor="#f87171" stopOpacity="1" />
+            <stop offset="100%" stopColor="#dc2626" stopOpacity="0.85" />
           </linearGradient>
 
-          {/* Glowing Drop Shadow Filter for Active Tapped Bar (Blue Glow) */}
+          {/* Glowing Drop Shadow Filter for Active Tapped Bar */}
           <filter
             id={`${idPrefix}pillGlow`}
             x="-40%"
@@ -106,10 +102,10 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
           >
             <feDropShadow
               dx="0"
-              dy="2.5"
-              stdDeviation="3.5"
-              floodColor="#38bdf8"
-              floodOpacity="0.8"
+              dy="2"
+              stdDeviation="3"
+              floodColor="#0284c7"
+              floodOpacity="0.45"
             />
           </filter>
         </defs>
@@ -120,27 +116,27 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
           y1={24}
           x2={chartWidth - paddingX}
           y2={24}
-          stroke="var(--border-color, rgba(255, 255, 255, 0.1))"
+          stroke="var(--color-border-subtle, rgba(255, 255, 255, 0.08))"
           strokeDasharray="3 3"
-          opacity="0.3"
+          opacity="0.4"
         />
         <line
           x1={paddingX}
           y1={24 + maxBarHeight / 2}
           x2={chartWidth - paddingX}
           y2={24 + maxBarHeight / 2}
-          stroke="var(--border-color, rgba(255, 255, 255, 0.1))"
+          stroke="var(--color-border-subtle, rgba(255, 255, 255, 0.08))"
           strokeDasharray="3 3"
-          opacity="0.3"
+          opacity="0.4"
         />
         <line
           x1={paddingX}
           y1={chartHeight - 20}
           x2={chartWidth - paddingX}
           y2={chartHeight - 20}
-          stroke="var(--border-color, rgba(255, 255, 255, 0.15))"
+          stroke="var(--color-border-control, rgba(255, 255, 255, 0.15))"
           strokeWidth="1"
-          opacity="0.4"
+          opacity="0.5"
         />
 
         {/* Render Column Bars */}
@@ -171,6 +167,8 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
                 rx={rx}
                 ry={rx}
                 fill={fillUrl}
+                stroke={bar.isSelected ? "var(--color-text-primary)" : "none"}
+                strokeWidth={bar.isSelected ? 1.5 : 0}
                 filter={bar.isSelected ? `url(#${idPrefix}pillGlow)` : undefined}
                 className="trend-bar-rect"
                 style={{ animationDelay: `${idx * 16}ms` }}
@@ -192,8 +190,8 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
             <Award
               size={12}
               style={{
-                color: "#4ade80",
-                filter: "drop-shadow(0px 1px 2px rgba(34,197,94,0.5))",
+                color: "var(--color-success-fg, #22c55e)",
+                filter: "drop-shadow(0px 1px 2px rgba(34,197,94,0.4))",
               }}
             />
           </g>
@@ -214,8 +212,8 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
               <TrendingDown
                 size={12}
                 style={{
-                  color: "#fb7185",
-                  filter: "drop-shadow(0px 1px 2px rgba(244,63,94,0.5))",
+                  color: "var(--color-error-fg, #ef4444)",
+                  filter: "drop-shadow(0px 1px 2px rgba(244,63,94,0.4))",
                 }}
               />
             </g>
@@ -248,18 +246,18 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
                 width={badgeWidth}
                 height="21"
                 rx="7"
-                fill="#1d4ed8"
-                stroke="#60a5fa"
+                fill="var(--color-surface-raised)"
+                stroke="var(--color-shift-1-fg)"
                 strokeWidth="1.5"
                 filter={`url(#${idPrefix}pillGlow)`}
               />
-              <polygon points="0,10 -4,8 4,8" fill="#1d4ed8" />
+              <polygon points="0,10 -4,8 4,8" fill="var(--color-surface-raised)" />
               <text
                 x="0"
                 y="1.5"
                 fontSize="10"
                 fontWeight="800"
-                fill="#ffffff"
+                fill="var(--color-text-primary)"
                 textAnchor="middle"
               >
                 {badgeText}
@@ -287,13 +285,13 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
               x={bar.x + barWidth / 2}
               y={chartHeight - 4}
               fontSize="9"
-              fontWeight={bar.isSelected || bar.isGlobalTab ? 700 : 400}
+              fontWeight={bar.isSelected || bar.isGlobalTab ? 700 : 500}
               fill={
                 bar.isSelected
-                  ? "#60a5fa"
+                  ? "var(--color-shift-1-fg)"
                   : bar.isGlobalTab
-                    ? "var(--orange-color)"
-                    : "var(--text-secondary)"
+                    ? "var(--color-shift-1-fg)"
+                    : "var(--color-text-secondary)"
               }
               textAnchor="middle"
               style={{ cursor: "pointer" }}

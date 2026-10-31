@@ -40,8 +40,8 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
         padding: "5px 8px",
         borderRadius: "12px",
         marginBottom: "12px",
-        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-        background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
+        border: "1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08))",
+        background: "var(--color-bg-surface, rgba(23, 23, 23, 0.75))",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
       }}
@@ -65,7 +65,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
       >
         <Calendar
           size={14}
-          style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
+          style={{ color: "var(--color-action-primary-bg, #3ECF8E)", flexShrink: 0 }}
         />
         <span
           style={{
@@ -74,7 +74,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            color: "var(--text-primary)",
+            color: "var(--color-text-primary, var(--text-primary))",
             letterSpacing: "-0.01em",
           }}
         >
@@ -104,7 +104,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
             background: "rgba(234, 179, 8, 0.12)",
             border: "1px solid rgba(234, 179, 8, 0.35)",
             borderRadius: "8px",
-            color: "var(--warning-color, #eab308)",
+            color: "var(--color-warning-fg, #eab308)",
             padding: "5px 9px",
             fontSize: "11.5px",
             fontWeight: 700,
@@ -123,27 +123,27 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
         const isVerified = reportStatus === "verified";
         const isSubmitted = reportStatus === "submitted";
 
-        let statusBg = "rgba(245, 158, 11, 0.1)";
-        let statusBorder = "rgba(245, 158, 11, 0.25)";
-        let statusColor = "var(--warning-color, #f59e0b)";
+        let statusBg = "var(--color-warning-bg, rgba(245, 158, 11, 0.1))";
+        let statusBorder = "var(--color-warning-border, rgba(245, 158, 11, 0.25))";
+        let statusColor = "var(--color-warning-fg, #f59e0b)";
         let statusLabel: string = TEXT_PDO_FORM.A2_REPORT.PILL_LABEL;
         let statusTitle: string = TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE;
 
         if (isFailed) {
-          statusBg = "rgba(239, 68, 68, 0.12)";
-          statusBorder = "rgba(239, 68, 68, 0.35)";
-          statusColor = "var(--danger-color, #ef4444)";
+          statusBg = "var(--color-danger-bg, rgba(239, 68, 68, 0.12))";
+          statusBorder = "var(--color-danger-border, rgba(239, 68, 68, 0.35))";
+          statusColor = "var(--color-danger-fg, #ef4444)";
           statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_FAILED;
           statusTitle = TEXT_PDO_FORM.A2_REPORT.TOOLTIP_FAILED;
         } else if (isVerified) {
-          statusBg = "rgba(16, 185, 129, 0.1)";
-          statusBorder = "rgba(16, 185, 129, 0.25)";
-          statusColor = "var(--success-color, #10b981)";
+          statusBg = "var(--color-success-bg, rgba(16, 185, 129, 0.1))";
+          statusBorder = "var(--color-success-border, rgba(16, 185, 129, 0.25))";
+          statusColor = "var(--color-success-fg, #10b981)";
           statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_VERIFIED;
         } else if (isSubmitted) {
-          statusBg = "rgba(14, 165, 233, 0.1)";
-          statusBorder = "rgba(14, 165, 233, 0.25)";
-          statusColor = "var(--info-color, #38bdf8)";
+          statusBg = "var(--color-info-bg, rgba(14, 165, 233, 0.1))";
+          statusBorder = "var(--color-info-border, rgba(14, 165, 233, 0.25))";
+          statusColor = "var(--color-info-fg, #38bdf8)";
           if (confirmedShifts?.[1] && confirmedShifts?.[2]) {
             statusLabel = TEXT_PDO_FORM.A2_REPORT.STATUS_SUBMITTED_BOTH;
           } else if (confirmedShifts?.[1]) {

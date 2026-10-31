@@ -230,11 +230,11 @@ function QuickKorlapFleetModalComponent({
         style={{
           width: '100%',
           maxWidth: '480px',
-          backgroundColor: 'var(--color-bg-elevated, #1e293b)',
-          color: 'var(--color-text-main, #f8fafc)',
+          backgroundColor: 'var(--color-surface-raised)',
+          color: 'var(--color-text-primary)',
           borderRadius: '16px',
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)',
-          border: '1px solid var(--color-border, #334155)',
+          boxShadow: '0 20px 25px -5px var(--color-shadow)',
+          border: '1px solid var(--color-border-subtle)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
@@ -244,7 +244,7 @@ function QuickKorlapFleetModalComponent({
         <div
           style={{
             padding: '16px 20px',
-            borderBottom: '1px solid var(--color-border, #334155)',
+            borderBottom: '1px solid var(--color-border-subtle)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -258,7 +258,7 @@ function QuickKorlapFleetModalComponent({
               style={{
                 margin: '4px 0 0',
                 fontSize: '0.85rem',
-                color: 'var(--color-text-muted, #94a3b8)',
+                color: 'var(--color-text-muted)',
               }}
             >
               {TEXT_FLEET_STATUS.QUICK_KORLAP.SUBTITLE(routeCode, currentShift)}
@@ -270,7 +270,7 @@ function QuickKorlapFleetModalComponent({
             style={{
               background: 'transparent',
               border: 'none',
-              color: 'var(--color-text-muted, #94a3b8)',
+              color: 'var(--color-text-muted)',
               fontSize: '1.4rem',
               cursor: 'pointer',
             }}
@@ -296,7 +296,7 @@ function QuickKorlapFleetModalComponent({
                 fontSize: '0.8rem',
                 fontWeight: 600,
                 marginBottom: '6px',
-                color: 'var(--color-text-muted, #94a3b8)',
+                color: 'var(--color-text-muted)',
               }}
             >
               Pilih Shift:
@@ -313,7 +313,7 @@ function QuickKorlapFleetModalComponent({
                   fontWeight: 700,
                   border: currentShift === 1 ? '1px solid var(--accent-color, #3ECF8E)' : '1px solid var(--color-border, #334155)',
                   background: currentShift === 1 ? 'rgba(62, 207, 142, 0.15)' : 'rgba(0, 0, 0, 0.15)',
-                  color: currentShift === 1 ? 'var(--accent-color, #3ECF8E)' : 'var(--color-text-muted, #94a3b8)',
+                  color: currentShift === 1 ? 'var(--accent-color, #3ECF8E)' : 'var(--color-text-muted)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                 }}
@@ -331,7 +331,7 @@ function QuickKorlapFleetModalComponent({
                   fontWeight: 700,
                   border: currentShift === 2 ? '1px solid var(--accent-color, #3ECF8E)' : '1px solid var(--color-border, #334155)',
                   background: currentShift === 2 ? 'rgba(62, 207, 142, 0.15)' : 'rgba(0, 0, 0, 0.15)',
-                  color: currentShift === 2 ? 'var(--accent-color, #3ECF8E)' : 'var(--color-text-muted, #94a3b8)',
+                  color: currentShift === 2 ? 'var(--accent-color, #3ECF8E)' : 'var(--color-text-muted)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                 }}
@@ -355,7 +355,7 @@ function QuickKorlapFleetModalComponent({
                   fontSize: '0.8rem',
                   fontWeight: 600,
                   marginBottom: '6px',
-                  color: 'var(--color-text-muted, #94a3b8)',
+                  color: 'var(--color-text-muted)',
                 }}
               >
                 {TEXT_FLEET_STATUS.QUICK_KORLAP.RENOPS_LABEL}
@@ -370,9 +370,9 @@ function QuickKorlapFleetModalComponent({
                   width: '100%',
                   padding: '10px 12px',
                   borderRadius: '8px',
-                  border: '1px solid var(--color-border, #334155)',
-                  backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                  color: '#fff',
+                  border: '1px solid var(--color-border-subtle)',
+                  backgroundColor: 'var(--color-surface-subtle)',
+                  color: 'var(--color-text-primary)',
                   fontSize: '1rem',
                   fontWeight: 600,
                   boxSizing: 'border-box',
@@ -387,7 +387,7 @@ function QuickKorlapFleetModalComponent({
                   fontSize: '0.8rem',
                   fontWeight: 600,
                   marginBottom: '6px',
-                  color: 'var(--color-text-muted, #94a3b8)',
+                  color: 'var(--color-text-muted)',
                 }}
               >
                 {TEXT_FLEET_STATUS.QUICK_KORLAP.REALOPS_LABEL}
@@ -402,9 +402,9 @@ function QuickKorlapFleetModalComponent({
                   width: '100%',
                   padding: '10px 12px',
                   borderRadius: '8px',
-                  border: '1px solid var(--color-border, #334155)',
-                  backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                  color: '#fff',
+                  border: '1px solid var(--color-border-subtle)',
+                  backgroundColor: 'var(--color-surface-subtle)',
+                  color: 'var(--color-text-primary)',
                   fontSize: '1rem',
                   fontWeight: 600,
                   boxSizing: 'border-box',
@@ -420,7 +420,7 @@ function QuickKorlapFleetModalComponent({
                 fontSize: '0.8rem',
                 fontWeight: 600,
                 marginBottom: '6px',
-                color: 'var(--color-text-muted, #94a3b8)',
+                color: 'var(--color-text-muted)',
               }}
             >
               {TEXT_FLEET_STATUS.QUICK_KORLAP.NOTES_LABEL}
@@ -435,9 +435,9 @@ function QuickKorlapFleetModalComponent({
                 width: '100%',
                 padding: '10px 12px',
                 borderRadius: '8px',
-                border: '1px solid var(--color-border, #334155)',
-                backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                color: '#fff',
+                border: '1px solid var(--color-border-subtle)',
+                backgroundColor: 'var(--color-surface-subtle)',
+                color: 'var(--color-text-primary)',
                 fontSize: '0.9rem',
                 boxSizing: 'border-box',
                 resize: 'vertical',
@@ -448,7 +448,7 @@ function QuickKorlapFleetModalComponent({
               style={{
                 margin: '4px 0 0',
                 fontSize: '0.75rem',
-                color: 'var(--color-text-muted, #94a3b8)',
+                color: 'var(--color-text-muted)',
               }}
             >
               Format: <em>Nomor Unit Catatan</em> (dipisah baris baru atau koma). Contoh: <code>TS.02 BA.01 Radiator</code>, <code>TS.05 EVDAL</code>, <code>KWK 222177 OFF</code>.
@@ -475,7 +475,7 @@ function QuickKorlapFleetModalComponent({
               borderRadius: '8px',
               border: '1px solid var(--color-border, #475569)',
               background: 'transparent',
-              color: 'var(--color-text-muted, #94a3b8)',
+              color: 'var(--color-text-muted)',
               fontSize: '0.9rem',
               fontWeight: 600,
               cursor: 'pointer',

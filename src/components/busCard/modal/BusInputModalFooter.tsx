@@ -67,15 +67,15 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
           borderRadius: "12px",
           border: "none",
           background: isDisabled
-            ? "rgba(100, 116, 139, 0.25)"
-            : "linear-gradient(135deg, #0284c7, #0ea5e9)",
-          color: isDisabled ? "#64748b" : "#ffffff",
+            ? "var(--color-disabled-bg)"
+            : "var(--color-action-primary-bg)",
+          color: isDisabled ? "var(--color-disabled-fg)" : "var(--color-action-primary-fg)",
           fontSize: isKeyboardOpen ? "0.88rem" : "0.92rem",
           fontWeight: 700,
           cursor: isDisabled ? "not-allowed" : "pointer",
           boxShadow: isDisabled
             ? "none"
-            : "0 4px 14px rgba(14, 165, 233, 0.35)",
+            : "0 4px 14px var(--color-shadow)",
           transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >

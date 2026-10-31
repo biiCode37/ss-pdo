@@ -15,6 +15,8 @@ export interface UnitSummaryItem {
   shiftStatus: UnitShiftStatus;
   notes: string[];
   noteCount: number;
+  keterangan?: string;
+  rawBus?: BusData;
 }
 
 export interface UnitSummaryMetrics {
@@ -83,6 +85,8 @@ export function extractUnitList(data: BusData[]): UnitSummaryItem[] {
       shiftStatus: getUnitShiftStatus(b),
       notes: metrics.notes,
       noteCount: metrics.notes.length,
+      keterangan: b.keterangan || (metrics.notes.length > 0 ? metrics.notes[0] : ''),
+      rawBus: b,
     };
   });
 }

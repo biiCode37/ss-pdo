@@ -85,7 +85,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         position: "sticky",
         top: 0,
         zIndex: 40,
-        background: "var(--bg-color)",
+        background: "var(--color-bg-base, var(--bg-color))",
         paddingTop: "12px",
         paddingBottom: "4px",
         marginTop: "-16px",
@@ -127,9 +127,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 gap: "4px",
                 padding: "6px 9px",
                 borderRadius: "10px",
-                background: "var(--card-bg, rgba(255, 255, 255, 0.06))",
-                border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
-                color: "var(--text-secondary, #a0aec0)",
+                background: "var(--color-bg-surface, var(--card-bg, rgba(255, 255, 255, 0.06)))",
+                border: "1px solid var(--color-border-subtle, var(--border-color, rgba(255, 255, 255, 0.12)))",
+                color: "var(--color-text-secondary, var(--text-secondary, #a0aec0))",
                 fontSize: "12px",
                 fontWeight: 600,
                 cursor: "pointer",
@@ -154,9 +154,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               gap: "5px",
               padding: "6px 10px",
               borderRadius: "10px",
-              background: "var(--accent-bg, rgba(62, 207, 142, 0.12))",
-              border: "1px solid var(--accent-border, rgba(62, 207, 142, 0.32))",
-              color: "var(--accent-color, #3ECF8E)",
+              background: "var(--color-selection-bg, rgba(62, 207, 142, 0.12))",
+              border: "1px solid var(--color-selection-border, rgba(62, 207, 142, 0.32))",
+              color: "var(--color-action-primary-bg, #3ECF8E)",
               fontSize: "12.5px",
               fontWeight: 700,
               letterSpacing: "0.2px",
@@ -167,7 +167,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             aria-label={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_ARIA(activeRouteCode)}
             data-testid="active-route-badge-btn"
           >
-            <MapPin size={13} style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }} />
+            <MapPin size={13} style={{ color: "var(--color-action-primary-bg, #3ECF8E)", flexShrink: 0 }} />
             <span>{activeRouteCode}</span>
             <ChevronDown size={12} style={{ opacity: 0.65, flexShrink: 0 }} />
           </button>
@@ -180,8 +180,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 alignItems: "center",
                 gap: "6px",
                 color: hasConflictOrFailedQueue
-                  ? "var(--danger-color)"
-                  : "var(--warning-color)",
+                  ? "var(--color-danger-fg, var(--danger-color))"
+                  : "var(--color-warning-fg, var(--warning-color))",
                 fontSize: "12px",
                 fontWeight: "bold",
                 background: hasConflictOrFailedQueue

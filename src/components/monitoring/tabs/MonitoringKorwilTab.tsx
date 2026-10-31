@@ -275,12 +275,13 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
         const isExpanded = !!expandedTeams[team.id];
         const isHighTarget = team.targetAchievementPercentage >= 80;
         const isMediumTarget = team.targetAchievementPercentage >= 60;
-        const badgeColor = isHighTarget ? "#10B981" : isMediumTarget ? "#F59E0B" : "#EF4444";
+        const badgeColor = isHighTarget ? "var(--color-success-fg)" : isMediumTarget ? "var(--color-warning-fg)" : "var(--color-error-fg)";
         const badgeBg = isHighTarget
-          ? "rgba(16, 185, 129, 0.12)"
+          ? "var(--color-success-bg)"
           : isMediumTarget
-          ? "rgba(245, 158, 11, 0.12)"
-          : "rgba(239, 68, 68, 0.12)";
+          ? "var(--color-warning-bg)"
+          : "var(--color-error-bg)";
+        const badgeBorder = isHighTarget ? "var(--color-success-border)" : isMediumTarget ? "var(--color-warning-border)" : "var(--color-error-border)";
 
         return (
           <div
@@ -354,7 +355,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   borderRadius: "9999px",
                   background: badgeBg,
                   color: badgeColor,
-                  border: `1px solid ${badgeColor}33`,
+                  border: `1px solid ${badgeBorder}`,
                   fontSize: "11.5px",
                   fontWeight: 700,
                   whiteSpace: "nowrap",

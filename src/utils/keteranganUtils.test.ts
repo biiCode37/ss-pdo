@@ -11,6 +11,8 @@ import {
   getCurrentOperationalShift,
   getDefaultModalTab,
   toSmartTitleCase,
+  isUnitOff,
+  isUnitTo,
   isUnitOffOrToEvdal,
 } from './keteranganUtils';
 
@@ -390,6 +392,77 @@ describe('keteranganUtils - multi-shift combine and split', () => {
       expect(res.isFixed).toBe(true);
       expect(res.fixedValue).toBe('Renop');
       expect(res.normalized).toBe('Renop');
+    });
+  });
+
+  describe('isUnitOff', () => {
+    it('identifies pure OFF status in various casings and spaces', () => {
+      expect(isUnitOff('OFF')).toBe(true);
+      expect(isUnitOff('off')).toBe(true);
+      expect(isUnitOff('Off')).toBe(true);
+      expect(isUnitOff('  OFF  ')).toBe(true);
+    });
+
+    it('identifies OFF with shift prefixes and notes', () => {
+      expect(isUnitOff('S1: OFF')).toBe(true);
+      expect(isUnitOff('S2: OFF')).toBe(true);
+      expect(isUnitOff('OFF - BAN PECAH')).toBe(true);
+      expect(isUnitOff('OFF (SPARE)')).toBe(true);
+      expect(isUnitOff('S1: OFF | S2: SGO')).toBe(true);
+    });
+
+    it('rejects non-OFF status or incidental substrings', () => {
+      expect(isUnitOff('OFFICER TRANSJAKARTA')).toBe(false);
+      expect(isUnitOff('TO EVDAL')).toBe(false);
+      expect(isUnitOff('T.O')).toBe(false);
+      expect(isUnitOff('BA.02 KENDALA MESIN (TEMPERATUR RADIATOR MENYALA)')).toBe(false);
+      expect(isUnitOff('SGO')).toBe(false);
+      expect(isUnitOff('')).toBe(false);
+      expect(isUnitOff(null)).toBe(false);
+    });
+  });
+
+  describe('isUnitTo', () => {
+    it('identifies exact TO and T.O variations as specified', () => {
+      expect(isUnitTo('TO')).toBe(true);
+      expect(isUnitTo('T.O')).toBe(true);
+      expect(isUnitTo('T.O.')).toBe(true);
+      expect(isUnitTo('to')).toBe(true);
+      expect(isUnitTo('t.o')).toBe(true);
+      expect(isUnitTo('TO EVDAL')).toBe(true);
+      expect(isUnitTo('T.O EVDAL')).toBe(true);
+      expect(isUnitTo('TO-EVDAL')).toBe(true);
+      expect(isUnitTo('T.O. EVDAL')).toBe(true);
+      expect(isUnitTo('S1: TO')).toBe(true);
+      expect(isUnitTo('S2: T.O')).toBe(true);
+      expect(isUnitTo('S1: TO EVDAL')).toBe(true);
+      expect(isUnitTo('TO (SANKSI)')).toBe(true);
+      expect(isUnitTo('T.O - CADANGAN')).toBe(true);
+      expect(isUnitTo('BA.02 - TO')).toBe(true);
+      expect(isUnitTo('BA.02 - T.O')).toBe(true);
+      expect(isUnitTo('S1: T.O | S2: SGO')).toBe(true);
+    });
+
+    it('strictly rejects non-TO descriptions and words containing TO substrings (RADIATOR, TEMPERATUR, MOTOR, TOA, etc.)', () => {
+      expect(isUnitTo('BA.02 KENDALA MESIN (TEMPERATUR RADIATOR MENYALA)')).toBe(false);
+      expect(isUnitTo('KENDALA MESIN (TEMPERATUR RADIATOR MENYALA)')).toBe(false);
+      expect(isUnitTo('RADIATOR')).toBe(false);
+      expect(isUnitTo('TEMPERATUR')).toBe(false);
+      expect(isUnitTo('MOTOR')).toBe(false);
+      expect(isUnitTo('TOKO')).toBe(false);
+      expect(isUnitTo('OTOMATIS')).toBe(false);
+      expect(isUnitTo('FOTO')).toBe(false);
+      expect(isUnitTo('TOA')).toBe(false);
+      expect(isUnitTo('T.O.A')).toBe(false);
+      expect(isUnitTo('T.O.A.')).toBe(false);
+      expect(isUnitTo('BA.01 Ban Bocor')).toBe(false);
+      expect(isUnitTo('BA.02 NP1')).toBe(false);
+      expect(isUnitTo('OKB')).toBe(false);
+      expect(isUnitTo('Renop')).toBe(false);
+      expect(isUnitTo('OFF')).toBe(false);
+      expect(isUnitTo('SGO')).toBe(false);
+      expect(isUnitTo('')).toBe(false);
+      expect(isUnitTo(null)).toBe(false);
     });
   });
 

@@ -220,4 +220,206 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(container.textContent).toContain('BAN PECAH');
     expect(container.querySelector('svg')).not.toBeNull();
   });
+
+  it('does NOT render T.O badge for unit with BA.02 KENDALA MESIN (TEMPERATUR RADIATOR MENYALA)', async () => {
+    await act(async () => {
+      root.render(
+        <BusCard
+          {...defaultProps}
+          bus={{
+            ...defaultProps.bus,
+            unit: 'KWK 222180',
+            keterangan: 'BA.02 KENDALA MESIN (TEMPERATUR RADIATOR MENYALA)',
+          }}
+          isShiftConfirmed={true}
+        />
+      );
+    });
+
+    // Must NOT have any T.O or OFF badge in header
+    expect(container.querySelector('.unit-status-badge-to')).toBeNull();
+    expect(container.querySelector('.unit-status-badge-off')).toBeNull();
+    expect(container.querySelector('.unit-status-badge')).toBeNull();
+
+    // But bottom note strip correctly shows BA.02 and description
+    expect(container.textContent).toContain('BA.02');
+    expect(container.textContent?.toLowerCase()).toContain('temperatur radiator menyala');
+  });
+
+  it('renders T.O badge in header ONLY for units with [T.O EVDAL/TO EVDAL/TO/T.O]', async () => {
+    const toVariations = ['TO', 'T.O', 'TO EVDAL', 'T.O EVDAL'];
+
+    for (const note of toVariations) {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            bus={{
+              ...defaultProps.bus,
+              unit: 'KWK 222180',
+              keterangan: note,
+            }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+
+      const toBadge = container.querySelector('.unit-status-badge-to');
+      expect(toBadge).not.toBeNull();
+      expect(toBadge?.textContent).toBe('T.O');
+      expect(container.querySelector('.unit-status-badge-off')).toBeNull();
+    }
+  });
+
+  describe('Focus Column Mode - Redundant Empty Badge Suppression for OFF / T.O Units', () => {
+    it('suppresses redundant "KM Awal S1: Kosong" badge in focus mode when unit is OFF', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="kmAwal1"
+            bus={{
+              ...defaultProps.bus,
+              unit: 'KWK 222159',
+              keterangan: 'OFF',
+              kmAwal1: '',
+            }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+
+      // Header must have [OFF] badge
+      expect(container.querySelector('.unit-status-badge-off')?.textContent).toBe('OFF');
+
+      // Must NOT display "KM Awal S1: Kosong"
+      expect(container.textContent).not.toContain('KM Awal S1: Kosong');
+      expect(container.textContent).not.toContain('Kosong');
+    });
+
+    it('suppresses redundant "KM Awal S1: Kosong" badge in focus mode when unit is T.O', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="kmAwal1"
+            bus={{
+              ...defaultProps.bus,
+              unit: 'KWK 222180',
+              keterangan: 'T.O EVDAL',
+              kmAwal1: '',
+            }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+
+      // Header must have [T.O] badge
+      expect(container.querySelector('.unit-status-badge-to')?.textContent).toBe('T.O');
+
+      // Must NOT display "KM Awal S1: Kosong"
+      expect(container.textContent).not.toContain('KM Awal S1: Kosong');
+      expect(container.textContent).not.toContain('Kosong');
+    });
+
+    it('renders "KM Awal S1: Kosong" badge when unit is operating (not OFF/T.O) with a technical note', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="kmAwal1"
+            bus={{
+              ...defaultProps.bus,
+              unit: 'KWK 222166',
+              keterangan: 'S1: PERBAIKAN RADIATOR',
+              kmAwal1: '',
+            }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+
+      // Header must display "KM Awal S1: Kosong" to remind operator that data is missing
+      expect(container.textContent).toContain('KM Awal S1: Kosong');
+
+      // Bottom strip displays technical note
+      expect(container.textContent).toContain('PERBAIKAN RADIATOR');
+    });
+
+    it('retains filled value badge in focus mode even if unit has OFF note (safeguard)', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="kmAwal1"
+            bus={{
+              ...defaultProps.bus,
+              unit: 'KWK 222159',
+              keterangan: 'OFF',
+              kmAwal1: '12345',
+            }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+
+      // If data is filled, badge shows the entered value
+      expect(container.textContent).toContain('KM Awal S1: 12345');
+    });
+
+    it('suppresses "Trip: Kosong" badge in trip focus mode when unit is OFF', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="trip"
+            bus={{
+              ...defaultProps.bus,
+              unit: 'KWK 222161',
+              keterangan: 'OFF',
+              tripPergi: '',
+              tripPulang: '',
+            }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+
+      // Header has [OFF] badge and no "Trip: Kosong"
+      expect(container.querySelector('.unit-status-badge-off')?.textContent).toBe('OFF');
+      expect(container.textContent).not.toContain('Trip: Kosong');
+    });
+
+    it('places OFF and T.O badges on the right side of the card header', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="ALL"
+            bus={{
+              ...defaultProps.bus,
+              unit: 'KWK 222161',
+              keterangan: 'OFF',
+            }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+
+      const header = container.querySelector('.bus-card-header');
+      expect(header).not.toBeNull();
+      const headerChildren = header?.children;
+      // First child is the left side (unit name + queued indicator)
+      // Second child is the right side (status badge + summary + loading spinner)
+      expect(headerChildren?.length).toBe(2);
+      const rightSide = headerChildren?.[1];
+      const offBadge = rightSide?.querySelector('.unit-status-badge-off');
+      expect(offBadge).not.toBeNull();
+      expect(offBadge?.textContent).toBe('OFF');
+
+      // Left side should only contain the unit name, not the OFF badge
+      const leftSide = headerChildren?.[0];
+      expect(leftSide?.querySelector('.unit-status-badge-off')).toBeNull();
+    });
+  });
 });

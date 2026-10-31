@@ -29,7 +29,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
         }}
       >
         <div className="analytics-card-title">
-          <Split size={18} style={{ color: "var(--orange-color)" }} />
+          <Split size={18} style={{ color: "var(--color-shift-1-fg)" }} />
           <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TITLE}</span>
         </div>
         {dateBadge && (
@@ -38,9 +38,9 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
               fontSize: "11.5px",
               fontWeight: 700,
               fontFamily: "monospace",
-              color: "var(--accent-color)",
-              background: "rgba(62, 207, 142, 0.12)",
-              border: "1px solid rgba(62, 207, 142, 0.25)",
+              color: "var(--color-action-primary-bg)",
+              background: "var(--color-selection-bg)",
+              border: "1px solid var(--color-border-control)",
               padding: "2px 8px",
               borderRadius: "6px",
               whiteSpace: "nowrap",
@@ -55,10 +55,10 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
       {totalBothShifts > 0 && (
         <div className="shift-ratio-container">
           <div className="shift-ratio-labels">
-            <span style={{ color: "var(--orange-color)" }}>
+            <span style={{ color: "var(--color-shift-1-fg)", fontWeight: 600 }}>
               {TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_1_SHARE(pctS1)}
             </span>
-            <span style={{ color: "#a78bfa" }}>
+            <span style={{ color: "var(--color-shift-2-fg)", fontWeight: 600 }}>
               {TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_2_SHARE(pctS2)}
             </span>
           </div>
@@ -82,7 +82,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
           <div
             className="shift-header"
             style={{
-              color: "var(--orange-color)",
+              color: "var(--color-shift-1-fg)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
@@ -99,8 +99,9 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
                   fontWeight: 700,
                   padding: "1px 6px",
                   borderRadius: "6px",
-                  background: "rgba(249, 115, 22, 0.12)",
-                  border: "1px solid rgba(249, 115, 22, 0.25)",
+                  background: "var(--color-shift-1-bg)",
+                  color: "var(--color-shift-1-fg)",
+                  border: "1px solid var(--color-shift-1-border)",
                 }}
               >
                 {pctS1}%
@@ -118,7 +119,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
                 fontVariantNumeric: "tabular-nums",
                 color:
                   summary.totalManualShift1 > 0
-                    ? "var(--warning-color)"
+                    ? "var(--color-warning-fg)"
                     : "inherit",
               }}
             >
@@ -136,7 +137,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
           <div
             className="shift-header"
             style={{
-              color: "#a78bfa",
+              color: "var(--color-shift-2-fg)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
@@ -153,8 +154,9 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
                   fontWeight: 700,
                   padding: "1px 6px",
                   borderRadius: "6px",
-                  background: "rgba(167, 139, 250, 0.12)",
-                  border: "1px solid rgba(167, 139, 250, 0.25)",
+                  background: "var(--color-shift-2-bg)",
+                  color: "var(--color-shift-2-fg)",
+                  border: "1px solid var(--color-shift-2-border)",
                 }}
               >
                 {pctS2}%
@@ -172,7 +174,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
                 fontVariantNumeric: "tabular-nums",
                 color:
                   summary.totalManualShift2 > 0
-                    ? "var(--warning-color)"
+                    ? "var(--color-warning-fg)"
                     : "inherit",
               }}
             >

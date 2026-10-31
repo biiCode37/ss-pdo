@@ -39,9 +39,9 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
           style={{
             padding: "10px 14px",
             borderRadius: "10px",
-            background: "rgba(56, 189, 248, 0.12)",
-            border: "1px solid rgba(56, 189, 248, 0.3)",
-            color: "var(--color-primary, #38bdf8)",
+            background: "var(--color-info-bg)",
+            border: "1px solid var(--color-info-border)",
+            color: "var(--color-info-fg)",
             fontSize: "0.82rem",
             fontWeight: 600,
             display: "flex",

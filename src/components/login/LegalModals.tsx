@@ -39,9 +39,10 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
           borderRadius: "16px",
           textAlign: "left",
           position: "relative",
-          backgroundColor: "var(--bg-card, #171717)",
-          border: "1px solid var(--border-color)",
-          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5)",
+          backgroundColor: "var(--color-surface-raised)",
+          color: "var(--color-text-primary)",
+          border: "1px solid var(--color-border-subtle)",
+          boxShadow: "0 20px 40px var(--color-shadow)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -53,7 +54,7 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
             alignItems: "center",
             marginBottom: "16px",
             paddingBottom: "12px",
-            borderBottom: "1px solid var(--border-color)",
+            borderBottom: "1px solid var(--color-border-subtle)",
           }}
         >
           <h3
@@ -127,7 +128,7 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
               Bila ada pertanyaan atau kendala seputar privasi data, Anda dapat menghubungi kami melalui email:{" "}
               <a
                 href="mailto:bionex37@gmail.com"
-                style={{ color: "#3ECF8E" }}
+                style={{ color: "var(--color-link)" }}
               >
                 bionex37@gmail.com
               </a>
@@ -191,8 +192,8 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
               style={{
                 padding: "16px",
                 borderRadius: "10px",
-                backgroundColor: "rgba(255, 255, 255, 0.03)",
-                border: "1px solid var(--border-color)",
+                backgroundColor: "var(--color-surface-subtle)",
+                border: "1px solid var(--color-border-subtle)",
                 marginTop: "12px",
               }}
             >
@@ -208,7 +209,7 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
                 </strong>{" "}
                 <a
                   href="mailto:bionex37@gmail.com"
-                  style={{ color: "#3ECF8E" }}
+                  style={{ color: "var(--color-link)" }}
                 >
                   bionex37@gmail.com
                 </a>
@@ -221,7 +222,7 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
                   href="https://bionex-pusm.vercel.app"
                   target="_blank"
                   rel="noreferrer"
-                  style={{ color: "#3ECF8E" }}
+                  style={{ color: "var(--color-link)" }}
                 >
                   https://bionex-pusm.vercel.app
                 </a>

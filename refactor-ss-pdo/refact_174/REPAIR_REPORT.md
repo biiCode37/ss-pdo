@@ -1,7 +1,7 @@
 # REPAIR REPORT — Refactor 174: Sistem Warna & Standardisasi Aksesibilitas Desain UI/UX
 
 **Tanggal:** 31 Oktober 2026  
-**Status:** **CHECKPOINT BASELINE SEBELUM IMPLEMENTASI REFACTOR**  
+**Status:** **TAHAP 5 SELESAI — VERIFIKASI MENYELURUH & QUALITY GATES FINAL LULUS 100%**  
 **Basis Repositori:** branch `devmode`, commit `158590fc9b2f60546d9cae65d6aae0884d660ffa`  
 **Sumber Audit:** `refactor-ss-pdo/refact_174/UI_COLOR_AUDIT_SS_PDO.md`  
 
@@ -9,7 +9,7 @@
 
 ## 1. Rencana Arsitektur & Struktur File Baru
 
-Untuk menyelesaikan 26 masalah warna (CLR-01 s.d. CLR-26) tanpa menambah dependensi berbayar dan tanpa merusak kode bisnis Google Sheets yang ada, disiapkan arsitektur 3 lapis token CSS:
+Untuk menyelesaikan 26 masalah warna (CLR-01 s.d. CLR-26) secara sistematis tanpa menambah dependensi berat dan tanpa merusak logika data Google Sheets, dibangun arsitektur 3 lapis token CSS:
 
 ```text
 src/
@@ -17,8 +17,8 @@ src/
 │   ├── tokens/
 │   │   ├── primitives.css          # Satu-satunya SSOT nilai hex/rgb (palette dasar)
 │   │   ├── semantic.css            # Token peran/makna (--color-*) untuk Light & Dark
-│   │   ├── legacy.css              # Jembatan kompatibilitas sementara untuk token lama
-│   │   └── color-contract.test.ts  # Unit test otomatis 104 pasangan rasio kontras WCAG
+│   │   ├── legacy.css              # Jembatan kompatibilitas fail-safe untuk token lama
+│   │   └── color-contract.test.ts  # Unit test otomatis 114 pasangan rasio kontras WCAG
 │   └── components/
 │       ├── actions.css             # Standarisasi tombol .ui-button (primary, secondary, danger)
 │       ├── status.css              # Standarisasi badge status .ui-status
@@ -27,7 +27,7 @@ src/
 ```
 
 ### Jembatan Kompatibilitas (`legacy.css`)
-Namespace yang hilang (`--bg-card`, `--bg-primary`, `--border-color`, `--shadow`, dll) dipetakan ke semantic token baru di `legacy.css` sehingga komponen lama yang belum sempat dimigrasikan secara manual tidak lagi mengalami layar gelap/transparan di Light Mode.
+Namespace lama (`--bg-card`, `--bg-primary`, `--border-color`, `--shadow`, `--warning-bg`, `--accent-bg`, dll) dipetakan ke semantic token baru di `legacy.css` sehingga seluruh komponen lama terlindungi dari layar gelap/transparan di Light Mode. Verifikasi global memastikan **200 variabel CSS unik terdefinisi dan 0 token hilang**.
 
 ---
 
@@ -102,6 +102,17 @@ Namespace yang hilang (`--bg-card`, `--bg-primary`, `--border-color`, `--shadow`
 
 ---
 
+### CLR-11: Standarisasi Angka Metrik Capaian KPI
+- **Lokasi:** `src/components/KPICard.tsx:95`, `ShiftComparisonCard.tsx:61, 139`
+- **Before:**
+  Angka capaian KPI menggunakan warna cyan terang `#38bdf8` (2.14:1) dan violet `#a78bfa` (2.72:1) langsung pada nilai metrik utama di Light Mode.
+- **After:**
+  Nilai metrik utama dikembalikan ke `var(--color-text-primary)` (kontras 17.85:1), sementara warna shift dialokasikan sebagai aksen pada ikon dan badge pendamping.
+- **Case: Skenario Lapangan:**
+  Petugas operasional di lapangan mengecek pencapaian target kilometer harian bus di bawah sinar matahari. Angka ritase dan kilometer kini terbaca jelas dan tidak menyilaukan mata.
+
+---
+
 ### CLR-13: Batang Grafik Tren TOA Opaque & Kontras
 - **Lokasi:** `src/components/dailyToaTrend/ToaBarChart.tsx:68`
 - **Before:**
@@ -150,6 +161,22 @@ Namespace yang hilang (`--bg-card`, `--bg-primary`, `--border-color`, `--shadow`
 
 ---
 
+### CLR-17: Harmonisasi Warna Peran (Role) Tanpa Warna 'Error' Merah
+- **Lokasi:** `src/components/userManagement/RoleBadge.tsx`, `src/index.css`
+- **Before:**
+  Superadmin diberi warna merah menyala yang identik dengan status kesalahan sistem/danger.
+- **After:**
+  Dibuat token semantik terdedikasi untuk masing-masing peran:
+  - Superadmin: `amber-50` / `amber-800` (wibawa kepemimpinan tanpa konotasi galat)
+  - Admin: `sky-50` / `sky-800`
+  - Korwil: `indigo-50` / `indigo-800`
+  - Korlap: `orange-50` / `orange-800`
+  - PDO: `emerald-50` / `emerald-800`
+- **Case: Skenario Lapangan:**
+  Saat superadmin membuka profil atau panel manajemen user, badge perannya tidak lagi menimbulkan persepsi adanya akun bermasalah atau status bahaya, melainkan penanda hierarki yang elegan dan kontras tinggi (7.15:1 s.d. 9.54:1).
+
+---
+
 ### CLR-22: Sinkronisasi Status Bar Peramban (Theme-Color)
 - **Lokasi:** `index.html:11`, `src/utils/themeUtils.ts` (helper baru)
 - **Before:**
@@ -161,32 +188,35 @@ Namespace yang hilang (`--bg-card`, `--bg-primary`, `--border-color`, `--shadow`
 
 ---
 
-## 3. Rencana Eksekusi Bertahap (Roadmap Refactor)
+## 3. Rangkuman Eksekusi Bertahap
 
-1. **Tahap 0 (Baseline & Checkpoint):**
-   - Pastikan seluruh unit test Vitest lulus (974 tests passed).
-   - Pastikan build produksi Vite (`pnpm run build`) sukses tanpa error.
-   - Buat checkpoint git untuk safety rollback sebelum manipulasi kode sumber.
-2. **Tahap 1 (P0 Blockers - Surface & Token Hilang):**
-   - Pasang `primitives.css`, `semantic.css`, dan `legacy.css`.
-   - Perbaiki modal-modal kritis (CLR-01, CLR-02, CLR-03, CLR-16).
-3. **Tahap 2 (P1 Actions & Input Controls):**
-   - Pasang `actions.css` dan `forms.css`.
-   - Migrasi tombol aksi utama, dialog SweetAlert2, placeholder, dan focus ring (CLR-04 s.d. CLR-08, CLR-14, CLR-15).
-4. **Tahap 3 (P1 Status, Monitoring, KPI, Charts):**
-   - Standarisasi badge status operasional dan `monitoringUtils.ts` (CLR-09, CLR-10, CLR-11, CLR-12, CLR-13).
-   - Implementasikan grafik opak dan perlindungan formula spreadsheet (CLR-24).
-5. **Tahap 4 (P2 Konsolidasi Desain, Brand & Aset):**
-   - Harmonisasi warna role (CLR-17), reduksi efek glow berlebih (CLR-18), sinkronisasi theme-color (CLR-22), dan pembersihan CSS kamus teks (CLR-25).
-6. **Tahap 5 (Verifikasi Menyeluruh & Cleanup):**
-   - Jalankan `color-contract.test.ts` (104 pasangan lulus).
-   - Jalankan `pnpm vitest run src/` 100% hijau.
-   - Jalankan `pnpm run build` 0 error.
+1. **Tahap 0 (Baseline & Checkpoint):** SELESAI.
+   - Commit & Tag Git Checkpoint `checkpoint-pre-refact-174` dibuat.
+2. **Tahap 1 (P0 Blockers - Surface & Token Hilang):** SELESAI.
+   - `primitives.css`, `semantic.css`, `legacy.css`, dan `color-contract.test.ts` aktif.
+   - Modal-modal kritis (CLR-01, CLR-02, CLR-03, CLR-16) teratasi.
+3. **Tahap 2 (P1 Actions & Input Controls):** SELESAI.
+   - `actions.css`, `forms.css`, dialog SweetAlert2, tombol WhatsApp, banner offline terstandarisasi (CLR-04 s.d. CLR-08, CLR-14, CLR-15).
+4. **Tahap 3 (P1 Status, Monitoring, KPI, Charts):** SELESAI.
+   - Standarisasi badge armada, `monitoringUtils.ts`, angka KPI, odometer, dan grafik TOA opak (CLR-09 s.d. CLR-13). Proteksi SSOT Google Sheets (CLR-24).
+5. **Tahap 4 (P2 Konsolidasi Desain, Brand & Aset):** SELESAI.
+   - Role badge terpisah, reduksi glow, tab seleksi terpadu, favicon TJ, pembersihan kamus teks, penghapusan opacity tembus non-SGO (CLR-17 s.d. CLR-23, CLR-25, CLR-26).
+6. **Tahap 5 (Verifikasi Menyeluruh & Quality Gates Final):** SELESAI.
+   - Audit global CSS token: 200 token terdefinisi, 0 missing token.
+   - Migrasi tuntas komponen pendukung (`DashboardContentTabs.tsx`, `DashboardHeader.tsx`, `UserProfileHeader.tsx`, `BulkRouteSection.tsx`, `UnifiedRouteControlBar.tsx`).
+   - Kontrak rasio kontras WCAG: **114 passed (100%)**.
+   - Seluruh test suite Vitest: **126 test files passed (1090+ tests, 100% hijau)**.
+   - TypeScript Strict Mode & Vite Build: **Lulus 0 error**.
+   - Knowledge graph `graphify`: Terbarukan.
 
 ---
 
-## 4. Status Checkpoint
-- **Vitest Baseline:** 124 file lulus, 974 tests lulus (100%).
-- **TypeScript & Vite Build:** Lulus 0 error.
-- **Git Branch:** `devmode`.
-- **Status Proyek:** Siap untuk eksekusi perbaikan bertahap.
+## 4. Hasil Pengujian & Quality Gates Final
+
+| Quality Gate | Perintah Verifikasi | Status | Catatan |
+|---|---|---|---|
+| Kontrak Rasio Kontras WCAG | `pnpm vitest run src/styles/tokens/color-contract.test.ts` | **PASS (114/114 tests)** | Lulus kriteria AA & AAA di Light & Dark Mode |
+| Test Suite Komprehensif | `pnpm vitest run src/` | **PASS (126 files / 1090+ tests)** | 100% lulus tanpa kegagalan atau regresi |
+| TypeScript Strict Mode | `pnpm tsc -b` | **PASS (0 error)** | Strict typecheck tuntas |
+| Vite Production Build | `pnpm vite build` | **PASS (0 error)** | Bundle produksi siap rilis |
+| Knowledge Graph | `graphify update .` | **PASS** | Graf relasi arsitektur terupdate |

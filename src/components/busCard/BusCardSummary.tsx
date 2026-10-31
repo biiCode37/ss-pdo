@@ -6,6 +6,7 @@ import {
   AlertCircle,
   ArrowRightLeft,
 } from "lucide-react";
+import { isUnitOff, isUnitTo, isUnitOffOrToEvdal } from "@/utils/keteranganUtils";
 
 interface BusCardSummaryProps {
   formData: Partial<BusData>;
@@ -13,6 +14,7 @@ interface BusCardSummaryProps {
   tabName: string;
   activeCategory: string;
   targetTrip?: { pergi: number; pulang: number } | null;
+  activeShiftStatus?: string;
   onOpenTripModal: () => void;
 }
 
@@ -22,6 +24,7 @@ export function BusCardSummary({
   tabName,
   activeCategory,
   targetTrip,
+  activeShiftStatus,
   onOpenTripModal,
 }: BusCardSummaryProps) {
   const toaShift1Num = parseIndonesianNumber(
@@ -79,7 +82,15 @@ export function BusCardSummary({
 
   // Mode Spesifik Kolom Aktif (selain ALL)
   if (activeCategory !== "ALL") {
+    const isCurrentShiftOffOrTo = activeShiftStatus !== undefined
+      ? (isUnitOff(activeShiftStatus) || isUnitTo(activeShiftStatus))
+      : isUnitOffOrToEvdal(formData.keterangan || bus.keterangan);
+
     if (activeCategory === "trip") {
+      // Jika unit berstatus OFF atau T.O dan tidak ada trip, sembunyikan badge "Trip: Kosong" (redundant & pemborosan space)
+      if (!hasTrip && isCurrentShiftOffOrTo) {
+        return null;
+      }
       return (
         <div
           style={{
@@ -126,6 +137,12 @@ export function BusCardSummary({
 
     const val = formData[activeCategory as keyof BusData] || bus[activeCategory as keyof BusData];
     const isFilled = val !== undefined && val !== null && String(val).trim() !== "";
+
+    // Jika unit berstatus OFF atau T.O dan field ini kosong, sembunyikan badge "[Label]: Kosong" (redundant & pemborosan space)
+    if (!isFilled && isCurrentShiftOffOrTo) {
+      return null;
+    }
+
     const isAccumulation = tabName.toUpperCase() === "AKUMULASI";
     const categoryLabels: Record<string, string> = {
       toaShift1: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TOA_S1,

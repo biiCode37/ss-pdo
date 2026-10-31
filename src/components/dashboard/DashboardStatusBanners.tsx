@@ -88,8 +88,9 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
       {!isUsingServiceAccount() && isAuthExpired && (
         <div
           style={{
-            background: "var(--danger-color, #ef4444)",
-            color: "#ffffff",
+            background: "var(--color-error-bg)",
+            border: "1px solid var(--color-error-fg)",
+            color: "var(--color-error-fg)",
             padding: "12px 16px",
             borderRadius: "12px",
             marginBottom: "16px",
@@ -97,7 +98,7 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
             alignItems: "center",
             justifyContent: "space-between",
             gap: "12px",
-            boxShadow: "0 4px 12px rgba(239, 68, 68, 0.25)",
+            boxShadow: "0 4px 12px var(--color-shadow)",
           }}
         >
           <div
@@ -116,8 +117,8 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
             type="button"
             className="btn"
             style={{
-              background: "#ffffff",
-              color: "var(--danger-color, #ef4444)",
+              background: "var(--color-danger-bg)",
+              color: "var(--color-danger-fg)",
               fontWeight: "bold",
               whiteSpace: "nowrap",
               border: "none",

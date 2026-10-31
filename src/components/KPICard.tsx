@@ -27,7 +27,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         }}
       >
         <div className="analytics-card-title">
-          <Activity size={18} style={{ color: "var(--accent-color)" }} />
+          <Activity size={18} style={{ color: "var(--color-action-primary-bg)" }} />
           <span>{TEXT_DASHBOARD.KPIS.TITLE}</span>
         </div>
         {dateBadge && (
@@ -36,9 +36,9 @@ function KPICardComponent({ summary, dateBadge }: Props) {
               fontSize: "11.5px",
               fontWeight: 700,
               fontFamily: "monospace",
-              color: "var(--accent-color)",
-              background: "rgba(62, 207, 142, 0.12)",
-              border: "1px solid rgba(62, 207, 142, 0.25)",
+              color: "var(--color-action-primary-bg)",
+              background: "var(--color-selection-bg)",
+              border: "1px solid var(--color-border-control)",
               padding: "2px 8px",
               borderRadius: "6px",
               whiteSpace: "nowrap",
@@ -55,12 +55,12 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <Gauge size={13} style={{ color: "var(--success-color)" }} />
+              <Gauge size={13} style={{ color: "var(--color-success-fg)" }} />
               {TEXT_DASHBOARD.KPIS.TOTAL_KM}
             </span>
           </div>
           <div className="kpi-metric-value-row">
-            <span className="kpi-metric-value" style={{ color: "var(--success-color)" }}>
+            <span className="kpi-metric-value" style={{ color: "var(--color-text-primary)" }}>
               {formatRaw(summary.totalKm)}
             </span>
             <span className="kpi-metric-unit">{TEXT_DASHBOARD.KPIS.TOTAL_KM_UNIT}</span>
@@ -71,12 +71,12 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <Users size={13} style={{ color: "var(--accent-color)" }} />
+              <Users size={13} style={{ color: "var(--color-action-primary-bg)" }} />
               {TEXT_DASHBOARD.KPIS.TOA_PASSENGERS}
             </span>
           </div>
           <div className="kpi-metric-value-row">
-            <span className="kpi-metric-value" style={{ color: "var(--accent-color)" }}>
+            <span className="kpi-metric-value" style={{ color: "var(--color-text-primary)" }}>
               {formatInt(summary.totalPassengers)}
             </span>
             <span className="kpi-metric-unit">{TEXT_DASHBOARD.UNIT_CARD.PNP_UNIT}</span>
@@ -87,12 +87,12 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <Bus size={13} style={{ color: "#38bdf8" }} />
+              <Bus size={13} style={{ color: "var(--color-shift-1-fg)" }} />
               {TEXT_DASHBOARD.KPIS.KM_PER_BUS_LABEL}
             </span>
           </div>
           <div className="kpi-metric-value-row">
-            <span className="kpi-metric-value" style={{ color: "#38bdf8" }}>
+            <span className="kpi-metric-value" style={{ color: "var(--color-text-primary)" }}>
               {formatRaw(summary.kmPerBus)}
             </span>
             <span className="kpi-metric-unit">{TEXT_DASHBOARD.KPIS.BUS_UNIT}</span>
@@ -103,12 +103,12 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <UserCheck size={13} style={{ color: "#a78bfa" }} />
+              <UserCheck size={13} style={{ color: "var(--color-shift-2-fg)" }} />
               {TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM_LABEL}
             </span>
           </div>
           <div className="kpi-metric-value-row">
-            <span className="kpi-metric-value" style={{ color: "#a78bfa" }}>
+            <span className="kpi-metric-value" style={{ color: "var(--color-text-primary)" }}>
               {formatRaw(summary.passengersPerKm)}
             </span>
             <span className="kpi-metric-unit">{TEXT_DASHBOARD.KPIS.RATIO_UNIT}</span>

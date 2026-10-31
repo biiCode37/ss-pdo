@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useMobileBackHandler } from "@/hooks/useMobileBackHandler";
 import { slugifyUnitId } from "@/utils/analytics";
 import { getStoredUserRole } from "@/utils/roleStorage";
+import { syncThemeChrome } from "@/utils/themeUtils";
 import type { PageKey } from "@/types/pageManagement";
 
 export type DashboardView =
@@ -71,6 +72,7 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
       const nextTheme = prevTheme === "light" ? "dark" : "light";
       if (typeof document !== "undefined") {
         document.documentElement.setAttribute("data-theme", nextTheme);
+        syncThemeChrome(nextTheme);
       }
       if (typeof localStorage !== "undefined") {
         localStorage.setItem("PDO_THEME", nextTheme);

@@ -151,9 +151,9 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 borderRadius: "6px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: "rgba(59, 130, 246, 0.12)",
-                color: "#3b82f6",
-                border: "1px solid rgba(59, 130, 246, 0.25)",
+                background: "var(--color-info-bg)",
+                color: "var(--color-info-fg)",
+                border: "1px solid var(--color-info-border)",
               }}
             >
               <Send size={13} />
@@ -170,9 +170,9 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 borderRadius: "6px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: "rgba(245, 158, 11, 0.12)",
-                color: "#f59e0b",
-                border: "1px solid rgba(245, 158, 11, 0.25)",
+                background: "var(--color-warning-bg)",
+                color: "var(--color-warning-fg)",
+                border: "1px solid var(--color-warning-border)",
               }}
             >
               <Clock size={13} />
