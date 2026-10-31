@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabase';
-import type { AppPageSetting, PageKey } from '@/types/pageManagement';
+import type { AppPageSetting, PageKey, BulkActionType } from '@/types/pageManagement';
 import { DEFAULT_PAGE_SETTINGS } from '@/types/pageManagement';
 
 const CACHE_KEY = 'APP_PAGE_SETTINGS';
@@ -22,10 +22,30 @@ export async function fetchPageSettings(): Promise<AppPageSetting[]> {
       return getCachedSettings();
     }
 
+    // Normalisasi fallback kolom array jika data lama dari DB belum memiliki kolom baru
+    const normalizedData: AppPageSetting[] = data.map((item: any) => ({
+      ...item,
+      allowed_roles: Array.isArray(item.allowed_roles) && item.allowed_roles.length > 0
+        ? item.allowed_roles
+        : (DEFAULT_PAGE_SETTINGS.find((d) => d.page_key === item.page_key)?.allowed_roles || [
+            'superadmin',
+            'admin',
+            'korwil',
+            'korlap',
+            'pdo',
+          ]),
+      allowed_user_emails: Array.isArray(item.allowed_user_emails)
+        ? item.allowed_user_emails
+        : [],
+      denied_user_emails: Array.isArray(item.denied_user_emails)
+        ? item.denied_user_emails
+        : [],
+    }));
+
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      localStorage.setItem(CACHE_KEY, JSON.stringify(normalizedData));
     }
-    return data as AppPageSetting[];
+    return normalizedData;
   } catch (err) {
     console.warn('[pageManagementService] Gagal fetch settings, fallback cache:', err);
     return getCachedSettings();
@@ -42,7 +62,24 @@ export function getCachedSettings(): AppPageSetting[] {
       if (cached) {
         const parsed = JSON.parse(cached) as AppPageSetting[];
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          return parsed.map((item) => ({
+            ...item,
+            allowed_roles: Array.isArray(item.allowed_roles)
+              ? item.allowed_roles
+              : (DEFAULT_PAGE_SETTINGS.find((d) => d.page_key === item.page_key)?.allowed_roles || [
+                  'superadmin',
+                  'admin',
+                  'korwil',
+                  'korlap',
+                  'pdo',
+                ]),
+            allowed_user_emails: Array.isArray(item.allowed_user_emails)
+              ? item.allowed_user_emails
+              : [],
+            denied_user_emails: Array.isArray(item.denied_user_emails)
+              ? item.denied_user_emails
+              : [],
+          }));
         }
       }
     }
@@ -122,6 +159,170 @@ export async function updatePageSetting(
 }
 
 /**
+ * Mengubah konfigurasi izin granular peran & override per-akun untuk 1 halaman.
+ */
+export async function updatePagePermissions(
+  pageKey: PageKey,
+  allowedRoles: string[],
+  allowedUserEmails: string[],
+  deniedUserEmails: string[],
+  updatedBy: string
+): Promise<boolean> {
+  if (pageKey === ('page_management' as PageKey)) {
+    return false;
+  }
+
+  // Jamin superadmin selalu diizinkan
+  const finalRoles = allowedRoles.includes('superadmin')
+    ? allowedRoles
+    : ['superadmin', ...allowedRoles];
+
+  // Optimistic cache update
+  const current = getCachedSettings();
+  const updated = current.map((item) =>
+    item.page_key === pageKey
+      ? {
+          ...item,
+          allowed_roles: finalRoles,
+          allowed_user_emails: allowedUserEmails,
+          denied_user_emails: deniedUserEmails,
+          updated_at: new Date().toISOString(),
+          updated_by: updatedBy,
+        }
+      : item
+  );
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(updated));
+  }
+
+  if (!isSupabaseConfigured) return true;
+
+  try {
+    const { data, error } = await (supabase as any).rpc('admin_update_page_permissions', {
+      p_acting_email: updatedBy,
+      p_page_key: pageKey,
+      p_allowed_roles: finalRoles,
+      p_allowed_user_emails: allowedUserEmails,
+      p_denied_user_emails: deniedUserEmails,
+    });
+
+    if (error || data === false) {
+      console.warn('[pageManagementService] Gagal update permissions via RPC:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn('[pageManagementService] Error updating permissions:', err);
+    return false;
+  }
+}
+
+/**
+ * Menjalankan operasi massal (Bulk Action) pada sekumpulan halaman.
+ */
+export async function bulkUpdatePageSettings(
+  pageKeys: PageKey[],
+  action: BulkActionType,
+  options: { is_enabled?: boolean; allowed_roles?: string[] },
+  updatedBy: string
+): Promise<boolean> {
+  const validKeys = pageKeys.filter((k) => k !== ('page_management' as PageKey));
+  if (validKeys.length === 0) return false;
+
+  // Optimistic update
+  const current = getCachedSettings();
+  const updated = current.map((item) => {
+    if (!validKeys.includes(item.page_key)) return item;
+
+    if (action === 'set_status' && typeof options.is_enabled === 'boolean') {
+      return {
+        ...item,
+        is_enabled: options.is_enabled,
+        updated_at: new Date().toISOString(),
+        updated_by: updatedBy,
+      };
+    }
+
+    if (action === 'set_roles' && options.allowed_roles) {
+      const finalRoles = options.allowed_roles.includes('superadmin')
+        ? options.allowed_roles
+        : ['superadmin', ...options.allowed_roles];
+      return {
+        ...item,
+        allowed_roles: finalRoles,
+        updated_at: new Date().toISOString(),
+        updated_by: updatedBy,
+      };
+    }
+
+    if (action === 'reset_default') {
+      const def = DEFAULT_PAGE_SETTINGS.find((d) => d.page_key === item.page_key);
+      return {
+        ...item,
+        allowed_roles: def ? def.allowed_roles : ['superadmin', 'admin', 'korwil', 'korlap', 'pdo'],
+        allowed_user_emails: [],
+        denied_user_emails: [],
+        updated_at: new Date().toISOString(),
+        updated_by: updatedBy,
+      };
+    }
+
+    return item;
+  });
+
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(updated));
+  }
+
+  if (!isSupabaseConfigured) return true;
+
+  try {
+    const { data, error } = await (supabase as any).rpc('admin_bulk_update_page_settings', {
+      p_acting_email: updatedBy,
+      p_page_keys: validKeys,
+      p_action: action,
+      p_is_enabled: options.is_enabled ?? null,
+      p_allowed_roles: options.allowed_roles ?? null,
+    });
+
+    if (error || data === false) {
+      console.warn('[pageManagementService] Gagal bulk update via RPC:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn('[pageManagementService] Error bulk updating page settings:', err);
+    return false;
+  }
+}
+
+/**
+ * Mengambil daftar pengguna aktif yang memiliki peran Superadmin untuk ditampilkan pada layar akses terbatas.
+ */
+export async function fetchActiveSuperadmins(): Promise<{ email: string; full_name: string }[]> {
+  if (!isSupabaseConfigured) {
+    return [{ email: 'admin@transjakarta.co.id', full_name: 'Administrator Transjakarta' }];
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('email, full_name')
+      .eq('role_id', 1)
+      .eq('is_active', true);
+
+    if (error || !data || data.length === 0) {
+      return [{ email: 'superadmin@transjakarta.co.id', full_name: 'Superadmin Sistem' }];
+    }
+
+    return data as { email: string; full_name: string }[];
+  } catch (err) {
+    console.warn('[pageManagementService] Gagal fetch active superadmins:', err);
+    return [{ email: 'superadmin@transjakarta.co.id', full_name: 'Superadmin Sistem' }];
+  }
+}
+
+/**
  * Berlangganan perubahan data tabel app_page_settings via Supabase Realtime WebSocket.
  */
 export function subscribeToPageSettings(
@@ -142,8 +343,26 @@ export function subscribeToPageSettings(
       },
       (payload: any) => {
         if (payload?.new && typeof payload.new === 'object') {
-          const newSetting = payload.new as AppPageSetting;
-          onChange(newSetting);
+          const raw = payload.new as any;
+          const normalized: AppPageSetting = {
+            ...raw,
+            allowed_roles: Array.isArray(raw.allowed_roles) && raw.allowed_roles.length > 0
+              ? raw.allowed_roles
+              : (DEFAULT_PAGE_SETTINGS.find((d) => d.page_key === raw.page_key)?.allowed_roles || [
+                  'superadmin',
+                  'admin',
+                  'korwil',
+                  'korlap',
+                  'pdo',
+                ]),
+            allowed_user_emails: Array.isArray(raw.allowed_user_emails)
+              ? raw.allowed_user_emails
+              : [],
+            denied_user_emails: Array.isArray(raw.denied_user_emails)
+              ? raw.denied_user_emails
+              : [],
+          };
+          onChange(normalized);
         }
       }
     )
