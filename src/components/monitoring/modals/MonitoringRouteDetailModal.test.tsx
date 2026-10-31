@@ -567,6 +567,8 @@ describe("MonitoringRouteDetailModal", () => {
       expect(container.textContent).toContain("KWK 222177");
       expect(container.textContent).toContain("T.O Radiator Panas");
       expect(container.textContent).toContain("T.O");
+      // Memastikan badge shift (S1 • S2) tidak dirender karena menimbulkan mispersepsi keterangan seharian
+      expect(container.textContent).not.toContain("S1 • S2");
     });
 
     it("renders 100% Siap Jalan when 0 troubled units and realops > 0", async () => {

@@ -1266,18 +1266,6 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             >
                               {unit.statusCode}
                             </span>
-                            <span
-                              style={{
-                                fontSize: "9px",
-                                fontWeight: 600,
-                                color: "var(--text-secondary)",
-                                padding: "2px 4px",
-                                borderRadius: "4px",
-                                background: "rgba(255, 255, 255, 0.06)",
-                              }}
-                            >
-                              {unit.shifts.map((s) => `S${s}`).join(" • ")}
-                            </span>
                           </div>
                         </div>
                       ))}

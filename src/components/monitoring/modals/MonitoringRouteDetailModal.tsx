@@ -791,19 +791,6 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                           >
                             {u.statusCode}
                           </span>
-                          <span
-                            style={{
-                              fontSize: "10px",
-                              fontWeight: 600,
-                              color: "var(--color-text-secondary)",
-                              padding: "2px 6px",
-                              borderRadius: "5px",
-                              backgroundColor: "var(--color-surface-subtle)",
-                              border: "1px solid var(--color-border-subtle)",
-                            }}
-                          >
-                            {u.shifts.map((s) => `S${s}`).join(" • ")}
-                          </span>
                         </div>
                       </div>
                     ))}
