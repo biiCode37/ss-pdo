@@ -2,9 +2,10 @@
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { DailyPlottingPage } from './DailyPlottingPage';
+import { DailyPlottingPage, normalizeBaseOrders } from './DailyPlottingPage';
 import * as dailyPlottingService from '@/services/dailyPlottingService';
 import type { BusData } from '@/services/googleSheets';
+import type { UnitPlottingItem } from '@/types/supabase';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -25,7 +26,7 @@ vi.mock('@/utils/alertUtils', () => ({
   showErrorToast: vi.fn(),
 }));
 
-describe('DailyPlottingPage Component', () => {
+describe('DailyPlottingPage Component & normalizeBaseOrders', () => {
   let container: HTMLDivElement;
   let root: Root;
 
@@ -89,6 +90,24 @@ describe('DailyPlottingPage Component', () => {
       root.unmount();
     });
     container.remove();
+  });
+
+  it('normalizes base orders to strictly sequential 1..N without duplicates or gaps', () => {
+    const corruptItems: UnitPlottingItem[] = [
+      { unit: 'U1', order: 1, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+      { unit: 'U2', order: 1, start_point: 'A', target_ritase: 7.5, status: 'READY' }, // duplikat order 1
+      { unit: 'U3', order: 5, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+      { unit: 'U4', order: 2, start_point: 'B', target_ritase: 7.5, status: 'READY' },
+      { unit: 'U5', order: 99, start_point: 'B', target_ritase: 7.5, status: 'READY' },
+    ];
+
+    const normalized = normalizeBaseOrders(corruptItems);
+
+    const baseA = normalized.filter((u) => u.start_point === 'A');
+    const baseB = normalized.filter((u) => u.start_point === 'B');
+
+    expect(baseA.map((u) => u.order)).toEqual([1, 2, 3]);
+    expect(baseB.map((u) => u.order)).toEqual([1, 2]);
   });
 
   it('merender header kesiapan subuh, pangkalan tabs, dan kartu unit', async () => {
@@ -172,7 +191,7 @@ describe('DailyPlottingPage Component', () => {
     expect(container.querySelector('[data-testid="btn-apply-rolling"]')).not.toBeNull();
   });
 
-  it('melakukan multi-select komplementer (Pilih unit Priok, sisanya otomatis menjadi IGI)', async () => {
+  it('melakukan multi-select penetapan pangkalan tanpa merusak unit unselected', async () => {
     vi.mocked(dailyPlottingService.fetchDailyPlotting).mockResolvedValueOnce(null);
 
     await act(async () => {
@@ -207,14 +226,46 @@ describe('DailyPlottingPage Component', () => {
     expect(actionBar).not.toBeNull();
     expect(actionBar?.textContent).toContain('1 Unit Terpilih');
 
-    // Klik tombol jadikan start A (Priok)
-    const btnAssignA = container.querySelector('[data-testid="btn-assign-start-a"]') as HTMLButtonElement;
+    // Klik tombol jadikan start B (IGI)
+    const btnAssignB = container.querySelector('[data-testid="btn-assign-start-b"]') as HTMLButtonElement;
     await act(async () => {
-      btnAssignA.click();
+      btnAssignB.click();
     });
 
     // Action bar tertutup setelah aksi selesai
     expect(container.querySelector('[data-testid="multi-select-action-bar"]')).toBeNull();
+  });
+
+  it('membuka modal target ritase bebas saat chip ritase pada kartu diklik', async () => {
+    vi.mocked(dailyPlottingService.fetchDailyPlotting).mockResolvedValueOnce(null);
+
+    await act(async () => {
+      root.render(
+        <DailyPlottingPage
+          routeId={1}
+          routeCode="JAK.115"
+          date="2026-10-31"
+          buses={sampleBuses}
+          headerMap={{
+            tripPergiLabel: 'TERM. TANJUNG PRIOK',
+            tripPulangLabel: 'PEGANGSAAN II IGI',
+          }}
+        />,
+      );
+    });
+
+    // Cari chip ritase pada TJ-01
+    const ritaseBtn = container.querySelector('[data-testid="btn-ritase-modal-TJ-01"]') as HTMLButtonElement;
+    expect(ritaseBtn).not.toBeNull();
+
+    await act(async () => {
+      ritaseBtn.click();
+    });
+
+    // Modal harus terbuka
+    expect(container.textContent).toContain('Atur Target Ritase');
+    expect(container.textContent).toContain('TJ-01');
+    expect(container.textContent).toContain('Terapkan Unit Ini');
   });
 
   it('menyimpan plotting saat tombol simpan ditekan', async () => {

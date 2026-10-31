@@ -225,6 +225,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
             <DailyPlottingPage
               routeId={matchedRoute?.id || 0}
               routeCode={matchedRoute?.route_code || ""}
+              routeName={matchedRoute?.route_name || ""}
               date={operationalReportDate || selectedTab}
               buses={busData}
               headerMap={headerMap}

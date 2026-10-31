@@ -33,12 +33,28 @@ export const TEXT_PLOTTING = {
     STATUS_OFF: 'OFF',
     NOTE_PLACEHOLDER: 'Catatan kendala...',
   },
+  TARGET_MODAL: {
+    TITLE: 'Atur Target Ritase',
+    SUBTITLE: (unit?: string) =>
+      unit ? `Tentukan target ritase operasional untuk unit ${unit}` : 'Tentukan target ritase default rute',
+    INPUT_LABEL: 'Jumlah Target Ritase (PP)',
+    CUSTOM_PLACEHOLDER: 'Contoh: 7.5',
+    APPLY_THIS_UNIT: 'Terapkan Unit Ini',
+    APPLY_ALL_BASE: 'Terapkan ke Pangkalan Ini',
+    APPLY_ALL_ROUTE: 'Terapkan ke Semua Unit',
+    QUICK_PRESETS: 'Pilihan Cepat:',
+    STEPPER_MINUS: '- 0.5',
+    STEPPER_PLUS: '+ 0.5',
+    DEFAULT_TARGET_LABEL: 'Target Default:',
+    SET_ALL_BTN: 'Set Semua Unit',
+  },
   TOASTS: {
     SAVE_SUCCESS: 'Plotting armada berhasil disimpan',
     SAVE_ERROR: 'Gagal menyimpan plotting armada',
     ROLLING_APPLIED: 'Rotasi harian (rolling) berhasil diterapkan',
     ORDER_UPDATED: 'Urutan armada diperbarui',
     START_ASSIGNED: (name: string, count: number) => `${count} unit ditetapkan start di ${name}`,
+    TARGET_UPDATED: (val: number, scope: string) => `Target ritase diatur ke ${val} Rit (${scope})`,
     LOAD_ERROR: 'Gagal memuat data plotting',
   },
   EMPTY: {

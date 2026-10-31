@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { TEXT_PLOTTING, TEXT_COMMON } from '@/constants/texts';
-import { Settings, Check, Save, RotateCcw } from 'lucide-react';
+import { TEXT_PLOTTING } from '@/constants/texts';
+import { Settings, Check, Save, RotateCcw, Zap } from 'lucide-react';
 
 export interface PlottingHeaderProps {
   routeCode: string;
@@ -12,27 +12,27 @@ export interface PlottingHeaderProps {
   troubleUnits: number;
   countA: number;
   countB: number;
+  defaultTargetRitase?: number;
   isReordering: boolean;
   isSaving: boolean;
   onToggleReordering: () => void;
   onApplyRolling: () => void;
+  onOpenTargetModal?: () => void;
   onSave: () => void;
 }
 
 export const PlottingHeader = memo(function PlottingHeader({
   routeCode,
   date,
-  endpointAName,
-  endpointBName,
   totalUnits,
   readyUnits,
   troubleUnits,
-  countA,
-  countB,
+  defaultTargetRitase = 7.5,
   isReordering,
   isSaving,
   onToggleReordering,
   onApplyRolling,
+  onOpenTargetModal,
   onSave,
 }: PlottingHeaderProps) {
   return (
@@ -46,16 +46,17 @@ export const PlottingHeader = memo(function PlottingHeader({
         boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
       }}
     >
-      {/* Title & Date */}
+      {/* Title & Date + Top Action Buttons */}
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-start',
-          marginBottom: '12px',
+          marginBottom: '14px',
+          gap: '8px',
         }}
       >
-        <div>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <h2
             style={{
               margin: 0,
@@ -72,6 +73,9 @@ export const PlottingHeader = memo(function PlottingHeader({
               margin: '3px 0 0 0',
               fontSize: '0.8rem',
               color: 'var(--color-text-secondary, #94a3b8)',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {TEXT_PLOTTING.SUBTITLE(routeCode, date)}
@@ -79,7 +83,7 @@ export const PlottingHeader = memo(function PlottingHeader({
         </div>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
           <button
             type="button"
             onClick={onToggleReordering}
@@ -122,16 +126,16 @@ export const PlottingHeader = memo(function PlottingHeader({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '6px 14px',
+              padding: '6px 12px',
               borderRadius: '8px',
               fontSize: '0.8rem',
               fontWeight: 700,
               cursor: isSaving ? 'not-allowed' : 'pointer',
+              opacity: isSaving ? 0.7 : 1,
               border: 'none',
               background: 'var(--color-action-primary-bg, #0284c7)',
               color: 'var(--color-action-primary-fg, #ffffff)',
-              boxShadow: '0 2px 8px rgba(2, 132, 199, 0.3)',
-              opacity: isSaving ? 0.7 : 1,
+              boxShadow: '0 2px 8px rgba(2, 132, 199, 0.35)',
               transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
             }}
           >
@@ -139,42 +143,44 @@ export const PlottingHeader = memo(function PlottingHeader({
             <span>
               {isSaving
                 ? TEXT_PLOTTING.ACTIONS.SAVING
-                : TEXT_COMMON.BUTTONS.SAVE}
+                : TEXT_PLOTTING.ACTIONS.SAVE}
             </span>
           </button>
         </div>
       </div>
 
-      {/* Summary KPI Badges */}
+      {/* 3 Essential Metric Counters (Always balanced 3 columns on mobile) */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '6px',
+          gridTemplateColumns: '1fr 1fr 1fr',
+          gap: '8px',
+          marginBottom: '12px',
         }}
       >
+        {/* Total Unit */}
         <div
           style={{
             background: 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
             border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
             borderRadius: '10px',
-            padding: '6px 8px',
+            padding: '8px 10px',
             textAlign: 'center',
           }}
         >
           <span
             style={{
               display: 'block',
-              fontSize: '0.68rem',
+              fontSize: '0.72rem',
               color: 'var(--color-text-secondary, #94a3b8)',
               fontWeight: 600,
             }}
           >
-            Total
+            Total Unit
           </span>
           <span
             style={{
-              fontSize: '0.95rem',
+              fontSize: '1.1rem',
               fontWeight: 800,
               color: 'var(--color-text-primary, #f8fafc)',
             }}
@@ -183,28 +189,29 @@ export const PlottingHeader = memo(function PlottingHeader({
           </span>
         </div>
 
+        {/* Siap Jalan */}
         <div
           style={{
             background: 'rgba(34, 197, 94, 0.08)',
             border: '1px solid rgba(34, 197, 94, 0.2)',
             borderRadius: '10px',
-            padding: '6px 8px',
+            padding: '8px 10px',
             textAlign: 'center',
           }}
         >
           <span
             style={{
               display: 'block',
-              fontSize: '0.68rem',
+              fontSize: '0.72rem',
               color: '#4ade80',
               fontWeight: 600,
             }}
           >
-            Siap
+            Siap Jalan
           </span>
           <span
             style={{
-              fontSize: '0.95rem',
+              fontSize: '1.1rem',
               fontWeight: 800,
               color: '#22c55e',
             }}
@@ -213,144 +220,109 @@ export const PlottingHeader = memo(function PlottingHeader({
           </span>
         </div>
 
-        {troubleUnits > 0 && (
-          <div
-            style={{
-              background: 'rgba(239, 68, 68, 0.08)',
-              border: '1px solid rgba(239, 68, 68, 0.2)',
-              borderRadius: '10px',
-              padding: '6px 8px',
-              textAlign: 'center',
-            }}
-          >
-            <span
-              style={{
-                display: 'block',
-                fontSize: '0.68rem',
-                color: '#f87171',
-                fontWeight: 600,
-              }}
-            >
-              Kendala
-            </span>
-            <span
-              style={{
-                fontSize: '0.95rem',
-                fontWeight: 800,
-                color: '#ef4444',
-              }}
-            >
-              {troubleUnits}
-            </span>
-          </div>
-        )}
-
+        {/* Kendala / OFF */}
         <div
           style={{
-            background: 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
-            border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
+            background: troubleUnits > 0 ? 'rgba(239, 68, 68, 0.08)' : 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
+            border: troubleUnits > 0 ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
             borderRadius: '10px',
-            padding: '6px 8px',
+            padding: '8px 10px',
             textAlign: 'center',
           }}
         >
           <span
             style={{
               display: 'block',
-              fontSize: '0.68rem',
-              color: 'var(--color-text-secondary, #94a3b8)',
+              fontSize: '0.72rem',
+              color: troubleUnits > 0 ? '#f87171' : 'var(--color-text-secondary, #94a3b8)',
               fontWeight: 600,
             }}
           >
-            {endpointAName}
+            Kendala
           </span>
           <span
             style={{
-              fontSize: '0.95rem',
+              fontSize: '1.1rem',
               fontWeight: 800,
-              color: 'var(--color-action-primary-bg, #38bdf8)',
+              color: troubleUnits > 0 ? '#ef4444' : 'var(--color-text-muted, #64748b)',
             }}
           >
-            {countA}
-          </span>
-        </div>
-
-        <div
-          style={{
-            background: 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
-            border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
-            borderRadius: '10px',
-            padding: '6px 8px',
-            textAlign: 'center',
-          }}
-        >
-          <span
-            style={{
-              display: 'block',
-              fontSize: '0.68rem',
-              color: 'var(--color-text-secondary, #94a3b8)',
-              fontWeight: 600,
-            }}
-          >
-            {endpointBName}
-          </span>
-          <span
-            style={{
-              fontSize: '0.95rem',
-              fontWeight: 800,
-              color: 'var(--color-accent-amber, #fbbf24)',
-            }}
-          >
-            {countB}
+            {troubleUnits}
           </span>
         </div>
       </div>
 
-      {/* Extra Action when Reordering: Smart Rolling Kemarin Button */}
-      {isReordering && (
-        <div
+      {/* Operational Toolbar: Target Ritase Rute & Rolling Kemarin */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '8px',
+          background: 'var(--color-surface-default, rgba(255, 255, 255, 0.03))',
+          border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
+          borderRadius: '10px',
+          padding: '8px 12px',
+        }}
+      >
+        {/* Target Ritase Default Controller */}
+        <button
+          type="button"
+          onClick={onOpenTargetModal}
+          data-testid="btn-open-target-modal-header"
           style={{
-            marginTop: '10px',
-            paddingTop: '10px',
-            borderTop: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08))',
-            display: 'flex',
-            justifyContent: 'space-between',
+            display: 'inline-flex',
             alignItems: 'center',
+            gap: '6px',
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--color-text-secondary, #94a3b8)',
+            fontSize: '0.78rem',
+            cursor: 'pointer',
+            padding: 0,
           }}
         >
+          <Zap size={14} color="#38bdf8" />
+          <span>{TEXT_PLOTTING.TARGET_MODAL.DEFAULT_TARGET_LABEL}</span>
           <span
             style={{
-              fontSize: '0.75rem',
-              color: 'var(--color-text-secondary, #94a3b8)',
+              fontWeight: 800,
+              color: 'var(--color-action-primary-bg, #38bdf8)',
+              background: 'rgba(56, 189, 248, 0.12)',
+              padding: '2px 8px',
+              borderRadius: '6px',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
             }}
           >
-            {TEXT_PLOTTING.ACTIONS.APPLY_ROLLING_DESC}
+            {defaultTargetRitase} Rit
           </span>
+        </button>
 
-          <button
-            type="button"
-            onClick={onApplyRolling}
-            data-testid="btn-apply-rolling"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              borderRadius: '8px',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
-              background: 'rgba(245, 158, 11, 0.12)',
-              color: '#fbbf24',
-              transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
-            }}
-          >
-            <RotateCcw size={13} />
-            <span>{TEXT_PLOTTING.ACTIONS.APPLY_ROLLING}</span>
-          </button>
-        </div>
-      )}
+        {/* Rolling Kemarin Action Button */}
+        <button
+          type="button"
+          onClick={onApplyRolling}
+          data-testid="btn-apply-rolling"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '5px',
+            padding: '5px 10px',
+            borderRadius: '8px',
+            border: '1px solid rgba(251, 191, 36, 0.3)',
+            background: 'rgba(251, 191, 36, 0.1)',
+            color: '#fbbf24',
+            fontSize: '0.76rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <RotateCcw size={12} />
+          <span>{TEXT_PLOTTING.ACTIONS.APPLY_ROLLING}</span>
+        </button>
+      </div>
     </div>
   );
 });

@@ -16,29 +16,54 @@ import { TEXT_PLOTTING, TEXT_COMMON } from '@/constants/texts';
 import { PlottingHeader } from './PlottingHeader';
 import { PlottingBaseTabs } from './PlottingBaseTabs';
 import { PlottingUnitCard } from './PlottingUnitCard';
+import { TargetRitaseModal } from './TargetRitaseModal';
 import { showSuccessToast, showErrorToast } from '@/utils/alertUtils';
 
 export interface DailyPlottingPageProps {
   routeId: number;
   routeCode: string;
+  routeName?: string;
   date: string;
   buses: BusData[];
   headerMap?: HeaderMap;
   onPlottingChange?: (plotting: DailyRoutePlotting) => void;
 }
 
+/**
+ * Normalizes unit ordering per base so each base (A and B) strictly has
+ * sequential numbers 1..N without duplicates or gaps.
+ */
+export const normalizeBaseOrders = (items: UnitPlottingItem[]): UnitPlottingItem[] => {
+  const unitsA = items
+    .filter((u) => u.start_point === 'A')
+    .sort((a, b) => a.order - b.order)
+    .map((u, idx) => ({ ...u, order: idx + 1 }));
+
+  const unitsB = items
+    .filter((u) => u.start_point === 'B')
+    .sort((a, b) => a.order - b.order)
+    .map((u, idx) => ({ ...u, order: idx + 1 }));
+
+  return [...unitsA, ...unitsB];
+};
+
 export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   routeId,
   routeCode,
+  routeName,
   date,
   buses,
   headerMap,
   onPlottingChange,
 }) => {
-  // 1. Endpoint names from Google Sheets composite headers
+  // 1. Endpoint names from Google Sheets composite headers or routeName fallback
   const { endpointA, endpointB } = useMemo(() => {
-    return extractEndpointNames(headerMap?.tripPergiLabel, headerMap?.tripPulangLabel);
-  }, [headerMap?.tripPergiLabel, headerMap?.tripPulangLabel]);
+    return extractEndpointNames(
+      headerMap?.tripPergiLabel,
+      headerMap?.tripPulangLabel,
+      routeName,
+    );
+  }, [headerMap?.tripPergiLabel, headerMap?.tripPulangLabel, routeName]);
 
   // 2. State
   const [unitsData, setUnitsData] = useState<UnitPlottingItem[]>([]);
@@ -48,6 +73,16 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [draggedUnit, setDraggedUnit] = useState<string | null>(null);
 
+  // Modal State untuk Pengatur Target Ritase Fleksibel
+  const [targetModal, setTargetModal] = useState<{
+    isOpen: boolean;
+    unit?: string;
+    initialValue: number;
+  }>({
+    isOpen: false,
+    initialValue: 7.5,
+  });
+
   // 3. Inisialisasi Data Plotting dari Supabase / LocalStorage / Fallback dari BusData
   useEffect(() => {
     let isMounted = true;
@@ -56,7 +91,7 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
       try {
         const existing = await fetchDailyPlotting(routeId, date);
         if (existing && existing.units_data && existing.units_data.length > 0 && isMounted) {
-          setUnitsData(existing.units_data);
+          setUnitsData(normalizeBaseOrders(existing.units_data));
           onPlottingChange?.(existing);
           return;
         }
@@ -81,7 +116,7 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
             };
           });
 
-          setUnitsData(initialItems);
+          setUnitsData(normalizeBaseOrders(initialItems));
         }
       } catch (err) {
         console.warn('[DailyPlottingPage] Gagal memuat data plotting:', err);
@@ -118,6 +153,24 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
     };
   }, [unitsData]);
 
+  // Target ritase default yang paling banyak digunakan untuk rute ini
+  const defaultTargetRitase = useMemo(() => {
+    if (unitsData.length === 0) return 7.5;
+    const counts: Record<number, number> = {};
+    unitsData.forEach((u) => {
+      counts[u.target_ritase] = (counts[u.target_ritase] || 0) + 1;
+    });
+    let maxCount = 0;
+    let topTarget = 7.5;
+    Object.entries(counts).forEach(([rit, count]) => {
+      if (count > maxCount) {
+        maxCount = count;
+        topTarget = Number(rit);
+      }
+    });
+    return topTarget;
+  }, [unitsData]);
+
   // Filter unit yang ditampilkan berdasarkan tab pangkalan aktif
   const currentBaseUnits = useMemo(() => {
     return unitsData
@@ -141,35 +194,27 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
     });
   }, []);
 
-  // Handler: Tetapkan Titik Start Komplementer (Ide Utama: Pilih A, sisanya otomatis B)
+  // Handler: Tetapkan Titik Start untuk Unit Terpilih SAJA (Tanpa mengubah unit lain)
   const handleAssignStartPoint = useCallback(
     (targetPoint: PlottingStartPoint) => {
       if (selectedUnits.size === 0) return;
 
-      const oppositePoint: PlottingStartPoint = targetPoint === 'A' ? 'B' : 'A';
       const targetBaseName = targetPoint === 'A' ? endpointA : endpointB;
 
       setUnitsData((prev) => {
-        let orderTarget = 1;
-        let orderOpposite = 1;
-
-        return prev.map((item) => {
+        // Hanya pindahkan unit-unit yang dipilih ke targetPoint, letakkan di urutan belakang
+        const updated = prev.map((item) => {
           if (selectedUnits.has(item.unit)) {
-            const updated: UnitPlottingItem = {
+            return {
               ...item,
               start_point: targetPoint,
-              order: orderTarget++,
+              order: 999999 + item.order,
             };
-            return updated;
-          } else {
-            const updated: UnitPlottingItem = {
-              ...item,
-              start_point: oppositePoint,
-              order: orderOpposite++,
-            };
-            return updated;
           }
+          return item;
         });
+
+        return normalizeBaseOrders(updated);
       });
 
       showSuccessToast(TEXT_PLOTTING.TOASTS.START_ASSIGNED(targetBaseName, selectedUnits.size));
@@ -178,19 +223,25 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
     [selectedUnits, endpointA, endpointB],
   );
 
-  // Handler: Single-Tap Toggle Titik Start per Kartu
+  // Handler: Single-Tap Toggle Titik Start per Kartu (Pindah ke pangkalan seberang di urutan akhir)
   const handleToggleStartPoint = useCallback((unit: string) => {
     setUnitsData((prev) => {
-      return prev.map((u) => {
+      const target = prev.find((u) => u.unit === unit);
+      if (!target) return prev;
+      const nextPoint: PlottingStartPoint = target.start_point === 'A' ? 'B' : 'A';
+
+      const updated = prev.map((u) => {
         if (u.unit === unit) {
-          const nextPoint: PlottingStartPoint = u.start_point === 'A' ? 'B' : 'A';
           return {
             ...u,
             start_point: nextPoint,
+            order: 999999,
           };
         }
         return u;
       });
+
+      return normalizeBaseOrders(updated);
     });
   }, []);
 
@@ -200,41 +251,76 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
       const targetUnit = prev.find((u) => u.unit === unit);
       if (!targetUnit) return prev;
 
-      const currentPoint = targetUnit.start_point;
-      const pointUnits = prev
-        .filter((u) => u.start_point === currentPoint && u.unit !== unit)
-        .sort((a, b) => a.order - b.order);
-
-      // Re-index remaining units (naik 1 tingkat)
-      const reindexed = pointUnits.map((u, idx) => ({
-        ...u,
-        order: idx + 1,
-      }));
-
-      // Taruh target unit di urutan terakhir
-      reindexed.push({
-        ...targetUnit,
-        order: reindexed.length + 1,
+      const updated = prev.map((u) => {
+        if (u.unit === unit) {
+          return { ...u, order: 999999 };
+        }
+        return u;
       });
 
-      // Gabungkan kembali dengan unit pangkalan seberang
-      const otherUnits = prev.filter((u) => u.start_point !== currentPoint);
-      return [...reindexed, ...otherUnits];
+      return normalizeBaseOrders(updated);
     });
   }, []);
 
-  // Handler: Rolling Otomatis (Memutar unit #1 ke urutan terakhir pangkalan)
+  // Handler: Rolling Otomatis (Memutar unit #1 kemarin ke urutan terakhir pangkalan)
   const handleApplyRolling = useCallback(() => {
-    setUnitsData((prev) => generateRollingFromYesterday(prev));
+    setUnitsData((prev) => normalizeBaseOrders(generateRollingFromYesterday(prev)));
     showSuccessToast(TEXT_PLOTTING.TOASTS.ROLLING_APPLIED);
   }, []);
 
-  // Handler: Update Target Ritase per Unit
+  // Handler: Update Target Ritase per Unit secara langsung (dari Stepper)
   const handleUpdateTargetRitase = useCallback((unit: string, target_ritase: number) => {
     setUnitsData((prev) =>
       prev.map((u) => (u.unit === unit ? { ...u, target_ritase } : u)),
     );
   }, []);
+
+  // Handler: Buka Modal Pengatur Ritase Fleksibel
+  const handleOpenUnitTargetModal = useCallback((unit: string, currentRitase: number) => {
+    setTargetModal({
+      isOpen: true,
+      unit,
+      initialValue: currentRitase,
+    });
+  }, []);
+
+  const handleOpenHeaderTargetModal = useCallback(() => {
+    setTargetModal({
+      isOpen: true,
+      unit: undefined,
+      initialValue: defaultTargetRitase,
+    });
+  }, [defaultTargetRitase]);
+
+  // Handler: Terapkan Target Ritase dari Modal (Unit / Pangkalan / Semua)
+  const handleApplyTargetRitase = useCallback(
+    (val: number, scope: 'unit' | 'base' | 'all') => {
+      setUnitsData((prev) => {
+        if (scope === 'unit' && targetModal.unit) {
+          return prev.map((u) => (u.unit === targetModal.unit ? { ...u, target_ritase: val } : u));
+        }
+        if (scope === 'base') {
+          return prev.map((u) => (u.start_point === activeBase ? { ...u, target_ritase: val } : u));
+        }
+        if (scope === 'all') {
+          return prev.map((u) => ({ ...u, target_ritase: val }));
+        }
+        return prev;
+      });
+
+      if (scope === 'unit' && targetModal.unit) {
+        showSuccessToast(TEXT_PLOTTING.TOASTS.TARGET_UPDATED(val, targetModal.unit));
+      } else if (scope === 'base') {
+        const baseName = activeBase === 'A' ? endpointA : endpointB;
+        showSuccessToast(TEXT_PLOTTING.TOASTS.TARGET_UPDATED(val, `Pangkalan ${baseName}`));
+      } else {
+        showSuccessToast(TEXT_PLOTTING.TOASTS.TARGET_UPDATED(val, 'Semua Unit'));
+      }
+
+      setTargetModal((prev) => ({ ...prev, isOpen: false }));
+    },
+    [targetModal.unit, activeBase, endpointA, endpointB],
+  );
 
   // Handler: Update Status Kesiapan Unit
   const handleUpdateStatus = useCallback((unit: string, status: PlottingUnitStatus) => {
@@ -319,12 +405,12 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   return (
     <div
       style={{
-        padding: '16px 16px calc(80px + env(safe-area-inset-bottom, 0px)) 16px',
+        padding: '16px 16px calc(140px + env(safe-area-inset-bottom, 0px)) 16px',
         maxWidth: '720px',
         margin: '0 auto',
       }}
     >
-      {/* 1. Header Ringkasan Kesiapan Subuh */}
+      {/* 1. Header Ringkasan Kesiapan Subuh & Target Ritase Rute */}
       <PlottingHeader
         routeCode={routeCode}
         date={date}
@@ -335,10 +421,12 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
         troubleUnits={troubleUnits}
         countA={countA}
         countB={countB}
+        defaultTargetRitase={defaultTargetRitase}
         isReordering={isReordering}
         isSaving={isSaving}
         onToggleReordering={handleToggleReordering}
         onApplyRolling={handleApplyRolling}
+        onOpenTargetModal={handleOpenHeaderTargetModal}
         onSave={handleSavePlotting}
       />
 
@@ -381,6 +469,7 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
               onMoveToBottom={handleMoveToBottom}
               onToggleStartPoint={handleToggleStartPoint}
               onUpdateTargetRitase={handleUpdateTargetRitase}
+              onOpenTargetModal={handleOpenUnitTargetModal}
               onUpdateStatus={handleUpdateStatus}
               onDragStart={handleDragStart}
               onDragOver={handleDragOver}
@@ -396,7 +485,7 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
           data-testid="multi-select-action-bar"
           style={{
             position: 'fixed',
-            bottom: '72px',
+            bottom: 'calc(82px + env(safe-area-inset-bottom, 0px))',
             left: '16px',
             right: '16px',
             maxWidth: '688px',
@@ -405,11 +494,11 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
             border: '1px solid var(--color-action-primary-bg, #0284c7)',
             borderRadius: '14px',
             padding: '10px 14px',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            zIndex: 100,
+            zIndex: 99,
             animation: 'fadeInUp 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
           }}
         >
@@ -481,6 +570,16 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
           </div>
         </div>
       )}
+
+      {/* 5. Modal Pengatur Target Ritase Fleksibel & Bebas */}
+      <TargetRitaseModal
+        isOpen={targetModal.isOpen}
+        initialValue={targetModal.initialValue}
+        targetUnit={targetModal.unit}
+        endpointName={activeBase === 'A' ? endpointA : endpointB}
+        onClose={() => setTargetModal((prev) => ({ ...prev, isOpen: false }))}
+        onApply={handleApplyTargetRitase}
+      />
     </div>
   );
 };

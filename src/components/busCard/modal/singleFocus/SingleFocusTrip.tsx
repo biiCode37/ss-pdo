@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import type { HeaderMap } from "@/services/googleSheets";
 import { MAX_TRIP_COUNT } from "@/utils/modals/busInput/busModalTypes";
 import { parseIndonesianNumber } from "@/utils/numberUtils";
@@ -14,7 +14,7 @@ import {
   getSingleFocusChipStyle,
   singleFocusLabelStyle,
 } from "./singleFocusStyles";
-import { AlertTriangle, MapPin, Zap } from "lucide-react";
+import { AlertTriangle, MapPin, Zap, Minus, Plus } from "lucide-react";
 
 export interface SingleFocusTripProps {
   form: BusInputFormReturn;
@@ -23,8 +23,6 @@ export interface SingleFocusTripProps {
   endpointAName?: string;
   endpointBName?: string;
 }
-
-const PRESET_RITASE = [6.5, 7.0, 7.5, 8.0];
 
 export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
   form,
@@ -61,6 +59,21 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
   const startPoint = plottingItem?.start_point || "A";
   const startBaseName = startPoint === "A" ? endpointAName : endpointBName;
 
+  // Dynamic presets based on unit/route target ritase
+  const dynamicPresets = useMemo(() => {
+    const target = plottingItem?.target_ritase ?? 7.5;
+    const set = new Set<number>();
+    set.add(Number((target - 1).toFixed(1)));
+    set.add(Number((target - 0.5).toFixed(1)));
+    set.add(Number(target.toFixed(1)));
+    set.add(Number((target + 0.5).toFixed(1)));
+    set.add(Number((target + 1).toFixed(1)));
+
+    return Array.from(set)
+      .filter((v) => v >= 1)
+      .sort((a, b) => a - b);
+  }, [plottingItem?.target_ritase]);
+
   // Validasi Fisika Rute
   const validation = validateSmartTripPhysicalInvariants({
     tripPergi: numPergi,
@@ -74,6 +87,12 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
     const split = calculateSmartTripSplit(targetRit, startPoint);
     setTripPergi(split.tripPergi.toString());
     setTripPulang(split.tripPulang.toString());
+  };
+
+  const handleStepRitase = (delta: number) => {
+    const current = totalRitasePP > 0 ? totalRitasePP : (plottingItem?.target_ritase ?? 7.5);
+    const nextRit = Math.max(0.5, Math.min(25, Number((current + delta).toFixed(1))));
+    handleApplyPreset(nextRit);
   };
 
   const handleTripPergiKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -125,48 +144,114 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
         )}
       </div>
 
-      {/* Preset Cepat Ritase Pintar */}
-      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <span
-          style={{
-            fontSize: "0.74rem",
-            color: "var(--color-text-secondary, #94a3b8)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "3px",
-          }}
-        >
-          <Zap size={12} color="#fbbf24" /> Auto-Set:
-        </span>
-        {PRESET_RITASE.map((val) => (
-          <button
-            key={val}
-            type="button"
-            onClick={() => handleApplyPreset(val)}
+      {/* Preset Cepat Ritase Pintar & Stepper Dinamis */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "6px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+          <span
             style={{
-              padding: "4px 8px",
-              borderRadius: "6px",
               fontSize: "0.74rem",
-              fontWeight: 700,
-              cursor: "pointer",
-              border:
-                totalRitasePP === val
-                  ? "1px solid var(--color-action-primary-bg, #38bdf8)"
-                  : "1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))",
-              background:
-                totalRitasePP === val
-                  ? "rgba(56, 189, 248, 0.15)"
-                  : "var(--color-surface-default, rgba(255, 255, 255, 0.05))",
-              color:
-                totalRitasePP === val
-                  ? "var(--color-action-primary-bg, #38bdf8)"
-                  : "var(--color-text-primary, #f8fafc)",
-              transition: "all 0.15s ease",
+              color: "var(--color-text-secondary, #94a3b8)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "3px",
             }}
           >
-            {val} Rit
+            <Zap size={12} color="#fbbf24" /> Auto-Set:
+          </span>
+          <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+            {dynamicPresets.map((val) => {
+              const isTarget = plottingItem?.target_ritase === val;
+              const isCurrent = totalRitasePP === val;
+              return (
+                <button
+                  key={val}
+                  type="button"
+                  onClick={() => handleApplyPreset(val)}
+                  style={{
+                    padding: "4px 8px",
+                    borderRadius: "6px",
+                    fontSize: "0.74rem",
+                    fontWeight: isTarget || isCurrent ? 800 : 600,
+                    cursor: "pointer",
+                    border: isCurrent
+                      ? "1px solid var(--color-action-primary-bg, #38bdf8)"
+                      : isTarget
+                      ? "1px solid rgba(251, 191, 36, 0.4)"
+                      : "1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))",
+                    background: isCurrent
+                      ? "rgba(56, 189, 248, 0.18)"
+                      : isTarget
+                      ? "rgba(251, 191, 36, 0.1)"
+                      : "var(--color-surface-default, rgba(255, 255, 255, 0.05))",
+                    color: isCurrent
+                      ? "var(--color-action-primary-bg, #38bdf8)"
+                      : isTarget
+                      ? "#fbbf24"
+                      : "var(--color-text-primary, #f8fafc)",
+                    transition: "all 0.15s ease",
+                  }}
+                  title={isTarget ? `Target Plotting Rute: ${val} Rit` : `${val} Rit`}
+                >
+                  {val} Rit
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Stepper Cepat -/+ 0.5 Ritase */}
+        <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+          <button
+            type="button"
+            onClick={() => handleStepRitase(-0.5)}
+            aria-label="Kurangi 0.5 ritase"
+            title="Kurang 0.5 Rit"
+            style={{
+              width: "26px",
+              height: "26px",
+              borderRadius: "6px",
+              border: "1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))",
+              background: "var(--color-surface-default, rgba(255, 255, 255, 0.04))",
+              color: "var(--color-text-secondary, #94a3b8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <Minus size={12} />
           </button>
-        ))}
+          <button
+            type="button"
+            onClick={() => handleStepRitase(0.5)}
+            aria-label="Tambah 0.5 ritase"
+            title="Tambah 0.5 Rit"
+            style={{
+              width: "26px",
+              height: "26px",
+              borderRadius: "6px",
+              border: "1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))",
+              background: "var(--color-surface-default, rgba(255, 255, 255, 0.04))",
+              color: "var(--color-text-secondary, #94a3b8)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <Plus size={12} />
+          </button>
+        </div>
       </div>
 
       {/* Grid 2 Kolom untuk Trip Pergi & Trip Pulang */}

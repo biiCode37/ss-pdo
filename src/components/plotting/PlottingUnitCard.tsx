@@ -1,7 +1,17 @@
 import { memo } from 'react';
 import type { UnitPlottingItem, PlottingUnitStatus } from '@/types/supabase';
 import { TEXT_PLOTTING } from '@/constants/texts';
-import { ArrowDown, GripVertical, CheckCircle2, AlertTriangle, XCircle, ArrowLeftRight } from 'lucide-react';
+import {
+  ArrowDown,
+  GripVertical,
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  ArrowLeftRight,
+  Minus,
+  Plus,
+  Zap,
+} from 'lucide-react';
 
 export interface PlottingUnitCardProps {
   item: UnitPlottingItem;
@@ -13,14 +23,13 @@ export interface PlottingUnitCardProps {
   onMoveToBottom: (unit: string) => void;
   onToggleStartPoint: (unit: string) => void;
   onUpdateTargetRitase: (unit: string, ritase: number) => void;
+  onOpenTargetModal?: (unit: string, currentRitase: number) => void;
   onUpdateStatus: (unit: string, status: PlottingUnitStatus) => void;
   onCardClick?: (unit: string) => void;
   onDragStart?: (e: React.DragEvent, unit: string) => void;
   onDragOver?: (e: React.DragEvent) => void;
   onDrop?: (e: React.DragEvent, unit: string) => void;
 }
-
-const RITASE_OPTIONS = [6.0, 6.5, 7.0, 7.5, 8.0, 8.5];
 
 export const PlottingUnitCard = memo(function PlottingUnitCard({
   item,
@@ -32,6 +41,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
   onMoveToBottom,
   onToggleStartPoint,
   onUpdateTargetRitase,
+  onOpenTargetModal,
   onUpdateStatus,
   onCardClick,
   onDragStart,
@@ -78,6 +88,12 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
     else onUpdateStatus(item.unit, 'READY');
   };
 
+  const handleStepRitase = (delta: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const nextVal = Math.max(1, Math.min(20, Number((item.target_ritase + delta).toFixed(1))));
+    onUpdateTargetRitase(item.unit, nextVal);
+  };
+
   return (
     <div
       draggable={isReordering}
@@ -100,83 +116,94 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           : '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08))',
         borderRadius: '14px',
         padding: '12px 14px',
-        marginBottom: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '10px',
-        transition: 'all 0.18s cubic-bezier(0.32, 0.72, 0, 1)',
-        cursor: isReordering ? 'pointer' : 'default',
+        marginBottom: '10px',
+        cursor: isReordering ? 'grab' : 'default',
         userSelect: isReordering ? 'none' : 'auto',
+        WebkitUserSelect: isReordering ? 'none' : 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+        transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
       }}
     >
-      {/* Left: Drag Handle or Order Badge + Unit Body */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        {isReordering && (
-          <div
-            title="Tarik untuk memindahkan urutan"
+      {/* BARIS 1: Drag Handle, Urutan, Nama Unit, Pangkalan Start, Tombol Geser */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '8px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
+          {/* Drag Handle Indicator */}
+          {isReordering && (
+            <div
+              style={{
+                color: 'var(--color-text-secondary, #94a3b8)',
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'grab',
+                flexShrink: 0,
+              }}
+              title="Tahan & seret untuk mengubah urutan"
+            >
+              <GripVertical size={16} />
+            </div>
+          )}
+
+          {/* Sequential Order Badge */}
+          <span
+            data-testid={`badge-order-${item.unit}`}
             style={{
-              color: 'var(--color-text-muted, #64748b)',
-              cursor: 'grab',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: '24px',
+              height: '24px',
+              padding: '0 5px',
+              borderRadius: '6px',
+              background: 'var(--color-surface-default, rgba(255, 255, 255, 0.08))',
+              border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
+              color: 'var(--color-text-primary, #f8fafc)',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              flexShrink: 0,
             }}
           >
-            <GripVertical size={18} />
-          </div>
-        )}
+            {item.order}
+          </span>
 
-        {/* Order Badge */}
-        <div
-          style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '8px',
-            background: isSelectedForMultiSelect
-              ? 'var(--color-action-primary-bg, #0284c7)'
-              : 'var(--color-surface-default, rgba(255, 255, 255, 0.08))',
-            color: isSelectedForMultiSelect
-              ? '#ffffff'
-              : 'var(--color-text-primary, #f8fafc)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 800,
-            fontSize: '0.85rem',
-            flexShrink: 0,
-            border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1))',
-          }}
-        >
-          {item.order}
-        </div>
-
-        {/* Unit Name & Start Point Pill */}
-        <div>
+          {/* Unit Name (KWK 222153) - Satu baris rapi tanpa wrapping */}
           <span
             style={{
-              display: 'block',
+              fontSize: '0.95rem',
               fontWeight: 800,
-              fontSize: '0.98rem',
               color: 'var(--color-text-primary, #f8fafc)',
               letterSpacing: '-0.01em',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {item.unit}
           </span>
 
+          {/* Pangkalan Start Switch Badge */}
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               onToggleStartPoint(item.unit);
             }}
-            title="Klik untuk menukar titik start"
+            data-testid={`btn-toggle-base-${item.unit}`}
+            title={`Pangkalan start: ${currentBaseName} (Klik untuk memindahkan pangkalan)`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '4px',
-              marginTop: '3px',
-              padding: '2px 6px',
+              padding: '3px 8px',
               borderRadius: '6px',
               fontSize: '0.72rem',
               fontWeight: 700,
@@ -184,68 +211,16 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               background: 'rgba(56, 189, 248, 0.08)',
               color: '#38bdf8',
               cursor: 'pointer',
+              flexShrink: 0,
+              transition: 'all 0.15s ease',
             }}
           >
             <span>📍 {currentBaseName}</span>
             <ArrowLeftRight size={10} style={{ opacity: 0.7 }} />
           </button>
         </div>
-      </div>
 
-      {/* Right Controls: Target Ritase, Status Toggle, & Move To Bottom Button */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        {/* Target Ritase Selector */}
-        <select
-          value={item.target_ritase}
-          onChange={(e) => onUpdateTargetRitase(item.unit, Number(e.target.value))}
-          onClick={(e) => e.stopPropagation()}
-          aria-label={`Target ritase ${item.unit}`}
-          style={{
-            padding: '4px 6px',
-            borderRadius: '7px',
-            fontSize: '0.78rem',
-            fontWeight: 700,
-            background: 'var(--color-surface-default, rgba(255, 255, 255, 0.06))',
-            color: 'var(--color-text-primary, #f8fafc)',
-            border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
-            cursor: 'pointer',
-          }}
-        >
-          {RITASE_OPTIONS.map((val) => (
-            <option key={val} value={val} style={{ background: '#1e293b', color: '#fff' }}>
-              {val} {TEXT_PLOTTING.UNIT_CARD.RITASE_UNIT}
-            </option>
-          ))}
-        </select>
-
-        {/* Status Pill Toggle */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            cycleStatus();
-          }}
-          title={`Ubah status ${item.unit} (Klik untuk berganti)`}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '4px',
-            padding: '5px 8px',
-            borderRadius: '8px',
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            border: `1px solid ${statusConfig.border}`,
-            background: statusConfig.bg,
-            color: statusConfig.fg,
-            cursor: 'pointer',
-            flexShrink: 0,
-          }}
-        >
-          <StatusIcon size={12} />
-          <span>{statusConfig.text}</span>
-        </button>
-
-        {/* Move To Bottom Button (In Reorder Mode) */}
+        {/* Move To Bottom Action Button */}
         {isReordering && (
           <button
             type="button"
@@ -253,18 +228,17 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               e.stopPropagation();
               onMoveToBottom(item.unit);
             }}
-            title={TEXT_PLOTTING.ACTIONS.MOVE_TO_BOTTOM}
             data-testid={`btn-move-bottom-${item.unit}`}
+            title="Pindahkan unit ini ke urutan terakhir pangkalan"
             style={{
-              width: '28px',
-              height: '28px',
+              padding: '4px 6px',
+              borderRadius: '6px',
+              background: 'var(--color-surface-default, rgba(255, 255, 255, 0.06))',
+              border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1))',
+              color: 'var(--color-text-secondary, #94a3b8)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: '7px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              background: 'rgba(255, 255, 255, 0.05)',
-              color: 'var(--color-text-secondary, #94a3b8)',
               cursor: 'pointer',
               flexShrink: 0,
             }}
@@ -272,6 +246,119 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
             <ArrowDown size={14} />
           </button>
         )}
+      </div>
+
+      {/* BARIS 2: Kontrol Operasional (Target Ritase Fleksibel & Status Kesiapan) */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderTop: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
+          paddingTop: '8px',
+          gap: '8px',
+        }}
+      >
+        {/* Target Ritase: Stepper & Interactive Pill (Bisa diatur bebas berapapun) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <button
+            type="button"
+            onClick={(e) => handleStepRitase(-0.5, e)}
+            aria-label="Kurang 0.5 ritase"
+            style={{
+              width: '26px',
+              height: '26px',
+              borderRadius: '6px',
+              border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
+              background: 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
+              color: 'var(--color-text-secondary, #94a3b8)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              padding: 0,
+            }}
+          >
+            <Minus size={12} />
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onOpenTargetModal) {
+                onOpenTargetModal(item.unit, item.target_ritase);
+              }
+            }}
+            data-testid={`btn-ritase-modal-${item.unit}`}
+            title="Klik untuk membuka pengatur ritase bebas & preset"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '3px 8px',
+              borderRadius: '6px',
+              border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
+              background: 'var(--color-surface-default, rgba(255, 255, 255, 0.06))',
+              color: 'var(--color-text-primary, #f8fafc)',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+            }}
+          >
+            <Zap size={11} color="#38bdf8" />
+            <span>{item.target_ritase} Rit</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={(e) => handleStepRitase(0.5, e)}
+            aria-label="Tambah 0.5 ritase"
+            style={{
+              width: '26px',
+              height: '26px',
+              borderRadius: '6px',
+              border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
+              background: 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
+              color: 'var(--color-text-secondary, #94a3b8)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              padding: 0,
+            }}
+          >
+            <Plus size={12} />
+          </button>
+        </div>
+
+        {/* Status Pill Toggle (Siap / Kendala / OFF) */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            cycleStatus();
+          }}
+          data-testid={`btn-status-${item.unit}`}
+          title={`Ubah status ${item.unit} (Klik untuk berganti)`}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '5px',
+            padding: '4px 10px',
+            borderRadius: '8px',
+            fontSize: '0.76rem',
+            fontWeight: 700,
+            border: `1px solid ${statusConfig.border}`,
+            background: statusConfig.bg,
+            color: statusConfig.fg,
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <StatusIcon size={13} />
+          <span>{statusConfig.text}</span>
+        </button>
       </div>
     </div>
   );
