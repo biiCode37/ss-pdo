@@ -25,12 +25,12 @@ export const PageDisabledState: React.FC<Props> = ({ message, onBack }) => {
           width: '64px',
           height: '64px',
           borderRadius: '20px',
-          background: 'rgba(245, 158, 11, 0.12)',
-          border: '1px solid rgba(245, 158, 11, 0.25)',
+          background: 'var(--color-warning-bg)',
+          border: '1px solid var(--color-warning-border)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#f59e0b',
+          color: 'var(--color-warning-fg)',
           marginBottom: '20px',
         }}
       >
@@ -41,7 +41,7 @@ export const PageDisabledState: React.FC<Props> = ({ message, onBack }) => {
         style={{
           fontSize: '18px',
           fontWeight: 700,
-          color: 'var(--text-primary)',
+          color: 'var(--color-text-primary)',
           marginBottom: '10px',
         }}
       >
@@ -52,7 +52,7 @@ export const PageDisabledState: React.FC<Props> = ({ message, onBack }) => {
         style={{
           fontSize: '14px',
           lineHeight: '1.5',
-          color: 'var(--text-secondary)',
+          color: 'var(--color-text-secondary)',
           maxWidth: '380px',
           marginBottom: '28px',
         }}
@@ -70,9 +70,9 @@ export const PageDisabledState: React.FC<Props> = ({ message, onBack }) => {
             gap: '8px',
             padding: '12px 20px',
             borderRadius: '12px',
-            background: 'var(--bg-secondary, #1e293b)',
-            border: '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
-            color: 'var(--text-primary)',
+            background: 'var(--color-surface-subtle)',
+            border: '1px solid var(--color-border-subtle)',
+            color: 'var(--color-text-primary)',
             fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',

@@ -1,0 +1,37 @@
+/* Standarisasi Badge & Status Operasional (Refactor 174) */
+.ui-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.ui-status[data-tone="success"] {
+  color: var(--color-success-fg);
+  background: var(--color-success-bg);
+}
+
+.ui-status[data-tone="warning"] {
+  color: var(--color-warning-fg);
+  background: var(--color-warning-bg);
+}
+
+.ui-status[data-tone="error"] {
+  color: var(--color-error-fg);
+  background: var(--color-error-bg);
+}
+
+.ui-status[data-tone="info"] {
+  color: var(--color-info-fg);
+  background: var(--color-info-bg);
+}
+
+.ui-status[data-tone="neutral"] {
+  color: var(--color-text-secondary);
+  background: var(--color-surface-subtle);
+}
+

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Search, CheckCheck, X, Filter } from "lucide-react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
+import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 import { SUPERVISORS } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { showConfirmDialog } from "@/utils/alertUtils";
@@ -17,6 +18,7 @@ export interface MonitoringRoutesTabProps {
   verifyingRouteId?: number | null;
   syncingRouteId?: number | null;
   isBulking?: boolean;
+  fleetShifts?: DailyFleetShiftWithUnits[];
 }
 
 type StatusFilterType = "all" | "submitted" | "uncompleted" | "verified";
@@ -30,6 +32,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
   verifyingRouteId,
   syncingRouteId,
   isBulking,
+  fleetShifts,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilterType>("all");
@@ -475,6 +478,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
       {/* Modal Detail 21 Metrik */}
       <MonitoringRouteDetailModal
         route={selectedRouteForModal}
+        fleetShifts={fleetShifts}
         isOpen={!!selectedRouteForModal}
         onClose={() => setSelectedRouteCodeForModal(null)}
         onSelectRoute={(code) => {

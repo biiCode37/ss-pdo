@@ -538,5 +538,109 @@ describe("MonitoringRouteDetailModal", () => {
       ).toBe("3.33 Rit/Bus");
     });
   });
+  describe("Fleet Readiness Section in Tab Operasional", () => {
+    it("renders troubled fleet units when present in route", async () => {
+      const routeWithIssues: RegionalRouteItem = {
+        ...mockRoute,
+        fleetStatusShift1: [
+          {
+            unit: "KWK 222177",
+            note: "T.O Radiator Panas",
+            isOff: false,
+          },
+        ],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={routeWithIssues}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(container.textContent).toContain("Status Kesiapan Armada Bus");
+      expect(container.textContent).toContain("1 Unit Kendala");
+      expect(container.textContent).toContain("KWK 222177");
+      expect(container.textContent).toContain("T.O Radiator Panas");
+      expect(container.textContent).toContain("T.O");
+      // Memastikan badge shift (S1 • S2) tidak dirender karena menimbulkan mispersepsi keterangan seharian
+      expect(container.textContent).not.toContain("S1 • S2");
+    });
+
+    it("renders 100% Siap Jalan when 0 troubled units and realops > 0", async () => {
+      const cleanRoute: RegionalRouteItem = {
+        ...mockRoute,
+        totalRealops: 10,
+        fleetStatusShift1: [],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={cleanRoute}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(container.textContent).toContain("Status Kesiapan Armada Bus");
+      expect(container.textContent).toContain("100% Siap Jalan");
+      expect(container.textContent).toContain("Tidak ada catatan unit kendala");
+    });
+
+    it("renders no data message when 0 troubled units and realops is 0", async () => {
+      const emptyRoute: RegionalRouteItem = {
+        ...mockRoute,
+        totalRealops: 0,
+        fleetStatusShift1: [],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={emptyRoute}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      expect(container.textContent).toContain("Status Kesiapan Armada Bus");
+      expect(container.textContent).toContain("Belum ada laporan data kesiapan armada");
+    });
+
+    it("renders fleet section as top-level full-width block, not nested in 2-col metric grid", async () => {
+      const cleanRoute: RegionalRouteItem = {
+        ...mockRoute,
+        totalRealops: 10,
+        fleetStatusShift1: [],
+        fleetStatusShift2: [],
+      };
+
+      await act(async () => {
+        root.render(
+          <MonitoringRouteDetailModal
+            route={cleanRoute}
+            isOpen={true}
+            onClose={vi.fn()}
+          />
+        );
+      });
+
+      const fleetSection = container.querySelector('[data-testid="route-modal-fleet-section"]');
+      expect(fleetSection).toBeTruthy();
+      const parentDisplay = (fleetSection?.parentElement as HTMLElement)?.style?.display;
+      expect(parentDisplay).not.toBe("grid");
+      expect((fleetSection as HTMLElement)?.style?.width).toBe("100%");
+    });
+  });
+
 });
 

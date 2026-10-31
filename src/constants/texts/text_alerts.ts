@@ -46,7 +46,7 @@ export const TEXT_ALERTS = {
     HTML_EXPLANATION: (tabName: string) => `
       <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; text-align: left;">
         Sistem akan merapikan seluruh baris data pada tanggal <strong>${tabName}</strong> di Google Sheets asli:
-        <div style="margin-top: 10px; padding: 10px; border-radius: 10px; background: rgba(62, 207, 142, 0.08); border: 1px solid rgba(62, 207, 142, 0.2);">
+        <div style="margin-top: 10px; padding: 10px; border-radius: 10px; background: var(--color-surface-subtle); border: 1px solid var(--color-border-subtle);">
           <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Standar Format yang Diterapkan:</div>
           <div style="font-size: 12px; color: var(--text-secondary);">
             • <strong>Teks & Perataan:</strong> Bold, Rata Tengah Horizontal & Vertikal, Wrap Text.<br/>

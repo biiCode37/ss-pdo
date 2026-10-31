@@ -124,16 +124,16 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           cursor: loading ? "wait" : "pointer",
           background:
             currentPeriod.mode === "daily"
-              ? "var(--accent-color, #3ECF8E)"
+              ? "var(--color-action-primary-bg)"
               : "transparent",
           color:
             currentPeriod.mode === "daily"
-              ? "#062817"
-              : "var(--text-secondary, #a3a3a3)",
+              ? "var(--color-action-primary-fg)"
+              : "var(--color-text-secondary)",
           transition: "all 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
           boxShadow:
             currentPeriod.mode === "daily"
-              ? "0 2px 8px rgba(62, 207, 142, 0.3)"
+              ? "0 2px 8px var(--color-shadow)"
               : "none",
           whiteSpace: "nowrap",
           overflow: "hidden",
@@ -165,16 +165,16 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           cursor: loading ? "wait" : "pointer",
           background:
             currentPeriod.mode === "weekly"
-              ? "var(--accent-color, #3ECF8E)"
+              ? "var(--color-action-primary-bg)"
               : "transparent",
           color:
             currentPeriod.mode === "weekly"
-              ? "#062817"
-              : "var(--text-secondary, #a3a3a3)",
+              ? "var(--color-action-primary-fg)"
+              : "var(--color-text-secondary)",
           transition: "all 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
           boxShadow:
             currentPeriod.mode === "weekly"
-              ? "0 2px 8px rgba(62, 207, 142, 0.3)"
+              ? "0 2px 8px var(--color-shadow)"
               : "none",
           whiteSpace: "nowrap",
           overflow: "hidden",
@@ -206,16 +206,16 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           cursor: loading ? "wait" : "pointer",
           background:
             currentPeriod.mode === "monthly"
-              ? "var(--accent-color, #3ECF8E)"
+              ? "var(--color-action-primary-bg)"
               : "transparent",
           color:
             currentPeriod.mode === "monthly"
-              ? "#062817"
-              : "var(--text-secondary, #a3a3a3)",
+              ? "var(--color-action-primary-fg)"
+              : "var(--color-text-secondary)",
           transition: "all 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
           boxShadow:
             currentPeriod.mode === "monthly"
-              ? "0 2px 8px rgba(62, 207, 142, 0.3)"
+              ? "0 2px 8px var(--color-shadow)"
               : "none",
           whiteSpace: "nowrap",
           overflow: "hidden",
@@ -247,16 +247,16 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           cursor: loading ? "wait" : "pointer",
           background:
             currentPeriod.mode === "custom"
-              ? "var(--accent-color, #3ECF8E)"
+              ? "var(--color-action-primary-bg)"
               : "transparent",
           color:
             currentPeriod.mode === "custom"
-              ? "#062817"
-              : "var(--text-secondary, #a3a3a3)",
+              ? "var(--color-action-primary-fg)"
+              : "var(--color-text-secondary)",
           transition: "all 0.25s cubic-bezier(0.32, 0.72, 0, 1)",
           boxShadow:
             currentPeriod.mode === "custom"
-              ? "0 2px 8px rgba(62, 207, 142, 0.3)"
+              ? "0 2px 8px var(--color-shadow)"
               : "none",
           whiteSpace: "nowrap",
           overflow: "hidden",

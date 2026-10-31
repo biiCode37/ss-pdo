@@ -81,8 +81,8 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
         transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
         userSelect: "none",
         WebkitTapHighlightColor: "transparent",
-        backgroundColor: "var(--card-bg, rgba(255, 255, 255, 0.05))",
-        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+        backgroundColor: "var(--color-bg-surface, var(--card-bg, rgba(255, 255, 255, 0.05)))",
+        border: "1px solid var(--color-border-subtle, var(--card-border, rgba(255, 255, 255, 0.1)))",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
       }}
       role="button"
@@ -103,10 +103,10 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "var(--color-primary-bg, rgba(59, 130, 246, 0.15))",
-          color: "var(--color-primary, #3b82f6)",
+          background: "var(--color-selection-bg, rgba(59, 130, 246, 0.15))",
+          color: "var(--color-info-fg, var(--color-primary, #3b82f6))",
           flexShrink: 0,
-          border: "1.5px solid var(--color-primary, #3b82f6)",
+          border: "1.5px solid var(--color-selection-border, #3b82f6)",
           boxShadow: "0 1px 3px rgba(0, 0, 0, 0.2)",
         }}
       >
@@ -140,7 +140,7 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
           style={{
             fontSize: "0.82rem",
             fontWeight: 650,
-            color: "var(--text-main)",
+            color: "var(--color-text-primary, var(--text-main))",
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",

@@ -251,8 +251,8 @@ export const UserManagementPage: React.FC<UserManagementPageProps> = ({
       style={{
         minHeight: "100dvh",
         width: "100%",
-        backgroundColor: "var(--bg-primary, #0f172a)",
-        color: "var(--text-primary, #f8fafc)",
+        backgroundColor: "var(--color-surface-canvas)",
+        color: "var(--color-text-primary)",
         display: "flex",
         flexDirection: "column",
       }}

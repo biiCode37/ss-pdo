@@ -12,6 +12,8 @@ export type PageKey =
 
 export type PageCategory = 'page' | 'tab' | 'modal';
 
+export type BulkActionType = 'set_status' | 'set_roles' | 'reset_default';
+
 export interface AppPageSetting {
   page_key: PageKey;
   page_name: string;
@@ -19,9 +21,16 @@ export interface AppPageSetting {
   is_enabled: boolean;
   disabled_message: string;
   is_locked?: boolean; // True jika halaman sistem yang tidak boleh dimatikan
+  allowed_roles: string[];
+  allowed_user_emails: string[];
+  denied_user_emails: string[];
   updated_at?: string;
   updated_by?: string;
 }
+
+export const ALL_ROLES = ['superadmin', 'admin', 'korwil', 'korlap', 'pdo'] as const;
+export const REGIONAL_ALLOWED_ROLES = ['superadmin', 'admin', 'korwil', 'korlap'] as const;
+export const USER_MANAGEMENT_ALLOWED_ROLES = ['superadmin', 'admin'] as const;
 
 export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
   {
@@ -30,6 +39,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'page',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...ALL_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'regional_monitoring',
@@ -37,6 +49,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'page',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...REGIONAL_ALLOWED_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'user_management',
@@ -44,6 +59,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'page',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...USER_MANAGEMENT_ALLOWED_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'input',
@@ -51,6 +69,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'tab',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...ALL_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'analytics',
@@ -58,6 +79,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'tab',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...ALL_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'units',
@@ -65,6 +89,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'tab',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...ALL_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'regional_summary',
@@ -72,6 +99,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'tab',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...REGIONAL_ALLOWED_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'regional_wa_report',
@@ -79,6 +109,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'tab',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...REGIONAL_ALLOWED_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'a2_report',
@@ -86,6 +119,9 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'modal',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...ALL_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
   {
     page_key: 'accumulation',
@@ -93,5 +129,8 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
     category: 'modal',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
+    allowed_roles: [...ALL_ROLES],
+    allowed_user_emails: [],
+    denied_user_emails: [],
   },
 ];

@@ -2,10 +2,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createRoot, type Root } from "react-dom/client";
 import { act } from "react";
-import {
-  MonitoringFleetStatusTab,
-  inferStatusCode,
-} from "@/components/monitoring/tabs/MonitoringFleetStatusTab";
+import { MonitoringFleetStatusTab } from "@/components/monitoring/tabs/MonitoringFleetStatusTab";
+import { inferStatusCode } from "@/components/monitoring/monitoringUtils";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";

@@ -25,6 +25,7 @@ import { usePageAccess } from "@/context/PageAccessContext";
 import {
   PageDisabledState,
   SuperadminMaintenanceBanner,
+  AccessRestrictedState,
 } from "@/components/pageManagement";
 
 // Dynamic Code Splitting for infrequently visited administration pages
@@ -233,7 +234,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
   if (currentView === "page_management") {
     if (currentUserRole !== "superadmin") {
       return (
-        <PageDisabledState
+        <AccessRestrictedState
           onBack={() =>
             setCurrentView(
               currentUserRole === "pdo" ? "dashboard" : "regional_monitoring",
@@ -253,8 +254,19 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   if (currentView === "user_management") {
     if (!canAccessPage("user_management", currentUserRole)) {
+      if (isUnderMaintenance("user_management")) {
+        return (
+          <PageDisabledState
+            onBack={() =>
+              setCurrentView(
+                currentUserRole === "pdo" ? "dashboard" : "regional_monitoring",
+              )
+            }
+          />
+        );
+      }
       return (
-        <PageDisabledState
+        <AccessRestrictedState
           onBack={() =>
             setCurrentView(
               currentUserRole === "pdo" ? "dashboard" : "regional_monitoring",
@@ -290,13 +302,15 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
         setCurrentView("dashboard");
         return null;
       }
+      if (isUnderMaintenance("regional_monitoring")) {
+        return (
+          <PageDisabledState
+            onBack={() => setCurrentView("dashboard")}
+          />
+        );
+      }
       return (
-        <PageDisabledState
-          message={
-            currentUserRole === "pdo"
-              ? TEXT_PAGE_MANAGEMENT.ACCESS_RESTRICTED_DESC
-              : undefined
-          }
+        <AccessRestrictedState
           onBack={() => setCurrentView("dashboard")}
         />
       );
@@ -349,7 +363,10 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   // 8. Main Route Dashboard View
   if (!canAccessPage("dashboard", currentUserRole)) {
-    return <PageDisabledState />;
+    if (isUnderMaintenance("dashboard")) {
+      return <PageDisabledState />;
+    }
+    return <AccessRestrictedState />;
   }
 
   return (

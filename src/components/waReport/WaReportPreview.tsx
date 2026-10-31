@@ -51,10 +51,10 @@ export function WaReportPreview({
             padding: "12px",
             borderRadius: "12px",
             background: copied
-              ? "var(--accent-color, #10b981)"
-              : "var(--input-bg, rgba(255, 255, 255, 0.06))",
-            color: copied ? "#ffffff" : "var(--text-primary, #ededed)",
-            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+              ? "var(--color-success-bg)"
+              : "var(--color-surface-subtle)",
+            color: copied ? "var(--color-success-fg)" : "var(--color-text-primary)",
+            border: copied ? "1px solid var(--color-success-fg)" : "1px solid var(--color-border-subtle)",
             fontSize: "13px",
             fontWeight: 600,
             display: "flex",
@@ -79,7 +79,7 @@ export function WaReportPreview({
             padding: "12px",
             borderRadius: "12px",
             background: "#25D366",
-            color: "#ffffff",
+            color: "#06361a",
             border: "none",
             fontSize: "13px",
             fontWeight: 700,

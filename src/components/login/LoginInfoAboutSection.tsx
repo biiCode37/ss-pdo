@@ -36,19 +36,19 @@ export function LoginInfoAboutSection() {
             gap: "10px",
             padding: "10px 12px",
             borderRadius: "10px",
-            backgroundColor: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid var(--border-color)",
+            backgroundColor: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
             fontSize: "12.5px",
             lineHeight: 1.45,
           }}
         >
           <CheckCircle2
             size={16}
-            color="#3ECF8E"
+            color="var(--color-success-fg)"
             style={{ flexShrink: 0, marginTop: "2px" }}
           />
           <div>
-            <strong style={{ color: "#3ECF8E" }}>
+            <strong style={{ color: "var(--color-text-primary)" }}>
               Digitalisasi Pencatatan Lapangan:
             </strong>{" "}
             Mengisi ritase dan kondisi shift harian tanpa perlu membawa kertas fisik.
@@ -62,19 +62,19 @@ export function LoginInfoAboutSection() {
             gap: "10px",
             padding: "10px 12px",
             borderRadius: "10px",
-            backgroundColor: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid var(--border-color)",
+            backgroundColor: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
             fontSize: "12.5px",
             lineHeight: 1.45,
           }}
         >
           <CheckCircle2
             size={16}
-            color="#3ECF8E"
+            color="var(--color-success-fg)"
             style={{ flexShrink: 0, marginTop: "2px" }}
           />
           <div>
-            <strong style={{ color: "#3ECF8E" }}>
+            <strong style={{ color: "var(--color-text-primary)" }}>
               Tersambung Langsung ke Spreadsheet Pengawas:
             </strong>{" "}
             Setiap laporan tersimpan rapi ke Google Spreadsheet resmi operasional.
@@ -88,19 +88,19 @@ export function LoginInfoAboutSection() {
             gap: "10px",
             padding: "10px 12px",
             borderRadius: "10px",
-            backgroundColor: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid var(--border-color)",
+            backgroundColor: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
             fontSize: "12.5px",
             lineHeight: 1.45,
           }}
         >
           <CheckCircle2
             size={16}
-            color="#3ECF8E"
+            color="var(--color-success-fg)"
             style={{ flexShrink: 0, marginTop: "2px" }}
           />
           <div>
-            <strong style={{ color: "#3ECF8E" }}>
+            <strong style={{ color: "var(--color-text-primary)" }}>
               Pemantauan Kinerja Cepat:
             </strong>{" "}
             Melihat jadwal rute, armada aktif, target ritase, dan data pelanggan langsung dari HP.

@@ -113,7 +113,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             }`,
             fontSize: "0.82rem",
             fontWeight: 600,
-            color: toaLiveS2.status === "invalid" ? "#f87171" : "#c084fc",
+            color: toaLiveS2.status === "invalid" ? "var(--color-error-fg)" : "var(--color-shift-2-fg)",
             display: "flex",
             alignItems: "center",
             gap: "6px",
@@ -262,7 +262,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             style={{
               fontSize: "0.78rem",
               fontWeight: 600,
-              color: kmLiveS2.status === "negative" ? "#f87171" : "#f59e0b",
+              color: kmLiveS2.status === "negative" ? "var(--color-error-fg)" : "var(--color-warning-fg)",
               display: "flex",
               alignItems: "center",
               gap: "6px",
@@ -270,8 +270,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               borderRadius: "6px",
               background:
                 kmLiveS2.status === "negative"
-                  ? "rgba(239, 68, 68, 0.1)"
-                  : "rgba(245, 158, 11, 0.1)",
+                  ? "var(--color-error-bg)"
+                  : "var(--color-warning-bg)",
             }}
           >
             <AlertTriangle size={14} style={{ flexShrink: 0 }} />

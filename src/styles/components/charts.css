@@ -1,0 +1,26 @@
+/* Standarisasi Grafik SVG Opaque & Chart Tokens (Refactor 174) */
+.ui-chart-bar {
+  transition: opacity 0.15s ease;
+}
+
+.ui-chart-bar:hover {
+  opacity: 0.92;
+}
+
+.ui-chart-bar--selected {
+  stroke: var(--color-text-primary);
+  stroke-width: 2px;
+}
+
+.ui-chart-label {
+  fill: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  user-select: none;
+}
+
+.ui-chart-label--selected {
+  fill: var(--color-link);
+  font-weight: 700;
+}
+

@@ -461,18 +461,40 @@ export function splitShiftKeterangan(combined?: string | null): {
 }
 
 /**
- * Mengecek apakah catatan keterangan mengindikasikan status armada OFF atau TO EVDAL
- * (baik status murni, variasi penulisan, dengan prefix shift S1:/S2:, maupun catatan gabungan).
- * Unit dengan status ini tidak beroperasi sehingga harus dikecualikan dari target bar progres.
+ * Mengecek apakah catatan keterangan mengindikasikan status armada OFF
+ * (kata "OFF" utuh, baik dengan prefix shift S1:/S2:, tanda kurung, maupun catatan tambahan).
+ * Mencegah false-positive pada kata yang mengandung substring seperti "OFFICER".
  */
-export function isUnitOffOrToEvdal(raw?: string | null): boolean {
+export function isUnitOff(raw?: string | null): boolean {
   if (!raw || typeof raw !== 'string') return false;
   const trimmed = raw.trim();
   if (!trimmed) return false;
 
-  // 1. Cek keberadaan kata OFF utuh (misal: "OFF", "S1: OFF", "S2: OFF", "OFF - BAN PECAH", "OFF (SPARE)")
-  if (/\bOFF\b/i.test(trimmed)) {
-    return true;
+  // 1. Jika memuat pemisah shift (|), evaluasi tiap bagian shift
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|').map((p) => p.trim());
+    return parts.some((part) => isUnitOff(part));
+  }
+
+  // 2. Cek keberadaan kata OFF utuh
+  return /\bOFF\b/i.test(trimmed);
+}
+
+/**
+ * Mengecek apakah catatan keterangan mengindikasikan status armada T.O / TO
+ * (hanya keterangan [T.O EVDAL / TO EVDAL / TO / T.O], variasi pemisah atau strip keterangan,
+ * serta prefix shift S1:/S2:).
+ * Mencegah false-positive pada kata umum operasional seperti "RADIATOR", "TEMPERATUR", "MOTOR", "TOA", dll.
+ */
+export function isUnitTo(raw?: string | null): boolean {
+  if (!raw || typeof raw !== 'string') return false;
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+
+  // 1. Jika memuat pemisah shift (|), evaluasi tiap bagian shift
+  if (trimmed.includes('|')) {
+    const parts = trimmed.split('|').map((p) => p.trim());
+    return parts.some((part) => isUnitTo(part));
   }
 
   // 2. Cek variasi TO EVDAL / T.O EVDAL / TO-EVDAL / T.O. EVDAL
@@ -480,19 +502,22 @@ export function isUnitOffOrToEvdal(raw?: string | null): boolean {
     return true;
   }
 
-  // 3. Cek status murni T.O / TO (standalone atau dengan prefix shift / tanda kurung / strip keterangan)
-  // Contoh: "TO", "T.O", "S1: TO", "S2: T.O", "TO (SANKSI)", "T.O - CADANGAN"
-  if (/^(?:S[12]\s*[:.-]\s*)?T\.?O\.?(?:\s*\(.*\)|\s*-\s*.*)?$/i.test(trimmed)) {
+  // 3. Cek status murni T.O / TO (standalone atau dengan prefix shift S1:/S2:, prefix BA, tanda kurung, atau strip)
+  // Contoh: "TO", "T.O", "T.O.", "S1: TO", "S2: T.O", "TO (SANKSI)", "T.O - CADANGAN", "BA.02 - TO", "BA.02 - T.O"
+  if (/^(?:S[12]\s*[:.-]\s*)?(?:BA\s*[-._:/]?\s*0?[1-4]\s*[-–—/]\s*)?T\.?O\.?(?:\s*\(.*\)|\s*[-–—].*)?$/i.test(trimmed)) {
     return true;
   }
 
-  // 4. Jika memuat pemisah shift (|), evaluasi tiap bagian shift
-  if (trimmed.includes('|')) {
-    const parts = trimmed.split('|').map((p) => p.trim());
-    return parts.some((part) => isUnitOffOrToEvdal(part));
-  }
-
   return false;
+}
+
+/**
+ * Mengecek apakah catatan keterangan mengindikasikan status armada OFF atau TO EVDAL
+ * (baik status murni, variasi penulisan, dengan prefix shift S1:/S2:, maupun catatan gabungan).
+ * Unit dengan status ini tidak beroperasi sehingga harus dikecualikan dari target bar progres.
+ */
+export function isUnitOffOrToEvdal(raw?: string | null): boolean {
+  return isUnitOff(raw) || isUnitTo(raw);
 }
 
 /**

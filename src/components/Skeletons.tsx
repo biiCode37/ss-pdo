@@ -225,8 +225,8 @@ export function AuditLogSkeleton({ count = 5 }: { count?: number }) {
       style={{
         minHeight: '100dvh',
         width: '100%',
-        backgroundColor: 'var(--bg-primary, #0f172a)',
-        color: 'var(--text-primary, #f8fafc)',
+        backgroundColor: 'var(--color-surface-canvas)',
+        color: 'var(--color-text-primary)',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -237,10 +237,10 @@ export function AuditLogSkeleton({ count = 5 }: { count?: number }) {
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          background: 'var(--card-bg, rgba(15, 23, 42, 0.92))',
+          background: 'var(--color-surface-default)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+          borderBottom: '1px solid var(--color-border-subtle)',
           padding: '12px 16px',
         }}
       >
@@ -330,8 +330,8 @@ export function UserManagementSkeleton({ count = 6 }: { count?: number }) {
       style={{
         minHeight: '100dvh',
         width: '100%',
-        backgroundColor: 'var(--bg-primary, #0f172a)',
-        color: 'var(--text-primary, #f8fafc)',
+        backgroundColor: 'var(--color-surface-canvas)',
+        color: 'var(--color-text-primary)',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -341,10 +341,10 @@ export function UserManagementSkeleton({ count = 6 }: { count?: number }) {
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          background: 'var(--card-bg, rgba(15, 23, 42, 0.92))',
+          background: 'var(--color-surface-default)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
+          borderBottom: '1px solid var(--color-border-subtle)',
           padding: '12px 16px',
         }}
       >

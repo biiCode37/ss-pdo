@@ -155,9 +155,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 borderRadius: "6px",
                 fontSize: "10.5px",
                 fontWeight: 700,
-                background: "rgba(16, 185, 129, 0.12)",
-                color: "#10b981",
-                border: "1px solid rgba(16, 185, 129, 0.25)",
+                background: "var(--color-success-bg)",
+                color: "var(--color-success-fg)",
+                border: "1px solid var(--color-success-border)",
               }}
               title="Data dikirim melalui input aplikasi"
             >
@@ -173,9 +173,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 borderRadius: "6px",
                 fontSize: "10.5px",
                 fontWeight: 700,
-                background: "rgba(56, 189, 248, 0.12)",
-                color: "#38bdf8",
-                border: "1px solid rgba(56, 189, 248, 0.25)",
+                background: "var(--color-info-bg)",
+                color: "var(--color-info-fg)",
+                border: "1px solid var(--color-info-border)",
               }}
               title="Data ditarik langsung dari Google Sheet rute"
             >
@@ -230,9 +230,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 borderRadius: "6px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: "rgba(16, 185, 129, 0.12)",
-                color: "#10b981",
-                border: "1px solid rgba(16, 185, 129, 0.25)",
+                background: "var(--color-success-bg)",
+                color: "var(--color-success-fg)",
+                border: "1px solid var(--color-success-border)",
               }}
             >
               <CheckCircle2 size={12} />
@@ -250,9 +250,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 borderRadius: "6px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: "rgba(56, 189, 248, 0.12)",
-                color: "#38bdf8",
-                border: "1px solid rgba(56, 189, 248, 0.25)",
+                background: "var(--color-info-bg)",
+                color: "var(--color-info-fg)",
+                border: "1px solid var(--color-info-border)",
               }}
             >
               <Send size={12} />
@@ -270,9 +270,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 borderRadius: "6px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: "rgba(245, 158, 11, 0.12)",
-                color: "#f59e0b",
-                border: "1px solid rgba(245, 158, 11, 0.25)",
+                background: "var(--color-warning-bg)",
+                color: "var(--color-warning-fg)",
+                border: "1px solid var(--color-warning-border)",
               }}
             >
               <Clock size={12} />
@@ -290,9 +290,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 borderRadius: "6px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: "rgba(161, 161, 170, 0.12)",
-                color: "#a1a1aa",
-                border: "1px solid rgba(161, 161, 170, 0.25)",
+                background: "var(--color-surface-subtle)",
+                color: "var(--color-text-muted)",
+                border: "1px solid var(--color-border-control)",
               }}
             >
               <AlertTriangle size={12} />

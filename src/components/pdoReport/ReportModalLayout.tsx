@@ -49,10 +49,11 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
         borderTopRightRadius: "24px",
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        backgroundColor: "var(--bg-card, #171717)",
-        border: "1px solid var(--border-color)",
+        backgroundColor: "var(--color-surface-raised)",
+        color: "var(--color-text-primary)",
+        border: "1px solid var(--color-border-subtle)",
         borderBottom: "none",
-        boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
+        boxShadow: "0 -10px 40px var(--color-shadow)",
         animation: "slideUp 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
         WebkitOverflowScrolling: "touch",
         overscrollBehavior: "contain",
@@ -86,7 +87,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
           paddingBottom: "12px",
           marginBottom: "16px",
           borderBottom:
-            "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
+            "1px solid var(--color-border-subtle)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

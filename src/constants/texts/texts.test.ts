@@ -447,6 +447,12 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.REALOPS_SHIFT_SUBTEXT(10, 9)).toBe('S1: 10 • S2: 9');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TARGET_CAP_SUBTEXT('1.11', '107.2')).toBe('Target: 1.11 • Cap: 107.2%');
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.ACHIEVEMENT_PCT('107.5')).toBe('Capaian: 107.5%');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.TITLE).toBe('Status Kesiapan Armada Bus');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.BADGE_TROUBLED(2)).toBe('2 Unit Kendala');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.BADGE_ALL_READY).toBe('100% Siap Jalan');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.ALL_READY_TITLE).toBe('Seluruh Armada Beroperasi Normal');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.ALL_READY_DESC).toContain('Luar biasa');
+    expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.NO_DATA_DESC).toContain('Belum ada laporan');
   });
 
   it('exports TEXT_WA_REPORT with studio title, format labels, and actions', () => {
@@ -487,6 +493,41 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PAGE_MANAGEMENT.ACCESS_RESTRICTED_DESC).toContain('Akses terbatas');
     expect(TEXT_PAGE_MANAGEMENT.TOAST.FALLBACK_TO_DASHBOARD).toBeDefined();
     expect(TEXT_PAGE_MANAGEMENT.TOAST.MONITORING_UNDER_MAINTENANCE).toBeDefined();
+  });
+
+  it('exports TEXT_PAGE_MANAGEMENT granular permissions and bulk action texts', () => {
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.TITLE).toBe('Pengaturan Akses Halaman');
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.ROLE_TAB).toBe('Hak Akses Peran');
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.WHITELIST_TAB).toBe('Izin Tambahan (Whitelist)');
+    expect(TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.BLACKLIST_TAB).toBe('Pembatasan Khusus (Blacklist)');
+    expect(TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE).toBe('Pilih Pengguna');
+    expect(TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE_WHITELIST).toBe('Pilih Akun untuk Izin Tambahan');
+    expect(TEXT_PAGE_MANAGEMENT.USER_PICKER.TITLE_BLACKLIST).toBe('Pilih Akun untuk Pembatasan Khusus');
+    expect(TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_MODE_BTN).toBe('Pilih Banyak');
+    expect(TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_HINT).toBe('Klik kartu untuk memilih');
+    expect(TEXT_PAGE_MANAGEMENT.CATEGORIES.EMPTY_FILTER).toBe('Tidak ada halaman dalam kategori ini');
+    expect(TEXT_PAGE_MANAGEMENT.ACCESS_DENIED.TITLE).toBe('Akses Halaman Dibatasi');
+
+    const wlMsg = TEXT_PAGE_MANAGEMENT.SAFETY_DIALOGS.WHITELIST_WARNING_MSG(
+      'Budi',
+      'PDO',
+      'Monitoring Wilayah'
+    );
+    expect(wlMsg).toContain('Budi');
+    expect(wlMsg).toContain('PDO');
+    expect(wlMsg).toContain('Monitoring Wilayah');
+
+    const blMsg = TEXT_PAGE_MANAGEMENT.SAFETY_DIALOGS.BLACKLIST_WARNING_MSG(
+      'Ani',
+      'Admin',
+      'Dashboard'
+    );
+    expect(blMsg).toContain('Ani');
+    expect(blMsg).toContain('Admin');
+    expect(blMsg).toContain('Dashboard');
+
+    const selCount = TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECTED_COUNT(3);
+    expect(selCount).toBe('3 Halaman Dipilih');
   });
 
   it('contains all required text entries for Keterangan Presets & Shift Notes', () => {

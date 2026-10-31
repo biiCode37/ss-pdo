@@ -2,7 +2,7 @@ import { memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
-import { hasMeaningfulNote } from "../utils/keteranganUtils";
+import { hasMeaningfulNote, isUnitOff, isUnitTo } from "../utils/keteranganUtils";
 import { TEXT_DASHBOARD } from "../constants/texts";
 import {
   Bus,
@@ -21,7 +21,30 @@ interface Props {
   onSelectUnit: (unit: string) => void;
 }
 
-function renderStatusBadge(status: UnitShiftStatus) {
+function renderStatusBadge(status: UnitShiftStatus, rawNote?: string) {
+  const note = rawNote || "";
+
+  if (isUnitOff(note)) {
+    return (
+      <span
+        className="unit-status-badge unit-status-badge-off"
+        title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(note)}
+      >
+        OFF
+      </span>
+    );
+  }
+
+  if (isUnitTo(note)) {
+    return (
+      <span
+        className="unit-status-badge unit-status-badge-to"
+        title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(note)}
+      >
+        T.O
+      </span>
+    );
+  }
   switch (status) {
     case "FULL_COMPLETE":
       return (
@@ -128,6 +151,9 @@ function renderStatusBadge(status: UnitShiftStatus) {
 }
 
 function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
+  const noteText = item.keterangan || (item.notes && item.notes[0]) || "";
+  const isNonSgo = isUnitOff(noteText) || isUnitTo(noteText);
+
   // BUG-61: Kartu interaktif kini dapat diakses keyboard & screen reader
   const handleClick = () => onSelectUnit(item.unit);
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -167,7 +193,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
       role="button"
       tabIndex={0}
       aria-label={TEXT_DASHBOARD.UNIT_CARD.ARIA_VIEW_DETAIL(item.unit)}
-      className="bus-card glass"
+      className={`bus-card glass ${isNonSgo ? "bus-card-non-sgo" : ""}`.trim()}
       style={{
         padding: 0,
         borderRadius: "16px",
@@ -204,7 +230,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
         </div>
 
         <div style={{ display: "flex", alignItems: "center" }}>
-          {renderStatusBadge(item.shiftStatus)}
+          {renderStatusBadge(item.shiftStatus, noteText)}
         </div>
       </div>
 
@@ -271,7 +297,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
       </div>
 
       {/* Line 3: Value Catatan Keterangan (disupresi jika hanya status tetap murni seperti OFF / TO EVDAL) */}
-      {item.notes && item.notes.length > 0 && hasMeaningfulNote(item.notes[0]) && (
+      {noteText && hasMeaningfulNote(noteText) && (
         <div
           style={{
             padding: "8px 16px 10px 16px",
@@ -298,7 +324,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
               textTransform: "uppercase",
             }}
           >
-            <FormattedNoteText text={item.notes[0]} />
+            <FormattedNoteText text={noteText} />
           </div>
         </div>
       )}

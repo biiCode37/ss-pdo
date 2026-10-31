@@ -97,9 +97,10 @@ export function AddRouteModal({
           borderRadius: '20px',
           textAlign: 'left',
           position: 'relative',
-          backgroundColor: 'var(--bg-card, #171717)',
-          border: '1px solid var(--border-color)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'var(--color-surface-raised)',
+          color: 'var(--color-text-primary)',
+          border: '1px solid var(--color-border-subtle)',
+          boxShadow: '0 20px 40px var(--color-shadow)',
           animation: 'slideUp 0.22s cubic-bezier(0.32, 0.72, 0, 1)',
         }}
         onClick={(e) => e.stopPropagation()}
@@ -112,7 +113,7 @@ export function AddRouteModal({
             alignItems: 'center',
             marginBottom: '16px',
             paddingBottom: '12px',
-            borderBottom: '1px solid var(--border-color)',
+            borderBottom: '1px solid var(--color-border-subtle)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -146,7 +147,7 @@ export function AddRouteModal({
             onClick={onClose}
             style={{
               background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-color)',
+              border: '1px solid var(--color-border-subtle)',
               color: 'var(--text-secondary)',
               cursor: 'pointer',
               padding: '6px',
@@ -165,11 +166,11 @@ export function AddRouteModal({
         <div
           style={{
             display: 'flex',
-            background: 'var(--bg-secondary, rgba(255, 255, 255, 0.05))',
+            background: 'var(--color-surface-subtle)',
             padding: '3px',
             borderRadius: '10px',
             marginBottom: '16px',
-            border: '1px solid var(--border-color)',
+            border: '1px solid var(--color-border-subtle)',
           }}
         >
           <button
@@ -182,8 +183,8 @@ export function AddRouteModal({
               fontWeight: activeTab === 'single' ? 600 : 500,
               borderRadius: '7px',
               border: 'none',
-              background: activeTab === 'single' ? 'var(--primary-color, #10b981)' : 'transparent',
-              color: activeTab === 'single' ? '#ffffff' : 'var(--text-secondary)',
+              background: activeTab === 'single' ? 'var(--color-action-primary-bg)' : 'transparent',
+              color: activeTab === 'single' ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
             }}
@@ -200,8 +201,8 @@ export function AddRouteModal({
               fontWeight: activeTab === 'bulk' ? 600 : 500,
               borderRadius: '7px',
               border: 'none',
-              background: activeTab === 'bulk' ? 'var(--primary-color, #10b981)' : 'transparent',
-              color: activeTab === 'bulk' ? '#ffffff' : 'var(--text-secondary)',
+              background: activeTab === 'bulk' ? 'var(--color-action-primary-bg)' : 'transparent',
+              color: activeTab === 'bulk' ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
             }}
@@ -250,8 +251,8 @@ export function AddRouteModal({
               alignItems: 'stretch',
               borderRadius: '10px',
               overflow: 'hidden',
-              border: '1px solid var(--input-border, rgba(255, 255, 255, 0.15))',
-              background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
+              border: '1px solid var(--color-border-control)',
+              background: 'var(--color-surface-default)',
             }}
           >
             <div
@@ -264,7 +265,7 @@ export function AddRouteModal({
                 fontWeight: 800,
                 fontSize: '13.5px',
                 letterSpacing: '0.5px',
-                borderRight: '1px solid var(--input-border, rgba(255, 255, 255, 0.15))',
+                borderRight: '1px solid var(--color-border-control)',
                 userSelect: 'none',
               }}
             >

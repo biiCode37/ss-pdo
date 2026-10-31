@@ -1,0 +1,40 @@
+/* Jembatan migrasi: namespace legacy dipetakan ke semantic token baru (Refactor 174) */
+:root, :root[data-theme="light"], :root[data-theme="dark"] {
+  --bg-color: var(--color-surface-canvas);
+  --color-bg-base: var(--color-surface-canvas);
+  --surface-color: var(--color-surface-default);
+  --color-bg-surface: var(--color-surface-default);
+  --card-bg: var(--color-surface-default);
+  --bg-card: var(--color-surface-raised);
+  --bg-primary: var(--color-surface-canvas);
+  --bg-secondary: var(--color-surface-subtle);
+  --bg-glass: var(--color-surface-raised);
+  --color-bg-elevated: var(--color-surface-raised);
+  --color-surface-elevated: var(--color-surface-raised);
+  --color-primary: var(--color-action-primary-bg);
+  --primary-color: var(--color-action-primary-bg);
+  --color-primary-bg: var(--color-selection-bg);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-main: var(--color-text-primary);
+  --color-text-main: var(--color-text-primary);
+  --card-border: var(--color-border-subtle);
+  --border-color: var(--color-border-subtle);
+  --color-border: var(--color-border-subtle);
+  --color-selection-border: var(--color-border-subtle);
+  --input-bg: var(--color-surface-subtle);
+  --input-border: var(--color-border-control);
+  --warning-bg: var(--color-warning-bg);
+  --warning-border: var(--color-warning-border);
+  --warning-text: var(--color-warning-fg);
+  --warning-color: var(--color-warning-fg);
+  --accent-bg: var(--color-selection-bg);
+  --accent-border: var(--color-border-subtle);
+  --accent-color: var(--color-action-primary-bg);
+  --info-color: var(--color-info-fg);
+  --success-color: var(--color-success-fg);
+  --danger-color: var(--color-error-fg);
+  --color-danger-border: var(--color-error-border);
+  --shadow: 0 12px 32px var(--color-shadow);
+  --sticky-header-height: 136px;
+}

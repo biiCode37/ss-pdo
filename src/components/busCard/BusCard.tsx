@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { slugifyUnitId } from "@/utils/analytics";
 import { FormattedNoteText } from "@/components/FormattedNoteText";
-import { hasMeaningfulNote } from "@/utils/keteranganUtils";
+import { hasMeaningfulNote, isUnitOff, isUnitTo } from "@/utils/keteranganUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import type { BusCardProps } from "./types";
@@ -89,23 +89,6 @@ function BusCardComponent({
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             <span className="bus-card-unit" style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
-            {isNonSgo && (
-              activeShiftStatus.toUpperCase().includes("OFF") ? (
-                <span
-                  className="unit-status-badge unit-status-badge-off"
-                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
-                >
-                  OFF
-                </span>
-              ) : activeShiftStatus.toUpperCase().includes("TO") ? (
-                <span
-                  className="unit-status-badge unit-status-badge-to"
-                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
-                >
-                  T.O
-                </span>
-              ) : null
-            )}
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
                 {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}
@@ -121,8 +104,26 @@ function BusCardComponent({
                 tabName={tabName}
                 activeCategory={activeCategory}
                 targetTrip={targetTrip}
+                activeShiftStatus={activeShiftStatus}
                 onOpenTripModal={() => handleOpenModal("trip")}
               />
+            )}
+            {isNonSgo && (
+              isUnitOff(activeShiftStatus) ? (
+                <span
+                  className="unit-status-badge unit-status-badge-off"
+                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
+                >
+                  OFF
+                </span>
+              ) : isUnitTo(activeShiftStatus) ? (
+                <span
+                  className="unit-status-badge unit-status-badge-to"
+                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
+                >
+                  T.O
+                </span>
+              ) : null
             )}
             {isLoading && (
               <Loader2
@@ -141,6 +142,7 @@ function BusCardComponent({
             tabName={tabName}
             activeCategory={activeCategory}
             targetTrip={targetTrip}
+            activeShiftStatus={activeShiftStatus}
             onOpenTripModal={() => handleOpenModal("trip")}
           />
         )}

@@ -39,7 +39,7 @@ export function QueueModal({
         backdropFilter: "blur(4px)",
       }}
       contentStyle={{
-        background: "var(--bg-card)",
+        background: "var(--color-surface-raised)",
         color: "var(--text-primary)",
         borderRadius: "12px",
         padding: "20px",
@@ -47,8 +47,8 @@ export function QueueModal({
         maxWidth: "420px",
         maxHeight: "min(80dvh, 640px)",
         overflowY: "auto",
-        boxShadow: "var(--shadow)",
-        border: "1px solid var(--border-color)",
+        boxShadow: "0 12px 32px var(--color-shadow)",
+        border: "1px solid var(--color-border-subtle)",
       }}
     >
         <h2 style={{ fontSize: "1.1rem", marginTop: 0, marginBottom: "16px" }}>
@@ -62,7 +62,7 @@ export function QueueModal({
               key={item.id}
               style={{
                 padding: "12px 0",
-                borderBottom: "1px solid var(--border-color)",
+                borderBottom: "1px solid var(--color-border-subtle)",
               }}
             >
               <p style={{ margin: "0 0 4px 0", fontSize: "14px" }}>

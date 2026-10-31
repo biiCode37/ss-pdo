@@ -165,7 +165,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
               style={{
                 fontSize: "10.5px",
                 fontWeight: 600,
-                color: kpi.subtextPositive ? "#10B981" : "var(--text-secondary)",
+                color: kpi.subtextPositive ? "var(--color-success-fg)" : "var(--color-text-secondary)",
               }}
             >
               {kpi.subtext}

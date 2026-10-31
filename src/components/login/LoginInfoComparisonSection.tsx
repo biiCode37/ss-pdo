@@ -40,8 +40,8 @@ export function LoginInfoComparisonSection() {
           style={{
             padding: "12px",
             borderRadius: "10px",
-            backgroundColor: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid var(--border-color)",
+            backgroundColor: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
           }}
         >
           <div
@@ -64,9 +64,9 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <XCircle size={15} color="#ef4444" style={{ flexShrink: 0 }} />
+              <XCircle size={15} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
               <span>
-                <strong style={{ color: "#ef4444" }}>Spreadsheet Biasa:</strong> Sel kecil, sering zoom in/out melelahkan.
+                <strong style={{ color: "var(--color-error-fg)" }}>Spreadsheet Biasa:</strong> Sel kecil, sering zoom in/out melelahkan.
               </span>
             </div>
             <div
@@ -78,9 +78,9 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <CheckCircle2 size={15} color="#3ECF8E" style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={15} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
               <span>
-                <strong style={{ color: "#3ECF8E" }}>PUSM:</strong> Tampilan kartu responsif, pas dioperasikan dengan satu tangan.
+                <strong style={{ color: "var(--color-success-fg)" }}>PUSM:</strong> Tampilan kartu responsif, pas dioperasikan dengan satu tangan.
               </span>
             </div>
           </div>
@@ -91,8 +91,8 @@ export function LoginInfoComparisonSection() {
           style={{
             padding: "12px",
             borderRadius: "10px",
-            backgroundColor: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid var(--border-color)",
+            backgroundColor: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
           }}
         >
           <div
@@ -115,9 +115,9 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <XCircle size={15} color="#ef4444" style={{ flexShrink: 0 }} />
+              <XCircle size={15} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
               <span>
-                <strong style={{ color: "#ef4444" }}>Spreadsheet Biasa:</strong> Rawan salah ketik format sel atau rumus terhapus.
+                <strong style={{ color: "var(--color-error-fg)" }}>Spreadsheet Biasa:</strong> Rawan salah ketik format sel atau rumus terhapus.
               </span>
             </div>
             <div
@@ -129,9 +129,9 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <CheckCircle2 size={15} color="#3ECF8E" style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={15} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
               <span>
-                <strong style={{ color: "#3ECF8E" }}>PUSM:</strong> Form terarah otomatis memformat data tanpa menyentuh rumus sheet.
+                <strong style={{ color: "var(--color-success-fg)" }}>PUSM:</strong> Form terarah otomatis memformat data tanpa menyentuh rumus sheet.
               </span>
             </div>
           </div>
@@ -142,8 +142,8 @@ export function LoginInfoComparisonSection() {
           style={{
             padding: "12px",
             borderRadius: "10px",
-            backgroundColor: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid var(--border-color)",
+            backgroundColor: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
           }}
         >
           <div
@@ -166,9 +166,9 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <XCircle size={15} color="#ef4444" style={{ flexShrink: 0 }} />
+              <XCircle size={15} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
               <span>
-                <strong style={{ color: "#ef4444" }}>Spreadsheet Biasa:</strong> Harus membuka puluhan tab dan menjumlah manual.
+                <strong style={{ color: "var(--color-error-fg)" }}>Spreadsheet Biasa:</strong> Harus membuka puluhan tab dan menjumlah manual.
               </span>
             </div>
             <div
@@ -180,9 +180,9 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <CheckCircle2 size={15} color="#3ECF8E" style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={15} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
               <span>
-                <strong style={{ color: "#3ECF8E" }}>PUSM:</strong> Akumulasi otomatis lintas tanggal dalam satu ketukan.
+                <strong style={{ color: "var(--color-success-fg)" }}>PUSM:</strong> Akumulasi otomatis lintas tanggal dalam satu ketukan.
               </span>
             </div>
           </div>
