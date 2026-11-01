@@ -91,4 +91,22 @@ describe("DashboardHeader Component", () => {
 
     expect(onBackToMonitoring).toHaveBeenCalledTimes(1);
   });
+
+  it("renders UnifiedRouteControlBar when hideRouteControlBar is false or undefined", () => {
+    act(() => {
+      root.render(<DashboardHeader {...defaultProps} hideRouteControlBar={false} />);
+    });
+
+    const controlBar = container.querySelector(".unified-route-control-bar");
+    expect(controlBar).toBeTruthy();
+  });
+
+  it("does not render UnifiedRouteControlBar when hideRouteControlBar is true (e.g. input tab active)", () => {
+    act(() => {
+      root.render(<DashboardHeader {...defaultProps} hideRouteControlBar={true} />);
+    });
+
+    const controlBar = container.querySelector(".unified-route-control-bar");
+    expect(controlBar).toBeNull();
+  });
 });

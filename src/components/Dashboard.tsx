@@ -9,6 +9,7 @@ import { getStoredUserRole } from "@/utils/roleStorage";
 import { showAuthExpiredAlert, showSuccessToast, showWarningToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
 import type { DailyRoutePlotting } from "@/types/supabase";
+import { UnifiedRouteControlBar, formatRouteDateLabel } from "@/components/routeSelector";
 import { fetchDailyPlotting } from "@/services/dailyPlottingService";
 
 import {
@@ -255,6 +256,49 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     }
   }, [currentUserRole, isMonitoringActive, isDashboardActive]);
 
+
+  const inputRouteControlBar = useMemo(() => {
+    const label = formatRouteDateLabel(
+      selectedTab,
+      activeYear,
+      activeMonth,
+      accRangeDetails,
+      currentTabName
+    );
+    return (
+      <UnifiedRouteControlBar
+        displayDateLabel={label}
+        isAccumulation={selectedTab === "AKUMULASI"}
+        days={days}
+        sheetUrl={sheetUrl}
+        setSelectedTab={handleSetSelectedTab}
+        onLoadData={(tab?: string, targetUrl?: string) =>
+          handleLoadData(true, tab, targetUrl)
+        }
+        onExitAccumulation={handleExitAccumulation}
+        reportRoute={matchedRoute}
+        reportStatus={operationalReportStatus}
+        confirmedShifts={confirmedShifts}
+        onOpenReportModal={() => setIsReportModalOpen(true)}
+        isInsidePanel={true}
+      />
+    );
+  }, [
+    selectedTab,
+    activeYear,
+    activeMonth,
+    accRangeDetails,
+    currentTabName,
+    days,
+    sheetUrl,
+    handleSetSelectedTab,
+    handleLoadData,
+    handleExitAccumulation,
+    matchedRoute,
+    operationalReportStatus,
+    confirmedShifts,
+  ]);
+
   // 7. Dynamic Administration & Regional Views
   if (currentView === "page_management") {
     if (currentUserRole !== "superadmin") {
@@ -401,14 +445,18 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {currentUserRole === "superadmin" && isUnderMaintenance("dashboard") && (
-        <SuperadminMaintenanceBanner
-          onManageAccess={() => setCurrentView("page_management")}
-        />
-      )}
       {/* 1. Header & Sticky Route Selector */}
       <DashboardHeader
         headerBlockRef={headerBlockRef}
+        hideRouteControlBar={mainTab === "input"}
+        maintenanceBanner={
+          currentUserRole === "superadmin" &&
+          (isUnderMaintenance("dashboard") || isUnderMaintenance(mainTab)) ? (
+            <SuperadminMaintenanceBanner
+              onManageAccess={() => setCurrentView("page_management")}
+            />
+          ) : null
+        }
         onOpenProfile={() => setIsProfileMenuOpen(true)}
         activeRouteCode={activeRouteCode}
         onOpenRouteSelector={() =>
@@ -498,6 +546,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           operationalReportDate={operationalReportDate}
           plotting={currentPlotting}
           onPlottingChange={setCurrentPlotting}
+          routeControlBar={inputRouteControlBar}
         />
       )}
 
