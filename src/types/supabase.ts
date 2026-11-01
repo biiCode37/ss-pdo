@@ -244,6 +244,7 @@ export interface UnitPlottingItem {
   target_ritase: number;
   status: PlottingUnitStatus;
   note?: string;
+  keterangan?: string;
 }
 
 export interface DailyRoutePlotting {

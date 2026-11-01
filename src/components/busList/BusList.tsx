@@ -9,7 +9,8 @@ import type { SyncItem } from "@/hooks/useOfflineSync";
 import type { OdometerRefInfo } from "@/hooks/usePreviousDayOdometer";
 import type { DailyRoutePlotting, UnitPlottingItem } from "@/types/supabase";
 
-import { isUnitAllowedForInput, isBusFilled } from "./busListUtils";
+import { isUnitAllowedForInput, isBusFilled, type FleetSortView } from "./busListUtils";
+import { extractEndpointNames } from "@/utils/routeEndpointUtils";
 import { useBulkOperations } from "./useBulkOperations";
 import { BusListHeader } from "./BusListHeader";
 
@@ -36,6 +37,8 @@ export interface BusListProps {
   previousDayKmMap?: Record<string, string>;
   previousDayRefMap?: Record<string, OdometerRefInfo>;
   plotting?: DailyRoutePlotting | null;
+  routeControlBar?: React.ReactNode;
+  headerTarget?: HTMLDivElement | null;
 }
 
 function BusListComponent({
@@ -54,6 +57,8 @@ function BusListComponent({
   previousDayKmMap,
   previousDayRefMap,
   plotting,
+  routeControlBar,
+  headerTarget,
 }: BusListProps) {
   const plottingMap = useMemo(() => {
     const map = new Map<string, UnitPlottingItem>();
@@ -68,6 +73,31 @@ function BusListComponent({
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [activeCategory, setActiveCategory] = useState("ALL");
+  const [sortView, setSortView] = useState<FleetSortView>("sheet");
+
+  const extractedEndpoints = useMemo(() => {
+    return extractEndpointNames(
+      headerMap?.tripPergiLabel,
+      headerMap?.tripPulangLabel
+    );
+  }, [headerMap?.tripPergiLabel, headerMap?.tripPulangLabel]);
+
+  const endpointAName =
+    plotting?.endpoint_a_name || extractedEndpoints.endpointA || "Titik A";
+  const endpointBName =
+    plotting?.endpoint_b_name || extractedEndpoints.endpointB || "Titik B";
+
+  const { countBaseA, countBaseB } = useMemo(() => {
+    let a = 0;
+    let b = 0;
+    data.forEach((bus) => {
+      const norm = bus.unit?.trim().toUpperCase();
+      const item = plottingMap.get(norm);
+      if (item?.start_point === "A") a++;
+      else if (item?.start_point === "B") b++;
+    });
+    return { countBaseA: a, countBaseB: b };
+  }, [data, plottingMap]);
 
   const {
     bulkPergi,
@@ -109,25 +139,55 @@ function BusListComponent({
   const filteredData = useMemo(() => {
     let result = data;
 
+    // 1. Filter Titik Start (Opsi B: Base A atau Base B)
+    if (sortView === "base_a") {
+      result = result.filter((bus) => {
+        const norm = bus.unit?.trim().toUpperCase();
+        return plottingMap.get(norm)?.start_point === "A";
+      });
+    } else if (sortView === "base_b") {
+      result = result.filter((bus) => {
+        const norm = bus.unit?.trim().toUpperCase();
+        return plottingMap.get(norm)?.start_point === "B";
+      });
+    }
+
+    // 2. Filter Sisa Unit Belum Selesai (jika tombol Filter aktif)
     if (showOnlyUnfinished) {
       result = result.filter(
         (bus) => checkAllowed(bus) && !checkFilled(bus),
       );
     }
 
-    // Sort: Unfinished di atas, lalu yang selesai, lalu yang non-SGO
+    // 3. Sorting Tampilan (Sesuai Opsi B Hybrid)
     result = [...result].sort((a, b) => {
-      const aAllowed = checkAllowed(a);
-      const bAllowed = checkAllowed(b);
-      if (aAllowed !== bAllowed) {
-        return aAllowed ? -1 : 1;
+      // Jika showOnlyUnfinished aktif, utamakan unit yang boleh diinput tapi belum selesai
+      if (showOnlyUnfinished) {
+        const aAllowed = checkAllowed(a);
+        const bAllowed = checkAllowed(b);
+        if (aAllowed !== bAllowed) return aAllowed ? -1 : 1;
+
+        const aFilled = checkFilled(a);
+        const bFilled = checkFilled(b);
+        if (aFilled !== bFilled) return aFilled ? 1 : -1;
       }
-      const aFilled = checkFilled(a);
-      const bFilled = checkFilled(b);
-      if (aFilled === bFilled) return 0;
-      return aFilled ? 1 : -1;
+
+      // Jika sortView base_a atau base_b: urutkan strictly berdasarkan nomor antrean plotting #1..#N
+      if (sortView === "base_a" || sortView === "base_b") {
+        const normA = a.unit?.trim().toUpperCase();
+        const normB = b.unit?.trim().toUpperCase();
+        const orderA = plottingMap.get(normA)?.order ?? 9999;
+        const orderB = plottingMap.get(normB)?.order ?? 9999;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+      }
+
+      // Default (sheet view) atau fallback: urutan baris spreadsheet SSOT asli
+      return a.rowIndex - b.rowIndex;
     });
 
+    // 4. Filter Pencarian No Body
     if (searchQuery) {
       const lowerQuery = searchQuery.toLowerCase();
       result = result.filter((bus) =>
@@ -136,7 +196,7 @@ function BusListComponent({
     }
 
     return result;
-  }, [data, searchQuery, showOnlyUnfinished, checkAllowed, checkFilled]);
+  }, [data, sortView, searchQuery, showOnlyUnfinished, checkAllowed, checkFilled, plottingMap]);
 
   // Handler Auto-Next Bus ketika Mode Satset aktif
   const handleSaveAndNext = useCallback(
@@ -197,6 +257,15 @@ function BusListComponent({
         availableKmS1Count={availableKmS1Buses.length}
         skippedWithNotesCount={skippedWithNotesCount}
         onBulkCopyKmS1={handleBulkCopyKmS1}
+        sortView={sortView}
+        onSortViewChange={setSortView}
+        endpointA={endpointAName}
+        endpointB={endpointBName}
+        countBaseA={countBaseA}
+        countBaseB={countBaseB}
+        totalFleetCount={data.length}
+        routeControlBar={routeControlBar}
+        headerTarget={headerTarget}
       />
 
       {isLoading ? (
@@ -243,14 +312,22 @@ function BusListComponent({
                   previousDayKmAkhir2={prevKm}
                   previousDayDateLabel={prevDateLabel}
                   plottingItem={plottingMap.get(normUnit)}
-                  endpointAName={plotting?.endpoint_a_name}
-                  endpointBName={plotting?.endpoint_b_name}
+                  endpointAName={endpointAName}
+                  endpointBName={endpointBName}
                 />
               );
             })
           ) : (
             <div className="empty-state">
-              <p>{TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)}</p>
+              <p>
+                {searchQuery
+                  ? TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)
+                  : sortView === "base_a"
+                    ? TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.EMPTY_BASE(endpointAName)
+                    : sortView === "base_b"
+                      ? TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.EMPTY_BASE(endpointBName)
+                      : TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)}
+              </p>
             </div>
           )}
         </div>

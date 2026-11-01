@@ -23,6 +23,8 @@ export const TEXT_PLOTTING = {
     ASSIGN_START_POINT: (name: string) => `Jadikan Start ${name}`,
     RESET_ORDER: 'Reset Urutan',
     MULTI_SELECT_INFO: (count: number) => `${count} Unit Terpilih`,
+    SET_BULK_RITASE: (count: number) => `Set Ritase (${count})`,
+    SET_TROUBLE: 'Set Kendala',
   },
   UNIT_CARD: {
     ORDER_BADGE: (order: number) => `#${order}`,
@@ -48,6 +50,23 @@ export const TEXT_PLOTTING = {
     DEFAULT_TARGET_LABEL: 'Target Default:',
     SET_ALL_BTN: 'Set Semua Unit',
   },
+  BULK_TARGET_MODAL: {
+    TITLE: (count: number) => `Atur Ritase (${count} Unit Terpilih)`,
+    SUBTITLE: 'Tentukan jumlah ritase operasional untuk seluruh unit yang terpilih',
+    SELECTED_UNITS_LABEL: 'Daftar Unit Terpilih:',
+    APPLY_BTN: (count: number) => `Terapkan ke ${count} Unit`,
+  },
+  TROUBLE_MODAL: {
+    TITLE: (unit: string) => `Status Kendala Unit ${unit}`,
+    SUBTITLE: 'Pilih jenis kendala operasional armada atau ketik catatan',
+    PRESET_LABEL: 'Kode Kendala Cepat (Opsional):',
+    RESET_SELECTION: 'Batal Pilih',
+    NOTE_LABEL: 'Catatan Tambahan (Opsional):',
+    NOTE_PLACEHOLDER: 'Contoh: Mogok radiator bocor, perlu derek...',
+    APPLY_BTN: 'Simpan Kendala',
+    RESET_READY_BTN: 'Jadikan Siap Jalan',
+    WARNING_OFF: 'Unit berstatus OFF / T.O EVDAL tidak beroperasi. Target ritase otomatis diset ke 0 dan dikosongkan di Google Sheets.',
+  },
   TOASTS: {
     SAVE_SUCCESS: 'Plotting armada berhasil disimpan',
     SAVE_ERROR: 'Gagal menyimpan plotting armada',
@@ -55,6 +74,9 @@ export const TEXT_PLOTTING = {
     ORDER_UPDATED: 'Urutan armada diperbarui',
     START_ASSIGNED: (name: string, count: number) => `${count} unit ditetapkan start di ${name}`,
     TARGET_UPDATED: (val: number, scope: string) => `Target ritase diatur ke ${val} Rit (${scope})`,
+    BULK_TARGET_APPLIED: (val: number, count: number) => `Target ritase ${val} Rit diterapkan ke ${count} unit`,
+    SHEET_SYNC_SUCCESS: (count: number) => `Plotting & ${count} unit berhasil disinkronkan ke Spreadsheet asli`,
+    SHEET_SYNC_OFFLINE: (count: number) => `Plotting tersimpan, ${count} mutasi spreadsheet masuk antrean offline`,
     LOAD_ERROR: 'Gagal memuat data plotting',
   },
   EMPTY: {

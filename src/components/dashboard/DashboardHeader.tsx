@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import {
   MapPin,
   ChevronDown,
@@ -12,7 +12,7 @@ import { TEXT_DASHBOARD } from "@/constants/texts";
 import type { Route } from "@/types/supabase";
 
 interface DashboardHeaderProps {
-  headerBlockRef: React.RefObject<HTMLDivElement | null>;
+  inputControlsRef?: React.Ref<HTMLDivElement>;
   onOpenProfile: () => void;
   activeRouteCode: string;
   onOpenRouteSelector: () => void;
@@ -44,10 +44,12 @@ interface DashboardHeaderProps {
   onRouteCodeChange: (code: string) => void;
   routeSelectorOpenTrigger: number;
   onBackToMonitoring?: () => void;
+  maintenanceBanner?: React.ReactNode;
+  hideRouteControlBar?: boolean;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
-  headerBlockRef,
+  inputControlsRef,
   onOpenProfile,
   activeRouteCode,
   onOpenRouteSelector,
@@ -72,7 +74,28 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   onRouteCodeChange,
   routeSelectorOpenTrigger,
   onBackToMonitoring,
+  maintenanceBanner,
+  hideRouteControlBar = false,
 }) => {
+  const headerBlockRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const header = headerBlockRef.current;
+    if (!header) return;
+    const updateHeight = () => {
+      document.documentElement.style.setProperty(
+        "--sticky-header-height",
+        `${header.offsetHeight}px`,
+      );
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty("--sticky-header-height");
+    };
+  }, []);
+
   const hasConflictOrFailedQueue = queue.some(
     (q) => q.status === "failed" || q.status === "conflict",
   );
@@ -81,30 +104,20 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     <div
       ref={headerBlockRef}
       className="sticky-top-block"
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 40,
-        background: "var(--color-bg-base, var(--bg-color))",
-        paddingTop: "12px",
-        paddingBottom: "4px",
-        marginTop: "-16px",
-        marginLeft: "-16px",
-        marginRight: "-16px",
-        paddingLeft: "16px",
-        paddingRight: "16px",
-        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
-      }}
     >
+      {/* 0. Banner Maintenance Terpadu di Puncak Header */}
+      {maintenanceBanner}
+
       <div
         className="app-header"
         style={{
           display: "flex",
+          flexWrap: "wrap",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "10px",
+          marginBottom: "8px",
           padding: 0,
-          gap: "12px",
+          gap: "8px",
           textAlign: "left",
         }}
       >
@@ -112,9 +125,10 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         <div
           style={{
             display: "flex",
-            gap: "8px",
+            gap: "6px",
             alignItems: "center",
             flexShrink: 0,
+            minWidth: 0,
           }}
         >
           {onBackToMonitoring && (
@@ -124,8 +138,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "4px",
-                padding: "6px 9px",
+                gap: "3px",
+                padding: "6px 8px",
                 borderRadius: "10px",
                 background: "var(--color-bg-surface, var(--card-bg, rgba(255, 255, 255, 0.06)))",
                 border: "1px solid var(--color-border-subtle, var(--border-color, rgba(255, 255, 255, 0.12)))",
@@ -151,13 +165,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "5px",
-              padding: "6px 10px",
+              gap: "4px",
+              padding: "6px 9px",
               borderRadius: "10px",
               background: "var(--color-selection-bg, rgba(62, 207, 142, 0.12))",
               border: "1px solid var(--color-selection-border, rgba(62, 207, 142, 0.32))",
               color: "var(--color-action-primary-bg, #3ECF8E)",
-              fontSize: "12.5px",
+              fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.2px",
               cursor: "pointer",
@@ -178,16 +192,16 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "5px",
                 color: hasConflictOrFailedQueue
                   ? "var(--color-danger-fg, var(--danger-color))"
                   : "var(--color-warning-fg, var(--warning-color))",
-                fontSize: "12px",
+                fontSize: "11.5px",
                 fontWeight: "bold",
                 background: hasConflictOrFailedQueue
                   ? "rgba(247, 85, 85, 0.12)"
                   : "rgba(245, 158, 11, 0.12)",
-                padding: "4px 8px",
+                padding: "3px 7px",
                 borderRadius: "20px",
                 cursor: "pointer",
                 border:
@@ -199,9 +213,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               title={TEXT_DASHBOARD.SYNC_QUEUE_TITLE}
             >
               {hasConflictOrFailedQueue ? (
-                <AlertTriangle size={14} />
+                <AlertTriangle size={13} />
               ) : (
-                <CloudOff size={14} />
+                <CloudOff size={13} />
               )}
               <span>{queue.length}</span>
             </div>
@@ -231,7 +245,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         onOpenReportModal={onOpenReportModal}
         onRouteCodeChange={onRouteCodeChange}
         externalOpenTrigger={routeSelectorOpenTrigger}
+        hideControlBar={hideRouteControlBar}
       />
+      <div ref={inputControlsRef} />
     </div>
   );
 };

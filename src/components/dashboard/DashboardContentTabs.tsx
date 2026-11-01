@@ -55,6 +55,7 @@ interface DashboardContentTabsProps {
   plotting?: DailyRoutePlotting | null;
   onPlottingChange?: (plotting: DailyRoutePlotting) => void;
   routeControlBar?: React.ReactNode;
+  inputHeaderTarget?: HTMLDivElement | null;
 }
 
 export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
@@ -90,6 +91,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
   plotting,
   onPlottingChange,
   routeControlBar,
+  inputHeaderTarget,
 }) => {
   const { canAccessPage, isUnderMaintenance } = usePageAccess();
   const currentUserRole = getStoredUserRole();
@@ -121,6 +123,7 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               previousDayRefMap={previousDayRefMap}
               plotting={plotting}
               routeControlBar={routeControlBar}
+              headerTarget={mainTab === "input" ? inputHeaderTarget : null}
             />
         )}
       </div>

@@ -22,7 +22,7 @@ export const BusListProgressBar: React.FC<BusListProgressBarProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "2px 4px 6px 4px",
+          padding: "0 2px 4px 2px",
           fontSize: "12px",
           color: "var(--text-secondary)",
         }}
@@ -63,7 +63,7 @@ export const BusListProgressBar: React.FC<BusListProgressBarProps> = ({
           background: "rgba(255, 255, 255, 0.08)",
           borderRadius: "2px",
           overflow: "hidden",
-          marginBottom: "10px",
+          marginBottom: "2px",
         }}
       >
         <div

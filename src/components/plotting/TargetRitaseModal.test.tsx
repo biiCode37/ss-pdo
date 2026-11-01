@@ -80,6 +80,30 @@ describe('TargetRitaseModal Component', () => {
     expect(input.value).toBe('7.5');
   });
 
+  it('mendukung pengaturan target ritase ke 0 / kosong', () => {
+    act(() => {
+      root.render(
+        <TargetRitaseModal
+          isOpen={true}
+          initialValue={0}
+          targetUnit="TJ-01"
+          onClose={vi.fn()}
+          onApply={vi.fn()}
+        />,
+      );
+    });
+
+    const input = container.querySelector('input[type="number"]') as HTMLInputElement;
+    expect(input.value).toBe('0');
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const chip0 = buttons.find((b) => b.textContent?.trim() === '0 Rit');
+    expect(chip0).toBeDefined();
+
+    const minusBtn = buttons.find((b) => b.getAttribute('aria-label')?.includes('Kurang'));
+    expect(minusBtn?.disabled).toBe(true);
+  });
+
   it('menerapkan preset chip cepat', () => {
     act(() => {
       root.render(

@@ -8,3 +8,5 @@ export * from "./RouteSelectorSheet";
 export * from "./RouteSelectorCard";
 export * from "./useBulkRouteForm";
 export * from "./BulkRouteSection";
+
+export { formatRouteDateLabel } from "./RouteSelectorCard";

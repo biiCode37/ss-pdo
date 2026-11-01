@@ -187,4 +187,90 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     expect(container.textContent).toContain('/1 Unit');
     expect(container.textContent).not.toContain('/4 Unit');
   });
+  it('handles Hybrid View (Opsi B): default sheet row order, and sorts strictly by plotting order when filtering by base', async () => {
+    const mockPlotting = {
+      id: 1,
+      route_id: 115,
+      route_code: 'JAK.115',
+      date: '2026-11-01',
+      endpoint_a_name: 'Priok',
+      endpoint_b_name: 'IGI',
+      default_ritase: 7,
+      created_by: 'user-1',
+      created_at: '2026-11-01T00:00:00Z',
+      updated_at: '2026-11-01T00:00:00Z',
+      units_data: [
+        { unit: 'BUS-01', order: 2, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
+        { unit: 'BUS-02', order: 1, start_point: 'B' as const, target_ritase: 7, status: 'READY' as const },
+        { unit: 'BUS-03', order: 1, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
+      ],
+    };
+
+    const fleetData = [
+      createMockBus({ rowIndex: 6, unit: 'BUS-01', keterangan: '' }),
+      createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: '' }),
+      createMockBus({ rowIndex: 8, unit: 'BUS-03', keterangan: '' }),
+    ];
+
+    await act(async () => {
+      root.render(
+        <BusList
+          {...defaultProps}
+          data={fleetData}
+          plotting={mockPlotting}
+          isShiftConfirmed={true}
+          activeShift={1}
+        />
+      );
+    });
+
+    // 1. Verifikasi Selector Opsi B muncul dengan angka unit yang tepat
+    const sheetTab = container.querySelector('[data-testid="filter-sort-sheet"]') as HTMLButtonElement;
+    const baseATab = container.querySelector('[data-testid="filter-sort-base-a"]') as HTMLButtonElement;
+    const baseBTab = container.querySelector('[data-testid="filter-sort-base-b"]') as HTMLButtonElement;
+
+    expect(sheetTab).not.toBeNull();
+    expect(baseATab).not.toBeNull();
+    expect(baseBTab).not.toBeNull();
+
+    expect(sheetTab.textContent).toContain('Semua (3)');
+    expect(baseATab.textContent).toContain('📍 Priok (2)');
+    expect(baseBTab.textContent).toContain('📍 IGI (1)');
+
+    // 2. Default: Sheet order (BUS-01 -> BUS-02 -> BUS-03)
+    let renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+      (el) => el.getAttribute('data-bus-row')
+    );
+    expect(renderedUnits).toEqual(['6', '7', '8']);
+
+    // 3. Klik Base A (Priok): Harus difilter hanya Base A dan diurutkan menaik (#1 BUS-03, lalu #2 BUS-01)
+    await act(async () => {
+      baseATab.click();
+    });
+
+    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+      (el) => el.getAttribute('data-bus-row')
+    );
+    expect(renderedUnits).toEqual(['8', '6']); // BUS-03 (order 1) lalu BUS-01 (order 2)
+
+    // 4. Klik Base B (IGI): Hanya BUS-02 (order 1)
+    await act(async () => {
+      baseBTab.click();
+    });
+
+    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+      (el) => el.getAttribute('data-bus-row')
+    );
+    expect(renderedUnits).toEqual(['7']); // BUS-02 (order 1)
+
+    // 5. Klik Semua (Sheet): Kembali ke urutan sheet asli
+    await act(async () => {
+      sheetTab.click();
+    });
+
+    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+      (el) => el.getAttribute('data-bus-row')
+    );
+    expect(renderedUnits).toEqual(['6', '7', '8']);
+  });
 });

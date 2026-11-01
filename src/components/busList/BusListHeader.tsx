@@ -1,7 +1,9 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { BusListAccumulationBanner } from "./BusListAccumulationBanner";
 import { BusListProgressBar } from "./BusListProgressBar";
 import { BusListControlBar } from "./BusListControlBar";
+import type { FleetSortView } from "./busListUtils";
 
 export interface BusListHeaderProps {
   tabName: string;
@@ -32,6 +34,15 @@ export interface BusListHeaderProps {
   availableKmS1Count: number;
   skippedWithNotesCount: number;
   onBulkCopyKmS1: () => void;
+  sortView?: FleetSortView;
+  onSortViewChange?: (view: FleetSortView) => void;
+  endpointA?: string;
+  endpointB?: string;
+  countBaseA?: number;
+  countBaseB?: number;
+  totalFleetCount?: number;
+  routeControlBar?: React.ReactNode;
+  headerTarget?: HTMLDivElement | null;
 }
 
 export const BusListHeader: React.FC<BusListHeaderProps> = ({
@@ -54,9 +65,18 @@ export const BusListHeader: React.FC<BusListHeaderProps> = ({
   availableKmS1Count,
   skippedWithNotesCount,
   onBulkCopyKmS1,
+  sortView,
+  onSortViewChange,
+  endpointA,
+  endpointB,
+  countBaseA,
+  countBaseB,
+  totalFleetCount,
+  routeControlBar,
+  headerTarget,
 }) => {
-  return (
-    <div className="sticky-buslist-header">
+  const controls = (
+    <div className="buslist-header">
       {/* 1. Rekap Akumulasi Warning Banner */}
       {tabName === "AKUMULASI" && (
         <BusListAccumulationBanner
@@ -65,30 +85,44 @@ export const BusListHeader: React.FC<BusListHeaderProps> = ({
         />
       )}
 
-      {/* 2. Hairline Progress Indicator */}
-      <BusListProgressBar
-        activeCategory={activeCategory}
-        filledCount={filledCount}
-        totalCount={totalCount}
-        progressPercent={progressPercent}
-      />
+      {/* Controls share the dashboard's sticky shell through the header slot. */}
+      <div className="unified-input-control-panel">
+        {/* Elemen 1: Datepicker & Status Laporan Operasional */}
+        {routeControlBar}
 
-      {/* 4. Controls Container: Row 1 & Row 2 */}
-      <BusListControlBar
-        activeCategory={activeCategory}
-        onCategoryChange={onCategoryChange}
-        searchQuery={searchQuery}
-        onSearchChange={onSearchChange}
-        showOnlyUnfinished={showOnlyUnfinished}
-        onToggleUnfinished={onToggleUnfinished}
-        bulkPergi={bulkPergi}
-        bulkPulang={bulkPulang}
-        isSubmittingBulk={isSubmittingBulk}
-        onOpenBulkTripModal={onOpenBulkTripModal}
-        availableKmS1Count={availableKmS1Count}
-        skippedWithNotesCount={skippedWithNotesCount}
-        onBulkCopyKmS1={onBulkCopyKmS1}
-      />
+        {/* Elemen 2: Hairline Progress Indicator */}
+        <BusListProgressBar
+          activeCategory={activeCategory}
+          filledCount={filledCount}
+          totalCount={totalCount}
+          progressPercent={progressPercent}
+        />
+
+        {/* Elemen 3: Controls Container (Set Trip, Fokus Kolom, Sort View, & Pencarian) */}
+        <BusListControlBar
+          activeCategory={activeCategory}
+          onCategoryChange={onCategoryChange}
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+          showOnlyUnfinished={showOnlyUnfinished}
+          onToggleUnfinished={onToggleUnfinished}
+          bulkPergi={bulkPergi}
+          bulkPulang={bulkPulang}
+          isSubmittingBulk={isSubmittingBulk}
+          onOpenBulkTripModal={onOpenBulkTripModal}
+          availableKmS1Count={availableKmS1Count}
+          skippedWithNotesCount={skippedWithNotesCount}
+          onBulkCopyKmS1={onBulkCopyKmS1}
+          sortView={sortView}
+          onSortViewChange={onSortViewChange}
+          endpointA={endpointA}
+          endpointB={endpointB}
+          countBaseA={countBaseA}
+          countBaseB={countBaseB}
+          totalFleetCount={totalFleetCount}
+        />
+      </div>
     </div>
   );
+  return headerTarget ? createPortal(controls, headerTarget) : controls;
 };

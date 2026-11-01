@@ -242,6 +242,13 @@ export const TEXT_DASHBOARD = {
     SAVE_ERROR_GENERIC: 'Terjadi kesalahan saat menyimpan data ke spreadsheet.',
     COPY_KM_ALL_FILLED: 'Semua unit bus sudah memiliki nilai KM Awal Shift 2.',
     ALL_UNITS_FILLED: '🎉 Semua unit pada filter ini telah selesai diisi!',
+    SORT_VIEWS: {
+      ALL_SHEET_LABEL: (count: number) => `Semua (${count})`,
+      ALL_SHEET_TITLE: 'Urutan default baris asli spreadsheet',
+      BASE_LABEL: (name: string, count: number) => `📍 ${name} (${count})`,
+      BASE_TOOLTIP: (name: string, count: number) => `Start ${name} (Urutan Plotting #1..#${count})`,
+      EMPTY_BASE: (name: string) => `Tidak ada unit dengan titik start di ${name}`,
+    },
     DAILY_PROGRESS: 'Progres Harian',
     COLUMN_PREFIX: (col: string) => `Kolom: ${col}`,
     CATEGORIES: {

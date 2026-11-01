@@ -58,6 +58,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.ACCUMULATION_SHEET.TITLE).toBe('Rekap Akumulasi Lintas Periode');
     expect(TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_TITLE('JAK.115')).toContain('JAK.115');
     expect(TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_DISPLAY_TITLE('05 Sep 2026')).toContain('05 Sep 2026');
+    expect(TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.ALL_SHEET_LABEL(30)).toBe('Semua (30)');
+    expect(TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.BASE_LABEL('Priok', 17)).toBe('📍 Priok (17)');
+    expect(TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.EMPTY_BASE('Priok')).toBe('Tidak ada unit dengan titik start di Priok');
     expect(TEXT_DASHBOARD.BUS_LIST.DAILY_PROGRESS).toBe('Progres Harian');
     expect(TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX('TOA')).toBe('Kolom: TOA');
     expect(TEXT_DASHBOARD.BUS_LIST.CATEGORIES.MANUAL_S1).toBe('Manual S1');
@@ -562,5 +565,16 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PLOTTING.ACTIONS.START_REORDER).toBe('Atur Urutan');
     expect(TEXT_PLOTTING.ACTIONS.APPLY_ROLLING).toBe('Rolling Kemarin');
     expect(TEXT_PLOTTING.UNIT_CARD.STATUS_READY).toBe('Siap');
+    expect(TEXT_PLOTTING.ACTIONS.SET_BULK_RITASE(3)).toBe('Set Ritase (3)');
+    expect(TEXT_PLOTTING.ACTIONS.SET_TROUBLE).toBe('Set Kendala');
+    expect(TEXT_PLOTTING.BULK_TARGET_MODAL.TITLE(5)).toBe('Atur Ritase (5 Unit Terpilih)');
+    expect(TEXT_PLOTTING.BULK_TARGET_MODAL.APPLY_BTN(5)).toBe('Terapkan ke 5 Unit');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.TITLE('TJ-01')).toBe('Status Kendala Unit TJ-01');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.PRESET_LABEL).toBe('Kode Kendala Cepat (Opsional):');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.RESET_SELECTION).toBe('Batal Pilih');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.APPLY_BTN).toBe('Simpan Kendala');
+    expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_SUCCESS(10)).toBe('Plotting & 10 unit berhasil disinkronkan ke Spreadsheet asli');
+    expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_OFFLINE(10)).toBe('Plotting tersimpan, 10 mutasi spreadsheet masuk antrean offline');
+    expect(TEXT_PLOTTING.TOASTS.BULK_TARGET_APPLIED(7.5, 4)).toBe('Target ritase 7.5 Rit diterapkan ke 4 unit');
   });
 });

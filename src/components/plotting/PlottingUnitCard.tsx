@@ -3,6 +3,7 @@ import type { UnitPlottingItem, PlottingUnitStatus } from '@/types/supabase';
 import { TEXT_PLOTTING } from '@/constants/texts';
 import {
   ArrowDown,
+  ArrowUp,
   GripVertical,
   CheckCircle2,
   AlertTriangle,
@@ -10,6 +11,7 @@ import {
   ArrowLeftRight,
   Minus,
   Plus,
+  Circle,
   Zap,
 } from 'lucide-react';
 
@@ -20,10 +22,13 @@ export interface PlottingUnitCardProps {
   isReordering: boolean;
   isSelectedForMultiSelect: boolean;
   onToggleSelect: (unit: string) => void;
-  onMoveToBottom: (unit: string) => void;
+  onMoveUp?: (unit: string) => void;
+  onMoveDown?: (unit: string) => void;
+  onMoveToBottom?: (unit: string) => void;
   onToggleStartPoint: (unit: string) => void;
   onUpdateTargetRitase: (unit: string, ritase: number) => void;
   onOpenTargetModal?: (unit: string, currentRitase: number) => void;
+  onOpenTroubleModal?: (unit: string) => void;
   onUpdateStatus: (unit: string, status: PlottingUnitStatus) => void;
   onCardClick?: (unit: string) => void;
   onDragStart?: (e: React.DragEvent, unit: string) => void;
@@ -38,10 +43,13 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
   isReordering,
   isSelectedForMultiSelect,
   onToggleSelect,
+  onMoveUp,
+  onMoveDown,
   onMoveToBottom,
   onToggleStartPoint,
   onUpdateTargetRitase,
   onOpenTargetModal,
+  onOpenTroubleModal,
   onUpdateStatus,
   onCardClick,
   onDragStart,
@@ -62,19 +70,19 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
         };
       case 'TROUBLE':
         return {
-          bg: 'rgba(234, 179, 8, 0.1)',
-          border: 'rgba(234, 179, 8, 0.3)',
-          fg: '#facc15',
+          bg: 'rgba(234, 179, 8, 0.12)',
+          border: 'rgba(234, 179, 8, 0.35)',
+          fg: 'var(--color-warning-fg, #facc15)',
           icon: AlertTriangle,
-          text: TEXT_PLOTTING.UNIT_CARD.STATUS_TROUBLE,
+          text: item.keterangan || item.note || TEXT_PLOTTING.UNIT_CARD.STATUS_TROUBLE,
         };
       case 'OFF':
         return {
-          bg: 'rgba(239, 68, 68, 0.1)',
-          border: 'rgba(239, 68, 68, 0.3)',
-          fg: '#f87171',
+          bg: 'rgba(239, 68, 68, 0.12)',
+          border: 'rgba(239, 68, 68, 0.35)',
+          fg: 'var(--color-error-fg, #f87171)',
           icon: XCircle,
-          text: TEXT_PLOTTING.UNIT_CARD.STATUS_OFF,
+          text: item.keterangan || TEXT_PLOTTING.UNIT_CARD.STATUS_OFF,
         };
     }
   };
@@ -90,7 +98,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
 
   const handleStepRitase = (delta: number, e: React.MouseEvent) => {
     e.stopPropagation();
-    const nextVal = Math.max(1, Math.min(20, Number((item.target_ritase + delta).toFixed(1))));
+    const nextVal = Math.max(0, Math.min(20, Number((item.target_ritase + delta).toFixed(1))));
     onUpdateTargetRitase(item.unit, nextVal);
   };
 
@@ -127,7 +135,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
         transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
       }}
     >
-      {/* BARIS 1: Drag Handle, Urutan, Nama Unit, Pangkalan Start, Tombol Geser */}
+      {/* BARIS 1: Drag Handle, Urutan, Nama Unit, Tombol Panah Reorder, Badge Titik Start (Pojok Kanan) */}
       <div
         style={{
           display: 'flex',
@@ -136,7 +144,35 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           gap: '8px',
         }}
       >
+        {/* Sisi Kiri: Selector Checkbox, Drag Handle, Order Badge, Unit Name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
+          {/* Checkbox Selector Bebas */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleSelect(item.unit);
+            }}
+            data-testid={`btn-select-${item.unit}`}
+            aria-label={`Pilih unit ${item.unit}`}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              padding: '0',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            {isSelectedForMultiSelect ? (
+              <CheckCircle2 size={18} color="var(--color-action-primary-bg, #38bdf8)" />
+            ) : (
+              <Circle size={18} color="var(--color-text-secondary, #64748b)" />
+            )}
+          </button>
+
           {/* Drag Handle Indicator */}
           {isReordering && (
             <div
@@ -189,8 +225,68 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           >
             {item.unit}
           </span>
+        </div>
 
-          {/* Pangkalan Start Switch Badge */}
+        {/* Sisi Kanan: Tombol Reorder Panah Atas & Bawah, lalu Badge Titik Start (Pojok Kanan) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+          {/* Tombol Reorder Panah Atas & Bawah */}
+          {isReordering && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onMoveUp?.(item.unit);
+                }}
+                data-testid={`btn-move-up-${item.unit}`}
+                title="Pindahkan 1 tingkat ke atas (atau ke paling bawah jika urutan pertama)"
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '6px',
+                  background: 'var(--color-surface-default, rgba(255, 255, 255, 0.06))',
+                  border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
+                  color: 'var(--color-text-secondary, #94a3b8)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <ArrowUp size={14} />
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onMoveDown ? onMoveDown(item.unit) : onMoveToBottom?.(item.unit);
+                }}
+                data-testid={`btn-move-down-${item.unit}`}
+                title="Pindahkan 1 tingkat ke bawah (atau ke paling atas jika urutan terakhir)"
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '6px',
+                  background: 'var(--color-surface-default, rgba(255, 255, 255, 0.06))',
+                  border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
+                  color: 'var(--color-text-secondary, #94a3b8)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <ArrowDown size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* Pangkalan Start Switch Badge (Pojok Paling Kanan) */}
           <button
             type="button"
             onClick={(e) => {
@@ -219,33 +315,6 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
             <ArrowLeftRight size={10} style={{ opacity: 0.7 }} />
           </button>
         </div>
-
-        {/* Move To Bottom Action Button */}
-        {isReordering && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onMoveToBottom(item.unit);
-            }}
-            data-testid={`btn-move-bottom-${item.unit}`}
-            title="Pindahkan unit ini ke urutan terakhir pangkalan"
-            style={{
-              padding: '4px 6px',
-              borderRadius: '6px',
-              background: 'var(--color-surface-default, rgba(255, 255, 255, 0.06))',
-              border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1))',
-              color: 'var(--color-text-secondary, #94a3b8)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              flexShrink: 0,
-            }}
-          >
-            <ArrowDown size={14} />
-          </button>
-        )}
       </div>
 
       {/* BARIS 2: Kontrol Operasional (Target Ritase Fleksibel & Status Kesiapan) */}
@@ -337,7 +406,11 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            cycleStatus();
+            if (onOpenTroubleModal) {
+              onOpenTroubleModal(item.unit);
+            } else {
+              cycleStatus();
+            }
           }}
           data-testid={`btn-status-${item.unit}`}
           title={`Ubah status ${item.unit} (Klik untuk berganti)`}

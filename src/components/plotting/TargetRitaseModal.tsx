@@ -7,38 +7,44 @@ export interface TargetRitaseModalProps {
   initialValue: number;
   targetUnit?: string;
   endpointName?: string;
+  selectedCount?: number;
   onClose: () => void;
-  onApply: (val: number, scope: 'unit' | 'base' | 'all') => void;
+  onApply: (val: number, scope: 'unit' | 'base' | 'all' | 'selected') => void;
 }
 
-const COMMON_PRESETS = [4, 5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 10];
+const COMMON_PRESETS = [0, 4, 5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 10];
 
 export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
   isOpen,
   initialValue,
   targetUnit,
   endpointName,
+  selectedCount,
   onClose,
   onApply,
 }) => {
-  const [val, setVal] = useState<number>(initialValue || 7.5);
+  const [val, setVal] = useState<number>(initialValue !== undefined ? initialValue : 7.5);
 
   useEffect(() => {
     if (isOpen) {
-      setVal(initialValue || 7.5);
+      setVal(initialValue !== undefined ? initialValue : 7.5);
     }
   }, [isOpen, initialValue]);
 
   if (!isOpen) return null;
 
   const handleStep = (delta: number) => {
-    setVal((prev) => Math.max(1, Math.min(20, Number((prev + delta).toFixed(1)))));
+    setVal((prev) => Math.max(0, Math.min(20, Number((prev + delta).toFixed(1)))));
   };
 
   const handleDirectChange = (raw: string) => {
+    if (raw === '') {
+      setVal(0);
+      return;
+    }
     const num = parseFloat(raw.replace(',', '.'));
     if (!isNaN(num)) {
-      setVal(num);
+      setVal(Math.max(0, Math.min(20, num)));
     }
   };
 
@@ -89,7 +95,9 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
                 color: 'var(--color-text-primary, #f8fafc)',
               }}
             >
-              {TEXT_PLOTTING.TARGET_MODAL.TITLE}
+              {selectedCount && selectedCount > 0
+                ? TEXT_PLOTTING.BULK_TARGET_MODAL.TITLE(selectedCount)
+                : TEXT_PLOTTING.TARGET_MODAL.TITLE}
             </h3>
             <p
               style={{
@@ -98,7 +106,9 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
                 color: 'var(--color-text-secondary, #94a3b8)',
               }}
             >
-              {TEXT_PLOTTING.TARGET_MODAL.SUBTITLE(targetUnit)}
+              {selectedCount && selectedCount > 0
+                ? TEXT_PLOTTING.BULK_TARGET_MODAL.SUBTITLE
+                : TEXT_PLOTTING.TARGET_MODAL.SUBTITLE(targetUnit)}
             </p>
           </div>
           <button
@@ -133,6 +143,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
           <button
             type="button"
             onClick={() => handleStep(-0.5)}
+            disabled={val <= 0}
             aria-label="Kurang 0.5 rit"
             style={{
               width: '40px',
@@ -144,7 +155,8 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              cursor: 'pointer',
+              cursor: val <= 0 ? 'not-allowed' : 'pointer',
+              opacity: val <= 0 ? 0.4 : 1,
             }}
           >
             <Minus size={18} />
@@ -154,7 +166,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
             <input
               type="number"
               step="0.5"
-              min="1"
+              min="0"
               max="25"
               value={val}
               onChange={(e) => handleDirectChange(e.target.value)}
@@ -250,7 +262,29 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
 
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '6px' }}>
-          {targetUnit ? (
+          {selectedCount && selectedCount > 0 ? (
+            <button
+              type="button"
+              onClick={() => onApply(val, 'selected')}
+              style={{
+                padding: '10px 14px',
+                borderRadius: '10px',
+                background: 'var(--color-action-primary-bg, #0284c7)',
+                color: 'var(--color-action-primary-fg, #ffffff)',
+                border: 'none',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+              }}
+            >
+              <Zap size={16} />
+              <span>{TEXT_PLOTTING.BULK_TARGET_MODAL.APPLY_BTN(selectedCount)}</span>
+            </button>
+          ) : targetUnit ? (
             <>
               <button
                 type="button"

@@ -76,7 +76,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     accRangeDetails,
     activeMonth,
     activeYear,
-    headerBlockRef,
     days,
     matchedRoute,
     activeRouteCode,
@@ -141,6 +140,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
 
   // 4. Daily Route Plotting State & Effect
   const [currentPlotting, setCurrentPlotting] = useState<DailyRoutePlotting | null>(null);
+  const [inputHeaderTarget, setInputHeaderTarget] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!matchedRoute?.id || !operationalReportDate) {
@@ -447,8 +447,11 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     >
       {/* 1. Header & Sticky Route Selector */}
       <DashboardHeader
-        headerBlockRef={headerBlockRef}
-        hideRouteControlBar={mainTab === "input"}
+        inputControlsRef={setInputHeaderTarget}
+        hideRouteControlBar={
+          mainTab === "input" && !!busData && !!headerMap &&
+          canAccessPage("input", currentUserRole)
+        }
         maintenanceBanner={
           currentUserRole === "superadmin" &&
           (isUnderMaintenance("dashboard") || isUnderMaintenance(mainTab)) ? (
@@ -547,6 +550,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           plotting={currentPlotting}
           onPlottingChange={setCurrentPlotting}
           routeControlBar={inputRouteControlBar}
+          inputHeaderTarget={inputHeaderTarget}
         />
       )}
 
