@@ -1,16 +1,13 @@
 import React from "react";
-import { AlertTriangle } from "lucide-react";
 import { SwipeableContainer } from "@/components/SwipeableContainer";
 import { BusList } from "@/components/BusList";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { UnitSummaryDashboard } from "@/components/UnitSummaryDashboard";
 import { extractMonthYearLabel } from "@/utils/analytics";
-import { TEXT_DASHBOARD } from "@/constants/texts";
 import { usePageAccess } from "@/context/PageAccessContext";
 import { getStoredUserRole } from "@/utils/roleStorage";
 import {
   PageDisabledState,
-  SuperadminMaintenanceBanner,
   AccessRestrictedState,
 } from "@/components/pageManagement";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
@@ -50,20 +47,21 @@ interface DashboardContentTabsProps {
   activeYear: number;
   onSelectTab: (newTab: string) => Promise<void>;
   onSelectUnit: (unit: string) => void;
-  missingColumns: string[];
+  missingColumns?: string[];
   previousDayKmMap?: Record<string, string>;
   previousDayRefMap?: Record<string, import("@/hooks/usePreviousDayOdometer").OdometerRefInfo>;
   matchedRoute?: Route | null;
   operationalReportDate?: string;
   plotting?: DailyRoutePlotting | null;
   onPlottingChange?: (plotting: DailyRoutePlotting) => void;
+  routeControlBar?: React.ReactNode;
 }
 
 export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
   mainTab,
   onSwipeNext,
   onSwipePrev,
-  onOpenPageManagement,
+  onOpenPageManagement: _onOpenPageManagement,
   busData,
   headerMap,
   currentSheetId,
@@ -84,13 +82,14 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
   activeYear,
   onSelectTab,
   onSelectUnit,
-  missingColumns,
+  missingColumns: _missingColumns,
   previousDayKmMap,
   previousDayRefMap,
   matchedRoute,
   operationalReportDate,
   plotting,
   onPlottingChange,
+  routeControlBar,
 }) => {
   const { canAccessPage, isUnderMaintenance } = usePageAccess();
   const currentUserRole = getStoredUserRole();
@@ -105,45 +104,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
         {!canAccessPage("input", currentUserRole) ? (
           isUnderMaintenance("input") ? <PageDisabledState /> : <AccessRestrictedState />
         ) : (
-          <>
-            {currentUserRole === "superadmin" && isUnderMaintenance("input") && (
-              <SuperadminMaintenanceBanner onManageAccess={onOpenPageManagement} />
-            )}
-            {missingColumns.length > 0 && (
-              <div
-                className="card"
-                style={{
-                  marginBottom: "16px",
-                  backgroundColor: "var(--color-warning-bg, rgba(245, 158, 11, 0.1))",
-                  borderColor: "var(--color-warning-border, #f59e0b)",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    color: "var(--color-warning-fg, #d97706)",
-                    fontWeight: 600,
-                  }}
-                >
-                  <AlertTriangle size={18} />
-                  <span>{TEXT_DASHBOARD.MISSING_COLS_TITLE}</span>
-                </div>
-                <ul
-                  style={{
-                    margin: "8px 0 0 24px",
-                    fontSize: "14px",
-                    color: "var(--text-secondary)",
-                  }}
-                >
-                  {missingColumns.map((col, i) => (
-                    <li key={i}>{col}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
             <BusList
               data={busData}
               sheetId={currentSheetId}
@@ -160,8 +120,8 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               previousDayKmMap={previousDayKmMap}
               previousDayRefMap={previousDayRefMap}
               plotting={plotting}
+              routeControlBar={routeControlBar}
             />
-          </>
         )}
       </div>
 
@@ -170,10 +130,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
         {!canAccessPage("analytics", currentUserRole) ? (
           isUnderMaintenance("analytics") ? <PageDisabledState /> : <AccessRestrictedState />
         ) : (
-          <>
-            {currentUserRole === "superadmin" && isUnderMaintenance("analytics") && (
-              <SuperadminMaintenanceBanner onManageAccess={onOpenPageManagement} />
-            )}
             <AnalyticsDashboard
               busData={busData}
               isLoading={isLoading}
@@ -188,7 +144,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               onSelectTab={onSelectTab}
               onSelectUnit={onSelectUnit}
             />
-          </>
         )}
       </div>
 
@@ -197,10 +152,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
         {!canAccessPage("units", currentUserRole) ? (
           isUnderMaintenance("units") ? <PageDisabledState /> : <AccessRestrictedState />
         ) : (
-          <>
-            {currentUserRole === "superadmin" && isUnderMaintenance("units") && (
-              <SuperadminMaintenanceBanner onManageAccess={onOpenPageManagement} />
-            )}
             <UnitSummaryDashboard
               busData={busData}
               isLoading={isLoading}
@@ -210,7 +161,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               activeYear={activeYear}
               accRange={accRangeDetails}
             />
-          </>
         )}
       </div>
       {/* TAB 4: Plotting Harian */}
@@ -218,10 +168,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
         {!canAccessPage("plotting", currentUserRole) ? (
           isUnderMaintenance("plotting") ? <PageDisabledState /> : <AccessRestrictedState />
         ) : (
-          <>
-            {currentUserRole === "superadmin" && isUnderMaintenance("plotting") && (
-              <SuperadminMaintenanceBanner onManageAccess={onOpenPageManagement} />
-            )}
             <DailyPlottingPage
               routeId={matchedRoute?.id || 0}
               routeCode={matchedRoute?.route_code || ""}
@@ -230,8 +176,11 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               buses={busData}
               headerMap={headerMap}
               onPlottingChange={onPlottingChange}
+              sheetId={currentSheetId}
+              tabName={selectedTab}
+              addToQueue={addToQueue}
+              onUpdateBus={onUpdateBus}
             />
-          </>
         )}
       </div>
     </SwipeableContainer>
