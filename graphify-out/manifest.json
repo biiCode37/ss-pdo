@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useOfflineSync.ts": {
-    "mtime": 1793104751.5096664,
-    "ast_hash": "9344e2ee1f4c3f106cdaa7708d8a6467",
+    "mtime": 1793603829.453106,
+    "ast_hash": "87bd730b7e7ebc55cb76fdab94294014",
     "semantic_hash": ""
   },
   "src/main.tsx": {
@@ -815,13 +815,13 @@
     "semantic_hash": ""
   },
   "src/utils/alertUtils.test.ts": {
-    "mtime": 1792211224.488184,
-    "ast_hash": "8ea744e9ef109f69bc322b4fa995a86e",
+    "mtime": 1793602514.5887313,
+    "ast_hash": "db97abe228e84bfe23a4106ce88653fc",
     "semantic_hash": ""
   },
   "src/utils/alertUtils.ts": {
-    "mtime": 1792392693.044313,
-    "ast_hash": "9c1e5a984ab9ef8bb970c21eca91792c",
+    "mtime": 1793602538.0951004,
+    "ast_hash": "10753bbf9c7de9ac2ffbb932f7cbad80",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-08-15-progressive-disclosure-input-modal-design.md": {
@@ -920,8 +920,8 @@
     "semantic_hash": ""
   },
   "src/hooks/__tests__/useOfflineSync.test.tsx": {
-    "mtime": 1793104751.508587,
-    "ast_hash": "8abe9cfeab02a2f8bd1542a593116fc5",
+    "mtime": 1793603803.6685681,
+    "ast_hash": "a6425119e0c08250ced413ff4ca087ad",
     "semantic_hash": ""
   },
   "src/services/googleSheets/analytics.ts": {
@@ -1130,13 +1130,13 @@
     "semantic_hash": ""
   },
   "src/utils/conflictMerge.test.ts": {
-    "mtime": 1792211138.2456536,
-    "ast_hash": "bb61b0122e2288da1b9e152ca6623662",
+    "mtime": 1793602873.787848,
+    "ast_hash": "8f323f6bdb446c2d55037888cf597334",
     "semantic_hash": ""
   },
   "src/utils/conflictMerge.ts": {
-    "mtime": 1792211138.2469752,
-    "ast_hash": "8fd3256f68bc2494b6d0cdf83b2ad48a",
+    "mtime": 1793602888.0157428,
+    "ast_hash": "02da435e41b033a1c6d973a02a2c7fee",
     "semantic_hash": ""
   },
   "supabase/migrations/20260827000000_fix_user_profiles_insert.sql": {
@@ -1350,8 +1350,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_alerts.ts": {
-    "mtime": 1793429226.6218634,
-    "ast_hash": "7bf94bb7eacd59fb1f92e4933d7d85b7",
+    "mtime": 1793602227.953169,
+    "ast_hash": "c721dbd4a4d3d8747224e07eeb7bc777",
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
@@ -1390,8 +1390,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1793583543.2050538,
-    "ast_hash": "91fe57151081847d2fa9bad718b282e2",
+    "mtime": 1793602068.1636288,
+    "ast_hash": "3614fccf20b37fcd7af55a4e5e869868",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -2180,8 +2180,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardSave.ts": {
-    "mtime": 1792211138.1104548,
-    "ast_hash": "8272474827aded870f8162e2c057acd8",
+    "mtime": 1793603453.8132524,
+    "ast_hash": "934dc705e96a7ade8743248125079bdb",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_48/AUDIT_BUGS.md": {
@@ -2790,8 +2790,8 @@
     "semantic_hash": ""
   },
   "src/components/busCard/useBusCardSave.test.tsx": {
-    "mtime": 1792211138.1104548,
-    "ast_hash": "93d78f222c782eda5d5c4fb532c2ffc7",
+    "mtime": 1793603266.8307056,
+    "ast_hash": "0992a84a2d5ba51dab8235341b6d96f9",
     "semantic_hash": ""
   },
   "src/services/googleSheets/core.test.ts": {
@@ -6230,18 +6230,23 @@
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_194/AUDIT_BUGS.md": {
-    "mtime": 1793590636.5329711,
-    "ast_hash": "8101ee3f87fb39b4a69c596d31e7e1f1",
+    "mtime": 1793604201.280876,
+    "ast_hash": "f8575db1d17b98fe91cc646af94245e9",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_194/REPAIR_REPORT.md": {
-    "mtime": 1793591661.0390532,
-    "ast_hash": "83a280288b0c404a3cd7571e492315cb",
+    "mtime": 1793604218.7743685,
+    "ast_hash": "71efa4dcaabf0339de6e123b7248988e",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-11-02-sheet-sync-webhook-security.md": {
     "mtime": 1793594260.725113,
     "ast_hash": "d55bccc9331503ac6a218ad4dca3069d",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-02-conflict-resolution-and-offline-queue.md": {
+    "mtime": 1793601906.8719966,
+    "ast_hash": "243f904895c1f2e05ab8960df04e4bfc",
     "semantic_hash": ""
   }
 }
