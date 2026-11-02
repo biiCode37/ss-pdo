@@ -56,7 +56,7 @@ export { isNetworkError };
  * karena perubahan nilai akibat evaluasi rumus spreadsheet bukan merupakan
  * konflik perubahan data pengguna manual (mencegah false-positive collision).
  */
-const FORMULA_FIELDS: ReadonlySet<keyof BusData> = new Set<keyof BusData>([
+export const FORMULA_FIELDS: ReadonlySet<keyof BusData> = new Set<keyof BusData>([
   'toaShift2',
 ]);
 

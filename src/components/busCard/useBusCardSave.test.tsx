@@ -253,4 +253,113 @@ describe('useBusCardSave - Optimistic Concurrency Control (OCC) & Three-Way Coll
     expect(alertUtils.showQueueConflictDialog).not.toHaveBeenCalled();
     expect(googleSheets.updateBusData).toHaveBeenCalledTimes(1);
   });
+
+  it('sends ONLY modified dirty fields (delta updates) to updateBusData, omitting untouched fields', async () => {
+    (googleSheets.getBusRowData as any).mockResolvedValueOnce({
+      toaShift1: '100',
+      manualShift1: '5',
+      totalToa: '200',
+    });
+
+    await renderSaveHook({
+      toaShift1: '100',
+      manualShift1: '5',
+      totalToa: '200',
+    });
+
+    // User hanya mengubah toaShift1 dari 100 menjadi 120 pada payload mode All
+    const updatesAllMode = {
+      toaShift1: '120',
+      manualShift1: '5', // tidak berubah
+      totalToa: '200', // tidak berubah
+    };
+
+    await act(async () => {
+      await latestSave?.handleSaveUpdates(updatesAllMode);
+    });
+
+    // updateBusData hanya boleh dipanggil dengan { toaShift1: "120" }
+    expect(googleSheets.updateBusData).toHaveBeenCalledTimes(1);
+    expect(googleSheets.updateBusData).toHaveBeenCalledWith(
+      'sheet-1',
+      '05',
+      5,
+      { toaShift1: '120' },
+      headerMap,
+      expect.objectContaining({
+        toaShift1: '100',
+        manualShift1: '5',
+        totalToa: '200',
+      })
+    );
+  });
+
+  it('omits formula fields like toaShift2 from deltaUpdates even if included in updates', async () => {
+    (googleSheets.getBusRowData as any).mockResolvedValueOnce({
+      toaShift1: '100',
+      toaShift2: '50',
+    });
+
+    await renderSaveHook({ toaShift1: '100', toaShift2: '50' });
+
+    const updatesWithFormula = {
+      toaShift1: '120',
+      toaShift2: '70', // rumus spreadsheet, tidak boleh dikirim
+    };
+
+    await act(async () => {
+      await latestSave?.handleSaveUpdates(updatesWithFormula);
+    });
+
+    expect(googleSheets.updateBusData).toHaveBeenCalledWith(
+      'sheet-1',
+      '05',
+      5,
+      { toaShift1: '120' },
+      headerMap,
+      expect.anything()
+    );
+  });
+
+  it('exits early without network request if no fields actually changed', async () => {
+    await renderSaveHook({ toaShift1: '100' });
+
+    const identicalUpdates = {
+      toaShift1: '100', // sama persis dengan initial
+    };
+
+    await act(async () => {
+      await latestSave?.handleSaveUpdates(identicalUpdates);
+    });
+
+    expect(googleSheets.getBusRowData).not.toHaveBeenCalled();
+    expect(googleSheets.updateBusData).not.toHaveBeenCalled();
+    expect(latestSave?.saveStatus).toBe('success');
+    expect(latestSave?.isLoading).toBe(false);
+  });
+
+  it('saves only dirty delta updates to offline queue when network error occurs', async () => {
+    const mockAddToQueue = vi.fn();
+    (googleSheets.getBusRowData as any).mockRejectedValueOnce(new TypeError('Failed to fetch'));
+
+    await renderSaveHook(
+      { toaShift1: '100', manualShift1: '5' },
+      { addToQueue: mockAddToQueue }
+    );
+
+    await act(async () => {
+      await latestSave?.handleSaveUpdates({
+        toaShift1: '120',
+        manualShift1: '5', // untouched
+      });
+    });
+
+    expect(mockAddToQueue).toHaveBeenCalledTimes(1);
+    expect(mockAddToQueue).toHaveBeenCalledWith(
+      expect.objectContaining({
+        updates: { toaShift1: '120' },
+        originalSnapshot: { toaShift1: '100' },
+      })
+    );
+  });
 });

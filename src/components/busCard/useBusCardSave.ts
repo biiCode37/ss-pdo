@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { updateBusData, getBusRowData } from "@/services/googleSheets";
-import { isNetworkError } from "@/hooks/useOfflineSync";
+import { isNetworkError, FORMULA_FIELDS } from "@/hooks/useOfflineSync";
 import { formatUserError } from "@/utils/errorFormatter";
 import { normalizeFieldValue } from "@/utils/numberUtils";
 
@@ -88,6 +88,27 @@ export function useBusCardSave({
       onSaveAndNext({ ...bus, ...mergedData });
     }
 
+    // Ekstraksi delta murni: hanya kolom yang benar-benar berbeda dari baseline lokal
+    const candidateFields = Object.keys(updates) as (keyof BusData)[];
+    const deltaUpdates: Partial<BusData> = {};
+    for (const field of candidateFields) {
+      // Abaikan kolom rumus spreadsheet
+      if (FORMULA_FIELDS.has(field) || field === "toaShift2") continue;
+
+      const updateNorm = normalizeFieldValue(updates[field]);
+      const baseNorm = normalizeFieldValue(bus[field]);
+      if (updateNorm !== baseNorm) {
+        (deltaUpdates as any)[field] = updates[field];
+      }
+    }
+
+    // Jika tidak ada perubahan riil dari baseline lokal, akhiri tanpa request jaringan
+    if (!forceOverwrite && Object.keys(deltaUpdates).length === 0) {
+      setIsLoading(false);
+      setSaveStatus("success");
+      return;
+    }
+
     // 3. Sinkronisasi ke Google Sheets di Background (Non-blocking)
     setIsLoading(true);
     try {
@@ -99,13 +120,8 @@ export function useBusCardSave({
           headerMap,
         );
 
-        // OCC Murni (SSOT Refact 66): Ekstraksi dirty fields yang benar-benar diubah user
-        const candidateFields = Object.keys(updates) as (keyof BusData)[];
-        const dirtyFields = candidateFields.filter((field) => {
-          const updateNorm = normalizeFieldValue(updates[field]);
-          const localBaseNorm = normalizeFieldValue(bus[field]);
-          return updateNorm !== localBaseNorm;
-        });
+        // OCC Murni (SSOT Refact 66): Gunakan dirty fields dari deltaUpdates
+        const dirtyFields = Object.keys(deltaUpdates) as (keyof BusData)[];
 
         // Tiga Syarat Mutlak Tabrakan Data (Three-Way Collision Rule):
         // Konflik HANYA terjadi jika user mengubah data (dirty field) DAN server juga berubah dari baseline
@@ -167,12 +183,13 @@ export function useBusCardSave({
       }
 
       // BUG-11: Apply success status only after API succeeds
+      const payloadToSend = forceOverwrite ? updates : deltaUpdates;
       try {
         await updateBusData(
           sheetId,
           tabName,
           bus.rowIndex,
-          updates,
+          payloadToSend,
           headerMap,
           bus,
         );
@@ -187,15 +204,16 @@ export function useBusCardSave({
       }
     } catch (err: any) {
       if (isNetworkError(err)) {
+        const payloadToSend = forceOverwrite ? updates : deltaUpdates;
         const originalSnapshot: Partial<BusData> = {};
-        for (const field of Object.keys(updates) as (keyof BusData)[]) {
+        for (const field of Object.keys(payloadToSend) as (keyof BusData)[]) {
           (originalSnapshot as any)[field] = bus[field];
         }
         addToQueue({
           sheetId,
           tabName,
           rowIndex: bus.rowIndex,
-          updates,
+          updates: payloadToSend,
           headerMap,
           originalSnapshot,
         });
