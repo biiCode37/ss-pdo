@@ -2510,13 +2510,13 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.test.tsx": {
-    "mtime": 1793104751.4816039,
-    "ast_hash": "daecb0c36ff24a69fe14123a3a5cb727",
+    "mtime": 1793587541.3487258,
+    "ast_hash": "f3a313a2720f516ea9bc88c32a1b053a",
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.tsx": {
-    "mtime": 1793429226.3782825,
-    "ast_hash": "126e4196e2eefeafc067ac4c19b3eec6",
+    "mtime": 1793587521.3412285,
+    "ast_hash": "f1240fa523d89ea85642e93b81e70927",
     "semantic_hash": ""
   },
   "src/components/monitoring/index.ts": {
@@ -6177,6 +6177,21 @@
   "refactor-ss-pdo/refact_192/REPAIR_REPORT.md": {
     "mtime": 1793583794.235072,
     "ast_hash": "1778625e58dd563cf8f8c3e2fbe1bc1e",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-02-fix-infinite-monitoring-loop-and-egress.md": {
+    "mtime": 1793587336.9094086,
+    "ast_hash": "b2700a5d07506acf3951a328eb859a68",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_193/AUDIT_BUGS.md": {
+    "mtime": 1793587573.2002823,
+    "ast_hash": "f04cb749f527fadab7d1f54f3e1a1a9c",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_193/REPAIR_REPORT.md": {
+    "mtime": 1793587582.3744364,
+    "ast_hash": "4950efb8dc0f646a7fece1ff6617d416",
     "semantic_hash": ""
   }
 }
