@@ -13,6 +13,8 @@ import {
   showErrorAlert,
   showAuthExpiredAlert,
   showQueueConflictDialog,
+  buildConflictDiffHtml,
+  type ConflictDiffItem,
   showBusInputModal,
   showFormatSheetConfirm,
   getSatsetMode,
@@ -231,6 +233,77 @@ describe("alertUtils", () => {
 
       expect(onServer).toHaveBeenCalledTimes(1);
       expect(onForce).not.toHaveBeenCalled();
+    });
+
+    it("renders conflict diffs in html when diffs are provided", async () => {
+      const swalSpy = vi.spyOn(pdoSwal, "fire").mockResolvedValue({ isConfirmed: false } as any);
+      const onServer = vi.fn();
+      const onForce = vi.fn();
+      const diffs: ConflictDiffItem[] = [
+        {
+          field: "kmAkhir1",
+          label: "KM Akhir Shift 1",
+          serverValue: "300250",
+          userValue: "300180",
+        },
+      ];
+
+      await showQueueConflictDialog({
+        unitName: "MB-02",
+        isOnline: true,
+        diffs,
+        onUseServer: onServer,
+        onForceSave: onForce,
+      });
+
+      expect(swalSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: TEXT_ALERTS.CONFLICT_ONLINE.TITLE,
+          html: expect.stringContaining("KM Akhir Shift 1"),
+          icon: "warning",
+        })
+      );
+    });
+  });
+
+  describe("buildConflictDiffHtml", () => {
+    it("renders side-by-side comparison cards for colliding fields with proper escaping", () => {
+      const diffs: ConflictDiffItem[] = [
+        {
+          field: "kmAkhir1",
+          label: "KM Akhir Shift 1",
+          serverValue: "300250",
+          userValue: "300180",
+        },
+        {
+          field: "keterangan",
+          label: "Keterangan",
+          serverValue: "<script>alert(1)</script>",
+          userValue: "",
+        },
+      ];
+
+      const html = buildConflictDiffHtml(diffs, "Pesan pengantar");
+      expect(html).toContain("KM Akhir Shift 1");
+      expect(html).toContain("300250");
+      expect(html).toContain("300180");
+      expect(html).toContain("&lt;script&gt;alert(1)&lt;/script&gt;");
+      expect(html).toContain(TEXT_ALERTS.CONFLICT_DIFF.EMPTY_VALUE);
+      expect(html).toContain("Pesan pengantar");
+      expect(html).toContain(TEXT_ALERTS.CONFLICT_DIFF.SECTION_TITLE);
+      expect(html).toContain(TEXT_ALERTS.CONFLICT_DIFF.SERVER_HEADER);
+      expect(html).toContain(TEXT_ALERTS.CONFLICT_DIFF.USER_HEADER);
+    });
+
+    it("returns intro html without diff container when diffs is empty", () => {
+      const html = buildConflictDiffHtml([], "Pesan saja tanpa diff");
+      expect(html).toContain("Pesan saja tanpa diff");
+      expect(html).not.toContain(TEXT_ALERTS.CONFLICT_DIFF.SECTION_TITLE);
+    });
+
+    it("returns empty string when diffs is empty and explanationText is omitted", () => {
+      const html = buildConflictDiffHtml([]);
+      expect(html).toBe("");
     });
   });
 
