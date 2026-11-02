@@ -62,10 +62,20 @@ async function executeSync(key: string, routeCode: string, date?: string): Promi
   const entry = syncEntries.get(key);
   syncEntries.delete(key);
 
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
   try {
     await fetch(WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(anonKey
+          ? {
+              apikey: anonKey,
+              Authorization: 'Bearer ' + anonKey,
+            }
+          : {}),
+      },
       body: JSON.stringify({
         routeCode,
         date,
