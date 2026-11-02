@@ -1,0 +1,81 @@
+name: Nightly Dual-Engine Backup
+
+on:
+  schedule:
+    # 19:00 UTC = 02:00 WIB (Tengah malam jam sepi operasional)
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+    inputs:
+      upload_to_gdrive:
+        description: 'Unggah hasil cadangan ke folder Google Drive?'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  run-backup:
+    name: Execute Unified Dual-Engine Backup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install PostgreSQL Client & Zip
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y postgresql-client zip
+
+      - name: Step 1 - Dump Database Supabase PostgreSQL (Engine A)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -n "$SUPABASE_DB_URL" ]; then
+            echo "Mengambil snapshot database Supabase PostgreSQL..."
+            pg_dump "$SUPABASE_DB_URL" \
+              --no-owner \
+              --no-acl \
+              --clean \
+              --if-exists \
+              --schema=public | gzip > supabase_backup.sql.gz
+            echo "✅ Dump database berhasil dibuat: $(du -h supabase_backup.sql.gz | cut -f1)"
+          else
+            echo "⚠️ SUPABASE_DB_URL tidak disetel. Pencadangan skema/data database dilewati."
+          fi
+
+      - name: Step 2 - Unduh 18 Spreadsheet SSOT & Kemas ZIP (Engine B)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          BACKUP_OUTPUT_DIR: ${{ github.workspace }}/backup_artifacts
+          SQL_DUMP_PATH: ${{ github.workspace }}/supabase_backup.sql.gz
+        run: |
+          mkdir -p "$BACKUP_OUTPUT_DIR"
+          node scripts/backup/run-backup.mjs
+
+      - name: Step 3 - Unggah ke Google Drive & Rotasi Retensi 30 Hari
+        if: github.event.inputs.upload_to_gdrive != 'false'
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          GDRIVE_BACKUP_FOLDER_ID: ${{ secrets.GDRIVE_BACKUP_FOLDER_ID }}
+          BACKUP_OUTPUT_DIR: ${{ github.workspace }}/backup_artifacts
+        run: |
+          if [ -n "$GDRIVE_BACKUP_FOLDER_ID" ]; then
+            echo "Mengunggah paket cadangan ke Google Drive Folder: $GDRIVE_BACKUP_FOLDER_ID..."
+            node scripts/backup/gdrive-uploader.mjs
+          else
+            echo "ℹ️ GDRIVE_BACKUP_FOLDER_ID tidak disetel. Unggahan ke Google Drive dilewati."
+          fi
+
+      - name: Step 4 - Simpan Artefak Cadangan di GitHub (Retensi 30 Hari)
+        uses: actions/upload-artifact@v4
+        with:
+          name: SS_PDO_DUAL_BACKUP_${{ github.run_id }}
+          path: backup_artifacts/*.zip
+          retention-days: 30
+          if-no-files-found: warn
