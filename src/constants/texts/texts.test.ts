@@ -288,6 +288,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ERRORS.NETWORK_FAILURE.toLowerCase()).toContain('koneksi internet');
     expect(TEXT_ERRORS.SESSION_EXPIRED).toBeDefined();
     expect(TEXT_ERRORS.SCHEMA_MIGRATION_REQUIRED).toBeDefined();
+    expect(TEXT_ERRORS.UNREGISTERED_SPREADSHEET).toBe('Dokumen spreadsheet tidak terdaftar dalam rute operasional resmi.');
     expect(TEXT_ERRORS.ROUTE_VALIDATION.CODE_REQUIRED).toContain('Kode Rute');
   });
 
