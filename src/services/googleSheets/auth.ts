@@ -15,6 +15,7 @@ export {
 } from "./authGis";
 
 export {
+  getGoogleAccessToken,
   ensureValidToken,
   refreshTokenInteractiveOrSilent,
   reauthenticateSession,

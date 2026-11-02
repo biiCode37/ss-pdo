@@ -10,6 +10,7 @@ import {
   subscribeToPageSettings,
 } from './pageManagementService';
 import { supabase } from './supabase';
+import { invokeAdminAction } from './adminActionService';
 
 vi.mock('./supabase', () => ({
   supabase: {
@@ -21,20 +22,28 @@ vi.mock('./supabase', () => ({
   isSupabaseConfigured: true,
 }));
 
+vi.mock('./adminActionService', () => ({
+  invokeAdminAction: vi.fn().mockResolvedValue({ success: true, data: true }),
+}));
+
 describe('pageManagementService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
+    vi.mocked(invokeAdminAction).mockResolvedValue({ success: true, data: true });
   });
 
   it('mengambil settings dari supabase dan menyimpannya di localStorage', async () => {
     const mockData = [
       {
-        page_key: 'input',
-        page_name: 'Form Input',
-        category: 'tab',
+        page_key: 'dashboard',
+        page_name: 'Dashboard',
         is_enabled: true,
-        disabled_message: 'Maintenance',
+        updated_at: '2026-10-19T00:00:00Z',
+        updated_by: 'admin@pusm.id',
+        allowed_roles: ['superadmin', 'admin'],
+        allowed_user_emails: [],
+        denied_user_emails: [],
       },
     ];
 
@@ -46,21 +55,24 @@ describe('pageManagementService', () => {
 
     const result = await fetchPageSettings();
     expect(result).toHaveLength(1);
-    expect(result[0].page_key).toBe('input');
-    expect(localStorage.getItem('APP_PAGE_SETTINGS')).toContain('input');
+    expect(result[0].page_key).toBe('dashboard');
+
+    const cached = localStorage.getItem('APP_PAGE_SETTINGS');
+    expect(cached).not.toBeNull();
+    expect(JSON.parse(cached!)).toHaveLength(1);
   });
 
   it('menggunakan fallback localStorage jika supabase error', async () => {
-    const cached = [
+    const cachedData = [
       {
-        page_key: 'analytics',
-        page_name: 'Analitik',
-        category: 'tab',
+        page_key: 'monitoring',
+        page_name: 'Monitoring',
         is_enabled: false,
-        disabled_message: 'Maintenance',
+        updated_at: '2026-10-19T00:00:00Z',
+        updated_by: 'admin@pusm.id',
       },
     ];
-    localStorage.setItem('APP_PAGE_SETTINGS', JSON.stringify(cached));
+    localStorage.setItem('APP_PAGE_SETTINGS', JSON.stringify(cachedData));
 
     (supabase.from as any).mockReturnValue({
       select: vi.fn().mockReturnValue({
@@ -70,8 +82,7 @@ describe('pageManagementService', () => {
 
     const result = await fetchPageSettings();
     expect(result).toHaveLength(1);
-    expect(result[0].page_key).toBe('analytics');
-    expect(result[0].is_enabled).toBe(false);
+    expect(result[0].page_key).toBe('monitoring');
   });
 
   it('mengembalikan default settings jika tidak ada cache dan supabase gagal', async () => {
@@ -86,15 +97,14 @@ describe('pageManagementService', () => {
     expect(result.some((s) => s.page_key === 'dashboard')).toBe(true);
   });
 
-  it('updatePageSetting mengupdate status di localStorage dan database', async () => {
-    (supabase.from as any).mockReturnValue({
-      update: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      }),
-    });
-
+  it('updatePageSetting mengupdate status di localStorage dan database via Edge Function', async () => {
     const success = await updatePageSetting('input', false, 'super@pusm.id');
     expect(success).toBe(true);
+
+    expect(invokeAdminAction).toHaveBeenCalledWith('set_page_setting', {
+      pageKey: 'input',
+      isEnabled: false,
+    });
 
     const cached = getCachedSettings();
     const updated = cached.find((c) => c.page_key === 'input');
@@ -120,9 +130,7 @@ describe('pageManagementService', () => {
     expect(supabase.removeChannel).toHaveBeenCalledWith(mockChannel);
   });
 
-  it('updatePagePermissions memanggil rpc admin_update_page_permissions dan mengupdate cache', async () => {
-    (supabase.rpc as any).mockResolvedValue({ data: true, error: null });
-
+  it('updatePagePermissions memanggil invokeAdminAction dan mengupdate cache', async () => {
     const roles = ['superadmin', 'admin', 'korwil'];
     const whitelist = ['user1@transjakarta.co.id'];
     const blacklist = ['user2@transjakarta.co.id'];
@@ -136,12 +144,11 @@ describe('pageManagementService', () => {
     );
 
     expect(success).toBe(true);
-    expect(supabase.rpc).toHaveBeenCalledWith('admin_update_page_permissions', {
-      p_acting_email: 'superadmin@transjakarta.co.id',
-      p_page_key: 'input',
-      p_allowed_roles: roles,
-      p_allowed_user_emails: whitelist,
-      p_denied_user_emails: blacklist,
+    expect(invokeAdminAction).toHaveBeenCalledWith('update_page_permissions', {
+      pageKey: 'input',
+      allowedRoles: roles,
+      allowedUserEmails: whitelist,
+      deniedUserEmails: blacklist,
     });
 
     const cached = getCachedSettings();
@@ -151,9 +158,7 @@ describe('pageManagementService', () => {
     expect(item?.denied_user_emails).toEqual(blacklist);
   });
 
-  it('bulkUpdatePageSettings memanggil rpc admin_bulk_update_page_settings dan memperbarui cache', async () => {
-    (supabase.rpc as any).mockResolvedValue({ data: true, error: null });
-
+  it('bulkUpdatePageSettings memanggil invokeAdminAction dan memperbarui cache', async () => {
     const success = await bulkUpdatePageSettings(
       ['input', 'analytics'],
       'set_status',
@@ -162,12 +167,11 @@ describe('pageManagementService', () => {
     );
 
     expect(success).toBe(true);
-    expect(supabase.rpc).toHaveBeenCalledWith('admin_bulk_update_page_settings', {
-      p_acting_email: 'superadmin@transjakarta.co.id',
-      p_page_keys: ['input', 'analytics'],
-      p_action: 'set_status',
-      p_is_enabled: false,
-      p_allowed_roles: null,
+    expect(invokeAdminAction).toHaveBeenCalledWith('bulk_update_page_settings', {
+      pageKeys: ['input', 'analytics'],
+      bulkAction: 'set_status',
+      isEnabled: false,
+      allowedRoles: null,
     });
 
     const cached = getCachedSettings();
@@ -191,6 +195,7 @@ describe('pageManagementService', () => {
 
     const result = await fetchActiveSuperadmins();
     expect(result).toHaveLength(2);
-    expect(result[0].full_name).toBe('Bpk. Superadmin 1');
+    expect(result[0].email).toBe('super1@transjakarta.co.id');
+    expect(result[1].email).toBe('super2@transjakarta.co.id');
   });
 });

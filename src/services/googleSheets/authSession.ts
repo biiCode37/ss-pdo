@@ -136,6 +136,23 @@ export const ensureValidToken = async (): Promise<void> => {
   await refreshTokenInteractiveOrSilent(true);
 };
 
+export const getGoogleAccessToken = async (): Promise<string | null> => {
+  if (typeof window === "undefined") return null;
+  const isPersistentSignedIn = localStorage.getItem("PDO_IS_SIGNED_IN") === "true";
+  if (!isPersistentSignedIn) return null;
+
+  await ensureValidToken();
+
+  const tokenStr = localStorage.getItem("GAPI_ACCESS_TOKEN");
+  if (!tokenStr) return null;
+  try {
+    const tokenObj = JSON.parse(tokenStr);
+    return tokenObj.token || null;
+  } catch {
+    return null;
+  }
+};
+
 export const reauthenticateSession = async (): Promise<void> => {
   const client = getTokenClient();
   return new Promise((resolve, reject) => {

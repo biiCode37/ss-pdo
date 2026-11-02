@@ -13,6 +13,11 @@ import {
   revokeUserProfile,
 } from './routeService';
 import { supabase } from './supabase';
+import { invokeAdminAction } from './adminActionService';
+
+vi.mock('./adminActionService', () => ({
+  invokeAdminAction: vi.fn(),
+}));
 
 // Mock localStorage in Node environment
 const localStorageMock = (() => {
@@ -335,10 +340,10 @@ describe('routeService', () => {
   });
 
   it('addUserProfile inserts user and logs USER_ADDED activity', async () => {
-    const mockInsert = vi.fn().mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: [{ email: 'newpetugas@pusm.id' }], error: null }),
+    vi.mocked(invokeAdminAction).mockResolvedValue({
+      success: true,
+      verifiedEmail: 'admin@pusm.id',
     });
-    (supabase.from as any).mockReturnValue({ insert: mockInsert });
 
     const result = await addUserProfile({
       email: 'newpetugas@pusm.id',
@@ -349,93 +354,60 @@ describe('routeService', () => {
     });
 
     expect(result.success).toBe(true);
-    expect(mockInsert).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          email: 'newpetugas@pusm.id',
-          role_id: 5,
-          is_active: true,
-        }),
-      ])
-    );
+    expect(invokeAdminAction).toHaveBeenCalledWith('add_user_profile', {
+      email: 'newpetugas@pusm.id',
+      fullName: 'Petugas Baru',
+      roleId: 5,
+      notes: 'Shift Siang',
+    });
   });
 
   it('updateUserProfileRole updates role and logs USER_ROLE_CHANGED', async () => {
-    const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockReturnValue({
-        select: vi.fn().mockResolvedValue({ data: [{ email: 'target@pusm.id' }], error: null }),
-      }),
-    });
-    const mockInsert = vi.fn().mockResolvedValue({ error: null });
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { update: mockUpdate };
-      if (table === 'activity_logs') return { insert: mockInsert };
-      return {};
+    vi.mocked(invokeAdminAction).mockResolvedValue({
+      success: true,
+      verifiedEmail: 'superadmin@pusm.id',
     });
 
     const result = await updateUserProfileRole('target@pusm.id', 'admin', 'superadmin@pusm.id');
     expect(result.success).toBe(true);
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        role_id: 2,
-      })
-    );
+    expect(invokeAdminAction).toHaveBeenCalledWith('update_user_role', {
+      targetEmail: 'target@pusm.id',
+      newRoleId: 2,
+    });
   });
 
   it('toggleUserProfileStatus updates is_active and logs USER_STATUS_CHANGED', async () => {
-    const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockReturnValue({
-        select: vi.fn().mockResolvedValue({ data: [{ email: 'target@pusm.id' }], error: null }),
-      }),
-    });
-    const mockInsert = vi.fn().mockResolvedValue({ error: null });
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { update: mockUpdate };
-      if (table === 'activity_logs') return { insert: mockInsert };
-      return {};
+    vi.mocked(invokeAdminAction).mockResolvedValue({
+      success: true,
+      verifiedEmail: 'admin@pusm.id',
     });
 
     const result = await toggleUserProfileStatus('target@pusm.id', false, 'admin@pusm.id');
     expect(result.success).toBe(true);
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        is_active: false,
-      })
-    );
+    expect(invokeAdminAction).toHaveBeenCalledWith('toggle_user_status', {
+      targetEmail: 'target@pusm.id',
+      isActive: false,
+    });
   });
 
   it('revokeUserProfile deactivates user (is_active: false) and logs USER_REVOKED', async () => {
-    const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockReturnValue({
-        select: vi.fn().mockResolvedValue({ data: [{ email: 'baduser@pusm.id' }], error: null }),
-      }),
-    });
-    const mockInsert = vi.fn().mockResolvedValue({ error: null });
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { update: mockUpdate };
-      if (table === 'activity_logs') return { insert: mockInsert };
-      return {};
+    vi.mocked(invokeAdminAction).mockResolvedValue({
+      success: true,
+      verifiedEmail: 'superadmin@pusm.id',
     });
 
     const result = await revokeUserProfile('baduser@pusm.id', 'superadmin@pusm.id');
     expect(result.success).toBe(true);
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        is_active: false,
-      })
-    );
+    expect(invokeAdminAction).toHaveBeenCalledWith('toggle_user_status', {
+      targetEmail: 'baduser@pusm.id',
+      isActive: false,
+    });
   });
 
-  // BUG-63: Silent RLS filtering (sukses dengan 0 baris) harus dilaporkan gagal
-  it('toggleUserProfileStatus reports failure when no rows were updated', async () => {
-    const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockReturnValue({
-        select: vi.fn().mockResolvedValue({ data: [], error: null }),
-      }),
-    });
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { update: mockUpdate };
-      return {};
+  it('toggleUserProfileStatus reports failure when admin action fails', async () => {
+    vi.mocked(invokeAdminAction).mockResolvedValue({
+      success: false,
+      message: 'Tidak dapat menemukan akun dengan email ghost@pusm.id atau akses ditolak.',
     });
 
     const result = await toggleUserProfileStatus('ghost@pusm.id', false, 'admin@pusm.id');
@@ -443,15 +415,10 @@ describe('routeService', () => {
     expect(result.message).toContain('Tidak dapat menemukan akun');
   });
 
-  it('revokeUserProfile reports failure when no rows were updated', async () => {
-    const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockReturnValue({
-        select: vi.fn().mockResolvedValue({ data: [], error: null }),
-      }),
-    });
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { update: mockUpdate };
-      return {};
+  it('revokeUserProfile reports failure when admin action fails', async () => {
+    vi.mocked(invokeAdminAction).mockResolvedValue({
+      success: false,
+      message: 'Tidak dapat menemukan akun dengan email ghost@pusm.id atau akses ditolak.',
     });
 
     const result = await revokeUserProfile('ghost@pusm.id', 'superadmin@pusm.id');
@@ -459,15 +426,10 @@ describe('routeService', () => {
     expect(result.message).toContain('Tidak dapat menemukan akun');
   });
 
-  it('updateUserProfileRole reports failure when no rows were updated', async () => {
-    const mockUpdate = vi.fn().mockReturnValue({
-      eq: vi.fn().mockReturnValue({
-        select: vi.fn().mockResolvedValue({ data: [], error: null }),
-      }),
-    });
-    (supabase.from as any).mockImplementation((table: string) => {
-      if (table === 'user_profiles') return { update: mockUpdate };
-      return {};
+  it('updateUserProfileRole reports failure when admin action fails', async () => {
+    vi.mocked(invokeAdminAction).mockResolvedValue({
+      success: false,
+      message: 'Tidak dapat menemukan akun dengan email ghost@pusm.id atau akses ditolak.',
     });
 
     const result = await updateUserProfileRole('ghost@pusm.id', 'admin', 'superadmin@pusm.id');
