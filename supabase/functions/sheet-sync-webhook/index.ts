@@ -26,37 +26,56 @@ function getCorsHeaders(req: Request) {
   };
 }
 
+function parseJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = atob(base64);
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
 function isAuthorizedRequest(req: Request): boolean {
-  const rawAuth = req.headers.get("authorization") || "";
-  const rawApiKey = req.headers.get("apikey") || "";
-  const rawSecret = req.headers.get("x-webhook-secret") || "";
+  const rawAuth = (req.headers.get("authorization") || "").trim();
+  const rawApiKey = (req.headers.get("apikey") || "").trim();
+  const rawSecret = (req.headers.get("x-webhook-secret") || "").trim();
 
   const expectedAnonKey = (Deno.env.get("SUPABASE_ANON_KEY") || "").trim();
   const expectedServiceKey = (Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "").trim();
   const expectedSecret = (Deno.env.get("SHEET_SYNC_WEBHOOK_SECRET") || "").trim();
+  const supabaseUrl = (Deno.env.get("SUPABASE_URL") || "").trim();
+
+  const projectRefMatch = supabaseUrl.match(/https:\/\/([^.]+)\.supabase\.co/);
+  const projectRef = projectRefMatch ? projectRefMatch[1] : "";
 
   // 1. Cek x-webhook-secret jika dikonfigurasi
-  if (expectedSecret && rawSecret && rawSecret.trim() === expectedSecret) {
+  if (expectedSecret && rawSecret && rawSecret === expectedSecret) {
     return true;
   }
 
-  // 2. Cek apikey header
-  if (rawApiKey) {
-    const cleanKey = rawApiKey.trim();
-    if ((expectedAnonKey && cleanKey === expectedAnonKey) || (expectedServiceKey && cleanKey === expectedServiceKey)) {
-      return true;
-    }
-  }
+  // 2. Kumpulkan token kandidat
+  const candidateTokens: string[] = [];
+  if (rawApiKey) candidateTokens.push(rawApiKey);
+  if (rawAuth.startsWith("Bearer ")) candidateTokens.push(rawAuth.slice(7).trim());
 
-  // 3. Cek authorization Bearer header
-  if (rawAuth.startsWith("Bearer ")) {
-    const token = rawAuth.slice(7).trim();
-    if (
-      (expectedAnonKey && token === expectedAnonKey) ||
-      (expectedServiceKey && token === expectedServiceKey) ||
-      (expectedSecret && token === expectedSecret)
-    ) {
-      return true;
+  for (const token of candidateTokens) {
+    if (expectedAnonKey && token === expectedAnonKey) return true;
+    if (expectedServiceKey && token === expectedServiceKey) return true;
+    if (expectedSecret && token === expectedSecret) return true;
+
+    // 3. Verifikasi JWT Payload (ref proyek & role resmi)
+    const payload = parseJwtPayload(token);
+    if (payload) {
+      const isCorrectRef = !projectRef || payload.ref === projectRef;
+      const isValidRole = payload.role === "anon" || payload.role === "authenticated" || payload.role === "service_role";
+      const isNotExpired = typeof payload.exp === "number" ? payload.exp > Math.floor(Date.now() / 1000) : true;
+
+      if (isCorrectRef && isValidRole && isNotExpired) {
+        return true;
+      }
     }
   }
 
@@ -283,6 +302,7 @@ Deno.serve(async (req: Request) => {
     );
   }
 
+  let syncKey: string | undefined;
   try {
     const body = await req.json().catch(() => ({}));
     const rawRouteCode = String(body.routeCode || "").trim();
@@ -316,7 +336,7 @@ Deno.serve(async (req: Request) => {
     const targetDay = parseInt(dStr, 10);
     const tabName = String(targetDay);
 
-    const syncKey = `${normalizedCode}_${targetDateStr}`;
+    syncKey = `${normalizedCode}_${targetDateStr}`;
     const now = Date.now();
 
     if (inFlightSyncs.has(syncKey)) {
@@ -345,7 +365,6 @@ Deno.serve(async (req: Request) => {
     }
 
     inFlightSyncs.add(syncKey);
-    try {
 
     // Inisialisasi Supabase internal client
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
