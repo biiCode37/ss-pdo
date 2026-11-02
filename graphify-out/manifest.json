@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   ".agents/AGENTS.md": {
-    "mtime": 1793429225.8620768,
-    "ast_hash": "3c9c4d5396471510bff09973c6f70751",
+    "mtime": 1793588423.9873161,
+    "ast_hash": "0b578a75181ce9f67ef045f9db6771e5",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -1150,8 +1150,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1793429225.8635247,
-    "ast_hash": "2e8f76c110564fb19f67ebcc6d6ee158",
+    "mtime": 1793588400.5128684,
+    "ast_hash": "70aa837575ee1b103c3415f658b698f3",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_7/AUDIT_BUGS.md": {
@@ -5760,8 +5760,8 @@
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1793429225.864874,
-    "ast_hash": "1b989bdb8e1add22ec72b1f835833fef",
+    "mtime": 1793588434.5089011,
+    "ast_hash": "21ebbb53894b5f3eccad2deaf271622e",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_175/AUDIT_BUGS.md": {
@@ -6192,6 +6192,51 @@
   "refactor-ss-pdo/refact_193/REPAIR_REPORT.md": {
     "mtime": 1793587582.3744364,
     "ast_hash": "4950efb8dc0f646a7fece1ff6617d416",
+    "semantic_hash": ""
+  },
+  "scripts/backup/__tests__/backup-engine.test.ts": {
+    "mtime": 1793590483.3199625,
+    "ast_hash": "e13e3237dab4e3daf2cb220472d6bf27",
+    "semantic_hash": ""
+  },
+  "scripts/backup/__tests__/gdrive-uploader.test.ts": {
+    "mtime": 1793590522.7916446,
+    "ast_hash": "bf75f0d0332868dab00a6a5cf08b0377",
+    "semantic_hash": ""
+  },
+  "scripts/backup/gdrive-uploader.mjs": {
+    "mtime": 1793590542.936271,
+    "ast_hash": "7b69ac445d351d6c5123b85cc2422c90",
+    "semantic_hash": ""
+  },
+  "scripts/backup/run-backup.mjs": {
+    "mtime": 1793590468.4952538,
+    "ast_hash": "3c29abbc2f6bf2b6a99a4abf7309d233",
+    "semantic_hash": ""
+  },
+  ".github/workflows/nightly-backup.yml": {
+    "mtime": 1793590600.105718,
+    "ast_hash": "eddb8d44163410c493c798c464c7c7ec",
+    "semantic_hash": ""
+  },
+  "docs/BACKUP_SETUP_GUIDE.md": {
+    "mtime": 1793590629.5497053,
+    "ast_hash": "107c66f00b3c7a5a46a782b4c83f7d6b",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-02-unified-dual-engine-backup.md": {
+    "mtime": 1793590084.9109757,
+    "ast_hash": "07e7bad9e96756e7149a6a58334d749d",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_194/AUDIT_BUGS.md": {
+    "mtime": 1793590636.5329711,
+    "ast_hash": "8101ee3f87fb39b4a69c596d31e7e1f1",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_194/REPAIR_REPORT.md": {
+    "mtime": 1793590645.6281812,
+    "ast_hash": "5fab5da0a5f297445c7865d835a8ccfa",
     "semantic_hash": ""
   }
 }
