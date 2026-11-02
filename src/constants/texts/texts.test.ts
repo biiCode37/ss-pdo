@@ -13,6 +13,7 @@ import {
   TEXT_UNIT_DETAIL,
   TEXT_PAGE_MANAGEMENT,
   TEXT_PLOTTING,
+  BUS_FIELD_LABELS,
 } from './index';
 
 describe('Centralized UI Text Dictionary', () => {
@@ -577,5 +578,28 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_SUCCESS(10)).toBe('Plotting & 10 unit berhasil disinkronkan ke Spreadsheet asli');
     expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_OFFLINE(10)).toBe('Plotting tersimpan, 10 mutasi spreadsheet masuk antrean offline');
     expect(TEXT_PLOTTING.TOASTS.BULK_TARGET_APPLIED(7.5, 4)).toBe('Target ritase 7.5 Rit diterapkan ke 4 unit');
+  });
+
+  describe('Conflict Comparison & Field Labels Text Dictionary', () => {
+    it('defines friendly Indonesian labels for all editable bus fields', () => {
+      expect(BUS_FIELD_LABELS.toaShift1).toBe('TOA Shift 1');
+      expect(BUS_FIELD_LABELS.manualShift1).toBe('Manual Shift 1');
+      expect(BUS_FIELD_LABELS.totalToa).toBe('Total TOA');
+      expect(BUS_FIELD_LABELS.kmAwal1).toBe('KM Awal Shift 1');
+      expect(BUS_FIELD_LABELS.kmAkhir1).toBe('KM Akhir Shift 1');
+      expect(BUS_FIELD_LABELS.kmAwal2).toBe('KM Awal Shift 2');
+      expect(BUS_FIELD_LABELS.kmAkhir2).toBe('KM Akhir Shift 2');
+      expect(BUS_FIELD_LABELS.tripPergi).toBe('Trip Pergi');
+      expect(BUS_FIELD_LABELS.tripPulang).toBe('Trip Pulang');
+      expect(BUS_FIELD_LABELS.keterangan).toBe('Keterangan');
+    });
+
+    it('defines conflict diff headers and notification toasts', () => {
+      expect(TEXT_ALERTS.CONFLICT_DIFF.SECTION_TITLE).toContain('Rincian Perbedaan Kolom');
+      expect(TEXT_ALERTS.CONFLICT_DIFF.SERVER_HEADER).toBe('Data Server:');
+      expect(TEXT_ALERTS.CONFLICT_DIFF.USER_HEADER).toBe('Input Baru Anda:');
+      expect(TEXT_ALERTS.CONFLICT_DIFF.EMPTY_VALUE).toBe('(Kosong)');
+      expect(TEXT_ALERTS.CONFLICT.TOAST_SERVER_DATA_APPLIED).toBe('Tampilan diperbarui menggunakan data server terbaru.');
+    });
   });
 });
