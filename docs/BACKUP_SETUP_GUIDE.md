@@ -32,11 +32,22 @@ Ikuti 3 langkah mudah berikut untuk memberi izin bot pencadangan mengantar file 
 4. Hapus centang pada opsi *"Beri tahu orang (Notify people)"*.
 5. Klik **Kirim / Bagikan (*Send / Share*)**.
 
-> 💡 **Selesai!** Mulai saat ini, Google Service Account resmi diizinkan mengunggah file cadangan harian ke dalam folder tersebut tanpa Anda perlu login ulang.
+> 💡 **Pertanyaan Umum: Apakah Akun Google Drive Pemilik Folder Harus Sama dengan Akun Service Account?**
+> **TIDAK PERLU SAMA.** Anda bebas menggunakan akun Google mana pun (Gmail pribadi, Google Workspace kantor, dll.) sebagai pemilik folder cadangan. Service Account bertindak seperti "bot / asisten otomatis" yang Anda undang masuk ke folder tersebut sebagai Editor. File cadangan akan tersimpan di Drive Anda dan langsung dapat Anda lihat di aplikasi Google Drive.
 
 ---
 
-## 🔐 2. Konfigurasi GitHub Repository Secrets
+## 🗄️ 2. Kebijakan Retensi Cadangan (Default: 0 = Permanen / Abadi)
+
+Sistem cadangan Google Drive SS_PDO dikonfigurasi dengan kebijakan retensi cerdas:
+- **Default Retensi Google Drive = 0 (Permanen/Abadi):** Seluruh file cadangan ZIP harian yang diunggah ke Google Drive **TIDAK AKAN PERNAH DIHAPUS OTOMATIS**. Anda memiliki riwayat cadangan permanen tanpa batas waktu.
+- **Kapasitas Penyimpanan Aman:** Ukuran arsip harian hanya berkisar **~4–5 MB** (~150 MB/bulan atau ~1.8 GB/tahun). Kapasitas Google Drive gratis (15 GB) dapat menampung arsip harian hingga **8–10 tahun ke depan** tanpa kehabisan ruang.
+- **Kustomisasi Fleksibel (Opsional):** Jika di masa mendatang Anda ingin mengaktifkan batas waktu tertentu (misal: 60 hari atau 90 hari), Anda cukup menambahkan repository secret `BACKUP_RETENTION_DAYS` di GitHub dengan angka hari yang diinginkan.
+- **GitHub Artifacts:** Khusus artefak internal di tab Actions GitHub, retensinya adalah 30 hari sesuai batas standar GitHub Actions.
+
+---
+
+## 🔐 3. Konfigurasi GitHub Repository Secrets
 
 Agar GitHub Actions dapat menjalankan tugas pencadangan setiap malam, pastikan variabel rahasia (*Secrets*) berikut telah terisi di repositori GitHub Anda:
 
@@ -54,7 +65,7 @@ Agar GitHub Actions dapat menjalankan tugas pencadangan setiap malam, pastikan v
 
 ---
 
-## ⚡ 3. Cara Menjalankan Backup Manual (1-Klik via GitHub Actions)
+## ⚡ 4. Cara Menjalankan Backup Manual (1-Klik via GitHub Actions)
 
 Selain berjalan otomatis setiap hari pukul **02.00 WIB**, Anda atau tim admin dapat memicu pencadangan kapan saja secara manual:
 
@@ -67,7 +78,7 @@ Selain berjalan otomatis setiap hari pukul **02.00 WIB**, Anda atau tim admin da
 
 ---
 
-## 🔄 4. Prosedur Pemulihan Darurat (Disaster Recovery)
+## 🔄 5. Prosedur Pemulihan Darurat (Disaster Recovery)
 
 Jika terjadi insiden kehilangan data atau kerusakan server:
 

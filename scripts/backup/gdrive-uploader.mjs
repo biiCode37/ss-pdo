@@ -11,9 +11,12 @@ import path from 'node:path';
 import { getGoogleAccessToken, parseServiceAccountKey } from './run-backup.mjs';
 
 /**
- * Filter file cadangan yang telah melewati batas usia retensi (default: 30 hari)
+ * Filter file cadangan yang telah melewati batas usia retensi (default: 0 = permanen/abadi)
  */
-export function filterExpiredBackupFiles(files, maxAgeDays = 30, nowTimestamp = Date.now()) {
+export function filterExpiredBackupFiles(files, maxAgeDays = 0, nowTimestamp = Date.now()) {
+  // Jika maxAgeDays <= 0, fitur penghapusan otomatis dinonaktifkan (penyimpanan permanen/abadi)
+  if (maxAgeDays <= 0) return [];
+
   const maxAgeMs = maxAgeDays * 24 * 60 * 60 * 1000;
 
   return (files || []).filter((file) => {
@@ -80,15 +83,22 @@ export async function uploadBackupToDrive({
 
 /**
  * Menghapus cadangan lama di folder Google Drive yang berusia lebih dari maxAgeDays
+ * Jika maxAgeDays <= 0, pembersihan otomatis dinonaktifkan (arsip permanen/abadi).
  */
 export async function pruneOldBackups({
   folderId,
-  maxAgeDays = 30,
+  maxAgeDays = 0,
   accessToken,
   nowTimestamp = Date.now(),
   fetchImpl = fetch,
 }) {
   if (!folderId) return [];
+
+  // Jika retensi diatur ke 0 atau negatif, lewati pembersihan (arsip disimpan permanen)
+  if (maxAgeDays <= 0) {
+    console.log('[GDrive Pruning] Retensi cadangan diatur ke 0 (Penyimpanan permanen/abadi). Pembersihan otomatis dinonaktifkan.');
+    return [];
+  }
 
   // 1. Ambil daftar file di folder
   const query = encodeURIComponent(`'${folderId}' in parents and trashed = false and mimeType = 'application/zip'`);
@@ -196,15 +206,20 @@ export async function main() {
 
   console.log(`=== ✅ Unggahan Berhasil! File ID: ${uploadResult.id} ===`);
 
-  // Jalankan rotasi retensi (hapus file lebih dari 30 hari di folder tersebut)
-  console.log('[GDrive] Menjalankan pemeriksaan retensi file (> 30 hari)...');
+  // Jalankan rotasi retensi (default 0 = permanen/abadi)
+  const maxAgeDays = parseInt(process.env.BACKUP_RETENTION_DAYS || '0', 10);
+  if (maxAgeDays > 0) {
+    console.log(`[GDrive] Menjalankan pemeriksaan retensi file (> ${maxAgeDays} hari)...`);
+  }
   const pruned = await pruneOldBackups({
     folderId,
-    maxAgeDays: 30,
+    maxAgeDays,
     accessToken,
   });
 
-  console.log(`[GDrive] Selesai. Total file lama dibersihkan: ${pruned.length}`);
+  if (maxAgeDays > 0) {
+    console.log(`[GDrive] Selesai. Total file lama dibersihkan: ${pruned.length}`);
+  }
 }
 
 // Jalankan otomatis jika dipanggil langsung via CLI

@@ -23,7 +23,8 @@ Dokumen ini mencatat implementasi sistem pencadangan skala industri **Refactor 1
   - **Packaging & Manifest:** Menyatukan seluruh file SQL, 18 Excel, dan file `manifest.json` ke dalam arsip ZIP tunggal `SS_PDO_BACKUP_YYYY-MM-DD_HHmmss.zip`.
   - **Penyimpanan Ganda (*Dual Offsite Storage*):**
     1. Disimpan di **GitHub Actions Artifacts** (retensi 30 hari).
-    2. Diunggah langsung ke **Folder Google Drive Pribadi Pengguna** menggunakan otorisasi Service Account, dilengkapi fitur **Auto-Pruning 30 Hari** agar kapasitas ruang Google Drive pengguna tetap bersih dan terjaga.
+    2. Diunggah langsung ke **Folder Google Drive Pribadi Pengguna** menggunakan otorisasi Service Account. Pemilik folder Google Drive bebas menggunakan akun mana pun (tidak harus sama dengan Service Account).
+    3. Kebijakan retensi Google Drive diatur secara baku ke **0 (Permanen/Abadi)**, sehingga file cadangan tidak akan pernah dihapus otomatis dan tersimpan utuh selamanya. Mengingat ukuran harian hanya ~4–5 MB (~150 MB/bln), kapasitas Google Drive gratis (15 GB) mampu menampung data cadangan hingga 8–10 tahun mendatang. Retensi juga dapat dikustomisasi fleksibel via GitHub Secrets `BACKUP_RETENTION_DAYS`.
 - **Before vs After:**
   - *Sebelum:* 0 pencadangan otomatis (ketergantungan 100% pada ketahanan cloud pihak ketiga tanpa snapshot offline).
   - *Sesudah:* 2 lapisan cadangan independen setiap hari (GitHub + Google Drive pribadi), siap di-restore dalam hitungan menit kapan saja.
@@ -44,5 +45,7 @@ Seluruh logika mesin pencadangan telah diuji menggunakan unit test otomatis Vite
   - Ekspor spreadsheet ke buffer biner `.xlsx` ➔ **PASSED**
 - `scripts/backup/__tests__/gdrive-uploader.test.ts`:
   - Filter masa kedaluwarsa retensi > 30 hari ➔ **PASSED**
+  - Opsi retensi 0 hari (arsip permanen/abadi tanpa hapus) ➔ **PASSED**
   - Unggahan multipart Google Drive API v3 ➔ **PASSED**
   - Pembersihan otomatis (*pruning*) file lama via DELETE API ➔ **PASSED**
+  - Pencegahan query dan delete Google Drive saat retensi = 0 ➔ **PASSED**

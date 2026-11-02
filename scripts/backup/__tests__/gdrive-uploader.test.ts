@@ -24,6 +24,17 @@ describe('Google Drive Backup Uploader & Pruning', () => {
     expect(expired.map((f) => f.id)).toEqual(['file-3', 'file-4']);
   });
 
+  it('keeps all files when retention is set to 0 (permanent storage / no auto-prune)', () => {
+    const now = new Date('2026-11-02T12:00:00Z').getTime();
+    const files = [
+      { id: 'file-ancient', name: 'SS_PDO_BACKUP_2020-01-01.zip', createdTime: '2020-01-01T00:00:00Z' },
+      { id: 'file-recent', name: 'SS_PDO_BACKUP_2026-11-01.zip', createdTime: '2026-11-01T00:00:00Z' },
+    ];
+
+    const expired = filterExpiredBackupFiles(files, 0, now);
+    expect(expired).toEqual([]);
+  });
+
   it('uploads backup zip file via Google Drive multipart upload endpoint', async () => {
     const mockFileContent = Buffer.from('dummy-zip-content');
     const mockFetch = vi.fn().mockResolvedValue({
@@ -86,5 +97,19 @@ describe('Google Drive Backup Uploader & Pruning', () => {
       expect.stringContaining('https://www.googleapis.com/drive/v3/files/expired-1'),
       expect.objectContaining({ method: 'DELETE' })
     );
+  });
+
+  it('skips Google Drive list and delete operations completely when maxAgeDays is 0', async () => {
+    const mockFetch = vi.fn();
+
+    const deleted = await pruneOldBackups({
+      folderId: 'folder-gdrive-123',
+      maxAgeDays: 0,
+      accessToken: 'gdrive-token-abc',
+      fetchImpl: mockFetch as any,
+    });
+
+    expect(deleted).toEqual([]);
+    expect(mockFetch).not.toHaveBeenCalled();
   });
 });

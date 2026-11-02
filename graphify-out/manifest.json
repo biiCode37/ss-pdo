@@ -6200,13 +6200,13 @@
     "semantic_hash": ""
   },
   "scripts/backup/__tests__/gdrive-uploader.test.ts": {
-    "mtime": 1793590522.7916446,
-    "ast_hash": "bf75f0d0332868dab00a6a5cf08b0377",
+    "mtime": 1793591613.0190625,
+    "ast_hash": "4c0b9e07d63f9dcb21d62340de565ee5",
     "semantic_hash": ""
   },
   "scripts/backup/gdrive-uploader.mjs": {
-    "mtime": 1793590542.936271,
-    "ast_hash": "7b69ac445d351d6c5123b85cc2422c90",
+    "mtime": 1793591578.1663783,
+    "ast_hash": "9dadadc1996af81c341d0b93ce5ab630",
     "semantic_hash": ""
   },
   "scripts/backup/run-backup.mjs": {
@@ -6215,13 +6215,13 @@
     "semantic_hash": ""
   },
   ".github/workflows/nightly-backup.yml": {
-    "mtime": 1793590600.105718,
-    "ast_hash": "eddb8d44163410c493c798c464c7c7ec",
+    "mtime": 1793591625.7056434,
+    "ast_hash": "0a76a4f530f22ea0301f38ba5ac4e89f",
     "semantic_hash": ""
   },
   "docs/BACKUP_SETUP_GUIDE.md": {
-    "mtime": 1793590629.5497053,
-    "ast_hash": "107c66f00b3c7a5a46a782b4c83f7d6b",
+    "mtime": 1793591645.8833764,
+    "ast_hash": "04c2917f66def4210bc4df24b198487b",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-11-02-unified-dual-engine-backup.md": {
@@ -6235,8 +6235,8 @@
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_194/REPAIR_REPORT.md": {
-    "mtime": 1793590645.6281812,
-    "ast_hash": "5fab5da0a5f297445c7865d835a8ccfa",
+    "mtime": 1793591661.0390532,
+    "ast_hash": "83a280288b0c404a3cd7571e492315cb",
     "semantic_hash": ""
   }
 }
