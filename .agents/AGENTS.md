@@ -174,7 +174,7 @@ Aturan di bawah ini dirumuskan berdasarkan evaluasi menyeluruh dari siklus **Ref
 - **Prinsip Kerja Ekstra Teliti & Hati-Hati:** Agent wajib bekerja dengan ketelitian tinggi, cermat, penuh kehati-hatian, dan pantang terburu-buru dalam setiap analisis, penulisan kode, refactoring, maupun migrasi arsitektur.
 - **Optimalisasi Lintas Bidang (360° Industrial Grade):**
   - **Keamanan (Security):** Terapkan sanitasi input ketat, anti-XSS (escape HTML pada SweetAlert2/modal), validasi hak akses & RLS database, cegah privilege escalation, zero credential leak, dan lindungi boundary API/Edge Function.
-  - **Performa (Performance):** Minimalkan re-render dengan memoization reaktif (`useMemo`/`useCallback`), eliminasi query berulang/N+1, efisiensi payload, lazy-loading komponen berat, dan pastikan animasi berjalan mulus di 60fps mobile.
+  - **Performa & Kuota (Performance & Quota Protection):** Minimalkan re-render dengan memoization reaktif (`useMemo`/`useCallback`), isolasi dependency tanpa loop state, pasang in-flight guard, terapkan debounce minimal 3 detik pada realtime listener, eliminasi query berulang/N+1, agregasikan log audit, efisiensi payload, dan pastikan animasi berjalan mulus di 60fps mobile.
   - **UI/UX & Mobile-First Excellence:** Tampilan mobile-first yang proporsional, ergonomis, interaksi sentuh alami (kurva pegas iOS `cubic-bezier(0.32, 0.72, 0, 1)`), kontras sempurna di 2 tema (Light & Dark Mode), serta status UX lengkap (loading skeleton, empty state informatif, error ramah non-teknis, success feedback).
   - **Integritas Data (Data Integrity):** Pertahankan Single Source of Truth (SSOT), lindungi rumus spreadsheet dari penimpaan nilai statis, gunakan parser desimal/ribuan lokal yang presisi (`parseIndonesianNumber`), dan pastikan normalisasi terminologi domain (ritase PP = 2 trip, `km_baku`).
   - **Kamus Teks Sentral:** Dilarang keras hardcode string antarmuka; seluruh teks wajib melalui `src/constants/texts/`.
@@ -231,3 +231,23 @@ Aturan di bawah ini dirumuskan berdasarkan evaluasi menyeluruh dari siklus **Ref
    - Setiap penambahan pasangan token warna atau elemen baru wajib diuji dengan:
      `pnpm vitest run src/styles/tokens/color-contract.test.ts`
      dan dipastikan lulus 100% sebelum pekerjaan diserahkan.
+
+---
+
+## ⚡ 14. Proteksi Kuota Supabase & Pencegahan Infinite Loop (Strict Anti-Egress & Quota Protection)
+
+1. **Aturan Emas Anti-Looping Network Queries (Prioritas Tinggi):**
+   - Dilarang keras memasukkan *state variable* yang nilainya dimutasi oleh fungsi pemanggil ke dalam `dependency array` milik `useCallback` atau `useEffect` (antipattern: `useCallback(async () => { setData(...) }, [data])`). Kesalahan ini memicu perulangan tak terbatas (*infinite re-render loop*) yang melenyapkan kuota API Gateway dan Egress seketika.
+   - Wajib menggunakan `dataRef` (`useRef(data)`) jika fungsi asinkronus memerlukan pembacaan status eksistensi data tanpa memperbarui referensi fungsi.
+2. **In-Flight Request Guard & Concurrency Control:**
+   - Setiap fungsi pemanggilan data asinkronus (terutama di dashboard, monitoring 18 rute, atau sinkronisasi latar belakang) **WAJIB** dilengkapi *in-flight guard* (seperti `isFetchingRef.current = true/false` atau `AbortController`) untuk mencegah request ganda yang tumpang tindih (*overlapping/bursting*).
+   - Abaikan (*early return*) request baru berstatus *silent update* jika request sebelumnya masih berjalan di jaringan.
+3. **Wajib Debounce Realtime Subscriptions (Minimal 3.000 ms):**
+   - Setiap listener Supabase Realtime (`postgres_changes`) yang bertugas memicu pembaruan data atau rekap laporan **WAJIB dibungkus dengan debounce timer minimal 3.000 ms (3 detik)**.
+   - Dilarang langsung memicu kueri database untuk setiap event individual yang masuk. Ketika puluhan baris diedit secara berurutan di spreadsheet oleh petugas lapangan, antrean event realtime wajib diredam sehingga hanya memicu **1 kali refresh hening (*silent in-place update*)** setelah jeda selesai.
+   - Wajib menyertakan *cleanup* pembersihan timer (`clearTimeout`) dan pelepasan channel (`supabase.removeChannel`) pada return fungsi `useEffect` saat komponen di-unmount untuk mencegah *memory leak* dan *ghost network fetchers*.
+4. **Agregasi Pencatatan Log Database (`activity_logs`):**
+   - Dilarang melakukan penulisan log per-sel / per-baris secara massal ke tabel database `activity_logs` pada operasi bulk atau loop otomatis.
+   - Pencatatan aktivitas wajib diagregasikan menjadi 1 baris ringkasan per aksi batch (misal: "Update massal 30 bus rute JAK.60") untuk melindungi kuota *Log Ingestion* Supabase (limit 1 GB).
+5. **Verifikasi Pengujian Beban Jaringan (Network Call-Count Assertion):**
+   - Setiap komponen atau modul baru yang mengonsumsi Supabase REST API atau Realtime wajib dilengkapi pengujian unit otomatis yang memvalidasi bahwa fungsi pemanggilan data hanya terpanggil tepat 1 kali pada mount awal (`toHaveBeenCalledTimes(1)`) dan membuktikan timer debounce realtime bekerja meredam event beruntun.

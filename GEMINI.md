@@ -51,13 +51,30 @@ Aturan utama disinkronkan secara penuh dengan [`.agents/AGENTS.md`](./.agents/AG
 
 ---
 
+## ⚡ Proteksi Kuota Supabase & Pencegahan Infinite Loop (Refactor 193)
+
+1. **Aturan Emas Anti-Looping Network Queries (Prioritas Tinggi):**
+   - Dilarang keras memasukkan *state variable* yang dimutasi fungsi pemanggil ke dalam `dependency array` milik `useCallback` atau `useEffect` (antipattern: `useCallback(async () => { setData(...) }, [data])`).
+   - Wajib gunakan `dataRef = useRef(data)` jika fungsi butuh memeriksa ketersediaan data tanpa memicu re-creation loop.
+2. **In-Flight Request Guard:**
+   - Setiap fungsi data asinkronus (monitoring, dashboard, background fetch) **WAJIB** memasang *in-flight guard* (`isFetchingRef`) untuk meredam request tumpang tindih (*overlapping*).
+3. **Debounce Realtime Subscriptions (Minimal 3.000 ms):**
+   - Setiap listener Supabase Realtime (`postgres_changes`) **WAJIB dibungkus debounce timer minimal 3.000 ms (3 detik)** dan menyertakan cleanup timer saat unmount. Dilarang memicu fetch database per-event spreadsheet individual.
+4. **Agregasi Log Audit (`activity_logs`):**
+   - Dilarang menulis log per-sel mikro ke database pada operasi massal. Wajib agregasi 1 log per batch demi melindungi kuota *Log Ingestion* Supabase (limit 1 GB).
+5. **Verifikasi Beban Jaringan di Unit Test:**
+   - Wajib memverifikasi batas frekuensi pemanggilan fetch (`toHaveBeenCalledTimes(1)`) dan mekanisme timer debounce pada pengujian unit.
+
+---
+
 ## 📌 Ringkasan Batasan Teknis Wajib SS_PDO
 
 1. **Branch devmode Eksklusif:** Seluruh pekerjaan wajib berada di branch `devmode`. Dilarang menyentuh branch `main`.
 2. **Paket Manager PNPM:** Wajib menggunakan `pnpm` (dilarang npm/yarn/npx).
 3. **Kamus Teks Sentral (`src/constants/texts/`):** Dilarang keras *hardcoded UI string* di komponen UI.
 4. **Proteksi Formula Spreadsheet:** Dilarang menimpa kolom berumus Google Sheets asli.
-5. **Quality Gates Otomatis Sebelum Selesai:**
+5. **Proteksi Kuota Supabase:** Wajib bebas infinite loop, debounce realtime minimal 3 detik, dan in-flight guard aktif.
+6. **Quality Gates Otomatis Sebelum Selesai:**
    - `pnpm vitest run src/styles/tokens/color-contract.test.ts` (100% pass)
    - `pnpm vitest run src/` (100% pass)
    - `pnpm run build` (0 error)
