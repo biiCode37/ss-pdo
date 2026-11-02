@@ -179,6 +179,97 @@ describe('useOfflineSync Hook', () => {
       expect(latestHookResult.queue[0].status).toBe('pending');
       expect(latestHookResult.queue[0].originalSnapshot).toBeUndefined();
     });
+
+    it('merges updates and preserves initial originalSnapshot when adding an item for the same row to the queue', () => {
+      act(() => {
+        root.render(<TestHookComponent />);
+      });
+
+      // Input 1 saat offline: TOA Shift 1
+      act(() => {
+        latestHookResult.addToQueue({
+          sheetId: 'sheet-1',
+          tabName: '2',
+          rowIndex: 5,
+          updates: { toaShift1: '150' },
+          headerMap: mockHeaderMap,
+          originalSnapshot: { toaShift1: '100' },
+        });
+      });
+
+      const initialId = latestHookResult.queue[0].id;
+
+      // Input 2 saat offline pada baris yang sama: KM Akhir 1 (dan update parsial baru)
+      act(() => {
+        latestHookResult.addToQueue({
+          sheetId: 'sheet-1',
+          tabName: '2',
+          rowIndex: 5,
+          updates: { kmAkhir1: '300500' },
+          headerMap: mockHeaderMap,
+          originalSnapshot: { kmAkhir1: '300200' },
+        });
+      });
+
+      // Antrean harus memiliki tepat 1 item dengan updates gabungan dan snapshot gabungan
+      const savedQueue = JSON.parse(localStorage.getItem('PDO_SYNC_QUEUE') || '[]');
+      expect(savedQueue).toHaveLength(1);
+      expect(savedQueue[0].id).toBe(initialId);
+      expect(savedQueue[0].updates).toEqual({
+        toaShift1: '150',
+        kmAkhir1: '300500',
+      });
+      expect(savedQueue[0].originalSnapshot).toEqual({
+        toaShift1: '100',
+        kmAkhir1: '300200',
+      });
+      expect(savedQueue[0].status).toBe('pending');
+      expect(savedQueue[0].retryCount).toBe(0);
+
+      // Verifikasi state hook juga sinkron
+      expect(latestHookResult.queue).toHaveLength(1);
+      expect(latestHookResult.queue[0].updates).toEqual({
+        toaShift1: '150',
+        kmAkhir1: '300500',
+      });
+      expect(latestHookResult.queue[0].originalSnapshot).toEqual({
+        toaShift1: '100',
+        kmAkhir1: '300200',
+      });
+    });
+
+    it('resolves conflict using server data by fetching remote row, calling onSyncSuccess, and removing item', async () => {
+      const onSyncSuccess = vi.fn();
+      const mockRemoteData = { unit: 'MB-05', toaShift1: '999' };
+      (googleSheets.getBusRowData as any).mockResolvedValue(mockRemoteData);
+
+      act(() => {
+        root.render(<TestHookComponent options={{ onSyncSuccess }} />);
+      });
+
+      act(() => {
+        latestHookResult.addToQueue({
+          sheetId: 'sheet-conflict',
+          tabName: '10',
+          rowIndex: 7,
+          updates: { toaShift1: '200' },
+          headerMap: mockHeaderMap,
+          originalSnapshot: { toaShift1: '100' },
+        });
+      });
+
+      const itemId = latestHookResult.queue[0].id;
+
+      await act(async () => {
+        await latestHookResult.resolveConflict(itemId);
+      });
+
+      expect(googleSheets.getBusRowData).toHaveBeenCalledWith('sheet-conflict', '10', 7, mockHeaderMap);
+      expect(onSyncSuccess).toHaveBeenCalledWith(7, 'sheet-conflict', '10', mockRemoteData);
+      expect(latestHookResult.queue).toHaveLength(0);
+      const savedQueue = JSON.parse(localStorage.getItem('PDO_SYNC_QUEUE') || '[]');
+      expect(savedQueue).toHaveLength(0);
+    });
   });
 
   describe('Process Queue Execution', () => {

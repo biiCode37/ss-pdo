@@ -117,20 +117,55 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
   ) => {
     // Baca langsung dari localStorage untuk menghindari data basi
     const currentQueue = readQueueFromStorage();
-    const filtered = currentQueue.filter(
-      q => !(q.sheetId === item.sheetId && q.tabName === item.tabName && q.rowIndex === item.rowIndex)
+    const existingIndex = currentQueue.findIndex(
+      q => q.sheetId === item.sheetId && q.tabName === item.tabName && q.rowIndex === item.rowIndex
     );
-    const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
-      ? crypto.randomUUID()
-      : Date.now().toString() + Math.random().toString(36).substring(2, 7);
 
-    const newItem: SyncItem = {
-      ...item,
-      id: uniqueId,
-      status: 'pending',
-      retryCount: 0,
-    };
-    const newQueue = [...filtered, newItem];
+    let newQueue: SyncItem[];
+    let payloadToBackup = item.updates;
+
+    if (existingIndex >= 0) {
+      const existingItem = currentQueue[existingIndex];
+      // Gabungkan updates: properti baru menimpa properti lama jika ada overlap, properti lain dipertahankan
+      const mergedUpdates = {
+        ...existingItem.updates,
+        ...item.updates,
+      };
+
+      // Preservasi originalSnapshot: pertahankan snapshot awal untuk field yang sudah ada sebelumnya
+      const mergedSnapshot = (item.originalSnapshot || existingItem.originalSnapshot)
+        ? {
+            ...item.originalSnapshot,
+            ...existingItem.originalSnapshot, // Baseline awal sebelum editan pertama tetap menjadi acuan utama
+          }
+        : undefined;
+
+      const updatedItem: SyncItem = {
+        ...existingItem,
+        updates: mergedUpdates,
+        headerMap: item.headerMap || existingItem.headerMap,
+        originalSnapshot: mergedSnapshot,
+        status: 'pending',
+        retryCount: 0,
+      };
+
+      newQueue = [...currentQueue];
+      newQueue[existingIndex] = updatedItem;
+      payloadToBackup = mergedUpdates;
+    } else {
+      const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : Date.now().toString() + Math.random().toString(36).substring(2, 7);
+
+      const newItem: SyncItem = {
+        ...item,
+        id: uniqueId,
+        status: 'pending',
+        retryCount: 0,
+      };
+      newQueue = [...currentQueue, newItem];
+    }
+
     writeQueueToStorage(newQueue);
     setQueue(newQueue);
 
@@ -141,7 +176,7 @@ export function useOfflineSync(options?: UseOfflineSyncOptions) {
       spreadsheet_id: item.sheetId,
       tab_name: item.tabName,
       row_index: item.rowIndex,
-      payload: item.updates,
+      payload: payloadToBackup,
       status: 'pending',
     }).catch(_e => {});
   }, []);
