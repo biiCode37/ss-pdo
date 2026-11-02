@@ -248,6 +248,10 @@ function handleMultiSheetEdit(e) {
     const response = UrlFetchApp.fetch(WEBHOOK_URL, {
       method: "post",
       contentType: "application/json",
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY
+      },
       payload: JSON.stringify(payload),
       muteHttpExceptions: true
     });
