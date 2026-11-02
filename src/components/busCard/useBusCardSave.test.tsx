@@ -6,6 +6,7 @@ import { useBusCardSave } from './useBusCardSave';
 import type { BusData } from '@/services/googleSheets';
 import * as googleSheets from '@/services/googleSheets';
 import * as alertUtils from '@/utils/alertUtils';
+import { TEXT_ALERTS } from '@/constants/texts';
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -75,7 +76,10 @@ describe('useBusCardSave - Optimistic Concurrency Control (OCC) & Three-Way Coll
     container.remove();
   });
 
-  const renderSaveHook = async (busOverride?: Partial<BusData>) => {
+  const renderSaveHook = async (
+    busOverride?: Partial<BusData>,
+    extraProps?: Partial<Parameters<typeof useBusCardSave>[0]>
+  ) => {
     await act(async () => {
       root.render(
         <SaveTestComponent
@@ -84,6 +88,7 @@ describe('useBusCardSave - Optimistic Concurrency Control (OCC) & Three-Way Coll
           tabName="05"
           headerMap={headerMap}
           addToQueue={vi.fn()}
+          {...extraProps}
         />
       );
     });
@@ -154,6 +159,83 @@ describe('useBusCardSave - Optimistic Concurrency Control (OCC) & Three-Way Coll
       })
     );
     expect(googleSheets.updateBusData).not.toHaveBeenCalled();
+  });
+
+  it('Scenario 3b: Conflict Resolution - onUseServer does NOT write to server, updates local state with remoteData, and shows toast', async () => {
+    const mockOnUpdateBus = vi.fn();
+    (googleSheets.getBusRowData as any).mockResolvedValueOnce({
+      kmAwal1: '300200',
+      toaShift2: '0',
+    });
+
+    await renderSaveHook(undefined, { onUpdateBus: mockOnUpdateBus });
+
+    await act(async () => {
+      await latestSave?.handleSaveUpdates({ kmAwal1: '300100' });
+    });
+
+    expect(alertUtils.showQueueConflictDialog).toHaveBeenCalledTimes(1);
+    const dialogOptions = (alertUtils.showQueueConflictDialog as any).mock.calls[0][0];
+
+    // Assert diffs are provided to dialog
+    expect(dialogOptions.diffs).toEqual([
+      expect.objectContaining({
+        field: 'kmAwal1',
+        label: 'KM Awal Shift 1',
+        serverValue: '300200',
+        userValue: '300100',
+      }),
+    ]);
+
+    // Simulate user choosing "Gunakan Data Server"
+    await act(async () => {
+      dialogOptions.onUseServer();
+    });
+
+    // Zero-write: updateBusData must NOT be called
+    expect(googleSheets.updateBusData).not.toHaveBeenCalled();
+    // Local state updated with remoteData
+    expect(mockOnUpdateBus).toHaveBeenCalledWith(
+      expect.objectContaining({ kmAwal1: '300200' })
+    );
+    expect(latestSave?.formData.kmAwal1).toBe('300200');
+    expect(latestSave?.saveStatus).toBe('idle');
+    expect(latestSave?.isLoading).toBe(false);
+    expect(alertUtils.showInfoToast).toHaveBeenCalledWith(
+      TEXT_ALERTS.CONFLICT.TOAST_SERVER_DATA_APPLIED
+    );
+  });
+
+  it('Scenario 3c: Conflict Resolution - onForceSave bypasses OCC and writes user updates to server', async () => {
+    (googleSheets.getBusRowData as any).mockResolvedValueOnce({
+      kmAwal1: '300200',
+      toaShift2: '0',
+    });
+
+    await renderSaveHook();
+
+    await act(async () => {
+      await latestSave?.handleSaveUpdates({ kmAwal1: '300100' });
+    });
+
+    expect(alertUtils.showQueueConflictDialog).toHaveBeenCalledTimes(1);
+    const dialogOptions = (alertUtils.showQueueConflictDialog as any).mock.calls[0][0];
+
+    // Simulate user choosing "Tetap Simpan (Force)"
+    await act(async () => {
+      await dialogOptions.onForceSave();
+    });
+
+    // Force write called with user's update
+    expect(googleSheets.updateBusData).toHaveBeenCalledTimes(1);
+    expect(googleSheets.updateBusData).toHaveBeenCalledWith(
+      'sheet-1',
+      '05',
+      5,
+      { kmAwal1: '300100' },
+      headerMap,
+      mockBus
+    );
   });
 
   it('Scenario 4: Idempotent Match - Remote kmAwal1 already contains the exact same value user is saving -> no conflict', async () => {

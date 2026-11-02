@@ -4,15 +4,16 @@ import { updateBusData, getBusRowData } from "@/services/googleSheets";
 import { isNetworkError } from "@/hooks/useOfflineSync";
 import { formatUserError } from "@/utils/errorFormatter";
 import { normalizeFieldValue } from "@/utils/numberUtils";
-import { mergeRemoteBusDataWithLocalUpdates } from "@/utils/conflictMerge";
+
 import {
   showErrorToast,
   showInfoToast,
   showQueueConflictDialog,
+  type ConflictDiffItem,
   escapeHtml,
 } from "@/utils/alertUtils";
 import { getSatsetMode } from "@/utils/modals/busInputModal";
-import { TEXT_DASHBOARD } from "@/constants/texts";
+import { TEXT_DASHBOARD, TEXT_ALERTS, BUS_FIELD_LABELS } from "@/constants/texts";
 
 interface UseBusCardSaveOptions {
   bus: BusData;
@@ -125,17 +126,39 @@ export function useBusCardSave({
 
         if (hasCollision) {
           setIsLoading(false);
+
+          // Susun daftar rincian kolom yang berbenturan untuk ditampilkan ke user
+          const diffs: ConflictDiffItem[] = [];
+          for (const field of dirtyFields) {
+            const remoteNorm = normalizeFieldValue(remoteData[field]);
+            const updateNorm = normalizeFieldValue(updates[field]);
+            if (remoteNorm !== updateNorm) {
+              diffs.push({
+                field,
+                label: BUS_FIELD_LABELS[field] || String(field),
+                serverValue: String(remoteData[field] ?? ""),
+                userValue: String(updates[field] ?? ""),
+              });
+            }
+          }
+
           showQueueConflictDialog({
             unitName: bus.unit,
             isOnline: true,
+            diffs,
             onUseServer: () => {
-              const mergedUpdates = mergeRemoteBusDataWithLocalUpdates(
-                remoteData,
-                updates,
-              );
-              handleSaveUpdates(mergedUpdates, true);
+              // PERBAIKAN: Gunakan data server = BATALKAN write lokal, sinkronkan UI lokal dengan server
+              const newFormData = { ...formData, ...remoteData };
+              setFormData(newFormData);
+              if (onUpdateBus) {
+                onUpdateBus(remoteData);
+              }
+              setIsLoading(false);
+              setSaveStatus("idle");
+              showInfoToast(TEXT_ALERTS.CONFLICT.TOAST_SERVER_DATA_APPLIED);
             },
             onForceSave: () => {
+              // Paksa simpan: kirim deltaUpdates milik user dengan bypass OCC
               handleSaveUpdates(updates, true);
             },
           });

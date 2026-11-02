@@ -68,6 +68,16 @@ describe('mergeRemoteBusDataWithLocalUpdates', () => {
     expect(merged.keterangan).toBe('B');
   });
 
+  it('supports priority parameter: remote priority overrides local when both exist', () => {
+    const merged = mergeRemoteBusDataWithLocalUpdates(
+      { kmAkhir1: '125', keterangan: 'Server A' },
+      { kmAkhir1: '130', keterangan: 'User B' },
+      'remote',
+    );
+    expect(merged.kmAkhir1).toBe('125');
+    expect(merged.keterangan).toBe('Server A');
+  });
+
   it('exposes editable fields including all operational columns', () => {
     expect(EDITABLE_BUS_FIELDS).toEqual(
       expect.arrayContaining([
