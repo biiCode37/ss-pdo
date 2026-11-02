@@ -5405,8 +5405,8 @@
     "semantic_hash": ""
   },
   "supabase/functions/sheet-sync-webhook/index.ts": {
-    "mtime": 1793104751.5319777,
-    "ast_hash": "1e1f5ebeec5535b47de8c0f85a2dca3f",
+    "mtime": 1793595275.0631132,
+    "ast_hash": "b15dacfeecd10a6ddd63a45535a405ab",
     "semantic_hash": ""
   },
   "supabase/migrations/20261024000002_enable_realtime_for_daily_route_reports.sql": {
@@ -5425,18 +5425,18 @@
     "semantic_hash": ""
   },
   "src/services/realtimeSyncService.test.ts": {
-    "mtime": 1793104751.5168793,
-    "ast_hash": "caf4fe83cb609d1aa4eeb561ff92a135",
+    "mtime": 1793594619.4837458,
+    "ast_hash": "a919160aafbe4d9fe1babad81ba6208c",
     "semantic_hash": ""
   },
   "src/services/realtimeSyncService.ts": {
-    "mtime": 1793104751.517449,
-    "ast_hash": "b68753aed2b73cfe0d953ad6fea063d4",
+    "mtime": 1793594652.8158326,
+    "ast_hash": "3b363d29d229c30e7d94ec606314e5f4",
     "semantic_hash": ""
   },
   "scripts/google-apps-script/CentralizedMasterRealtimeSync.js": {
-    "mtime": 1793104751.4569373,
-    "ast_hash": "e92092cf461a39a122c032efdfff4715",
+    "mtime": 1793595428.108586,
+    "ast_hash": "3f99f1b41c9cf1230252d546035d6fc8",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_156/AUDIT_BUGS.md": {
@@ -6185,13 +6185,13 @@
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_193/AUDIT_BUGS.md": {
-    "mtime": 1793587573.2002823,
-    "ast_hash": "f04cb749f527fadab7d1f54f3e1a1a9c",
+    "mtime": 1793595458.89947,
+    "ast_hash": "ba30869c5612ff0bcc8aec68d3364c1c",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_193/REPAIR_REPORT.md": {
-    "mtime": 1793587582.3744364,
-    "ast_hash": "4950efb8dc0f646a7fece1ff6617d416",
+    "mtime": 1793595468.2838056,
+    "ast_hash": "f6f1a8ea3cf82a710fd7d96954e60456",
     "semantic_hash": ""
   },
   "scripts/backup/__tests__/backup-engine.test.ts": {
@@ -6237,6 +6237,11 @@
   "refactor-ss-pdo/refact_194/REPAIR_REPORT.md": {
     "mtime": 1793591661.0390532,
     "ast_hash": "83a280288b0c404a3cd7571e492315cb",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-02-sheet-sync-webhook-security.md": {
+    "mtime": 1793594260.725113,
+    "ast_hash": "d55bccc9331503ac6a218ad4dca3069d",
     "semantic_hash": ""
   }
 }
