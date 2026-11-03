@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * scripts/backup/run-backup.mjs
  * Unified Dual-Engine Backup Script (Supabase Database + Google Sheets SSOT).

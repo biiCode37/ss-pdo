@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   uploadBackupToDrive,
+  uploadBackupViaAppsScript,
   pruneOldBackups,
   filterExpiredBackupFiles,
 } from '../gdrive-uploader.mjs';
@@ -96,6 +97,33 @@ describe('Google Drive Backup Uploader & Pruning', () => {
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining('https://www.googleapis.com/drive/v3/files/expired-1'),
       expect.objectContaining({ method: 'DELETE' })
+    );
+  });
+
+  it('uploads backup zip file via Google Apps Script Web App', async () => {
+    const mockFileContent = Buffer.from('dummy-zip-content');
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ status: 'success', id: 'apps-script-file-123' }),
+    });
+
+    const result = await uploadBackupViaAppsScript({
+      appScriptUrl: 'https://script.google.com/macros/s/dummy/exec',
+      fileName: 'SS_PDO_BACKUP.zip',
+      fileBuffer: mockFileContent,
+      folderId: 'folder-123',
+      fetchImpl: mockFetch as any,
+    });
+
+    expect(result.id).toBe('apps-script-file-123');
+    expect(mockFetch).toHaveBeenCalledWith(
+      'https://script.google.com/macros/s/dummy/exec',
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: expect.stringContaining('SS_PDO_BACKUP.zip'),
+      })
     );
   });
 

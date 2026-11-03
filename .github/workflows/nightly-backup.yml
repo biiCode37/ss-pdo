@@ -60,20 +60,23 @@ jobs:
 
       - name: "Step 3 - Unggah ke Google Drive & Retensi Cadangan (Default 0 = Permanen)"
         if: github.event.inputs.upload_to_gdrive != 'false'
+        continue-on-error: true
         env:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           GDRIVE_BACKUP_FOLDER_ID: ${{ secrets.GDRIVE_BACKUP_FOLDER_ID }}
+          GDRIVE_APPSCRIPT_URL: ${{ secrets.GDRIVE_APPSCRIPT_URL }}
           BACKUP_RETENTION_DAYS: ${{ secrets.BACKUP_RETENTION_DAYS || '0' }}
           BACKUP_OUTPUT_DIR: ${{ github.workspace }}/backup_artifacts
         run: |
-          if [ -n "$GDRIVE_BACKUP_FOLDER_ID" ]; then
-            echo "Mengunggah paket cadangan ke Google Drive Folder: $GDRIVE_BACKUP_FOLDER_ID..."
+          if [ -n "$GDRIVE_BACKUP_FOLDER_ID" ] || [ -n "$GDRIVE_APPSCRIPT_URL" ]; then
+            echo "Mengunggah paket cadangan ke Google Drive..."
             node scripts/backup/gdrive-uploader.mjs
           else
-            echo "ℹ️ GDRIVE_BACKUP_FOLDER_ID tidak disetel. Unggahan ke Google Drive dilewati."
+            echo "ℹ️ GDRIVE_BACKUP_FOLDER_ID atau GDRIVE_APPSCRIPT_URL tidak disetel. Unggahan ke Google Drive dilewati."
           fi
 
-      - name: Step 4 - Simpan Artefak Cadangan di GitHub (Retensi 30 Hari)
+      - name: "Step 4 - Simpan Artefak Cadangan di GitHub (Retensi 30 Hari)"
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: SS_PDO_DUAL_BACKUP_${{ github.run_id }}
