@@ -378,4 +378,64 @@ describe('DailyPlottingPage Component & normalizeBaseOrders', () => {
     // Verifikasi in-memory update busData lokal
     expect(mockOnUpdateBus).toHaveBeenCalled();
   });
+
+  it('memiliki atribut data-no-swipe="true" untuk mencegah gesture bentrok pada mobile (BUG-195-06)', async () => {
+    await act(async () => {
+      root.render(
+        <DailyPlottingPage
+          routeId={1}
+          routeCode="JAK.115"
+          date="2026-10-31"
+          buses={sampleBuses}
+        />,
+      );
+    });
+
+    const pageContainer = container.querySelector('[data-no-swipe="true"]');
+    expect(pageContainer).not.toBeNull();
+  });
+
+  it('tidak menimpa target ritase unit berstatus OFF saat menerapkan ke semua (BUG-195-07)', async () => {
+    vi.mocked(dailyPlottingService.fetchDailyPlotting).mockResolvedValueOnce({
+      id: 1,
+      route_id: 1,
+      route_code: 'JAK.115',
+      date: '2026-10-31',
+      units_data: [
+        { unit: 'TJ-01', order: 1, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+        { unit: 'TJ-03', order: 2, start_point: 'A', target_ritase: 0, status: 'OFF', keterangan: 'OFF' },
+      ],
+    });
+
+    await act(async () => {
+      root.render(
+        <DailyPlottingPage
+          routeId={1}
+          routeCode="JAK.115"
+          date="2026-10-31"
+          buses={sampleBuses}
+        />,
+      );
+    });
+
+    // Buka modal target ritase default dari header
+    const btnTarget = container.querySelector('[data-testid="btn-open-target-modal-header"]') as HTMLButtonElement;
+    await act(async () => {
+      btnTarget.click();
+    });
+
+    // Klik tombol Terapkan ke Semua Unit
+    const applyAllBtn = Array.from(container.querySelectorAll('button')).find((b) =>
+      b.textContent?.includes('Terapkan ke Semua Unit'),
+    );
+    expect(applyAllBtn).toBeDefined();
+
+    await act(async () => {
+      applyAllBtn?.click();
+    });
+
+    // Target ritase TJ-03 (status OFF) harus tetap 0 Rit
+    const card03 = container.querySelector('[data-testid="plotting-card-TJ-03"]');
+    expect(card03?.textContent).toContain('0 Rit');
+  });
 });

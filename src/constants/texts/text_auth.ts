@@ -24,6 +24,12 @@ export const TEXT_AUTH = {
   SESSION_EXPIRED_MSG: 'Sesi Google Sheets Anda telah kedaluwarsa. Silakan login ulang untuk melanjutkan.',
   SESSION_EXPIRED_BANNER: 'Sesi Google Sheets kedaluwarsa. Ketuk tombol untuk perbarui sesi.',
   SESSION_NEED_REAUTH: 'Sesi Google perlu diperbarui untuk sinkronisasi data.',
+  ADMIN_REAUTH_TITLE: 'Konfirmasi Sesi Administrator',
+  ADMIN_REAUTH_DESC: 'Sesi akun Google Anda perlu dikonfirmasi satu kali untuk mengaktifkan sesi permanen penyimpanan izin.',
+  ADMIN_REAUTH_DESC_WITH_EMAIL: (email: string) => `Sesi akun Google Anda (${email}) perlu dikonfirmasi satu kali untuk mengaktifkan sesi permanen penyimpanan izin. Pastikan memilih akun tersebut pada jendela Google.`,
+  ADMIN_REAUTH_CONFIRM_BTN: 'Konfirmasi Akun Google',
+  ADMIN_REAUTH_CANCEL_BTN: 'Batal',
+  ADMIN_REAUTH_FAILED: 'Konfirmasi akun Google dibatalkan atau tidak selesai.',
   REAUTH_BTN: 'Login Ulang',
   REFRESH_SESSION_BTN: 'Perbarui Sesi',
   INIT_ERROR_TITLE: 'Gagal Inisialisasi Layanan',
@@ -51,4 +57,3 @@ export const TEXT_AUTH = {
     CARD_3_DESC: 'Input data terarah yang langsung tersimpan rapi ke spreadsheet resmi pengawas.',
   },
 } as const;
-

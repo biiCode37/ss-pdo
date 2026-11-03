@@ -141,11 +141,13 @@ describe('dailyPlottingService', () => {
     });
 
     it('memuat data dari local storage jika supabase gagal/offline', async () => {
+      const mockResult = { data: null, error: { message: 'Network offline' } };
       (supabase.from as any).mockReturnValue({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
-              single: vi.fn().mockResolvedValue({ data: null, error: { message: 'Network offline' } }),
+              single: vi.fn().mockResolvedValue(mockResult),
+              maybeSingle: vi.fn().mockResolvedValue(mockResult),
             }),
           }),
         }),

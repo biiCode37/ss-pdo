@@ -173,7 +173,7 @@ export const PlottingHeader = memo(function PlottingHeader({
               fontWeight: 600,
             }}
           >
-            Total Unit
+            {TEXT_PLOTTING.COUNTERS.TOTAL_UNITS}
           </span>
           <span
             style={{
@@ -189,8 +189,8 @@ export const PlottingHeader = memo(function PlottingHeader({
         {/* Siap Jalan */}
         <div
           style={{
-            background: 'rgba(34, 197, 94, 0.08)',
-            border: '1px solid rgba(34, 197, 94, 0.2)',
+            background: 'var(--color-success-bg, rgba(34, 197, 94, 0.08))',
+            border: '1px solid var(--color-success-border, rgba(34, 197, 94, 0.2))',
             borderRadius: '10px',
             padding: '8px 10px',
             textAlign: 'center',
@@ -200,17 +200,17 @@ export const PlottingHeader = memo(function PlottingHeader({
             style={{
               display: 'block',
               fontSize: '0.72rem',
-              color: '#4ade80',
+              color: 'var(--color-success-fg, #4ade80)',
               fontWeight: 600,
             }}
           >
-            Siap Jalan
+            {TEXT_PLOTTING.COUNTERS.READY_UNITS}
           </span>
           <span
             style={{
               fontSize: '1.1rem',
               fontWeight: 800,
-              color: '#22c55e',
+              color: 'var(--color-success-fg, #22c55e)',
             }}
           >
             {readyUnits}
@@ -220,8 +220,8 @@ export const PlottingHeader = memo(function PlottingHeader({
         {/* Kendala / OFF */}
         <div
           style={{
-            background: troubleUnits > 0 ? 'rgba(239, 68, 68, 0.08)' : 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
-            border: troubleUnits > 0 ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
+            background: troubleUnits > 0 ? 'var(--color-error-bg, rgba(239, 68, 68, 0.08))' : 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
+            border: troubleUnits > 0 ? '1px solid var(--color-error-border, rgba(239, 68, 68, 0.2))' : '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
             borderRadius: '10px',
             padding: '8px 10px',
             textAlign: 'center',
@@ -231,17 +231,17 @@ export const PlottingHeader = memo(function PlottingHeader({
             style={{
               display: 'block',
               fontSize: '0.72rem',
-              color: troubleUnits > 0 ? '#f87171' : 'var(--color-text-secondary, #94a3b8)',
+              color: troubleUnits > 0 ? 'var(--color-error-fg, #f87171)' : 'var(--color-text-secondary, #94a3b8)',
               fontWeight: 600,
             }}
           >
-            Kendala
+            {TEXT_PLOTTING.COUNTERS.TROUBLE_UNITS}
           </span>
           <span
             style={{
               fontSize: '1.1rem',
               fontWeight: 800,
-              color: troubleUnits > 0 ? '#ef4444' : 'var(--color-text-muted, #64748b)',
+              color: troubleUnits > 0 ? 'var(--color-error-fg, #ef4444)' : 'var(--color-text-muted, #64748b)',
             }}
           >
             {troubleUnits}
@@ -279,19 +279,19 @@ export const PlottingHeader = memo(function PlottingHeader({
             padding: 0,
           }}
         >
-          <Zap size={14} color="#38bdf8" />
+          <Zap size={14} color="var(--color-action-primary-bg, #38bdf8)" />
           <span>{TEXT_PLOTTING.TARGET_MODAL.DEFAULT_TARGET_LABEL}</span>
           <span
             style={{
               fontWeight: 800,
               color: 'var(--color-action-primary-bg, #38bdf8)',
-              background: 'rgba(56, 189, 248, 0.12)',
+              background: 'var(--color-info-bg, rgba(56, 189, 248, 0.12))',
               padding: '2px 8px',
               borderRadius: '6px',
-              border: '1px solid rgba(56, 189, 248, 0.25)',
+              border: '1px solid var(--color-info-border, rgba(56, 189, 248, 0.25))',
             }}
           >
-            {defaultTargetRitase} Rit
+            {defaultTargetRitase} {TEXT_PLOTTING.UNIT_CARD.RITASE_UNIT}
           </span>
         </button>
 
@@ -306,9 +306,9 @@ export const PlottingHeader = memo(function PlottingHeader({
             gap: '5px',
             padding: '5px 10px',
             borderRadius: '8px',
-            border: '1px solid rgba(251, 191, 36, 0.3)',
-            background: 'rgba(251, 191, 36, 0.1)',
-            color: '#fbbf24',
+            border: '1px solid var(--color-warning-border, rgba(251, 191, 36, 0.3))',
+            background: 'var(--color-warning-bg, rgba(251, 191, 36, 0.1))',
+            color: 'var(--color-warning-fg, #fbbf24)',
             fontSize: '0.76rem',
             fontWeight: 700,
             cursor: 'pointer',

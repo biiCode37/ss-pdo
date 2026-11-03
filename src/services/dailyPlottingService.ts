@@ -22,7 +22,7 @@ export async function fetchDailyPlotting(
       .select('*')
       .eq('route_id', routeId)
       .eq('date', date)
-      .single();
+      .maybeSingle();
 
     if (!error && data) {
       const plotting = data as DailyRoutePlotting;

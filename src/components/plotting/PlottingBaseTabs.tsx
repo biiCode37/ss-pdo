@@ -32,7 +32,7 @@ export const PlottingBaseTabs = memo(function PlottingBaseTabs({
         border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08))',
       }}
       role="tablist"
-      aria-label="Pilihan Pangkalan Start"
+      aria-label={TEXT_PLOTTING.TABS.ARIA_LABEL}
     >
       <button
         type="button"

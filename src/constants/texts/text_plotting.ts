@@ -1,6 +1,11 @@
 export const TEXT_PLOTTING = {
   TITLE: 'Plotting Armada Harian',
   SUBTITLE: (routeCode: string, date: string) => `Perencanaan Subuh Rute ${routeCode} • ${date}`,
+  COUNTERS: {
+    TOTAL_UNITS: 'Total Unit',
+    READY_UNITS: 'Siap Jalan',
+    TROUBLE_UNITS: 'Kendala',
+  },
   BADGES: {
     TOTAL_UNITS: (count: number) => `${count} Unit`,
     READY_UNITS: (count: number) => `${count} Siap`,
@@ -8,6 +13,7 @@ export const TEXT_PLOTTING = {
     START_BASE: (name: string, count: number) => `${name} (${count})`,
   },
   TABS: {
+    ARIA_LABEL: 'Pilihan Pangkalan Start',
     START_POINT_A: (name: string, count: number) => `📍 Start ${name} (${count})`,
     START_POINT_B: (name: string, count: number) => `📍 Start ${name} (${count})`,
   },
@@ -34,6 +40,14 @@ export const TEXT_PLOTTING = {
     STATUS_TROUBLE: 'Kendala',
     STATUS_OFF: 'OFF',
     NOTE_PLACEHOLDER: 'Catatan kendala...',
+    DRAG_HANDLE_TITLE: 'Tahan & seret untuk mengubah urutan',
+    MOVE_UP_TITLE: 'Pindahkan 1 tingkat ke atas (atau ke paling bawah jika urutan pertama)',
+    MOVE_DOWN_TITLE: 'Pindahkan 1 tingkat ke bawah (atau ke paling atas jika urutan terakhir)',
+    STEP_MINUS_ARIA: 'Kurang 0.5 ritase',
+    STEP_PLUS_ARIA: 'Tambah 0.5 ritase',
+    RITASE_PILL_TITLE: 'Klik untuk membuka pengatur ritase bebas & preset',
+    STATUS_PILL_TITLE: (unit: string) => `Ubah status ${unit} (Klik untuk berganti)`,
+    SELECT_UNIT_ARIA: (unit: string) => `Pilih unit ${unit} untuk aksi massal`,
   },
   TARGET_MODAL: {
     TITLE: 'Atur Target Ritase',
@@ -47,6 +61,8 @@ export const TEXT_PLOTTING = {
     QUICK_PRESETS: 'Pilihan Cepat:',
     STEPPER_MINUS: '- 0.5',
     STEPPER_PLUS: '+ 0.5',
+    STEPPER_MINUS_ARIA: 'Kurang 0.5 rit',
+    STEPPER_PLUS_ARIA: 'Tambah 0.5 rit',
     DEFAULT_TARGET_LABEL: 'Target Default:',
     SET_ALL_BTN: 'Set Semua Unit',
   },

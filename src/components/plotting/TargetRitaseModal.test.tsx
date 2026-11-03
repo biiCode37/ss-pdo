@@ -179,4 +179,31 @@ describe('TargetRitaseModal Component', () => {
 
     expect(onApply).toHaveBeenCalledWith(6.0, 'all');
   });
+
+  it('membulatkan input desimal bebas ke kelipatan 0.5 terdekat (BUG-195-05)', () => {
+    const onApply = vi.fn();
+
+    act(() => {
+      root.render(
+        <TargetRitaseModal
+          isOpen={true}
+          initialValue={7.2}
+          targetUnit="TJ-01"
+          onClose={vi.fn()}
+          onApply={onApply}
+        />,
+      );
+    });
+
+    const buttons = Array.from(container.querySelectorAll('button'));
+    const applyUnitBtn = buttons.find((b) => b.textContent?.includes('Terapkan Unit Ini'));
+    expect(applyUnitBtn).toBeDefined();
+
+    act(() => {
+      applyUnitBtn?.click();
+    });
+
+    // 7.2 harus dibulatkan ke 7.0
+    expect(onApply).toHaveBeenCalledWith(7.0, 'unit');
+  });
 });

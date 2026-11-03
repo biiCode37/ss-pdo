@@ -1115,8 +1115,8 @@
     "semantic_hash": ""
   },
   "src/services/routes/users.ts": {
-    "mtime": 1793579832.3617795,
-    "ast_hash": "c47ae8ea9fb5e28a085ec7572b075887",
+    "mtime": 1793665985.8350632,
+    "ast_hash": "8fa42b61ad15c5879fc41b50e27fff33",
     "semantic_hash": ""
   },
   "src/utils/auditLogContext.test.ts": {
@@ -1355,8 +1355,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_auth.ts": {
-    "mtime": 1793579253.942988,
-    "ast_hash": "c47b19d24f56173e2b77d1bb98910e9a",
+    "mtime": 1793666720.2693627,
+    "ast_hash": "f8fe5ba612b4f593118c4b17820b915c",
     "semantic_hash": ""
   },
   "src/constants/texts/text_common.ts": {
@@ -1390,8 +1390,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1793602068.1636288,
-    "ast_hash": "3614fccf20b37fcd7af55a4e5e869868",
+    "mtime": 1793666748.121116,
+    "ast_hash": "948ba19a4718f910aa05e0077e94b0bb",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_18/AUDIT_BUGS.md": {
@@ -2405,13 +2405,13 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/authGis.ts": {
-    "mtime": 1792211138.2273116,
-    "ast_hash": "9f2a9f49951e89ac01a87969fe9e8417",
+    "mtime": 1793664984.325532,
+    "ast_hash": "4ab6f519c7865df6fe6cf52b66cc79cd",
     "semantic_hash": ""
   },
   "src/services/googleSheets/authSession.ts": {
-    "mtime": 1793579212.1771224,
-    "ast_hash": "e86ab41800c1c278ede304089bc0484a",
+    "mtime": 1793665802.839995,
+    "ast_hash": "c2a54862bce8976d6336ac0a803b72b8",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_56/AUDIT_BUGS.md": {
@@ -2500,8 +2500,8 @@
     "semantic_hash": ""
   },
   "src/components/login/LoginScreen.tsx": {
-    "mtime": 1792211138.1453362,
-    "ast_hash": "3e76f09fd2931be4fd293dcf001aa506",
+    "mtime": 1793665009.4318025,
+    "ast_hash": "fd938e4359fcd3fe91dd3361daa2c278",
     "semantic_hash": ""
   },
   "src/components/login/index.ts": {
@@ -5250,8 +5250,8 @@
     "semantic_hash": ""
   },
   "src/components/pageManagement/PageManagementPage.tsx": {
-    "mtime": 1793429226.5150135,
-    "ast_hash": "b5020738fbed6206408c9c4cab012dfa",
+    "mtime": 1793665027.835521,
+    "ast_hash": "4533ee8a088507693202061bbfe5f95f",
     "semantic_hash": ""
   },
   "src/components/pageManagement/SuperadminMaintenanceBanner.test.tsx": {
@@ -5905,28 +5905,28 @@
     "semantic_hash": ""
   },
   "src/components/plotting/DailyPlottingPage.test.tsx": {
-    "mtime": 1793499459.4330292,
-    "ast_hash": "050c822a78e394a3008e8ee6bb848556",
+    "mtime": 1793663545.9218154,
+    "ast_hash": "9748d1fd560c2edf5e6ed82e2ce67349",
     "semantic_hash": ""
   },
   "src/components/plotting/DailyPlottingPage.tsx": {
-    "mtime": 1793500801.9035094,
-    "ast_hash": "b1bad053d940e35a55f2038085e6e14c",
+    "mtime": 1793663524.3703198,
+    "ast_hash": "8b06f3369c492a0eaeef8e6497bb63d3",
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingBaseTabs.tsx": {
-    "mtime": 1793458857.368208,
-    "ast_hash": "6ec97f21bb8d1cf8accc49ffe76cfa40",
+    "mtime": 1793663347.5025163,
+    "ast_hash": "eb0910de5a91a488adf97ecfce2a3a15",
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingHeader.tsx": {
-    "mtime": 1793491050.0186324,
-    "ast_hash": "646bf814e427af3a4dc9861fc968fa39",
+    "mtime": 1793663335.4699092,
+    "ast_hash": "dda2ca6b04a8413056d897545b141613",
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingUnitCard.tsx": {
-    "mtime": 1793501250.5656278,
-    "ast_hash": "5ff16c04cabd009da318614f72be71b9",
+    "mtime": 1793663411.3474996,
+    "ast_hash": "c9aa26e2543c718734ece06314a81c70",
     "semantic_hash": ""
   },
   "src/components/plotting/index.ts": {
@@ -5935,18 +5935,18 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_plotting.ts": {
-    "mtime": 1793500708.4331522,
-    "ast_hash": "7b4508d6317d0a407a3e4f1e066f62ef",
+    "mtime": 1793663120.2237978,
+    "ast_hash": "c575be29e581e7d2c03623fa79c60a38",
     "semantic_hash": ""
   },
   "src/services/dailyPlottingService.test.ts": {
-    "mtime": 1793458040.9419582,
-    "ast_hash": "5724533ab136b42b70bed58084d10df7",
+    "mtime": 1793662698.6724517,
+    "ast_hash": "0ad8dfdb26253d3fd31dbd15a14d1cd3",
     "semantic_hash": ""
   },
   "src/services/dailyPlottingService.ts": {
-    "mtime": 1793458027.1678357,
-    "ast_hash": "4312b1b6c16931d370cb96d343b2f665",
+    "mtime": 1793662693.7796335,
+    "ast_hash": "ad6ebde89ed8be86fce9e2a608430812",
     "semantic_hash": ""
   },
   "src/utils/routeEndpointUtils.test.ts": {
@@ -5995,13 +5995,13 @@
     "semantic_hash": ""
   },
   "src/components/plotting/TargetRitaseModal.test.tsx": {
-    "mtime": 1793501269.943797,
-    "ast_hash": "75d5d41caccb5b6bac84446b198b3d05",
+    "mtime": 1793663308.3862367,
+    "ast_hash": "feaccbc82d51f95fe80120b2cc8392f9",
     "semantic_hash": ""
   },
   "src/components/plotting/TargetRitaseModal.tsx": {
-    "mtime": 1793501250.5620608,
-    "ast_hash": "a55da987d43d7d95898e3860e579ab09",
+    "mtime": 1793663288.6867678,
+    "ast_hash": "7970cd9740520816d3d804f66a20c065",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_183/AUDIT_BUGS.md": {
@@ -6040,13 +6040,13 @@
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingTroubleModal.test.tsx": {
-    "mtime": 1793500831.550877,
-    "ast_hash": "92f241547c34d2e7fc8ef26ec395e5ff",
+    "mtime": 1793663204.0097232,
+    "ast_hash": "ac64175e7f1ec8c224cea43ece52a0b8",
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingTroubleModal.tsx": {
-    "mtime": 1793500822.0911596,
-    "ast_hash": "290723e4842f801a7d3ab88ce38e85f3",
+    "mtime": 1793663190.3544471,
+    "ast_hash": "14444f7d4309a90a51751af7f4dc5622",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_186/AUDIT_BUGS.md": {
@@ -6125,13 +6125,13 @@
     "semantic_hash": ""
   },
   "src/services/adminActionService.test.ts": {
-    "mtime": 1793579232.9919856,
-    "ast_hash": "ed9bc3cff3bbbad85f145c55907afb90",
+    "mtime": 1793666799.3347793,
+    "ast_hash": "e64c2f86785b1e1959c9af1bac686052",
     "semantic_hash": ""
   },
   "src/services/adminActionService.ts": {
-    "mtime": 1793579272.1484141,
-    "ast_hash": "0fc1e4dadd7f69772fbc655739bca693",
+    "mtime": 1793666763.0539415,
+    "ast_hash": "0b479b58c3bcc8370d3afac314cf5c27",
     "semantic_hash": ""
   },
   "supabase/functions/admin-action/deno.json": {
@@ -6140,8 +6140,8 @@
     "semantic_hash": ""
   },
   "supabase/functions/admin-action/index.ts": {
-    "mtime": 1793579150.060937,
-    "ast_hash": "84a7d0f83fc98126dc582581cb125eda",
+    "mtime": 1793666677.0359683,
+    "ast_hash": "c7ec2ad033281a55c0ab47c3240083cf",
     "semantic_hash": ""
   },
   "supabase/migrations/20261102000001_restrict_admin_rpcs_to_service_role.sql": {
@@ -6215,8 +6215,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/nightly-backup.yml": {
-    "mtime": 1793591625.7056434,
-    "ast_hash": "0a76a4f530f22ea0301f38ba5ac4e89f",
+    "mtime": 1793667818.258513,
+    "ast_hash": "19651435d57a278f40200d56901c2618",
     "semantic_hash": ""
   },
   "docs/BACKUP_SETUP_GUIDE.md": {
@@ -6247,6 +6247,26 @@
   "docs/superpowers/plans/2026-11-02-conflict-resolution-and-offline-queue.md": {
     "mtime": 1793601906.8719966,
     "ast_hash": "243f904895c1f2e05ab8960df04e4bfc",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_195/AUDIT_BUGS.md": {
+    "mtime": 1793660936.2362657,
+    "ast_hash": "853508edf4a766e22919ed310bed17c7",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_195/REPAIR_REPORT.md": {
+    "mtime": 1793663612.8098135,
+    "ast_hash": "a8ada9107be65afbdbd47f470c5ccc0a",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_196/AUDIT_BUGS.md": {
+    "mtime": 1793666854.9258275,
+    "ast_hash": "b8586892133f455a9c277c74505aa70c",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_196/REPAIR_REPORT.md": {
+    "mtime": 1793666866.7518651,
+    "ast_hash": "8c6ee2e3b03c9475f7cc68afdab9d161",
     "semantic_hash": ""
   }
 }

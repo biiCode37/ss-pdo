@@ -34,7 +34,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
   if (!isOpen) return null;
 
   const handleStep = (delta: number) => {
-    setVal((prev) => Math.max(0, Math.min(20, Number((prev + delta).toFixed(1)))));
+    setVal((prev) => Math.max(0, Math.min(20, Math.round((prev + delta) * 2) / 2)));
   };
 
   const handleDirectChange = (raw: string) => {
@@ -44,8 +44,13 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
     }
     const num = parseFloat(raw.replace(',', '.'));
     if (!isNaN(num)) {
-      setVal(Math.max(0, Math.min(20, num)));
+      setVal(Math.max(0, Math.min(20, Math.round(num * 2) / 2)));
     }
+  };
+
+  const handleApplyScope = (scope: 'unit' | 'base' | 'all' | 'selected') => {
+    const finalVal = Math.round(val * 2) / 2;
+    onApply(finalVal, scope);
   };
 
   return (
@@ -144,7 +149,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
             type="button"
             onClick={() => handleStep(-0.5)}
             disabled={val <= 0}
-            aria-label="Kurang 0.5 rit"
+            aria-label={TEXT_PLOTTING.TARGET_MODAL.STEPPER_MINUS_ARIA}
             style={{
               width: '40px',
               height: '40px',
@@ -196,7 +201,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
           <button
             type="button"
             onClick={() => handleStep(0.5)}
-            aria-label="Tambah 0.5 rit"
+            aria-label={TEXT_PLOTTING.TARGET_MODAL.STEPPER_PLUS_ARIA}
             style={{
               width: '40px',
               height: '40px',
@@ -253,7 +258,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
                     transition: 'all 0.15s ease',
                   }}
                 >
-                  {preset} Rit
+                  {preset} {TEXT_PLOTTING.UNIT_CARD.RITASE_UNIT}
                 </button>
               );
             })}
@@ -265,7 +270,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
           {selectedCount && selectedCount > 0 ? (
             <button
               type="button"
-              onClick={() => onApply(val, 'selected')}
+              onClick={() => handleApplyScope('selected')}
               style={{
                 padding: '10px 14px',
                 borderRadius: '10px',
@@ -288,7 +293,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
             <>
               <button
                 type="button"
-                onClick={() => onApply(val, 'unit')}
+                onClick={() => handleApplyScope('unit')}
                 style={{
                   padding: '10px 14px',
                   borderRadius: '10px',
@@ -311,7 +316,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
               {endpointName && (
                 <button
                   type="button"
-                  onClick={() => onApply(val, 'base')}
+                  onClick={() => handleApplyScope('base')}
                   style={{
                     padding: '8px 12px',
                     borderRadius: '10px',
@@ -329,7 +334,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
 
               <button
                 type="button"
-                onClick={() => onApply(val, 'all')}
+                onClick={() => handleApplyScope('all')}
                 style={{
                   padding: '8px 12px',
                   borderRadius: '10px',
@@ -347,7 +352,7 @@ export const TargetRitaseModal: React.FC<TargetRitaseModalProps> = ({
           ) : (
             <button
               type="button"
-              onClick={() => onApply(val, 'all')}
+              onClick={() => handleApplyScope('all')}
               style={{
                 padding: '10px 14px',
                 borderRadius: '10px',

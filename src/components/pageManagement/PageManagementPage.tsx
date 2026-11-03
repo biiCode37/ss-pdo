@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { ensureAdminSession } from '@/services/adminActionService';
 import {
   ArrowLeft,
   ShieldAlert,
@@ -40,6 +41,11 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
   const [configTarget, setConfigTarget] = useState<AppPageSetting | null>(null);
   const [isBulkRoleModalOpen, setIsBulkRoleModalOpen] = useState(false);
   const [isBulkLoading, setIsBulkLoading] = useState(false);
+
+  // Inisialisasi token sesi admin permanen secara hening (Golden Rule #3)
+  useEffect(() => {
+    ensureAdminSession().catch(() => {});
+  }, []);
 
   const settingsList = useMemo(() => {
     return Object.values(pageSettings);

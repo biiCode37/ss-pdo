@@ -36,6 +36,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_AUTH.INFO_MODAL_CLOSE).toBe('Tutup & Kembali');
     expect(TEXT_AUTH.VIEW_PERMISSIONS_DETAIL).toBe('Lihat rincian izin resmi Google');
     expect(TEXT_AUTH.HIDE_PERMISSIONS_DETAIL).toBe('Sembunyikan rincian izin resmi Google');
+    expect(TEXT_AUTH.ADMIN_REAUTH_TITLE).toBe('Konfirmasi Sesi Administrator');
+    expect(TEXT_AUTH.ADMIN_REAUTH_CONFIRM_BTN).toBe('Konfirmasi Akun Google');
+    expect(TEXT_AUTH.ADMIN_REAUTH_DESC_WITH_EMAIL('test@example.com')).toContain('test@example.com');
   });
 
   it('exports TEXT_DASHBOARD with app header, tabs, and selectors', () => {
@@ -564,9 +567,15 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.TABS.PLOTTING).toBe('Plotting Harian');
     expect(TEXT_DASHBOARD.TABS.PLOTTING_SHORT).toBe('Plotting');
     expect(TEXT_PLOTTING.TITLE).toBe('Plotting Armada Harian');
+    expect(TEXT_PLOTTING.COUNTERS.TOTAL_UNITS).toBe('Total Unit');
+    expect(TEXT_PLOTTING.COUNTERS.READY_UNITS).toBe('Siap Jalan');
+    expect(TEXT_PLOTTING.COUNTERS.TROUBLE_UNITS).toBe('Kendala');
+    expect(TEXT_PLOTTING.TABS.ARIA_LABEL).toBe('Pilihan Pangkalan Start');
     expect(TEXT_PLOTTING.ACTIONS.START_REORDER).toBe('Atur Urutan');
     expect(TEXT_PLOTTING.ACTIONS.APPLY_ROLLING).toBe('Rolling Kemarin');
     expect(TEXT_PLOTTING.UNIT_CARD.STATUS_READY).toBe('Siap');
+    expect(TEXT_PLOTTING.UNIT_CARD.DRAG_HANDLE_TITLE).toBe('Tahan & seret untuk mengubah urutan');
+    expect(TEXT_PLOTTING.TARGET_MODAL.STEPPER_MINUS_ARIA).toBe('Kurang 0.5 rit');
     expect(TEXT_PLOTTING.ACTIONS.SET_BULK_RITASE(3)).toBe('Set Ritase (3)');
     expect(TEXT_PLOTTING.ACTIONS.SET_TROUBLE).toBe('Set Kendala');
     expect(TEXT_PLOTTING.BULK_TARGET_MODAL.TITLE(5)).toBe('Atur Ritase (5 Unit Terpilih)');

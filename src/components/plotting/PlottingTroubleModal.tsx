@@ -22,7 +22,7 @@ const COMMON_TROUBLE_CODES = [
   { code: 'T.O EVDAL', label: 'T.O EVDAL (Sanksi / Administrasi)' },
 ];
 
-const parseInitialTroubleState = (
+export const parseInitialTroubleState = (
   keterangan: string,
   initialNote: string,
 ): { codes: string[]; note: string } => {
@@ -30,10 +30,12 @@ const parseInitialTroubleState = (
   if (!keterangan && !initialNote) return { codes: [], note: '' };
 
   const knownCodes = COMMON_TROUBLE_CODES.map((c) => c.code);
-  const ketUpper = (keterangan || '').toUpperCase();
+  const ketUpper = (keterangan || '').trim();
 
   for (const item of knownCodes) {
-    if (ketUpper.includes(item.toUpperCase())) {
+    const escaped = item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`(?:^|[^a-zA-Z0-9])${escaped}(?:$|[^a-zA-Z0-9])`, 'i');
+    if (pattern.test(ketUpper)) {
       codes.push(item);
     }
   }
@@ -238,10 +240,10 @@ export const PlottingTroubleModal: React.FC<PlottingTroubleModalProps> = ({
                     padding: '10px 12px',
                     borderRadius: '10px',
                     border: isSelected
-                      ? '1.5px solid var(--color-warning-fg, #f59e0b)'
+                      ? '1.5px solid var(--color-warning-border, #f59e0b)'
                       : '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.1))',
                     background: isSelected
-                      ? 'rgba(245, 158, 11, 0.18)'
+                      ? 'var(--color-warning-bg, rgba(245, 158, 11, 0.18))'
                       : 'var(--color-surface-default, rgba(255, 255, 255, 0.04))',
                     color: isSelected
                       ? 'var(--color-warning-fg, #f59e0b)'
@@ -274,8 +276,8 @@ export const PlottingTroubleModal: React.FC<PlottingTroubleModalProps> = ({
               gap: '8px',
               padding: '10px 12px',
               borderRadius: '10px',
-              background: 'rgba(239, 68, 68, 0.12)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
+              background: 'var(--color-error-bg, rgba(239, 68, 68, 0.12))',
+              border: '1px solid var(--color-error-border, rgba(239, 68, 68, 0.3))',
               color: 'var(--color-error-fg, #f87171)',
               fontSize: '0.74rem',
               lineHeight: 1.4,

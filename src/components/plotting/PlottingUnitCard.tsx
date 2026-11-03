@@ -24,7 +24,6 @@ export interface PlottingUnitCardProps {
   onToggleSelect: (unit: string) => void;
   onMoveUp?: (unit: string) => void;
   onMoveDown?: (unit: string) => void;
-  onMoveToBottom?: (unit: string) => void;
   onToggleStartPoint: (unit: string) => void;
   onUpdateTargetRitase: (unit: string, ritase: number) => void;
   onOpenTargetModal?: (unit: string, currentRitase: number) => void;
@@ -45,7 +44,6 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
   onToggleSelect,
   onMoveUp,
   onMoveDown,
-  onMoveToBottom,
   onToggleStartPoint,
   onUpdateTargetRitase,
   onOpenTargetModal,
@@ -62,24 +60,24 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
     switch (status) {
       case 'READY':
         return {
-          bg: 'rgba(34, 197, 94, 0.1)',
-          border: 'rgba(34, 197, 94, 0.3)',
-          fg: '#4ade80',
+          bg: 'var(--color-success-bg, rgba(34, 197, 94, 0.1))',
+          border: 'var(--color-success-border, rgba(34, 197, 94, 0.3))',
+          fg: 'var(--color-success-fg, #4ade80)',
           icon: CheckCircle2,
           text: TEXT_PLOTTING.UNIT_CARD.STATUS_READY,
         };
       case 'TROUBLE':
         return {
-          bg: 'rgba(234, 179, 8, 0.12)',
-          border: 'rgba(234, 179, 8, 0.35)',
+          bg: 'var(--color-warning-bg, rgba(234, 179, 8, 0.12))',
+          border: 'var(--color-warning-border, rgba(234, 179, 8, 0.35))',
           fg: 'var(--color-warning-fg, #facc15)',
           icon: AlertTriangle,
           text: item.keterangan || item.note || TEXT_PLOTTING.UNIT_CARD.STATUS_TROUBLE,
         };
       case 'OFF':
         return {
-          bg: 'rgba(239, 68, 68, 0.12)',
-          border: 'rgba(239, 68, 68, 0.35)',
+          bg: 'var(--color-error-bg, rgba(239, 68, 68, 0.12))',
+          border: 'var(--color-error-border, rgba(239, 68, 68, 0.35))',
           fg: 'var(--color-error-fg, #f87171)',
           icon: XCircle,
           text: item.keterangan || TEXT_PLOTTING.UNIT_CARD.STATUS_OFF,
@@ -154,7 +152,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               onToggleSelect(item.unit);
             }}
             data-testid={`btn-select-${item.unit}`}
-            aria-label={`Pilih unit ${item.unit}`}
+            aria-label={TEXT_PLOTTING.UNIT_CARD.SELECT_UNIT_ARIA(item.unit)}
             style={{
               background: 'transparent',
               border: 'none',
@@ -183,7 +181,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
                 cursor: 'grab',
                 flexShrink: 0,
               }}
-              title="Tahan & seret untuk mengubah urutan"
+              title={TEXT_PLOTTING.UNIT_CARD.DRAG_HANDLE_TITLE}
             >
               <GripVertical size={16} />
             </div>
@@ -239,7 +237,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
                   onMoveUp?.(item.unit);
                 }}
                 data-testid={`btn-move-up-${item.unit}`}
-                title="Pindahkan 1 tingkat ke atas (atau ke paling bawah jika urutan pertama)"
+                title={TEXT_PLOTTING.UNIT_CARD.MOVE_UP_TITLE}
                 style={{
                   width: '28px',
                   height: '28px',
@@ -262,10 +260,10 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onMoveDown ? onMoveDown(item.unit) : onMoveToBottom?.(item.unit);
+                  onMoveDown?.(item.unit);
                 }}
                 data-testid={`btn-move-down-${item.unit}`}
-                title="Pindahkan 1 tingkat ke bawah (atau ke paling atas jika urutan terakhir)"
+                title={TEXT_PLOTTING.UNIT_CARD.MOVE_DOWN_TITLE}
                 style={{
                   width: '28px',
                   height: '28px',
@@ -303,9 +301,9 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               borderRadius: '6px',
               fontSize: '0.72rem',
               fontWeight: 700,
-              border: '1px solid rgba(56, 189, 248, 0.25)',
-              background: 'rgba(56, 189, 248, 0.08)',
-              color: '#38bdf8',
+              border: '1px solid var(--color-info-border, rgba(56, 189, 248, 0.25))',
+              background: 'var(--color-info-bg, rgba(56, 189, 248, 0.08))',
+              color: 'var(--color-info-fg, #38bdf8)',
               cursor: 'pointer',
               flexShrink: 0,
               transition: 'all 0.15s ease',
@@ -333,7 +331,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           <button
             type="button"
             onClick={(e) => handleStepRitase(-0.5, e)}
-            aria-label="Kurang 0.5 ritase"
+            aria-label={TEXT_PLOTTING.UNIT_CARD.STEP_MINUS_ARIA}
             style={{
               width: '26px',
               height: '26px',
@@ -360,7 +358,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               }
             }}
             data-testid={`btn-ritase-modal-${item.unit}`}
-            title="Klik untuk membuka pengatur ritase bebas & preset"
+            title={TEXT_PLOTTING.UNIT_CARD.RITASE_PILL_TITLE}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -375,14 +373,14 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               cursor: 'pointer',
             }}
           >
-            <Zap size={11} color="#38bdf8" />
-            <span>{item.target_ritase} Rit</span>
+            <Zap size={11} color="var(--color-action-primary-bg, #38bdf8)" />
+            <span>{item.target_ritase} {TEXT_PLOTTING.UNIT_CARD.RITASE_UNIT}</span>
           </button>
 
           <button
             type="button"
             onClick={(e) => handleStepRitase(0.5, e)}
-            aria-label="Tambah 0.5 ritase"
+            aria-label={TEXT_PLOTTING.UNIT_CARD.STEP_PLUS_ARIA}
             style={{
               width: '26px',
               height: '26px',
@@ -413,7 +411,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
             }
           }}
           data-testid={`btn-status-${item.unit}`}
-          title={`Ubah status ${item.unit} (Klik untuk berganti)`}
+          title={TEXT_PLOTTING.UNIT_CARD.STATUS_PILL_TITLE(item.unit)}
           style={{
             display: 'inline-flex',
             alignItems: 'center',

@@ -2,7 +2,7 @@
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { PlottingTroubleModal } from './PlottingTroubleModal';
+import { PlottingTroubleModal, parseInitialTroubleState } from './PlottingTroubleModal';
 import { TEXT_PLOTTING } from '@/constants/texts';
 
 // @ts-ignore
@@ -233,5 +233,34 @@ describe('PlottingTroubleModal Component', () => {
 
     expect(defaultProps.onResetReady).toHaveBeenCalledWith('KWK 222153');
     expect(defaultProps.onClose).toHaveBeenCalled();
+  });
+
+  describe('parseInitialTroubleState (BUG-195-04 word boundary regex check)', () => {
+    it('mencegah false positive substring pada kata biasa seperti TANPA, INPUT, OFFICER', () => {
+      const result1 = parseInitialTroubleState('RADIATOR TANPA AIR', '');
+      expect(result1.codes).not.toContain('NP');
+      expect(result1.codes).toHaveLength(0);
+      expect(result1.note).toBe('RADIATOR TANPA AIR');
+
+      const result2 = parseInitialTroubleState('INPUT DATA PUSM', '');
+      expect(result2.codes).not.toContain('NP');
+
+      const result3 = parseInitialTroubleState('OFFICER DALOPS TEGUR PENGEMUDI', '');
+      expect(result3.codes).not.toContain('OFF');
+      expect(result3.codes).toHaveLength(0);
+    });
+
+    it('mencocokkan kode trouble asli dengan akurat', () => {
+      const result1 = parseInitialTroubleState('BA.02 - KENDALA RADIATOR', '');
+      expect(result1.codes).toContain('BA.02');
+      expect(result1.note).toBe('KENDALA RADIATOR');
+
+      const result2 = parseInitialTroubleState('NP', '');
+      expect(result2.codes).toContain('NP');
+
+      const result3 = parseInitialTroubleState('OFF - DI BENGKEL', '');
+      expect(result3.codes).toContain('OFF');
+      expect(result3.note).toBe('DI BENGKEL');
+    });
   });
 });
