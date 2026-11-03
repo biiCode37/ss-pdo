@@ -273,4 +273,154 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     );
     expect(renderedUnits).toEqual(['6', '7', '8']);
   });
+
+  it('parks non-operational buses to the bottom of the list in both sheet and base views', async () => {
+    const mockPlotting = {
+      id: 1,
+      route_id: 115,
+      route_code: 'JAK.115',
+      date: '2026-11-01',
+      endpoint_a_name: 'Priok',
+      endpoint_b_name: 'IGI',
+      default_ritase: 7,
+      created_by: 'user-1',
+      created_at: '2026-11-01T00:00:00Z',
+      updated_at: '2026-11-01T00:00:00Z',
+      units_data: [
+        { unit: 'BUS-01', order: 2, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
+        { unit: 'BUS-02', order: 1, start_point: 'A' as const, target_ritase: 0, status: 'OFF' as const },
+        { unit: 'BUS-03', order: 3, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
+      ],
+    };
+
+    const fleetData = [
+      createMockBus({ rowIndex: 6, unit: 'BUS-01', keterangan: '' }),
+      createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: 'OFF' }),
+      createMockBus({ rowIndex: 8, unit: 'BUS-03', keterangan: '' }),
+    ];
+
+    await act(async () => {
+      root.render(
+        <BusList
+          {...defaultProps}
+          data={fleetData}
+          plotting={mockPlotting}
+          isShiftConfirmed={true}
+          activeShift={1}
+        />
+      );
+    });
+
+    // 1. Sheet View: BUS-02 (non-operational) is parked at the bottom: BUS-01 (6) -> BUS-03 (8) -> BUS-02 (7)
+    let renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+      (el) => el.getAttribute('data-bus-row')
+    );
+    expect(renderedUnits).toEqual(['6', '8', '7']);
+
+    // 2. Base A View: BUS-02 has order 1 but is non-operational, so operational BUS-01 (#2) & BUS-03 (#3) come first
+    const baseATab = container.querySelector('[data-testid="filter-sort-base-a"]') as HTMLButtonElement;
+    expect(baseATab).not.toBeNull();
+
+    await act(async () => {
+      baseATab.click();
+    });
+
+    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+      (el) => el.getAttribute('data-bus-row')
+    );
+    expect(renderedUnits).toEqual(['6', '8', '7']);
+  });
+
+  it('auto-skips non-operational buses when Satset mode advances to the next unit', async () => {
+    localStorage.setItem('pdo_satset_mode', 'true');
+
+    const mockPlotting = {
+      id: 1,
+      route_id: 115,
+      route_code: 'JAK.115',
+      date: '2026-11-01',
+      endpoint_a_name: 'Priok',
+      endpoint_b_name: 'IGI',
+      default_ritase: 7,
+      created_by: 'user-1',
+      created_at: '2026-11-01T00:00:00Z',
+      updated_at: '2026-11-01T00:00:00Z',
+      units_data: [
+        { unit: 'BUS-01', order: 1, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
+        { unit: 'BUS-02', order: 2, start_point: 'A' as const, target_ritase: 0, status: 'OFF' as const },
+        { unit: 'BUS-03', order: 3, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
+      ],
+    };
+
+    const fleetData = [
+      createMockBus({
+        rowIndex: 6,
+        unit: 'BUS-01',
+        toaShift1: '100',
+        totalToa: '200',
+        kmAwal1: '10',
+        kmAkhir1: '20',
+        tripPergi: '3',
+        tripPulang: '3',
+      }),
+      createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: '', tripPergi: '', tripPulang: '' }),
+      createMockBus({ rowIndex: 8, unit: 'BUS-03', keterangan: '', tripPergi: '', tripPulang: '' }),
+    ];
+
+    await act(async () => {
+      root.render(
+        <BusList
+          {...defaultProps}
+          data={fleetData}
+          plotting={mockPlotting}
+          isShiftConfirmed={true}
+          activeShift={1}
+        />
+      );
+    });
+
+    // Switch to trip category so checkFilled checks trip fields (both BUS-02 and BUS-03 are unfilled)
+    const tripCatBtn = container.querySelector('[data-testid="category-chip-trip"]') as HTMLButtonElement;
+    if (tripCatBtn) {
+      await act(async () => {
+        tripCatBtn.click();
+      });
+    }
+
+    const cardBus1 = container.querySelector('[data-bus-row="6"]') as HTMLElement;
+    const cardBus2 = container.querySelector('[data-bus-row="7"]') as HTMLElement;
+    const cardBus3 = container.querySelector('[data-bus-row="8"]') as HTMLElement;
+
+    expect(cardBus1).not.toBeNull();
+    expect(cardBus2).not.toBeNull();
+    expect(cardBus3).not.toBeNull();
+
+    const spyBus2Click = vi.spyOn(cardBus2, 'click');
+    const spyBus3Click = vi.spyOn(cardBus3, 'click');
+
+    // Open modal for BUS-01
+    await act(async () => {
+      cardBus1.click();
+    });
+
+    // Submit form inside modal
+    const form = document.body.querySelector('form');
+    expect(form).not.toBeNull();
+
+    await act(async () => {
+      form?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    });
+
+    // Wait for the 120ms timeout in handleSaveAndNext
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 200));
+    });
+
+    // BUS-02 (non-operational) must be skipped!
+    expect(spyBus2Click).not.toHaveBeenCalled();
+    // BUS-03 (operational) must be clicked!
+    expect(spyBus3Click).toHaveBeenCalled();
+
+    localStorage.removeItem('pdo_satset_mode');
+  });
 });

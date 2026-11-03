@@ -2,6 +2,7 @@ import { memo } from "react";
 import { slugifyUnitId } from "@/utils/analytics";
 import { FormattedNoteText } from "@/components/FormattedNoteText";
 import { hasMeaningfulNote, isUnitOff, isUnitTo } from "@/utils/keteranganUtils";
+import { isBusNonOperational } from "@/utils/operationalStatusUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import type { BusCardProps } from "./types";
@@ -108,6 +109,7 @@ function BusCardComponent({
                 style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}
               >
                 {/* 1. Badge Urutan Mandiri */}
+                {!isBusNonOperational(bus, plottingItem) && (
                 <span
                   data-testid={`plotting-order-${bus.unit}`}
                   title={`Urutan Antrean #${plottingItem.order}`}
@@ -128,6 +130,7 @@ function BusCardComponent({
                 >
                   #{plottingItem.order}
                 </span>
+                )}
 
                 {/* 2. Badge Titik Start Mandiri */}
                 <span
