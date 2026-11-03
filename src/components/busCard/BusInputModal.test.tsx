@@ -6,6 +6,7 @@ import { BusInputModal } from "./BusInputModal";
 import type { BusData } from "@/services/googleSheets";
 import { getSatsetMode, setSatsetMode } from "@/utils/modals/busInput/busModalTypes";
 import { TEXT_ALERTS, TEXT_FLEET_STATUS, TEXT_COMMON } from "@/constants/texts";
+import * as alertUtils from "@/utils/alertUtils";
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -1790,6 +1791,184 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       expect(textarea?.value).toBe("BA.01 Gangguan");
     });
   });
+  describe("Non-Operational Protection, Banner, & Override Action", () => {
+    it("renders OFF/LIBUR banner for bus with ritase = 0 and keterangan OFF", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({
+              tripPergi: "0",
+              tripPulang: "0",
+              keterangan: "OFF",
+            })}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const banner = document.body.querySelector('[data-testid="non-operational-banner"]');
+      expect(banner).not.toBeNull();
+      expect(banner?.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_OFF_LIBUR,
+      );
+
+      const activateBtn = document.body.querySelector('[data-testid="btn-activate-input"]');
+      expect(activateBtn).not.toBeNull();
+      expect(activateBtn?.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.BTN_ACTIVATE_INPUT,
+      );
+    });
+
+    it("renders EMPTY_RITASE banner for bus with empty ritase without OFF/LIBUR keterangan", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({
+              tripPergi: "",
+              tripPulang: "",
+              keterangan: "",
+            })}
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const banner = document.body.querySelector('[data-testid="non-operational-banner"]');
+      expect(banner).not.toBeNull();
+      expect(banner?.textContent).toContain(
+        TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_EMPTY_RITASE,
+      );
+    });
+
+    it("disables number fields while form is locked", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({
+              tripPergi: "0",
+              tripPulang: "0",
+              keterangan: "OFF",
+            })}
+            initialTab="shift1"
+            onSave={vi.fn()}
+          />,
+        );
+      });
+
+      const inputToaS1 = document.body.querySelector<HTMLInputElement>("#input-toa-s1");
+      expect(inputToaS1).not.toBeNull();
+      expect(inputToaS1?.disabled).toBe(true);
+
+      const inputKmAkhir1 = document.body.querySelector<HTMLInputElement>("#input-km-akhir-1");
+      expect(inputKmAkhir1).not.toBeNull();
+      expect(inputKmAkhir1?.disabled).toBe(true);
+
+      // Beralih ke tab Ritase dan periksa field trip
+      const tabButtons = document.body.querySelectorAll("button");
+      const ritaseBtn = Array.from(tabButtons).find((b) =>
+        b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.TAB_RITASE),
+      );
+      await act(async () => {
+        ritaseBtn?.click();
+      });
+
+      const inputTripPergi = document.body.querySelector<HTMLInputElement>("#input-trip-pergi");
+      const inputTripPulang = document.body.querySelector<HTMLInputElement>("#input-trip-pulang");
+      expect(inputTripPergi?.disabled).toBe(true);
+      expect(inputTripPulang?.disabled).toBe(true);
+
+      // Beralih ke tab Ket dan pastikan textarea tetap aktif
+      const ketBtn = Array.from(tabButtons).find((b) =>
+        b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.TAB_KET),
+      );
+      await act(async () => {
+        ketBtn?.click();
+      });
+
+      const inputKeterangan = document.body.querySelector<HTMLTextAreaElement>("#input-keterangan");
+      expect(inputKeterangan).not.toBeNull();
+      expect(inputKeterangan?.disabled).toBe(false);
+    });
+
+    it("unlocks form and clears pure OFF/LIBUR notes when activate input button is clicked with valid ritase", async () => {
+      const onSave = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({
+              tripPergi: "0",
+              tripPulang: "0",
+              keterangan: "OFF",
+            })}
+            initialTab="shift1"
+            onSave={onSave}
+          />,
+        );
+      });
+
+      // Banner tampil dan input terkunci
+      expect(document.body.querySelector('[data-testid="non-operational-banner"]')).not.toBeNull();
+      expect(document.body.querySelector<HTMLInputElement>("#input-toa-s1")?.disabled).toBe(true);
+
+      // Mock pdoSwal.fire prompt pengaktifan
+      const swalSpy = vi.spyOn(alertUtils.pdoSwal, "fire").mockResolvedValueOnce({
+        isConfirmed: true,
+        value: "7.5",
+      } as any);
+
+      const activateBtn = document.body.querySelector<HTMLButtonElement>('[data-testid="btn-activate-input"]');
+      expect(activateBtn).not.toBeNull();
+
+      await act(async () => {
+        activateBtn?.click();
+      });
+
+      expect(swalSpy).toHaveBeenCalled();
+
+      // Form harus terbuka: banner hilang dan input TOA S1 aktif
+      expect(document.body.querySelector('[data-testid="non-operational-banner"]')).toBeNull();
+      const inputToaS1 = document.body.querySelector<HTMLInputElement>("#input-toa-s1");
+      expect(inputToaS1?.disabled).toBe(false);
+
+      // Beralih ke tab Ritase dan periksa trip terisi 7.5
+      const tabButtons = document.body.querySelectorAll("button");
+      const ritaseBtn = Array.from(tabButtons).find((b) =>
+        b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.TAB_RITASE),
+      );
+      await act(async () => {
+        ritaseBtn?.click();
+      });
+
+      const inputTripPergi = document.body.querySelector<HTMLInputElement>("#input-trip-pergi");
+      const inputTripPulang = document.body.querySelector<HTMLInputElement>("#input-trip-pulang");
+      expect(inputTripPergi?.value).toBe("7.5");
+      expect(inputTripPulang?.value).toBe("7.5");
+      expect(inputTripPergi?.disabled).toBe(false);
+      expect(inputTripPulang?.disabled).toBe(false);
+
+      // Beralih ke tab Ket dan pastikan keterangan OFF telah dibersihkan
+      const ketBtn = Array.from(tabButtons).find((b) =>
+        b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.TAB_KET),
+      );
+      await act(async () => {
+        ketBtn?.click();
+      });
+
+      const inputKeterangan = document.body.querySelector<HTMLTextAreaElement>("#input-keterangan");
+      expect(inputKeterangan?.value).toBe("");
+
+      swalSpy.mockRestore();
+    });
+  });
+
 });
 
 
