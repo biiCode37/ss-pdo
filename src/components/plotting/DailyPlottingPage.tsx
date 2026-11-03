@@ -41,19 +41,37 @@ export interface DailyPlottingPageProps {
 }
 
 /**
- * Normalizes unit ordering per base so each base (A and B) strictly has
- * sequential numbers 1..N without duplicates or gaps.
+ * Normalizes unit ordering per base so each base (A and B):
+ * - Operational units (target_ritase > 0 && status !== 'OFF') are strictly sequential 1..N.
+ * - Non-operational units (target_ritase === 0 || status === 'OFF') are parked at the bottom with order = 0.
  */
 export const normalizeBaseOrders = (items: UnitPlottingItem[]): UnitPlottingItem[] => {
-  const unitsA = items
-    .filter((u) => u.start_point === 'A')
-    .sort((a, b) => a.order - b.order)
-    .map((u, idx) => ({ ...u, order: idx + 1 }));
+  const normalizeBase = (units: UnitPlottingItem[]): UnitPlottingItem[] => {
+    const operational = units.filter((u) => u.target_ritase > 0 && u.status !== 'OFF');
+    const nonOperational = units.filter((u) => u.target_ritase === 0 || u.status === 'OFF');
 
-  const unitsB = items
-    .filter((u) => u.start_point === 'B')
-    .sort((a, b) => a.order - b.order)
-    .map((u, idx) => ({ ...u, order: idx + 1 }));
+    const opWithExistingOrder = operational
+      .filter((u) => u.order > 0)
+      .sort((a, b) => a.order - b.order);
+    const opNewlyRestored = operational.filter((u) => u.order === 0);
+
+    const sortedOperational = [...opWithExistingOrder, ...opNewlyRestored];
+
+    const mappedOperational = sortedOperational.map((u, idx) => ({
+      ...u,
+      order: idx + 1,
+    }));
+
+    const mappedNonOperational = nonOperational.map((u) => ({
+      ...u,
+      order: 0,
+    }));
+
+    return [...mappedOperational, ...mappedNonOperational];
+  };
+
+  const unitsA = normalizeBase(items.filter((u) => u.start_point === 'A'));
+  const unitsB = normalizeBase(items.filter((u) => u.start_point === 'B'));
 
   return [...unitsA, ...unitsB];
 };
@@ -276,7 +294,13 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   const currentBaseUnits = useMemo(() => {
     return unitsData
       .filter((u) => u.start_point === activeBase)
-      .sort((a, b) => a.order - b.order);
+      .sort((a, b) => {
+        const isNonOpA = a.order === 0 || a.target_ritase === 0 || a.status === 'OFF';
+        const isNonOpB = b.order === 0 || b.target_ritase === 0 || b.status === 'OFF';
+        if (isNonOpA && !isNonOpB) return 1;
+        if (!isNonOpA && isNonOpB) return -1;
+        return a.order - b.order;
+      });
   }, [unitsData, activeBase]);
 
   // Handler: Toggle Reordering Mode (Safety barrier)
@@ -352,18 +376,23 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
     setUnitsData((prev) => {
       const target = prev.find((u) => u.unit === unit);
       if (!target) return prev;
+      if (target.order === 0 || target.target_ritase === 0 || target.status === 'OFF') {
+        return prev;
+      }
 
       const point = target.start_point;
-      const baseUnits = prev
-        .filter((u) => u.start_point === point)
+      const opUnits = prev
+        .filter((u) => u.start_point === point && u.target_ritase > 0 && u.status !== 'OFF')
         .sort((a, b) => a.order - b.order);
+      const nonOpUnits = prev
+        .filter((u) => u.start_point === point && (u.target_ritase === 0 || u.status === 'OFF'));
 
-      const idx = baseUnits.findIndex((u) => u.unit === unit);
+      const idx = opUnits.findIndex((u) => u.unit === unit);
       if (idx === -1) return prev;
 
-      const updatedBase = [...baseUnits];
+      const updatedBase = [...opUnits];
       if (idx === 0) {
-        // Infinity Movement: Unit urutan pertama diputar ke paling bawah
+        // Infinity Movement: Unit urutan pertama diputar ke paling bawah antrean operasional
         const [first] = updatedBase.splice(0, 1);
         updatedBase.push(first);
       } else {
@@ -373,11 +402,9 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
         updatedBase[idx] = temp;
       }
 
-      // Re-index urutan pangkalan
       const reindexed = updatedBase.map((u, i) => ({ ...u, order: i + 1 }));
       const otherUnits = prev.filter((u) => u.start_point !== point);
-
-      return normalizeBaseOrders([...reindexed, ...otherUnits]);
+      return normalizeBaseOrders([...reindexed, ...nonOpUnits, ...otherUnits]);
     });
   }, []);
 
@@ -387,18 +414,23 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
     setUnitsData((prev) => {
       const target = prev.find((u) => u.unit === unit);
       if (!target) return prev;
+      if (target.order === 0 || target.target_ritase === 0 || target.status === 'OFF') {
+        return prev;
+      }
 
       const point = target.start_point;
-      const baseUnits = prev
-        .filter((u) => u.start_point === point)
+      const opUnits = prev
+        .filter((u) => u.start_point === point && u.target_ritase > 0 && u.status !== 'OFF')
         .sort((a, b) => a.order - b.order);
+      const nonOpUnits = prev
+        .filter((u) => u.start_point === point && (u.target_ritase === 0 || u.status === 'OFF'));
 
-      const idx = baseUnits.findIndex((u) => u.unit === unit);
+      const idx = opUnits.findIndex((u) => u.unit === unit);
       if (idx === -1) return prev;
 
-      const updatedBase = [...baseUnits];
+      const updatedBase = [...opUnits];
       if (idx === updatedBase.length - 1) {
-        // Infinity Movement: Unit urutan terakhir diputar ke paling atas
+        // Infinity Movement: Unit urutan terakhir diputar ke paling atas antrean operasional
         const [last] = updatedBase.splice(updatedBase.length - 1, 1);
         updatedBase.unshift(last);
       } else {
@@ -408,11 +440,9 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
         updatedBase[idx] = temp;
       }
 
-      // Re-index urutan pangkalan
       const reindexed = updatedBase.map((u, i) => ({ ...u, order: i + 1 }));
       const otherUnits = prev.filter((u) => u.start_point !== point);
-
-      return normalizeBaseOrders([...reindexed, ...otherUnits]);
+      return normalizeBaseOrders([...reindexed, ...nonOpUnits, ...otherUnits]);
     });
   }, []);
 
@@ -478,9 +508,10 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   const handleUpdateTargetRitase = useCallback((unit: string, target_ritase: number) => {
     isDirtyRef.current = true;
     const rounded = Math.round(target_ritase * 2) / 2;
-    setUnitsData((prev) =>
-      prev.map((u) => (u.unit === unit ? { ...u, target_ritase: rounded } : u)),
-    );
+    setUnitsData((prev) => {
+      const updated = prev.map((u) => (u.unit === unit ? { ...u, target_ritase: rounded } : u));
+      return normalizeBaseOrders(updated);
+    });
   }, []);
 
   // Handler: Buka Modal Pengatur Ritase Fleksibel
@@ -509,9 +540,12 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
       const roundedVal = Math.round(val * 2) / 2;
 
       if (scope === 'selected') {
-        setUnitsData((prev) =>
-          prev.map((u) => (selectedUnits.has(u.unit) ? { ...u, target_ritase: roundedVal } : u)),
-        );
+        setUnitsData((prev) => {
+          const updated = prev.map((u) =>
+            selectedUnits.has(u.unit) ? { ...u, target_ritase: roundedVal } : u,
+          );
+          return normalizeBaseOrders(updated);
+        });
         showSuccessToast(TEXT_PLOTTING.TOASTS.BULK_TARGET_APPLIED(roundedVal, selectedUnits.size));
         setSelectedUnits(new Set());
         setTargetModal((prev) => ({ ...prev, isOpen: false }));
@@ -519,23 +553,24 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
       }
 
       setUnitsData((prev) => {
+        let updated: UnitPlottingItem[];
         if (scope === 'unit' && targetModal.unit) {
-          return prev.map((u) => (u.unit === targetModal.unit ? { ...u, target_ritase: roundedVal } : u));
-        }
-        if (scope === 'base') {
-          return prev.map((u) =>
+          updated = prev.map((u) => (u.unit === targetModal.unit ? { ...u, target_ritase: roundedVal } : u));
+        } else if (scope === 'base') {
+          updated = prev.map((u) =>
             u.start_point === activeBase
               ? { ...u, target_ritase: u.status === 'OFF' ? 0 : roundedVal }
               : u,
           );
-        }
-        if (scope === 'all') {
-          return prev.map((u) => ({
+        } else if (scope === 'all') {
+          updated = prev.map((u) => ({
             ...u,
             target_ritase: u.status === 'OFF' ? 0 : roundedVal,
           }));
+        } else {
+          updated = prev;
         }
-        return prev;
+        return normalizeBaseOrders(updated);
       });
 
       if (scope === 'unit' && targetModal.unit) {
@@ -555,9 +590,19 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   // Handler: Update Status Kesiapan Unit Langsung
   const handleUpdateStatus = useCallback((unit: string, status: PlottingUnitStatus) => {
     isDirtyRef.current = true;
-    setUnitsData((prev) =>
-      prev.map((u) => (u.unit === unit ? { ...u, status } : u)),
-    );
+    setUnitsData((prev) => {
+      const updated = prev.map((u) => {
+        if (u.unit === unit) {
+          return {
+            ...u,
+            status,
+            target_ritase: status === 'OFF' ? 0 : u.target_ritase,
+          };
+        }
+        return u;
+      });
+      return normalizeBaseOrders(updated);
+    });
   }, []);
 
   // Handler: Buka Modal Kendala Cepat
@@ -584,8 +629,8 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
       const isOff = isUnitOffOrToEvdal(keterangan);
       const newStatus: PlottingUnitStatus = isOff ? 'OFF' : 'TROUBLE';
 
-      setUnitsData((prev) =>
-        prev.map((u) => {
+      setUnitsData((prev) => {
+        const updated = prev.map((u) => {
           if (u.unit === unitName) {
             return {
               ...u,
@@ -596,8 +641,9 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
             };
           }
           return u;
-        }),
-      );
+        });
+        return normalizeBaseOrders(updated);
+      });
     },
     [],
   );
@@ -606,8 +652,8 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   const handleResetReady = useCallback(
     (unitName: string) => {
       isDirtyRef.current = true;
-      setUnitsData((prev) =>
-        prev.map((u) => {
+      setUnitsData((prev) => {
+        const updated: UnitPlottingItem[] = prev.map((u) => {
           if (u.unit === unitName) {
             return {
               ...u,
@@ -618,8 +664,9 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
             };
           }
           return u;
-        }),
-      );
+        });
+        return normalizeBaseOrders(updated);
+      });
     },
     [defaultTargetRitase],
   );

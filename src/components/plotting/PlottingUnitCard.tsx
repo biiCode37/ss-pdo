@@ -55,6 +55,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
   onDrop,
 }: PlottingUnitCardProps) {
   const currentBaseName = item.start_point === 'A' ? endpointAName : endpointBName;
+  const isNonOp = item.target_ritase === 0 || item.status === 'OFF' || item.order === 0;
 
   const getStatusColor = (status: PlottingUnitStatus) => {
     switch (status) {
@@ -102,7 +103,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
 
   return (
     <div
-      draggable={isReordering}
+      draggable={isReordering && !isNonOp}
       onDragStart={(e) => onDragStart?.(e, item.unit)}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop?.(e, item.unit)}
@@ -121,9 +122,9 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
         borderRadius: '14px',
         padding: '12px 14px',
         marginBottom: '10px',
-        cursor: isReordering ? 'grab' : 'pointer',
-        userSelect: isReordering ? 'none' : 'auto',
-        WebkitUserSelect: isReordering ? 'none' : 'auto',
+        cursor: isReordering && !isNonOp ? 'grab' : 'pointer',
+        userSelect: isReordering && !isNonOp ? 'none' : 'auto',
+        WebkitUserSelect: isReordering && !isNonOp ? 'none' : 'auto',
         display: 'flex',
         flexDirection: 'column',
         gap: '9px',
@@ -167,15 +168,21 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
             )}
           </button>
 
-          {/* Sequential Order Badge (Interaktif - klik untuk atur urutan) */}
+          {/* Sequential Order Badge (Interaktif jika operasional - klik untuk atur urutan) */}
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              onOpenOrderModal?.(item.unit);
+              if (!isNonOp) {
+                onOpenOrderModal?.(item.unit);
+              }
             }}
             data-testid={`badge-order-${item.unit}`}
-            title="Klik untuk mengatur posisi urutan unit ini"
+            title={
+              isNonOp
+                ? 'Unit Tidak Beroperasi (Tidak Masuk Antrean)'
+                : 'Klik untuk mengatur posisi urutan unit ini'
+            }
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -186,15 +193,17 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               borderRadius: '6px',
               background: 'var(--color-surface-default, rgba(255, 255, 255, 0.08))',
               border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
-              color: 'var(--color-text-primary, #f8fafc)',
+              color: isNonOp
+                ? 'var(--color-text-muted, #64748b)'
+                : 'var(--color-text-primary, #f8fafc)',
               fontSize: '0.8rem',
               fontWeight: 800,
               flexShrink: 0,
-              cursor: 'pointer',
+              cursor: isNonOp ? 'default' : 'pointer',
               transition: 'all 0.15s ease',
             }}
           >
-            {item.order}
+            {isNonOp ? '-' : item.order}
           </button>
 
           {/* Unit Name (KWK 222153) - Mendapat ruang utama lega tanpa terpotong */}
@@ -338,8 +347,8 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
             <ArrowLeftRight size={11} style={{ opacity: 0.7 }} />
           </button>
 
-          {/* Tombol Reorder Panah Atas & Bawah (Tampil saat isReordering aktif) */}
-          {isReordering && (
+          {/* Tombol Reorder Panah Atas & Bawah (Hanya tampil untuk unit operasional saat isReordering aktif) */}
+          {isReordering && !isNonOp && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
               <button
                 type="button"

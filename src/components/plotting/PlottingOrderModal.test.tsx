@@ -298,4 +298,36 @@ describe('PlottingOrderModal Component', () => {
     });
     expect(handleClose).toHaveBeenCalledTimes(2);
   });
+
+  it('hanya menampilkan unit-unit operasional (order > 0) pada dropdown unit acuan target', () => {
+    const mixedUnits: UnitPlottingItem[] = [
+      { unit: 'KWK 222151', order: 1, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+      { unit: 'KWK 222152', order: 2, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+      { unit: 'KWK 222153', order: 0, start_point: 'A', target_ritase: 0, status: 'OFF' },
+      { unit: 'KWK 222154', order: 0, start_point: 'A', target_ritase: 0, status: 'READY' },
+    ];
+
+    act(() => {
+      root.render(
+        <PlottingOrderModal
+          isOpen={true}
+          unitsToMove={['KWK 222151']}
+          allBaseUnits={mixedUnits}
+          onClose={vi.fn()}
+          onApplyMove={vi.fn()}
+        />
+      );
+    });
+
+    const select = container.querySelector('[data-testid="select-ref-unit"]') as HTMLSelectElement;
+    expect(select).not.toBeNull();
+
+    const options = Array.from(select.options).map((opt) => opt.value);
+    // Hanya KWK 222152 (order 2) yang tampil. KWK 222151 sedang dipindahkan, KWK 222153 & 222154 non-operasional (order 0)
+    expect(options).toContain('');
+    expect(options).toContain('KWK 222152');
+    expect(options).not.toContain('KWK 222151');
+    expect(options).not.toContain('KWK 222153');
+    expect(options).not.toContain('KWK 222154');
+  });
 });

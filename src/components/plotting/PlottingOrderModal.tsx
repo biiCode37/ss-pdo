@@ -46,7 +46,9 @@ export const PlottingOrderModal: React.FC<PlottingOrderModalProps> = ({
     ? TEXT_PLOTTING.ORDER_MODAL.TITLE_SINGLE(unitsToMove[0], currentOrder)
     : TEXT_PLOTTING.ORDER_MODAL.TITLE_MULTI(unitsToMove.length);
 
-  const candidateUnits = allBaseUnits.filter((u) => !unitsToMove.includes(u.unit));
+  const candidateUnits = allBaseUnits.filter(
+    (u) => !unitsToMove.includes(u.unit) && u.order > 0,
+  );
 
   const handleQuickTop = () => {
     onApplyMove(unitsToMove, 'TOP', undefined);

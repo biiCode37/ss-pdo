@@ -300,4 +300,51 @@ describe('PlottingUnitCard Component', () => {
 
     expect(container.querySelector('.lucide-grip-vertical')).toBeNull();
   });
+
+  it('menampilkan badge non-operasi (-) dan tooltip khusus untuk unit OFF atau target ritase 0 serta menyembunyikan tombol panah reorder', () => {
+    const mockItemOff: UnitPlottingItem = {
+      unit: 'KWK 222155',
+      order: 0,
+      start_point: 'A',
+      target_ritase: 0,
+      status: 'OFF',
+      keterangan: 'OFF',
+    };
+    const mockOpenOrderModal = vi.fn();
+
+    act(() => {
+      root.render(
+        <PlottingUnitCard
+          item={mockItemOff}
+          endpointAName="Priok"
+          endpointBName="IGI"
+          isReordering={true}
+          isSelectedForMultiSelect={false}
+          onToggleSelect={vi.fn()}
+          onOpenOrderModal={mockOpenOrderModal}
+          onToggleStartPoint={vi.fn()}
+          onUpdateTargetRitase={vi.fn()}
+          onUpdateStatus={vi.fn()}
+        />,
+      );
+    });
+
+    // Badge urutan harus menampilkan non-numeric '-'
+    const badge = container.querySelector('[data-testid="badge-order-KWK 222155"]');
+    expect(badge).not.toBeNull();
+    expect(badge?.textContent?.trim()).toBe('-');
+    expect(badge?.getAttribute('title')).toBe('Unit Tidak Beroperasi (Tidak Masuk Antrean)');
+
+    // Klik pada badge non-op tidak boleh membuka modal reorder urutan
+    act(() => {
+      (badge as HTMLButtonElement).click();
+    });
+    expect(mockOpenOrderModal).not.toHaveBeenCalled();
+
+    // Reorder panah TIDAK boleh tampil untuk unit non-operasi meskipun isReordering = true
+    const btnUp = container.querySelector('[data-testid="btn-move-up-KWK 222155"]');
+    const btnDown = container.querySelector('[data-testid="btn-move-down-KWK 222155"]');
+    expect(btnUp).toBeNull();
+    expect(btnDown).toBeNull();
+  });
 });

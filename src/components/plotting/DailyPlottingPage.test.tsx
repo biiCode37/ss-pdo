@@ -89,7 +89,7 @@ describe('DailyPlottingPage Component & normalizeBaseOrders', () => {
       kmAkhir1: '',
       kmAwal2: '',
       kmAkhir2: '',
-      keterangan: 'OFF',
+      keterangan: '',
       originalRow: [],
     },
   ];
@@ -122,6 +122,40 @@ describe('DailyPlottingPage Component & normalizeBaseOrders', () => {
 
     expect(unitsA.map((u) => u.order)).toEqual([1, 2, 3]);
     expect(unitsB.map((u) => u.order)).toEqual([1]);
+  });
+
+  it('menempatkan unit OFF atau target ritase 0 di paling bawah dengan order = 0, dan unit operasional berurutan 1..N', () => {
+    const mixedItems: UnitPlottingItem[] = [
+      { unit: 'U1', order: 1, start_point: 'A', target_ritase: 0, status: 'OFF' },
+      { unit: 'U2', order: 2, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+      { unit: 'U3', order: 3, start_point: 'A', target_ritase: 0, status: 'READY' },
+      { unit: 'U4', order: 4, start_point: 'A', target_ritase: 8, status: 'READY' },
+      { unit: 'U5', order: 5, start_point: 'A', target_ritase: 7.5, status: 'OFF' },
+      { unit: 'U6', order: 1, start_point: 'B', target_ritase: 0, status: 'OFF' },
+      { unit: 'U7', order: 2, start_point: 'B', target_ritase: 7, status: 'READY' },
+    ];
+
+    const normalized = normalizeBaseOrders(mixedItems);
+    const unitsA = normalized.filter((u) => u.start_point === 'A');
+    const unitsB = normalized.filter((u) => u.start_point === 'B');
+
+    // Unit operasional di A (U2, U4) harus nomor 1 dan 2
+    expect(unitsA.slice(0, 2).map((u) => ({ unit: u.unit, order: u.order }))).toEqual([
+      { unit: 'U2', order: 1 },
+      { unit: 'U4', order: 2 },
+    ]);
+    // Unit non-operasional di A (U1, U3, U5) harus terparkir di bawah dengan order = 0
+    expect(unitsA.slice(2).map((u) => ({ unit: u.unit, order: u.order }))).toEqual([
+      { unit: 'U1', order: 0 },
+      { unit: 'U3', order: 0 },
+      { unit: 'U5', order: 0 },
+    ]);
+
+    // Di Base B: U7 operasional (order 1), U6 non-op di bawah (order 0)
+    expect(unitsB.map((u) => ({ unit: u.unit, order: u.order }))).toEqual([
+      { unit: 'U7', order: 1 },
+      { unit: 'U6', order: 0 },
+    ]);
   });
 
   it('merender header kesiapan subuh, pangkalan tabs, dan kartu unit', async () => {
@@ -595,5 +629,61 @@ describe('DailyPlottingPage Component & normalizeBaseOrders', () => {
     // Floating bar sudah tertutup karena unselect all
     expect(container.querySelector('[data-testid="multi-select-action-bar"]')).toBeNull();
     expect(showSuccessToast).toHaveBeenCalledWith(TEXT_PLOTTING.ORDER_MODAL.APPLY_SUCCESS(2));
+  });
+
+  it('secara otomatis memarkir unit ke bawah dengan badge non-operasi saat status diubah ke OFF', async () => {
+    vi.mocked(dailyPlottingService.fetchDailyPlotting).mockResolvedValueOnce({
+      id: 1,
+      route_id: 1,
+      route_code: 'JAK.115',
+      date: '2026-10-31',
+      units_data: [
+        { unit: 'TJ-01', order: 1, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+        { unit: 'TJ-02', order: 2, start_point: 'A', target_ritase: 7.5, status: 'READY' },
+      ],
+    });
+
+    await act(async () => {
+      root.render(
+        <DailyPlottingPage
+          routeId={1}
+          routeCode="JAK.115"
+          date="2026-10-31"
+          buses={sampleBuses}
+        />,
+      );
+    });
+
+    // Awal: TJ-01 #1, TJ-02 #2
+    const b01Initial = container.querySelector('[data-testid="badge-order-TJ-01"]');
+    expect(b01Initial?.textContent?.trim()).toBe('1');
+
+    // Buka trouble modal pada TJ-01
+    const btnStatus01 = container.querySelector('[data-testid="btn-status-TJ-01"]') as HTMLButtonElement;
+    await act(async () => {
+      btnStatus01.click();
+    });
+
+    // Pilih kode OFF pada modal trouble
+    const btnOff = container.querySelector('[data-testid="trouble-code-OFF"]') as HTMLButtonElement;
+    expect(btnOff).not.toBeNull();
+    await act(async () => {
+      btnOff.click();
+    });
+
+    const applyTroubleBtn = Array.from(container.querySelectorAll('button')).find((b) =>
+      b.textContent?.includes(TEXT_PLOTTING.TROUBLE_MODAL.APPLY_BTN),
+    );
+    expect(applyTroubleBtn).toBeDefined();
+
+    await act(async () => {
+      applyTroubleBtn?.click();
+    });
+
+    // Sekarang TJ-02 menjadi urutan #1 dan TJ-01 terparkir di bawah dengan badge '-'
+    const b02After = container.querySelector('[data-testid="badge-order-TJ-02"]');
+    const b01After = container.querySelector('[data-testid="badge-order-TJ-01"]');
+    expect(b02After?.textContent?.trim()).toBe('1');
+    expect(b01After?.textContent?.trim()).toBe('-');
   });
 });
