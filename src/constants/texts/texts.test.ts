@@ -587,6 +587,20 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_SUCCESS(10)).toBe('Plotting & 10 unit berhasil disinkronkan ke Spreadsheet asli');
     expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_OFFLINE(10)).toBe('Plotting tersimpan, 10 mutasi spreadsheet masuk antrean offline');
     expect(TEXT_PLOTTING.TOASTS.BULK_TARGET_APPLIED(7.5, 4)).toBe('Target ritase 7.5 Rit diterapkan ke 4 unit');
+
+    // ORDER_MODAL & ACTIONS.BULK_REORDER (Task 2)
+    expect(TEXT_PLOTTING.ACTIONS.BULK_REORDER(3)).toBe('⇅ Atur Posisi (3)');
+    expect(TEXT_PLOTTING.ORDER_MODAL.TITLE_SINGLE('TJ-01', 5)).toBe('Atur Posisi TJ-01 (#5)');
+    expect(TEXT_PLOTTING.ORDER_MODAL.TITLE_MULTI(3)).toBe('Atur Posisi 3 Unit Terpilih');
+    expect(TEXT_PLOTTING.ORDER_MODAL.QUICK_TOP).toBe('⤒ Paling Depan (#1)');
+    expect(TEXT_PLOTTING.ORDER_MODAL.QUICK_BOTTOM).toBe('⤓ Paling Belakang');
+    expect(TEXT_PLOTTING.ORDER_MODAL.RELATIVE_HEADER).toBe('Atau selipkan posisi relatif:');
+    expect(TEXT_PLOTTING.ORDER_MODAL.DIR_ABOVE).toBe('Di Atas Unit');
+    expect(TEXT_PLOTTING.ORDER_MODAL.DIR_BELOW).toBe('Di Bawah Unit');
+    expect(TEXT_PLOTTING.ORDER_MODAL.REF_LABEL).toBe('Pilih Unit Acuan:');
+    expect(TEXT_PLOTTING.ORDER_MODAL.REF_PLACEHOLDER).toBe('-- Pilih unit acuan target --');
+    expect(TEXT_PLOTTING.ORDER_MODAL.SUBMIT).toBe('Terapkan Posisi');
+    expect(TEXT_PLOTTING.ORDER_MODAL.APPLY_SUCCESS(3)).toBe('Posisi 3 unit berhasil diperbarui');
   });
 
   describe('Conflict Comparison & Field Labels Text Dictionary', () => {
