@@ -58,7 +58,7 @@ jobs:
           mkdir -p "$BACKUP_OUTPUT_DIR"
           node scripts/backup/run-backup.mjs
 
-      - name: Step 3 - Unggah ke Google Drive & Retensi Cadangan (Default: 0 = Permanen)
+      - name: "Step 3 - Unggah ke Google Drive & Retensi Cadangan (Default 0 = Permanen)"
         if: github.event.inputs.upload_to_gdrive != 'false'
         env:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
