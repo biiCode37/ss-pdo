@@ -62,10 +62,52 @@ Agar GitHub Actions dapat menjalankan tugas pencadangan setiap malam, pastikan v
 | `SUPABASE_SERVICE_ROLE_KEY` | Kunci *service_role* Supabase (dari menu **Project Settings** ➔ **API**). |
 | `GOOGLE_SERVICE_ACCOUNT_KEY` | Isi teks lengkap dari file JSON kunci Google Service Account. |
 | `GDRIVE_BACKUP_FOLDER_ID` | ID Folder Google Drive yang Anda salin pada **Langkah 1** di atas. |
+| `GDRIVE_APPSCRIPT_URL` | *(Sangat Direkomendasikan untuk akun Gmail personal)* URL Web App Google Apps Script penerima cadangan (lihat panduan di bawah) untuk mem-bypass pembatasan kuota 0-byte Service Account. |
 
 ---
 
-## ⚡ 4. Cara Menjalankan Backup Manual (1-Klik via GitHub Actions)
+## 🌐 4. Cara Menghubungkan Akun Gmail Pribadi via Google Apps Script (Bypass Kuota 0-Byte)
+
+Google memberlakukan pembatasan bahwa Service Account bot memiliki kuota penyimpanan 0-byte untuk akun Gmail personal (`@gmail.com`). Agar file cadangan dapat langsung masuk ke Google Drive pribadi Anda tanpa batas:
+
+1. Buka [Google Apps Script](https://script.google.com/) menggunakan akun Google pribadi Anda.
+2. Klik **+ Proyek baru**.
+3. Hapus semua kode default dan tempelkan kode skrip jembatan berikut:
+   ```javascript
+   function doPost(e) {
+     try {
+       var data = JSON.parse(e.postData.contents);
+       var decoded = Utilities.base64Decode(data.base64Data);
+       var blob = Utilities.newBlob(decoded, 'application/zip', data.fileName);
+       var folder = data.folderId ? DriveApp.getFolderById(data.folderId) : DriveApp.getRootFolder();
+       var file = folder.createFile(blob);
+       return ContentService.createTextOutput(JSON.stringify({
+         status: 'success',
+         id: file.getId(),
+         name: file.getName()
+       })).setMimeType(ContentService.MimeType.JSON);
+     } catch (err) {
+       return ContentService.createTextOutput(JSON.stringify({
+         status: 'error',
+         message: err.toString()
+       })).setMimeType(ContentService.MimeType.JSON);
+     }
+   }
+   ```
+4. Klik tombol biru **Terapkan (Deploy)** di pojok kanan atas ➔ pilih **Penerapan baru (New deployment)**.
+5. Klik ikon gerigi ⚙️ di samping "Select type" ➔ pilih **Aplikasi web (Web app)**:
+   - Deskripsi: `SS_PDO Backup Receiver`
+   - Jalankan sebagai (*Execute as*): **Saya (*Me*)**
+   - Siapa yang memiliki akses (*Who has access*): **Siapa saja (*Anyone*)**
+6. Klik **Terapkan (Deploy)** ➔ Berikan izin akses Google Drive saat diminta (*Authorize access*).
+7. Salin **URL Aplikasi Web** yang berakhiran `/exec`.
+8. Masukkan URL tersebut ke GitHub Secrets dengan nama **`GDRIVE_APPSCRIPT_URL`**.
+
+> 💡 **Kenapa cara ini terbaik?** Karena Apps Script berjalan atas nama akun Anda sendiri, file cadangan otomatis memakai kuota 15 GB gratis akun Google Anda, tanpa batasan Service Account sama sekali!
+
+---
+
+## ⚡ 5. Cara Menjalankan Backup Manual (1-Klik via GitHub Actions)
 
 Selain berjalan otomatis setiap hari pukul **02.00 WIB**, Anda atau tim admin dapat memicu pencadangan kapan saja secara manual:
 
@@ -78,7 +120,7 @@ Selain berjalan otomatis setiap hari pukul **02.00 WIB**, Anda atau tim admin da
 
 ---
 
-## 🔄 5. Prosedur Pemulihan Darurat (Disaster Recovery)
+## 🔄 6. Prosedur Pemulihan Darurat (Disaster Recovery)
 
 Jika terjadi insiden kehilangan data atau kerusakan server:
 

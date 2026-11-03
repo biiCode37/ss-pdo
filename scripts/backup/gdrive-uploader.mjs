@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * scripts/backup/gdrive-uploader.mjs
  * Modul Pengunggah Google Drive & Pembersihan Cadangan Lama (Auto-Pruning 30 Hari).
@@ -25,6 +24,43 @@ export function filterExpiredBackupFiles(files, maxAgeDays = 0, nowTimestamp = D
     if (isNaN(fileTime)) return false;
     return nowTimestamp - fileTime > maxAgeMs;
   });
+}
+
+/**
+ * Mengunggah file ZIP cadangan melalui Google Apps Script Web App
+ * (Solusi resmi untuk akun Gmail personal agar file dimiliki langsung oleh akun Google Anda)
+ */
+export async function uploadBackupViaAppsScript({
+  appScriptUrl,
+  fileName,
+  fileBuffer,
+  folderId,
+  fetchImpl = fetch,
+}) {
+  const payload = {
+    fileName,
+    folderId,
+    base64Data: fileBuffer.toString('base64'),
+  };
+
+  const res = await fetchImpl(appScriptUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    redirect: 'follow',
+  });
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(`Gagal mengunggah via Google Apps Script (${res.status}): ${errText}`);
+  }
+
+  const result = await res.json();
+  if (result.status === 'error') {
+    throw new Error(`Google Apps Script mengembalikan error: ${result.message}`);
+  }
+
+  return result;
 }
 
 /**
@@ -62,7 +98,7 @@ export async function uploadBackupToDrive({
     footerPart,
   ]);
 
-  const uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+  const uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true';
   const res = await fetchImpl(uploadUrl, {
     method: 'POST',
     headers: {
@@ -102,7 +138,7 @@ export async function pruneOldBackups({
 
   // 1. Ambil daftar file di folder
   const query = encodeURIComponent(`'${folderId}' in parents and trashed = false and mimeType = 'application/zip'`);
-  const listUrl = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name,createdTime)&pageSize=100`;
+  const listUrl = `https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,name,createdTime)&pageSize=100&supportsAllDrives=true&includeItemsFromAllDrives=true`;
 
   const res = await fetchImpl(listUrl, {
     method: 'GET',
@@ -124,7 +160,7 @@ export async function pruneOldBackups({
   // 2. Hapus file yang kedaluwarsa satu per satu
   for (const file of expiredFiles) {
     try {
-      const deleteUrl = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(file.id)}`;
+      const deleteUrl = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(file.id)}?supportsAllDrives=true`;
       const delRes = await fetchImpl(deleteUrl, {
         method: 'DELETE',
         headers: {
@@ -193,32 +229,63 @@ export async function main() {
   const fileBuffer = fs.readFileSync(targetZip);
   const fileSizeMb = (fileBuffer.length / (1024 * 1024)).toFixed(2);
 
+  // Opsi 1: Google Apps Script Webhook (Bypass kuota 0 Service Account untuk personal Gmail)
+  const appScriptUrl = process.env.GDRIVE_APPSCRIPT_URL;
+  if (appScriptUrl) {
+    console.log(`[GDrive] Mengunggah ${fileName} (${fileSizeMb} MB) melalui Google Apps Script Web App...`);
+    try {
+      const gasResult = await uploadBackupViaAppsScript({
+        appScriptUrl,
+        fileName,
+        fileBuffer,
+        folderId,
+      });
+      console.log(`=== ✅ Unggahan Berhasil via Google Apps Script! File ID: ${gasResult.id || gasResult.fileId || 'ok'} ===`);
+      return;
+    } catch (gasErr) {
+      console.error('❌ Gagal mengunggah via Apps Script Web App:', gasErr.message);
+      throw gasErr;
+    }
+  }
+
+  // Opsi 2: Google Drive API v3 langsung via Service Account
   console.log(`[GDrive] Mengautentikasi Service Account (${serviceAccount.client_email})...`);
   const accessToken = await getGoogleAccessToken(serviceAccount);
 
   console.log(`[GDrive] Mengunggah ${fileName} (${fileSizeMb} MB) ke Folder ID: ${folderId}...`);
-  const uploadResult = await uploadBackupToDrive({
-    fileName,
-    fileBuffer,
-    folderId,
-    accessToken,
-  });
+  try {
+    const uploadResult = await uploadBackupToDrive({
+      fileName,
+      fileBuffer,
+      folderId,
+      accessToken,
+    });
+    console.log(`=== ✅ Unggahan Berhasil! File ID: ${uploadResult.id} ===`);
 
-  console.log(`=== ✅ Unggahan Berhasil! File ID: ${uploadResult.id} ===`);
+    // Jalankan rotasi retensi (default 0 = permanen/abadi)
+    const maxAgeDays = parseInt(process.env.BACKUP_RETENTION_DAYS || '0', 10);
+    if (maxAgeDays > 0) {
+      console.log(`[GDrive] Menjalankan pemeriksaan retensi file (> ${maxAgeDays} hari)...`);
+    }
+    const pruned = await pruneOldBackups({
+      folderId,
+      maxAgeDays,
+      accessToken,
+    });
 
-  // Jalankan rotasi retensi (default 0 = permanen/abadi)
-  const maxAgeDays = parseInt(process.env.BACKUP_RETENTION_DAYS || '0', 10);
-  if (maxAgeDays > 0) {
-    console.log(`[GDrive] Menjalankan pemeriksaan retensi file (> ${maxAgeDays} hari)...`);
-  }
-  const pruned = await pruneOldBackups({
-    folderId,
-    maxAgeDays,
-    accessToken,
-  });
-
-  if (maxAgeDays > 0) {
-    console.log(`[GDrive] Selesai. Total file lama dibersihkan: ${pruned.length}`);
+    if (maxAgeDays > 0) {
+      console.log(`[GDrive] Selesai. Total file lama dibersihkan: ${pruned.length}`);
+    }
+  } catch (driveErr) {
+    const errMsg = driveErr.message || '';
+    if (errMsg.includes('storageQuotaExceeded') || errMsg.includes('Service Accounts do not have storage quota')) {
+      console.warn('\n⚠️ [PERINGATAN KUOTA GOOGLE DRIVE]');
+      console.warn('Google menolak penyimpanan langsung karena Service Account memiliki kuota 0-byte untuk folder Gmail personal.');
+      console.warn('💡 SOLUSI: Pasang Google Apps Script Web App (setel secret GDRIVE_APPSCRIPT_URL) atau gunakan Shared Drive.');
+      console.warn('ℹ️ File cadangan ZIP tetap aman dan tersimpan di GitHub Actions Artifacts.\n');
+    } else {
+      throw driveErr;
+    }
   }
 }
 
