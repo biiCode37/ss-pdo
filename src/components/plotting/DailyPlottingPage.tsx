@@ -763,7 +763,7 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
     <div
       data-no-swipe="true"
       style={{
-        padding: '16px 16px calc(92px + env(safe-area-inset-bottom, 0px)) 16px',
+        padding: '16px 16px calc(130px + env(safe-area-inset-bottom, 0px)) 16px',
         maxWidth: '720px',
         margin: '0 auto',
       }}

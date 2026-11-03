@@ -5910,8 +5910,8 @@
     "semantic_hash": ""
   },
   "src/components/plotting/DailyPlottingPage.tsx": {
-    "mtime": 1793668545.9752705,
-    "ast_hash": "d6e9cb5036d0e8547c0482d1c82be150",
+    "mtime": 1793671322.121416,
+    "ast_hash": "26c9b4c96d98d0f341151ba4f4a9d314",
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingBaseTabs.tsx": {
@@ -5920,13 +5920,13 @@
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingHeader.tsx": {
-    "mtime": 1793668545.9765801,
-    "ast_hash": "c710b49708d8fb16233b579e47cef2e2",
+    "mtime": 1793671313.5129168,
+    "ast_hash": "4ec1e3529ac6158980c9d4f1ff01a355",
     "semantic_hash": ""
   },
   "src/components/plotting/PlottingUnitCard.tsx": {
-    "mtime": 1793668545.979475,
-    "ast_hash": "f5b03ead1d8afe3c9db29ff67d6501a3",
+    "mtime": 1793671267.1687963,
+    "ast_hash": "f2c7b140573c35fc2005de3ed415a586",
     "semantic_hash": ""
   },
   "src/components/plotting/index.ts": {
@@ -6200,28 +6200,28 @@
     "semantic_hash": ""
   },
   "scripts/backup/__tests__/gdrive-uploader.test.ts": {
-    "mtime": 1793669669.2076912,
-    "ast_hash": "6891ebc1010f8393a557d4dc6ecf6f7f",
+    "mtime": 1793670522.6915245,
+    "ast_hash": "a8c54c41f2c77ea4f80f2c360cea85d3",
     "semantic_hash": ""
   },
   "scripts/backup/gdrive-uploader.mjs": {
-    "mtime": 1793669858.8936305,
-    "ast_hash": "68da2edd850528bff0e3c46f68a3d7ab",
+    "mtime": 1793670522.6923504,
+    "ast_hash": "557aab1e32d756f762dcfe3651448d3d",
     "semantic_hash": ""
   },
   "scripts/backup/run-backup.mjs": {
-    "mtime": 1793669848.6921372,
-    "ast_hash": "5da890a556fadc77104251b094c480b8",
+    "mtime": 1793670522.69293,
+    "ast_hash": "fbd47c76c6a764da49ce7866bfe17a2b",
     "semantic_hash": ""
   },
   ".github/workflows/nightly-backup.yml": {
-    "mtime": 1793669644.8428192,
-    "ast_hash": "c5296ab3fa780cf1a0ea7e67ebdea364",
+    "mtime": 1793670522.618852,
+    "ast_hash": "090113eee66f99208bbb504d45a24ac2",
     "semantic_hash": ""
   },
   "docs/BACKUP_SETUP_GUIDE.md": {
-    "mtime": 1793669902.3937473,
-    "ast_hash": "868e33660613eabfdaaba4f1b7cabb81",
+    "mtime": 1793670522.6204145,
+    "ast_hash": "2d50576dda9c19aa537bfe8e32aca012",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-11-02-unified-dual-engine-backup.md": {
@@ -6267,6 +6267,21 @@
   "refactor-ss-pdo/refact_196/REPAIR_REPORT.md": {
     "mtime": 1793668545.908122,
     "ast_hash": "6fda330f70b67fffcf0cd494e9edf17f",
+    "semantic_hash": ""
+  },
+  "src/components/plotting/PlottingUnitCard.test.tsx": {
+    "mtime": 1793671335.0389323,
+    "ast_hash": "db6fda7f79828b170ee23e2716d5c8c4",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_197/AUDIT_BUGS.md": {
+    "mtime": 1793671375.767346,
+    "ast_hash": "6167f0f46d9052aa8da11237d42f8615",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_197/REPAIR_REPORT.md": {
+    "mtime": 1793671385.9028814,
+    "ast_hash": "c31d8e0c2597f84fedc114a4c88a4f32",
     "semantic_hash": ""
   }
 }
