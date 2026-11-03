@@ -261,6 +261,18 @@ export const TEXT_ALERTS = {
     TAB_KET: "Ket",
     SWITCH_TO_FULL_FORM: "Semua Kolom",
     SWITCH_TO_SINGLE_FOCUS: "Mode Fokus",
+    NON_OPERATIONAL_BANNER_EMPTY_RITASE:
+      "Unit tidak memiliki target Ritase (Tidak Beroperasi) - Hanya kolom Keterangan yang dapat diedit/diisi.",
+    NON_OPERATIONAL_BANNER_OFF_LIBUR:
+      'Unit tidak memiliki target Ritase dan berstatus "OFF (Libur)" - Hanya kolom Keterangan yang dapat diedit/diisi.',
+    BTN_ACTIVATE_INPUT: "🔓 Aktifkan Input",
+    ACTIVATE_INPUT_PROMPT_TITLE: "Aktifkan Input Unit",
+    ACTIVATE_INPUT_PROMPT_LABEL:
+      "Masukkan target ritase unit untuk membuka kunci input:",
+    ACTIVATE_INPUT_SUCCESS:
+      "Unit berhasil diaktifkan. Kolom input angka telah terbuka.",
+    ACTIVATE_INPUT_INVALID_RITASE:
+      "Nilai ritase harus lebih besar dari 0 untuk mengaktifkan unit.",
     REF_KM_AWAL: (km: string | number) => `Acuan KM Awal: ${km}`,
     REF_KM_AWAL_DYNAMIC: (km: string | number, dateLabel: string) =>
       `Acuan KM (${dateLabel}): ${km}`,

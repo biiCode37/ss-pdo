@@ -287,6 +287,26 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.CONFLICT_ONLINE.UNIT_TEXT('KWK 222171')).toContain('KWK 222171');
   });
 
+  it('exports TEXT_ALERTS non-operational protection and input activation tokens', () => {
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_EMPTY_RITASE).toBe(
+      'Unit tidak memiliki target Ritase (Tidak Beroperasi) - Hanya kolom Keterangan yang dapat diedit/diisi.'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_OFF_LIBUR).toBe(
+      'Unit tidak memiliki target Ritase dan berstatus "OFF (Libur)" - Hanya kolom Keterangan yang dapat diedit/diisi.'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.BTN_ACTIVATE_INPUT).toBe('🔓 Aktifkan Input');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE).toBe('Aktifkan Input Unit');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_LABEL).toBe(
+      'Masukkan target ritase unit untuk membuka kunci input:'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_SUCCESS).toBe(
+      'Unit berhasil diaktifkan. Kolom input angka telah terbuka.'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_INVALID_RITASE).toBe(
+      'Nilai ritase harus lebih besar dari 0 untuk mengaktifkan unit.'
+    );
+  });
+
   it('exports TEXT_ERRORS with friendly error messages and route validation', () => {
     expect(TEXT_ERRORS.DEFAULT_FALLBACK).toBeDefined();
     expect(TEXT_ERRORS.NETWORK_FAILURE.toLowerCase()).toContain('koneksi internet');
