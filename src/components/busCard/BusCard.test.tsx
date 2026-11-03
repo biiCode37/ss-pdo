@@ -481,6 +481,45 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       expect(startBadge?.style.color).toBe('var(--color-warning-fg)');
       expect(startBadge?.style.background).toBe('var(--color-warning-bg)');
     });
+
+    it('does not render queue order badge (#order) for non-operational unit', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="ALL"
+            bus={{
+              ...defaultProps.bus,
+              tripPergi: '',
+              tripPulang: '',
+              keterangan: 'OFF',
+            }}
+            plottingItem={{
+              unit: defaultProps.bus.unit,
+              order: 4,
+              start_point: 'A',
+              target_ritase: 0,
+              status: 'OFF',
+            }}
+            endpointAName="Priok"
+            endpointBName="IGI"
+          />
+        );
+      });
+
+      const badge = container.querySelector(`[data-testid="plotting-badge-${defaultProps.bus.unit}"]`);
+      expect(badge).not.toBeNull();
+      // Should NOT render order number #4
+      expect(badge?.textContent).not.toContain('#4');
+
+      const orderBadge = container.querySelector(`[data-testid="plotting-order-${defaultProps.bus.unit}"]`);
+      expect(orderBadge).toBeNull();
+
+      // Start point badge still renders
+      const startBadge = container.querySelector(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`);
+      expect(startBadge).not.toBeNull();
+      expect(startBadge?.textContent).toContain('Priok');
+    });
   });
 });
 

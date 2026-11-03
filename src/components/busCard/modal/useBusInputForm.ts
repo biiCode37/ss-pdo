@@ -21,6 +21,14 @@ import {
   getDefaultModalTab,
 } from "@/utils/keteranganUtils";
 import { TEXT_ALERTS } from "@/constants/texts";
+import type { UnitPlottingItem } from "@/types/supabase";
+import {
+  isBusNonOperational,
+  getNonOperationalBannerType,
+  shouldClearKeteranganOnActivation,
+  type NonOperationalBannerType,
+} from "@/utils/operationalStatusUtils";
+import { showSuccessToast } from "@/utils/alertUtils";
 
 export type ModalTab = "shift1" | "shift2" | "trip" | "notes";
 
@@ -36,6 +44,7 @@ export interface UseBusInputFormProps {
   isMounted: boolean;
   previousDayKmAkhir2?: string;
   previousDayDateLabel?: string;
+  plottingItem?: UnitPlottingItem | null;
 }
 
 export function useBusInputForm({
@@ -50,6 +59,7 @@ export function useBusInputForm({
   isMounted,
   previousDayKmAkhir2,
   previousDayDateLabel,
+  plottingItem,
 }: UseBusInputFormProps) {
   // Evaluasi mode Single-Column Focus
   const isSingleColumnEligible = Boolean(
@@ -176,6 +186,38 @@ export function useBusInputForm({
       }
     },
     [activeTab, keterangan]
+  );
+
+  // Proteksi Unit Non-Operasional (Golden Rule Ritase & Override Action)
+  const [isInputUnlocked, setIsInputUnlocked] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setIsInputUnlocked(false);
+    }
+  }, [isOpen]);
+
+  const isNonOp = isBusNonOperational(bus, plottingItem);
+  const isLocked = isNonOp && !isInputUnlocked;
+  const nonOpBannerType: NonOperationalBannerType = isLocked
+    ? getNonOperationalBannerType(bus, plottingItem)
+    : "NONE";
+
+  const handleActivateInput = useCallback(
+    (targetRitase: number) => {
+      if (targetRitase > 0) {
+        setIsInputUnlocked(true);
+        setTripPergi(String(targetRitase));
+        setTripPulang(String(targetRitase));
+        if (shouldClearKeteranganOnActivation(keterangan)) {
+          setKeterangan("");
+          setKeteranganS1("");
+          setKeteranganS2("");
+        }
+        showSuccessToast(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_SUCCESS);
+      }
+    },
+    [keterangan, setKeterangan]
   );
 
   const [showKeterangan, setShowKeterangan] = useState(
@@ -609,7 +651,24 @@ export function useBusInputForm({
     isKmAwal2Locked,
     isKmAkhir2Locked,
     headerMap,
+    // Proteksi Non-Operasional & Override Input
+    isLocked,
+    nonOpBannerType,
+    handleActivateInput,
+    isInputUnlocked,
+    setIsInputUnlocked,
   };
 }
 
-export type BusInputFormReturn = ReturnType<typeof useBusInputForm>;
+type RawBusInputFormReturn = ReturnType<typeof useBusInputForm>;
+
+export type BusInputFormReturn = Omit<
+  RawBusInputFormReturn,
+  "isLocked" | "nonOpBannerType" | "handleActivateInput" | "isInputUnlocked" | "setIsInputUnlocked"
+> & {
+  isLocked?: boolean;
+  nonOpBannerType?: NonOperationalBannerType;
+  handleActivateInput?: (targetRitase: number) => void;
+  isInputUnlocked?: boolean;
+  setIsInputUnlocked?: React.Dispatch<React.SetStateAction<boolean>>;
+};

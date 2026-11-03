@@ -4,14 +4,12 @@ import { TEXT_PLOTTING } from '@/constants/texts';
 import {
   ArrowDown,
   ArrowUp,
-  GripVertical,
   CheckCircle2,
   AlertTriangle,
   XCircle,
   ArrowLeftRight,
   Minus,
   Plus,
-  Circle,
   Zap,
 } from 'lucide-react';
 
@@ -22,6 +20,7 @@ export interface PlottingUnitCardProps {
   isReordering: boolean;
   isSelectedForMultiSelect: boolean;
   onToggleSelect: (unit: string) => void;
+  onOpenOrderModal?: (unit: string) => void;
   onMoveUp?: (unit: string) => void;
   onMoveDown?: (unit: string) => void;
   onToggleStartPoint: (unit: string) => void;
@@ -42,6 +41,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
   isReordering,
   isSelectedForMultiSelect,
   onToggleSelect,
+  onOpenOrderModal,
   onMoveUp,
   onMoveDown,
   onToggleStartPoint,
@@ -55,6 +55,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
   onDrop,
 }: PlottingUnitCardProps) {
   const currentBaseName = item.start_point === 'A' ? endpointAName : endpointBName;
+  const isNonOp = item.target_ritase === 0 || item.status === 'OFF' || item.order === 0;
 
   const getStatusColor = (status: PlottingUnitStatus) => {
     switch (status) {
@@ -72,7 +73,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           border: 'var(--color-warning-border, rgba(234, 179, 8, 0.35))',
           fg: 'var(--color-warning-fg, #facc15)',
           icon: AlertTriangle,
-          text: item.keterangan || item.note || TEXT_PLOTTING.UNIT_CARD.STATUS_TROUBLE,
+          text: TEXT_PLOTTING.UNIT_CARD.STATUS_TROUBLE,
         };
       case 'OFF':
         return {
@@ -80,7 +81,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           border: 'var(--color-error-border, rgba(239, 68, 68, 0.35))',
           fg: 'var(--color-error-fg, #f87171)',
           icon: XCircle,
-          text: item.keterangan || TEXT_PLOTTING.UNIT_CARD.STATUS_OFF,
+          text: TEXT_PLOTTING.UNIT_CARD.STATUS_OFF,
         };
     }
   };
@@ -102,15 +103,13 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
 
   return (
     <div
-      draggable={isReordering}
+      draggable={isReordering && !isNonOp}
       onDragStart={(e) => onDragStart?.(e, item.unit)}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop?.(e, item.unit)}
       onClick={() => {
-        if (isReordering) {
-          onToggleSelect(item.unit);
-          onCardClick?.(item.unit);
-        }
+        onToggleSelect(item.unit);
+        onCardClick?.(item.unit);
       }}
       data-testid={`plotting-card-${item.unit}`}
       style={{
@@ -123,17 +122,17 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
         borderRadius: '14px',
         padding: '12px 14px',
         marginBottom: '10px',
-        cursor: isReordering ? 'grab' : 'default',
-        userSelect: isReordering ? 'none' : 'auto',
-        WebkitUserSelect: isReordering ? 'none' : 'auto',
+        cursor: isReordering && !isNonOp ? 'grab' : 'pointer',
+        userSelect: isReordering && !isNonOp ? 'none' : 'auto',
+        WebkitUserSelect: isReordering && !isNonOp ? 'none' : 'auto',
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px',
+        gap: '9px',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
         transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
       }}
     >
-      {/* BARIS 1: Drag Handle, Urutan, Nama Unit, Tombol Panah Reorder, Badge Titik Start (Pojok Kanan) */}
+      {/* BARIS 1: Selector Checkmark, Urutan Interaktif, Nama Unit (Lega & Jelas), Status Pill */}
       <div
         style={{
           display: 'flex',
@@ -142,9 +141,9 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           gap: '8px',
         }}
       >
-        {/* Sisi Kiri: Selector Checkbox, Drag Handle, Order Badge, Unit Name */}
+        {/* Sisi Kiri: Centang Seleksi (saat terpilih), Order Badge Interaktif, Unit Name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
-          {/* Checkbox Selector Bebas */}
+          {/* Centang Seleksi Mini (Hanya saat unit terpilih; tanpa bulatan idle) */}
           <button
             type="button"
             onClick={(e) => {
@@ -158,38 +157,32 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               border: 'none',
               padding: '0',
               cursor: 'pointer',
-              display: 'flex',
+              display: isSelectedForMultiSelect ? 'inline-flex' : 'none',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
             }}
           >
-            {isSelectedForMultiSelect ? (
-              <CheckCircle2 size={18} color="var(--color-action-primary-bg, #38bdf8)" />
-            ) : (
-              <Circle size={18} color="var(--color-text-secondary, #64748b)" />
+            {isSelectedForMultiSelect && (
+              <CheckCircle2 size={15} color="var(--color-action-primary-bg, #38bdf8)" />
             )}
           </button>
 
-          {/* Drag Handle Indicator */}
-          {isReordering && (
-            <div
-              style={{
-                color: 'var(--color-text-secondary, #94a3b8)',
-                display: 'flex',
-                alignItems: 'center',
-                cursor: 'grab',
-                flexShrink: 0,
-              }}
-              title={TEXT_PLOTTING.UNIT_CARD.DRAG_HANDLE_TITLE}
-            >
-              <GripVertical size={16} />
-            </div>
-          )}
-
-          {/* Sequential Order Badge */}
-          <span
+          {/* Sequential Order Badge (Interaktif jika operasional - klik untuk atur urutan) */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!isNonOp) {
+                onOpenOrderModal?.(item.unit);
+              }
+            }}
             data-testid={`badge-order-${item.unit}`}
+            title={
+              isNonOp
+                ? 'Unit Tidak Beroperasi (Tidak Masuk Antrean)'
+                : 'Klik untuk mengatur posisi urutan unit ini'
+            }
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -200,35 +193,162 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               borderRadius: '6px',
               background: 'var(--color-surface-default, rgba(255, 255, 255, 0.08))',
               border: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.12))',
-              color: 'var(--color-text-primary, #f8fafc)',
+              color: isNonOp
+                ? 'var(--color-text-muted, #64748b)'
+                : 'var(--color-text-primary, #f8fafc)',
               fontSize: '0.8rem',
               fontWeight: 800,
               flexShrink: 0,
+              cursor: isNonOp ? 'default' : 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
-            {item.order}
-          </span>
+            {isNonOp ? '-' : item.order}
+          </button>
 
-          {/* Unit Name (KWK 222153) - Satu baris rapi tanpa wrapping */}
+          {/* Unit Name (KWK 222153) - Mendapat ruang utama lega tanpa terpotong */}
           <span
             style={{
-              fontSize: '0.95rem',
+              fontSize: '0.98rem',
               fontWeight: 800,
               color: 'var(--color-text-primary, #f8fafc)',
               letterSpacing: '-0.01em',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
+              flex: 1,
+              minWidth: 0,
             }}
           >
             {item.unit}
           </span>
         </div>
 
-        {/* Sisi Kanan: Tombol Reorder Panah Atas & Bawah, lalu Badge Titik Start (Pojok Kanan) */}
+        {/* Sisi Kanan: Status Pill Toggle (Siap / Kendala / OFF) - Presisi & Bebas Distorsi */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onOpenTroubleModal) {
+              onOpenTroubleModal(item.unit);
+            } else {
+              cycleStatus();
+            }
+          }}
+          data-testid={`btn-status-${item.unit}`}
+          title={TEXT_PLOTTING.UNIT_CARD.STATUS_PILL_TITLE(item.unit)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '5px',
+            padding: '4px 10px',
+            borderRadius: '8px',
+            fontSize: '0.76rem',
+            fontWeight: 700,
+            border: `1px solid ${statusConfig.border}`,
+            background: statusConfig.bg,
+            color: statusConfig.fg,
+            cursor: 'pointer',
+            flexShrink: 0,
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <StatusIcon size={13} />
+          <span>{statusConfig.text}</span>
+        </button>
+      </div>
+
+      {/* Sub-baris Keterangan Kendala / Alasan OFF (Tampil manis & rapi bila ada catatan) */}
+      {(item.keterangan || item.note) && item.status !== 'READY' && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenTroubleModal?.(item.unit);
+          }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '5px 10px',
+            borderRadius: '8px',
+            background:
+              item.status === 'TROUBLE'
+                ? 'var(--color-warning-bg, rgba(234, 179, 8, 0.1))'
+                : 'var(--color-error-bg, rgba(239, 68, 68, 0.1))',
+            border: `1px solid ${
+              item.status === 'TROUBLE'
+                ? 'var(--color-warning-border, rgba(234, 179, 8, 0.25))'
+                : 'var(--color-error-border, rgba(239, 68, 68, 0.25))'
+            }`,
+            color:
+              item.status === 'TROUBLE'
+                ? 'var(--color-warning-fg, #facc15)'
+                : 'var(--color-error-fg, #f87171)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            lineHeight: 1.3,
+            cursor: onOpenTroubleModal ? 'pointer' : 'default',
+          }}
+          title="Klik untuk mengubah catatan kendala"
+        >
+          <AlertTriangle size={12} style={{ flexShrink: 0 }} />
+          <span
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              flex: 1,
+            }}
+          >
+            {item.keterangan || item.note}
+          </span>
+        </div>
+      )}
+
+      {/* BARIS 2: Kontrol Operasional (Titik Start, Reorder Panah saat aktif, & Stepper Target Ritase) */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderTop: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
+          paddingTop: '8px',
+          gap: '8px',
+        }}
+      >
+        {/* Sisi Kiri: Pangkalan Start Badge + Tombol Panah Reorder (saat isReordering aktif) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-          {/* Tombol Reorder Panah Atas & Bawah */}
-          {isReordering && (
+          {/* Pangkalan Start Switch Badge */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleStartPoint(item.unit);
+            }}
+            data-testid={`btn-toggle-base-${item.unit}`}
+            title={`Pangkalan start: ${currentBaseName} (Klik untuk memindahkan pangkalan)`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '4px 9px',
+              borderRadius: '7px',
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              border: '1px solid var(--color-info-border, rgba(56, 189, 248, 0.25))',
+              background: 'var(--color-info-bg, rgba(56, 189, 248, 0.08))',
+              color: 'var(--color-info-fg, #38bdf8)',
+              cursor: 'pointer',
+              flexShrink: 0,
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <span>📍 {currentBaseName}</span>
+            <ArrowLeftRight size={11} style={{ opacity: 0.7 }} />
+          </button>
+
+          {/* Tombol Reorder Panah Atas & Bawah (Hanya tampil untuk unit operasional saat isReordering aktif) */}
+          {isReordering && !isNonOp && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
               <button
                 type="button"
@@ -283,51 +403,10 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               </button>
             </div>
           )}
-
-          {/* Pangkalan Start Switch Badge (Pojok Paling Kanan) */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleStartPoint(item.unit);
-            }}
-            data-testid={`btn-toggle-base-${item.unit}`}
-            title={`Pangkalan start: ${currentBaseName} (Klik untuk memindahkan pangkalan)`}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '3px 8px',
-              borderRadius: '6px',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              border: '1px solid var(--color-info-border, rgba(56, 189, 248, 0.25))',
-              background: 'var(--color-info-bg, rgba(56, 189, 248, 0.08))',
-              color: 'var(--color-info-fg, #38bdf8)',
-              cursor: 'pointer',
-              flexShrink: 0,
-              transition: 'all 0.15s ease',
-            }}
-          >
-            <span>📍 {currentBaseName}</span>
-            <ArrowLeftRight size={10} style={{ opacity: 0.7 }} />
-          </button>
         </div>
-      </div>
 
-      {/* BARIS 2: Kontrol Operasional (Target Ritase Fleksibel & Status Kesiapan) */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderTop: '1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.06))',
-          paddingTop: '8px',
-          gap: '8px',
-        }}
-      >
-        {/* Target Ritase: Stepper & Interactive Pill (Bisa diatur bebas berapapun) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        {/* Sisi Kanan: Target Ritase Stepper & Interactive Pill */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
           <button
             type="button"
             onClick={(e) => handleStepRitase(-0.5, e)}
@@ -398,38 +477,6 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
             <Plus size={12} />
           </button>
         </div>
-
-        {/* Status Pill Toggle (Siap / Kendala / OFF) */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (onOpenTroubleModal) {
-              onOpenTroubleModal(item.unit);
-            } else {
-              cycleStatus();
-            }
-          }}
-          data-testid={`btn-status-${item.unit}`}
-          title={TEXT_PLOTTING.UNIT_CARD.STATUS_PILL_TITLE(item.unit)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '5px',
-            padding: '4px 10px',
-            borderRadius: '8px',
-            fontSize: '0.76rem',
-            fontWeight: 700,
-            border: `1px solid ${statusConfig.border}`,
-            background: statusConfig.bg,
-            color: statusConfig.fg,
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-          }}
-        >
-          <StatusIcon size={13} />
-          <span>{statusConfig.text}</span>
-        </button>
       </div>
     </div>
   );

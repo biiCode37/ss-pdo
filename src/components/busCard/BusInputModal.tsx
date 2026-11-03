@@ -2,7 +2,9 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { AlertCircle, Sparkles } from "lucide-react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import type { UnitPlottingItem } from "@/types/supabase";
-import { TEXT_ALERTS } from "@/constants/texts";
+import { TEXT_ALERTS, TEXT_COMMON } from "@/constants/texts";
+import { pdoSwal } from "@/utils/alertUtils";
+import { parseIndonesianNumber } from "@/utils/numberUtils";
 import { useBusInputForm, type ModalTab } from "./modal/useBusInputForm";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { ModalShell } from "@/components/ui/ModalShell";
@@ -103,9 +105,68 @@ export function BusInputModal({
     isMounted,
     previousDayKmAkhir2,
     previousDayDateLabel,
+    plottingItem,
   });
 
   formIdRef.current = form.formId;
+
+  const handlePromptActivateInput = async () => {
+    const result = await pdoSwal.fire({
+      title: TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE,
+      text: TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_LABEL,
+      input: "text",
+      inputPlaceholder: "Contoh: 7.5",
+      showCancelButton: true,
+      confirmButtonText: TEXT_COMMON.BUTTONS.SAVE,
+      cancelButtonText: TEXT_COMMON.BUTTONS.CANCEL,
+      reverseButtons: true,
+      customClass: {
+        container: "pdo-swal-container",
+        popup: "pdo-swal-popup",
+        confirmButton: "pdo-swal-confirm-btn",
+        cancelButton: "pdo-swal-cancel-btn",
+      },
+      inputValidator: (value) => {
+        const num = parseIndonesianNumber(value, 0);
+        if (!value || isNaN(num) || num <= 0) {
+          return TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_INVALID_RITASE;
+        }
+        return null;
+      },
+    });
+
+    if (result && result.value !== undefined && result.value !== null) {
+      const num = parseIndonesianNumber(String(result.value), 0);
+      if (num > 0) {
+        form.handleActivateInput(num);
+      }
+    }
+  };
+
+  // Penegakan proteksi status disabled pada elemen input angka saat form terkunci
+  useEffect(() => {
+    if (!isOpen) return;
+    const modalEl = document.getElementById(`bus-input-modal-${form.formId}`);
+    if (!modalEl) return;
+
+    const numberInputs = modalEl.querySelectorAll<HTMLInputElement>(
+      'input[type="number"], input[id^="input-toa"], input[id^="input-trip"], input[id^="input-km"], input[id^="single-input-trip"], input[id^="single-input-toa"], input[id^="single-input-km"]'
+    );
+
+    numberInputs.forEach((input) => {
+      if (form.isLocked) {
+        input.disabled = true;
+      } else {
+        const isKmLocked =
+          (input.id === "input-km-akhir-1" && form.isKmAkhir1Locked) ||
+          (input.id === "input-km-awal-2" && form.isKmAwal2Locked) ||
+          (input.id === "input-km-akhir-2" && form.isKmAkhir2Locked);
+        if (!isKmLocked) {
+          input.disabled = false;
+        }
+      }
+    });
+  });
 
   if (!isOpen) return null;
 
@@ -171,6 +232,62 @@ export function BusInputModal({
           onToggleSatset={form.handleToggleSatset}
           onDismiss={handleDismiss}
         />
+
+        {/* Banner Peringatan Non-Operasional (Jika Terkunci) */}
+        {form.isLocked && form.nonOpBannerType !== "NONE" && (
+          <div
+            data-testid="non-operational-banner"
+            style={{
+              margin: "10px 0 0 0",
+              padding: "10px 12px",
+              borderRadius: "10px",
+              background: "var(--color-warning-bg, rgba(234, 179, 8, 0.12))",
+              border: "1px solid var(--color-warning-border, rgba(234, 179, 8, 0.35))",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "8px",
+                fontSize: "0.8rem",
+                lineHeight: 1.45,
+                color: "var(--color-warning-fg, #eab308)",
+              }}
+            >
+              <AlertCircle size={16} style={{ flexShrink: 0, marginTop: "2px" }} />
+              <span style={{ flex: 1, fontWeight: 500 }}>
+                {form.nonOpBannerType === "OFF_LIBUR"
+                  ? TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_OFF_LIBUR
+                  : TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_EMPTY_RITASE}
+              </span>
+            </div>
+            <button
+              type="button"
+              data-testid="btn-activate-input"
+              onClick={handlePromptActivateInput}
+              style={{
+                alignSelf: "flex-start",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "5px 12px",
+                borderRadius: "6px",
+                background: "var(--color-warning-fg, #eab308)",
+                color: "#000",
+                fontWeight: 700,
+                fontSize: "0.78rem",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <span>{TEXT_ALERTS.BUS_INPUT_MODAL.BTN_ACTIVATE_INPUT}</span>
+            </button>
+          </div>
+        )}
 
         {/* 2. Navigation Tabs */}
         {!form.isSingleMode && (
@@ -305,40 +422,60 @@ export function BusInputModal({
             }}
           >
             {form.isSingleMode && (
-              <BusInputModalSingleFocus
-                form={form}
-                activeCategory={activeCategory}
-                busKmAwal1={bus.kmAwal1 || previousDayKmAkhir2}
-                headerMap={headerMap}
-                plottingItem={plottingItem}
-                endpointAName={endpointAName}
-                endpointBName={endpointBName}
-              />
+              <fieldset
+                disabled={form.isLocked && activeCategory !== "keterangan"}
+                style={{ border: "none", margin: 0, padding: 0 }}
+              >
+                <BusInputModalSingleFocus
+                  form={form}
+                  activeCategory={activeCategory}
+                  busKmAwal1={bus.kmAwal1 || previousDayKmAkhir2}
+                  headerMap={headerMap}
+                  plottingItem={plottingItem}
+                  endpointAName={endpointAName}
+                  endpointBName={endpointBName}
+                />
+              </fieldset>
             )}
 
             {!form.isSingleMode && form.activeTab === "shift1" && (
-              <BusInputModalShift1 form={form} />
+              <fieldset
+                disabled={form.isLocked}
+                style={{ border: "none", margin: 0, padding: 0 }}
+              >
+                <BusInputModalShift1 form={form} />
+              </fieldset>
             )}
 
             {!form.isSingleMode && form.activeTab === "shift2" && (
-              <BusInputModalShift2 form={form} />
+              <fieldset
+                disabled={form.isLocked}
+                style={{ border: "none", margin: 0, padding: 0 }}
+              >
+                <BusInputModalShift2 form={form} />
+              </fieldset>
             )}
 
             {!form.isSingleMode && form.activeTab === "trip" && (
-              <BusInputModalTrip
-                form={form}
-                tripPergiLabel={
-                  headerMap?.tripPergiLabel ||
-                  TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PERGI
-                }
-                tripPulangLabel={
-                  headerMap?.tripPulangLabel ||
-                  TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG
-                }
-                plottingItem={plottingItem}
-                endpointAName={endpointAName}
-                endpointBName={endpointBName}
-              />
+              <fieldset
+                disabled={form.isLocked}
+                style={{ border: "none", margin: 0, padding: 0 }}
+              >
+                <BusInputModalTrip
+                  form={form}
+                  tripPergiLabel={
+                    headerMap?.tripPergiLabel ||
+                    TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PERGI
+                  }
+                  tripPulangLabel={
+                    headerMap?.tripPulangLabel ||
+                    TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG
+                  }
+                  plottingItem={plottingItem}
+                  endpointAName={endpointAName}
+                  endpointBName={endpointBName}
+                />
+              </fieldset>
             )}
 
             {!form.isSingleMode && form.activeTab === "notes" && (

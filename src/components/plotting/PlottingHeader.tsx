@@ -67,7 +67,7 @@ export const PlottingHeader = memo(function PlottingHeader({
             color: 'var(--color-text-secondary, #94a3b8)',
           }}
         >
-          {TEXT_PLOTTING.SUBTITLE(routeCode, date)}
+          <span>{TEXT_PLOTTING.SUBTITLE(routeCode, date).split(' • ')[0]} • </span><span style={{ whiteSpace: 'nowrap' }}>{date}</span>
         </p>
       </div>
 

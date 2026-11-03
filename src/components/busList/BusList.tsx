@@ -10,6 +10,7 @@ import type { OdometerRefInfo } from "@/hooks/usePreviousDayOdometer";
 import type { DailyRoutePlotting, UnitPlottingItem } from "@/types/supabase";
 
 import { isUnitAllowedForInput, isBusFilled, type FleetSortView } from "./busListUtils";
+import { isBusNonOperational } from "@/utils/operationalStatusUtils";
 import { extractEndpointNames } from "@/utils/routeEndpointUtils";
 import { useBulkOperations } from "./useBulkOperations";
 import { BusListHeader } from "./BusListHeader";
@@ -161,6 +162,13 @@ function BusListComponent({
 
     // 3. Sorting Tampilan (Sesuai Opsi B Hybrid)
     result = [...result].sort((a, b) => {
+      // Auto-park non-operasional selalu ke paling bawah
+      const aNonOp = isBusNonOperational(a, plottingMap.get(a.unit?.trim().toUpperCase()));
+      const bNonOp = isBusNonOperational(b, plottingMap.get(b.unit?.trim().toUpperCase()));
+      if (aNonOp !== bNonOp) {
+        return aNonOp ? 1 : -1;
+      }
+
       // Jika showOnlyUnfinished aktif, utamakan unit yang boleh diinput tapi belum selesai
       if (showOnlyUnfinished) {
         const aAllowed = checkAllowed(a);
@@ -208,14 +216,19 @@ function BusListComponent({
           (b) => b.rowIndex === savedBus.rowIndex,
         );
 
+        const isEligible = (b: BusData) =>
+          b.rowIndex !== savedBus.rowIndex &&
+          !checkFilled(b) &&
+          !isBusNonOperational(b, plottingMap.get(b.unit?.trim().toUpperCase()));
+
         let nextBus = filteredData
           .slice(currentIndex + 1)
-          .find((b) => b.rowIndex !== savedBus.rowIndex && !checkFilled(b));
+          .find(isEligible);
 
         if (!nextBus) {
           nextBus = filteredData
             .slice(0, currentIndex)
-            .find((b) => b.rowIndex !== savedBus.rowIndex && !checkFilled(b));
+            .find(isEligible);
         }
 
         if (nextBus) {
@@ -230,7 +243,7 @@ function BusListComponent({
         }
       }, 120);
     },
-    [filteredData, checkFilled],
+    [filteredData, checkFilled, plottingMap],
   );
 
   return (

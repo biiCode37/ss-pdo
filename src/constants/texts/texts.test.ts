@@ -287,6 +287,26 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.CONFLICT_ONLINE.UNIT_TEXT('KWK 222171')).toContain('KWK 222171');
   });
 
+  it('exports TEXT_ALERTS non-operational protection and input activation tokens', () => {
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_EMPTY_RITASE).toBe(
+      'Unit tidak memiliki target Ritase (Tidak Beroperasi) - Hanya kolom Keterangan yang dapat diedit/diisi.'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.NON_OPERATIONAL_BANNER_OFF_LIBUR).toBe(
+      'Unit tidak memiliki target Ritase dan berstatus "OFF (Libur)" - Hanya kolom Keterangan yang dapat diedit/diisi.'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.BTN_ACTIVATE_INPUT).toBe('🔓 Aktifkan Input');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE).toBe('Aktifkan Input Unit');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_LABEL).toBe(
+      'Masukkan target ritase unit untuk membuka kunci input:'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_SUCCESS).toBe(
+      'Unit berhasil diaktifkan. Kolom input angka telah terbuka.'
+    );
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_INVALID_RITASE).toBe(
+      'Nilai ritase harus lebih besar dari 0 untuk mengaktifkan unit.'
+    );
+  });
+
   it('exports TEXT_ERRORS with friendly error messages and route validation', () => {
     expect(TEXT_ERRORS.DEFAULT_FALLBACK).toBeDefined();
     expect(TEXT_ERRORS.NETWORK_FAILURE.toLowerCase()).toContain('koneksi internet');
@@ -587,6 +607,20 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_SUCCESS(10)).toBe('Plotting & 10 unit berhasil disinkronkan ke Spreadsheet asli');
     expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_OFFLINE(10)).toBe('Plotting tersimpan, 10 mutasi spreadsheet masuk antrean offline');
     expect(TEXT_PLOTTING.TOASTS.BULK_TARGET_APPLIED(7.5, 4)).toBe('Target ritase 7.5 Rit diterapkan ke 4 unit');
+
+    // ORDER_MODAL & ACTIONS.BULK_REORDER (Task 2)
+    expect(TEXT_PLOTTING.ACTIONS.BULK_REORDER(3)).toBe('⇅ Atur Posisi (3)');
+    expect(TEXT_PLOTTING.ORDER_MODAL.TITLE_SINGLE('TJ-01', 5)).toBe('Atur Posisi TJ-01 (#5)');
+    expect(TEXT_PLOTTING.ORDER_MODAL.TITLE_MULTI(3)).toBe('Atur Posisi 3 Unit Terpilih');
+    expect(TEXT_PLOTTING.ORDER_MODAL.QUICK_TOP).toBe('⤒ Paling Depan (#1)');
+    expect(TEXT_PLOTTING.ORDER_MODAL.QUICK_BOTTOM).toBe('⤓ Paling Belakang');
+    expect(TEXT_PLOTTING.ORDER_MODAL.RELATIVE_HEADER).toBe('Atau selipkan posisi relatif:');
+    expect(TEXT_PLOTTING.ORDER_MODAL.DIR_ABOVE).toBe('Di Atas Unit');
+    expect(TEXT_PLOTTING.ORDER_MODAL.DIR_BELOW).toBe('Di Bawah Unit');
+    expect(TEXT_PLOTTING.ORDER_MODAL.REF_LABEL).toBe('Pilih Unit Acuan:');
+    expect(TEXT_PLOTTING.ORDER_MODAL.REF_PLACEHOLDER).toBe('-- Pilih unit acuan target --');
+    expect(TEXT_PLOTTING.ORDER_MODAL.SUBMIT).toBe('Terapkan Posisi');
+    expect(TEXT_PLOTTING.ORDER_MODAL.APPLY_SUCCESS(3)).toBe('Posisi 3 unit berhasil diperbarui');
   });
 
   describe('Conflict Comparison & Field Labels Text Dictionary', () => {
