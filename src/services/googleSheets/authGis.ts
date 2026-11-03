@@ -312,6 +312,7 @@ export const signOut = async () => {
   localStorage.removeItem("PDO_USER_EMAIL");
   localStorage.removeItem("PDO_USER_NAME");
   localStorage.removeItem("PDO_USER_AVATAR");
+  localStorage.removeItem("PDO_ADMIN_SESSION_TOKEN");
   const gapiObj = getGapi();
   if (gapiObj?.client) {
     gapiObj.client.setToken(null);

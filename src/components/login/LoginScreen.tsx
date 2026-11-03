@@ -10,6 +10,7 @@ import { LoginInfoModal } from "./LoginInfoModal";
 import { LoginFooter } from "./LoginFooter";
 import { useMobileBackHandler } from "../../hooks/useMobileBackHandler";
 import { TEXT_AUTH } from "../../constants/texts";
+import { ensureAdminSession } from "../../services/adminActionService";
 
 export interface LoginScreenProps {
   onLoginSuccess: () => void;
@@ -127,6 +128,7 @@ export function LoginScreen({ onLoginSuccess, isApiReady }: LoginScreenProps) {
           // Gagal upsert bukan fatal — user tetap bisa masuk
         });
 
+        ensureAdminSession().catch(() => {});
         onLoginSuccess();
       } else {
         // BUG-38: Jika email tidak tersedia setelah OAuth, tolak akses

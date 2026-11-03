@@ -132,6 +132,15 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [verifyingRouteId, setVerifyingRouteId] = useState<number | null>(null);
   const [syncingRouteId, setSyncingRouteId] = useState<number | null>(null);
 
+  // Stable ref untuk pembacaan status data tanpa memicu re-creation loop pada loadData
+  const dataRef = useRef(data);
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
+  // In-flight guard untuk mencegah pemanggilan ganda/tumpang tindih secara bersamaan
+  const isFetchingRef = useRef(false);
+
   // 4. Load Data Function
   // Mendukung mode "initial" (skeleton awal), "refresh" (spinner header), dan "silent" (realtime in-place update)
   const loadData = useCallback(
@@ -146,9 +155,16 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       const isInitial =
         modeOrRefreshIndicator === false || modeOrRefreshIndicator === "initial";
 
+      // Guard: Redam overlapping request jika silent sync dipicu saat fetch masih berlangsung
+      if (isSilent && isFetchingRef.current) {
+        return;
+      }
+
+      isFetchingRef.current = true;
+
       if (isRefresh) {
         setRefreshing(true);
-      } else if (isInitial && !data) {
+      } else if (isInitial && !dataRef.current) {
         // Hanya tampilkan full skeleton loading jika data belum ada di memori
         setLoading(true);
       }
@@ -174,15 +190,17 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         setFleetShifts(fleetRes);
       } catch (err: unknown) {
         console.warn("[AllRouteMonitoringPage] Gagal memuat data monitoring:", err);
-        if (!data) {
+        if (!dataRef.current) {
           setErrorMessage(TEXT_ERRORS.LOAD_REGIONAL_FAILED);
         }
       } finally {
+        isFetchingRef.current = false;
         setLoading(false);
         setRefreshing(false);
       }
     },
-    [selectedDate, currentPeriod, data],
+    // ponytail: isolasi dependency ke parameter rute/tanggal, hilangkan 'data' agar bebas dari infinite loop (BUG-193-01)
+    [selectedDate, currentPeriod],
   );
 
   useEffect(() => {
@@ -196,6 +214,8 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
 
   // 4b. Realtime Subscription: Dengarkan perubahan tabel daily_route_reports secara hening (Silent In-place Update)
   useEffect(() => {
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
     const channel = supabase
       .channel("monitoring-realtime-reports")
       .on(
@@ -206,8 +226,11 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
           table: "daily_route_reports",
         },
         () => {
-          // Lakukan pembaruan latar belakang secara hening tanpa loading skeleton / unmounting
-          loadDataRef.current?.("silent");
+          // Debounce 3000ms untuk meredam cascading events dari multi-cell spreadsheet edits di lapangan
+          if (debounceTimer) clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => {
+            loadDataRef.current?.("silent");
+          }, 3000);
         }
       )
       .subscribe((status) => {
@@ -218,6 +241,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       });
 
     return () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
       supabase.removeChannel(channel);
     };
   }, []);

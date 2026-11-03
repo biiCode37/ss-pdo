@@ -4,6 +4,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { PageAccessProvider, usePageAccess, type PageAccessContextType } from './PageAccessContext';
+import { DEFAULT_PAGE_SETTINGS } from '@/types/pageManagement';
 
 vi.mock('@/services/pageManagementService', () => ({
   fetchPageSettings: vi.fn().mockResolvedValue([
@@ -268,5 +269,20 @@ describe('PageAccessContext', () => {
 
     expect(contextValue.activeSuperadmins).toHaveLength(1);
     expect(contextValue.activeSuperadmins[0].full_name).toBe('Bpk. Superadmin');
+  });
+
+  it('menyertakan halaman plotting pada konfigurasi default dan pengaturan akses', () => {
+    const plottingSetting = DEFAULT_PAGE_SETTINGS.find((s) => s.page_key === 'plotting');
+    expect(plottingSetting).toBeDefined();
+    expect(plottingSetting?.page_name).toBe('Plotting Armada Harian');
+    expect(plottingSetting?.category).toBe('tab');
+    expect(plottingSetting?.is_enabled).toBe(true);
+    expect(plottingSetting?.allowed_roles).toEqual([
+      'superadmin',
+      'admin',
+      'korwil',
+      'korlap',
+      'pdo',
+    ]);
   });
 });

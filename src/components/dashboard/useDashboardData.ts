@@ -77,7 +77,6 @@ export function useDashboardData() {
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const requestIdRef = useRef<number>(0);
-  const headerBlockRef = useRef<HTMLDivElement>(null);
 
   // Ref sinkron untuk sheetUrl/selectedTab
   const sheetUrlRef = useRef(sheetUrl);
@@ -104,30 +103,6 @@ export function useDashboardData() {
   useEffect(() => {
     selectedTabRef.current = selectedTab;
   }, [selectedTab]);
-
-  useEffect(() => {
-    const el = headerBlockRef.current;
-    if (!el) return;
-
-    const updateHeight = () => {
-      const h = el.offsetHeight;
-      document.documentElement.style.setProperty(
-        "--sticky-header-height",
-        `${h}px`,
-      );
-    };
-
-    updateHeight();
-
-    const ro = new ResizeObserver(() => {
-      updateHeight();
-    });
-    ro.observe(el);
-
-    return () => {
-      ro.disconnect();
-    };
-  }, []);
 
   const days = Array.from({ length: 31 }, (_, i) => String(i + 1));
 
@@ -435,7 +410,6 @@ export function useDashboardData() {
     setAccRangeDetails,
     activeMonth,
     activeYear,
-    headerBlockRef,
     days,
     currentRouteCode,
     matchedRoute,

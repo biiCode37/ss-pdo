@@ -212,12 +212,78 @@ export async function showAuthExpiredAlert(
   }
 }
 
+export interface ConflictDiffItem {
+  field: string;
+  label: string;
+  serverValue: string;
+  userValue: string;
+}
+
+/**
+ * Membangun representasi HTML visual perbandingan kolom (Side-by-Side Diff)
+ * untuk dialog resolusi konflik SweetAlert2.
+ */
+export function buildConflictDiffHtml(
+  diffs: ConflictDiffItem[],
+  explanationText?: string,
+): string {
+  const introHtml = explanationText
+    ? `<div style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 12px; text-align: left; line-height: 1.5;">${explanationText}</div>`
+    : "";
+
+  if (!diffs || diffs.length === 0) {
+    return introHtml;
+  }
+
+  const itemsHtml = diffs
+    .map((item) => {
+      const serverDisplay = item.serverValue
+        ? escapeHtml(item.serverValue)
+        : `<span style="color: var(--color-text-muted); font-style: italic;">${TEXT_ALERTS.CONFLICT_DIFF.EMPTY_VALUE}</span>`;
+      const userDisplay = item.userValue
+        ? escapeHtml(item.userValue)
+        : `<span style="color: var(--color-text-muted); font-style: italic;">${TEXT_ALERTS.CONFLICT_DIFF.EMPTY_VALUE}</span>`;
+
+      return `
+        <div style="padding: 10px 0; border-bottom: 1px solid var(--color-border-subtle);">
+          <div style="font-weight: 700; color: var(--color-text-primary); font-size: 12.5px; margin-bottom: 6px; text-align: left;">
+            🔹 ${escapeHtml(item.label)}
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; text-align: left;">
+            <div style="background: var(--color-surface-raised); padding: 8px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
+              <div style="color: var(--color-text-muted); font-size: 10.5px; margin-bottom: 2px;">${TEXT_ALERTS.CONFLICT_DIFF.SERVER_HEADER}</div>
+              <div style="font-weight: 600; color: var(--color-text-primary); word-break: break-word;">${serverDisplay}</div>
+            </div>
+            <div style="background: var(--color-surface-raised); padding: 8px; border-radius: 8px; border: 1px solid var(--color-warning-border);">
+              <div style="color: var(--color-warning-fg); font-size: 10.5px; margin-bottom: 2px;">${TEXT_ALERTS.CONFLICT_DIFF.USER_HEADER}</div>
+              <div style="font-weight: 600; color: var(--color-warning-fg); word-break: break-word;">${userDisplay}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <div style="font-family: inherit;">
+      ${introHtml}
+      <div style="background: var(--color-surface-subtle); border-radius: 12px; padding: 10px 12px; border: 1px solid var(--color-border-subtle); max-height: 240px; overflow-y: auto;">
+        <div style="font-weight: 700; color: var(--color-text-secondary); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; text-align: left;">
+          ${TEXT_ALERTS.CONFLICT_DIFF.SECTION_TITLE}
+        </div>
+        ${itemsHtml}
+      </div>
+    </div>
+  `;
+}
+
 /**
  * Dialog Resolusi Konflik Sinkronisasi Data Antrean Offline
  */
 export async function showQueueConflictDialog(options: {
   unitName?: string;
   isOnline?: boolean;
+  diffs?: ConflictDiffItem[];
   onUseServer: () => void;
   onForceSave: () => void;
 }) {
@@ -226,11 +292,15 @@ export async function showQueueConflictDialog(options: {
     ? TEXT_ALERTS.CONFLICT_ONLINE
     : TEXT_ALERTS.CONFLICT;
 
+  const introText = options.unitName
+    ? alertTextDict.UNIT_TEXT(escapeHtml(options.unitName))
+    : alertTextDict.GENERAL_TEXT;
+
+  const htmlContent = buildConflictDiffHtml(options.diffs || [], introText);
+
   const result = await pdoSwal.fire({
     title: alertTextDict.TITLE,
-    text: options.unitName
-      ? alertTextDict.UNIT_TEXT(escapeHtml(options.unitName))
-      : alertTextDict.GENERAL_TEXT,
+    html: htmlContent,
     icon: "warning",
     showCancelButton: true,
     showDenyButton: true,

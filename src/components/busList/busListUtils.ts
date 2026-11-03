@@ -2,6 +2,8 @@ import type { BusData } from "@/services/googleSheets";
 import { splitShiftKeterangan, cleanShiftNote, isUnitOffOrToEvdal } from "@/utils/keteranganUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
+export type FleetSortView = 'sheet' | 'base_a' | 'base_b';
+
 export const BUS_CATEGORIES = [
   { id: "ALL", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.ALL },
   { id: "trip", label: TEXT_DASHBOARD.BUS_LIST.CATEGORIES.TRIP },

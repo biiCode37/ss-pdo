@@ -1,3 +1,32 @@
+export function formatRouteDateLabel(
+  tab: string,
+  year: number,
+  month: number,
+  accRange?: any,
+  fallbackTabName?: string
+): string {
+  const targetYear = year ?? new Date().getFullYear();
+  const targetMonth = month ?? new Date().getMonth() + 1;
+
+  if (tab === "AKUMULASI") {
+    return `Akumulasi (${getFormattedDateBadge("AKUMULASI", targetMonth, targetYear, accRange)})`;
+  }
+
+  const rawDay = fallbackTabName || tab;
+  const parsedDay = parseInt(rawDay, 10);
+  const validDay =
+    !isNaN(parsedDay) && parsedDay >= 1 && parsedDay <= 31
+      ? parsedDay
+      : new Date().getDate();
+
+  const dateObj = new Date(targetYear, targetMonth - 1, validDay);
+  const dayName = INDO_DAYS[dateObj.getDay()];
+  const padDay = String(validDay).padStart(2, "0");
+  const monthName = INDO_MONTHS_SHORT[targetMonth - 1] || "Jan";
+
+  return `${dayName}, ${padDay} ${monthName} ${targetYear}`;
+}
+
 import { useState, useEffect, useRef, useMemo, memo } from "react";
 import { getFormattedDateBadge } from "@/utils/analytics";
 import { TEXT_DASHBOARD } from "@/constants/texts";
@@ -32,6 +61,7 @@ function RouteSelectorCardComponent({
   onOpenReportModal,
   onRouteCodeChange,
   externalOpenTrigger,
+  hideControlBar = false,
 }: RouteSelectorCardProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(!isDataLoaded);
   const prevLoadingRef = useRef(isLoading);
@@ -128,26 +158,13 @@ function RouteSelectorCardComponent({
   }, [isAddingRoute]);
 
   const displayDateLabel = useMemo(() => {
-    const targetYear = selectedYear ?? new Date().getFullYear();
-    const targetMonth = selectedMonth ?? new Date().getMonth() + 1;
-
-    if (selectedTab === "AKUMULASI") {
-      return `Akumulasi (${getFormattedDateBadge("AKUMULASI", targetMonth, targetYear, accRange)})`;
-    }
-
-    const rawDay = currentTabName || selectedTab;
-    const parsedDay = parseInt(rawDay, 10);
-    const validDay =
-      !isNaN(parsedDay) && parsedDay >= 1 && parsedDay <= 31
-        ? parsedDay
-        : new Date().getDate();
-
-    const dateObj = new Date(targetYear, targetMonth - 1, validDay);
-    const dayName = INDO_DAYS[dateObj.getDay()];
-    const padDay = String(validDay).padStart(2, "0");
-    const monthName = INDO_MONTHS_SHORT[targetMonth - 1] || "Jan";
-
-    return `${dayName}, ${padDay} ${monthName} ${targetYear}`;
+    return formatRouteDateLabel(
+      selectedTab,
+      selectedYear ?? new Date().getFullYear(),
+      selectedMonth ?? new Date().getMonth() + 1,
+      accRange,
+      currentTabName
+    );
   }, [selectedTab, currentTabName, selectedYear, selectedMonth, accRange]);
 
   const warningMessage =
@@ -164,19 +181,21 @@ function RouteSelectorCardComponent({
 
   return (
     <>
-      <UnifiedRouteControlBar
-        displayDateLabel={displayDateLabel}
-        isAccumulation={isAccumulation}
-        days={days}
-        sheetUrl={sheetUrl}
-        setSelectedTab={setSelectedTab}
-        onLoadData={onLoadData}
-        onExitAccumulation={onExitAccumulation}
-        reportRoute={reportRoute}
-        reportStatus={reportStatus}
-        confirmedShifts={confirmedShifts}
-        onOpenReportModal={onOpenReportModal}
-      />
+      {!hideControlBar && (
+        <UnifiedRouteControlBar
+          displayDateLabel={displayDateLabel}
+          isAccumulation={isAccumulation}
+          days={days}
+          sheetUrl={sheetUrl}
+          setSelectedTab={setSelectedTab}
+          onLoadData={onLoadData}
+          onExitAccumulation={onExitAccumulation}
+          reportRoute={reportRoute}
+          reportStatus={reportStatus}
+          confirmedShifts={confirmedShifts}
+          onOpenReportModal={onOpenReportModal}
+        />
+      )}
 
       {/* Contextual Bottom Sheet Drawer */}
       <RouteSelectorSheet

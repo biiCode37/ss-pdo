@@ -1,6 +1,22 @@
 /**
  * Kamus teks antarmuka: Pesan konfirmasi SweetAlert2 dan toast notifikasi pengguna.
  */
+export const BUS_FIELD_LABELS: Record<string, string> = {
+  unit: "Nomor Bodi Unit",
+  tripPergi: "Trip Pergi",
+  tripPulang: "Trip Pulang",
+  toaShift1: "TOA Shift 1",
+  manualShift1: "Manual Shift 1",
+  toaShift2: "TOA Shift 2",
+  manualShift2: "Manual Shift 2",
+  totalToa: "Total TOA",
+  kmAwal1: "KM Awal Shift 1",
+  kmAkhir1: "KM Akhir Shift 1",
+  kmAwal2: "KM Awal Shift 2",
+  kmAkhir2: "KM Akhir Shift 2",
+  keterangan: "Keterangan",
+};
+
 export const TEXT_ALERTS = {
   LOGOUT: {
     TITLE: "Yakin Ingin Logout?",
@@ -23,22 +39,30 @@ export const TEXT_ALERTS = {
   CONFLICT: {
     TITLE: "Tabrakan Data (Conflict)",
     UNIT_TEXT: (unit: string) =>
-      `Data unit ${unit} di Google Sheets telah berubah saat Anda offline. Data dari SS digabung dengan data yang anda input.`,
+      `Data unit ${unit} di Google Sheets telah berubah saat Anda offline. Silakan tinjau perbedaan data di bawah ini:`,
     GENERAL_TEXT:
-      "Data di Google Sheets telah berubah saat Anda offline. Data dari SS digabung dengan data yang anda input.",
-    CONFIRM_BTN: "Timpa Data SS",
-    DENY_BTN: "Gunakan & Gabung Data SS",
+      "Data di Google Sheets telah berubah saat Anda offline. Silakan tinjau perbedaan data di bawah ini:",
+    CONFIRM_BTN: "Tetap Timpa (Force)",
+    DENY_BTN: "Gunakan Data Server",
+    TOAST_SERVER_DATA_APPLIED: "Tampilan diperbarui menggunakan data server terbaru.",
     CANCEL_BTN: "Batal",
   },
   CONFLICT_ONLINE: {
     TITLE: "Data Spreadsheet Telah Berubah",
     UNIT_TEXT: (unit: string) =>
-      `Data unit ${unit} di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data SS?`,
+      `Data unit ${unit} di Google Sheets baru saja diperbarui oleh pihak lain. Silakan tinjau perbedaan data di bawah ini:`,
     GENERAL_TEXT:
-      "Data di Google Sheets baru saja diperbarui oleh pihak lain. Apakah Anda ingin menimpa perubahan tersebut atau menggabungkannya dengan data SS?",
-    CONFIRM_BTN: "Timpa Data SS",
-    DENY_BTN: "Gunakan & Gabung Data SS",
+      "Data di Google Sheets baru saja diperbarui oleh pihak lain. Silakan tinjau perbedaan data di bawah ini:",
+    CONFIRM_BTN: "Tetap Timpa (Force)",
+    DENY_BTN: "Gunakan Data Server",
+    TOAST_SERVER_DATA_APPLIED: "Tampilan diperbarui menggunakan data server terbaru.",
     CANCEL_BTN: "Batal",
+  },
+  CONFLICT_DIFF: {
+    SECTION_TITLE: "Rincian Perbedaan Kolom:",
+    SERVER_HEADER: "Data Server:",
+    USER_HEADER: "Input Baru Anda:",
+    EMPTY_VALUE: "(Kosong)",
   },
   FORMAT_SHEET: {
     TITLE: "Rapikan & Format Spreadsheet?",

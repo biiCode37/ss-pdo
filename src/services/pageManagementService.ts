@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from './supabase';
+import { invokeAdminAction } from './adminActionService';
 import type { AppPageSetting, PageKey, BulkActionType } from '@/types/pageManagement';
 import { DEFAULT_PAGE_SETTINGS } from '@/types/pageManagement';
 
@@ -122,33 +123,13 @@ export async function updatePageSetting(
   if (!isSupabaseConfigured) return true;
 
   try {
-    // Coba eksekusi melalui secure RPC function (SECURITY DEFINER)
-    try {
-      if (typeof (supabase as any)?.rpc === 'function') {
-        const { data: rpcRes, error: rpcErr } = await (supabase as any).rpc('set_app_page_setting', {
-          p_acting_email: updatedBy,
-          p_page_key: pageKey,
-          p_is_enabled: isEnabled,
-        });
-        if (!rpcErr && rpcRes === true) {
-          return true;
-        }
-      }
-    } catch {
-      // Fallback ke direct update jika RPC belum tersedia
-    }
+    const res = await invokeAdminAction('set_page_setting', {
+      pageKey,
+      isEnabled,
+    });
 
-    const { error } = await supabase
-      .from('app_page_settings')
-      .update({
-        is_enabled: isEnabled,
-        updated_at: new Date().toISOString(),
-        updated_by: updatedBy,
-      })
-      .eq('page_key', pageKey);
-
-    if (error) {
-      console.warn('[pageManagementService] Gagal update status di database:', error);
+    if (!res.success) {
+      console.warn('[pageManagementService] Gagal update status di database via Edge Function:', res.message);
       return false;
     }
     return true;
@@ -198,16 +179,15 @@ export async function updatePagePermissions(
   if (!isSupabaseConfigured) return true;
 
   try {
-    const { data, error } = await (supabase as any).rpc('admin_update_page_permissions', {
-      p_acting_email: updatedBy,
-      p_page_key: pageKey,
-      p_allowed_roles: finalRoles,
-      p_allowed_user_emails: allowedUserEmails,
-      p_denied_user_emails: deniedUserEmails,
+    const res = await invokeAdminAction('update_page_permissions', {
+      pageKey,
+      allowedRoles: finalRoles,
+      allowedUserEmails,
+      deniedUserEmails,
     });
 
-    if (error || data === false) {
-      console.warn('[pageManagementService] Gagal update permissions via RPC:', error);
+    if (!res.success) {
+      console.warn('[pageManagementService] Gagal update permissions via Edge Function:', res.message);
       return false;
     }
     return true;
@@ -277,16 +257,15 @@ export async function bulkUpdatePageSettings(
   if (!isSupabaseConfigured) return true;
 
   try {
-    const { data, error } = await (supabase as any).rpc('admin_bulk_update_page_settings', {
-      p_acting_email: updatedBy,
-      p_page_keys: validKeys,
-      p_action: action,
-      p_is_enabled: options.is_enabled ?? null,
-      p_allowed_roles: options.allowed_roles ?? null,
+    const res = await invokeAdminAction('bulk_update_page_settings', {
+      pageKeys: validKeys,
+      bulkAction: action,
+      isEnabled: options.is_enabled ?? null,
+      allowedRoles: options.allowed_roles ?? null,
     });
 
-    if (error || data === false) {
-      console.warn('[pageManagementService] Gagal bulk update via RPC:', error);
+    if (!res.success) {
+      console.warn('[pageManagementService] Gagal bulk update via Edge Function:', res.message);
       return false;
     }
     return true;

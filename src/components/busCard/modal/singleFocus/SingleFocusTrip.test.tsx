@@ -246,7 +246,7 @@ describe("SingleFocusTrip Component", () => {
       root.render(<SingleFocusTrip form={form} />);
     });
 
-    const chipBtn = container.querySelector("button") as HTMLButtonElement;
+    const chipBtn = container.querySelector('[data-testid="chip-toggle-keterangan"]') as HTMLButtonElement;
     expect(chipBtn.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_KETERANGAN);
 
     act(() => {

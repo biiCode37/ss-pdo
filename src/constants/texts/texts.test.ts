@@ -12,6 +12,8 @@ import {
   TEXT_USER_MANAGEMENT,
   TEXT_UNIT_DETAIL,
   TEXT_PAGE_MANAGEMENT,
+  TEXT_PLOTTING,
+  BUS_FIELD_LABELS,
 } from './index';
 
 describe('Centralized UI Text Dictionary', () => {
@@ -34,6 +36,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_AUTH.INFO_MODAL_CLOSE).toBe('Tutup & Kembali');
     expect(TEXT_AUTH.VIEW_PERMISSIONS_DETAIL).toBe('Lihat rincian izin resmi Google');
     expect(TEXT_AUTH.HIDE_PERMISSIONS_DETAIL).toBe('Sembunyikan rincian izin resmi Google');
+    expect(TEXT_AUTH.ADMIN_REAUTH_TITLE).toBe('Konfirmasi Sesi Administrator');
+    expect(TEXT_AUTH.ADMIN_REAUTH_CONFIRM_BTN).toBe('Konfirmasi Akun Google');
+    expect(TEXT_AUTH.ADMIN_REAUTH_DESC_WITH_EMAIL('test@example.com')).toContain('test@example.com');
   });
 
   it('exports TEXT_DASHBOARD with app header, tabs, and selectors', () => {
@@ -57,6 +62,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.ACCUMULATION_SHEET.TITLE).toBe('Rekap Akumulasi Lintas Periode');
     expect(TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_TITLE('JAK.115')).toContain('JAK.115');
     expect(TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_DISPLAY_TITLE('05 Sep 2026')).toContain('05 Sep 2026');
+    expect(TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.ALL_SHEET_LABEL(30)).toBe('Semua (30)');
+    expect(TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.BASE_LABEL('Priok', 17)).toBe('📍 Priok (17)');
+    expect(TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.EMPTY_BASE('Priok')).toBe('Tidak ada unit dengan titik start di Priok');
     expect(TEXT_DASHBOARD.BUS_LIST.DAILY_PROGRESS).toBe('Progres Harian');
     expect(TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX('TOA')).toBe('Kolom: TOA');
     expect(TEXT_DASHBOARD.BUS_LIST.CATEGORIES.MANUAL_S1).toBe('Manual S1');
@@ -284,6 +292,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ERRORS.NETWORK_FAILURE.toLowerCase()).toContain('koneksi internet');
     expect(TEXT_ERRORS.SESSION_EXPIRED).toBeDefined();
     expect(TEXT_ERRORS.SCHEMA_MIGRATION_REQUIRED).toBeDefined();
+    expect(TEXT_ERRORS.UNREGISTERED_SPREADSHEET).toBe('Dokumen spreadsheet tidak terdaftar dalam rute operasional resmi.');
     expect(TEXT_ERRORS.ROUTE_VALIDATION.CODE_REQUIRED).toContain('Kode Rute');
   });
 
@@ -553,5 +562,53 @@ describe('Centralized UI Text Dictionary', () => {
     expect(modalTexts.PRESETS.PREVIEW_SSOT_LABEL).toBe('Hasil Format Spreadsheet:');
     expect(modalTexts.PRESETS.APPLY_ALL_SHIFTS).toBe('Terapkan ke Kedua Shift');
     expect(modalTexts.PRESETS.ARIA_SELECT_NOTE_SHIFT).toBe('Pilih Shift Catatan');
+  });
+  it('exports TEXT_PLOTTING with labels, tabs, and actions', () => {
+    expect(TEXT_DASHBOARD.TABS.PLOTTING).toBe('Plotting Harian');
+    expect(TEXT_DASHBOARD.TABS.PLOTTING_SHORT).toBe('Plotting');
+    expect(TEXT_PLOTTING.TITLE).toBe('Plotting Armada Harian');
+    expect(TEXT_PLOTTING.COUNTERS.TOTAL_UNITS).toBe('Total Unit');
+    expect(TEXT_PLOTTING.COUNTERS.READY_UNITS).toBe('Siap Jalan');
+    expect(TEXT_PLOTTING.COUNTERS.TROUBLE_UNITS).toBe('Kendala');
+    expect(TEXT_PLOTTING.TABS.ARIA_LABEL).toBe('Pilihan Pangkalan Start');
+    expect(TEXT_PLOTTING.ACTIONS.START_REORDER).toBe('Atur Urutan');
+    expect(TEXT_PLOTTING.ACTIONS.APPLY_ROLLING).toBe('Rolling Kemarin');
+    expect(TEXT_PLOTTING.UNIT_CARD.STATUS_READY).toBe('Siap');
+    expect(TEXT_PLOTTING.UNIT_CARD.DRAG_HANDLE_TITLE).toBe('Tahan & seret untuk mengubah urutan');
+    expect(TEXT_PLOTTING.TARGET_MODAL.STEPPER_MINUS_ARIA).toBe('Kurang 0.5 rit');
+    expect(TEXT_PLOTTING.ACTIONS.SET_BULK_RITASE(3)).toBe('Set Ritase (3)');
+    expect(TEXT_PLOTTING.ACTIONS.SET_TROUBLE).toBe('Set Kendala');
+    expect(TEXT_PLOTTING.BULK_TARGET_MODAL.TITLE(5)).toBe('Atur Ritase (5 Unit Terpilih)');
+    expect(TEXT_PLOTTING.BULK_TARGET_MODAL.APPLY_BTN(5)).toBe('Terapkan ke 5 Unit');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.TITLE('TJ-01')).toBe('Status Kendala Unit TJ-01');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.PRESET_LABEL).toBe('Kode Kendala Cepat (Opsional):');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.RESET_SELECTION).toBe('Batal Pilih');
+    expect(TEXT_PLOTTING.TROUBLE_MODAL.APPLY_BTN).toBe('Simpan Kendala');
+    expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_SUCCESS(10)).toBe('Plotting & 10 unit berhasil disinkronkan ke Spreadsheet asli');
+    expect(TEXT_PLOTTING.TOASTS.SHEET_SYNC_OFFLINE(10)).toBe('Plotting tersimpan, 10 mutasi spreadsheet masuk antrean offline');
+    expect(TEXT_PLOTTING.TOASTS.BULK_TARGET_APPLIED(7.5, 4)).toBe('Target ritase 7.5 Rit diterapkan ke 4 unit');
+  });
+
+  describe('Conflict Comparison & Field Labels Text Dictionary', () => {
+    it('defines friendly Indonesian labels for all editable bus fields', () => {
+      expect(BUS_FIELD_LABELS.toaShift1).toBe('TOA Shift 1');
+      expect(BUS_FIELD_LABELS.manualShift1).toBe('Manual Shift 1');
+      expect(BUS_FIELD_LABELS.totalToa).toBe('Total TOA');
+      expect(BUS_FIELD_LABELS.kmAwal1).toBe('KM Awal Shift 1');
+      expect(BUS_FIELD_LABELS.kmAkhir1).toBe('KM Akhir Shift 1');
+      expect(BUS_FIELD_LABELS.kmAwal2).toBe('KM Awal Shift 2');
+      expect(BUS_FIELD_LABELS.kmAkhir2).toBe('KM Akhir Shift 2');
+      expect(BUS_FIELD_LABELS.tripPergi).toBe('Trip Pergi');
+      expect(BUS_FIELD_LABELS.tripPulang).toBe('Trip Pulang');
+      expect(BUS_FIELD_LABELS.keterangan).toBe('Keterangan');
+    });
+
+    it('defines conflict diff headers and notification toasts', () => {
+      expect(TEXT_ALERTS.CONFLICT_DIFF.SECTION_TITLE).toContain('Rincian Perbedaan Kolom');
+      expect(TEXT_ALERTS.CONFLICT_DIFF.SERVER_HEADER).toBe('Data Server:');
+      expect(TEXT_ALERTS.CONFLICT_DIFF.USER_HEADER).toBe('Input Baru Anda:');
+      expect(TEXT_ALERTS.CONFLICT_DIFF.EMPTY_VALUE).toBe('(Kosong)');
+      expect(TEXT_ALERTS.CONFLICT.TOAST_SERVER_DATA_APPLIED).toBe('Tampilan diperbarui menggunakan data server terbaru.');
+    });
   });
 });

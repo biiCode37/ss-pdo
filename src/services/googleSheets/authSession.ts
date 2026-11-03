@@ -24,7 +24,12 @@ export function startTokenRefreshTimer(expiresInMs: number) {
       const client = getTokenClient();
       if (client) {
         // Silent refresh — tanpa prompt consent
+      const userEmail = typeof localStorage !== "undefined" ? localStorage.getItem("PDO_USER_EMAIL") || undefined : undefined;
+      if (userEmail) {
+        client.requestAccessToken({ prompt: "", hint: userEmail });
+      } else {
         client.requestAccessToken({ prompt: "" });
+      }
       }
     } catch {
       window.dispatchEvent(new CustomEvent("google-token-expiring"));
@@ -85,7 +90,12 @@ export const refreshTokenInteractiveOrSilent = async (
     window.addEventListener("google-login-error", handleError);
 
     try {
-      client.requestAccessToken({ prompt: "" });
+      const userEmail = typeof localStorage !== "undefined" ? localStorage.getItem("PDO_USER_EMAIL") || undefined : undefined;
+      if (userEmail) {
+        client.requestAccessToken({ prompt: "", hint: userEmail });
+      } else {
+        client.requestAccessToken({ prompt: "" });
+      }
     } catch (e) {
       if (!settled) {
         settled = true;
@@ -102,7 +112,7 @@ export const refreshTokenInteractiveOrSilent = async (
         if (silentOnly) resolve();
         else reject(new Error("Token refresh timeout"));
       }
-    }, 8000); // ponytail: 8 detik untuk mengakomodasi sinyal lemah di lapangan (BUG-38)
+    }, 3000);
   });
 
   return tokenRefreshPromise;
@@ -134,6 +144,32 @@ export const ensureValidToken = async (): Promise<void> => {
 
   // Lakukan silent token refresh tanpa prompt consent
   await refreshTokenInteractiveOrSilent(true);
+};
+
+export const getGoogleAccessToken = async (): Promise<string | null> => {
+  if (typeof window === "undefined") return null;
+  const isPersistentSignedIn = localStorage.getItem("PDO_IS_SIGNED_IN") === "true";
+  if (!isPersistentSignedIn) return null;
+
+  await ensureValidToken();
+
+  const tokenStr = localStorage.getItem("GAPI_ACCESS_TOKEN");
+  if (!tokenStr) return null;
+
+  try {
+    const tokenObj = JSON.parse(tokenStr);
+    const isExpired =
+      !tokenObj.token ||
+      (tokenObj.expiresAt && tokenObj.expiresAt <= Date.now() + 10000);
+
+    if (isExpired) {
+      return null;
+    }
+
+    return tokenObj.token || null;
+  } catch {
+    return null;
+  }
 };
 
 export const reauthenticateSession = async (): Promise<void> => {
@@ -184,8 +220,16 @@ export const reauthenticateSession = async (): Promise<void> => {
     window.addEventListener("google-login-error", handleError as EventListener);
 
     // Trigger popup directly from user gesture (click event)
+    const userEmail =
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem("PDO_USER_EMAIL") || undefined
+        : undefined;
     try {
-      client.requestAccessToken();
+      if (userEmail) {
+        client.requestAccessToken({ prompt: "select_account", hint: userEmail });
+      } else {
+        client.requestAccessToken({ prompt: "select_account" });
+      }
     } catch (_e) {
       client.requestAccessToken({ prompt: "select_account" });
     }

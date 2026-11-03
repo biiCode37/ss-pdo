@@ -1,11 +1,90 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-webhook-secret",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:4173",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:4173",
+  ];
+
+  const isAllowed =
+    !origin ||
+    allowedOrigins.includes(origin) ||
+    origin.endsWith(".vercel.app") ||
+    origin.endsWith(".supabase.co") ||
+    (Deno.env.get("ALLOWED_ORIGIN") && origin === Deno.env.get("ALLOWED_ORIGIN"));
+
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? (origin || "*") : "https://sspdo.vercel.app",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-webhook-secret",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
+
+function parseJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = atob(base64);
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+function isAuthorizedRequest(req: Request): boolean {
+  const rawAuth = (req.headers.get("authorization") || "").trim();
+  const rawApiKey = (req.headers.get("apikey") || "").trim();
+  const rawSecret = (req.headers.get("x-webhook-secret") || "").trim();
+
+  const expectedAnonKey = (Deno.env.get("SUPABASE_ANON_KEY") || "").trim();
+  const expectedServiceKey = (Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "").trim();
+  const expectedSecret = (Deno.env.get("SHEET_SYNC_WEBHOOK_SECRET") || "").trim();
+  const supabaseUrl = (Deno.env.get("SUPABASE_URL") || "").trim();
+
+  const projectRefMatch = supabaseUrl.match(/https:\/\/([^.]+)\.supabase\.co/);
+  const projectRef = projectRefMatch ? projectRefMatch[1] : "";
+
+  // 1. Cek x-webhook-secret jika dikonfigurasi
+  if (expectedSecret && rawSecret && rawSecret === expectedSecret) {
+    return true;
+  }
+
+  // 2. Kumpulkan token kandidat
+  const candidateTokens: string[] = [];
+  if (rawApiKey) candidateTokens.push(rawApiKey);
+  if (rawAuth.startsWith("Bearer ")) candidateTokens.push(rawAuth.slice(7).trim());
+
+  for (const token of candidateTokens) {
+    if (expectedAnonKey && token === expectedAnonKey) return true;
+    if (expectedServiceKey && token === expectedServiceKey) return true;
+    if (expectedSecret && token === expectedSecret) return true;
+
+    // 3. Verifikasi JWT Payload (ref proyek & role resmi)
+    const payload = parseJwtPayload(token);
+    if (payload) {
+      const isCorrectRef = !projectRef || payload.ref === projectRef;
+      const isValidRole = payload.role === "anon" || payload.role === "authenticated" || payload.role === "service_role";
+      const isNotExpired = typeof payload.exp === "number" ? payload.exp > Math.floor(Date.now() / 1000) : true;
+
+      if (isCorrectRef && isValidRole && isNotExpired) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+const inFlightSyncs = new Set<string>();
+const routeCooldowns = new Map<string, number>();
+const COOLDOWN_MS = 3000; // 3 detik per rute
 
 interface ServiceAccountCredentials {
   client_email: string;
@@ -203,6 +282,8 @@ function parseIndonesianNumber(value: unknown): number {
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -214,6 +295,14 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  if (!isAuthorizedRequest(req)) {
+    return new Response(
+      JSON.stringify({ error: "Otorisasi tidak valid atau tidak disertakan", code: "UNAUTHORIZED" }),
+      { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  let syncKey: string | undefined;
   try {
     const body = await req.json().catch(() => ({}));
     const rawRouteCode = String(body.routeCode || "").trim();
@@ -246,6 +335,36 @@ Deno.serve(async (req: Request) => {
     const targetMonth = parseInt(mStr, 10);
     const targetDay = parseInt(dStr, 10);
     const tabName = String(targetDay);
+
+    syncKey = `${normalizedCode}_${targetDateStr}`;
+    const now = Date.now();
+
+    if (inFlightSyncs.has(syncKey)) {
+      console.log(`[SheetSyncWebhook] Sinkronisasi untuk ${syncKey} sedang berjalan, request baru di-skip.`);
+      return new Response(
+        JSON.stringify({
+          ok: true,
+          message: `Sinkronisasi rute ${normalizedCode} untuk ${targetDateStr} sedang berjalan di server.`,
+          skipped: true,
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const lastSyncTime = routeCooldowns.get(syncKey) || 0;
+    if (now - lastSyncTime < COOLDOWN_MS) {
+      console.log(`[SheetSyncWebhook] Cooldown aktif untuk ${syncKey} (${now - lastSyncTime}ms < ${COOLDOWN_MS}ms), request di-skip.`);
+      return new Response(
+        JSON.stringify({
+          ok: true,
+          message: `Sinkronisasi rute ${normalizedCode} baru saja diproses. Cooldown aktif.`,
+          skipped: true,
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    inFlightSyncs.add(syncKey);
 
     // Inisialisasi Supabase internal client
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
@@ -625,6 +744,8 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    routeCooldowns.set(syncKey, Date.now());
+
     return new Response(
       JSON.stringify({
         ok: true,
@@ -650,5 +771,9 @@ Deno.serve(async (req: Request) => {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+  } finally {
+    if (typeof syncKey !== "undefined") {
+      inFlightSyncs.delete(syncKey);
+    }
   }
 });

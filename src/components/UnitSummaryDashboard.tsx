@@ -60,7 +60,7 @@ function UnitSummaryDashboardComponent({
   }, []);
 
   return (
-    <div style={{ marginTop: "0px" }}>
+    <div style={{ paddingTop: "12px" }}>
       {/* Header & Search */}
       <div className="search-container" style={{ marginBottom: "12px" }}>
         <div className="search-input-wrapper" style={{ flex: 1 }}>

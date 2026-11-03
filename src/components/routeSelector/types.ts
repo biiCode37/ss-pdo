@@ -26,6 +26,7 @@ export interface RouteSelectorCardProps {
   onOpenReportModal?: () => void;
   onRouteCodeChange?: (routeCode: string) => void;
   externalOpenTrigger?: number;
+  hideControlBar?: boolean;
 }
 
 export interface FlatRouteSheet {

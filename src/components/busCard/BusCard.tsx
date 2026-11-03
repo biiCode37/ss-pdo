@@ -28,6 +28,9 @@ function BusCardComponent({
   activeShift = 1,
   previousDayKmAkhir2,
   previousDayDateLabel,
+  plottingItem,
+  endpointAName,
+  endpointBName,
 }: BusCardProps) {
   const { formData, isLoading, saveStatus, handleSaveUpdates } = useBusCardSave({
     bus,
@@ -87,6 +90,7 @@ function BusCardComponent({
             padding: "12px 16px",
           }}
         >
+          {/* Sisi Kiri: Nama Unit & Status Antrean Offline */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             <span className="bus-card-unit" style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
             {(saveStatus === "queued" || isQueued) && (
@@ -96,7 +100,65 @@ function BusCardComponent({
             )}
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          {/* Sisi Kanan: 2 Badge Terpisah (Urutan & Titik Start) di Pojok Kanan + Ringkasan/Status */}
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
+            {plottingItem && (
+              <div
+                data-testid={`plotting-badge-${bus.unit}`}
+                style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}
+              >
+                {/* 1. Badge Urutan Mandiri */}
+                <span
+                  data-testid={`plotting-order-${bus.unit}`}
+                  title={`Urutan Antrean #${plottingItem.order}`}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minWidth: "22px",
+                    height: "22px",
+                    padding: "0 6px",
+                    borderRadius: "6px",
+                    fontSize: "11px",
+                    fontWeight: 800,
+                    background: "var(--color-surface-default)",
+                    color: "var(--color-text-primary)",
+                    border: "1px solid var(--color-border-subtle)",
+                  }}
+                >
+                  #{plottingItem.order}
+                </span>
+
+                {/* 2. Badge Titik Start Mandiri */}
+                <span
+                  data-testid={`plotting-start-${bus.unit}`}
+                  title={`Titik Start: ${plottingItem.start_point === 'A' ? (endpointAName || 'A') : (endpointBName || 'B')}`}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "3px",
+                    padding: "2px 7px",
+                    borderRadius: "6px",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    background:
+                      plottingItem.start_point === 'A'
+                        ? "var(--color-shift-1-bg)"
+                        : "var(--color-warning-bg)",
+                    color:
+                      plottingItem.start_point === 'A'
+                        ? "var(--color-shift-1-fg)"
+                        : "var(--color-warning-fg)",
+                    border:
+                      plottingItem.start_point === 'A'
+                        ? "1px solid var(--color-shift-1-border)"
+                        : "1px solid var(--color-warning-border)",
+                  }}
+                >
+                  📍 {plottingItem.start_point === 'A' ? (endpointAName || 'A') : (endpointBName || 'B')}
+                </span>
+              </div>
+            )}
             {activeCategory !== "ALL" && (
               <BusCardSummary
                 formData={formData}
@@ -196,6 +258,9 @@ function BusCardComponent({
           activeShift={activeShift}
           previousDayKmAkhir2={previousDayKmAkhir2}
           previousDayDateLabel={previousDayDateLabel}
+          plottingItem={plottingItem}
+          endpointAName={endpointAName}
+          endpointBName={endpointBName}
         />
       )}
     </>

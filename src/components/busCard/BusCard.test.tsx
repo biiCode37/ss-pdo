@@ -421,5 +421,66 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       const leftSide = headerChildren?.[0];
       expect(leftSide?.querySelector('.unit-status-badge-off')).toBeNull();
     });
+    it('renders plotting sequence and start base badge when plottingItem is provided', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="ALL"
+            plottingItem={{
+              unit: defaultProps.bus.unit,
+              order: 3,
+              start_point: 'A',
+              target_ritase: 7.5,
+              status: 'READY',
+            }}
+            endpointAName="Priok"
+            endpointBName="IGI"
+          />
+        );
+      });
+
+      const badge = container.querySelector(`[data-testid="plotting-badge-${defaultProps.bus.unit}"]`);
+      expect(badge).not.toBeNull();
+      expect(badge?.textContent).toContain('#3');
+      expect(badge?.textContent).toContain('Priok');
+
+      const orderBadge = container.querySelector<HTMLElement>(`[data-testid="plotting-order-${defaultProps.bus.unit}"]`);
+      expect(orderBadge).not.toBeNull();
+      expect(orderBadge?.style.color).toBe('var(--color-text-primary)');
+      expect(orderBadge?.style.background).toBe('var(--color-surface-default)');
+
+      const startBadge = container.querySelector<HTMLElement>(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`);
+      expect(startBadge).not.toBeNull();
+      expect(startBadge?.style.color).toBe('var(--color-shift-1-fg)');
+      expect(startBadge?.style.background).toBe('var(--color-shift-1-bg)');
+    });
+
+    it('renders plotting badge for start point B with warning semantic tokens', async () => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="ALL"
+            plottingItem={{
+              unit: defaultProps.bus.unit,
+              order: 2,
+              start_point: 'B',
+              target_ritase: 7,
+              status: 'READY',
+            }}
+            endpointAName="Priok"
+            endpointBName="IGI"
+          />
+        );
+      });
+
+      const startBadge = container.querySelector<HTMLElement>(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`);
+      expect(startBadge).not.toBeNull();
+      expect(startBadge?.textContent).toContain('IGI');
+      expect(startBadge?.style.color).toBe('var(--color-warning-fg)');
+      expect(startBadge?.style.background).toBe('var(--color-warning-bg)');
+    });
   });
 });
+

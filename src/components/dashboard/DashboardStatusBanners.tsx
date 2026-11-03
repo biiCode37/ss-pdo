@@ -12,6 +12,7 @@ import {
 import { isUsingServiceAccount, reauthenticateSession } from "@/services/googleSheets";
 import type { BusData } from "@/services/googleSheets";
 import type { Route } from "@/types/supabase";
+import type { DashboardMainTab } from "./useDashboardUiState";
 
 interface DashboardStatusBannersProps {
   pullDistance: number;
@@ -31,7 +32,7 @@ interface DashboardStatusBannersProps {
   activeShift: 1 | 2;
   onOpenFleetModal?: () => void;
   isLoading: boolean;
-  mainTab: "input" | "analytics" | "units";
+  mainTab: DashboardMainTab;
 }
 
 export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({

@@ -1,10 +1,30 @@
-import "@supabase/functions-js/edge-runtime.d.ts";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:4173",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:4173",
+  ];
+
+  const isAllowed =
+    !origin ||
+    allowedOrigins.includes(origin) ||
+    origin.endsWith(".vercel.app") ||
+    origin.endsWith(".supabase.co") ||
+    (Deno.env.get("ALLOWED_ORIGIN") && origin === Deno.env.get("ALLOWED_ORIGIN"));
+
+  return {
+    "Access-Control-Allow-Origin": isAllowed ? (origin || "*") : "https://sspdo.vercel.app",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-google-token",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
 
 interface ServiceAccountCredentials {
   client_email: string;
@@ -13,6 +33,86 @@ interface ServiceAccountCredentials {
 }
 
 let cachedToken: { accessToken: string; expiresAt: number } | null = null;
+
+// In-Memory Whitelist Cache (TTL: 5 menit)
+interface WhitelistCache {
+  allowedSpreadsheetIds: Set<string>;
+  lastFetched: number;
+}
+
+let whitelistCache: WhitelistCache | null = null;
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 menit
+
+function getSupabaseAdmin() {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+  if (!supabaseUrl || !supabaseServiceKey) {
+    return null;
+  }
+  return createClient(supabaseUrl, supabaseServiceKey);
+}
+
+async function isSpreadsheetAllowed(spreadsheetId: string): Promise<boolean> {
+  const trimmedId = spreadsheetId.trim();
+  const now = Date.now();
+
+  // 1. Cek dari in-memory cache jika masih segar (< 5 menit)
+  if (whitelistCache && now - whitelistCache.lastFetched < CACHE_TTL_MS) {
+    if (whitelistCache.allowedSpreadsheetIds.has(trimmedId)) {
+      return true;
+    }
+  }
+
+  const supabase = getSupabaseAdmin();
+  if (!supabase) {
+    console.error("[SheetsProxy] Supabase Admin client gagal diinisialisasi (SUPABASE_URL atau SERVICE_ROLE_KEY tidak ada)");
+    // Fail-closed untuk keamanan
+    return false;
+  }
+
+  // 2. Jika cache kosong atau kedaluwarsa, segarkan dari tabel database route_sheets
+  if (!whitelistCache || now - whitelistCache.lastFetched >= CACHE_TTL_MS) {
+    const { data, error } = await supabase
+      .from("route_sheets")
+      .select("spreadsheet_id");
+
+    if (!error && Array.isArray(data)) {
+      const idSet = new Set<string>();
+      for (const row of data) {
+        if (typeof row.spreadsheet_id === "string" && row.spreadsheet_id.trim()) {
+          idSet.add(row.spreadsheet_id.trim());
+        }
+      }
+      whitelistCache = {
+        allowedSpreadsheetIds: idSet,
+        lastFetched: now,
+      };
+
+      if (whitelistCache.allowedSpreadsheetIds.has(trimmedId)) {
+        return true;
+      }
+    } else {
+      console.warn("[SheetsProxy] Gagal memuat whitelist dari route_sheets:", error?.message);
+    }
+  }
+
+  // 3. Fallback cache-miss (misal rute baru saja didaftarkan beberapa saat lalu saat cache masih aktif)
+  const { data: singleMatch, error: singleError } = await supabase
+    .from("route_sheets")
+    .select("id")
+    .eq("spreadsheet_id", trimmedId)
+    .limit(1)
+    .maybeSingle();
+
+  if (!singleError && singleMatch) {
+    if (whitelistCache) {
+      whitelistCache.allowedSpreadsheetIds.add(trimmedId);
+    }
+    return true;
+  }
+
+  return false;
+}
 
 function base64UrlEncode(data: Uint8Array | string): string {
   let bytes: Uint8Array;
@@ -102,11 +202,9 @@ function getServiceAccountCredentials(): ServiceAccountCredentials | null {
       try {
         parsed = JSON.parse(text) as Record<string, unknown>;
       } catch {
-        // Ekstraksi objek JSON pertama jika ada konten berlebih atau terduplikasi
         parsed = extractFirstJsonObject(text);
       }
     } else {
-      // Decode if base64 encoded
       const decoded = atob(text);
       try {
         parsed = JSON.parse(decoded) as Record<string, unknown>;
@@ -116,8 +214,8 @@ function getServiceAccountCredentials(): ServiceAccountCredentials | null {
     }
 
     if (
-      typeof parsed.client_email === "string" &&
-      typeof parsed.private_key === "string"
+      typeof parsed?.client_email === "string" &&
+      typeof parsed?.private_key === "string"
     ) {
       return {
         client_email: parsed.client_email,
@@ -133,17 +231,11 @@ function getServiceAccountCredentials(): ServiceAccountCredentials | null {
 
 async function getGoogleAccessToken(creds: ServiceAccountCredentials): Promise<string> {
   const now = Math.floor(Date.now() / 1000);
-
-  // Gunakan cache jika masih berlaku lebih dari 3 menit
   if (cachedToken && cachedToken.expiresAt - now > 180) {
     return cachedToken.accessToken;
   }
 
-  const header = {
-    alg: "RS256",
-    typ: "JWT",
-  };
-
+  const header = { alg: "RS256", typ: "JWT" };
   const claimSet = {
     iss: creds.client_email,
     scope: "https://www.googleapis.com/auth/spreadsheets",
@@ -160,10 +252,7 @@ async function getGoogleAccessToken(creds: ServiceAccountCredentials): Promise<s
   const privateKey = await crypto.subtle.importKey(
     "pkcs8",
     keyBuffer as unknown as BufferSource,
-    {
-      name: "RSASSA-PKCS1-v1_5",
-      hash: "SHA-256",
-    },
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
     false,
     ["sign"]
   );
@@ -205,6 +294,8 @@ async function getGoogleAccessToken(creds: ServiceAccountCredentials): Promise<s
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -305,6 +396,36 @@ Deno.serve(async (req: Request) => {
         JSON.stringify({ error: "spreadsheetId tidak valid atau tidak disertakan" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+
+    // Validasi Whitelist Spreadsheet Terdaftar
+    const isAllowed = await isSpreadsheetAllowed(spreadsheetId);
+    if (!isAllowed) {
+      console.warn(`[SheetsProxy] Akses ditolak: spreadsheetId '${spreadsheetId}' tidak terdaftar di route_sheets`);
+      return new Response(
+        JSON.stringify({
+          error: "Akses ditolak: Spreadsheet ID tidak terdaftar dalam rute operasional resmi.",
+          code: "SPREADSHEET_NOT_ALLOWED",
+        }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Validasi Integritas Payload Aksi Tulis / Mutasi
+    if (action === "values.batchUpdate") {
+      if (!payload || typeof payload !== "object" || !Array.isArray(payload.data)) {
+        return new Response(
+          JSON.stringify({ error: "Payload values.batchUpdate tidak valid atau tidak memiliki array data" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    } else if (action === "batchUpdate") {
+      if (!payload || typeof payload !== "object" || !Array.isArray(payload.requests)) {
+        return new Response(
+          JSON.stringify({ error: "Payload batchUpdate tidak valid atau tidak memiliki array requests" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
     }
 
     const accessToken = await getGoogleAccessToken(creds);

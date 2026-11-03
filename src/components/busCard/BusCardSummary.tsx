@@ -63,6 +63,10 @@ export function BusCardSummary({
   const pergiNum = parseIndonesianNumber(pergiVal, 0);
   const pulangNum = parseIndonesianNumber(pulangVal, 0);
 
+  const totalTrips = pergiNum + pulangNum;
+  const totalRit = totalTrips / 2;
+  const totalRitDisplay = totalRit % 1 === 0 ? String(totalRit) : String(totalRit);
+
   const targetP = targetTrip ? targetTrip.pergi : 0;
   const targetQ = targetTrip ? targetTrip.pulang : 0;
   const hasTarget = targetP > 0 && targetQ > 0;
@@ -219,10 +223,10 @@ export function BusCardSummary({
               : "var(--text-primary)",
           }}
         >
-          {hasTrip ? (
+          {hasTrip && totalRit > 0 ? (
             <>
               {isBelowTarget && "⚠️ "}
-              {pergiVal || 0}/{pulangVal || 0}
+              {totalRitDisplay}{" "}
               <span className="bus-metric-unit">{TEXT_DASHBOARD.BUS_CARD_ACTIONS.RIT_UNIT}</span>
             </>
           ) : (

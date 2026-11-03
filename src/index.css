@@ -197,21 +197,35 @@ input[type="number"] {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Sticky Controls Block on Input SS Page */
-.sticky-buslist-header {
+/* One sticky shell: route/profile, date, progress and input controls. */
+.sticky-top-block {
   position: sticky;
-  top: var(--sticky-header-height, 136px);
-  z-index: 30;
-  background: var(--bg-color);
+  top: 0;
+  z-index: 40;
+  flex-shrink: 0;
+  background: var(--color-surface-raised);
+  padding: 12px clamp(12px, 2.5vw, 16px);
+  margin: calc(-1 * clamp(12px, 2.5vw, 16px)) calc(-1 * clamp(12px, 2.5vw, 16px)) 14px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.unified-input-control-panel {
   padding-top: 8px;
-  padding-bottom: 12px;
-  margin-top: -6px;
-  margin-left: -16px;
-  margin-right: -16px;
-  padding-left: 16px;
-  padding-right: 16px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  margin-bottom: 12px;
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.unified-input-control-panel .search-container {
+  position: static;
+  padding: 0;
+  background: transparent;
+}
+
+.unified-input-control-panel .search-input-wrapper {
+  min-width: 0;
 }
 
 /* Set Jumlah Trip Trigger Button */
@@ -377,9 +391,11 @@ select.input-field {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding-top: 6px;
 }
 .bus-card {
   overflow: hidden;
+  scroll-margin-top: calc(var(--sticky-header-height, 90px) + 12px);
   border-left: 3.5px solid transparent;
   transition: transform 0.18s var(--ease-spring), box-shadow 0.18s var(--ease-spring), border-color 0.18s var(--ease-spring);
 }
@@ -797,6 +813,7 @@ body.light-mode .bottom-nav-item:hover {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding-top: 16px;
 }
 
 .analytics-card {

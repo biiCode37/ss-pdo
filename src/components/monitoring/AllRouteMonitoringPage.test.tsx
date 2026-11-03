@@ -48,6 +48,23 @@ vi.mock('@/utils/alertUtils', () => ({
   showConfirmationDialog: vi.fn().mockResolvedValue(true),
 }));
 
+let realtimeCallback: (() => void) | null = null;
+const mockChannel = {
+  on: vi.fn((_event: string, _filter: any, callback: () => void) => {
+    realtimeCallback = callback;
+    return mockChannel;
+  }),
+  subscribe: vi.fn().mockReturnThis(),
+};
+
+vi.mock('@/services/supabase', () => ({
+  isSupabaseConfigured: true,
+  supabase: {
+    channel: vi.fn(() => mockChannel),
+    removeChannel: vi.fn(),
+  },
+}));
+
 const mockData: RegionalMonitoringResult = {
   date: '2026-09-02',
   yesterdayDate: '2026-09-01',
@@ -558,5 +575,52 @@ describe('AllRouteMonitoringPage Component', () => {
 
     // Should call ingestRegionalRouteSummariesForRange
     expect(regionalIngestionService.ingestRegionalRouteSummariesForRange).toHaveBeenCalled();
+  });
+
+  it('does not trigger infinite loop and only calls fetchRegionalMonitoringData once on initial mount', async () => {
+    (regionalService.fetchRegionalMonitoringData as any).mockClear();
+    (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue(mockData);
+
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+    });
+
+    // Exactly 1 call on mount, not infinite loop
+    expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
+  });
+
+  it('debounces rapid realtime events and only triggers silent reload once after 3000ms', async () => {
+    vi.useFakeTimers();
+    (regionalService.fetchRegionalMonitoringData as any).mockClear();
+    (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue(mockData);
+
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+    });
+
+    expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
+
+    // Simulate 5 incoming realtime events within 1 second
+    expect(realtimeCallback).toBeTruthy();
+    act(() => {
+      realtimeCallback?.();
+      realtimeCallback?.();
+      realtimeCallback?.();
+      realtimeCallback?.();
+      realtimeCallback?.();
+    });
+
+    // Before 3000ms, should NOT have called fetch again
+    expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
+
+    // Advance timers by 3000ms
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    // After debounce finishes, should only have executed 1 additional silent reload
+    expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
+
+    vi.useRealTimers();
   });
 });

@@ -13,7 +13,10 @@ vi.mock('./audit', () => ({
   logActivity: vi.fn().mockResolvedValue(undefined),
 }));
 
-import { supabase } from '../supabase';
+vi.mock('../adminActionService', () => ({
+  invokeAdminAction: vi.fn(),
+}));
+
 import {
   generateProfileChecksum,
   tryOfflineProfileFallback,
@@ -22,8 +25,9 @@ import {
   toggleUserProfileStatus,
   revokeUserProfile,
 } from './users';
+import { invokeAdminAction } from '../adminActionService';
 
-describe('User Service Security & Error Sanitization (Refactor 154)', () => {
+describe('User Service Security & Error Sanitization (Refactor 154 & Refactor 191)', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
@@ -105,15 +109,11 @@ describe('User Service Security & Error Sanitization (Refactor 154)', () => {
     });
   });
 
-  describe('Database Error Sanitization (SEC-154-05)', () => {
+  describe('Database Error Sanitization & Admin Action Gateway (SEC-154-05 & Refactor 191)', () => {
     it('sanitizes duplicate email error to friendly message on addUserProfile', async () => {
-      (supabase.from as any).mockReturnValue({
-        insert: vi.fn().mockReturnValue({
-          select: vi.fn().mockResolvedValue({
-            data: null,
-            error: { code: '23505', message: 'duplicate key value violates unique constraint "user_profiles_email_key"' },
-          }),
-        }),
+      vi.mocked(invokeAdminAction).mockResolvedValue({
+        success: false,
+        message: 'Email tersebut sudah terdaftar di sistem.',
       });
 
       const res = await addUserProfile({
@@ -123,17 +123,12 @@ describe('User Service Security & Error Sanitization (Refactor 154)', () => {
 
       expect(res.success).toBe(false);
       expect(res.message).toBe('Email tersebut sudah terdaftar di sistem.');
-      expect(res.message).not.toContain('violates unique constraint');
     });
 
     it('sanitizes technical postgres syntax error to friendly non-technical message', async () => {
-      (supabase.from as any).mockReturnValue({
-        insert: vi.fn().mockReturnValue({
-          select: vi.fn().mockResolvedValue({
-            data: null,
-            error: { code: '42601', message: 'syntax error at or near "WHERE"' },
-          }),
-        }),
+      vi.mocked(invokeAdminAction).mockResolvedValue({
+        success: false,
+        message: 'Gagal menambahkan pengguna baru. Pastikan format email valid dan koneksi internet stabil.',
       });
 
       const res = await addUserProfile({
@@ -142,14 +137,13 @@ describe('User Service Security & Error Sanitization (Refactor 154)', () => {
       });
 
       expect(res.success).toBe(false);
-      expect(res.message).not.toContain('syntax error');
       expect(res.message).toBe('Gagal menambahkan pengguna baru. Pastikan format email valid dan koneksi internet stabil.');
     });
 
     it('preserves intentional Access Denied exception from PostgreSQL function', async () => {
-      (supabase.rpc as any).mockResolvedValue({
-        data: null,
-        error: { message: 'Akses ditolak: Hanya Superadmin aktif yang berwenang mengubah peran akun pengguna.' },
+      vi.mocked(invokeAdminAction).mockResolvedValue({
+        success: false,
+        message: 'Akses ditolak: Hanya Superadmin aktif yang berwenang mengubah peran akun pengguna.',
       });
 
       const res = await updateUserProfileRole('target@gmail.com', 'admin', 'acting@gmail.com');
@@ -159,20 +153,15 @@ describe('User Service Security & Error Sanitization (Refactor 154)', () => {
     });
 
     it('sanitizes errors in toggleUserProfileStatus and revokeUserProfile', async () => {
-      (supabase.rpc as any).mockResolvedValue({
-        data: null,
-        error: { code: '42501', message: 'permission denied for function admin_toggle_user_status' },
-      });
-      (supabase.from as any).mockReturnValue({
-        update: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            select: vi.fn().mockResolvedValue({
-              data: null,
-              error: { code: '42501', message: 'permission denied for table user_profiles' },
-            }),
-          }),
-        }),
-      });
+      vi.mocked(invokeAdminAction)
+        .mockResolvedValueOnce({
+          success: false,
+          message: 'Gagal memperbarui status aktif akun pengguna.',
+        })
+        .mockResolvedValueOnce({
+          success: false,
+          message: 'Gagal mencabut hak akses akun pengguna.',
+        });
 
       const resToggle = await toggleUserProfileStatus('target@gmail.com', false, 'admin@gmail.com');
       expect(resToggle.success).toBe(false);
@@ -181,6 +170,27 @@ describe('User Service Security & Error Sanitization (Refactor 154)', () => {
       const resRevoke = await revokeUserProfile('target@gmail.com', 'admin@gmail.com');
       expect(resRevoke.success).toBe(false);
       expect(resRevoke.message).toBe('Gagal mencabut hak akses akun pengguna.');
+    });
+
+    it('successfully executes addUserProfile and logs activity with verified email', async () => {
+      vi.mocked(invokeAdminAction).mockResolvedValue({
+        success: true,
+        verifiedEmail: 'verified-superadmin@transjakarta.co.id',
+      });
+
+      const res = await addUserProfile({
+        email: 'newuser@transjakarta.co.id',
+        full_name: 'New Operator',
+        role: 'pdo',
+      });
+
+      expect(res.success).toBe(true);
+      expect(invokeAdminAction).toHaveBeenCalledWith('add_user_profile', {
+        email: 'newuser@transjakarta.co.id',
+        fullName: 'New Operator',
+        roleId: 5,
+        notes: null,
+      });
     });
   });
 });

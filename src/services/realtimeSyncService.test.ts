@@ -68,6 +68,11 @@ describe('realtimeSyncService', () => {
       expect.stringContaining('sheet-sync-webhook'),
       expect.objectContaining({
         method: 'POST',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+          apikey: expect.any(String),
+          Authorization: expect.stringContaining('Bearer '),
+        }),
         body: JSON.stringify({ routeCode: 'JAK.60', date: '2026-10-24' }),
       })
     );

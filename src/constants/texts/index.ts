@@ -13,3 +13,4 @@ export * from './text_fleet_status';
 export * from './text_user_management';
 export * from './text_unit_detail';
 export * from './text_page_management';
+export * from './text_plotting';

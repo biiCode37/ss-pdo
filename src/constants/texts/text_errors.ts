@@ -12,6 +12,7 @@ export const TEXT_ERRORS = {
   LOAD_DATA_FAILED: 'Gagal memuat data operasional spreadsheet.',
   SESSION_EXPIRED: 'Sesi anda telah berakhir. Ketuk tombol "Perbarui Sesi" untuk melanjutkan.',
   SHEET_NOT_FOUND: 'Data tab spreadsheet untuk periode ini tidak ditemukan.',
+  UNREGISTERED_SPREADSHEET: 'Dokumen spreadsheet tidak terdaftar dalam rute operasional resmi.',
   EMPTY_QUEUE: 'Tidak ada item antrean yang perlu disinkronkan.',
   PERMISSION_DENIED_FILE: 'Gagal mengakses Google Sheets (Hak Akses Ditolak). Akun Google Anda tidak memiliki akses ke dokumen ini. Pastikan dokumen telah dibagikan (share) ke akun Anda.',
   PERMISSION_DENIED_GENERAL: 'Gagal mengakses Google Sheets. Pastikan akun Anda memiliki hak akses ke dokumen tersebut.',

@@ -14,6 +14,7 @@ interface UnifiedRouteControlBarProps {
   reportStatus?: "draft" | "submitted" | "verified" | "failed";
   confirmedShifts?: { 1: boolean; 2: boolean };
   onOpenReportModal?: () => void;
+  isInsidePanel?: boolean;
 }
 
 export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
@@ -28,22 +29,26 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
   reportStatus,
   confirmedShifts,
   onOpenReportModal,
+  isInsidePanel = false,
 }) => {
   return (
     <div
-      className="glass unified-route-control-bar"
+      className={isInsidePanel ? "unified-route-control-bar" : "glass unified-route-control-bar"}
       style={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         gap: "8px",
-        padding: "5px 8px",
-        borderRadius: "12px",
-        marginBottom: "12px",
-        border: "1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08))",
-        background: "var(--color-bg-surface, rgba(23, 23, 23, 0.75))",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
+        padding: isInsidePanel ? "0 0 6px 0" : "4px 8px",
+        borderRadius: isInsidePanel ? "0" : "10px",
+        marginBottom: isInsidePanel ? "0px" : "2px",
+        border: "none",
+        borderBottom: isInsidePanel
+          ? "1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08))"
+          : "none",
+        background: isInsidePanel ? "transparent" : "var(--color-bg-surface, rgba(23, 23, 23, 0.75))",
+        backdropFilter: isInsidePanel ? "none" : "blur(16px)",
+        WebkitBackdropFilter: isInsidePanel ? "none" : "blur(16px)",
       }}
     >
       {/* Left Segment: Static Date Display Badge (Informative Only, Not Clickable) */}
@@ -55,7 +60,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
           gap: "6px",
           flex: 1,
           minWidth: 0,
-          padding: "4px 6px",
+          padding: isInsidePanel ? "2px 0" : "4px 6px",
           borderRadius: "8px",
           background: "transparent",
           userSelect: "none",

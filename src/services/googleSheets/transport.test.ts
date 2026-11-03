@@ -152,4 +152,23 @@ describe('transport adapter', () => {
     expect(mockSpreadsheets.get).toHaveBeenCalledWith({ spreadsheetId: 'sheet123', fields: undefined });
     expect(res.result.sheets).toBeDefined();
   });
+
+  it('throws friendly error when sheets-proxy returns SPREADSHEET_NOT_ALLOWED (403)', async () => {
+    (supabase.functions.invoke as any).mockImplementation((_fnName: string, options: any) => {
+      if (options.body.action === 'health') {
+        return Promise.resolve({ data: { ok: true, configured: true }, error: null });
+      }
+      return Promise.resolve({
+        data: {
+          error: 'Akses ditolak: Spreadsheet ID tidak terdaftar dalam rute operasional resmi.',
+          code: 'SPREADSHEET_NOT_ALLOWED',
+        },
+        error: null,
+      });
+    });
+
+    await expect(fetchSpreadsheetMeta('unregistered_sheet_id')).rejects.toThrow(
+      'Akses ditolak: Spreadsheet ID tidak terdaftar dalam rute operasional resmi.'
+    );
+  });
 });
