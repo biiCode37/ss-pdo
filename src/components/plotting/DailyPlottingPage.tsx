@@ -21,6 +21,8 @@ import { PlottingBaseTabs } from './PlottingBaseTabs';
 import { PlottingUnitCard } from './PlottingUnitCard';
 import { TargetRitaseModal } from './TargetRitaseModal';
 import { PlottingTroubleModal } from './PlottingTroubleModal';
+import { PlottingOrderModal } from './PlottingOrderModal';
+import { reorderUnitsRelative, type RelativePlacement } from '@/utils/plottingOrderUtils';
 import { showSuccessToast, showErrorToast } from '@/utils/alertUtils';
 import { Zap } from 'lucide-react';
 
@@ -100,6 +102,15 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
   }>({
     isOpen: false,
     initialValue: 7.5,
+  });
+
+  // Modal State untuk Pengatur Posisi Urutan Relatif (Satuan & Rombongan)
+  const [orderModal, setOrderModal] = useState<{
+    isOpen: boolean;
+    units: string[];
+  }>({
+    isOpen: false,
+    units: [],
   });
 
   // Modal State untuk Pengatur Kendala Terpadu
@@ -411,6 +422,57 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
     setUnitsData((prev) => normalizeBaseOrders(generateRollingFromYesterday(prev)));
     showSuccessToast(TEXT_PLOTTING.TOASTS.ROLLING_APPLIED);
   }, []);
+
+  // Handler: Buka Modal Posisi Satuan (dari badge urutan kartu)
+  const handleOpenOrderModal = useCallback((unit: string) => {
+    setOrderModal({
+      isOpen: true,
+      units: [unit],
+    });
+  }, []);
+
+  // Handler: Buka Modal Posisi Rombongan (dari floating action bar)
+  const handleOpenBulkOrderModal = useCallback(() => {
+    const unitsInActiveBase = currentBaseUnits
+      .filter((u) => selectedUnits.has(u.unit))
+      .map((u) => u.unit);
+    if (unitsInActiveBase.length === 0) return;
+    setOrderModal({
+      isOpen: true,
+      units: unitsInActiveBase,
+    });
+  }, [currentBaseUnits, selectedUnits]);
+
+  // Handler: Terapkan Pemindahan Posisi Urutan Relatif (Satuan / Rombongan)
+  const handleApplyOrderMove = useCallback(
+    (
+      unitsToMove: string[],
+      placement: RelativePlacement,
+      referenceUnit?: string,
+    ) => {
+      isDirtyRef.current = true;
+      setUnitsData((prev) => {
+        const baseUnits = prev
+          .filter((u) => u.start_point === activeBase)
+          .sort((a, b) => a.order - b.order);
+
+        const reorderedBase = reorderUnitsRelative(
+          baseUnits,
+          unitsToMove,
+          placement,
+          referenceUnit,
+        );
+
+        const otherUnits = prev.filter((u) => u.start_point !== activeBase);
+        return normalizeBaseOrders([...reorderedBase, ...otherUnits]);
+      });
+
+      setSelectedUnits(new Set());
+      setOrderModal({ isOpen: false, units: [] });
+      showSuccessToast(TEXT_PLOTTING.ORDER_MODAL.APPLY_SUCCESS(unitsToMove.length));
+    },
+    [activeBase],
+  );
 
   // Handler: Update Target Ritase per Unit secara langsung (dari Stepper)
   const handleUpdateTargetRitase = useCallback((unit: string, target_ritase: number) => {
@@ -824,6 +886,7 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
               isReordering={isReordering}
               isSelectedForMultiSelect={selectedUnits.has(item.unit)}
               onToggleSelect={handleToggleSelect}
+              onOpenOrderModal={handleOpenOrderModal}
               onMoveUp={handleMoveUp}
               onMoveDown={handleMoveDown}
               onToggleStartPoint={handleToggleStartPoint}
@@ -876,6 +939,29 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {/* Tombol Atur Posisi Rombongan (Bulk Reorder) */}
+            <button
+              type="button"
+              onClick={handleOpenBulkOrderModal}
+              data-testid="btn-bulk-reorder"
+              title="Atur posisi urutan untuk seluruh unit terpilih sekaligus"
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                border: 'none',
+                background: 'var(--color-surface-default, rgba(255, 255, 255, 0.08))',
+                color: 'var(--color-text-primary, #f8fafc)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}
+            >
+              <span>{TEXT_PLOTTING.ACTIONS.BULK_REORDER(selectedUnits.size)}</span>
+            </button>
+
             {/* Tombol Atur Ritase Terpilih (Bulk Target Ritase) */}
             <button
               type="button"
@@ -987,6 +1073,15 @@ export const DailyPlottingPage: React.FC<DailyPlottingPageProps> = ({
         onClose={() => setTroubleModal((prev) => ({ ...prev, isOpen: false }))}
         onApplyTrouble={handleApplyTrouble}
         onResetReady={handleResetReady}
+      />
+
+      {/* 7. Modal Pengatur Posisi Urutan Relatif Satuan & Rombongan */}
+      <PlottingOrderModal
+        isOpen={orderModal.isOpen}
+        unitsToMove={orderModal.units}
+        allBaseUnits={currentBaseUnits}
+        onClose={() => setOrderModal({ isOpen: false, units: [] })}
+        onApplyMove={handleApplyOrderMove}
       />
     </div>
   );
