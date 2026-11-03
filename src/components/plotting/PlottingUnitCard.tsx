@@ -4,14 +4,12 @@ import { TEXT_PLOTTING } from '@/constants/texts';
 import {
   ArrowDown,
   ArrowUp,
-  GripVertical,
   CheckCircle2,
   AlertTriangle,
   XCircle,
   ArrowLeftRight,
   Minus,
   Plus,
-  Circle,
   Zap,
 } from 'lucide-react';
 
@@ -22,6 +20,7 @@ export interface PlottingUnitCardProps {
   isReordering: boolean;
   isSelectedForMultiSelect: boolean;
   onToggleSelect: (unit: string) => void;
+  onOpenOrderModal?: (unit: string) => void;
   onMoveUp?: (unit: string) => void;
   onMoveDown?: (unit: string) => void;
   onToggleStartPoint: (unit: string) => void;
@@ -42,6 +41,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
   isReordering,
   isSelectedForMultiSelect,
   onToggleSelect,
+  onOpenOrderModal,
   onMoveUp,
   onMoveDown,
   onToggleStartPoint,
@@ -107,10 +107,8 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
       onDragOver={onDragOver}
       onDrop={(e) => onDrop?.(e, item.unit)}
       onClick={() => {
-        if (isReordering) {
-          onToggleSelect(item.unit);
-          onCardClick?.(item.unit);
-        }
+        onToggleSelect(item.unit);
+        onCardClick?.(item.unit);
       }}
       data-testid={`plotting-card-${item.unit}`}
       style={{
@@ -123,7 +121,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
         borderRadius: '14px',
         padding: '12px 14px',
         marginBottom: '10px',
-        cursor: isReordering ? 'grab' : 'default',
+        cursor: isReordering ? 'grab' : 'pointer',
         userSelect: isReordering ? 'none' : 'auto',
         WebkitUserSelect: isReordering ? 'none' : 'auto',
         display: 'flex',
@@ -133,7 +131,7 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
         transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
       }}
     >
-      {/* BARIS 1: Checkbox, Drag Handle (saat reorder), Urutan, Nama Unit (Lega & Jelas), Status Pill */}
+      {/* BARIS 1: Selector Checkmark, Urutan Interaktif, Nama Unit (Lega & Jelas), Status Pill */}
       <div
         style={{
           display: 'flex',
@@ -142,9 +140,9 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
           gap: '8px',
         }}
       >
-        {/* Sisi Kiri: Selector Checkbox, Drag Handle, Order Badge, Unit Name (Prioritas Utama) */}
+        {/* Sisi Kiri: Centang Seleksi (saat terpilih), Order Badge Interaktif, Unit Name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
-          {/* Checkbox Selector Bebas */}
+          {/* Centang Seleksi Mini (Hanya saat unit terpilih; tanpa bulatan idle) */}
           <button
             type="button"
             onClick={(e) => {
@@ -158,38 +156,26 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               border: 'none',
               padding: '0',
               cursor: 'pointer',
-              display: 'flex',
+              display: isSelectedForMultiSelect ? 'inline-flex' : 'none',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
             }}
           >
-            {isSelectedForMultiSelect ? (
-              <CheckCircle2 size={18} color="var(--color-action-primary-bg, #38bdf8)" />
-            ) : (
-              <Circle size={18} color="var(--color-text-secondary, #64748b)" />
+            {isSelectedForMultiSelect && (
+              <CheckCircle2 size={15} color="var(--color-action-primary-bg, #38bdf8)" />
             )}
           </button>
 
-          {/* Drag Handle Indicator (Hanya saat mode reorder aktif) */}
-          {isReordering && (
-            <div
-              style={{
-                color: 'var(--color-text-secondary, #94a3b8)',
-                display: 'flex',
-                alignItems: 'center',
-                cursor: 'grab',
-                flexShrink: 0,
-              }}
-              title={TEXT_PLOTTING.UNIT_CARD.DRAG_HANDLE_TITLE}
-            >
-              <GripVertical size={16} />
-            </div>
-          )}
-
-          {/* Sequential Order Badge */}
-          <span
+          {/* Sequential Order Badge (Interaktif - klik untuk atur urutan) */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenOrderModal?.(item.unit);
+            }}
             data-testid={`badge-order-${item.unit}`}
+            title="Klik untuk mengatur posisi urutan unit ini"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -204,10 +190,12 @@ export const PlottingUnitCard = memo(function PlottingUnitCard({
               fontSize: '0.8rem',
               fontWeight: 800,
               flexShrink: 0,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
             {item.order}
-          </span>
+          </button>
 
           {/* Unit Name (KWK 222153) - Mendapat ruang utama lega tanpa terpotong */}
           <span

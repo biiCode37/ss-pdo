@@ -172,4 +172,132 @@ describe('PlottingUnitCard Component', () => {
     });
     expect(handleUpdateTargetRitase).toHaveBeenCalledWith('KWK 222153', 8);
   });
+
+  it('tidak menampilkan lingkaran checkbox idle saat unit tidak terpilih', () => {
+    act(() => {
+      root.render(
+        <PlottingUnitCard
+          item={mockItemReady}
+          endpointAName="Priok"
+          endpointBName="IGI"
+          isReordering={false}
+          isSelectedForMultiSelect={false}
+          onToggleSelect={vi.fn()}
+          onToggleStartPoint={vi.fn()}
+          onUpdateTargetRitase={vi.fn()}
+          onUpdateStatus={vi.fn()}
+        />,
+      );
+    });
+
+    // Lingkaran checkbox idle tidak boleh ada
+    expect(container.querySelector('.lucide-circle')).toBeNull();
+    const selectBtn = container.querySelector('[data-testid="btn-select-KWK 222153"]');
+    expect(selectBtn?.querySelector('svg')).toBeNull();
+  });
+
+  it('menampilkan centang mini halus ketika unit terpilih', () => {
+    act(() => {
+      root.render(
+        <PlottingUnitCard
+          item={mockItemReady}
+          endpointAName="Priok"
+          endpointBName="IGI"
+          isReordering={false}
+          isSelectedForMultiSelect={true}
+          onToggleSelect={vi.fn()}
+          onToggleStartPoint={vi.fn()}
+          onUpdateTargetRitase={vi.fn()}
+          onUpdateStatus={vi.fn()}
+        />,
+      );
+    });
+
+    const selectBtn = container.querySelector('[data-testid="btn-select-KWK 222153"]');
+    const checkmark = selectBtn?.querySelector('svg');
+    expect(checkmark).not.toBeNull();
+    expect(checkmark?.classList.contains('lucide-circle-check')).toBe(true);
+    expect(checkmark?.getAttribute('width')).toBe('15');
+    expect(checkmark?.getAttribute('height')).toBe('15');
+  });
+
+  it('memicu onToggleSelect saat bodi kartu diklik', () => {
+    const handleToggleSelect = vi.fn();
+
+    act(() => {
+      root.render(
+        <PlottingUnitCard
+          item={mockItemReady}
+          endpointAName="Priok"
+          endpointBName="IGI"
+          isReordering={false}
+          isSelectedForMultiSelect={false}
+          onToggleSelect={handleToggleSelect}
+          onToggleStartPoint={vi.fn()}
+          onUpdateTargetRitase={vi.fn()}
+          onUpdateStatus={vi.fn()}
+        />,
+      );
+    });
+
+    const card = container.querySelector('[data-testid="plotting-card-KWK 222153"]') as HTMLDivElement;
+    expect(card).not.toBeNull();
+
+    act(() => {
+      card.click();
+    });
+    expect(handleToggleSelect).toHaveBeenCalledWith('KWK 222153');
+  });
+
+  it('memicu onOpenOrderModal saat badge urutan diklik dan tidak memicu onToggleSelect', () => {
+    const handleToggleSelect = vi.fn();
+    const handleOpenOrderModal = vi.fn();
+
+    act(() => {
+      root.render(
+        <PlottingUnitCard
+          item={mockItemReady}
+          endpointAName="Priok"
+          endpointBName="IGI"
+          isReordering={false}
+          isSelectedForMultiSelect={false}
+          onToggleSelect={handleToggleSelect}
+          onOpenOrderModal={handleOpenOrderModal}
+          onToggleStartPoint={vi.fn()}
+          onUpdateTargetRitase={vi.fn()}
+          onUpdateStatus={vi.fn()}
+        />,
+      );
+    });
+
+    const orderBadge = container.querySelector('[data-testid="badge-order-KWK 222153"]') as HTMLElement;
+    expect(orderBadge).not.toBeNull();
+    expect(orderBadge.title).toBe('Klik untuk mengatur posisi urutan unit ini');
+
+    act(() => {
+      orderBadge.click();
+    });
+    expect(handleOpenOrderModal).toHaveBeenCalledWith('KWK 222153');
+    expect(handleToggleSelect).not.toHaveBeenCalled();
+  });
+
+  it('tidak merender drag handle GripVertical meskipun isReordering aktif', () => {
+    act(() => {
+      root.render(
+        <PlottingUnitCard
+          item={mockItemReady}
+          endpointAName="Priok"
+          endpointBName="IGI"
+          isReordering={true}
+          isSelectedForMultiSelect={false}
+          onToggleSelect={vi.fn()}
+          onToggleStartPoint={vi.fn()}
+          onUpdateTargetRitase={vi.fn()}
+          onUpdateStatus={vi.fn()}
+        />,
+      );
+    });
+
+    expect(container.querySelector('.lucide-grip-vertical')).toBeNull();
+  });
 });
