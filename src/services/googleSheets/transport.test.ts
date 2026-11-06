@@ -1,3 +1,4 @@
+// @vitest-environment happy-dom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 const mockSpreadsheets = {
@@ -31,6 +32,7 @@ vi.mock('./auth', () => ({
   withAuthRetry: vi.fn((fn) => fn()),
   ensureValidToken: vi.fn(),
   getGapi: vi.fn(() => mockGapi),
+  getGoogleAccessToken: vi.fn(async () => 'google-token'),
 }));
 
 import {
@@ -42,13 +44,99 @@ import {
   updateSheetValuesBatch,
   batchUpdateSpreadsheet,
   isUsingServiceAccount,
+  PROXY_SESSION_STORAGE_KEY,
 } from './transport';
 import { supabase } from '../supabase';
+import { getGoogleAccessToken } from './auth';
 
 describe('transport adapter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     setTransportMode('auto');
+    localStorage.clear();
+  });
+
+  it('menukar token Google dengan sesi proxy sekali lalu mengirimnya di setiap panggilan (BUG-SEC-205-01)', async () => {
+    (supabase.functions.invoke as any).mockImplementation((_fnName: string, options: any) => {
+      if (options.body.action === 'health') {
+        return Promise.resolve({ data: { ok: true, configured: true }, error: null });
+      }
+      if (options.body.action === 'session') {
+        return Promise.resolve({
+          data: { sessionToken: 'SESSION-1', expiresAt: Date.now() + 12 * 3600 * 1000 },
+          error: null,
+        });
+      }
+      return Promise.resolve({ data: { values: [['ok']] }, error: null });
+    });
+
+    await fetchSheetValues('sheet123', 'A1:B2');
+    await fetchSheetValues('sheet123', 'C1:D2');
+
+    const calls = (supabase.functions.invoke as any).mock.calls;
+    const sessionCalls = calls.filter((c: any[]) => c[1].body.action === 'session');
+    expect(sessionCalls).toHaveLength(1);
+    expect(sessionCalls[0][1].headers).toEqual({ 'x-google-token': 'google-token' });
+
+    const valueCalls = calls.filter((c: any[]) => c[1].body.action === 'values.get');
+    expect(valueCalls).toHaveLength(2);
+    for (const c of valueCalls) {
+      expect(c[1].headers).toEqual({ 'x-proxy-session': 'SESSION-1' });
+    }
+    expect(JSON.parse(localStorage.getItem(PROXY_SESSION_STORAGE_KEY) || '{}').sessionToken).toBe('SESSION-1');
+  });
+
+  it('memperbarui sesi sekali saat proxy menolak 401, lalu mengulang permintaan', async () => {
+    localStorage.setItem(
+      PROXY_SESSION_STORAGE_KEY,
+      JSON.stringify({ sessionToken: 'OLD', expiresAt: Date.now() + 3600 * 1000 })
+    );
+    (supabase.functions.invoke as any).mockImplementation((_fnName: string, options: any) => {
+      if (options.body.action === 'health') {
+        return Promise.resolve({ data: { ok: true, configured: true }, error: null });
+      }
+      if (options.body.action === 'session') {
+        return Promise.resolve({
+          data: { sessionToken: 'NEW', expiresAt: Date.now() + 12 * 3600 * 1000 },
+          error: null,
+        });
+      }
+      if (options.headers?.['x-proxy-session'] === 'OLD') {
+        return Promise.resolve({ data: null, error: { message: 'non-2xx', context: { status: 401 } } });
+      }
+      return Promise.resolve({ data: { values: [['fresh']] }, error: null });
+    });
+
+    const res = await fetchSheetValues('sheet123', 'A1:B2');
+    expect(res.result.values[0][0]).toBe('fresh');
+    const valueCalls = (supabase.functions.invoke as any).mock.calls.filter(
+      (c: any[]) => c[1].body.action === 'values.get'
+    );
+    expect(valueCalls.map((c: any[]) => c[1].headers['x-proxy-session'])).toEqual(['OLD', 'NEW']);
+  });
+
+  it('memicu prompt re-auth bila sesi ditolak dan token Google tidak tersedia', async () => {
+    localStorage.setItem(
+      PROXY_SESSION_STORAGE_KEY,
+      JSON.stringify({ sessionToken: 'OLD', expiresAt: Date.now() + 3600 * 1000 })
+    );
+    vi.mocked(getGoogleAccessToken).mockResolvedValueOnce(null);
+    const onExpired = vi.fn();
+    window.addEventListener('google-auth-expired', onExpired);
+    (supabase.functions.invoke as any).mockImplementation((_fnName: string, options: any) => {
+      if (options.body.action === 'health') {
+        return Promise.resolve({ data: { ok: true, configured: true }, error: null });
+      }
+      return Promise.resolve({ data: null, error: { message: 'non-2xx', context: { status: 401 } } });
+    });
+
+    await expect(fetchSheetValues('sheet123', 'A1:B2')).rejects.toThrow();
+    expect(onExpired).toHaveBeenCalledTimes(1);
+    const valueCalls = (supabase.functions.invoke as any).mock.calls.filter(
+      (c: any[]) => c[1].body.action === 'values.get'
+    );
+    expect(valueCalls).toHaveLength(1);
+    window.removeEventListener('google-auth-expired', onExpired);
   });
 
   it('detects active proxy when Edge Function reports configured: true', async () => {

@@ -1428,15 +1428,15 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/transport.test.ts": {
-    "mtime": 1793668546.0109365,
-    "seen": 1793936743.0088408,
-    "ast_hash": "8ffc759b8e8efa5b56af2ead6853c93b",
+    "mtime": 1793976974.1185777,
+    "seen": 1793977183.5411036,
+    "ast_hash": "9c84dbbd6653aa78fe86fd7922f7046c",
     "semantic_hash": ""
   },
   "src/services/googleSheets/transport.ts": {
-    "mtime": 1793104751.5158696,
-    "seen": 1793936743.0088427,
-    "ast_hash": "98ff2f65e764204ad0ead9990d404a7f",
+    "mtime": 1793976972.568598,
+    "seen": 1793977183.5411062,
+    "ast_hash": "92de232a5ae672c3f8297913a754ea28",
     "semantic_hash": ""
   },
   "supabase/functions/sheets-proxy/deno.json": {
@@ -1446,9 +1446,9 @@
     "semantic_hash": ""
   },
   "supabase/functions/sheets-proxy/index.ts": {
-    "mtime": 1793668546.037896,
-    "seen": 1793936743.0090613,
-    "ast_hash": "a8fc73f6b85eb2c4099f19218e57b1b7",
+    "mtime": 1793976883.1358304,
+    "seen": 1793977183.5414221,
+    "ast_hash": "45167a1606b3bb6ee2b1fa4b71c86b78",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_11/AUDIT_BUGS.md": {
@@ -2874,9 +2874,9 @@
     "semantic_hash": ""
   },
   "src/services/googleSheets/authGis.ts": {
-    "mtime": 1793668546.0080073,
-    "seen": 1793936743.0088243,
-    "ast_hash": "4ab6f519c7865df6fe6cf52b66cc79cd",
+    "mtime": 1793976923.8360364,
+    "seen": 1793977183.5410748,
+    "ast_hash": "0aabdd44af45686a57f4cf9c40b10d54",
     "semantic_hash": ""
   },
   "src/services/googleSheets/authSession.ts": {
@@ -7815,6 +7815,36 @@
     "mtime": 1793974728.6365516,
     "seen": 1793974905.110383,
     "ast_hash": "19b7c13a05bfb35835815bce0db8fac5",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_203/REPAIR_REPORT.md": {
+    "mtime": 1793975233.034114,
+    "seen": 1793975317.7708673,
+    "ast_hash": "d698bc338ddc2286c6c1aed59371a10c",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261106000002_restrict_daily_unit_summaries_delete.sql": {
+    "mtime": 1793975593.8179412,
+    "seen": 1793975991.91087,
+    "ast_hash": "0e8eac079da5fdd0f9d9a2ebaa2b547b",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_204/AUDIT_BUGS.md": {
+    "mtime": 1793975624.7278392,
+    "seen": 1793975991.9122522,
+    "ast_hash": "2c0588bd1e6f21954184081fc1edc92c",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_204/REPAIR_REPORT.md": {
+    "mtime": 1793975805.1945438,
+    "seen": 1793975991.912255,
+    "ast_hash": "8ac21b92db79e11cf3acf2af601917bf",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_205/AUDIT_BUGS.md": {
+    "mtime": 1793977025.468426,
+    "seen": 1793977183.542868,
+    "ast_hash": "a336d8fbd4ab8fd7f0d3f7126472c853",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {
