@@ -8,9 +8,7 @@ import { usePreviousDayOdometer } from "@/hooks/usePreviousDayOdometer";
 import { getStoredUserRole } from "@/utils/roleStorage";
 import { showAuthExpiredAlert, showSuccessToast, showWarningToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD, TEXT_PAGE_MANAGEMENT } from "@/constants/texts";
-import type { DailyRoutePlotting } from "@/types/supabase";
 import { UnifiedRouteControlBar, formatRouteDateLabel } from "@/components/routeSelector";
-import { fetchDailyPlotting } from "@/services/dailyPlottingService";
 
 import {
   DashboardHeader,
@@ -138,29 +136,7 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
     setBusData,
   });
 
-  // 4. Daily Route Plotting State & Effect
-  const [currentPlotting, setCurrentPlotting] = useState<DailyRoutePlotting | null>(null);
   const [inputHeaderTarget, setInputHeaderTarget] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!matchedRoute?.id || !operationalReportDate) {
-      setCurrentPlotting(null);
-      return;
-    }
-    let isCancelled = false;
-    fetchDailyPlotting(matchedRoute.id, operationalReportDate)
-      .then((data) => {
-        if (!isCancelled) {
-          setCurrentPlotting(data);
-        }
-      })
-      .catch((err) => {
-        console.warn("[Dashboard] Gagal memuat data plotting:", err);
-      });
-    return () => {
-      isCancelled = true;
-    };
-  }, [matchedRoute?.id, operationalReportDate]);
 
   // 4. Offline Queue & Background Sync
   const {
@@ -545,10 +521,6 @@ export function Dashboard({ onLogout, needsReauth }: Props) {
           missingColumns={missingColumns}
           previousDayKmMap={previousDayKmMap}
           previousDayRefMap={previousDayRefMap}
-          matchedRoute={matchedRoute}
-          operationalReportDate={operationalReportDate}
-          plotting={currentPlotting}
-          onPlottingChange={setCurrentPlotting}
           routeControlBar={inputRouteControlBar}
           inputHeaderTarget={inputHeaderTarget}
         />

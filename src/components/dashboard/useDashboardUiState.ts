@@ -11,7 +11,7 @@ export type DashboardView =
   | "regional_monitoring"
   | "page_management";
 
-export type DashboardMainTab = "input" | "analytics" | "units" | "plotting";
+export type DashboardMainTab = "input" | "analytics" | "units";
 
 interface UseDashboardUiStateOptions {
   onClearError?: () => void;
@@ -82,7 +82,7 @@ export function useDashboardUiState(options: UseDashboardUiStateOptions = {}) {
   }, []);
 
   // Swipe Tab Navigation
-  const mainTabs: DashboardMainTab[] = ["input", "analytics", "units", "plotting"];
+  const mainTabs: DashboardMainTab[] = ["input", "analytics", "units"];
 
   const handleSwipeNextTab = useCallback(() => {
     setMainTab((prev) => {

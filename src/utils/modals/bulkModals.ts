@@ -8,6 +8,10 @@ export interface BulkTripModalOptions {
   currentPulang?: string;
   headerMap?: HeaderMap;
   unitCount: number;
+  /** Mode "Set Trip Unit Terpilih": judul & deskripsi khusus unit pilihan. */
+  isSelection?: boolean;
+  /** Jumlah unit terpilih berstatus OFF/TO EVDAL yang dilewati (mode pilihan). */
+  skippedCount?: number;
 }
 
 /**
@@ -21,7 +25,13 @@ export async function showBulkTripModal(
     currentPulang = "",
     headerMap,
     unitCount,
+    isSelection = false,
+    skippedCount = 0,
   } = options;
+  const descriptionHtml = isSelection
+    ? TEXT_ALERTS.BULK_TRIP.DESCRIPTION_SELECTED(escapeHtml(unitCount)) +
+      (skippedCount > 0 ? TEXT_ALERTS.BULK_TRIP.SKIPPED_NOTE(escapeHtml(skippedCount)) : "")
+    : TEXT_ALERTS.BULK_TRIP.DESCRIPTION(escapeHtml(unitCount));
   const tripPergiLabel = escapeHtml(headerMap?.tripPergiLabel || "Trip Pergi");
   const tripPulangLabel = escapeHtml(
     headerMap?.tripPulangLabel || "Trip Pulang",
@@ -30,7 +40,7 @@ export async function showBulkTripModal(
   const formHtml = `
     <div class="swal-bus-input-container" style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
       <div style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.45;">
-        ${TEXT_ALERTS.BULK_TRIP.DESCRIPTION(escapeHtml(unitCount))}
+        ${descriptionHtml}
       </div>
 
       <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
@@ -68,7 +78,7 @@ export async function showBulkTripModal(
   `;
 
   const result = await pdoSwal.fire({
-    title: TEXT_ALERTS.BULK_TRIP.TITLE,
+    title: isSelection ? TEXT_ALERTS.BULK_TRIP.TITLE_SELECTED : TEXT_ALERTS.BULK_TRIP.TITLE,
     html: formHtml,
     showCancelButton: true,
     confirmButtonText: TEXT_ALERTS.BULK_TRIP.APPLY_BTN,

@@ -154,7 +154,7 @@ describe('AdminActionService', () => {
       });
 
     const res = await invokeAdminAction('update_page_permissions', {
-      pageKey: 'plotting',
+      pageKey: 'units',
       allowedRoles: ['superadmin'],
       allowedUserEmails: ['biiaby370@gmail.com'],
       deniedUserEmails: [],

@@ -1,19 +1,18 @@
-import { useState, useMemo, useCallback, memo } from "react";
+import { useState, useMemo, useCallback, useEffect, memo } from "react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import { BusCard } from "@/components/BusCard";
 import { BusCardSkeleton } from "@/components/Skeletons";
 import { getSatsetMode } from "@/utils/modals/busInputModal";
-import { showSuccessToast } from "@/utils/alertUtils";
+import { showSuccessToast, showWarningToast } from "@/utils/alertUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import type { SyncItem } from "@/hooks/useOfflineSync";
 import type { OdometerRefInfo } from "@/hooks/usePreviousDayOdometer";
-import type { DailyRoutePlotting, UnitPlottingItem } from "@/types/supabase";
 
-import { isUnitAllowedForInput, isBusFilled, type FleetSortView } from "./busListUtils";
+import { isUnitAllowedForInput, isBusFilled } from "./busListUtils";
 import { isBusNonOperational } from "@/utils/operationalStatusUtils";
-import { extractEndpointNames } from "@/utils/routeEndpointUtils";
 import { useBulkOperations } from "./useBulkOperations";
 import { BusListHeader } from "./BusListHeader";
+import { BusListSelectionBar } from "./BusListSelectionBar";
 
 export interface BusListProps {
   data: BusData[];
@@ -37,7 +36,6 @@ export interface BusListProps {
   activeShift?: 1 | 2;
   previousDayKmMap?: Record<string, string>;
   previousDayRefMap?: Record<string, OdometerRefInfo>;
-  plotting?: DailyRoutePlotting | null;
   routeControlBar?: React.ReactNode;
   headerTarget?: HTMLDivElement | null;
 }
@@ -57,48 +55,12 @@ function BusListComponent({
   activeShift = 1,
   previousDayKmMap,
   previousDayRefMap,
-  plotting,
   routeControlBar,
   headerTarget,
 }: BusListProps) {
-  const plottingMap = useMemo(() => {
-    const map = new Map<string, UnitPlottingItem>();
-    if (plotting?.units_data) {
-      plotting.units_data.forEach((item) => {
-        map.set(item.unit.trim().toUpperCase(), item);
-      });
-    }
-    return map;
-  }, [plotting]);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [showOnlyUnfinished, setShowOnlyUnfinished] = useState(false);
   const [activeCategory, setActiveCategory] = useState("ALL");
-  const [sortView, setSortView] = useState<FleetSortView>("sheet");
-
-  const extractedEndpoints = useMemo(() => {
-    return extractEndpointNames(
-      headerMap?.tripPergiLabel,
-      headerMap?.tripPulangLabel
-    );
-  }, [headerMap?.tripPergiLabel, headerMap?.tripPulangLabel]);
-
-  const endpointAName =
-    plotting?.endpoint_a_name || extractedEndpoints.endpointA || "Titik A";
-  const endpointBName =
-    plotting?.endpoint_b_name || extractedEndpoints.endpointB || "Titik B";
-
-  const { countBaseA, countBaseB } = useMemo(() => {
-    let a = 0;
-    let b = 0;
-    data.forEach((bus) => {
-      const norm = bus.unit?.trim().toUpperCase();
-      const item = plottingMap.get(norm);
-      if (item?.start_point === "A") a++;
-      else if (item?.start_point === "B") b++;
-    });
-    return { countBaseA: a, countBaseB: b };
-  }, [data, plottingMap]);
 
   const {
     bulkPergi,
@@ -108,6 +70,7 @@ function BusListComponent({
     availableKmS1Buses,
     skippedWithNotesCount,
     handleOpenBulkTripModal,
+    handleApplyTripToSelected,
     handleBulkCopyKmS1,
   } = useBulkOperations({
     data,
@@ -118,6 +81,47 @@ function BusListComponent({
     onUpdateBus,
     isShiftConfirmed,
   });
+
+  // Mode Pilih Unit (Set Trip Unit Terpilih) — pilihan disimpan per rowIndex.
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(() => new Set());
+
+  const exitSelectionMode = useCallback(() => {
+    setIsSelectionMode(false);
+    setSelectedRows((prev) => (prev.size === 0 ? prev : new Set()));
+  }, []);
+
+  // Pilihan tidak boleh terbawa saat pindah rute/tanggal (rowIndex berbeda arti).
+  useEffect(() => {
+    exitSelectionMode();
+  }, [sheetId, tabName, exitSelectionMode]);
+
+  const handleToggleSelectionMode = useCallback(() => {
+    if (isSelectionMode) {
+      exitSelectionMode();
+      return;
+    }
+    if (tabName === "AKUMULASI") {
+      showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
+      return;
+    }
+    setIsSelectionMode(true);
+  }, [isSelectionMode, tabName, exitSelectionMode]);
+
+  const handleToggleSelect = useCallback((rowIndex: number) => {
+    setSelectedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(rowIndex)) next.delete(rowIndex);
+      else next.add(rowIndex);
+      return next;
+    });
+  }, []);
+
+  const handleApplySelected = useCallback(async () => {
+    const selectedBuses = data.filter((bus) => selectedRows.has(bus.rowIndex));
+    const saved = await handleApplyTripToSelected(selectedBuses);
+    if (saved) exitSelectionMode();
+  }, [data, selectedRows, handleApplyTripToSelected, exitSelectionMode]);
 
   const checkAllowed = useCallback(
     (bus: BusData) => isUnitAllowedForInput(bus, activeCategory),
@@ -140,31 +144,18 @@ function BusListComponent({
   const filteredData = useMemo(() => {
     let result = data;
 
-    // 1. Filter Titik Start (Opsi B: Base A atau Base B)
-    if (sortView === "base_a") {
-      result = result.filter((bus) => {
-        const norm = bus.unit?.trim().toUpperCase();
-        return plottingMap.get(norm)?.start_point === "A";
-      });
-    } else if (sortView === "base_b") {
-      result = result.filter((bus) => {
-        const norm = bus.unit?.trim().toUpperCase();
-        return plottingMap.get(norm)?.start_point === "B";
-      });
-    }
-
-    // 2. Filter Sisa Unit Belum Selesai (jika tombol Filter aktif)
+    // 1. Filter Sisa Unit Belum Selesai (jika tombol Filter aktif)
     if (showOnlyUnfinished) {
       result = result.filter(
         (bus) => checkAllowed(bus) && !checkFilled(bus),
       );
     }
 
-    // 3. Sorting Tampilan (Sesuai Opsi B Hybrid)
+    // 2. Sorting Tampilan
     result = [...result].sort((a, b) => {
       // Auto-park non-operasional selalu ke paling bawah
-      const aNonOp = isBusNonOperational(a, plottingMap.get(a.unit?.trim().toUpperCase()));
-      const bNonOp = isBusNonOperational(b, plottingMap.get(b.unit?.trim().toUpperCase()));
+      const aNonOp = isBusNonOperational(a);
+      const bNonOp = isBusNonOperational(b);
       if (aNonOp !== bNonOp) {
         return aNonOp ? 1 : -1;
       }
@@ -180,22 +171,11 @@ function BusListComponent({
         if (aFilled !== bFilled) return aFilled ? 1 : -1;
       }
 
-      // Jika sortView base_a atau base_b: urutkan strictly berdasarkan nomor antrean plotting #1..#N
-      if (sortView === "base_a" || sortView === "base_b") {
-        const normA = a.unit?.trim().toUpperCase();
-        const normB = b.unit?.trim().toUpperCase();
-        const orderA = plottingMap.get(normA)?.order ?? 9999;
-        const orderB = plottingMap.get(normB)?.order ?? 9999;
-        if (orderA !== orderB) {
-          return orderA - orderB;
-        }
-      }
-
-      // Default (sheet view) atau fallback: urutan baris spreadsheet SSOT asli
+      // Urutan baris spreadsheet SSOT asli
       return a.rowIndex - b.rowIndex;
     });
 
-    // 4. Filter Pencarian No Body
+    // 3. Filter Pencarian No Body
     if (searchQuery) {
       const lowerQuery = searchQuery.toLowerCase();
       result = result.filter((bus) =>
@@ -204,7 +184,7 @@ function BusListComponent({
     }
 
     return result;
-  }, [data, sortView, searchQuery, showOnlyUnfinished, checkAllowed, checkFilled, plottingMap]);
+  }, [data, searchQuery, showOnlyUnfinished, checkAllowed, checkFilled]);
 
   // Handler Auto-Next Bus ketika Mode Satset aktif
   const handleSaveAndNext = useCallback(
@@ -219,7 +199,7 @@ function BusListComponent({
         const isEligible = (b: BusData) =>
           b.rowIndex !== savedBus.rowIndex &&
           !checkFilled(b) &&
-          !isBusNonOperational(b, plottingMap.get(b.unit?.trim().toUpperCase()));
+          !isBusNonOperational(b);
 
         let nextBus = filteredData
           .slice(currentIndex + 1)
@@ -243,7 +223,7 @@ function BusListComponent({
         }
       }, 120);
     },
-    [filteredData, checkFilled, plottingMap],
+    [filteredData, checkFilled],
   );
 
   return (
@@ -270,13 +250,8 @@ function BusListComponent({
         availableKmS1Count={availableKmS1Buses.length}
         skippedWithNotesCount={skippedWithNotesCount}
         onBulkCopyKmS1={handleBulkCopyKmS1}
-        sortView={sortView}
-        onSortViewChange={setSortView}
-        endpointA={endpointAName}
-        endpointB={endpointBName}
-        countBaseA={countBaseA}
-        countBaseB={countBaseB}
-        totalFleetCount={data.length}
+        isSelectionMode={isSelectionMode}
+        onToggleSelectionMode={handleToggleSelectionMode}
         routeControlBar={routeControlBar}
         headerTarget={headerTarget}
       />
@@ -324,26 +299,31 @@ function BusListComponent({
                   activeShift={activeShift}
                   previousDayKmAkhir2={prevKm}
                   previousDayDateLabel={prevDateLabel}
-                  plottingItem={plottingMap.get(normUnit)}
-                  endpointAName={endpointAName}
-                  endpointBName={endpointBName}
+                  isSelectionMode={isSelectionMode}
+                  isSelected={selectedRows.has(bus.rowIndex)}
+                  onToggleSelect={handleToggleSelect}
                 />
               );
             })
           ) : (
             <div className="empty-state">
               <p>
-                {searchQuery
-                  ? TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)
-                  : sortView === "base_a"
-                    ? TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.EMPTY_BASE(endpointAName)
-                    : sortView === "base_b"
-                      ? TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.EMPTY_BASE(endpointBName)
-                      : TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)}
+                {TEXT_DASHBOARD.BUS_LIST.EMPTY_SEARCH(searchQuery)}
               </p>
             </div>
           )}
+          {/* Ruang kosong agar kartu terakhir tidak tertutup bar aksi pilihan */}
+          {isSelectionMode && <div aria-hidden="true" style={{ height: "72px" }} />}
         </div>
+      )}
+
+      {isSelectionMode && (
+        <BusListSelectionBar
+          selectedCount={selectedRows.size}
+          isSubmitting={isSubmittingBulk}
+          onApply={handleApplySelected}
+          onCancel={exitSelectionMode}
+        />
       )}
     </div>
   );

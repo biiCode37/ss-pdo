@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import { BusListAccumulationBanner } from "./BusListAccumulationBanner";
 import { BusListProgressBar } from "./BusListProgressBar";
 import { BusListControlBar } from "./BusListControlBar";
-import type { FleetSortView } from "./busListUtils";
 
 export interface BusListHeaderProps {
   tabName: string;
@@ -34,13 +33,8 @@ export interface BusListHeaderProps {
   availableKmS1Count: number;
   skippedWithNotesCount: number;
   onBulkCopyKmS1: () => void;
-  sortView?: FleetSortView;
-  onSortViewChange?: (view: FleetSortView) => void;
-  endpointA?: string;
-  endpointB?: string;
-  countBaseA?: number;
-  countBaseB?: number;
-  totalFleetCount?: number;
+  isSelectionMode?: boolean;
+  onToggleSelectionMode?: () => void;
   routeControlBar?: React.ReactNode;
   headerTarget?: HTMLDivElement | null;
 }
@@ -65,13 +59,8 @@ export const BusListHeader: React.FC<BusListHeaderProps> = ({
   availableKmS1Count,
   skippedWithNotesCount,
   onBulkCopyKmS1,
-  sortView,
-  onSortViewChange,
-  endpointA,
-  endpointB,
-  countBaseA,
-  countBaseB,
-  totalFleetCount,
+  isSelectionMode,
+  onToggleSelectionMode,
   routeControlBar,
   headerTarget,
 }) => {
@@ -98,7 +87,7 @@ export const BusListHeader: React.FC<BusListHeaderProps> = ({
           progressPercent={progressPercent}
         />
 
-        {/* Elemen 3: Controls Container (Set Trip, Fokus Kolom, Sort View, & Pencarian) */}
+        {/* Elemen 3: Controls Container (Set Trip, Fokus Kolom, & Pencarian) */}
         <BusListControlBar
           activeCategory={activeCategory}
           onCategoryChange={onCategoryChange}
@@ -113,13 +102,8 @@ export const BusListHeader: React.FC<BusListHeaderProps> = ({
           availableKmS1Count={availableKmS1Count}
           skippedWithNotesCount={skippedWithNotesCount}
           onBulkCopyKmS1={onBulkCopyKmS1}
-          sortView={sortView}
-          onSortViewChange={onSortViewChange}
-          endpointA={endpointA}
-          endpointB={endpointB}
-          countBaseA={countBaseA}
-          countBaseB={countBaseB}
-          totalFleetCount={totalFleetCount}
+          isSelectionMode={isSelectionMode}
+          onToggleSelectionMode={onToggleSelectionMode}
         />
       </div>
     </div>

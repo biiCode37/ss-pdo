@@ -12,11 +12,9 @@ import {
 } from "@/components/pageManagement";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
 import type { SyncItem } from "@/hooks/useOfflineSync";
-import { DailyPlottingPage } from "@/components/plotting";
-import type { DailyRoutePlotting, Route } from "@/types/supabase";
 
 interface DashboardContentTabsProps {
-  mainTab: "input" | "analytics" | "units" | "plotting";
+  mainTab: "input" | "analytics" | "units";
   onSwipeNext: () => void;
   onSwipePrev: () => void;
   onOpenPageManagement?: () => void;
@@ -50,10 +48,6 @@ interface DashboardContentTabsProps {
   missingColumns?: string[];
   previousDayKmMap?: Record<string, string>;
   previousDayRefMap?: Record<string, import("@/hooks/usePreviousDayOdometer").OdometerRefInfo>;
-  matchedRoute?: Route | null;
-  operationalReportDate?: string;
-  plotting?: DailyRoutePlotting | null;
-  onPlottingChange?: (plotting: DailyRoutePlotting) => void;
   routeControlBar?: React.ReactNode;
   inputHeaderTarget?: HTMLDivElement | null;
 }
@@ -86,10 +80,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
   missingColumns: _missingColumns,
   previousDayKmMap,
   previousDayRefMap,
-  matchedRoute,
-  operationalReportDate,
-  plotting,
-  onPlottingChange,
   routeControlBar,
   inputHeaderTarget,
 }) => {
@@ -121,7 +111,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               activeShift={activeShift}
               previousDayKmMap={previousDayKmMap}
               previousDayRefMap={previousDayRefMap}
-              plotting={plotting}
               routeControlBar={routeControlBar}
               headerTarget={mainTab === "input" ? inputHeaderTarget : null}
             />
@@ -163,26 +152,6 @@ export const DashboardContentTabs: React.FC<DashboardContentTabsProps> = ({
               activeMonth={activeMonth}
               activeYear={activeYear}
               accRange={accRangeDetails}
-            />
-        )}
-      </div>
-      {/* TAB 4: Plotting Harian */}
-      <div style={{ display: mainTab === "plotting" ? "block" : "none" }}>
-        {!canAccessPage("plotting", currentUserRole) ? (
-          isUnderMaintenance("plotting") ? <PageDisabledState /> : <AccessRestrictedState />
-        ) : (
-            <DailyPlottingPage
-              routeId={matchedRoute?.id || 0}
-              routeCode={matchedRoute?.route_code || ""}
-              routeName={matchedRoute?.route_name || ""}
-              date={operationalReportDate || selectedTab}
-              buses={busData}
-              headerMap={headerMap}
-              onPlottingChange={onPlottingChange}
-              sheetId={currentSheetId}
-              tabName={selectedTab}
-              addToQueue={addToQueue}
-              onUpdateBus={onUpdateBus}
             />
         )}
       </div>

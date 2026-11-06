@@ -2,7 +2,6 @@ import React from "react";
 import { Info } from "lucide-react";
 import type { HeaderMap } from "@/services/googleSheets";
 import type { BusInputFormReturn } from "./useBusInputForm";
-import type { UnitPlottingItem } from "@/types/supabase";
 import { SingleFocusTrip } from "./singleFocus/SingleFocusTrip";
 import { SingleFocusToa } from "./singleFocus/SingleFocusToa";
 import { SingleFocusKm } from "./singleFocus/SingleFocusKm";
@@ -13,9 +12,6 @@ export interface BusInputModalSingleFocusProps {
   activeCategory: string;
   busKmAwal1?: string;
   headerMap?: HeaderMap;
-  plottingItem?: UnitPlottingItem | null;
-  endpointAName?: string;
-  endpointBName?: string;
 }
 
 export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> = ({
@@ -23,9 +19,6 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
   activeCategory,
   busKmAwal1,
   headerMap,
-  plottingItem,
-  endpointAName,
-  endpointBName,
 }) => {
   const currentCategory = form.effectiveCategory || activeCategory;
   const isTripCategory = currentCategory === "trip";
@@ -63,13 +56,7 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
 
       {/* Kelompok Input Trip */}
       {isTripCategory && (
-        <SingleFocusTrip
-          form={form}
-          headerMap={headerMap || form.headerMap}
-          plottingItem={plottingItem}
-          endpointAName={endpointAName}
-          endpointBName={endpointBName}
-        />
+        <SingleFocusTrip form={form} headerMap={headerMap || form.headerMap} />
       )}
 
       {/* Kelompok Input TOA */}

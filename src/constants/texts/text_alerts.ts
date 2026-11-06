@@ -91,6 +91,11 @@ export const TEXT_ALERTS = {
     TITLE: "Set Jumlah Trip Armada",
     DESCRIPTION: (count: number | string) =>
       `Nilai di bawah akan langsung diterapkan ke seluruh <strong>${count} unit bus</strong> pada rute ini dan disimpan ke SS.`,
+    TITLE_SELECTED: "Set Trip Unit Terpilih",
+    DESCRIPTION_SELECTED: (count: number | string) =>
+      `Nilai di bawah hanya diterapkan ke <strong>${count} unit terpilih</strong> dan disimpan ke SS.`,
+    SKIPPED_NOTE: (count: number | string) =>
+      ` ${count} unit berstatus OFF/TO EVDAL dilewati.`,
     APPLY_BTN: "Terapkan",
     CANCEL_BTN: "Batal",
     REQUIRED: "Harap isi nilai Trip Pergi dan Trip Pulang!",

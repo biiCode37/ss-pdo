@@ -21,7 +21,6 @@ import {
   getDefaultModalTab,
 } from "@/utils/keteranganUtils";
 import { TEXT_ALERTS } from "@/constants/texts";
-import type { UnitPlottingItem } from "@/types/supabase";
 import {
   isBusNonOperational,
   getNonOperationalBannerType,
@@ -44,7 +43,6 @@ export interface UseBusInputFormProps {
   isMounted: boolean;
   previousDayKmAkhir2?: string;
   previousDayDateLabel?: string;
-  plottingItem?: UnitPlottingItem | null;
 }
 
 export function useBusInputForm({
@@ -59,7 +57,6 @@ export function useBusInputForm({
   isMounted,
   previousDayKmAkhir2,
   previousDayDateLabel,
-  plottingItem,
 }: UseBusInputFormProps) {
   // Evaluasi mode Single-Column Focus
   const isSingleColumnEligible = Boolean(
@@ -197,10 +194,10 @@ export function useBusInputForm({
     }
   }, [isOpen]);
 
-  const isNonOp = isBusNonOperational(bus, plottingItem);
+  const isNonOp = isBusNonOperational(bus);
   const isLocked = isNonOp && !isInputUnlocked;
   const nonOpBannerType: NonOperationalBannerType = isLocked
-    ? getNonOperationalBannerType(bus, plottingItem)
+    ? getNonOperationalBannerType(bus)
     : "NONE";
 
   const handleActivateInput = useCallback(

@@ -76,48 +76,12 @@ describe('BusListControlBar Component', () => {
     expect(container.textContent).toContain('siap disalin');
     expect(container.textContent).toContain('(2 berketerangan dilewati)');
   });
-  it('renders segmented sort/filter selector tabs (Opsi B Hybrid) and triggers onSortViewChange', async () => {
-    const onSortViewChange = vi.fn();
+  it('tidak lagi menampilkan selector tampilan Base A/B Plotting', async () => {
     await act(async () => {
-      root.render(
-        <BusListControlBar
-          {...defaultProps}
-          sortView="sheet"
-          onSortViewChange={onSortViewChange}
-          endpointA="Priok"
-          endpointB="IGI"
-          countBaseA={10}
-          countBaseB={20}
-          totalFleetCount={30}
-        />
-      );
+      root.render(<BusListControlBar {...defaultProps} />);
     });
 
-    const sheetTab = container.querySelector('[data-testid="filter-sort-sheet"]') as HTMLButtonElement;
-    const baseATab = container.querySelector('[data-testid="filter-sort-base-a"]') as HTMLButtonElement;
-    const baseBTab = container.querySelector('[data-testid="filter-sort-base-b"]') as HTMLButtonElement;
-
-    expect(sheetTab).not.toBeNull();
-    expect(baseATab).not.toBeNull();
-    expect(baseBTab).not.toBeNull();
-
-    expect(sheetTab.textContent).toContain('Semua (30)');
-    expect(baseATab.textContent).toContain('📍 Priok (10)');
-    expect(baseBTab.textContent).toContain('📍 IGI (20)');
-
-    await act(async () => {
-      baseATab.click();
-    });
-    expect(onSortViewChange).toHaveBeenCalledWith('base_a');
-
-    await act(async () => {
-      baseBTab.click();
-    });
-    expect(onSortViewChange).toHaveBeenCalledWith('base_b');
-
-    await act(async () => {
-      sheetTab.click();
-    });
-    expect(onSortViewChange).toHaveBeenCalledWith('sheet');
+    expect(container.querySelector('[data-testid="fleet-sort-view-selector"]')).toBeNull();
+    expect(container.querySelector('[data-testid="filter-sort-base-a"]')).toBeNull();
   });
 });

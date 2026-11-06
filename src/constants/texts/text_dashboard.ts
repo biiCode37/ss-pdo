@@ -15,8 +15,6 @@ export const TEXT_DASHBOARD = {
     DASHBOARD_SHORT: 'Dashboard',
     UNIT_LIST: 'Armada',
     UNIT_SHORT: 'Armada',
-    PLOTTING: 'Plotting Harian',
-    PLOTTING_SHORT: 'Plotting',
     ACCUMULATION: 'Akumulasi',
     MORE: 'Lainnya',
     MORE_SHORT: 'Menu',
@@ -228,6 +226,17 @@ export const TEXT_DASHBOARD = {
     SET_TRIP_SUCCESS: (p: string, q: string, count: number) =>
       `Trip Operasional (${p}/${q}) berhasil disimpan ke Spreadsheet untuk ${count} unit!`,
     SET_TRIP_FAILED: 'Gagal Menyimpan Set Jumlah Trip',
+    SELECT_MODE_BTN: 'Pilih',
+    SELECT_MODE_TITLE: 'Pilih beberapa unit untuk Set Trip Terpilih',
+    SELECTED_COUNT: (count: number) => `${count} unit dipilih`,
+    SELECTED_APPLY_BTN: 'Set Trip Terpilih',
+    SELECTED_CANCEL_BTN: 'Batal',
+    SELECTED_ACTION_BAR_ARIA: 'Aksi unit terpilih',
+    SELECT_UNIT_ARIA: (unit: string) => `Pilih unit ${unit}`,
+    SELECTED_ALL_SKIPPED: 'Semua unit terpilih berstatus OFF/TO EVDAL. Tidak ada yang diubah.',
+    SET_TRIP_SELECTED_SUCCESS: (p: string, q: string, ritase: string, count: number) =>
+      `Trip ${p}/${q} (${ritase} Rit) disimpan ke Spreadsheet untuk ${count} unit terpilih`,
+    SET_TRIP_SELECTED_SKIPPED: (count: number) => ` · ${count} unit OFF/TO EVDAL dilewati`,
     COPY_KM_SUCCESS: (count: number, noteSuffix: string) =>
       `KM Akhir S1 berhasil disalin ke KM Awal S2 untuk ${count} unit bus${noteSuffix}!`,
     COPY_KM_FAILED: 'Gagal Menyalin KM Massal',
@@ -242,13 +251,6 @@ export const TEXT_DASHBOARD = {
     SAVE_ERROR_GENERIC: 'Terjadi kesalahan saat menyimpan data ke spreadsheet.',
     COPY_KM_ALL_FILLED: 'Semua unit bus sudah memiliki nilai KM Awal Shift 2.',
     ALL_UNITS_FILLED: '🎉 Semua unit pada filter ini telah selesai diisi!',
-    SORT_VIEWS: {
-      ALL_SHEET_LABEL: (count: number) => `Semua (${count})`,
-      ALL_SHEET_TITLE: 'Urutan default baris asli spreadsheet',
-      BASE_LABEL: (name: string, count: number) => `📍 ${name} (${count})`,
-      BASE_TOOLTIP: (name: string, count: number) => `Start ${name} (Urutan Plotting #1..#${count})`,
-      EMPTY_BASE: (name: string) => `Tidak ada unit dengan titik start di ${name}`,
-    },
     DAILY_PROGRESS: 'Progres Harian',
     COLUMN_PREFIX: (col: string) => `Kolom: ${col}`,
     CATEGORIES: {
