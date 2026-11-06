@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { createGuardedFetch } from './requestCircuitBreaker';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
@@ -15,6 +16,9 @@ export const supabase = createClient(
   isSupabaseConfigured ? SUPABASE_URL : 'http://localhost:54321',
   isSupabaseConfigured ? SUPABASE_ANON_KEY : 'anon-key-unconfigured',
   {
+    global: {
+      fetch: createGuardedFetch((...args) => fetch(...args)),
+    },
     realtime: {
       params: {
         eventsPerSecond: 10,

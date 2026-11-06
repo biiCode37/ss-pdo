@@ -1,12 +1,12 @@
 import { supabase, isSupabaseConfigured } from './supabase';
 import type { BusData } from './googleSheets/types';
 
-// URL resmi Supabase Edge Function Webhook
-const DEFAULT_WEBHOOK_URL =
-  'https://sejttnsanzogsykmtwym.supabase.co/functions/v1/sheet-sync-webhook';
+// URL Edge Function webhook diturunkan dari proyek aktif (VITE_SUPABASE_URL) agar ikut berpindah saat migrasi proyek;
+// URL lama yang di-hardcode membuat sinkron produksi tetap menembak proyek lama setelah migrasi 6 Nov 2026 (BUG-MIG-202-01)
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
 
-const WEBHOOK_URL =
-  import.meta.env.VITE_SHEET_SYNC_WEBHOOK_URL || DEFAULT_WEBHOOK_URL;
+export const WEBHOOK_URL =
+  import.meta.env.VITE_SHEET_SYNC_WEBHOOK_URL || `${SUPABASE_URL}/functions/v1/sheet-sync-webhook`;
 
 // Runtime session ID acak unik per jendela peranti/tab browser
 let clientSessionId: string | null = null;
@@ -34,7 +34,7 @@ export async function triggerRealtimeSheetSync(
   routeCode: string,
   date?: string
 ): Promise<void> {
-  if (!routeCode) return;
+  if (!routeCode || !isSupabaseConfigured) return;
 
   const key = `${routeCode.toUpperCase()}_${date || 'default'}`;
 

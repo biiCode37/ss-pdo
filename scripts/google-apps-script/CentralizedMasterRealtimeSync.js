@@ -13,8 +13,8 @@
  */
 
 // 1. Konfigurasi Endpoint Supabase Resmi
-const SUPABASE_URL = "https://sejttnsanzogsykmtwym.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlanR0bnNhbnpvZ3N5a210d3ltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4MDg1MjUsImV4cCI6MjEwMTM4NDUyNX0.EIOBWlaLCornJo7IPFFfwitFoNiiZWBuP_wSmuXsmbk";
+const SUPABASE_URL = "https://znchudtormqsgpukibsn.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpuY2h1ZHRvcm1xc2dwdWtpYnNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5NTI5ODYsImV4cCI6MjEwOTUyODk4Nn0.TdtlPT2QuK4Yz7VKRWaVFX_A845bqTmE9bMjm8rAddc";
 const WEBHOOK_URL = SUPABASE_URL + "/functions/v1/sheet-sync-webhook";
 
 // 2. Durasi Debounce (Milidetik)
