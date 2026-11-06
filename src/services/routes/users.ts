@@ -265,6 +265,15 @@ export async function sendUserHeartbeat(userEmail: string, secondsInterval: numb
   const cleanEmail = userEmail.trim().toLowerCase();
 
   try {
+    // Pulsa tanpa durasi (mount/tab kembali aktif) cukup memperbarui last_active_at: 1 request, bukan baca + tulis (BUG-QUOTA-203-02)
+    if (secondsInterval <= 0) {
+      await supabase
+        .from('user_profiles')
+        .update({ last_active_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .eq('email', cleanEmail);
+      return;
+    }
+
     const { data } = await supabase
       .from('user_profiles')
       .select('total_active_seconds')

@@ -302,6 +302,22 @@ describe('routeService', () => {
     );
   });
 
+  it('sendUserHeartbeat tanpa durasi hanya 1 request update tanpa select (BUG-QUOTA-203-02)', async () => {
+    const mockEq = vi.fn().mockResolvedValue({ error: null });
+    const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+    const mockSelect = vi.fn();
+    (supabase.from as any).mockReturnValue({ select: mockSelect, update: mockUpdate });
+
+    await sendUserHeartbeat('User@PUSM.id ', 0);
+
+    expect(supabase.from).toHaveBeenCalledTimes(1);
+    expect(mockSelect).not.toHaveBeenCalled();
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.not.objectContaining({ total_active_seconds: expect.anything() })
+    );
+    expect(mockEq).toHaveBeenCalledWith('email', 'user@pusm.id');
+  });
+
   it('backupSyncQueue invokes supabase insert with backup payload', async () => {
     const mockInsert = vi.fn().mockResolvedValue({ error: null });
     (supabase.from as any).mockReturnValue({

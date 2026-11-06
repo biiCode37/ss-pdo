@@ -251,24 +251,20 @@ export async function fetchRegionalMonitoringData(
     }
   }
 
-  // 3. Ambil daily_unit_summaries untuk 3 tanggal dengan field projection & silent retry (mitigasi QUIC UDP drop)
+  // 3. Ambil total daily_unit_summaries per rute per tanggal (H, H-1, H-7) yang sudah dijumlahkan di database.
+  // Baris mentah per unit (±1.500) terpotong batas 1.000 baris PostgREST dan ±160 KB per muat (BUG-QUOTA-203-01);
+  // RPC mengembalikan 1 baris per (rute, tanggal) sehingga filter + reduce di bawah tetap berlaku tanpa perubahan.
   const pToday = parseDateParts(dateStr);
   const pYest = parseDateParts(yesterdayDate);
   const pLast = parseDateParts(lastWeekDate);
 
   let summaries: DailyUnitSummary[] = [];
-  const unitSummaryColumns = 'route_code, year, month, day, total_passengers, total_km, toa_shift1, manual_shift1, toa_shift2, manual_shift2';
 
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
-      const { data: summaryData, error } = await supabase
-        .from('daily_unit_summaries')
-        .select(unitSummaryColumns)
-        .or(
-          `and(year.eq.${pToday.year},month.eq.${pToday.month},day.eq.${pToday.day}),` +
-          `and(year.eq.${pYest.year},month.eq.${pYest.month},day.eq.${pYest.day}),` +
-          `and(year.eq.${pLast.year},month.eq.${pLast.month},day.eq.${pLast.day})`
-        );
+      const { data: summaryData, error } = await supabase.rpc('get_daily_unit_summary_totals', {
+        p_dates: [dateStr, yesterdayDate, lastWeekDate],
+      });
       if (!error && summaryData) {
         summaries = summaryData as DailyUnitSummary[];
         break;

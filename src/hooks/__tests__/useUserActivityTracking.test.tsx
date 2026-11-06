@@ -63,4 +63,29 @@ describe('useUserActivityTracking', () => {
     expect(routeService.sendUserHeartbeat).toHaveBeenCalledTimes(2);
     expect(routeService.sendUserHeartbeat).toHaveBeenLastCalledWith('petugas@pusm.id', 180);
   });
+
+  it('meredam pulsa visibilitychange beruntun di bawah 60 detik (BUG-QUOTA-203-02)', () => {
+    act(() => {
+      root.render(<TestComponent isSignedIn={true} userEmail="petugas@pusm.id" />);
+    });
+    expect(routeService.sendUserHeartbeat).toHaveBeenCalledTimes(1);
+
+    // Ganti-ganti tab berkali-kali dalam 30 detik setelah mount → tidak ada pulsa tambahan
+    act(() => {
+      for (let i = 0; i < 10; i++) {
+        vi.advanceTimersByTime(3000);
+        document.dispatchEvent(new Event('visibilitychange'));
+      }
+    });
+    expect(routeService.sendUserHeartbeat).toHaveBeenCalledTimes(1);
+
+    // Setelah ≥60 detik sejak pulsa terakhir, tab kembali aktif → 1 pulsa
+    act(() => {
+      vi.advanceTimersByTime(31_000);
+      document.dispatchEvent(new Event('visibilitychange'));
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    expect(routeService.sendUserHeartbeat).toHaveBeenCalledTimes(2);
+    expect(routeService.sendUserHeartbeat).toHaveBeenLastCalledWith('petugas@pusm.id', 0);
+  });
 });
