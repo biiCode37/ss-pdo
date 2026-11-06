@@ -12,6 +12,8 @@ export interface BulkTripModalOptions {
   isSelection?: boolean;
   /** Jumlah unit terpilih berstatus OFF/TO EVDAL yang dilewati (mode pilihan). */
   skippedCount?: number;
+  /** Mode "Aktifkan Input" 1 unit non-operasional: wajib isi kedua trip, total > 0, tanpa opsi kosongkan. */
+  isActivation?: boolean;
 }
 
 /**
@@ -27,8 +29,11 @@ export async function showBulkTripModal(
     unitCount,
     isSelection = false,
     skippedCount = 0,
+    isActivation = false,
   } = options;
-  const descriptionHtml = isSelection
+  const descriptionHtml = isActivation
+    ? escapeHtml(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_LABEL)
+    : isSelection
     ? TEXT_ALERTS.BULK_TRIP.DESCRIPTION_SELECTED(escapeHtml(unitCount)) +
       (skippedCount > 0 ? TEXT_ALERTS.BULK_TRIP.SKIPPED_NOTE(escapeHtml(skippedCount)) : "")
     : TEXT_ALERTS.BULK_TRIP.DESCRIPTION(escapeHtml(unitCount));
@@ -74,14 +79,24 @@ export async function showBulkTripModal(
           />
         </div>
       </div>
-      <div style="font-size: 11.5px; color: var(--color-text-secondary); line-height: 1.4;">
+      ${
+        isActivation
+          ? ""
+          : `<div style="font-size: 11.5px; color: var(--color-text-secondary); line-height: 1.4;">
         ${TEXT_ALERTS.BULK_TRIP.CLEAR_HINT}
-      </div>
+      </div>`
+      }
     </div>
   `;
 
+  const title = isActivation
+    ? TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE
+    : isSelection
+      ? TEXT_ALERTS.BULK_TRIP.TITLE_SELECTED
+      : TEXT_ALERTS.BULK_TRIP.TITLE;
+
   const result = await pdoSwal.fire({
-    title: isSelection ? TEXT_ALERTS.BULK_TRIP.TITLE_SELECTED : TEXT_ALERTS.BULK_TRIP.TITLE,
+    title,
     html: formHtml,
     showCancelButton: true,
     confirmButtonText: TEXT_ALERTS.BULK_TRIP.APPLY_BTN,
@@ -136,6 +151,15 @@ export async function showBulkTripModal(
 
       const pEmpty = pVal.trim() === "";
       const qEmpty = qVal.trim() === "";
+
+      if (isActivation) {
+        const p = Number(pVal);
+        const q = Number(qVal);
+        if (pEmpty || qEmpty || isNaN(p) || isNaN(q) || p < 0 || q < 0 || Math.floor(p) + Math.floor(q) <= 0) {
+          pdoSwal.showValidationMessage(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_INVALID_RITASE);
+          return false;
+        }
+      }
 
       // Keduanya kosong = hapus trip di SS (sel dikosongkan, bukan diisi 0)
       if (pEmpty && qEmpty) {

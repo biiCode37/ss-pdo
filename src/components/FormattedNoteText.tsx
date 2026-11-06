@@ -1,8 +1,6 @@
-import { parseKeterangan } from "../utils/keteranganUtils";
-
 /**
- * Komponen pembantu untuk merender teks keterangan/catatan dengan
- * smart visual badging profesional (BA.01-04, OFF, NP1/NP2, TO EVDAL) dan simbol bullet point.
+ * Merender teks keterangan/catatan sebagai teks polos per item dengan pemisah bullet
+ * (tanpa badge — refact_212). Prefiks shift (S1/S2) tetap ditampilkan sebagai label teks.
  */
 export function FormattedNoteText({ text }: { text?: string | null }) {
   if (!text || !text.trim()) return null;
@@ -14,155 +12,14 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
     const trimmed = itemText.trim();
     if (!trimmed) return null;
 
-    // 0. Prefiks shift (S1:/S2:) dipertahankan agar jelas shift mana yang berketerangan
+    // Prefiks shift (S1:/S2:) dipertahankan agar jelas shift mana yang berketerangan
     const shiftMatch = trimmed.match(/^(S[12])\s*[:.-]\s*(.+)$/i);
-    if (shiftMatch) {
-      return (
-        <div
-          key={key}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            flexWrap: "wrap",
-            lineHeight: 1.4,
-          }}
-        >
-          <span
-            className="note-shift-prefix"
-            style={{
-              fontSize: "11px",
-              fontWeight: 800,
-              color: "var(--color-text-secondary)",
-            }}
-          >
-            {shiftMatch[1].toUpperCase()}
-          </span>
-          {renderItem(shiftMatch[2])}
-        </div>
-      );
-    }
+    const body = shiftMatch ? shiftMatch[2].trim() : trimmed;
 
-    const parsed = parseKeterangan(trimmed);
-
-    // 1. BA.01 - BA.04 Prefix Detection - Clean Professional Badge
-    if (parsed.prefix) {
-      const prefix = parsed.prefix;
-      const detail = parsed.detail;
-      return (
-        <div
-          key={key}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            flexWrap: "wrap",
-            lineHeight: 1.4,
-          }}
-        >
-          <span className="note-badge-ba">{prefix}</span>
-          {detail && (
-            <span
-              style={{
-                color: "var(--text-primary)",
-                fontWeight: 600,
-                fontSize: "12px",
-              }}
-            >
-              {detail}
-            </span>
-          )}
-        </div>
-      );
-    }
-
-    // 2. OFF (Libur) Detection - Clean Professional Badge
-    if (parsed.isFixed && parsed.fixedValue === "OFF") {
-      return (
-        <div
-          key={key}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            lineHeight: 1.4,
-          }}
-        >
-          <span className="note-badge-off">OFF</span>
-        </div>
-      );
-    }
-
-    // 2b. Standalone OFF with parenthesis
-    if (/^OFF(?:\s*\(.*\))?$/i.test(trimmed)) {
-      return (
-        <div
-          key={key}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            lineHeight: 1.4,
-          }}
-        >
-          <span className="note-badge-off">{trimmed.toUpperCase()}</span>
-        </div>
-      );
-    }
-
-    // 3. NP1 / NP2 (Negatif Pramudi) Detection - Clean Professional Badge
-    const npMatch = trimmed.match(/^(NP\s*[-.]?\s*[12])(?:\s*[-:]?\s*(.*))?$/i);
-    if (npMatch) {
-      const tag = npMatch[1].replace(/[\s-.]+/g, "").toUpperCase();
-      const detail = npMatch[2]?.trim();
-      return (
-        <div
-          key={key}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            flexWrap: "wrap",
-            lineHeight: 1.4,
-          }}
-        >
-          <span className="note-badge-np">{tag}</span>
-          {detail && (
-            <span
-              style={{
-                color: "var(--text-primary)",
-                fontWeight: 600,
-                fontSize: "12px",
-              }}
-            >
-              {detail}
-            </span>
-          )}
-        </div>
-      );
-    }
-
-    // 4. TO EVDAL Detection - Clean Professional Badge
-    if (/^TO\s*[-.]?\s*EVDAL$/i.test(trimmed)) {
-      return (
-        <div
-          key={key}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            lineHeight: 1.4,
-          }}
-        >
-          <span className="note-badge-to">TO EVDAL</span>
-        </div>
-      );
-    }
-
-    // 5. Default Bullet Point Item
     return (
       <div
         key={key}
+        className="note-item"
         style={{
           display: "flex",
           alignItems: "flex-start",
@@ -179,17 +36,32 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
           }}
         >
           <span
+            className="note-bullet"
             style={{
               width: "5px",
               height: "5px",
               borderRadius: "50%",
-              backgroundColor: "var(--accent-color, #38bdf8)",
-              boxShadow: "0 0 5px rgba(56, 189, 248, 0.7)",
+              backgroundColor: "var(--color-text-secondary)",
               display: "inline-block",
             }}
           />
         </div>
-        <span style={{ flex: 1, fontSize: "12px" }}>{trimmed}</span>
+        <span style={{ flex: 1, fontSize: "12px" }}>
+          {shiftMatch && (
+            <span
+              className="note-shift-prefix"
+              style={{
+                fontSize: "11px",
+                fontWeight: 800,
+                color: "var(--color-text-secondary)",
+                marginRight: "6px",
+              }}
+            >
+              {shiftMatch[1].toUpperCase()}
+            </span>
+          )}
+          {body}
+        </span>
       </div>
     );
   };

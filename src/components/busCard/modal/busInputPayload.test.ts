@@ -72,6 +72,33 @@ describe("busInputPayload - Pure Payload Module", () => {
     });
   });
 
+  describe("includeTrip (unit diaktifkan lewat Aktifkan Input)", () => {
+    it("mode fokus non-trip: trip ikut terkirim bersama kolom fokus", () => {
+      const payload = buildBusInputPayload(
+        createBaseParams({
+          isSingleMode: true,
+          effectiveCategory: "kmAwal1",
+          tripPergi: "4",
+          tripPulang: "3",
+          includeTrip: true,
+        }),
+      );
+      expect(payload.tripPergi).toBe("4");
+      expect(payload.tripPulang).toBe("3");
+      expect(payload.kmAwal1).toBeDefined();
+      expect(payload.toaShift1).toBeUndefined();
+      expect(payload).not.toHaveProperty("toaShift2");
+    });
+
+    it("tanpa includeTrip: mode fokus non-trip tetap tidak mengirim trip", () => {
+      const payload = buildBusInputPayload(
+        createBaseParams({ isSingleMode: true, effectiveCategory: "kmAwal1" }),
+      );
+      expect(payload.tripPergi).toBeUndefined();
+      expect(payload.tripPulang).toBeUndefined();
+    });
+  });
+
   describe("Single Focus Mode Scoped Updates", () => {
     it("kategori trip: HANYA mengirimkan tripPergi dan tripPulang", () => {
       const params = createBaseParams({
