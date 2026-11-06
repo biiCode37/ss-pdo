@@ -20,10 +20,6 @@ vi.mock("@/components/UnitSummaryDashboard", () => ({
   UnitSummaryDashboard: () => <div data-testid="mock-unit-summary">Mock Unit Summary</div>,
 }));
 
-vi.mock("@/components/plotting", () => ({
-  DailyPlottingPage: () => <div data-testid="mock-daily-plotting">Mock Daily Plotting</div>,
-}));
-
 vi.mock("@/components/SwipeableContainer", () => ({
   SwipeableContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));

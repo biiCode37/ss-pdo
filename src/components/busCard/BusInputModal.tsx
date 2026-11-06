@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AlertCircle, Sparkles } from "lucide-react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
-import type { UnitPlottingItem } from "@/types/supabase";
 import { TEXT_ALERTS, TEXT_COMMON } from "@/constants/texts";
 import { pdoSwal } from "@/utils/alertUtils";
 import { parseIndonesianNumber } from "@/utils/numberUtils";
@@ -30,9 +29,6 @@ export interface BusInputModalProps {
   activeShift?: 1 | 2;
   previousDayKmAkhir2?: string;
   previousDayDateLabel?: string;
-  plottingItem?: UnitPlottingItem | null;
-  endpointAName?: string;
-  endpointBName?: string;
 }
 
 export function BusInputModal({
@@ -47,9 +43,6 @@ export function BusInputModal({
   activeShift,
   previousDayKmAkhir2,
   previousDayDateLabel,
-  plottingItem,
-  endpointAName,
-  endpointBName,
 }: BusInputModalProps) {
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -105,7 +98,6 @@ export function BusInputModal({
     isMounted,
     previousDayKmAkhir2,
     previousDayDateLabel,
-    plottingItem,
   });
 
   formIdRef.current = form.formId;
@@ -431,9 +423,6 @@ export function BusInputModal({
                   activeCategory={activeCategory}
                   busKmAwal1={bus.kmAwal1 || previousDayKmAkhir2}
                   headerMap={headerMap}
-                  plottingItem={plottingItem}
-                  endpointAName={endpointAName}
-                  endpointBName={endpointBName}
                 />
               </fieldset>
             )}
@@ -471,9 +460,6 @@ export function BusInputModal({
                     headerMap?.tripPulangLabel ||
                     TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TRIP_PULANG
                   }
-                  plottingItem={plottingItem}
-                  endpointAName={endpointAName}
-                  endpointBName={endpointBName}
                 />
               </fieldset>
             )}

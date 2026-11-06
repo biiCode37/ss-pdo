@@ -16,7 +16,7 @@ React 19 + TypeScript 6 (strict) + Vite 8 + vite-plugin-pwa, Vitest 4 (happy-dom
 - `src/components/Dashboard.tsx` — shell utama & navigasi halaman (`BottomNav.tsx`).
 
 ## Halaman (`PageKey` di `src/types/pageManagement.ts`)
-`dashboard`, `regional_monitoring`, `user_management`, `input`, `analytics`, `units`, `plotting`, `regional_summary`, `regional_wa_report`, `a2_report`, `accumulation`. Kategori: `page | tab | modal`.
+`dashboard`, `regional_monitoring`, `user_management`, `input`, `analytics`, `units`, `regional_summary`, `regional_wa_report`, `a2_report`, `accumulation`. Kategori: `page | tab | modal`.
 
 Role (RBAC): `superadmin`, `admin`, `korwil`, `korlap`, `pdo`. Warna badge pakai token `--color-role-*` (`RoleBadge.tsx`).
 
@@ -24,22 +24,21 @@ Role (RBAC): `superadmin`, `admin`, `korwil`, `korlap`, `pdo`. Warna badge pakai
 | Folder | Isi |
 |---|---|
 | `components/*.tsx` (root) | Banyak file root hanya **facade re-export** (mis. `BusList.tsx` → `busList/BusList`). Edit di subfolder. |
-| `components/busList/` | Halaman Input SS: daftar unit, alur Satset, bulk ops (`useBulkOperations.ts`). |
+| `components/busList/` | Halaman Input SS: daftar unit, alur Satset, bulk ops (`useBulkOperations.ts`: Set Jumlah Trip semua unit & Set Trip Unit Terpilih via mode "Pilih"). Halaman Plotting dihapus di refact_206. |
 | `components/busCard/modal/` | Form input bus: `useBusInputForm.ts`, `busInputPayload.ts` (payload builder), `busInputValidation.ts`, tab Shift1/Shift2/Trip/SingleFocus. |
 | `components/monitoring/` | Monitoring 18 rute (`AllRouteMonitoringPage.tsx`) — contoh referensi pola realtime + guard. |
-| `components/plotting/` | Plotting harian (`DailyPlottingPage.tsx`, order modal). |
 | `components/accumulation/`, `waReport/`, `pdoReport/`, `fleetStatus/`, `pageManagement/`, `userManagement/`, `dashboard/`, `dailyToaTrend/` | Fitur per domain. |
 | `services/googleSheets/` | Baca/tulis Sheets — lihat skill `ss-pdo-sheets`. |
 | `services/routes/` | Rute, users, audit (`logActivity`), sync. `services/routeService.ts` = facade. |
-| `services/*Service.ts` | `allRouteMonitoringService`, `dailyRouteReportService`, `dailyPlottingService`, `fleetStatusService`, `fleetResolutionService`, `regionalIngestionService`, `monthlyMasterIngestionService`, `realtimeSyncService`, `adminActionService`, `pageManagementService`, `appSettingsService`. Klien: `services/supabase.ts`. |
-| `utils/` | Util murni + test berdampingan. Penting: `numberUtils` (`parseIndonesianNumber`), `keteranganUtils`, `operationalStatusUtils` (`isUnitNonOperational`), `smartRitaseUtils`, `sheetColorUtils` (SSOT warna Sheets — jangan dipakai untuk UI), `cacheUtils` (`CURRENT_CACHE_VERSION`), `errorFormatter`/`errorClassifier`, `alertUtils`/`swalBase`, `themeUtils` (`syncThemeChrome`). |
+| `services/*Service.ts` | `allRouteMonitoringService`, `dailyRouteReportService`, `fleetStatusService`, `fleetResolutionService`, `regionalIngestionService`, `monthlyMasterIngestionService`, `realtimeSyncService`, `adminActionService`, `pageManagementService`, `appSettingsService`. Klien: `services/supabase.ts`. |
+| `utils/` | Util murni + test berdampingan. Penting: `numberUtils` (`parseIndonesianNumber`), `keteranganUtils`, `operationalStatusUtils` (`isBusNonOperational`), `sheetColorUtils` (SSOT warna Sheets — jangan dipakai untuk UI), `cacheUtils` (`CURRENT_CACHE_VERSION`), `errorFormatter`/`errorClassifier`, `alertUtils`/`swalBase`, `themeUtils` (`syncThemeChrome`). |
 | `utils/modals/busInput/` | Template & handler modal SweetAlert input bus. |
 | `constants/texts/` | Kamus teks UI per domain (`text_*.ts`, diekspor via `index.ts`, diuji `texts.test.ts`). |
 | `styles/tokens/` | `primitives.css` → `semantic.css` (token dipakai UI), `color-contract.test.ts`. |
 | `hooks/` | `useOfflineSync`, `usePreviousDayOdometer`, `useUserActivityTracking`, `useVisualViewport`, `useMobileBackHandler`. |
 
 ## Supabase
-Tabel (public): `routes`, `route_sheets` (whitelist spreadsheet per rute/bulan), `route_operators`, `operators`, `user_profiles`, `roles`, `app_page_settings`, `app_settings`, `daily_route_reports`, `daily_fleet_shifts`, `daily_fleet_non_sgo_units`, `daily_unit_summaries`, `daily_route_plottings`, `fleet_statuses`, `fleet_status_logs`, `activity_logs`, `sync_queue_backups`.
+Tabel (public): `routes`, `route_sheets` (whitelist spreadsheet per rute/bulan), `route_operators`, `operators`, `user_profiles`, `roles`, `app_page_settings`, `app_settings`, `daily_route_reports`, `daily_fleet_shifts`, `daily_fleet_non_sgo_units`, `daily_unit_summaries`, `fleet_statuses`, `fleet_status_logs`, `activity_logs`, `sync_queue_backups`.
 
 Migrasi: `supabase/migrations/` (urut timestamp). Mutasi admin (role, status aktif, page settings) **wajib** lewat RPC `SECURITY DEFINER` / Edge Function `admin-action`, bukan update langsung dari klien.
 
@@ -59,6 +58,6 @@ Untuk inspeksi skema/RLS/log produksi gunakan Supabase MCP (read-only): `list_ta
 - Test unit jaringan: assert `toHaveBeenCalledTimes(1)` saat mount + debounce meredam event beruntun.
 
 ## Domain
-- 1 ritase = PP = 2 trip. Ritase PP = `(tripPergi + tripPulang) / 2` atau `totalKm / km_baku` (lihat `allRouteMonitoringService.ts`, `dailyPlottingService.ts`).
+- 1 ritase = PP = 2 trip. Ritase PP = `(tripPergi + tripPulang) / 2` atau `totalKm / km_baku` (lihat `allRouteMonitoringService.ts`, `BusCardSummary.tsx`).
 - Unit non-operasional (ritase 0/kosong/OFF/LIBUR/NP) → `operationalStatusUtils.isUnitNonOperational`; dilewati Satset, diparkir di bawah, tanpa nomor urut.
 - Angka dari Sheets selalu lewat `parseIndonesianNumber` ("5.589,06", "4.670").

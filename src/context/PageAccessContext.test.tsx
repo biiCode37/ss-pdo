@@ -271,18 +271,8 @@ describe('PageAccessContext', () => {
     expect(contextValue.activeSuperadmins[0].full_name).toBe('Bpk. Superadmin');
   });
 
-  it('menyertakan halaman plotting pada konfigurasi default dan pengaturan akses', () => {
-    const plottingSetting = DEFAULT_PAGE_SETTINGS.find((s) => s.page_key === 'plotting');
-    expect(plottingSetting).toBeDefined();
-    expect(plottingSetting?.page_name).toBe('Plotting Armada Harian');
-    expect(plottingSetting?.category).toBe('tab');
-    expect(plottingSetting?.is_enabled).toBe(true);
-    expect(plottingSetting?.allowed_roles).toEqual([
-      'superadmin',
-      'admin',
-      'korwil',
-      'korlap',
-      'pdo',
-    ]);
+  it('tidak lagi menyertakan halaman plotting pada konfigurasi default', () => {
+    const keys: string[] = DEFAULT_PAGE_SETTINGS.map((s) => s.page_key);
+    expect(keys).not.toContain('plotting');
   });
 });

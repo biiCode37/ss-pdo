@@ -5,9 +5,10 @@ import {
   CheckCircle2,
   Loader2,
   ChevronDown,
+  ListChecks,
 } from "lucide-react";
 import { TEXT_DASHBOARD } from "@/constants/texts";
-import { BUS_CATEGORIES, type FleetSortView } from "./busListUtils";
+import { BUS_CATEGORIES } from "./busListUtils";
 
 interface BusListControlBarProps {
   activeCategory: string;
@@ -23,13 +24,8 @@ interface BusListControlBarProps {
   availableKmS1Count: number;
   skippedWithNotesCount: number;
   onBulkCopyKmS1: () => void;
-  sortView?: FleetSortView;
-  onSortViewChange?: (view: FleetSortView) => void;
-  endpointA?: string;
-  endpointB?: string;
-  countBaseA?: number;
-  countBaseB?: number;
-  totalFleetCount?: number;
+  isSelectionMode?: boolean;
+  onToggleSelectionMode?: () => void;
 }
 
 export const BusListControlBar: React.FC<BusListControlBarProps> = ({
@@ -46,13 +42,8 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
   availableKmS1Count,
   skippedWithNotesCount,
   onBulkCopyKmS1,
-  sortView = "sheet",
-  onSortViewChange,
-  endpointA,
-  endpointB,
-  countBaseA = 0,
-  countBaseB = 0,
-  totalFleetCount = 0,
+  isSelectionMode = false,
+  onToggleSelectionMode,
 }) => {
   return (
     <div
@@ -62,11 +53,11 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
         gap: "clamp(6px, 1.5vw, 8px)",
       }}
     >
-      {/* Row 1: Set Jumlah Trip (Kiri) & Fokus Kolom (Kanan) */}
+      {/* Row 1: Set Jumlah Trip & Pilih Unit (Kiri) & Fokus Kolom (Kanan) */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "auto 1fr",
+          gridTemplateColumns: "auto auto 1fr",
           gap: "clamp(6px, 1.5vw, 8px)",
           alignItems: "center",
         }}
@@ -117,6 +108,42 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
           </span>
         </button>
 
+        {/* Toggle Mode Pilih Unit (Set Trip Unit Terpilih) */}
+        <button
+          type="button"
+          data-testid="btn-toggle-select-mode"
+          onClick={onToggleSelectionMode}
+          disabled={isSubmittingBulk}
+          aria-pressed={isSelectionMode}
+          title={TEXT_DASHBOARD.BUS_LIST.SELECT_MODE_TITLE}
+          style={{
+            height: "36px",
+            padding: "0 10px",
+            borderRadius: "10px",
+            background: isSelectionMode
+              ? "var(--color-action-primary-bg)"
+              : "var(--input-bg)",
+            border: isSelectionMode
+              ? "1px solid var(--color-action-primary-bg)"
+              : "1px solid var(--card-border)",
+            color: isSelectionMode
+              ? "var(--color-action-primary-fg)"
+              : "var(--color-text-primary)",
+            fontWeight: 600,
+            fontSize: "12px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "5px",
+            whiteSpace: "nowrap",
+            cursor: "pointer",
+            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
+          }}
+        >
+          <ListChecks size={14} />
+          <span>{TEXT_DASHBOARD.BUS_LIST.SELECT_MODE_BTN}</span>
+        </button>
+
         {/* Dropdown Fokus Kolom (Kanan) */}
         <div style={{ position: "relative", width: "100%", minWidth: 0 }}>
           <select
@@ -164,126 +191,6 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             }}
           />
         </div>
-      </div>
-
-      {/* Segmented Sort/Filter View Selector (Opsi B - Hybrid Fleksibel) */}
-      <div
-        data-testid="fleet-sort-view-selector"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "clamp(4px, 1vw, 6px)",
-          background: "var(--input-bg, var(--color-surface-subtle))",
-          padding: "3px",
-          borderRadius: "10px",
-          border: "1px solid var(--card-border, var(--color-border-subtle))",
-        }}
-      >
-        {/* Tab 1: Semua (Sheet) */}
-        <button
-          type="button"
-          data-testid="filter-sort-sheet"
-          onClick={() => onSortViewChange?.("sheet")}
-          title={TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.ALL_SHEET_TITLE}
-          style={{
-            height: "32px",
-            padding: "0 6px",
-            borderRadius: "7px",
-            fontSize: "11.5px",
-            fontWeight: sortView === "sheet" ? 700 : 600,
-            background: sortView === "sheet"
-              ? "var(--color-action-primary-bg)"
-              : "transparent",
-            color: sortView === "sheet"
-              ? "var(--color-action-primary-fg)"
-              : "var(--color-text-secondary)",
-            border: "none",
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            whiteSpace: "nowrap",
-            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
-          }}
-        >
-          {TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.ALL_SHEET_LABEL(totalFleetCount)}
-        </button>
-
-        {/* Tab 2: Titik Start A */}
-        <button
-          type="button"
-          data-testid="filter-sort-base-a"
-          onClick={() => onSortViewChange?.("base_a")}
-          title={TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.BASE_TOOLTIP(
-            endpointA || "Titik A",
-            countBaseA
-          )}
-          style={{
-            height: "32px",
-            padding: "0 6px",
-            borderRadius: "7px",
-            fontSize: "11.5px",
-            fontWeight: sortView === "base_a" ? 700 : 600,
-            background: sortView === "base_a"
-              ? "var(--color-action-primary-bg)"
-              : "transparent",
-            color: sortView === "base_a"
-              ? "var(--color-action-primary-fg)"
-              : "var(--color-text-secondary)",
-            border: "none",
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
-          }}
-        >
-          {TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.BASE_LABEL(
-            endpointA || "Titik A",
-            countBaseA
-          )}
-        </button>
-
-        {/* Tab 3: Titik Start B */}
-        <button
-          type="button"
-          data-testid="filter-sort-base-b"
-          onClick={() => onSortViewChange?.("base_b")}
-          title={TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.BASE_TOOLTIP(
-            endpointB || "Titik B",
-            countBaseB
-          )}
-          style={{
-            height: "32px",
-            padding: "0 6px",
-            borderRadius: "7px",
-            fontSize: "11.5px",
-            fontWeight: sortView === "base_b" ? 700 : 600,
-            background: sortView === "base_b"
-              ? "var(--color-action-primary-bg)"
-              : "transparent",
-            color: sortView === "base_b"
-              ? "var(--color-action-primary-fg)"
-              : "var(--color-text-secondary)",
-            border: "none",
-            cursor: "pointer",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
-          }}
-        >
-          {TEXT_DASHBOARD.BUS_LIST.SORT_VIEWS.BASE_LABEL(
-            endpointB || "Titik B",
-            countBaseB
-          )}
-        </button>
       </div>
 
       {/* Row 2: Pencarian & Filter Sisa Unit */}

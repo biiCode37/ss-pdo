@@ -5,7 +5,6 @@ export type PageKey =
   | 'input'
   | 'analytics'
   | 'units'
-  | 'plotting'
   | 'regional_summary'
   | 'regional_wa_report'
   | 'a2_report'
@@ -87,16 +86,6 @@ export const DEFAULT_PAGE_SETTINGS: AppPageSetting[] = [
   {
     page_key: 'units',
     page_name: 'Daftar Unit Armada',
-    category: 'tab',
-    is_enabled: true,
-    disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',
-    allowed_roles: [...ALL_ROLES],
-    allowed_user_emails: [],
-    denied_user_emails: [],
-  },
-  {
-    page_key: 'plotting',
-    page_name: 'Plotting Armada Harian',
     category: 'tab',
     is_enabled: true,
     disabled_message: 'Halaman/Fitur ini masih dalam tahap pengembangan/perbaikan',

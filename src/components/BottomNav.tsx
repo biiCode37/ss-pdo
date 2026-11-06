@@ -1,10 +1,10 @@
 import { memo } from "react";
-import { ClipboardList, BarChart3, Bus, ListOrdered } from "lucide-react";
+import { ClipboardList, BarChart3, Bus } from "lucide-react";
 import { TEXT_DASHBOARD } from "../constants/texts";
 
 interface BottomNavProps {
-  activeTab: "input" | "analytics" | "units" | "plotting";
-  onSelectTab: (tab: "input" | "analytics" | "units" | "plotting") => void;
+  activeTab: "input" | "analytics" | "units";
+  onSelectTab: (tab: "input" | "analytics" | "units") => void;
   pendingQueueCount?: number;
 }
 
@@ -13,7 +13,7 @@ function BottomNavComponent({
   onSelectTab,
   pendingQueueCount = 0,
 }: BottomNavProps) {
-  const handleTabClick = (tab: "input" | "analytics" | "units" | "plotting") => {
+  const handleTabClick = (tab: "input" | "analytics" | "units") => {
     if (activeTab !== tab) {
       onSelectTab(tab);
     }
@@ -70,21 +70,6 @@ function BottomNavComponent({
           </div>
           <span className="bottom-nav-label">
             {TEXT_DASHBOARD.TABS.UNIT_SHORT}
-          </span>
-        </button>
-        <button
-          type="button"
-          onClick={() => handleTabClick("plotting")}
-          className={`bottom-nav-item ${activeTab === "plotting" ? "active" : ""}`}
-          title={TEXT_DASHBOARD.TABS.PLOTTING}
-          aria-label={TEXT_DASHBOARD.TABS.PLOTTING}
-          data-testid="bottom-nav-plotting"
-        >
-          <div className="bottom-nav-icon-wrapper">
-            <ListOrdered size={19} />
-          </div>
-          <span className="bottom-nav-label">
-            {TEXT_DASHBOARD.TABS.PLOTTING_SHORT}
           </span>
         </button>
       </nav>

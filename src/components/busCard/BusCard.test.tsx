@@ -94,6 +94,52 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(document.body.textContent).toContain('JAK.15-01');
   });
 
+  it('mode pilih: ketuk kartu memanggil onToggleSelect dan TIDAK membuka modal input', async () => {
+    const onToggleSelect = vi.fn();
+    await act(async () => {
+      root.render(
+        <BusCard
+          {...defaultProps}
+          isSelectionMode={true}
+          isSelected={false}
+          onToggleSelect={onToggleSelect}
+        />
+      );
+    });
+
+    const checkbox = container.querySelector('[data-testid="select-unit-6"]');
+    expect(checkbox).not.toBeNull();
+    expect(checkbox?.getAttribute('aria-checked')).toBe('false');
+
+    await act(async () => {
+      (container.querySelector('.bus-card') as HTMLDivElement).click();
+    });
+
+    expect(onToggleSelect).toHaveBeenCalledTimes(1);
+    expect(onToggleSelect).toHaveBeenCalledWith(6);
+    expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
+  });
+
+  it('mode pilih: kartu terpilih menampilkan centang dan outline token aksi utama', async () => {
+    await act(async () => {
+      root.render(
+        <BusCard {...defaultProps} isSelectionMode={true} isSelected={true} onToggleSelect={vi.fn()} />
+      );
+    });
+
+    const card = container.querySelector<HTMLDivElement>('.bus-card');
+    expect(card?.getAttribute('data-selected')).toBe('true');
+    expect(card?.style.outline).toContain('var(--color-action-primary-bg)');
+    expect(container.querySelector('[data-testid="select-unit-6"]')?.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('di luar mode pilih tidak merender kotak centang', async () => {
+    await act(async () => {
+      root.render(<BusCard {...defaultProps} />);
+    });
+    expect(container.querySelector('[data-testid="select-unit-6"]')).toBeNull();
+  });
+
   it('allows opening modal without blocking when tapping unit with OFF status', async () => {
     await act(async () => {
       root.render(
@@ -421,104 +467,15 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       const leftSide = headerChildren?.[0];
       expect(leftSide?.querySelector('.unit-status-badge-off')).toBeNull();
     });
-    it('renders plotting sequence and start base badge when plottingItem is provided', async () => {
+
+    it('tidak lagi menampilkan badge urutan/titik start Plotting', async () => {
       await act(async () => {
-        root.render(
-          <BusCard
-            {...defaultProps}
-            activeCategory="ALL"
-            plottingItem={{
-              unit: defaultProps.bus.unit,
-              order: 3,
-              start_point: 'A',
-              target_ritase: 7.5,
-              status: 'READY',
-            }}
-            endpointAName="Priok"
-            endpointBName="IGI"
-          />
-        );
+        root.render(<BusCard {...defaultProps} activeCategory="ALL" />);
       });
 
-      const badge = container.querySelector(`[data-testid="plotting-badge-${defaultProps.bus.unit}"]`);
-      expect(badge).not.toBeNull();
-      expect(badge?.textContent).toContain('#3');
-      expect(badge?.textContent).toContain('Priok');
-
-      const orderBadge = container.querySelector<HTMLElement>(`[data-testid="plotting-order-${defaultProps.bus.unit}"]`);
-      expect(orderBadge).not.toBeNull();
-      expect(orderBadge?.style.color).toBe('var(--color-text-primary)');
-      expect(orderBadge?.style.background).toBe('var(--color-surface-default)');
-
-      const startBadge = container.querySelector<HTMLElement>(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`);
-      expect(startBadge).not.toBeNull();
-      expect(startBadge?.style.color).toBe('var(--color-shift-1-fg)');
-      expect(startBadge?.style.background).toBe('var(--color-shift-1-bg)');
-    });
-
-    it('renders plotting badge for start point B with warning semantic tokens', async () => {
-      await act(async () => {
-        root.render(
-          <BusCard
-            {...defaultProps}
-            activeCategory="ALL"
-            plottingItem={{
-              unit: defaultProps.bus.unit,
-              order: 2,
-              start_point: 'B',
-              target_ritase: 7,
-              status: 'READY',
-            }}
-            endpointAName="Priok"
-            endpointBName="IGI"
-          />
-        );
-      });
-
-      const startBadge = container.querySelector<HTMLElement>(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`);
-      expect(startBadge).not.toBeNull();
-      expect(startBadge?.textContent).toContain('IGI');
-      expect(startBadge?.style.color).toBe('var(--color-warning-fg)');
-      expect(startBadge?.style.background).toBe('var(--color-warning-bg)');
-    });
-
-    it('does not render queue order badge (#order) for non-operational unit', async () => {
-      await act(async () => {
-        root.render(
-          <BusCard
-            {...defaultProps}
-            activeCategory="ALL"
-            bus={{
-              ...defaultProps.bus,
-              tripPergi: '',
-              tripPulang: '',
-              keterangan: 'OFF',
-            }}
-            plottingItem={{
-              unit: defaultProps.bus.unit,
-              order: 4,
-              start_point: 'A',
-              target_ritase: 0,
-              status: 'OFF',
-            }}
-            endpointAName="Priok"
-            endpointBName="IGI"
-          />
-        );
-      });
-
-      const badge = container.querySelector(`[data-testid="plotting-badge-${defaultProps.bus.unit}"]`);
-      expect(badge).not.toBeNull();
-      // Should NOT render order number #4
-      expect(badge?.textContent).not.toContain('#4');
-
-      const orderBadge = container.querySelector(`[data-testid="plotting-order-${defaultProps.bus.unit}"]`);
-      expect(orderBadge).toBeNull();
-
-      // Start point badge still renders
-      const startBadge = container.querySelector(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`);
-      expect(startBadge).not.toBeNull();
-      expect(startBadge?.textContent).toContain('Priok');
+      expect(container.querySelector(`[data-testid="plotting-badge-${defaultProps.bus.unit}"]`)).toBeNull();
+      expect(container.querySelector(`[data-testid="plotting-order-${defaultProps.bus.unit}"]`)).toBeNull();
+      expect(container.querySelector(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`)).toBeNull();
     });
   });
 });

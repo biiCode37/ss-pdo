@@ -2,9 +2,8 @@ import { memo } from "react";
 import { slugifyUnitId } from "@/utils/analytics";
 import { FormattedNoteText } from "@/components/FormattedNoteText";
 import { hasMeaningfulNote, isUnitOff, isUnitTo } from "@/utils/keteranganUtils";
-import { isBusNonOperational } from "@/utils/operationalStatusUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import type { BusCardProps } from "./types";
 import {
   getBusCardStyles,
@@ -29,9 +28,9 @@ function BusCardComponent({
   activeShift = 1,
   previousDayKmAkhir2,
   previousDayDateLabel,
-  plottingItem,
-  endpointAName,
-  endpointBName,
+  isSelectionMode = false,
+  isSelected = false,
+  onToggleSelect,
 }: BusCardProps) {
   const { formData, isLoading, saveStatus, handleSaveUpdates } = useBusCardSave({
     bus,
@@ -70,16 +69,28 @@ function BusCardComponent({
     isNonSgo,
   });
 
+  // Mode pilih: ketukan di mana pun pada kartu hanya memilih/membatalkan pilihan unit.
+  const handleCardTap = (tab?: Parameters<typeof handleOpenModal>[0]) => {
+    if (isSelectionMode) {
+      onToggleSelect?.(bus.rowIndex);
+      return;
+    }
+    handleOpenModal(tab);
+  };
+
   return (
     <>
       <div
         id={`bus-card-${slugifyUnitId(bus.unit)}`}
       data-bus-row={bus.rowIndex}
+      data-selected={isSelectionMode ? String(isSelected) : undefined}
       className={`bus-card glass ${statusClass} ${lockedClass}`.trim()}
-      onClick={() => handleOpenModal()}
+      onClick={() => handleCardTap()}
       style={{
         cursor: tabName === "AKUMULASI" ? "default" : "pointer",
         transition: "all 0.18s var(--ease-spring)",
+        outline: isSelectionMode && isSelected ? "2px solid var(--color-action-primary-bg)" : undefined,
+        outlineOffset: isSelectionMode && isSelected ? "-2px" : undefined,
       }}
     >
         <div
@@ -91,8 +102,32 @@ function BusCardComponent({
             padding: "12px 16px",
           }}
         >
-          {/* Sisi Kiri: Nama Unit & Status Antrean Offline */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+            {isSelectionMode && (
+              <span
+                role="checkbox"
+                aria-checked={isSelected}
+                aria-label={TEXT_DASHBOARD.BUS_LIST.SELECT_UNIT_ARIA(bus.unit)}
+                data-testid={`select-unit-${bus.rowIndex}`}
+                style={{
+                  width: "20px",
+                  height: "20px",
+                  borderRadius: "6px",
+                  flexShrink: 0,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: isSelected ? "var(--color-action-primary-bg)" : "transparent",
+                  border: isSelected
+                    ? "2px solid var(--color-action-primary-bg)"
+                    : "2px solid var(--color-text-muted)",
+                  color: "var(--color-action-primary-fg)",
+                  transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
+                }}
+              >
+                {isSelected && <Check size={14} strokeWidth={3} />}
+              </span>
+            )}
             <span className="bus-card-unit" style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
@@ -101,67 +136,7 @@ function BusCardComponent({
             )}
           </div>
 
-          {/* Sisi Kanan: 2 Badge Terpisah (Urutan & Titik Start) di Pojok Kanan + Ringkasan/Status */}
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
-            {plottingItem && (
-              <div
-                data-testid={`plotting-badge-${bus.unit}`}
-                style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}
-              >
-                {/* 1. Badge Urutan Mandiri */}
-                {!isBusNonOperational(bus, plottingItem) && (
-                <span
-                  data-testid={`plotting-order-${bus.unit}`}
-                  title={`Urutan Antrean #${plottingItem.order}`}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minWidth: "22px",
-                    height: "22px",
-                    padding: "0 6px",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    fontWeight: 800,
-                    background: "var(--color-surface-default)",
-                    color: "var(--color-text-primary)",
-                    border: "1px solid var(--color-border-subtle)",
-                  }}
-                >
-                  #{plottingItem.order}
-                </span>
-                )}
-
-                {/* 2. Badge Titik Start Mandiri */}
-                <span
-                  data-testid={`plotting-start-${bus.unit}`}
-                  title={`Titik Start: ${plottingItem.start_point === 'A' ? (endpointAName || 'A') : (endpointBName || 'B')}`}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "3px",
-                    padding: "2px 7px",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    background:
-                      plottingItem.start_point === 'A'
-                        ? "var(--color-shift-1-bg)"
-                        : "var(--color-warning-bg)",
-                    color:
-                      plottingItem.start_point === 'A'
-                        ? "var(--color-shift-1-fg)"
-                        : "var(--color-warning-fg)",
-                    border:
-                      plottingItem.start_point === 'A'
-                        ? "1px solid var(--color-shift-1-border)"
-                        : "1px solid var(--color-warning-border)",
-                  }}
-                >
-                  📍 {plottingItem.start_point === 'A' ? (endpointAName || 'A') : (endpointBName || 'B')}
-                </span>
-              </div>
-            )}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             {activeCategory !== "ALL" && (
               <BusCardSummary
                 formData={formData}
@@ -170,7 +145,7 @@ function BusCardComponent({
                 activeCategory={activeCategory}
                 targetTrip={targetTrip}
                 activeShiftStatus={activeShiftStatus}
-                onOpenTripModal={() => handleOpenModal("trip")}
+                onOpenTripModal={() => handleCardTap("trip")}
               />
             )}
             {isNonSgo && (
@@ -208,7 +183,7 @@ function BusCardComponent({
             activeCategory={activeCategory}
             targetTrip={targetTrip}
             activeShiftStatus={activeShiftStatus}
-            onOpenTripModal={() => handleOpenModal("trip")}
+            onOpenTripModal={() => handleCardTap("trip")}
           />
         )}
 
@@ -261,9 +236,6 @@ function BusCardComponent({
           activeShift={activeShift}
           previousDayKmAkhir2={previousDayKmAkhir2}
           previousDayDateLabel={previousDayDateLabel}
-          plottingItem={plottingItem}
-          endpointAName={endpointAName}
-          endpointBName={endpointBName}
         />
       )}
     </>

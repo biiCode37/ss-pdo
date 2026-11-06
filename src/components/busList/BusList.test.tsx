@@ -31,8 +31,17 @@ vi.mock('@/utils/alertUtils', async () => {
   return {
     ...actual,
     showWarningToast: vi.fn(),
+    showSuccessToast: vi.fn(),
     showBulkTripModal: vi.fn(),
     showBulkCopyKmModal: vi.fn(),
+  };
+});
+
+vi.mock('@/services/googleSheets', async () => {
+  const actual = await vi.importActual<typeof import('@/services/googleSheets')>('@/services/googleSheets');
+  return {
+    ...actual,
+    updateBulkBusData: vi.fn().mockResolvedValue(undefined),
   };
 });
 
@@ -187,145 +196,141 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     expect(container.textContent).toContain('/1 Unit');
     expect(container.textContent).not.toContain('/4 Unit');
   });
-  it('handles Hybrid View (Opsi B): default sheet row order, and sorts strictly by plotting order when filtering by base', async () => {
-    const mockPlotting = {
-      id: 1,
-      route_id: 115,
-      route_code: 'JAK.115',
-      date: '2026-11-01',
-      endpoint_a_name: 'Priok',
-      endpoint_b_name: 'IGI',
-      default_ritase: 7,
-      created_by: 'user-1',
-      created_at: '2026-11-01T00:00:00Z',
-      updated_at: '2026-11-01T00:00:00Z',
-      units_data: [
-        { unit: 'BUS-01', order: 2, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
-        { unit: 'BUS-02', order: 1, start_point: 'B' as const, target_ritase: 7, status: 'READY' as const },
-        { unit: 'BUS-03', order: 1, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
-      ],
+  describe('Set Trip Unit Terpilih (mode Pilih)', () => {
+    const fleetData = [
+      createMockBus({ rowIndex: 6, unit: 'BUS-01' }),
+      createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: 'OFF' }),
+      createMockBus({ rowIndex: 8, unit: 'BUS-03' }),
+    ];
+
+    const clickEl = async (el: Element | null) => {
+      expect(el).not.toBeNull();
+      await act(async () => {
+        (el as HTMLElement).click();
+      });
     };
 
+    it('hanya unit terpilih yang disimpan dalam 1 request, unit OFF dilewati, target rute tidak berubah', async () => {
+      const { updateBulkBusData } = await import('@/services/googleSheets');
+      vi.mocked(alertUtils.showBulkTripModal).mockResolvedValue({ tripPergi: '8', tripPulang: '7' });
+      const onUpdateBus = vi.fn();
+
+      await act(async () => {
+        root.render(<BusList {...defaultProps} data={fleetData} onUpdateBus={onUpdateBus} />);
+      });
+
+      await clickEl(container.querySelector('[data-testid="btn-toggle-select-mode"]'));
+      expect(document.body.querySelector('[data-testid="selection-action-bar"]')).not.toBeNull();
+
+      await clickEl(container.querySelector('[data-bus-row="6"]'));
+      await clickEl(container.querySelector('[data-bus-row="7"]'));
+
+      // Ketukan kartu di mode pilih tidak membuka modal input
+      expect(document.body.querySelector('.bus-input-modal-overlay')).toBeNull();
+      expect(container.querySelector('[data-testid="select-unit-6"]')?.getAttribute('aria-checked')).toBe('true');
+      expect(container.querySelector('[data-testid="select-unit-8"]')?.getAttribute('aria-checked')).toBe('false');
+      expect(document.body.textContent).toContain('2 unit dipilih');
+
+      await clickEl(document.body.querySelector('[data-testid="btn-apply-selected-trip"]'));
+
+      expect(alertUtils.showBulkTripModal).toHaveBeenCalledWith(
+        expect.objectContaining({ unitCount: 1, isSelection: true, skippedCount: 1 }),
+      );
+      expect(updateBulkBusData).toHaveBeenCalledTimes(1);
+      expect(updateBulkBusData).toHaveBeenCalledWith(
+        'sheet-123',
+        'Tgl 9',
+        [{ rowIndex: 6, updates: { tripPergi: '8', tripPulang: '7' } }],
+        defaultProps.headerMap,
+      );
+      expect(onUpdateBus).toHaveBeenCalledTimes(1);
+      expect(onUpdateBus).toHaveBeenCalledWith(6, { tripPergi: '8', tripPulang: '7' });
+      expect(alertUtils.showSuccessToast).toHaveBeenCalledWith(
+        expect.stringContaining('(7.5 Rit)'),
+      );
+
+      // Mode pilih tertutup setelah tersimpan & target rute (tombol Set Jumlah Trip) tidak ikut berubah
+      expect(document.body.querySelector('[data-testid="selection-action-bar"]')).toBeNull();
+      expect(container.textContent).not.toContain('(8/7)');
+    });
+
+    it('tidak menyimpan apa pun jika semua unit terpilih berstatus OFF', async () => {
+      const { updateBulkBusData } = await import('@/services/googleSheets');
+      await act(async () => {
+        root.render(<BusList {...defaultProps} data={fleetData} />);
+      });
+
+      await clickEl(container.querySelector('[data-testid="btn-toggle-select-mode"]'));
+      await clickEl(container.querySelector('[data-bus-row="7"]'));
+      await clickEl(document.body.querySelector('[data-testid="btn-apply-selected-trip"]'));
+
+      expect(alertUtils.showBulkTripModal).not.toHaveBeenCalled();
+      expect(updateBulkBusData).not.toHaveBeenCalled();
+      expect(alertUtils.showWarningToast).toHaveBeenCalledTimes(1);
+    });
+
+    it('tombol Batal menutup mode pilih dan mengosongkan pilihan', async () => {
+      await act(async () => {
+        root.render(<BusList {...defaultProps} data={fleetData} />);
+      });
+
+      await clickEl(container.querySelector('[data-testid="btn-toggle-select-mode"]'));
+      await clickEl(container.querySelector('[data-bus-row="6"]'));
+      await clickEl(document.body.querySelector('[data-testid="btn-cancel-selection"]'));
+
+      expect(document.body.querySelector('[data-testid="selection-action-bar"]')).toBeNull();
+      expect(container.querySelector('[data-testid="select-unit-6"]')).toBeNull();
+
+      // Masuk lagi: pilihan lama tidak terbawa
+      await clickEl(container.querySelector('[data-testid="btn-toggle-select-mode"]'));
+      expect(container.querySelector('[data-testid="select-unit-6"]')?.getAttribute('aria-checked')).toBe('false');
+    });
+
+    it('mode pilih dikunci di tab AKUMULASI', async () => {
+      await act(async () => {
+        root.render(<BusList {...defaultProps} tabName="AKUMULASI" data={fleetData} />);
+      });
+
+      await clickEl(container.querySelector('[data-testid="btn-toggle-select-mode"]'));
+      expect(document.body.querySelector('[data-testid="selection-action-bar"]')).toBeNull();
+      expect(alertUtils.showWarningToast).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('renders units in spreadsheet row order without Plotting base view selector', async () => {
     const fleetData = [
-      createMockBus({ rowIndex: 6, unit: 'BUS-01', keterangan: '' }),
-      createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: '' }),
-      createMockBus({ rowIndex: 8, unit: 'BUS-03', keterangan: '' }),
+      createMockBus({ rowIndex: 6, unit: 'BUS-01', tripPergi: '7', tripPulang: '7' }),
+      createMockBus({ rowIndex: 7, unit: 'BUS-02', tripPergi: '7', tripPulang: '7' }),
+      createMockBus({ rowIndex: 8, unit: 'BUS-03', tripPergi: '7', tripPulang: '7' }),
     ];
 
     await act(async () => {
       root.render(
-        <BusList
-          {...defaultProps}
-          data={fleetData}
-          plotting={mockPlotting}
-          isShiftConfirmed={true}
-          activeShift={1}
-        />
+        <BusList {...defaultProps} data={fleetData} isShiftConfirmed={true} activeShift={1} />
       );
     });
 
-    // 1. Verifikasi Selector Opsi B muncul dengan angka unit yang tepat
-    const sheetTab = container.querySelector('[data-testid="filter-sort-sheet"]') as HTMLButtonElement;
-    const baseATab = container.querySelector('[data-testid="filter-sort-base-a"]') as HTMLButtonElement;
-    const baseBTab = container.querySelector('[data-testid="filter-sort-base-b"]') as HTMLButtonElement;
-
-    expect(sheetTab).not.toBeNull();
-    expect(baseATab).not.toBeNull();
-    expect(baseBTab).not.toBeNull();
-
-    expect(sheetTab.textContent).toContain('Semua (3)');
-    expect(baseATab.textContent).toContain('📍 Priok (2)');
-    expect(baseBTab.textContent).toContain('📍 IGI (1)');
-
-    // 2. Default: Sheet order (BUS-01 -> BUS-02 -> BUS-03)
-    let renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
-      (el) => el.getAttribute('data-bus-row')
-    );
-    expect(renderedUnits).toEqual(['6', '7', '8']);
-
-    // 3. Klik Base A (Priok): Harus difilter hanya Base A dan diurutkan menaik (#1 BUS-03, lalu #2 BUS-01)
-    await act(async () => {
-      baseATab.click();
-    });
-
-    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
-      (el) => el.getAttribute('data-bus-row')
-    );
-    expect(renderedUnits).toEqual(['8', '6']); // BUS-03 (order 1) lalu BUS-01 (order 2)
-
-    // 4. Klik Base B (IGI): Hanya BUS-02 (order 1)
-    await act(async () => {
-      baseBTab.click();
-    });
-
-    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
-      (el) => el.getAttribute('data-bus-row')
-    );
-    expect(renderedUnits).toEqual(['7']); // BUS-02 (order 1)
-
-    // 5. Klik Semua (Sheet): Kembali ke urutan sheet asli
-    await act(async () => {
-      sheetTab.click();
-    });
-
-    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+    expect(container.querySelector('[data-testid="fleet-sort-view-selector"]')).toBeNull();
+    const renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
       (el) => el.getAttribute('data-bus-row')
     );
     expect(renderedUnits).toEqual(['6', '7', '8']);
   });
 
-  it('parks non-operational buses to the bottom of the list in both sheet and base views', async () => {
-    const mockPlotting = {
-      id: 1,
-      route_id: 115,
-      route_code: 'JAK.115',
-      date: '2026-11-01',
-      endpoint_a_name: 'Priok',
-      endpoint_b_name: 'IGI',
-      default_ritase: 7,
-      created_by: 'user-1',
-      created_at: '2026-11-01T00:00:00Z',
-      updated_at: '2026-11-01T00:00:00Z',
-      units_data: [
-        { unit: 'BUS-01', order: 2, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
-        { unit: 'BUS-02', order: 1, start_point: 'A' as const, target_ritase: 0, status: 'OFF' as const },
-        { unit: 'BUS-03', order: 3, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
-      ],
-    };
-
+  it('parks non-operational buses (ritase 0/kosong) to the bottom of the list', async () => {
     const fleetData = [
-      createMockBus({ rowIndex: 6, unit: 'BUS-01', keterangan: '' }),
+      createMockBus({ rowIndex: 6, unit: 'BUS-01', tripPergi: '7', tripPulang: '7' }),
       createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: 'OFF' }),
-      createMockBus({ rowIndex: 8, unit: 'BUS-03', keterangan: '' }),
+      createMockBus({ rowIndex: 8, unit: 'BUS-03', tripPergi: '8', tripPulang: '7' }),
     ];
 
     await act(async () => {
       root.render(
-        <BusList
-          {...defaultProps}
-          data={fleetData}
-          plotting={mockPlotting}
-          isShiftConfirmed={true}
-          activeShift={1}
-        />
+        <BusList {...defaultProps} data={fleetData} isShiftConfirmed={true} activeShift={1} />
       );
     });
 
-    // 1. Sheet View: BUS-02 (non-operational) is parked at the bottom: BUS-01 (6) -> BUS-03 (8) -> BUS-02 (7)
-    let renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
-      (el) => el.getAttribute('data-bus-row')
-    );
-    expect(renderedUnits).toEqual(['6', '8', '7']);
-
-    // 2. Base A View: BUS-02 has order 1 but is non-operational, so operational BUS-01 (#2) & BUS-03 (#3) come first
-    const baseATab = container.querySelector('[data-testid="filter-sort-base-a"]') as HTMLButtonElement;
-    expect(baseATab).not.toBeNull();
-
-    await act(async () => {
-      baseATab.click();
-    });
-
-    renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
+    const renderedUnits = Array.from(container.querySelectorAll('.bus-card')).map(
       (el) => el.getAttribute('data-bus-row')
     );
     expect(renderedUnits).toEqual(['6', '8', '7']);
@@ -334,23 +339,6 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
   it('auto-skips non-operational buses when Satset mode advances to the next unit', async () => {
     localStorage.setItem('pdo_satset_mode', 'true');
 
-    const mockPlotting = {
-      id: 1,
-      route_id: 115,
-      route_code: 'JAK.115',
-      date: '2026-11-01',
-      endpoint_a_name: 'Priok',
-      endpoint_b_name: 'IGI',
-      default_ritase: 7,
-      created_by: 'user-1',
-      created_at: '2026-11-01T00:00:00Z',
-      updated_at: '2026-11-01T00:00:00Z',
-      units_data: [
-        { unit: 'BUS-01', order: 1, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
-        { unit: 'BUS-02', order: 2, start_point: 'A' as const, target_ritase: 0, status: 'OFF' as const },
-        { unit: 'BUS-03', order: 3, start_point: 'A' as const, target_ritase: 7, status: 'READY' as const },
-      ],
-    };
 
     const fleetData = [
       createMockBus({
@@ -364,7 +352,7 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
         tripPulang: '3',
       }),
       createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: '', tripPergi: '', tripPulang: '' }),
-      createMockBus({ rowIndex: 8, unit: 'BUS-03', keterangan: '', tripPergi: '', tripPulang: '' }),
+      createMockBus({ rowIndex: 8, unit: 'BUS-03', keterangan: '', tripPergi: '3', tripPulang: '3' }),
     ];
 
     await act(async () => {
@@ -372,14 +360,13 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
         <BusList
           {...defaultProps}
           data={fleetData}
-          plotting={mockPlotting}
           isShiftConfirmed={true}
           activeShift={1}
         />
       );
     });
 
-    // Switch to trip category so checkFilled checks trip fields (both BUS-02 and BUS-03 are unfilled)
+    // BUS-02 ritase kosong (non-operasional, dilewati); BUS-03 sudah ada ritase tapi kolom lain belum lengkap
     const tripCatBtn = container.querySelector('[data-testid="category-chip-trip"]') as HTMLButtonElement;
     if (tripCatBtn) {
       await act(async () => {

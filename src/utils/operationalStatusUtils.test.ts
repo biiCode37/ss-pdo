@@ -30,56 +30,11 @@ describe('operationalStatusUtils', () => {
       expect(isBusNonOperational({ tripPergi: '', tripPulang: '', keterangan: 'TO' })).toBe(true);
       expect(isBusNonOperational({ tripPergi: '0', tripPulang: '0', keterangan: 'T.O' })).toBe(true);
     });
-
-    it('sinkron dengan plotting status jika target_ritase 0 atau status OFF', () => {
-      expect(
-        isBusNonOperational(
-          { tripPergi: '', tripPulang: '', keterangan: '' },
-          { target_ritase: 0, status: 'OFF' }
-        )
-      ).toBe(true);
-      expect(
-        isBusNonOperational(
-          { tripPergi: '0', tripPulang: '0', keterangan: '' },
-          { target_ritase: 0, status: 'READY' }
-        )
-      ).toBe(true);
-      expect(
-        isBusNonOperational(
-          { tripPergi: '', tripPulang: '', keterangan: '' },
-          { target_ritase: 7.5, status: 'OFF' }
-        )
-      ).toBe(true);
-    });
-
-    it('menganggap beroperasi jika plotting memiliki target_ritase > 0 dan belum input trip', () => {
-      expect(
-        isBusNonOperational(
-          { tripPergi: '', tripPulang: '', keterangan: '' },
-          { target_ritase: 7.5, status: 'READY' }
-        )
-      ).toBe(false);
-    });
-
-    it('mengutamakan ritase riil > 0 meskipun status plotting bernilai OFF', () => {
-      expect(
-        isBusNonOperational(
-          { tripPergi: '5', tripPulang: '5', keterangan: '' },
-          { target_ritase: 0, status: 'OFF' }
-        )
-      ).toBe(false);
-    });
   });
 
   describe('getNonOperationalBannerType', () => {
     it('mengembalikan NONE untuk unit beroperasi', () => {
       expect(getNonOperationalBannerType({ tripPergi: '5', tripPulang: '5' })).toBe('NONE');
-      expect(
-        getNonOperationalBannerType(
-          { tripPergi: '', tripPulang: '' },
-          { target_ritase: 7.5, status: 'READY' }
-        )
-      ).toBe('NONE');
     });
 
     it('mengembalikan EMPTY_RITASE jika ritase 0 dan keterangan kosong atau bukan OFF/LIBUR', () => {

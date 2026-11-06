@@ -74,6 +74,27 @@ export function useBulkOperations({
     ).length;
   }, [availableKmS1Buses]);
 
+  type TripUpdate = {
+    rowIndex: number;
+    updates: { tripPergi: string; tripPulang: string };
+  };
+
+  /**
+   * Menyimpan mutasi trip massal: 1x updateBulkBusData saat online (1 log audit per batch),
+   * antrean offline per baris saat offline, lalu perbarui state in-memory.
+   * Hanya kolom input trip pergi/pulang yang disentuh (bukan kolom berumus).
+   */
+  const persistTripUpdates = async (updatesList: TripUpdate[]) => {
+    if (navigator.onLine) {
+      await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
+    } else {
+      updatesList.forEach(({ rowIndex, updates }) => {
+        addToQueue({ sheetId, tabName, rowIndex, updates, headerMap });
+      });
+    }
+    updatesList.forEach(({ rowIndex, updates }) => onUpdateBus?.(rowIndex, updates));
+  };
+
   const handleOpenBulkTripModal = async () => {
     if (!data || data.length === 0) return;
     if (tabName === "AKUMULASI") {
@@ -107,34 +128,7 @@ export function useBulkOperations({
     });
 
     try {
-      if (navigator.onLine) {
-        await updateBulkBusData(sheetId, tabName, updatesList, headerMap);
-      } else {
-        data.forEach((bus) => {
-          const isOff = isUnitOffOrToEvdal(bus.keterangan);
-          addToQueue({
-            sheetId,
-            tabName,
-            rowIndex: bus.rowIndex,
-            updates: {
-              tripPergi: isOff ? "" : result.tripPergi,
-              tripPulang: isOff ? "" : result.tripPulang,
-            },
-            headerMap,
-          });
-        });
-      }
-
-      if (onUpdateBus) {
-        data.forEach((bus) => {
-          const isOff = isUnitOffOrToEvdal(bus.keterangan);
-          onUpdateBus(bus.rowIndex, {
-            tripPergi: isOff ? "" : result.tripPergi,
-            tripPulang: isOff ? "" : result.tripPulang,
-          });
-        });
-      }
-
+      await persistTripUpdates(updatesList);
       showSuccessToast(
         TEXT_DASHBOARD.BUS_LIST.SET_TRIP_SUCCESS(
           result.tripPergi,
@@ -147,6 +141,71 @@ export function useBulkOperations({
         TEXT_DASHBOARD.BUS_LIST.SET_TRIP_FAILED,
         err.message || TEXT_DASHBOARD.BUS_LIST.SAVE_ERROR_GENERIC,
       );
+    } finally {
+      setIsSubmittingBulk(false);
+    }
+  };
+
+  /**
+   * Set Trip Unit Terpilih: terapkan trip pergi/pulang hanya ke unit pilihan.
+   * Unit OFF/TO EVDAL dilewati (tidak diubah). Target rute (bulkPergi/bulkPulang) tidak berubah.
+   * Mengembalikan true jika tersimpan agar pemanggil bisa menutup mode pilih.
+   */
+  const handleApplyTripToSelected = async (selectedBuses: BusData[]): Promise<boolean> => {
+    if (selectedBuses.length === 0 || isSubmittingBulk) return false;
+    if (tabName === "AKUMULASI") {
+      showWarningToast(TEXT_DASHBOARD.BUS_LIST.ACCUMULATION_LOCKED);
+      return false;
+    }
+
+    const eligible = selectedBuses.filter((bus) => !isUnitOffOrToEvdal(bus.keterangan));
+    const skippedCount = selectedBuses.length - eligible.length;
+    if (eligible.length === 0) {
+      showWarningToast(TEXT_DASHBOARD.BUS_LIST.SELECTED_ALL_SKIPPED);
+      return false;
+    }
+
+    const result = await showBulkTripModal({
+      currentPergi: bulkPergi,
+      currentPulang: bulkPulang,
+      headerMap,
+      unitCount: eligible.length,
+      isSelection: true,
+      skippedCount,
+    });
+    if (!result) return false;
+
+    setIsSubmittingBulk(true);
+    try {
+      await persistTripUpdates(
+        eligible.map((bus) => ({
+          rowIndex: bus.rowIndex,
+          updates: { tripPergi: result.tripPergi, tripPulang: result.tripPulang },
+        })),
+      );
+      // ponytail: 1 Ritase = 2 Trip (PP)
+      const ritase = String(
+        (parseIndonesianNumber(result.tripPergi, 0) +
+          parseIndonesianNumber(result.tripPulang, 0)) / 2,
+      );
+      showSuccessToast(
+        TEXT_DASHBOARD.BUS_LIST.SET_TRIP_SELECTED_SUCCESS(
+          result.tripPergi,
+          result.tripPulang,
+          ritase,
+          eligible.length,
+        ) +
+          (skippedCount > 0
+            ? TEXT_DASHBOARD.BUS_LIST.SET_TRIP_SELECTED_SKIPPED(skippedCount)
+            : ""),
+      );
+      return true;
+    } catch (err: any) {
+      showErrorAlert(
+        TEXT_DASHBOARD.BUS_LIST.SET_TRIP_FAILED,
+        err.message || TEXT_DASHBOARD.BUS_LIST.SAVE_ERROR_GENERIC,
+      );
+      return false;
     } finally {
       setIsSubmittingBulk(false);
     }
@@ -249,6 +308,7 @@ export function useBulkOperations({
     emptyKmAwal2Count,
     skippedWithNotesCount,
     handleOpenBulkTripModal,
+    handleApplyTripToSelected,
     handleBulkCopyKmS1,
   };
 }

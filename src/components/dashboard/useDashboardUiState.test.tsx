@@ -87,16 +87,11 @@ describe("useDashboardUiState Hook", () => {
 
     expect(latestHookResult.mainTab).toBe("analytics");
 
-    // Cycle forward: analytics -> units -> plotting -> input -> analytics
+    // Cycle forward: analytics -> units -> input -> analytics
     act(() => {
       latestHookResult.handleSwipeNextTab();
     });
     expect(latestHookResult.mainTab).toBe("units");
-
-    act(() => {
-      latestHookResult.handleSwipeNextTab();
-    });
-    expect(latestHookResult.mainTab).toBe("plotting");
 
     act(() => {
       latestHookResult.handleSwipeNextTab();
@@ -108,16 +103,11 @@ describe("useDashboardUiState Hook", () => {
     });
     expect(latestHookResult.mainTab).toBe("analytics");
 
-    // Cycle backward: analytics -> input -> plotting -> units -> analytics
+    // Cycle backward: analytics -> input -> units -> analytics
     act(() => {
       latestHookResult.handleSwipePrevTab();
     });
     expect(latestHookResult.mainTab).toBe("input");
-
-    act(() => {
-      latestHookResult.handleSwipePrevTab();
-    });
-    expect(latestHookResult.mainTab).toBe("plotting");
 
     act(() => {
       latestHookResult.handleSwipePrevTab();
