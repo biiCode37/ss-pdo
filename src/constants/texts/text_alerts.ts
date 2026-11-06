@@ -99,6 +99,12 @@ export const TEXT_ALERTS = {
     APPLY_BTN: "Terapkan",
     CANCEL_BTN: "Batal",
     REQUIRED: "Harap isi nilai Trip Pergi dan Trip Pulang!",
+    REQUIRED_OR_CLEAR: "Isi Trip Pergi dan Trip Pulang, atau kosongkan keduanya untuk menghapus trip.",
+    CLEAR_HINT: "Kosongkan kedua kolom untuk menghapus trip di SS.",
+    CLEAR_CONFIRM_TITLE: "Kosongkan Trip?",
+    CLEAR_CONFIRM_TEXT: (count: number) =>
+      `Trip pergi & pulang ${count} unit akan dihapus (dikosongkan) dari SS.`,
+    CLEAR_CONFIRM_BTN: "Ya, Kosongkan",
     VALIDATION_POSITIVE: "Nilai trip harus berupa angka positif!",
     VALIDATION_MAX: (max: number) =>
       `Jumlah trip tidak boleh lebih dari ${max}!`,
@@ -231,6 +237,12 @@ export const TEXT_ALERTS = {
       `TOA Shift 2: ${s2} Penumpang (${tot} - ${s1})`,
     LIVE_TOA_S2_INVALID: (tot: number, s1: number) =>
       `⚠️ Total TOA (${tot}) lebih kecil dari Shift 1 (${s1})`,
+    TOA_COMPARE_ARIA: "Pembanding TOA Shift 1 dan Shift 2",
+    LABEL_TOA_S2_AUTO: "TOA Shift 2 (otomatis)",
+    TOA_COMPARE_EMPTY: "-",
+    CROSS_DAY_DIFF_LABEL: (dateLabel: string) => `Selisih dari KM Akhir S2 ${dateLabel}:`,
+    CROSS_DAY_DIFF_VALUE: (diff: string) => `+${diff} KM`,
+    CROSS_DAY_DIFF_REF: (prevKm: string) => `Acuan: ${prevKm}`,
     COPY_KM_AKHIR_S1_BTN: "📋 Salin KM Akhir S1",
     HEADER_MODE_SHIFT1: "Input Shift 1 (Closing Siang)",
     HEADER_MODE_SHIFT2: "Input Shift 2 (Closing Malam)",

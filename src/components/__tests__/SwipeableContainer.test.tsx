@@ -192,3 +192,87 @@ describe('SwipeableContainer', () => {
     expect(onSwipeLeft).not.toHaveBeenCalled();
   });
 });
+
+type Point = { x: number; y: number };
+
+const fireTouch = (el: Element, type: string, point: Point | null) => {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  const touch = point ? [{ clientX: point.x, clientY: point.y }] : [];
+  Object.defineProperty(event, 'touches', { value: type === 'touchend' ? [] : touch });
+  Object.defineProperty(event, 'changedTouches', { value: touch });
+  act(() => {
+    el.dispatchEvent(event);
+  });
+};
+
+/** Simulasi gestur: start → beberapa titik move → end di titik terakhir. */
+const gesture = (el: Element, points: Point[]) => {
+  fireTouch(el, 'touchstart', points[0]);
+  points.slice(1).forEach((p) => fireTouch(el, 'touchmove', p));
+  fireTouch(el, 'touchend', points[points.length - 1]);
+};
+
+describe('SwipeableContainer — swipe pindah tab vs scroll vertikal', () => {
+  let container: HTMLDivElement;
+  let root: Root;
+  const onSwipeLeft = vi.fn();
+  const onSwipeRight = vi.fn();
+
+  const getArea = () => container.querySelector('[data-testid="swipe-area"]') as HTMLElement;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    Object.defineProperty(window, 'scrollY', { value: 0, writable: true, configurable: true });
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
+    act(() => {
+      root.render(
+        <SwipeableContainer onSwipeLeft={onSwipeLeft} onSwipeRight={onSwipeRight}>
+          <div data-testid="swipe-area" style={{ height: 400 }}>konten</div>
+        </SwipeableContainer>,
+      );
+    });
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it('swipe horizontal yang jelas tetap berpindah tab', () => {
+    gesture(getArea(), [{ x: 300, y: 300 }, { x: 280, y: 302 }, { x: 180, y: 310 }]);
+    expect(onSwipeLeft).toHaveBeenCalledTimes(1);
+
+    gesture(getArea(), [{ x: 100, y: 300 }, { x: 120, y: 298 }, { x: 220, y: 295 }]);
+    expect(onSwipeRight).toHaveBeenCalledTimes(1);
+  });
+
+  it('scroll vertikal cepat dengan jempol melengkung ke samping TIDAK berpindah tab', () => {
+    // Awal gerak vertikal (sumbu terkunci 'y'), lalu melengkung jauh ke samping
+    gesture(getArea(), [{ x: 300, y: 500 }, { x: 298, y: 480 }, { x: 200, y: 440 }, { x: 160, y: 430 }]);
+    expect(onSwipeLeft).not.toHaveBeenCalled();
+    expect(onSwipeRight).not.toHaveBeenCalled();
+  });
+
+  it('gestur diagonal (tidak 2x lebih horizontal) TIDAK berpindah tab', () => {
+    gesture(getArea(), [{ x: 300, y: 300 }, { x: 285, y: 291 }, { x: 220, y: 250 }]);
+    expect(onSwipeLeft).not.toHaveBeenCalled();
+  });
+
+  it('tidak berpindah tab jika halaman ikut ter-scroll selama gestur', () => {
+    fireTouch(getArea(), 'touchstart', { x: 300, y: 300 });
+    fireTouch(getArea(), 'touchmove', { x: 280, y: 301 });
+    (window as unknown as { scrollY: number }).scrollY = 240;
+    fireTouch(getArea(), 'touchend', { x: 180, y: 305 });
+    expect(onSwipeLeft).not.toHaveBeenCalled();
+  });
+
+  it('touchcancel membatalkan gestur yang sedang berjalan', () => {
+    fireTouch(getArea(), 'touchstart', { x: 300, y: 300 });
+    fireTouch(getArea(), 'touchmove', { x: 280, y: 301 });
+    fireTouch(getArea(), 'touchcancel', null);
+    fireTouch(getArea(), 'touchend', { x: 180, y: 305 });
+    expect(onSwipeLeft).not.toHaveBeenCalled();
+  });
+});

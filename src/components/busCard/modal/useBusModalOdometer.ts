@@ -59,6 +59,8 @@ export interface UseBusModalOdometerReturn {
   // Realtime Live Calculations
   kmLiveS1: KmDistanceResult;
   kmLiveS2: KmDistanceResult;
+  /** Selisih realtime KM Awal S1 hari ini terhadap KM Akhir S2 hari sebelumnya */
+  kmLiveCrossDay: KmDistanceResult;
   kmDistanceS1: string | null;
   kmDistanceS2: string | null;
 
@@ -333,6 +335,15 @@ export function useBusModalOdometer({
     [kmAwal2, kmAkhir2],
   );
 
+  // Selisih lintas hari: KM Akhir S2 kemarin → KM Awal S1 hari ini (hanya saat KM Awal S1 sudah lengkap)
+  const kmLiveCrossDay = useMemo<KmDistanceResult>(
+    () =>
+      isKmAwal1Valid && previousDayKmAkhir2
+        ? computeRealtimeDistance(previousDayKmAkhir2, kmAwal1)
+        : { diff: null, status: "empty", formattedText: null },
+    [isKmAwal1Valid, previousDayKmAkhir2, kmAwal1],
+  );
+
   // Backward-compatible string distance (e.g. "45.0")
   const kmDistanceS1 = useMemo(() => {
     if (kmLiveS1.diff !== null && kmLiveS1.status !== "negative") {
@@ -442,6 +453,7 @@ export function useBusModalOdometer({
     guideMessage,
     kmLiveS1,
     kmLiveS2,
+    kmLiveCrossDay,
     kmDistanceS1,
     kmDistanceS2,
     handleCopyKmAkhir1ToAwal2,

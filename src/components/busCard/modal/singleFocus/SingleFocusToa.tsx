@@ -2,6 +2,7 @@ import React from "react";
 import { MAX_TOA_VALUE } from "@/utils/modals/busInput/busModalTypes";
 import { TEXT_ALERTS } from "@/constants/texts";
 import type { BusInputFormReturn } from "../useBusInputForm";
+import { ToaShiftComparison } from "../fields/ToaShiftComparison";
 import {
   singleFocusPrimaryInputStyle,
   getSingleFocusChipStyle,
@@ -139,6 +140,9 @@ export const SingleFocusToa: React.FC<SingleFocusToaProps> = ({
             style={singleFocusPrimaryInputStyle}
           />
         </div>
+
+        {/* Pembanding realtime TOA S1 vs TOA S2 (= Total TOA − TOA S1), hanya tampilan */}
+        <ToaShiftComparison toaShift1={toaShift1} live={form.toaLiveS2} />
 
         <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
           <button

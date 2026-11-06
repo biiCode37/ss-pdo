@@ -76,6 +76,7 @@ describe("SingleFocusTrip Component", () => {
     kmDistanceS2: null,
     kmLiveS1: { diff: null, status: "empty", formattedText: null },
     kmLiveS2: { diff: null, status: "empty", formattedText: null },
+    kmLiveCrossDay: { diff: null, status: "empty", formattedText: null },
     toaLiveS2: { s2: null, status: "empty", formattedText: null },
     handleCopyKmAkhir1ToAwal2: vi.fn(),
     bus: {

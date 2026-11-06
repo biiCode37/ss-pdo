@@ -3,6 +3,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { UnitCard } from '../UnitCard';
+import { TEXT_DASHBOARD } from "@/constants/texts";
 import type { UnitSummaryItem } from '@/utils/unitAnalytics';
 
 // @ts-ignore
@@ -56,7 +57,10 @@ describe('UnitCard Component', () => {
 
     expect(container.textContent).toContain('JAK.15-05');
     expect(container.textContent).toContain('2 Shift Lengkap');
-    expect(container.textContent).toContain('4/4');
+    // 4/4 trip = 4 ritase PP (bukan trip mentah berlabel "Rit")
+    expect(container.querySelector('.bus-metric-value')?.textContent).toBe(
+      `4${TEXT_DASHBOARD.UNIT_CARD.RIT_UNIT}`,
+    );
     expect(container.textContent).toContain('150,2');
     expect(container.textContent).toContain('230');
 
@@ -154,8 +158,8 @@ describe('UnitCard Component', () => {
     // Must NOT display "Belum Terisi"
     expect(container.textContent).not.toContain('Belum Terisi');
 
-    // Card should have bus-card-non-sgo class
-    expect(container.querySelector('.bus-card')?.classList.contains('bus-card-non-sgo')).toBe(true);
+    // Kartu memakai kelas warna status keterangan
+    expect(container.querySelector('.bus-card')?.classList.contains('unit-status-off')).toBe(true);
   });
 
   it('renders red [T.O] badge instead of "Belum Terisi" when unit is T.O / TO EVDAL', async () => {
@@ -182,8 +186,8 @@ describe('UnitCard Component', () => {
       // Must NOT display "Belum Terisi"
       expect(container.textContent).not.toContain('Belum Terisi');
 
-      // Card should have bus-card-non-sgo class
-      expect(container.querySelector('.bus-card')?.classList.contains('bus-card-non-sgo')).toBe(true);
+      // Kartu memakai kelas warna status keterangan
+      expect(container.querySelector('.bus-card')?.classList.contains('unit-status-to')).toBe(true);
     }
   });
 
@@ -203,6 +207,26 @@ describe('UnitCard Component', () => {
     expect(container.textContent).toContain('Belum Terisi');
     expect(container.querySelector('.unit-status-badge-off')).toBeNull();
     expect(container.querySelector('.unit-status-badge-to')).toBeNull();
-    expect(container.querySelector('.bus-card')?.classList.contains('bus-card-non-sgo')).toBe(false);
+    expect(container.querySelector('.bus-card')?.className).not.toMatch(/unit-status-/);
+  });
+
+  it('unit berketerangan kendala (BA02) berwarna oranye dan tetap menampilkan badge shift', async () => {
+    const mockItem = createMockUnit({ keterangan: 'BA02 Service Berkala', shiftStatus: 'SHIFT_1_ONLY' });
+    await act(async () => {
+      root.render(<UnitCard item={mockItem} onSelectUnit={() => {}} />);
+    });
+    expect(container.querySelector('.bus-card')?.classList.contains('unit-status-kendala')).toBe(true);
+    expect(container.querySelector('.unit-status-badge-kendala')?.textContent).toBe('KENDALA');
+    expect(container.textContent).toContain(TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY);
+  });
+
+  it('ritase tampil sebagai ritase PP dengan warna netral', async () => {
+    const mockItem = createMockUnit({ tripPergi: '8', tripPulang: '7' });
+    await act(async () => {
+      root.render(<UnitCard item={mockItem} onSelectUnit={() => {}} />);
+    });
+    const value = container.querySelector<HTMLElement>('.bus-metric-value');
+    expect(value?.textContent).toContain('7.5');
+    expect(value?.style.color).toBe('var(--color-text-primary)');
   });
 });

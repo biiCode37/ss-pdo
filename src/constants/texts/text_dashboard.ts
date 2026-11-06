@@ -237,6 +237,7 @@ export const TEXT_DASHBOARD = {
     SET_TRIP_SELECTED_SUCCESS: (p: string, q: string, ritase: string, count: number) =>
       `Trip ${p}/${q} (${ritase} Rit) disimpan ke Spreadsheet untuk ${count} unit terpilih`,
     SET_TRIP_SELECTED_SKIPPED: (count: number) => ` · ${count} unit OFF/TO EVDAL dilewati`,
+    TRIP_CLEARED_SUCCESS: (count: number) => `Trip ${count} unit berhasil dikosongkan di Spreadsheet`,
     COPY_KM_SUCCESS: (count: number, noteSuffix: string) =>
       `KM Akhir S1 berhasil disalin ke KM Awal S2 untuk ${count} unit bus${noteSuffix}!`,
     COPY_KM_FAILED: 'Gagal Menyalin KM Massal',
@@ -270,22 +271,14 @@ export const TEXT_DASHBOARD = {
   BUS_CARD_ACTIONS: {
     UNCONFIRMED_BADGE: '⚠️ Belum Konfirmasi',
     UNIT_STATUS_TOOLTIP: (status: string) => `Status unit: ${status}`,
-    RITASE_DEFICIT_TOOLTIP: (p: string | number, q: string | number, tp: number, tq: number) =>
-      `Kurang Ritase: ${p}/${q} Rit (Target Rute: ${tp}/${tq} Rit). Klik untuk edit Trip.`,
-    FULL_TARGET_TOOLTIP: (p: string | number, q: string | number, tp: number, tq: number) =>
-      `Target Ritase Tercapai Penuh: ${p}/${q} Rit (Target: ${tp}/${tq} Rit). Klik untuk edit Trip.`,
-    RITASE_TARGET_TOOLTIP: (tp: number, tq: number) =>
-      `Target Rute: ${tp}/${tq} Rit. Klik untuk edit Trip.`,
+    UNIT_STATUS_LABEL: {
+      OFF: 'OFF',
+      LIBUR: 'LIBUR',
+      TO: 'T.O',
+      KENDALA: 'KENDALA',
+    },
     DEFAULT_TRIP_TITLE: 'Trip Operasional (Klik untuk edit Trip per unit)',
-    TRIP_BADGE_DEFICIT: (p: string | number, q: string | number) => `⚠️ ${p}/${q} Rit (Kurang)`,
-    TRIP_BADGE_ACHIEVED: (p: string | number, q: string | number) => `${p}/${q} Rit (Tercapai)`,
-    TRIP_BADGE_NORMAL: (p: string | number, q: string | number) => `${p}/${q} Rit`,
-    RITASE_DEFICIT_CARD: (p: string | number, q: string | number, tp: number, tq: number) =>
-      `Kurang Ritase: ${p}/${q} Rit (Target Rute: ${tp}/${tq} Rit)`,
-    RITASE_IMBALANCED_CARD: (p: string | number, q: string | number) =>
-      `Trip Tidak Seimbang: ${p}/${q} Rit`,
-    RITASE_TARGET_CARD: (p: string | number, q: string | number) =>
-      `Target Tercapai: ${p}/${q} Rit`,
+    TRIP_BADGE_NORMAL: (p: string | number, q: string | number) => `${p}/${q}`,
     SAVED_TO_OFFLINE_QUEUE: (unit: string) =>
       `Unit ${unit} disimpan ke antrean offline`,
     SAVE_FAILED: 'Gagal menyimpan data bus ke Google Sheets.',

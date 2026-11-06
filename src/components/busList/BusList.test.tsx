@@ -33,6 +33,7 @@ vi.mock('@/utils/alertUtils', async () => {
     showWarningToast: vi.fn(),
     showSuccessToast: vi.fn(),
     showBulkTripModal: vi.fn(),
+    showConfirmDialog: vi.fn(),
     showBulkCopyKmModal: vi.fn(),
   };
 });
@@ -196,6 +197,125 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     expect(container.textContent).toContain('/1 Unit');
     expect(container.textContent).not.toContain('/4 Unit');
   });
+
+  it('Set Jumlah Trip mengosongkan trip unit LIBUR (diperlakukan seperti OFF)', async () => {
+    const { updateBulkBusData } = await import('@/services/googleSheets');
+    vi.mocked(alertUtils.showBulkTripModal).mockResolvedValue({ tripPergi: '7', tripPulang: '7' });
+    const fleet = [
+      createMockBus({ rowIndex: 6, unit: 'BUS-01' }),
+      createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: 'LIBUR' }),
+    ];
+
+    await act(async () => {
+      root.render(<BusList {...defaultProps} data={fleet} />);
+    });
+    const btn = Array.from(container.querySelectorAll('button')).find((b) =>
+      b.textContent?.includes('Set Jumlah Trip'),
+    );
+    await act(async () => {
+      btn!.click();
+    });
+
+    expect(updateBulkBusData).toHaveBeenCalledWith(
+      'sheet-123',
+      'Tgl 9',
+      [
+        { rowIndex: 6, updates: { tripPergi: '7', tripPulang: '7' } },
+        { rowIndex: 7, updates: { tripPergi: '', tripPulang: '' } },
+      ],
+      defaultProps.headerMap,
+    );
+  });
+
+  it('unit LIBUR tidak dihitung pada target bar progres', async () => {
+    await act(async () => {
+      root.render(
+        <BusList
+          {...defaultProps}
+          data={[
+            createMockBus({ rowIndex: 6, unit: 'BUS-01' }),
+            createMockBus({ rowIndex: 7, unit: 'BUS-02', keterangan: 'Libur' }),
+          ]}
+          isShiftConfirmed={true}
+        />,
+      );
+    });
+    expect(container.textContent).toContain('/1 Unit');
+    expect(container.textContent).not.toContain('/2 Unit');
+  });
+
+  describe('Kosongkan trip lewat modal massal (kedua kolom dikosongkan)', () => {
+    const filledFleet = [
+      createMockBus({ rowIndex: 6, unit: 'BUS-01', tripPergi: '8', tripPulang: '8' }),
+      createMockBus({ rowIndex: 7, unit: 'BUS-02', tripPergi: '8', tripPulang: '7' }),
+    ];
+
+    const openSetTrip = async () => {
+      const btn = Array.from(container.querySelectorAll('button')).find((b) =>
+        b.textContent?.includes('Set Jumlah Trip'),
+      );
+      expect(btn).toBeDefined();
+      await act(async () => {
+        btn!.click();
+      });
+    };
+
+    it('Set Jumlah Trip kosong + konfirmasi: semua sel trip dikirim "" (bukan 0) dalam 1 request', async () => {
+      const { updateBulkBusData } = await import('@/services/googleSheets');
+      vi.mocked(alertUtils.showBulkTripModal).mockResolvedValue({ tripPergi: '', tripPulang: '' });
+      vi.mocked(alertUtils.showConfirmDialog).mockResolvedValue(true);
+      const onUpdateBus = vi.fn();
+
+      await act(async () => {
+        root.render(<BusList {...defaultProps} data={filledFleet} onUpdateBus={onUpdateBus} />);
+      });
+      await openSetTrip();
+
+      expect(alertUtils.showConfirmDialog).toHaveBeenCalledTimes(1);
+      expect(updateBulkBusData).toHaveBeenCalledTimes(1);
+      expect(updateBulkBusData).toHaveBeenCalledWith(
+        'sheet-123',
+        'Tgl 9',
+        [
+          { rowIndex: 6, updates: { tripPergi: '', tripPulang: '' } },
+          { rowIndex: 7, updates: { tripPergi: '', tripPulang: '' } },
+        ],
+        defaultProps.headerMap,
+      );
+      expect(onUpdateBus).toHaveBeenCalledWith(6, { tripPergi: '', tripPulang: '' });
+      expect(alertUtils.showSuccessToast).toHaveBeenCalledWith(
+        'Trip 2 unit berhasil dikosongkan di Spreadsheet',
+      );
+    });
+
+    it('batal di dialog konfirmasi: tidak ada yang dikirim ke Spreadsheet', async () => {
+      const { updateBulkBusData } = await import('@/services/googleSheets');
+      vi.mocked(alertUtils.showBulkTripModal).mockResolvedValue({ tripPergi: '', tripPulang: '' });
+      vi.mocked(alertUtils.showConfirmDialog).mockResolvedValue(false);
+
+      await act(async () => {
+        root.render(<BusList {...defaultProps} data={filledFleet} />);
+      });
+      await openSetTrip();
+
+      expect(alertUtils.showConfirmDialog).toHaveBeenCalledTimes(1);
+      expect(updateBulkBusData).not.toHaveBeenCalled();
+    });
+
+    it('isi trip biasa tidak memunculkan dialog konfirmasi kosongkan', async () => {
+      const { updateBulkBusData } = await import('@/services/googleSheets');
+      vi.mocked(alertUtils.showBulkTripModal).mockResolvedValue({ tripPergi: '7', tripPulang: '7' });
+
+      await act(async () => {
+        root.render(<BusList {...defaultProps} data={filledFleet} />);
+      });
+      await openSetTrip();
+
+      expect(alertUtils.showConfirmDialog).not.toHaveBeenCalled();
+      expect(updateBulkBusData).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('Set Trip Unit Terpilih (mode Pilih)', () => {
     const fleetData = [
       createMockBus({ rowIndex: 6, unit: 'BUS-01' }),
@@ -284,6 +404,30 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
       // Masuk lagi: pilihan lama tidak terbawa
       await clickEl(container.querySelector('[data-testid="btn-toggle-select-mode"]'));
       expect(container.querySelector('[data-testid="select-unit-6"]')?.getAttribute('aria-checked')).toBe('false');
+    });
+
+    it('Set Trip Terpilih kosong + konfirmasi: hanya unit terpilih yang dikosongkan', async () => {
+      const { updateBulkBusData } = await import('@/services/googleSheets');
+      vi.mocked(alertUtils.showBulkTripModal).mockResolvedValue({ tripPergi: '', tripPulang: '' });
+      vi.mocked(alertUtils.showConfirmDialog).mockResolvedValue(true);
+
+      await act(async () => {
+        root.render(<BusList {...defaultProps} data={fleetData} />);
+      });
+
+      await clickEl(container.querySelector('[data-testid="btn-toggle-select-mode"]'));
+      await clickEl(container.querySelector('[data-bus-row="8"]'));
+      await clickEl(document.body.querySelector('[data-testid="btn-apply-selected-trip"]'));
+
+      expect(alertUtils.showConfirmDialog).toHaveBeenCalledTimes(1);
+      expect(updateBulkBusData).toHaveBeenCalledTimes(1);
+      expect(updateBulkBusData).toHaveBeenCalledWith(
+        'sheet-123',
+        'Tgl 9',
+        [{ rowIndex: 8, updates: { tripPergi: '', tripPulang: '' } }],
+        defaultProps.headerMap,
+      );
+      expect(document.body.querySelector('[data-testid="selection-action-bar"]')).toBeNull();
     });
 
     it('mode pilih dikunci di tab AKUMULASI', async () => {

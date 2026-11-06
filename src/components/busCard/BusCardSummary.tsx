@@ -13,7 +13,6 @@ interface BusCardSummaryProps {
   bus: BusData;
   tabName: string;
   activeCategory: string;
-  targetTrip?: { pergi: number; pulang: number } | null;
   activeShiftStatus?: string;
   onOpenTripModal: () => void;
 }
@@ -23,7 +22,6 @@ export function BusCardSummary({
   bus,
   tabName,
   activeCategory,
-  targetTrip,
   activeShiftStatus,
   onOpenTripModal,
 }: BusCardSummaryProps) {
@@ -57,32 +55,14 @@ export function BusCardSummary({
 
   const pergiVal = formData.tripPergi ?? bus.tripPergi;
   const pulangVal = formData.tripPulang ?? bus.tripPulang;
-  const hasPergi = Boolean(pergiVal && String(pergiVal).trim() !== "");
-  const hasPulang = Boolean(pulangVal && String(pulangVal).trim() !== "");
-  const hasTrip = hasPergi || hasPulang;
-  const pergiNum = parseIndonesianNumber(pergiVal, 0);
-  const pulangNum = parseIndonesianNumber(pulangVal, 0);
 
-  const totalTrips = pergiNum + pulangNum;
-  const totalRit = totalTrips / 2;
-  const totalRitDisplay = totalRit % 1 === 0 ? String(totalRit) : String(totalRit);
-
-  const targetP = targetTrip ? targetTrip.pergi : 0;
-  const targetQ = targetTrip ? targetTrip.pulang : 0;
-  const hasTarget = targetP > 0 && targetQ > 0;
-
-  // Evaluasi apakah mencapai target atau berada di bawah target ritase rute
-  const isBelowTarget = hasTarget && hasTrip && (pergiNum < targetP || pulangNum < targetQ);
-  const isTargetAchieved = hasTarget && hasTrip && pergiNum >= targetP && pulangNum >= targetQ;
-  const isImbalanced = hasTrip && (pergiVal !== pulangVal || isBelowTarget);
-
-  const tripStatusTitle = isBelowTarget
-    ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_DEFICIT_TOOLTIP(pergiVal || 0, pulangVal || 0, targetP, targetQ)
-    : isTargetAchieved
-    ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.FULL_TARGET_TOOLTIP(pergiVal || 0, pulangVal || 0, targetP, targetQ)
-    : hasTarget
-    ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_TARGET_TOOLTIP(targetP, targetQ)
-    : TEXT_DASHBOARD.BUS_CARD_ACTIONS.DEFAULT_TRIP_TITLE;
+  const hasTrip =
+    String(pergiVal ?? "").trim() !== "" || String(pulangVal ?? "").trim() !== "";
+  // ponytail: 1 Ritase = 2 Trip (PP)
+  const totalRit =
+    (parseIndonesianNumber(pergiVal, 0) + parseIndonesianNumber(pulangVal, 0)) / 2;
+  const totalRitDisplay = String(totalRit);
+  const tripStatusTitle = TEXT_DASHBOARD.BUS_CARD_ACTIONS.DEFAULT_TRIP_TITLE;
 
   // Mode Spesifik Kolom Aktif (selain ALL)
   if (activeCategory !== "ALL") {
@@ -102,23 +82,9 @@ export function BusCardSummary({
             fontWeight: 700,
             padding: "4px 10px",
             borderRadius: "8px",
-            backgroundColor: isBelowTarget || isImbalanced
-              ? "rgba(245, 158, 11, 0.12)"
-              : isTargetAchieved || (hasTrip && !hasTarget)
-              ? "rgba(16, 185, 129, 0.12)"
-              : "rgba(239, 68, 68, 0.12)",
-            color: isBelowTarget || isImbalanced
-              ? "var(--warning-text, #f59e0b)"
-              : isTargetAchieved || (hasTrip && !hasTarget)
-              ? "#10b981"
-              : "var(--danger-color)",
-            border: `1px solid ${
-              isBelowTarget || isImbalanced
-                ? "rgba(245, 158, 11, 0.3)"
-                : isTargetAchieved || (hasTrip && !hasTarget)
-                ? "rgba(16, 185, 129, 0.25)"
-                : "rgba(239, 68, 68, 0.25)"
-            }`,
+            backgroundColor: hasTrip ? "var(--color-surface-subtle)" : "var(--color-error-bg)",
+            color: hasTrip ? "var(--color-text-primary)" : "var(--color-error-fg)",
+            border: `1px solid ${hasTrip ? "var(--color-border-subtle)" : "var(--color-error-border)"}`,
             display: "flex",
             alignItems: "center",
             gap: "5px",
@@ -127,11 +93,7 @@ export function BusCardSummary({
           <ArrowRightLeft size={12} style={{ flexShrink: 0 }} />
           <span>
             Trip:{" "}
-            {isBelowTarget
-              ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.TRIP_BADGE_DEFICIT(pergiVal || 0, pulangVal || 0)
-              : isTargetAchieved
-              ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.TRIP_BADGE_ACHIEVED(pergiVal || 0, pulangVal || 0)
-              : hasTrip
+            {hasTrip
               ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.TRIP_BADGE_NORMAL(pergiVal || 0, pulangVal || 0)
               : TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}
           </span>
@@ -216,16 +178,11 @@ export function BusCardSummary({
         <span
           className="bus-metric-value"
           style={{
-            color: isBelowTarget || isImbalanced
-              ? "var(--warning-text, #f59e0b)"
-              : isTargetAchieved || (hasTrip && !hasTarget)
-              ? "var(--success-color, #10b981)"
-              : "var(--text-primary)",
+            color: "var(--color-text-primary)",
           }}
         >
           {hasTrip && totalRit > 0 ? (
             <>
-              {isBelowTarget && "⚠️ "}
               {totalRitDisplay}{" "}
               <span className="bus-metric-unit">{TEXT_DASHBOARD.BUS_CARD_ACTIONS.RIT_UNIT}</span>
             </>

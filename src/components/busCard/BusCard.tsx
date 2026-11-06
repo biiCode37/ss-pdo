@@ -1,12 +1,13 @@
 import { memo } from "react";
 import { slugifyUnitId } from "@/utils/analytics";
 import { FormattedNoteText } from "@/components/FormattedNoteText";
-import { hasMeaningfulNote, isUnitOff, isUnitTo } from "@/utils/keteranganUtils";
+import { classifyUnitKeterangan, shouldShowKeteranganStrip } from "@/utils/keteranganUtils";
+import { UnitStatusBadge } from "@/components/ui/UnitStatusBadge";
+import { UNIT_STATUS_CARD_CLASS } from "@/components/ui/unitStatusClass";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import { AlertTriangle, Check, Loader2 } from "lucide-react";
 import type { BusCardProps } from "./types";
 import {
-  getBusCardStyles,
   useBusCardSave,
   useBusCardModal,
   BusCardSummary,
@@ -21,7 +22,6 @@ function BusCardComponent({
   isQueued,
   addToQueue,
   activeCategory,
-  targetTrip,
   onUpdateBus,
   onSaveAndNext,
   isShiftConfirmed,
@@ -43,7 +43,6 @@ function BusCardComponent({
   });
 
   const {
-    isNonSgo,
     activeShiftStatus,
     handleOpenModal,
     isModalOpen,
@@ -61,13 +60,9 @@ function BusCardComponent({
     handleSaveUpdates,
   });
 
-  const { lockedClass, statusClass } = getBusCardStyles({
-    formData,
-    bus,
-    targetTrip,
-    isShiftConfirmed,
-    isNonSgo,
-  });
+  const keteranganHariIni = formData.keterangan ?? bus.keterangan;
+  // Warna kartu = riwayat keterangan SEPANJANG HARI (S1+S2), bukan shift aktif.
+  const unitStatusClass = UNIT_STATUS_CARD_CLASS[classifyUnitKeterangan(keteranganHariIni)];
 
   // Mode pilih: ketukan di mana pun pada kartu hanya memilih/membatalkan pilihan unit.
   const handleCardTap = (tab?: Parameters<typeof handleOpenModal>[0]) => {
@@ -84,7 +79,7 @@ function BusCardComponent({
         id={`bus-card-${slugifyUnitId(bus.unit)}`}
       data-bus-row={bus.rowIndex}
       data-selected={isSelectionMode ? String(isSelected) : undefined}
-      className={`bus-card glass ${statusClass} ${lockedClass}`.trim()}
+      className={`bus-card glass ${unitStatusClass}`.trim()}
       onClick={() => handleCardTap()}
       style={{
         cursor: tabName === "AKUMULASI" ? "default" : "pointer",
@@ -143,28 +138,11 @@ function BusCardComponent({
                 bus={bus}
                 tabName={tabName}
                 activeCategory={activeCategory}
-                targetTrip={targetTrip}
                 activeShiftStatus={activeShiftStatus}
                 onOpenTripModal={() => handleCardTap("trip")}
               />
             )}
-            {isNonSgo && (
-              isUnitOff(activeShiftStatus) ? (
-                <span
-                  className="unit-status-badge unit-status-badge-off"
-                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
-                >
-                  OFF
-                </span>
-              ) : isUnitTo(activeShiftStatus) ? (
-                <span
-                  className="unit-status-badge unit-status-badge-to"
-                  title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(activeShiftStatus)}
-                >
-                  T.O
-                </span>
-              ) : null
-            )}
+            <UnitStatusBadge keterangan={keteranganHariIni} />
             {isLoading && (
               <Loader2
                 size={14}
@@ -181,31 +159,29 @@ function BusCardComponent({
             bus={bus}
             tabName={tabName}
             activeCategory={activeCategory}
-            targetTrip={targetTrip}
             activeShiftStatus={activeShiftStatus}
             onOpenTripModal={() => handleCardTap("trip")}
           />
         )}
 
-      {hasMeaningfulNote(formData.keterangan) && (
+      {shouldShowKeteranganStrip(keteranganHariIni) && (
         <div
           style={{
             padding: "8px 16px 10px 16px",
             borderTop: "1px solid var(--card-border)",
             fontSize: "11.5px",
-            color: "var(--warning-text)",
+            color: "var(--color-text-primary)",
             fontWeight: 600,
             letterSpacing: "0.01em",
             display: "flex",
             gap: "8px",
             alignItems: "flex-start",
-            background: "rgba(245, 158, 11, 0.04)",
           }}
         >
           <AlertTriangle
             size={13}
             style={{
-              color: "var(--orange-color)",
+              color: "var(--color-text-secondary)",
               flexShrink: 0,
               marginTop: "2px",
             }}
@@ -218,7 +194,7 @@ function BusCardComponent({
               textTransform: "uppercase",
             }}
           >
-            <FormattedNoteText text={formData.keterangan} />
+            <FormattedNoteText text={keteranganHariIni} />
           </div>
         </div>
       )}

@@ -99,7 +99,6 @@ describe("UnitDetailModal Component", () => {
         <UnitDetailModal
           unit="TS.01"
           busData={sampleBusData}
-          targetTrip={{ pergi: 2, pulang: 2 }}
           sheetId="sheet-123"
           selectedTab="18"
           onClose={onClose}
@@ -111,7 +110,7 @@ describe("UnitDetailModal Component", () => {
     expect(document.body.textContent).toContain(TEXT_UNIT_DETAIL.STRIP_TOTAL_KM);
     expect(document.body.textContent).toContain(TEXT_UNIT_DETAIL.STRIP_PASSENGERS);
     expect(document.body.textContent).toContain("2/2");
-    expect(document.body.textContent).toContain(TEXT_UNIT_DETAIL.TARGET_ACHIEVED);
+    expect(document.body.textContent).not.toContain('Target Tercapai');
   });
 
   it("renders notes and operational remarks", () => {

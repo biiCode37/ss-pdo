@@ -205,23 +205,19 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     expect(document.body.querySelector('.bus-input-modal-overlay')).not.toBeNull();
   });
 
-  it('does not render blue BA badge in card header when unit has BA note', async () => {
+  it('unit dengan catatan BA tampil sebagai KENDALA (badge oranye + kelas kartu)', async () => {
     await act(async () => {
       root.render(
         <BusCard
           {...defaultProps}
-          bus={{
-            ...defaultProps.bus,
-            keterangan: 'BA.02 Pramudi Meriang',
-          }}
+          bus={{ ...defaultProps.bus, keterangan: 'BA.02 Pramudi Meriang' }}
           isShiftConfirmed={true}
         />
       );
     });
 
-    const headerBadge = container.querySelector('.unit-status-badge');
-    expect(headerBadge).toBeNull();
-    // But FormattedNoteText still renders the note detail
+    expect(container.querySelector('.unit-status-badge-kendala')?.textContent).toBe('KENDALA');
+    expect(container.querySelector('.bus-card')?.classList.contains('unit-status-kendala')).toBe(true);
     expect(container.textContent).toContain('Pramudi Meriang');
   });
 
@@ -285,7 +281,7 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
     // Must NOT have any T.O or OFF badge in header
     expect(container.querySelector('.unit-status-badge-to')).toBeNull();
     expect(container.querySelector('.unit-status-badge-off')).toBeNull();
-    expect(container.querySelector('.unit-status-badge')).toBeNull();
+    expect(container.querySelector('.unit-status-badge-kendala')?.textContent).toBe('KENDALA');
 
     // But bottom note strip correctly shows BA.02 and description
     expect(container.textContent).toContain('BA.02');
@@ -476,6 +472,53 @@ describe('BusCard Component - Non-Blocking Card Editing', () => {
       expect(container.querySelector(`[data-testid="plotting-badge-${defaultProps.bus.unit}"]`)).toBeNull();
       expect(container.querySelector(`[data-testid="plotting-order-${defaultProps.bus.unit}"]`)).toBeNull();
       expect(container.querySelector(`[data-testid="plotting-start-${defaultProps.bus.unit}"]`)).toBeNull();
+    });
+  });
+
+  describe('Warna kartu dari keterangan sepanjang hari (bukan shift aktif)', () => {
+    const renderWith = async (keterangan: string, activeShift: 1 | 2) => {
+      await act(async () => {
+        root.render(
+          <BusCard
+            {...defaultProps}
+            activeCategory="ALL"
+            activeShift={activeShift}
+            bus={{ ...defaultProps.bus, keterangan }}
+            isShiftConfirmed={true}
+          />
+        );
+      });
+      return container.querySelector('.bus-card') as HTMLElement;
+    };
+
+    it('S1: OFF tetap kuning saat shift aktif = 2, dengan badge & strip', async () => {
+      const card = await renderWith('S1: OFF', 2);
+      expect(card.classList.contains('unit-status-off')).toBe(true);
+      expect(container.querySelector('.unit-status-badge-off')?.textContent).toBe('OFF');
+      expect(container.textContent).toContain('S1');
+    });
+
+    it('LIBUR = kuning dengan badge LIBUR', async () => {
+      const card = await renderWith('LIBUR', 1);
+      expect(card.classList.contains('unit-status-off')).toBe(true);
+      expect(container.querySelector('.unit-status-badge-off')?.textContent).toBe('LIBUR');
+    });
+
+    it('S1: NP1 | S2: T.O = merah (prioritas TO)', async () => {
+      const card = await renderWith('S1: NP1 | S2: T.O', 1);
+      expect(card.classList.contains('unit-status-to')).toBe(true);
+      expect(container.querySelector('.unit-status-badge-to')?.textContent).toBe('T.O');
+    });
+
+    it('S1: OFF | S2: BA02 Service = oranye (prioritas KENDALA atas OFF)', async () => {
+      const card = await renderWith('S1: OFF | S2: BA02 Service', 1);
+      expect(card.classList.contains('unit-status-kendala')).toBe(true);
+    });
+
+    it('tanpa keterangan: tidak ada kelas status maupun badge', async () => {
+      const card = await renderWith('', 1);
+      expect(card.className).not.toMatch(/unit-status-/);
+      expect(container.querySelector('.unit-status-badge')).toBeNull();
     });
   });
 });

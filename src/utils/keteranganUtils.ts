@@ -476,8 +476,8 @@ export function isUnitOff(raw?: string | null): boolean {
     return parts.some((part) => isUnitOff(part));
   }
 
-  // 2. Cek keberadaan kata OFF utuh
-  return /\bOFF\b/i.test(trimmed);
+  // 2. Cek keberadaan kata OFF / LIBUR utuh (bukan substring seperti "OFFICER" / "LIBURAN")
+  return /\b(?:OFF|LIBUR)\b/i.test(trimmed);
 }
 
 /**
@@ -532,7 +532,7 @@ export function hasMeaningfulNote(raw?: string | null): boolean {
   const trimmed = raw.trim();
   if (!trimmed) return false;
 
-  const PURE_STATUS_REGEX = /^(?:S[12]:\s*)?(?:OFF|T\.?O(?:\s*EVDAL)?|SO|SGO)$/i;
+  const PURE_STATUS_REGEX = /^(?:S[12]:\s*)?(?:OFF|LIBUR|T\.?O(?:\s*EVDAL)?|SO|SGO)$/i;
 
   if (trimmed.includes('|')) {
     const parts = trimmed.split('|').map((p) => p.trim());
@@ -552,3 +552,44 @@ export function hasMeaningfulNote(raw?: string | null): boolean {
 }
 
 
+
+export type UnitKeteranganStatus = 'NORMAL' | 'OFF_LIBUR' | 'KENDALA' | 'TO';
+
+const UNIT_STATUS_PRIORITY: Record<UnitKeteranganStatus, number> = {
+  NORMAL: 0,
+  OFF_LIBUR: 1,
+  KENDALA: 2,
+  TO: 3,
+};
+
+function classifyKeteranganPart(part: string): UnitKeteranganStatus {
+  const trimmed = part.trim();
+  if (!trimmed || /^(?:S[12]\s*[:.-]\s*)?(?:SO|SGO)$/i.test(trimmed)) return 'NORMAL';
+  if (isUnitTo(trimmed)) return 'TO';
+  if (isUnitOff(trimmed)) return 'OFF_LIBUR';
+  return 'KENDALA';
+}
+
+/**
+ * Status kartu unit dari SELURUH keterangan hari itu (S1 dan S2), bukan shift aktif.
+ * Prioritas lintas shift: TO > KENDALA > OFF_LIBUR > NORMAL.
+ */
+export function classifyUnitKeterangan(raw?: string | null): UnitKeteranganStatus {
+  if (!raw || typeof raw !== 'string' || !raw.trim()) return 'NORMAL';
+  return raw
+    .split('|')
+    .map(classifyKeteranganPart)
+    .reduce<UnitKeteranganStatus>(
+      (worst, s) => (UNIT_STATUS_PRIORITY[s] > UNIT_STATUS_PRIORITY[worst] ? s : worst),
+      'NORMAL',
+    );
+}
+
+/**
+ * Strip keterangan di kartu: tampil bila catatan bermakna ATAU berprefiks shift (S1:/S2:),
+ * agar warna kartu selalu punya penjelasan shift mana yang bermasalah.
+ */
+export function shouldShowKeteranganStrip(raw?: string | null): boolean {
+  if (!raw || typeof raw !== 'string' || !raw.trim()) return false;
+  return hasMeaningfulNote(raw) || /\bS[12]\s*[:.-]/i.test(raw);
+}

@@ -69,6 +69,16 @@
   --color-badge-ba-bg: var(--p-orange-50);
   --color-badge-ba-fg: var(--p-orange-800);
   --color-badge-ba-border: var(--p-orange-200);
+  /* Status kartu unit dari keterangan (refact_209) */
+  --color-unit-off-bg: var(--p-amber-100);
+  --color-unit-off-fg: var(--p-amber-800);
+  --color-unit-off-border: var(--p-amber-800);
+  --color-unit-kendala-bg: var(--p-orange-200);
+  --color-unit-kendala-fg: var(--p-orange-800);
+  --color-unit-kendala-border: var(--p-orange-800);
+  --color-unit-to-bg: var(--p-red-100);
+  --color-unit-to-fg: var(--p-red-800);
+  --color-unit-to-border: var(--p-red-700);
   --color-overlay: var(--p-overlay);
   --color-shadow: var(--p-shadow-light);
 }
@@ -142,6 +152,16 @@
   --color-badge-ba-bg: var(--p-orange-950);
   --color-badge-ba-fg: var(--p-orange-300);
   --color-badge-ba-border: var(--p-orange-800);
+  /* Status kartu unit dari keterangan (refact_209) */
+  --color-unit-off-bg: var(--p-amber-950);
+  --color-unit-off-fg: var(--p-amber-300);
+  --color-unit-off-border: var(--p-amber-300);
+  --color-unit-kendala-bg: var(--p-orange-950);
+  --color-unit-kendala-fg: var(--p-orange-300);
+  --color-unit-kendala-border: var(--p-orange-300);
+  --color-unit-to-bg: var(--p-red-950);
+  --color-unit-to-fg: var(--p-red-300);
+  --color-unit-to-border: var(--p-red-300);
   --color-overlay: var(--p-overlay);
   --color-shadow: var(--p-shadow-dark);
 }

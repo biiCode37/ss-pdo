@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateKmPair, validateKmCrossShift, validateKmCrossDay, detectSmartRollover } from './busModalValidation';
+import { validateKmPair, validateKmCrossShift, validateKmCrossDay, detectSmartRollover, validateToaPair } from './busModalValidation';
 
 describe('busModalValidation - validateKmPair', () => {
   it('bypasses validation if either kmAwal or kmAkhir is empty (morning input)', () => {
@@ -132,5 +132,26 @@ describe('busModalValidation - detectSmartRollover', () => {
   it('returns null when input is too short or empty', () => {
     expect(detectSmartRollover('292', '292990')).toBeNull();
     expect(detectSmartRollover('', '292990')).toBeNull();
+  });
+});
+
+describe('validateToaPair — TOTAL TOA tidak boleh lebih kecil dari TOA Shift 1', () => {
+  it('menolak TOTAL TOA < TOA S1', () => {
+    expect(validateToaPair('120', '100')).not.toBeNull();
+  });
+  it('menolak TOTAL TOA "0" ketika TOA S1 > 0', () => {
+    expect(validateToaPair('50', '0')).not.toBeNull();
+  });
+  it('menerima TOTAL TOA = TOA S1 (TOA S2 = 0) dan TOTAL TOA > TOA S1', () => {
+    expect(validateToaPair('100', '100')).toBeNull();
+    expect(validateToaPair('100', '230')).toBeNull();
+  });
+  it('tidak memblokir saat salah satu belum diisi', () => {
+    expect(validateToaPair('', '100')).toBeNull();
+    expect(validateToaPair('100', '')).toBeNull();
+  });
+  it('membaca format angka Indonesia (1.234)', () => {
+    expect(validateToaPair('1.200', '1.100')).not.toBeNull();
+    expect(validateToaPair('1.100', '1.200')).toBeNull();
   });
 });

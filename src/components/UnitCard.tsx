@@ -2,7 +2,10 @@ import { memo } from "react";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { slugifyUnitId } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
-import { hasMeaningfulNote, isUnitOff, isUnitTo } from "../utils/keteranganUtils";
+import { classifyUnitKeterangan, shouldShowKeteranganStrip } from "../utils/keteranganUtils";
+import { parseIndonesianNumber } from "../utils/numberUtils";
+import { UnitStatusBadge } from "./ui/UnitStatusBadge";
+import { UNIT_STATUS_CARD_CLASS } from "./ui/unitStatusClass";
 import { TEXT_DASHBOARD } from "../constants/texts";
 import {
   Bus,
@@ -16,35 +19,11 @@ import type { UnitSummaryItem, UnitShiftStatus } from "../utils/unitAnalytics";
 
 interface Props {
   item: UnitSummaryItem;
-  targetTrip?: { pergi: number; pulang: number } | null;
   /** Callback stabil berparameter unit — memo(UnitCard) jadi efektif */
   onSelectUnit: (unit: string) => void;
 }
 
-function renderStatusBadge(status: UnitShiftStatus, rawNote?: string) {
-  const note = rawNote || "";
-
-  if (isUnitOff(note)) {
-    return (
-      <span
-        className="unit-status-badge unit-status-badge-off"
-        title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(note)}
-      >
-        OFF
-      </span>
-    );
-  }
-
-  if (isUnitTo(note)) {
-    return (
-      <span
-        className="unit-status-badge unit-status-badge-to"
-        title={TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP(note)}
-      >
-        T.O
-      </span>
-    );
-  }
+function renderStatusBadge(status: UnitShiftStatus) {
   switch (status) {
     case "FULL_COMPLETE":
       return (
@@ -150,9 +129,10 @@ function renderStatusBadge(status: UnitShiftStatus, rawNote?: string) {
   }
 }
 
-function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
+function UnitCardComponent({ item, onSelectUnit }: Props) {
   const noteText = item.keterangan || (item.notes && item.notes[0]) || "";
-  const isNonSgo = isUnitOff(noteText) || isUnitTo(noteText);
+  // Warna kartu = riwayat keterangan sepanjang hari (S1+S2)
+  const unitStatus = classifyUnitKeterangan(noteText);
 
   // BUG-61: Kartu interaktif kini dapat diakses keyboard & screen reader
   const handleClick = () => onSelectUnit(item.unit);
@@ -165,25 +145,9 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
 
   const pergiVal = (item.tripPergi || "").trim();
   const pulangVal = (item.tripPulang || "").trim();
-  const hasTrip = Boolean(pergiVal !== "" || pulangVal !== "");
-  const pergiNum = parseInt(pergiVal || "0", 10);
-  const pulangNum = parseInt(pulangVal || "0", 10);
-
-  const targetP = targetTrip?.pergi ?? 0;
-  const targetQ = targetTrip?.pulang ?? 0;
-  const hasTarget = Boolean(targetTrip && targetP > 0 && targetQ > 0);
-
-  const isTargetAchieved = hasTarget && hasTrip && pergiNum >= targetP && pulangNum >= targetQ;
-  const isBelowTarget = hasTarget && hasTrip && (pergiNum < targetP || pulangNum < targetQ);
-  const isImbalanced = hasTrip && pergiVal !== pulangVal;
-
-  const tripTitle = isBelowTarget
-    ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_DEFICIT_CARD(pergiVal || "0", pulangVal || "0", targetP, targetQ)
-    : isTargetAchieved
-      ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_TARGET_CARD(pergiVal || "0", pulangVal || "0")
-      : isImbalanced
-        ? TEXT_DASHBOARD.BUS_CARD_ACTIONS.RITASE_IMBALANCED_CARD(pergiVal || "0", pulangVal || "0")
-        : undefined;
+  const hasTrip = pergiVal !== "" || pulangVal !== "";
+  // ponytail: 1 Ritase = 2 Trip (PP)
+  const ritase = (parseIndonesianNumber(pergiVal, 0) + parseIndonesianNumber(pulangVal, 0)) / 2;
 
   return (
     <div
@@ -193,7 +157,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
       role="button"
       tabIndex={0}
       aria-label={TEXT_DASHBOARD.UNIT_CARD.ARIA_VIEW_DETAIL(item.unit)}
-      className={`bus-card glass ${isNonSgo ? "bus-card-non-sgo" : ""}`.trim()}
+      className={`bus-card glass ${UNIT_STATUS_CARD_CLASS[unitStatus]}`.trim()}
       style={{
         padding: 0,
         borderRadius: "16px",
@@ -229,34 +193,25 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
           <span className="bus-card-unit">{item.unit}</span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {renderStatusBadge(item.shiftStatus, noteText)}
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <UnitStatusBadge keterangan={noteText} />
+          {(unitStatus === "NORMAL" || unitStatus === "KENDALA") &&
+            renderStatusBadge(item.shiftStatus)}
         </div>
       </div>
 
       {/* Line 2: Modern 3-Column Glanceable Metric Strip */}
       <div className="bus-metric-strip">
         {/* Kolom 1: Ritase */}
-        <div className="bus-metric-col" title={tripTitle}>
+        <div className="bus-metric-col">
           <span className="bus-metric-label">{TEXT_DASHBOARD.UNIT_CARD.LABEL_RITASE}</span>
           <span
             className="bus-metric-value"
-            style={{
-              color: isBelowTarget
-                ? "var(--warning-text, #f59e0b)"
-                : isTargetAchieved
-                ? "#10b981"
-                : isImbalanced
-                ? "#f97316"
-                : hasTrip
-                ? "var(--text-primary)"
-                : "var(--text-secondary)",
-            }}
+            style={{ color: hasTrip ? "var(--color-text-primary)" : "var(--color-text-secondary)" }}
           >
             {hasTrip ? (
               <>
-                {isBelowTarget && "⚠️ "}
-                {pergiVal || "0"}/{pulangVal || "0"}
+                {String(ritase)}
                 <span className="bus-metric-unit">{TEXT_DASHBOARD.UNIT_CARD.RIT_UNIT}</span>
               </>
             ) : (
@@ -297,7 +252,7 @@ function UnitCardComponent({ item, targetTrip, onSelectUnit }: Props) {
       </div>
 
       {/* Line 3: Value Catatan Keterangan (disupresi jika hanya status tetap murni seperti OFF / TO EVDAL) */}
-      {noteText && hasMeaningfulNote(noteText) && (
+      {shouldShowKeteranganStrip(noteText) && (
         <div
           style={{
             padding: "8px 16px 10px 16px",

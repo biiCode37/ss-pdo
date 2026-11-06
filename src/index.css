@@ -403,14 +403,18 @@ select.input-field {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-.bus-card.status-kendala {
-  border-left-color: var(--danger-color, #ef4444) !important;
+/* Status kartu unit dari keterangan sepanjang hari (refact_209) */
+.bus-card.unit-status-off {
+  background: var(--color-unit-off-bg);
+  border-left-color: var(--color-unit-off-border);
 }
-.bus-card.status-warning {
-  border-left-color: var(--warning-color, #f59e0b) !important;
+.bus-card.unit-status-kendala {
+  background: var(--color-unit-kendala-bg);
+  border-left-color: var(--color-unit-kendala-border);
 }
-.bus-card.status-achieved {
-  border-left-color: var(--success-color, #3ECF8E) !important;
+.bus-card.unit-status-to {
+  background: var(--color-unit-to-bg);
+  border-left-color: var(--color-unit-to-border);
 }
 .bus-card-header {
   padding: 16px 20px;
@@ -2293,11 +2297,6 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border-left-color: var(--warning-color, #f59e0b) !important;
 }
 
-.bus-card.bus-card-non-sgo {
-  background: var(--color-status-off-bg);
-  border-color: var(--color-border-subtle);
-}
-
 .unit-status-badge {
   display: inline-flex;
   align-items: center;
@@ -2310,15 +2309,21 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 }
 
 .unit-status-badge-off {
-  background: var(--color-warning-bg);
-  color: var(--color-warning-fg);
-  border: 1px solid var(--color-warning-border);
+  background: var(--color-unit-off-fg);
+  color: var(--color-unit-off-bg);
+  border: 1px solid var(--color-unit-off-border);
 }
 
 .unit-status-badge-to {
-  background: var(--color-error-bg);
-  color: var(--color-error-fg);
-  border: 1px solid var(--color-error-border);
+  background: var(--color-unit-to-fg);
+  color: var(--color-unit-to-bg);
+  border: 1px solid var(--color-unit-to-border);
+}
+
+.unit-status-badge-kendala {
+  background: var(--color-unit-kendala-fg);
+  color: var(--color-unit-kendala-bg);
+  border: 1px solid var(--color-unit-kendala-border);
 }
 
 /* Monitoring Regional & Leaderboard Responsive System */

@@ -11,7 +11,6 @@ import { ModalShell } from "./ui/ModalShell";
 interface Props {
   unit: string;
   busData: BusData[] | null;
-  targetTrip?: { pergi: number; pulang: number } | null;
   sheetId: string;
   selectedTab: string;
   activeMonth?: number;
@@ -30,7 +29,6 @@ interface Props {
 export function UnitDetailModal({
   unit,
   busData,
-  targetTrip,
   sheetId,
   selectedTab,
   activeMonth,
@@ -70,11 +68,6 @@ export function UnitDetailModal({
       }
     };
   }, []);
-
-  const pergiNum = parseInt(metrics.tripPergi || "0", 10);
-  const pulangNum = parseInt(metrics.tripPulang || "0", 10);
-  const hasTargetTrip = Boolean(targetTrip && targetTrip.pergi > 0);
-  const isTargetAchieved = hasTargetTrip && pergiNum >= (targetTrip?.pergi || 0) && pulangNum >= (targetTrip?.pulang || 0);
 
   return (
     <ModalShell
@@ -442,23 +435,6 @@ export function UnitDetailModal({
                 {metrics.tripPergi || "0"}/{metrics.tripPulang || "0"}
               </span>
             </div>
-            {hasTargetTrip && (
-              <span
-                style={{
-                  fontSize: "0.62rem",
-                  fontWeight: 700,
-                  padding: "1px 4px",
-                  borderRadius: "4px",
-                  backgroundColor: isTargetAchieved ? "rgba(16, 185, 129, 0.15)" : "rgba(245, 158, 11, 0.15)",
-                  color: isTargetAchieved ? "#10b981" : "#f59e0b",
-                  border: `1px solid ${isTargetAchieved ? "rgba(16, 185, 129, 0.3)" : "rgba(245, 158, 11, 0.3)"}`,
-                }}
-              >
-                {isTargetAchieved
-                  ? TEXT_UNIT_DETAIL.TARGET_ACHIEVED
-                  : `${pergiNum}/${pulangNum}`}
-              </span>
-            )}
           </div>
 
           {/* Kolom 2: TOTAL KM */}

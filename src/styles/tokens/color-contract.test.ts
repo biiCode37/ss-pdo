@@ -88,6 +88,9 @@ for (const [fg, bg] of [
   ["status-off-fg", "status-off-bg"],
   ["badge-ba-fg", "badge-ba-bg"],
   ["disabled-fg", "disabled-bg"],
+  ["unit-off-fg", "unit-off-bg"],
+  ["unit-kendala-fg", "unit-kendala-bg"],
+  ["unit-to-fg", "unit-to-bg"],
 ]) {
   contracts.push([fg, bg, 4.5]);
 }
@@ -102,6 +105,16 @@ for (const fg of [
 ]) {
   for (const bg of surfaces) {
     contracts.push([fg, bg, 3]);
+  }
+}
+
+// Kontrak Kartu Status Unit: teks kartu di atas latar status (4.5:1) & garis tepi status vs permukaan (3:1)
+for (const status of ["unit-off", "unit-kendala", "unit-to"]) {
+  for (const fg of ["text-primary", "text-secondary"]) {
+    contracts.push([fg, `${status}-bg`, 4.5]);
+  }
+  for (const bg of surfaces) {
+    contracts.push([`${status}-border`, bg, 3]);
   }
 }
 

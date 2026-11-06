@@ -5,6 +5,7 @@ import { parseIndonesianNumber } from "@/utils/numberUtils";
 import type { BusInputFormReturn } from "./useBusInputForm";
 import { AlertTriangle, Copy, ChevronDown, ChevronUp } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
+import { ToaShiftComparison } from "./fields/ToaShiftComparison";
 import { ShiftOptionChip } from "./fields/ShiftOptionChip";
 import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
 import { normalizeKeterangan } from "@/utils/keteranganUtils";
@@ -96,35 +97,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
         />
       </div>
 
-      {/* 2. Live Feedback Box: Kalkulasi TOA S2 */}
-      {toaLiveS2.formattedText && (
-        <div
-          style={{
-            padding: "8px 12px",
-            borderRadius: "10px",
-            background:
-              toaLiveS2.status === "invalid"
-                ? "rgba(239, 68, 68, 0.12)"
-                : "rgba(192, 132, 252, 0.1)",
-            border: `1px solid ${
-              toaLiveS2.status === "invalid"
-                ? "rgba(239, 68, 68, 0.3)"
-                : "rgba(192, 132, 252, 0.25)"
-            }`,
-            fontSize: "0.82rem",
-            fontWeight: 600,
-            color: toaLiveS2.status === "invalid" ? "var(--color-error-fg)" : "var(--color-shift-2-fg)",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-        >
-          {toaLiveS2.status === "invalid" && (
-            <AlertTriangle size={14} style={{ flexShrink: 0 }} />
-          )}
-          <span>{toaLiveS2.formattedText}</span>
-        </div>
-      )}
+      {/* 2. Pembanding realtime TOA S1 vs TOA S2 (= Total TOA − TOA S1), hanya tampilan */}
+      <ToaShiftComparison toaShift1={form.toaShift1} live={toaLiveS2} />
 
       {/* 3. Indikator Odometer S2 & Selisih Jarak Tempuh */}
       <div

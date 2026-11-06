@@ -11,7 +11,6 @@ export const TEXT_UNIT_DETAIL = {
   PASSENGER_UNIT: 'Pnp',
   PASSENGER_TOTAL_UNIT: 'Pnp Total',
   RITASE_UNIT: 'Ritase',
-  TARGET_ACHIEVED: 'Target Tercapai',
   TARGET_DEFICIT: (pergi: number, pulang: number) => `Kurang Ritase (Target: ${pergi}/${pulang})`,
   TOA_LABEL: 'TOA:',
   MANUAL_LABEL: 'Man:',
