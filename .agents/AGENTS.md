@@ -67,18 +67,40 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 - Sajikan ringkasan perubahan dalam format:
   1. Ringkasan Perubahan
   2. Daftar File yang Diubah
-  3. Status Verifikasi & Build (`pnpm run build`)
-  4. Wajib keritis dan jangan selalu setuju terhadap keputusan User, kaji resiko terlebih dahulu dan selalu berikan masukan yang terbaik untuk kelangsungan project ini.
-  5. Jika keputusan/pendapat saya keliru/kurang tepat atau bahkan berdampak buruk kedepannya dalam berbagai aspek, anda wajib keritis dan memberikan masukan alternatif solusi terbaik untuk kelangsungan project ini.
-  6. Selalu perhatikan apa yang boleh dilihat oleh user (tampil pada frontend) dan apa yang tidak boleh (termasuk database), peringatan sistem, dan hal-hal lainnya yang hanya dimengerti oleh developer.
-  7. Selalu sajikan pesan error/kesalahan (frontend) pada sisi user yang mudah untuk user fahami (bahasa non teknis).
+  3. Status Verifikasi & Build (hasil nyata 4 quality gate, lihat bagian 12)
+  4. Apa yang dilewati/belum diverifikasi dan risiko yang perlu diketahui User (1–2 baris)
+- Selalu perhatikan apa yang boleh dilihat oleh user (tampil pada frontend) dan apa yang tidak boleh (termasuk database), peringatan sistem, dan hal-hal lainnya yang hanya dimengerti oleh developer.
+- Selalu sajikan pesan error/kesalahan (frontend) pada sisi user yang mudah untuk user fahami (bahasa non teknis).
+
+### 🧠 6A. Pola Pikir Kritis (Bukan "Yes-Man") — WAJIB
+User secara eksplisit meminta agent yang berani tidak setuju. Menyetujui keputusan/pendapat User yang keliru dianggap kegagalan kerja.
+1. **Uji dulu, baru sepakati.** Sebelum menjalankan aturan/rencana/klaim User, cek terhadap bukti nyata (ukur, uji kecil, baca kode). Contoh: klaim "selalu graphify dulu" diuji dengan membandingkan biaya query graphify (~2.000 token, terpotong, tidak menjawab) vs grep tertarget (~200 token, langsung tepat) sebelum dijadikan aturan.
+2. **Jika keliru/kurang tepat/berdampak buruk, katakan terus terang** — tunjukkan buktinya, jelaskan dampaknya (data, keamanan, kuota, UX, biaya), dan tawarkan alternatif solusi terbaik. Jangan melunakkan menjadi persetujuan.
+3. **Koreksi miskonsepsi dan informasi keliru/hoaks** walau tidak ditanya, termasuk soal tool, library, dan praktik industri. Bedakan tegas antara fakta terverifikasi, asumsi, dan opini.
+4. **Jujur soal ketidakpastian.** Jangan mengarang nama API, flag, versi, atau hasil. Jika belum diverifikasi, sebut "belum diverifikasi"; cek dokumentasi terkini untuk hal yang bergantung versi.
+5. **Saat User meminta pendapat, berikan pendapat dan tunggu keputusan** — jangan langsung mengeksekusi. Saat instruksi ambigu dan salah tafsir berisiko, tanyakan satu pertanyaan yang paling menentukan.
+6. **Laporkan hasil apa adanya:** test gagal disebut gagal beserta output-nya; langkah yang dilewati disebut dilewati. Dilarang mengklaim selesai tanpa bukti.
+7. **Membimbing, bukan menggurui:** jelaskan alasan di balik rekomendasi secara singkat dan mudah dipahami agar User ikut memahami, bukan sekadar menerima.
 
 ---
 
-## ⚡ 7. Penggunaan Skill Wajib (Ponytail & Graphify)
+## ⚡ 7. Golden Rule Efisiensi Token & Anti Over-Engineering (Ponytail & Graphify)
 
-- **Mode Ponytail (Wajib Aktif):** Selalu terapkan prinsip YAGNI (*You Aren't Gonna Need It*) dan *Lazy Senior Dev*. Gunakan solusi native/standard library, buat kode seminimal & seefisien mungkin tanpa over-engineering/abstraksi tak perlu, serta cantumkan komentar `// ponytail: [alasan]` jika ada penyederhanaan teknis.
-- **Graphify (Wajib Aktif):** Selalu manfaatkan Knowledge Graph pada `graphify-out/` untuk kueri arsitektur/navigasi file, dan jalankan `graphify update .` secara otomatis setelah setiap perubahan kode untuk menjaga graf pengetahuan tetap *up-to-date*.
+**Prioritas:** seluruh aturan lain di dokumen ini > bagian 7 > preferensi gaya lain. Efisiensi tidak boleh menurunkan kualitas atau melewati quality gate. Selaras dengan bagian bernama sama di [`AGENTS.md`](../AGENTS.md).
+
+### 7A. Urutan Navigasi Kode (paling murah lebih dulu)
+1. **Lokasi sudah diketahui** (dari konteks sesi atau langkah sebelumnya) ➔ baca bagian yang relevan saja, bukan seluruh file.
+2. **Lokasi atau relasi belum diketahui** (siapa memanggil X, dampak mengubah Y, alur A ➔ B) ➔ graphify CLI: `graphify query "<pertanyaan>"`, `graphify path "<A>" "<B>"`, `graphify explain "<konsep>"`.
+3. **Mencari literal persis** (nama kolom, kunci teks, simbol) ➔ grep tertarget (daftar file/jumlah dulu).
+4. **Baca file utuh / grep luas** ➔ opsi terakhir.
+5. Hasil graphify adalah petunjuk, bukan bukti: wajib dicocokkan ke kode asli sebelum disimpulkan atau diedit. Jalankan `graphify update .` setelah setiap perubahan kode.
+
+### 7B. Mode Ponytail — Anti Over-Engineering (Wajib Aktif, level `full`)
+1. Ambil opsi terkecil yang menyelesaikan tugas secara utuh: (a) apakah perlu ada? (b) sudah ada helper/komponen/pola di codebase? (c) standard library/fitur platform? (d) dependency terpasang? (e) baru tulis kode minimal. Dilarang menambah dependency untuk beberapa baris kode.
+2. Tanpa abstraksi, wrapper, opsi, config, atau kode "untuk nanti" yang tidak diminta. Penghapusan lebih baik daripada penambahan. Pertahankan struktur dan konvensi yang sudah ada.
+3. Malas pada solusi, tidak pada kelengkapan: tuntaskan semua pemanggil, test, dan fixture yang terdampak. Perbaikan bug ➔ cari semua pemanggil, perbaiki akar masalah sekali di kode bersama.
+4. Penyederhanaan/shortcut dengan batasan yang disadari wajib diberi komentar satu baris: `// ponytail: <alasan/batasan>, <kapan perlu ditingkatkan>`.
+5. **Bukan over-engineering (tetap wajib):** kamus teks `src/constants/texts/`, token warna semantik, test call-count/debounce, dokumentasi `refact_N`, 4 quality gate, RLS/`SECURITY DEFINER`, in-flight guard, debounce realtime, validasi di trust boundary, penanganan error pencegah kehilangan data, aksesibilitas.
 
 ---
 
