@@ -36,3 +36,6 @@ supabase/.temp/
 graphify-out/cache/
 graphify-out/2026-*/
 
+
+# Claude Code (preferensi lokal per mesin)
+.claude/settings.local.json
