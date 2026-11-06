@@ -387,6 +387,7 @@ describe("Modal Shift Integration via Reusable Fields", () => {
       isKmAkhir1Locked: false,
       kmDistanceS1: "130",
       kmLiveS1: { diff: 130, status: "normal", formattedText: "" },
+      kmLiveCrossDay: { diff: null, status: "empty", formattedText: null },
       kmAwal2: "12580",
       setKmAwal2: vi.fn(),
       isKmAwal2Valid: true,

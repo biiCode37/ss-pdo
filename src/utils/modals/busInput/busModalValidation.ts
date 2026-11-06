@@ -222,7 +222,8 @@ export function validateToaPair(
   const numTotToa = parseIndonesianNumber(totalToaRaw, NaN);
   if (isNaN(numToaS1) || isNaN(numTotToa)) return null;
 
-  if (numTotToa > 0 && numTotToa < numToaS1) {
+  // TOTAL TOA (kumulatif harian) tidak mungkin lebih kecil dari TOA Shift 1, termasuk "0" bila S1 > 0
+  if (numTotToa < numToaS1) {
     return TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TOA_LESS_THAN_S1(totalToaRaw, toaShift1Raw);
   }
 

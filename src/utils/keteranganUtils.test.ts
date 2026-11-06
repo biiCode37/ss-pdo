@@ -14,6 +14,8 @@ import {
   isUnitOff,
   isUnitTo,
   isUnitOffOrToEvdal,
+  classifyUnitKeterangan,
+  shouldShowKeteranganStrip,
 } from './keteranganUtils';
 
 describe('keteranganUtils - normalizeKeterangan', () => {
@@ -664,5 +666,73 @@ describe('keteranganUtils - multi-shift combine and split', () => {
         })
       ).toBe('');
     });
+  });
+});
+
+describe('isUnitOff — LIBUR', () => {
+  it('mengenali LIBUR sebagai kata utuh', () => {
+    expect(isUnitOff('LIBUR')).toBe(true);
+    expect(isUnitOff('Libur')).toBe(true);
+    expect(isUnitOff('S1: LIBUR')).toBe(true);
+    expect(isUnitOff('S1: NP1 | S2: LIBUR')).toBe(true);
+  });
+  it('tidak mengenali LIBURAN', () => {
+    expect(isUnitOff('LIBURAN KELUARGA')).toBe(false);
+  });
+});
+
+describe('hasMeaningfulNote — LIBUR murni', () => {
+  it('LIBUR murni tidak dianggap catatan bermakna (sudah diwakili badge)', () => {
+    expect(hasMeaningfulNote('LIBUR')).toBe(false);
+    expect(hasMeaningfulNote('Libur')).toBe(false);
+  });
+});
+
+describe('classifyUnitKeterangan', () => {
+  it('kosong / SGO / SO = NORMAL', () => {
+    expect(classifyUnitKeterangan('')).toBe('NORMAL');
+    expect(classifyUnitKeterangan(undefined)).toBe('NORMAL');
+    expect(classifyUnitKeterangan('SGO')).toBe('NORMAL');
+    expect(classifyUnitKeterangan('SO')).toBe('NORMAL');
+  });
+  it('OFF / LIBUR = OFF_LIBUR', () => {
+    expect(classifyUnitKeterangan('OFF')).toBe('OFF_LIBUR');
+    expect(classifyUnitKeterangan('LIBUR')).toBe('OFF_LIBUR');
+    expect(classifyUnitKeterangan('S1: OFF')).toBe('OFF_LIBUR');
+  });
+  it('variasi T.O = TO', () => {
+    for (const k of ['TO', 'T.O', 'TO EVDAL', 'T.O EVDAL', 'S2: T.O', 'BA.02 - TO']) {
+      expect(classifyUnitKeterangan(k)).toBe('TO');
+    }
+  });
+  it('keterangan lain = KENDALA', () => {
+    for (const k of ['BA02 Lampu indikator', 'NP1 / Renop', 'SERVICE BERKALA', 'S1: PERBAIKAN RADIATOR', 'SAKIT']) {
+      expect(classifyUnitKeterangan(k)).toBe('KENDALA');
+    }
+  });
+  it('prioritas lintas shift: TO > KENDALA > OFF_LIBUR', () => {
+    expect(classifyUnitKeterangan('S1: OFF | S2: BA02 Service')).toBe('KENDALA');
+    expect(classifyUnitKeterangan('S1: NP1 | S2: T.O')).toBe('TO');
+    expect(classifyUnitKeterangan('S1: OFF | S2: TO EVDAL')).toBe('TO');
+    expect(classifyUnitKeterangan('S1: LIBUR | S2: OFF')).toBe('OFF_LIBUR');
+  });
+  it('tidak bergantung shift: keterangan hanya di S1 tetap terklasifikasi', () => {
+    expect(classifyUnitKeterangan('S1: BA02 SAKIT')).toBe('KENDALA');
+  });
+});
+
+describe('shouldShowKeteranganStrip', () => {
+  it('status murni tanpa prefiks shift disembunyikan', () => {
+    expect(shouldShowKeteranganStrip('OFF')).toBe(false);
+    expect(shouldShowKeteranganStrip('T.O EVDAL')).toBe(false);
+    expect(shouldShowKeteranganStrip('LIBUR')).toBe(false);
+    expect(shouldShowKeteranganStrip('')).toBe(false);
+  });
+  it('status berprefiks shift ditampilkan agar jelas shift mana', () => {
+    expect(shouldShowKeteranganStrip('S1: OFF')).toBe(true);
+    expect(shouldShowKeteranganStrip('S2: T.O')).toBe(true);
+  });
+  it('catatan bermakna ditampilkan', () => {
+    expect(shouldShowKeteranganStrip('BA02 Lampu indikator')).toBe(true);
   });
 });

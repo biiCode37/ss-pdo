@@ -111,6 +111,31 @@ describe("useBusModalOdometer - Dedicated Sub-hook Characterization & Regression
     expect(latestOdometer?.kmAwal1).toBe("300100");
   });
 
+  it("kmLiveCrossDay: selisih realtime KM Awal S1 vs KM Akhir S2 kemarin, hanya saat KM Awal S1 lengkap", () => {
+    renderOdometer({ previousDayKmAkhir2: "300050" });
+    // Masih draft prefill 3 digit → belum dihitung
+    expect(latestOdometer?.kmLiveCrossDay.status).toBe("empty");
+
+    act(() => {
+      latestOdometer?.setKmAwal1("300062");
+    });
+    expect(latestOdometer?.kmLiveCrossDay.status).toBe("normal");
+    expect(latestOdometer?.kmLiveCrossDay.diff).toBe(12);
+
+    act(() => {
+      latestOdometer?.setKmAwal1("300010");
+    });
+    expect(latestOdometer?.kmLiveCrossDay.status).toBe("negative");
+  });
+
+  it("kmLiveCrossDay kosong bila tidak ada KM Akhir S2 kemarin", () => {
+    renderOdometer({ previousDayKmAkhir2: undefined });
+    act(() => {
+      latestOdometer?.setKmAwal1("300062");
+    });
+    expect(latestOdometer?.kmLiveCrossDay.status).toBe("empty");
+  });
+
   it("4. Backspace/koreksi KM Awal S1: me-lock dan me-reset KM Akhir S1 tanpa loop atau prefill berulang", () => {
     renderOdometer();
     // Awal: prefill 3 digit "300"

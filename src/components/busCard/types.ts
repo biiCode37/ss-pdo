@@ -8,7 +8,6 @@ export interface BusCardProps {
   isQueued: boolean;
   addToQueue: (item: any) => void;
   activeCategory: string;
-  targetTrip?: { pergi: number; pulang: number } | null;
   onUpdateBus?: (updates: Partial<BusData>) => void;
   onSaveAndNext?: (savedBus: BusData) => void;
   isShiftConfirmed?: boolean;

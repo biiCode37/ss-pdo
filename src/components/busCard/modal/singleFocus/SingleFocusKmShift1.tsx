@@ -12,6 +12,7 @@ import {
   singleFocusDistanceBadgeStyle,
 } from "./singleFocusStyles";
 import { SingleFocusKmRolloverBanner } from "./SingleFocusKmRolloverBanner";
+import { CrossDayKmIndicator } from "../fields/CrossDayKmIndicator";
 
 export interface SingleFocusKmShift1Props {
   form: BusInputFormReturn;
@@ -103,6 +104,14 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
             placeholder={TEXT_ALERTS.BUS_INPUT_MODAL.META_PLACEHOLDERS.KM_AWAL_1}
             style={singleFocusPrimaryInputStyle}
           />
+
+          <div style={{ marginTop: "8px" }}>
+            <CrossDayKmIndicator
+              live={form.kmLiveCrossDay}
+              previousDayKmAkhir2={form.previousDayKmAkhir2}
+              dateLabel={previousDateLabel}
+            />
+          </div>
 
           {form.smartRolloverSuggestion && (
             <SingleFocusKmRolloverBanner

@@ -74,6 +74,9 @@ export async function showBulkTripModal(
           />
         </div>
       </div>
+      <div style="font-size: 11.5px; color: var(--color-text-secondary); line-height: 1.4;">
+        ${TEXT_ALERTS.BULK_TRIP.CLEAR_HINT}
+      </div>
     </div>
   `;
 
@@ -131,8 +134,16 @@ export async function showBulkTripModal(
       const pVal = pElem ? pElem.value : "";
       const qVal = qElem ? qElem.value : "";
 
-      if (pVal.trim() === "" || qVal.trim() === "") {
-        pdoSwal.showValidationMessage(TEXT_ALERTS.BULK_TRIP.REQUIRED);
+      const pEmpty = pVal.trim() === "";
+      const qEmpty = qVal.trim() === "";
+
+      // Keduanya kosong = hapus trip di SS (sel dikosongkan, bukan diisi 0)
+      if (pEmpty && qEmpty) {
+        return { tripPergi: "", tripPulang: "" };
+      }
+
+      if (pEmpty || qEmpty) {
+        pdoSwal.showValidationMessage(TEXT_ALERTS.BULK_TRIP.REQUIRED_OR_CLEAR);
         return false;
       }
 

@@ -14,6 +14,35 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
     const trimmed = itemText.trim();
     if (!trimmed) return null;
 
+    // 0. Prefiks shift (S1:/S2:) dipertahankan agar jelas shift mana yang berketerangan
+    const shiftMatch = trimmed.match(/^(S[12])\s*[:.-]\s*(.+)$/i);
+    if (shiftMatch) {
+      return (
+        <div
+          key={key}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            flexWrap: "wrap",
+            lineHeight: 1.4,
+          }}
+        >
+          <span
+            className="note-shift-prefix"
+            style={{
+              fontSize: "11px",
+              fontWeight: 800,
+              color: "var(--color-text-secondary)",
+            }}
+          >
+            {shiftMatch[1].toUpperCase()}
+          </span>
+          {renderItem(shiftMatch[2])}
+        </div>
+      );
+    }
+
     const parsed = parseKeterangan(trimmed);
 
     // 1. BA.01 - BA.04 Prefix Detection - Clean Professional Badge

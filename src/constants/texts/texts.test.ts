@@ -67,6 +67,12 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.BUS_LIST.CATEGORIES.MANUAL_S2).toBe('Manual S2');
     expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNCONFIRMED_BADGE).toBe('⚠️ Belum Konfirmasi');
     expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_TOOLTIP('OFF')).toBe('Status unit: OFF');
+    expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.UNIT_STATUS_LABEL).toEqual({
+      OFF: 'OFF',
+      LIBUR: 'LIBUR',
+      TO: 'T.O',
+      KENDALA: 'KENDALA',
+    });
   });
 
   it('exports TEXT_DASHBOARD.ROUTE_SELECTOR.BULK_ADD with full dictionary entries', () => {
@@ -340,7 +346,6 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_UNIT_DETAIL.TITLE).toBe('Ringkasan Rekapitulasi Armada');
     expect(TEXT_UNIT_DETAIL.SHIFT_1_TITLE).toBe('Shift 1');
     expect(TEXT_UNIT_DETAIL.TOTAL_TITLE).toBe('Akumulasi Total');
-    expect(TEXT_UNIT_DETAIL.TARGET_ACHIEVED).toBe('Target Tercapai');
     expect(TEXT_UNIT_DETAIL.NOTES_SECTION_TITLE).toBe('Catatan & Keterangan Operasional');
   });
 
@@ -382,6 +387,12 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_EXTREME(500, 400)).toContain('sangat besar');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LIVE_TOA_S2_RESULT(250, 150, 100)).toContain('100 Penumpang');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.LIVE_TOA_S2_INVALID(120, 150)).toContain('lebih kecil dari Shift 1');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOA_S2_AUTO).toBe('TOA Shift 2 (otomatis)');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.TOA_COMPARE_ARIA).toBe('Pembanding TOA Shift 1 dan Shift 2');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.TOA_COMPARE_EMPTY).toBe('-');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CROSS_DAY_DIFF_LABEL('Kemarin')).toBe('Selisih dari KM Akhir S2 Kemarin:');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CROSS_DAY_DIFF_VALUE('8.0')).toBe('+8.0 KM');
+    expect(TEXT_ALERTS.BUS_INPUT_MODAL.CROSS_DAY_DIFF_REF('316812')).toBe('Acuan: 316812');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_AKHIR_S1_BTN).toBe('📋 Salin KM Akhir S1');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT1).toBe('Input Shift 1 (Closing Siang)');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.HEADER_MODE_SHIFT2).toBe('Input Shift 2 (Closing Malam)');
@@ -404,6 +415,13 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BULK_TRIP.DESCRIPTION(15)).toContain('15 unit bus');
     expect(TEXT_ALERTS.BULK_TRIP.REQUIRED).toBe('Harap isi nilai Trip Pergi dan Trip Pulang!');
     expect(TEXT_ALERTS.BULK_TRIP.TITLE_SELECTED).toBe('Set Trip Unit Terpilih');
+    expect(TEXT_ALERTS.BULK_TRIP.REQUIRED_OR_CLEAR).toContain('kosongkan keduanya');
+    expect(TEXT_ALERTS.BULK_TRIP.CLEAR_HINT).toBe('Kosongkan kedua kolom untuk menghapus trip di SS.');
+    expect(TEXT_ALERTS.BULK_TRIP.CLEAR_CONFIRM_TITLE).toBe('Kosongkan Trip?');
+    expect(TEXT_ALERTS.BULK_TRIP.CLEAR_CONFIRM_TEXT(5)).toContain('5 unit');
+    expect(TEXT_ALERTS.BULK_TRIP.CLEAR_CONFIRM_BTN).toBe('Ya, Kosongkan');
+    expect(TEXT_DASHBOARD.BUS_LIST.TRIP_CLEARED_SUCCESS(3)).toBe('Trip 3 unit berhasil dikosongkan di Spreadsheet');
+    expect(TEXT_DASHBOARD.BUS_CARD_ACTIONS.TRIP_BADGE_NORMAL(8, 7)).toBe('8/7');
     expect(TEXT_ALERTS.BULK_TRIP.DESCRIPTION_SELECTED(3)).toContain('3 unit terpilih');
     expect(TEXT_ALERTS.BULK_TRIP.SKIPPED_NOTE(2)).toContain('2 unit berstatus OFF/TO EVDAL dilewati');
     expect(TEXT_DASHBOARD.BUS_LIST.SELECT_MODE_BTN).toBe('Pilih');

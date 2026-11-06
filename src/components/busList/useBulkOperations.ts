@@ -10,8 +10,9 @@ import {
   showWarningToast,
   showBulkTripModal,
   showBulkCopyKmModal,
+  showConfirmDialog,
 } from "@/utils/alertUtils";
-import { TEXT_DASHBOARD } from "@/constants/texts";
+import { TEXT_ALERTS, TEXT_DASHBOARD } from "@/constants/texts";
 import type { SyncItem } from "@/hooks/useOfflineSync";
 
 interface UseBulkOperationsProps {
@@ -95,6 +96,18 @@ export function useBulkOperations({
     updatesList.forEach(({ rowIndex, updates }) => onUpdateBus?.(rowIndex, updates));
   };
 
+  // Kedua kolom dikosongkan di modal = hapus trip di SS (sel kosong, bukan 0)
+  const isClearResult = (r: { tripPergi: string; tripPulang: string }) =>
+    r.tripPergi === "" && r.tripPulang === "";
+
+  const confirmClearTrips = (count: number) =>
+    showConfirmDialog({
+      title: TEXT_ALERTS.BULK_TRIP.CLEAR_CONFIRM_TITLE,
+      text: TEXT_ALERTS.BULK_TRIP.CLEAR_CONFIRM_TEXT(count),
+      confirmButtonText: TEXT_ALERTS.BULK_TRIP.CLEAR_CONFIRM_BTN,
+      isDanger: true,
+    });
+
   const handleOpenBulkTripModal = async () => {
     if (!data || data.length === 0) return;
     if (tabName === "AKUMULASI") {
@@ -112,8 +125,13 @@ export function useBulkOperations({
 
     if (!result) return;
 
-    setBulkPergi(result.tripPergi);
-    setBulkPulang(result.tripPulang);
+    const isClear = isClearResult(result);
+    if (isClear && !(await confirmClearTrips(data.length))) return;
+
+    if (!isClear) {
+      setBulkPergi(result.tripPergi);
+      setBulkPulang(result.tripPulang);
+    }
 
     setIsSubmittingBulk(true);
     const updatesList = data.map((bus) => {
@@ -129,6 +147,13 @@ export function useBulkOperations({
 
     try {
       await persistTripUpdates(updatesList);
+      if (isClear) {
+        // Setelah data ikut kosong, target rute dihitung ulang dari data (tidak tertinggal angka lama)
+        setBulkPergi("");
+        setBulkPulang("");
+        showSuccessToast(TEXT_DASHBOARD.BUS_LIST.TRIP_CLEARED_SUCCESS(data.length));
+        return;
+      }
       showSuccessToast(
         TEXT_DASHBOARD.BUS_LIST.SET_TRIP_SUCCESS(
           result.tripPergi,
@@ -175,6 +200,9 @@ export function useBulkOperations({
     });
     if (!result) return false;
 
+    const isClear = isClearResult(result);
+    if (isClear && !(await confirmClearTrips(eligible.length))) return false;
+
     setIsSubmittingBulk(true);
     try {
       await persistTripUpdates(
@@ -183,6 +211,15 @@ export function useBulkOperations({
           updates: { tripPergi: result.tripPergi, tripPulang: result.tripPulang },
         })),
       );
+      if (isClear) {
+        showSuccessToast(
+          TEXT_DASHBOARD.BUS_LIST.TRIP_CLEARED_SUCCESS(eligible.length) +
+            (skippedCount > 0
+              ? TEXT_DASHBOARD.BUS_LIST.SET_TRIP_SELECTED_SKIPPED(skippedCount)
+              : ""),
+        );
+        return true;
+      }
       // ponytail: 1 Ritase = 2 Trip (PP)
       const ritase = String(
         (parseIndonesianNumber(result.tripPergi, 0) +
@@ -303,7 +340,6 @@ export function useBulkOperations({
     bulkPergi,
     bulkPulang,
     isSubmittingBulk,
-    targetTrip,
     availableKmS1Buses,
     emptyKmAwal2Count,
     skippedWithNotesCount,

@@ -66,7 +66,6 @@ function BusListComponent({
     bulkPergi,
     bulkPulang,
     isSubmittingBulk,
-    targetTrip,
     availableKmS1Buses,
     skippedWithNotesCount,
     handleOpenBulkTripModal,
@@ -288,7 +287,6 @@ function BusListComponent({
                   )}
                   addToQueue={addToQueue}
                   activeCategory={activeCategory}
-                  targetTrip={targetTrip}
                   onUpdateBus={
                     onUpdateBus
                       ? (updates) => onUpdateBus(bus.rowIndex, updates)

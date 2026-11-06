@@ -5,6 +5,7 @@ import { validateKmCrossDay } from "@/utils/modals/busInput/busModalValidation";
 import type { BusInputFormReturn } from "./useBusInputForm";
 import { AlertTriangle, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { BusFormField } from "./fields/BusFormField";
+import { CrossDayKmIndicator } from "./fields/CrossDayKmIndicator";
 import { ShiftOptionChip } from "./fields/ShiftOptionChip";
 import { KeteranganPresetBar } from "./notes/KeteranganPresetBar";
 import { normalizeKeterangan } from "@/utils/keteranganUtils";
@@ -182,6 +183,13 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             <span>{showKmAwalEdit ? TEXT_COMMON.BUTTONS.CLOSE : TEXT_COMMON.BUTTONS.EDIT}</span>
           </button>
         </div>
+
+        {/* Selisih realtime KM Awal S1 vs KM Akhir S2 hari sebelumnya */}
+        <CrossDayKmIndicator
+          live={form.kmLiveCrossDay}
+          previousDayKmAkhir2={form.previousDayKmAkhir2}
+          dateLabel={previousDateLabel}
+        />
 
         {/* Baris 2: Badge Jarak Tempuh yang Proporsional (Anti-Tabrakan) */}
         {kmDistanceS1 !== null && (
