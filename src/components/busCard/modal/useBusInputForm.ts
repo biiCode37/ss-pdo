@@ -202,11 +202,11 @@ export function useBusInputForm({
     : "NONE";
 
   const handleActivateInput = useCallback(
-    (targetRitase: number) => {
-      if (targetRitase > 0) {
+    (nextTripPergi: string, nextTripPulang: string) => {
+      if ((Number(nextTripPergi) || 0) + (Number(nextTripPulang) || 0) > 0) {
         setIsInputUnlocked(true);
-        setTripPergi(String(targetRitase));
-        setTripPulang(String(targetRitase));
+        setTripPergi(nextTripPergi);
+        setTripPulang(nextTripPulang);
         if (shouldClearKeteranganOnActivation(keterangan)) {
           setKeterangan("");
           setKeteranganS1("");
@@ -555,6 +555,7 @@ export function useBusInputForm({
       showKeterangan,
       bus,
       previousDayKmAkhir2,
+      includeTrip: isInputUnlocked,
     });
 
     onSave(updates);
@@ -667,7 +668,7 @@ export type BusInputFormReturn = Omit<
 > & {
   isLocked?: boolean;
   nonOpBannerType?: NonOperationalBannerType;
-  handleActivateInput?: (targetRitase: number) => void;
+  handleActivateInput?: (tripPergi: string, tripPulang: string) => void;
   isInputUnlocked?: boolean;
   setIsInputUnlocked?: React.Dispatch<React.SetStateAction<boolean>>;
 };

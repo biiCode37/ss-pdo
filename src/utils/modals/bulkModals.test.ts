@@ -6,6 +6,7 @@ import {
   showFormatSheetConfirm,
 } from "./bulkModals";
 import { pdoSwal } from "@/utils/swalBase";
+import { TEXT_ALERTS } from "@/constants/texts";
 
 vi.mock("@/utils/swalBase", () => ({
   pdoSwal: {
@@ -50,6 +51,44 @@ describe("bulkModals Module", () => {
       });
 
       expect(result).toBeNull();
+    });
+
+    describe("mode aktivasi (Aktifkan Input 1 unit)", () => {
+      const runPreConfirm = async (pergi: string, pulang: string) => {
+        vi.mocked(pdoSwal.fire).mockResolvedValue({ isConfirmed: false } as any);
+        await showBulkTripModal({ unitCount: 1, isActivation: true });
+        const opts = vi.mocked(pdoSwal.fire).mock.calls[0][0] as any;
+        document.body.innerHTML = opts.html;
+        (document.getElementById("swal-bulk-tripPergi") as HTMLInputElement).value = pergi;
+        (document.getElementById("swal-bulk-tripPulang") as HTMLInputElement).value = pulang;
+        const out = opts.preConfirm();
+        document.body.innerHTML = "";
+        return { opts, out };
+      };
+
+      it("judul & deskripsi aktivasi, tanpa petunjuk kosongkan trip", async () => {
+        const { opts } = await runPreConfirm("4", "3");
+        expect(opts.title).toBe(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE);
+        expect(opts.html).toContain("Trip Pergi");
+        expect(opts.html).not.toContain(TEXT_ALERTS.BULK_TRIP.CLEAR_HINT);
+      });
+
+      it("trip pergi & pulang valid dikembalikan apa adanya", async () => {
+        const { out } = await runPreConfirm("4", "3");
+        expect(out).toEqual({ tripPergi: "4", tripPulang: "3" });
+      });
+
+      it.each([
+        ["", ""],
+        ["4", ""],
+        ["0", "0"],
+      ])("menolak pergi=%j pulang=%j (unit tidak bisa aktif tanpa trip)", async (p, q) => {
+        const { out } = await runPreConfirm(p, q);
+        expect(out).toBe(false);
+        expect(pdoSwal.showValidationMessage).toHaveBeenCalledWith(
+          TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_INVALID_RITASE,
+        );
+      });
     });
   });
 

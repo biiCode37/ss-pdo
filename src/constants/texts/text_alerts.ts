@@ -285,11 +285,11 @@ export const TEXT_ALERTS = {
     BTN_ACTIVATE_INPUT: "🔓 Aktifkan Input",
     ACTIVATE_INPUT_PROMPT_TITLE: "Aktifkan Input Unit",
     ACTIVATE_INPUT_PROMPT_LABEL:
-      "Masukkan target ritase unit untuk membuka kunci input:",
+      "Isi jumlah Trip Pergi dan Trip Pulang (1 ritase = 2 trip) untuk membuka kunci input:",
     ACTIVATE_INPUT_SUCCESS:
       "Unit berhasil diaktifkan. Kolom input angka telah terbuka.",
     ACTIVATE_INPUT_INVALID_RITASE:
-      "Nilai ritase harus lebih besar dari 0 untuk mengaktifkan unit.",
+      "Isi Trip Pergi dan Trip Pulang; total trip harus lebih dari 0 untuk mengaktifkan unit.",
     REF_KM_AWAL: (km: string | number) => `Acuan KM Awal: ${km}`,
     REF_KM_AWAL_DYNAMIC: (km: string | number, dateLabel: string) =>
       `Acuan KM (${dateLabel}): ${km}`,

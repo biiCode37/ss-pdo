@@ -32,6 +32,8 @@ export interface BuildBusInputPayloadParams {
   showKeterangan: boolean;
   bus: BusData;
   previousDayKmAkhir2?: string;
+  /** Unit diaktifkan lewat "Aktifkan Input": trip hasil aktivasi wajib ikut tersimpan di mode fokus mana pun. */
+  includeTrip?: boolean;
 }
 
 /**
@@ -144,6 +146,11 @@ export function buildBusInputPayload(params: BuildBusInputPayloadParams): Partia
     // Jika chip keterangan dibuka pada mode single focus, sertakan keterangan
     if (showKeterangan) {
       updates.keterangan = resolvedKeterangan;
+    }
+
+    if (params.includeTrip) {
+      updates.tripPergi = tripPergi.trim();
+      updates.tripPulang = tripPulang.trim();
     }
   } else {
     // Mode All (Semua Kolom): kirim seluruh kolom yang berhak diisi

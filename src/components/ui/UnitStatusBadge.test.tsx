@@ -4,6 +4,10 @@ import { createRoot, type Root } from 'react-dom/client';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { UnitStatusBadge } from './UnitStatusBadge';
 import { UNIT_STATUS_CARD_CLASS } from './unitStatusClass';
+import { readFileSync } from 'node:fs';
+import { resolve as pathResolve } from 'node:path';
+
+const indexCss = readFileSync(pathResolve(__dirname, '../../index.css'), 'utf8');
 
 // @ts-ignore
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
@@ -54,5 +58,13 @@ describe('UnitStatusBadge', () => {
       KENDALA: 'unit-status-kendala',
       TO: 'unit-status-to',
     });
+  });
+  it('refact_212: kartu berstatus hanya mewarnai garis tepi kiri & kanan, latar tetap netral', () => {
+    for (const cls of ['unit-status-off', 'unit-status-kendala', 'unit-status-to']) {
+      const rule = indexCss.match(new RegExp(`\\.bus-card\\.${cls}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+      expect(rule, cls).toMatch(/border-left-color:/);
+      expect(rule, cls).toMatch(/border-right-color:/);
+      expect(rule, cls).not.toMatch(/background/);
+    }
   });
 });

@@ -1921,7 +1921,7 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       // Mock pdoSwal.fire prompt pengaktifan
       const swalSpy = vi.spyOn(alertUtils.pdoSwal, "fire").mockResolvedValueOnce({
         isConfirmed: true,
-        value: "7.5",
+        value: { tripPergi: "4", tripPulang: "3" },
       } as any);
 
       const activateBtn = document.body.querySelector<HTMLButtonElement>('[data-testid="btn-activate-input"]');
@@ -1931,14 +1931,21 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
         activateBtn?.click();
       });
 
-      expect(swalSpy).toHaveBeenCalled();
+      expect(swalSpy).toHaveBeenCalledTimes(1);
+      // Form aktivasi = form "Set Jumlah Trip" (Trip Pergi + Trip Pulang), bukan prompt 1 angka
+      const swalArgs = swalSpy.mock.calls[0][0] as { title?: string; html?: string; input?: string };
+      expect(swalArgs.title).toBe(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE);
+      expect(swalArgs.input).toBeUndefined();
+      expect(swalArgs.html).toContain('id="swal-bulk-tripPergi"');
+      expect(swalArgs.html).toContain('id="swal-bulk-tripPulang"');
+      expect(swalArgs.html).not.toContain(TEXT_ALERTS.BULK_TRIP.CLEAR_HINT);
 
       // Form harus terbuka: banner hilang dan input TOA S1 aktif
       expect(document.body.querySelector('[data-testid="non-operational-banner"]')).toBeNull();
       const inputToaS1 = document.body.querySelector<HTMLInputElement>("#input-toa-s1");
       expect(inputToaS1?.disabled).toBe(false);
 
-      // Beralih ke tab Ritase dan periksa trip terisi 7.5
+      // Beralih ke tab Ritase dan periksa trip terisi 4 / 3
       const tabButtons = document.body.querySelectorAll("button");
       const ritaseBtn = Array.from(tabButtons).find((b) =>
         b.textContent?.includes(TEXT_ALERTS.BUS_INPUT_MODAL.TAB_RITASE),
@@ -1949,8 +1956,8 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
 
       const inputTripPergi = document.body.querySelector<HTMLInputElement>("#input-trip-pergi");
       const inputTripPulang = document.body.querySelector<HTMLInputElement>("#input-trip-pulang");
-      expect(inputTripPergi?.value).toBe("7.5");
-      expect(inputTripPulang?.value).toBe("7.5");
+      expect(inputTripPergi?.value).toBe("4");
+      expect(inputTripPulang?.value).toBe("3");
       expect(inputTripPergi?.disabled).toBe(false);
       expect(inputTripPulang?.disabled).toBe(false);
 
@@ -1965,6 +1972,70 @@ describe("BusInputModal Component (Declarative React JSX Modal)", () => {
       const inputKeterangan = document.body.querySelector<HTMLTextAreaElement>("#input-keterangan");
       expect(inputKeterangan?.value).toBe("");
 
+      swalSpy.mockRestore();
+    });
+
+    it("mode Fokus Kolom (TOA S1): trip hasil Aktifkan Input ikut terkirim saat simpan", async () => {
+      const onSave = vi.fn();
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ tripPergi: "", tripPulang: "", keterangan: "OFF" })}
+            activeCategory="toaShift1"
+            onSave={onSave}
+          />,
+        );
+      });
+
+      const swalSpy = vi.spyOn(alertUtils.pdoSwal, "fire").mockResolvedValueOnce({
+        isConfirmed: true,
+        value: { tripPergi: "4", tripPulang: "3" },
+      } as any);
+      await act(async () => {
+        document.body
+          .querySelector<HTMLButtonElement>('[data-testid="btn-activate-input"]')
+          ?.click();
+      });
+
+      const form = document.body.querySelector("form");
+      await act(async () => {
+        form?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      });
+
+      expect(onSave).toHaveBeenCalledTimes(1);
+      expect(onSave.mock.calls[0][0]).toMatchObject({
+        tripPergi: "4",
+        tripPulang: "3",
+        toaShift1: "120",
+      });
+      expect(onSave.mock.calls[0][0]).not.toHaveProperty("toaShift2");
+      swalSpy.mockRestore();
+    });
+
+    it("membatalkan form aktivasi: form tetap terkunci", async () => {
+      await act(async () => {
+        root.render(
+          <BusInputModal
+            isOpen={true}
+            onClose={vi.fn()}
+            bus={createMockBus({ tripPergi: "0", tripPulang: "0", keterangan: "OFF" })}
+            initialTab="shift1"
+            onSave={vi.fn()}
+          />,
+        );
+      });
+      const swalSpy = vi
+        .spyOn(alertUtils.pdoSwal, "fire")
+        .mockResolvedValueOnce({ isConfirmed: false, isDismissed: true } as any);
+      await act(async () => {
+        document.body
+          .querySelector<HTMLButtonElement>('[data-testid="btn-activate-input"]')
+          ?.click();
+      });
+      expect(document.body.querySelector('[data-testid="non-operational-banner"]')).not.toBeNull();
+      expect(document.body.querySelector<HTMLInputElement>("#input-toa-s1")?.disabled).toBe(true);
       swalSpy.mockRestore();
     });
   });

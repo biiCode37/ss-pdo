@@ -299,13 +299,13 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.BTN_ACTIVATE_INPUT).toBe('🔓 Aktifkan Input');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE).toBe('Aktifkan Input Unit');
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_LABEL).toBe(
-      'Masukkan target ritase unit untuk membuka kunci input:'
+      'Isi jumlah Trip Pergi dan Trip Pulang (1 ritase = 2 trip) untuk membuka kunci input:'
     );
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_SUCCESS).toBe(
       'Unit berhasil diaktifkan. Kolom input angka telah terbuka.'
     );
     expect(TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_INVALID_RITASE).toBe(
-      'Nilai ritase harus lebih besar dari 0 untuk mengaktifkan unit.'
+      'Isi Trip Pergi dan Trip Pulang; total trip harus lebih dari 0 untuk mengaktifkan unit.'
     );
   });
 

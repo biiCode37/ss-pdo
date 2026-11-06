@@ -404,17 +404,21 @@ select.input-field {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 /* Status kartu unit dari keterangan sepanjang hari (refact_209) */
+.bus-card {
+  border-right: 3.5px solid transparent;
+}
+/* refact_212: warna status HANYA di garis tepi kiri & kanan; latar kartu tetap netral */
 .bus-card.unit-status-off {
-  background: var(--color-unit-off-bg);
   border-left-color: var(--color-unit-off-border);
+  border-right-color: var(--color-unit-off-border);
 }
 .bus-card.unit-status-kendala {
-  background: var(--color-unit-kendala-bg);
   border-left-color: var(--color-unit-kendala-border);
+  border-right-color: var(--color-unit-kendala-border);
 }
 .bus-card.unit-status-to {
-  background: var(--color-unit-to-bg);
   border-left-color: var(--color-unit-to-border);
+  border-right-color: var(--color-unit-to-border);
 }
 .bus-card-header {
   padding: 16px 20px;
@@ -2087,60 +2091,6 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 
   color: #f87171;
 
-}
-
-/* Formatted Note Badges on Bus Cards */
-.note-badge-ba {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  border-radius: 6px;
-  background: var(--color-badge-ba-bg);
-  border: 1px solid var(--color-badge-ba-border);
-  color: var(--color-badge-ba-fg);
-  font-weight: 800;
-  font-size: 11px;
-  letter-spacing: 0.02em;
-}
-
-.note-badge-off {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 6px;
-  background: var(--color-warning-bg);
-  border: 1px solid var(--color-warning-border);
-  color: var(--color-warning-fg);
-  font-weight: 700;
-  font-size: 11px;
-}
-
-.note-badge-np {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 6px;
-  background: rgba(249, 115, 22, 0.12);
-  border: 1px solid rgba(249, 115, 22, 0.35);
-  color: #fb923c;
-  font-weight: 800;
-  font-size: 11px;
-}
-
-.note-badge-to {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 6px;
-  background: var(--color-error-bg);
-  border: 1px solid var(--color-error-border);
-  color: var(--color-error-fg);
-  font-weight: 800;
-  font-size: 11px;
 }
 
 /* SweetAlert / Modal Select Styling */

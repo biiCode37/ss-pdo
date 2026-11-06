@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AlertCircle, Sparkles } from "lucide-react";
 import type { BusData, HeaderMap } from "@/services/googleSheets";
-import { TEXT_ALERTS, TEXT_COMMON } from "@/constants/texts";
-import { pdoSwal } from "@/utils/alertUtils";
-import { parseIndonesianNumber } from "@/utils/numberUtils";
+import { TEXT_ALERTS } from "@/constants/texts";
+import { showBulkTripModal } from "@/utils/modals/bulkModals";
 import { useBusInputForm, type ModalTab } from "./modal/useBusInputForm";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { ModalShell } from "@/components/ui/ModalShell";
@@ -102,36 +101,15 @@ export function BusInputModal({
 
   formIdRef.current = form.formId;
 
+  // Form yang sama dengan "Set Jumlah Trip" (Trip Pergi + Trip Pulang), mode aktivasi 1 unit
   const handlePromptActivateInput = async () => {
-    const result = await pdoSwal.fire({
-      title: TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_TITLE,
-      text: TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_PROMPT_LABEL,
-      input: "text",
-      inputPlaceholder: "Contoh: 7.5",
-      showCancelButton: true,
-      confirmButtonText: TEXT_COMMON.BUTTONS.SAVE,
-      cancelButtonText: TEXT_COMMON.BUTTONS.CANCEL,
-      reverseButtons: true,
-      customClass: {
-        container: "pdo-swal-container",
-        popup: "pdo-swal-popup",
-        confirmButton: "pdo-swal-confirm-btn",
-        cancelButton: "pdo-swal-cancel-btn",
-      },
-      inputValidator: (value) => {
-        const num = parseIndonesianNumber(value, 0);
-        if (!value || isNaN(num) || num <= 0) {
-          return TEXT_ALERTS.BUS_INPUT_MODAL.ACTIVATE_INPUT_INVALID_RITASE;
-        }
-        return null;
-      },
+    const result = await showBulkTripModal({
+      unitCount: 1,
+      headerMap,
+      isActivation: true,
     });
-
-    if (result && result.value !== undefined && result.value !== null) {
-      const num = parseIndonesianNumber(String(result.value), 0);
-      if (num > 0) {
-        form.handleActivateInput(num);
-      }
+    if (result) {
+      form.handleActivateInput(result.tripPergi, result.tripPulang);
     }
   };
 
