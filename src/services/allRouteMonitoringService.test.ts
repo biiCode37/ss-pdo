@@ -13,6 +13,7 @@ import * as googleSheetsService from './googleSheets';
 vi.mock('./supabase', () => ({
   supabase: {
     from: vi.fn(),
+    rpc: vi.fn(),
   }
 }));
 
@@ -28,6 +29,7 @@ vi.mock('./googleSheets', () => ({
 describe('allRouteMonitoringService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    (supabase.rpc as any).mockResolvedValue({ data: [], error: null });
   });
 
   it('calculates yesterday and last week dates correctly across months', () => {
@@ -124,12 +126,6 @@ describe('allRouteMonitoringService', () => {
           in: vi.fn().mockResolvedValue({ data: mockReports, error: null })
         };
       }
-      if (table === 'daily_unit_summaries') {
-        return {
-          select: vi.fn().mockReturnThis(),
-          or: vi.fn().mockResolvedValue({ data: mockSummaries, error: null })
-        };
-      }
       const defaultMock = {
         select: vi.fn().mockReturnThis(),
         in: vi.fn().mockResolvedValue({ data: [], error: null }),
@@ -138,8 +134,16 @@ describe('allRouteMonitoringService', () => {
       };
       return defaultMock;
     });
+    (supabase.rpc as any).mockResolvedValue({ data: mockSummaries, error: null });
 
     const result = await fetchRegionalMonitoringData('2026-09-02');
+
+    // Ringkasan unit diambil sebagai total per rute per tanggal lewat RPC, bukan baris mentah (BUG-QUOTA-203-01)
+    expect(supabase.rpc).toHaveBeenCalledTimes(1);
+    expect(supabase.rpc).toHaveBeenCalledWith('get_daily_unit_summary_totals', {
+      p_dates: ['2026-09-02', '2026-09-01', '2026-08-26'],
+    });
+    expect(supabase.from).not.toHaveBeenCalledWith('daily_unit_summaries');
 
     expect(result.date).toBe('2026-09-02');
     expect(result.yesterdayDate).toBe('2026-09-01');
@@ -207,12 +211,6 @@ describe('allRouteMonitoringService', () => {
         return {
           select: vi.fn().mockReturnThis(),
           in: vi.fn().mockResolvedValue({ data: mockReports, error: null })
-        };
-      }
-      if (table === 'daily_unit_summaries') {
-        return {
-          select: vi.fn().mockReturnThis(),
-          or: vi.fn().mockResolvedValue({ data: [], error: null })
         };
       }
       const defaultMock = {

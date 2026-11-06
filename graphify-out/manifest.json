@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1793964908.3592885,
-    "seen": 1793965284.7178907,
+    "mtime": 1793973534.6506977,
+    "seen": 1793973650.606773,
     "ast_hash": "5f49ccd57d96ba9a7900db5ff9bd85ed",
     "semantic_hash": ""
   },
@@ -474,8 +474,8 @@
     "semantic_hash": ""
   },
   ".agents/AGENTS.md": {
-    "mtime": 1793940490.794493,
-    "seen": 1793940512.6827748,
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6086295,
     "ast_hash": "cb1dedc5f22f96443ded348897c03333",
     "semantic_hash": ""
   },
@@ -732,8 +732,8 @@
     "semantic_hash": ""
   },
   "src/services/supabase.ts": {
-    "mtime": 1793964884.3471053,
-    "seen": 1793965284.718487,
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6081374,
     "ast_hash": "6d0b3897fac63f5536266e0f42375c90",
     "semantic_hash": ""
   },
@@ -756,9 +756,9 @@
     "semantic_hash": ""
   },
   "src/services/routeService.test.ts": {
-    "mtime": 1793668546.0181425,
-    "seen": 1793936743.0088654,
-    "ast_hash": "c183e3aa691aa2b3a9d27adad2f92dee",
+    "mtime": 1793974698.6640303,
+    "seen": 1793974905.1017184,
+    "ast_hash": "beba820cb2a3b1cae6fec315bdd21b72",
     "semantic_hash": ""
   },
   "src/components/SwipeableContainer.tsx": {
@@ -942,15 +942,15 @@
     "semantic_hash": ""
   },
   "src/hooks/__tests__/useUserActivityTracking.test.tsx": {
-    "mtime": 1786762500.6190255,
-    "seen": 1793936743.0087683,
-    "ast_hash": "09e135d215bdce5bb96da9c255fd972c",
+    "mtime": 1793974698.2722137,
+    "seen": 1793974905.1012263,
+    "ast_hash": "26e4751fd306f973bc73c36e896aec4b",
     "semantic_hash": ""
   },
   "src/hooks/useUserActivityTracking.ts": {
-    "mtime": 1787322418.5546718,
-    "seen": 1793936743.0087788,
-    "ast_hash": "f169d0026a8266b44ba12c7718c1f2a3",
+    "mtime": 1793974684.2243266,
+    "seen": 1793974905.1012783,
+    "ast_hash": "2e35f07c7ea16433a9432de69fdbac23",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-08-07-user-activity-telemetry-plan.md": {
@@ -1308,8 +1308,8 @@
     "semantic_hash": ""
   },
   "src/services/routes/routes.ts": {
-    "mtime": 1793965037.8563368,
-    "seen": 1793965284.7184796,
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6081223,
     "ast_hash": "22279ca38811f75d49e7dab562521c79",
     "semantic_hash": ""
   },
@@ -1326,9 +1326,9 @@
     "semantic_hash": ""
   },
   "src/services/routes/users.ts": {
-    "mtime": 1793668546.0206609,
-    "seen": 1793936743.0088842,
-    "ast_hash": "8fa42b61ad15c5879fc41b50e27fff33",
+    "mtime": 1793974682.0715275,
+    "seen": 1793974905.1018062,
+    "ast_hash": "4cd83095074f8ecec78f3299bb19ee32",
     "semantic_hash": ""
   },
   "src/utils/auditLogContext.test.ts": {
@@ -1368,8 +1368,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1793940463.9340975,
-    "seen": 1793940512.6828015,
+    "mtime": 1793973534.5917616,
+    "seen": 1793973650.6086626,
     "ast_hash": "8d79354c89298cc0e37f1a1ec9ab0794",
     "semantic_hash": ""
   },
@@ -1554,15 +1554,15 @@
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.test.ts": {
-    "mtime": 1793104751.5102172,
-    "seen": 1793936743.008789,
-    "ast_hash": "873a07c5b6b49b2e821be60a1b923ba6",
+    "mtime": 1793974636.9083462,
+    "seen": 1793974905.1013262,
+    "ast_hash": "36cbfbfc91f905e94290ca235b9135a8",
     "semantic_hash": ""
   },
   "src/services/allRouteMonitoringService.ts": {
-    "mtime": 1793964943.244838,
-    "seen": 1793965284.7184093,
-    "ast_hash": "3069ad5b6e2d1f6bda6db81e38cfb7bb",
+    "mtime": 1793974617.0767956,
+    "seen": 1793974905.1013348,
+    "ast_hash": "605a2bcf35e4ad34e20c64bfa553f333",
     "semantic_hash": ""
   },
   "src/services/dailyRouteReportService.test.ts": {
@@ -1632,8 +1632,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/text_errors.ts": {
-    "mtime": 1793964893.0627966,
-    "seen": 1793965284.7183688,
+    "mtime": 1793973534.6546772,
+    "seen": 1793973650.6079073,
     "ast_hash": "ec558ac3394d35e169a4ddf47e55c5f3",
     "semantic_hash": ""
   },
@@ -1656,8 +1656,8 @@
     "semantic_hash": ""
   },
   "src/constants/texts/texts.test.ts": {
-    "mtime": 1793964908.849062,
-    "seen": 1793965284.7183833,
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6079338,
     "ast_hash": "2af6a1ba65637026378f0257826bacc8",
     "semantic_hash": ""
   },
@@ -3000,14 +3000,14 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.test.tsx": {
-    "mtime": 1793965004.08824,
-    "seen": 1793965284.7181475,
+    "mtime": 1793973534.6506977,
+    "seen": 1793973650.6074626,
     "ast_hash": "251af51d09462eacf0b8e2188d96be18",
     "semantic_hash": ""
   },
   "src/components/monitoring/AllRouteMonitoringPage.tsx": {
-    "mtime": 1793964977.6477792,
-    "seen": 1793965284.7181492,
+    "mtime": 1793973534.6506977,
+    "seen": 1793973650.607466,
     "ast_hash": "a385b7dc919b1d5c988604cea57ff242",
     "semantic_hash": ""
   },
@@ -3474,8 +3474,8 @@
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringMacroKpiGrid.tsx": {
-    "mtime": 1793966827.9235582,
-    "seen": 1793966977.9379401,
+    "mtime": 1793973534.6506977,
+    "seen": 1793973650.6075828,
     "ast_hash": "35286eb15289cc13d0e592566cd21ac7",
     "semantic_hash": ""
   },
@@ -5628,9 +5628,9 @@
     "semantic_hash": ""
   },
   "src/services/routes/routes.test.ts": {
-    "mtime": 1793965059.5773165,
-    "seen": 1793965284.718478,
-    "ast_hash": "398e297ee406a5d12ba101a4c6408aff",
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6081192,
+    "ast_hash": "3c57ce36a98fb348b5568e09266f687e",
     "semantic_hash": ""
   },
   "src/utils/bulkRouteInspector.test.ts": {
@@ -6492,20 +6492,20 @@
     "semantic_hash": ""
   },
   "src/services/realtimeSyncService.test.ts": {
-    "mtime": 1793967502.5078127,
-    "seen": 1793967674.9909701,
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6080875,
     "ast_hash": "a9e7922158b6edc860bb71f57b872d6b",
     "semantic_hash": ""
   },
   "src/services/realtimeSyncService.ts": {
-    "mtime": 1793967493.1527963,
-    "seen": 1793967674.9909725,
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6080906,
     "ast_hash": "331acdcd92e91d57cef69336326f8c4c",
     "semantic_hash": ""
   },
   "scripts/google-apps-script/CentralizedMasterRealtimeSync.js": {
-    "mtime": 1793967519.9359481,
-    "seen": 1793967674.9901698,
+    "mtime": 1793973534.6486847,
+    "seen": 1793973650.606757,
     "ast_hash": "43a40589ab5d72c51395bfe6ed03568e",
     "semantic_hash": ""
   },
@@ -6894,9 +6894,9 @@
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1793940491.174919,
-    "seen": 1793940512.682806,
-    "ast_hash": "961c08ab6e117e32310d24de0e0c6bae",
+    "mtime": 1793973534.5917616,
+    "seen": 1793973650.6086679,
+    "ast_hash": "0674345fb0d2fee46e43701e295cedb6",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_175/AUDIT_BUGS.md": {
@@ -7446,9 +7446,9 @@
     "semantic_hash": ""
   },
   "docs/BACKUP_SETUP_GUIDE.md": {
-    "mtime": 1793967529.7926335,
-    "seen": 1793967674.9914036,
-    "ast_hash": "5b057119767779eb7089efff46d94688",
+    "mtime": 1793973534.594011,
+    "seen": 1793973650.6086776,
+    "ast_hash": "4fb887d3ae34660824fac08a69f2fff9",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-11-02-unified-dual-engine-backup.md": {
@@ -7668,63 +7668,63 @@
     "semantic_hash": ""
   },
   ".claude/hooks/check-raw-colors.mjs": {
-    "mtime": 1793936527.1451523,
-    "seen": 1793936743.0080624,
-    "ast_hash": "9c0452a47e92126f54042c453a8a6db9",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6066277,
+    "ast_hash": "249a52c74e97f62f4c2279121d0a3405",
     "semantic_hash": ""
   },
   ".claude/hooks/guard-protected-branch.mjs": {
-    "mtime": 1793936527.0643258,
-    "seen": 1793936743.008065,
-    "ast_hash": "b233b94c64ab5d76e6a0fd750a53005b",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6066337,
+    "ast_hash": "c281f717db7e40ae80b450b695da7420",
     "semantic_hash": ""
   },
   ".claude/launch.json": {
-    "mtime": 1793936527.352055,
-    "seen": 1793936743.0080676,
-    "ast_hash": "b03e71a6e6eed0077a674a1905a99cbf",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6066399,
+    "ast_hash": "59a82a5aa324de03738e66eef1370876",
     "semantic_hash": ""
   },
   ".claude/settings.json": {
-    "mtime": 1793936527.209239,
-    "seen": 1793936743.0080702,
-    "ast_hash": "264240f6adecd8f371b28fbb244375cb",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6066456,
+    "ast_hash": "a4211b9cbffaaf9bf1c8b2399efcf075",
     "semantic_hash": ""
   },
   ".mcp.json": {
-    "mtime": 1793967529.7779946,
-    "seen": 1793967674.990126,
-    "ast_hash": "b54803feb9ecfd6db69311e0b24bc972",
+    "mtime": 1793973534.5885706,
+    "seen": 1793973650.6066637,
+    "ast_hash": "36ca6176131d5f982768685b01ac8214",
     "semantic_hash": ""
   },
   "supabase/.temp/linked-project.json": {
-    "mtime": 1793967543.0503802,
-    "seen": 1793967674.9911852,
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6083846,
     "ast_hash": "1d785bd65373b8b50c01ddcaa667bb34",
     "semantic_hash": ""
   },
   ".claude/skills/pa/SKILL.md": {
-    "mtime": 1793936551.0699174,
-    "seen": 1793936743.0092185,
-    "ast_hash": "0af3b6396fa27e659db4f951730ca542",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.608639,
+    "ast_hash": "d3728aa0eca9bf22da6aac6ad150642f",
     "semantic_hash": ""
   },
   ".claude/skills/pd/SKILL.md": {
-    "mtime": 1793936551.33679,
-    "seen": 1793936743.0092206,
-    "ast_hash": "72f4856a27e39a891c2152b587ffdf01",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6086419,
+    "ast_hash": "6deea0af556892b1291eacd4ef2dfd50",
     "semantic_hash": ""
   },
   ".claude/skills/refact-doc/SKILL.md": {
-    "mtime": 1793936550.7781544,
-    "seen": 1793936743.0092227,
-    "ast_hash": "7d2c9ed84a8ab1db2f920314a40255f3",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6086447,
+    "ast_hash": "6396f3be6f344cb96f4681fb3f64cdbe",
     "semantic_hash": ""
   },
   ".claude/skills/verify/SKILL.md": {
-    "mtime": 1793936550.554916,
-    "seen": 1793936743.0092247,
-    "ast_hash": "3a6a65f996cab2112f3fa0a84e2c36d7",
+    "mtime": 1793973534.5885706,
+    "seen": 1793973650.6086533,
+    "ast_hash": "1fcce892600949b377c305f81dec8426",
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
@@ -7740,69 +7740,81 @@
     "semantic_hash": ""
   },
   ".claude/skills/ss-pdo-architecture/SKILL.md": {
-    "mtime": 1793938525.0234158,
-    "seen": 1793938538.4718182,
-    "ast_hash": "614f6f28288a2e1a197de14b3b539452",
+    "mtime": 1793973534.5788064,
+    "seen": 1793973650.6086476,
+    "ast_hash": "8461d5c6c99b4ad4a235341123b1ac6e",
     "semantic_hash": ""
   },
   ".claude/skills/ss-pdo-sheets/SKILL.md": {
-    "mtime": 1793938510.1996522,
-    "seen": 1793938538.471822,
-    "ast_hash": "baa4c71955c217feb687aae8b36b5612",
+    "mtime": 1793973534.5879822,
+    "seen": 1793973650.6086504,
+    "ast_hash": "df2adb8b77905813de68076aeee7068e",
     "semantic_hash": ""
   },
   "src/services/requestCircuitBreaker.test.ts": {
-    "mtime": 1793964909.2251484,
-    "seen": 1793965284.7184682,
-    "ast_hash": "985324e6995b65a99f772dee742821c6",
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6081004,
+    "ast_hash": "19ef875f6617381475a334df6e97f1a8",
     "semantic_hash": ""
   },
   "src/services/requestCircuitBreaker.ts": {
-    "mtime": 1793964883.4691782,
-    "seen": 1793965284.7184696,
-    "ast_hash": "b7cddfdb4c0b5369ecdfac9091db3f49",
+    "mtime": 1793973534.6553018,
+    "seen": 1793973650.6081033,
+    "ast_hash": "3a6a487c504a9a21f841bd47e6e91ab3",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_200/AUDIT_BUGS.md": {
-    "mtime": 1793964260.3795438,
-    "seen": 1793965284.7194355,
-    "ast_hash": "700e7982301e8b5da7faa0114338c3b8",
+    "mtime": 1793973534.6446586,
+    "seen": 1793973650.6099627,
+    "ast_hash": "4368f100695c7dc77b366e7fbd366b72",
     "semantic_hash": ""
   },
   "src/components/monitoring/tabs/MonitoringMacroKpiGrid.test.tsx": {
-    "mtime": 1793966828.319198,
-    "seen": 1793966977.9379323,
-    "ast_hash": "22da3627438ddf3a91356af173acf64d",
+    "mtime": 1793973534.6506977,
+    "seen": 1793973650.60758,
+    "ast_hash": "97b20ef9682bc8589aede4f109ca1a56",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_200/REPAIR_REPORT.md": {
-    "mtime": 1793965323.3625097,
-    "seen": 1793966787.4360204,
-    "ast_hash": "f588d6aabc5ddb9193088c09c242d3e9",
+    "mtime": 1793973534.6466715,
+    "seen": 1793973650.6099658,
+    "ast_hash": "fc6714914a9448bc0f61329fd960f50e",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_201/AUDIT_BUGS.md": {
-    "mtime": 1793967014.4503393,
-    "seen": 1793967674.9926622,
-    "ast_hash": "bebdc69e820366967c31f6d4e1d000e2",
+    "mtime": 1793973534.6466715,
+    "seen": 1793973650.6099684,
+    "ast_hash": "fe022eef894df820b146b5381297f705",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_201/REPAIR_REPORT.md": {
-    "mtime": 1793967171.8692083,
-    "seen": 1793967674.9926653,
-    "ast_hash": "d5d907c5f2b5c0f110cb174744d4572f",
+    "mtime": 1793973534.6466715,
+    "seen": 1793973650.6099713,
+    "ast_hash": "b64eeb053f08f90ad2465fce1feaf121",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_202/AUDIT_BUGS.md": {
-    "mtime": 1793972724.7973852,
-    "seen": 1793973180.9526577,
-    "ast_hash": "24e586b9fd78b8f33023e87d9af572ff",
+    "mtime": 1793973534.6486847,
+    "seen": 1793973650.6099737,
+    "ast_hash": "c9cf742c7d9ab0391b40e5028dc15e76",
     "semantic_hash": ""
   },
   "refactor-ss-pdo/refact_202/REPAIR_REPORT.md": {
-    "mtime": 1793973067.8745043,
-    "seen": 1793973180.952662,
-    "ast_hash": "28f985567d0ba90428ccd835c5baf363",
+    "mtime": 1793973534.6486847,
+    "seen": 1793973650.6099765,
+    "ast_hash": "1675773e046cf6a4bfde7a187211dfa0",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261106000001_daily_unit_summary_totals_rpc.sql": {
+    "mtime": 1793974600.2059221,
+    "seen": 1793974905.1030493,
+    "ast_hash": "95c7ad3954f350164ed656f3ccf87ee3",
+    "semantic_hash": ""
+  },
+  "refactor-ss-pdo/refact_203/AUDIT_BUGS.md": {
+    "mtime": 1793974728.6365516,
+    "seen": 1793974905.110383,
+    "ast_hash": "19b7c13a05bfb35835815bce0db8fac5",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {
