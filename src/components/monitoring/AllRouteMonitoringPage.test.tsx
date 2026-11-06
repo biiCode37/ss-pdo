@@ -2,7 +2,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createRoot, type Root } from 'react-dom/client';
 import { act } from 'react';
-import { AllRouteMonitoringPage } from './AllRouteMonitoringPage';
+import {
+  AllRouteMonitoringPage,
+  REALTIME_MIN_DEBOUNCE_MS,
+  REALTIME_MIN_INTERVAL_MS,
+} from './AllRouteMonitoringPage';
 import * as regionalService from '@/services/allRouteMonitoringService';
 import * as regionalIngestionService from '@/services/regionalIngestionService';
 import * as dailyReportService from '@/services/dailyRouteReportService';
@@ -622,5 +626,100 @@ describe('AllRouteMonitoringPage Component', () => {
     expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
 
     vi.useRealTimers();
+  });
+
+  describe('BUG-QUOTA-200: proteksi kuota egress', () => {
+    let visibility: DocumentVisibilityState = 'visible';
+
+    beforeEach(() => {
+      visibility = 'visible';
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => visibility });
+      (regionalService.fetchRegionalMonitoringData as any).mockClear();
+      (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue(mockData);
+      mockChannel.on.mockClear();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('memfilter realtime ke tanggal yang sedang dilihat', async () => {
+      await act(async () => {
+        root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+      });
+
+      expect(mockChannel.on).toHaveBeenCalledWith(
+        'postgres_changes',
+        expect.objectContaining({ table: 'daily_route_reports', filter: 'date=eq.2026-10-14' }),
+        expect.any(Function),
+      );
+    });
+
+    it('membatasi muat ulang hening maksimal 1 kali per 60 detik', async () => {
+      vi.useFakeTimers();
+      await act(async () => {
+        root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+      });
+
+      act(() => realtimeCallback?.());
+      await act(async () => {
+        vi.advanceTimersByTime(REALTIME_MIN_DEBOUNCE_MS);
+      });
+      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
+
+      // Event berikutnya 5 detik kemudian tidak boleh memuat ulang sebelum 60 detik sejak muat terakhir
+      await act(async () => {
+        vi.advanceTimersByTime(5000);
+      });
+      act(() => realtimeCallback?.());
+      await act(async () => {
+        vi.advanceTimersByTime(REALTIME_MIN_DEBOUNCE_MS);
+      });
+      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
+
+      await act(async () => {
+        vi.advanceTimersByTime(REALTIME_MIN_INTERVAL_MS);
+      });
+      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(3);
+    });
+
+    it('tidak memuat ulang saat tab tersembunyi dan memuat 1 kali saat tab kembali terlihat', async () => {
+      vi.useFakeTimers();
+      await act(async () => {
+        root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+      });
+
+      visibility = 'hidden';
+      act(() => {
+        realtimeCallback?.();
+        realtimeCallback?.();
+      });
+      await act(async () => {
+        vi.advanceTimersByTime(REALTIME_MIN_INTERVAL_MS);
+      });
+      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
+
+      visibility = 'visible';
+      await act(async () => {
+        document.dispatchEvent(new Event('visibilitychange'));
+      });
+      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
+    });
+
+    it('memakai armada shift dari hasil regional tanpa request fleet shift ganda (BUG-QUOTA-200-03)', async () => {
+      (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue({
+        ...mockData,
+        date: '2026-10-14',
+        fleetShifts: [],
+      });
+      (fleetService.fetchDailyFleetShiftsByDate as ReturnType<typeof vi.fn>).mockClear();
+
+      await act(async () => {
+        root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
+      });
+
+      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
+      expect(fleetService.fetchDailyFleetShiftsByDate).not.toHaveBeenCalled();
+    });
   });
 });

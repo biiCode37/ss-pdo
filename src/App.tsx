@@ -10,7 +10,8 @@ import { formatUserError } from './utils/errorFormatter';
 import { showErrorAlert } from './utils/alertUtils';
 import { checkAndMigrateCache } from './utils/cacheUtils';
 import { initHistoryNavigation } from './utils/historyNavigation';
-import { TEXT_AUTH } from './constants/texts';
+import { TEXT_AUTH, TEXT_ERRORS } from './constants/texts';
+import { CIRCUIT_OPEN_EVENT } from './services/requestCircuitBreaker';
 import { PageAccessProvider } from './context/PageAccessContext';
 
 export default function App() {
@@ -100,6 +101,15 @@ export default function App() {
     };
     window.addEventListener('google-auth-expired', handleAuthExpired);
     return () => window.removeEventListener('google-auth-expired', handleAuthExpired);
+  }, []);
+
+  // BUG-QUOTA-200-01: Beri tahu pengguna saat circuit breaker request Supabase terpicu
+  useEffect(() => {
+    const handleCircuitOpen = () => {
+      showErrorAlert(TEXT_ERRORS.REQUEST_LIMIT_TITLE, TEXT_ERRORS.REQUEST_LIMIT_MESSAGE);
+    };
+    window.addEventListener(CIRCUIT_OPEN_EVENT, handleCircuitOpen);
+    return () => window.removeEventListener(CIRCUIT_OPEN_EVENT, handleCircuitOpen);
   }, []);
 
   // ISS-01: Listen for successful token refresh, clear needs_reauth

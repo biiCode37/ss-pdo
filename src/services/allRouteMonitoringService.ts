@@ -157,6 +157,8 @@ export interface RegionalMonitoringResult {
   lastWeekDate: string;
   routes: RegionalRouteItem[];
   supervisorSummaries?: SupervisorTeamSummary[];
+  // Armada shift tanggal aktif (mode harian) agar halaman tidak mengambil ulang data yang sama (BUG-QUOTA-200-03)
+  fleetShifts?: DailyFleetShiftWithUnits[];
   // Totals
   totalRenops: number;
   totalRealops: number;
@@ -545,6 +547,7 @@ export async function fetchRegionalMonitoringData(
     lastWeekDate,
     routes: sortedRouteItems,
     supervisorSummaries: calculateSupervisorSummaries(sortedRouteItems),
+    fleetShifts,
     ...totals
   };
 }

@@ -4,6 +4,8 @@ Dokumen ini adalah acuan dan standar emas (_Golden Rules_) yang **WAJIB dipatuhi
 
 Aturan utama disinkronkan secara penuh dengan [`.agents/AGENTS.md`](./.agents/AGENTS.md) dan [`AGENTS.md`](./AGENTS.md).
 
+> **Golden Rule Efisiensi Token & Anti Over-Engineering** (A. urutan navigasi graphify ➔ grep ➔ read, B. prinsip anti over-engineering/ponytail, C. Pola Pikir Kritis — bukan "yes-man") berlaku penuh sesuai bagian dengan judul yang sama di [`AGENTS.md`](./AGENTS.md).
+
 ---
 
 ## 🎨 Standar Sistem Warna & Aksesibilitas Desain UI/UX (Refactor 174)

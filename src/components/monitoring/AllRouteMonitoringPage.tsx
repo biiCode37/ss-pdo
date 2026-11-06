@@ -42,6 +42,10 @@ import {
 // Re-export untuk kompatibilitas penuh (Zero Breaking Change)
 export { SUPERVISOR_TABS, matchesSupervisorTab };
 
+// ponytail: angka Monitoring boleh telat ≤60 detik demi kuota egress Free Plan (BUG-QUOTA-200-02); turunkan jika pindah ke server kantor
+export const REALTIME_MIN_DEBOUNCE_MS = 3000;
+export const REALTIME_MIN_INTERVAL_MS = 60_000;
+
 export interface AllRouteMonitoringPageProps {
   onBackToRouteView?: () => void;
   onOpenProfile?: () => void;
@@ -174,18 +178,19 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       }
 
       try {
-        const regionalPromise =
+        const regionalRes =
           activePeriod.mode === "daily"
-            ? fetchRegionalMonitoringData(activePeriod.date)
-            : fetchRegionalPeriodMonitoringData(activePeriod.startDate, activePeriod.endDate);
+            ? await fetchRegionalMonitoringData(activePeriod.date)
+            : await fetchRegionalPeriodMonitoringData(activePeriod.startDate, activePeriod.endDate);
 
-        const [regionalRes, fleetRes] = await Promise.all([
-          regionalPromise,
-          fetchDailyFleetShiftsByDate(selectedDate).catch((err) => {
-            console.warn("[AllRouteMonitoringPage] Gagal memuat fleet shifts:", err);
-            return [] as DailyFleetShiftWithUnits[];
-          }),
-        ]);
+        // BUG-QUOTA-200-03: pakai armada shift dari hasil regional bila tanggalnya sama, hindari request ganda
+        const fleetRes =
+          regionalRes.fleetShifts && regionalRes.date === selectedDate
+            ? regionalRes.fleetShifts
+            : await fetchDailyFleetShiftsByDate(selectedDate).catch((err) => {
+                console.warn("[AllRouteMonitoringPage] Gagal memuat fleet shifts:", err);
+                return [] as DailyFleetShiftWithUnits[];
+              });
         setData(regionalRes);
         setFleetShifts(fleetRes);
       } catch (err: unknown) {
@@ -213,24 +218,49 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   }, [loadData]);
 
   // 4b. Realtime Subscription: Dengarkan perubahan tabel daily_route_reports secara hening (Silent In-place Update)
+  // BUG-QUOTA-200-02: hanya tanggal yang dilihat (mode harian), jeda saat tab tersembunyi, maksimal 1 muat ulang per 60 detik
+  const realtimeDateFilter = currentPeriod.mode === "daily" ? currentPeriod.date : null;
+  const lastSilentLoadAtRef = useRef(0);
+
   useEffect(() => {
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    let pendingWhileHidden = false;
+
+    const runSilentLoad = () => {
+      debounceTimer = null;
+      if (document.visibilityState !== "visible") {
+        pendingWhileHidden = true;
+        return;
+      }
+      lastSilentLoadAtRef.current = Date.now();
+      loadDataRef.current?.("silent");
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && pendingWhileHidden) {
+        pendingWhileHidden = false;
+        lastSilentLoadAtRef.current = Date.now();
+        loadDataRef.current?.("silent");
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     const channel = supabase
-      .channel("monitoring-realtime-reports")
+      .channel(`monitoring-realtime-reports-${realtimeDateFilter ?? "period"}`)
       .on(
         "postgres_changes",
         {
           event: "*",
           schema: "public",
           table: "daily_route_reports",
+          ...(realtimeDateFilter ? { filter: `date=eq.${realtimeDateFilter}` } : {}),
         },
         () => {
-          // Debounce 3000ms untuk meredam cascading events dari multi-cell spreadsheet edits di lapangan
-          if (debounceTimer) clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(() => {
-            loadDataRef.current?.("silent");
-          }, 3000);
+          // Redam minimal 3000ms; event selama timer berjalan ikut digabung ke 1 muat ulang hening
+          if (debounceTimer) return;
+          const sinceLast = Date.now() - lastSilentLoadAtRef.current;
+          const delay = Math.max(REALTIME_MIN_DEBOUNCE_MS, REALTIME_MIN_INTERVAL_MS - sinceLast);
+          debounceTimer = setTimeout(runSilentLoad, delay);
         }
       )
       .subscribe((status) => {
@@ -242,9 +272,10 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
 
     return () => {
       if (debounceTimer) clearTimeout(debounceTimer);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [realtimeDateFilter]);
 
   const handlePeriodChange = (newPeriod: MonitoringPeriodFilter) => {
     setCurrentPeriod(newPeriod);

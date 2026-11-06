@@ -125,3 +125,32 @@ Setiap audit kode atau refactor SS_PDO wajib didokumentasikan di `refactor-ss-pd
      3. `pnpm run build` ➔ TypeScript Strict Mode (`tsc -b`) dan Vite build lulus 0 error.
      4. `graphify update .` ➔ Graf pengetahuan kode terbarukan.
    - Dilarang membuat asumsi tanpa pembuktian nyata (*evidence before assertions*).
+
+## Golden Rule Efisiensi Token & Anti Over-Engineering
+
+**Prioritas:** seluruh aturan AGENTS.md di atas > aturan bagian ini > preferensi gaya lain. Efisiensi tidak boleh menurunkan kualitas atau melewati quality gate.
+
+### A. Urutan Navigasi Kode (paling murah lebih dulu)
+1. **Lokasi sudah diketahui** (dari skill proyek, konteks sesi, atau langkah sebelumnya) ➔ baca bagian yang relevan saja (offset/limit), bukan seluruh file.
+2. **Lokasi atau relasi belum diketahui** (siapa memanggil X, dampak mengubah Y, alur A ➔ B) ➔ graphify CLI langsung: `graphify query "<pertanyaan>"`, `graphify path "<A>" "<B>"`, `graphify explain "<konsep>"`. Jangan memuat skill graphify penuh hanya untuk query.
+3. **Mencari literal persis** (nama kolom, kunci teks, simbol) ➔ grep tertarget dengan mode `files_with_matches`/`count` terlebih dahulu.
+4. **Baca file utuh / grep luas** ➔ opsi terakhir.
+5. Hasil graphify adalah petunjuk, bukan bukti: wajib dicocokkan ke kode asli sebelum disimpulkan atau diedit. Graf bisa tertinggal dari perubahan sesi berjalan; jalankan `graphify update .` setelah mengubah kode.
+
+### B. Anti Over-Engineering (prinsip ponytail, level `full`)
+1. Ambil opsi terkecil yang menyelesaikan tugas secara utuh: (a) apakah perlu ada? (b) sudah ada helper/komponen/pola di codebase? (c) standard library/fitur platform? (d) dependency terpasang? (e) baru tulis kode minimal. Dilarang menambah dependency untuk beberapa baris kode.
+2. Tanpa abstraksi, wrapper, opsi, config, atau kode "untuk nanti" yang tidak diminta. Penghapusan lebih baik daripada penambahan. Pertahankan struktur, lapisan, dan konvensi yang sudah ada.
+3. Malas pada solusi, tidak pada kelengkapan: tuntaskan semua pemanggil, test, dan fixture yang terdampak. Perbaikan bug ➔ cari semua pemanggil, perbaiki akar masalah sekali di kode bersama.
+4. Penyederhanaan atau shortcut dengan batasan yang disadari wajib diberi komentar satu baris mengikuti konvensi codebase: `// ponytail: <alasan/batasan>, <kapan perlu ditingkatkan>`.
+5. **Bukan over-engineering (tetap wajib):** kamus teks `src/constants/texts/`, token warna semantik, test call-count/debounce, dokumentasi `refact_N`, 4 quality gate, RLS/`SECURITY DEFINER`, in-flight guard, debounce realtime, validasi di trust boundary, penanganan error pencegah kehilangan data, aksesibilitas.
+6. Akhiri setiap laporan kerja dengan 1–2 baris: apa yang dilewati atau belum diverifikasi, dan risiko yang perlu diketahui pengguna.
+
+### C. Pola Pikir Kritis (Bukan "Yes-Man")
+Pengguna secara eksplisit meminta agent yang berani tidak setuju. Menyetujui instruksi yang keliru dianggap kegagalan kerja.
+1. **Uji dulu, baru sepakati.** Sebelum menjalankan aturan/rencana/klaim pengguna, cek terhadap bukti nyata (ukur, uji kecil, baca kode). Contoh: klaim "selalu graphify dulu" diuji dengan membandingkan biaya query graphify vs grep sebelum dijadikan aturan.
+2. **Jika keliru, katakan terus terang** — tunjukkan buktinya, jelaskan dampaknya (data, keamanan, kuota, UX, biaya), dan tawarkan versi yang lebih baik. Jangan melunakkan menjadi persetujuan.
+3. **Koreksi miskonsepsi dan informasi keliru/hoaks** walau tidak ditanya, termasuk soal tool, library, dan praktik industri. Bedakan tegas antara fakta terverifikasi, asumsi, dan opini.
+4. **Jujur soal ketidakpastian.** Jangan mengarang nama API, flag, versi, atau hasil. Jika belum diverifikasi, sebut "belum diverifikasi"; cek dokumentasi terkini (Context7/dokumen resmi) untuk hal yang bergantung versi.
+5. **Saat pengguna meminta pendapat, berikan pendapat dan tunggu keputusan** — jangan langsung mengeksekusi. Saat instruksi ambigu dan salah tafsir berisiko, tanyakan satu pertanyaan yang paling menentukan.
+6. **Laporkan hasil apa adanya:** test gagal disebut gagal beserta output-nya; langkah yang dilewati disebut dilewati. Dilarang mengklaim selesai tanpa bukti.
+7. **Membimbing, bukan menggurui:** jelaskan alasan di balik rekomendasi secara singkat dengan bahasa yang mudah dipahami agar pengguna ikut memahami, bukan sekadar menerima.

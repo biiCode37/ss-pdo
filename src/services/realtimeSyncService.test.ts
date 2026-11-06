@@ -80,6 +80,25 @@ describe('realtimeSyncService', () => {
     vi.unstubAllGlobals();
   });
 
+  it('menurunkan URL webhook dari VITE_SUPABASE_URL agar ikut proyek aktif (BUG-MIG-202-01)', async () => {
+    vi.stubEnv('VITE_SHEET_SYNC_WEBHOOK_URL', '');
+    vi.stubEnv('VITE_SUPABASE_URL', 'https://projekbaru.supabase.co/');
+    vi.resetModules();
+    const mod = await import('./realtimeSyncService');
+    expect(mod.WEBHOOK_URL).toBe('https://projekbaru.supabase.co/functions/v1/sheet-sync-webhook');
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it('memakai VITE_SHEET_SYNC_WEBHOOK_URL bila diisi eksplisit', async () => {
+    vi.stubEnv('VITE_SHEET_SYNC_WEBHOOK_URL', 'https://override.example/hook');
+    vi.resetModules();
+    const mod = await import('./realtimeSyncService');
+    expect(mod.WEBHOOK_URL).toBe('https://override.example/hook');
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
   it('broadcasts bus update via supabase channel', async () => {
     const mockChannel = supabase.channel('test');
 

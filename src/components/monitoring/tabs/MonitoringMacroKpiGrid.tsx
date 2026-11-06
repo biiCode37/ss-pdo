@@ -7,23 +7,22 @@ interface MonitoringMacroKpiGridProps {
   data: RegionalMonitoringResult;
 }
 
+// Format desimal Indonesia dengan jumlah digit tetap (koma desimal, titik ribuan) — BUG-FMT-201
+const formatId = (value: number, digits: number) =>
+  value.toLocaleString("id-ID", { minimumFractionDigits: digits, maximumFractionDigits: digits });
+
 export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
   data,
 }) => {
-  const targetPct =
+  const targetPctNum =
     data.totalTargetPassengers > 0
-      ? ((data.totalTodayPassengers / data.totalTargetPassengers) * 100).toFixed(1)
-      : "0.0";
+      ? (data.totalTodayPassengers / data.totalTargetPassengers) * 100
+      : 0;
 
-  const paxPerBus =
-    data.totalRealops > 0
-      ? (data.totalTodayPassengers / data.totalRealops).toFixed(0)
-      : "0";
+  const paxPerBusNum =
+    data.totalRealops > 0 ? Math.round(data.totalTodayPassengers / data.totalRealops) : 0;
 
-  const paxPerKm =
-    data.totalKm > 0
-      ? (data.totalTodayPassengers / data.totalKm).toFixed(2)
-      : "0.00";
+  const paxPerKm = formatId(data.totalKm > 0 ? data.totalTodayPassengers / data.totalKm : 0, 2);
 
   const kpis = [
     {
@@ -31,8 +30,8 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
       title: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PASSENGERS,
       value: data.totalTodayPassengers.toLocaleString("id-ID"),
       suffix: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PASSENGERS_SUFFIX,
-      subtext: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TARGET_PCT(targetPct),
-      subtextPositive: Number(targetPct) >= 100,
+      subtext: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TARGET_PCT(formatId(targetPctNum, 1)),
+      subtextPositive: targetPctNum >= 100,
       icon: Users,
       color: "#3ECF8E",
       bgGradient: "rgba(62, 207, 142, 0.08)",
@@ -42,7 +41,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
       title: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TRIPS,
       value: (data.totalTrips || 0).toLocaleString("id-ID", { maximumFractionDigits: 1 }),
       suffix: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TRIPS_SUFFIX,
-      subtext: `${(data.averageTripsPerBus || 0).toFixed(1)} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TRIPS_SUFFIX} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PER_BUS}`,
+      subtext: `${formatId(data.averageTripsPerBus || 0, 1)} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TRIPS_SUFFIX} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PER_BUS}`,
       subtextPositive: (data.averageTripsPerBus || 0) >= 6.5,
       icon: Repeat,
       color: "#38BDF8",
@@ -51,9 +50,9 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
     {
       id: "distance",
       title: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.DISTANCE,
-      value: `${data.totalKm.toLocaleString("id-ID")}`,
+      value: formatId(data.totalKm, 1),
       suffix: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.DISTANCE_SUFFIX,
-      subtext: `${data.averageKmPerBus.toFixed(1)} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.DISTANCE_SUFFIX} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PER_BUS}`,
+      subtext: `${formatId(data.averageKmPerBus, 1)} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.DISTANCE_SUFFIX} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PER_BUS}`,
       subtextPositive: true,
       icon: Navigation,
       color: "#F59E0B",
@@ -62,10 +61,10 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
     {
       id: "productivity",
       title: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PRODUCTIVITY,
-      value: `${paxPerBus}`,
+      value: paxPerBusNum.toLocaleString("id-ID"),
       suffix: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PRODUCTIVITY_SUFFIX,
       subtext: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.SUBTEXT_PER_KM(paxPerKm),
-      subtextPositive: Number(paxPerBus) >= 150,
+      subtextPositive: paxPerBusNum >= 150,
       icon: TrendingUp,
       color: "#A855F7",
       bgGradient: "rgba(168, 85, 247, 0.08)",

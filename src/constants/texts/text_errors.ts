@@ -20,6 +20,8 @@ export const TEXT_ERRORS = {
   AUTH_TIMEOUT: 'Koneksi ke layanan autentikasi terganggu atau membutuhkan waktu lebih lama. Silakan coba lagi.',
   COLUMN_MISMATCH: 'Format kolom pada tabel Google Sheets tidak sesuai. Mohon periksa kembali dokumen Anda.',
   EMPTY_SHEET: 'Tidak ditemukan data pada lembar kerja ini.',
+  REQUEST_LIMIT_TITLE: 'Aplikasi Dijeda Sementara',
+  REQUEST_LIMIT_MESSAGE: 'Aplikasi mendeteksi permintaan data yang tidak wajar dan menghentikannya untuk melindungi layanan bagi semua pengguna. Silakan muat ulang halaman. Jika pesan ini muncul lagi, hubungi admin.',
   ROUTE_VALIDATION: {
     CODE_REQUIRED: 'Kode Rute wajib diisi (misal: JAK.76).',
     CODE_FORMAT: 'Format Kode Rute tidak valid. Wajib diawali "JAK." diikuti angka/huruf (contoh: JAK.115, JAK.76, JAK.78A).',

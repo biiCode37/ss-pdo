@@ -58,7 +58,7 @@ Agar GitHub Actions dapat menjalankan tugas pencadangan setiap malam, pastikan v
 | Nama Secret | Deskripsi & Lokasi Pengambilan |
 | :--- | :--- |
 | `SUPABASE_DB_URL` | *Connection String* PostgreSQL Supabase.<br>Ambil dari: **Supabase Studio** ➔ **Project Settings** ➔ **Database** ➔ **Connection String** ➔ pilih mode **URI** (ganti `[YOUR-PASSWORD]` dengan password database Anda). |
-| `SUPABASE_URL` | URL endpoint Supabase resmi (contoh: `https://sejttnsanzogsykmtwym.supabase.co`). |
+| `SUPABASE_URL` | URL endpoint Supabase resmi (contoh: `https://znchudtormqsgpukibsn.supabase.co`). |
 | `SUPABASE_SERVICE_ROLE_KEY` | Kunci *service_role* Supabase (dari menu **Project Settings** ➔ **API**). |
 | `GOOGLE_SERVICE_ACCOUNT_KEY` | Isi teks lengkap dari file JSON kunci Google Service Account. |
 | `GDRIVE_BACKUP_FOLDER_ID` | ID Folder Google Drive yang Anda salin pada **Langkah 1** di atas. |

@@ -5,10 +5,11 @@ description: Consult the graphify knowledge graph at graphify-out/ for codebase 
 
 ## graphify
 
-This project has a graphify knowledge graph at graphify-out/.
+This project has a graphify knowledge graph at graphify-out/. Navigation order and limits follow `AGENTS.md` → "Golden Rule Efisiensi Token & Anti Over-Engineering" (section A). Summary:
 
-Rules:
-- For codebase or architecture questions, when `graphify-out/graph.json` exists, first run `graphify query "<question>"` (CLI) or `query_graph` (MCP). Use `graphify path "<A>" "<B>"` / `shortest_path` for relationships and `graphify explain "<concept>"` / `get_node` for focused concepts. These return a scoped subgraph, usually much smaller than `GRAPH_REPORT.md` or raw grep output.
-- If graphify-out/wiki/index.md exists, navigate it instead of reading raw files
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context
-- After modifying code files in this session, run `graphify update .` to keep the graph current (AST-only, no API cost)
+- Location already known → targeted read (offset/limit) of that part only.
+- Location or relationships unknown → run the CLI directly: `graphify query "<question>"`, `graphify path "<A>" "<B>"`, `graphify explain "<concept>"`. Output is capped (~2k tokens); narrow the query instead of raising the budget.
+- Exact literal (column name, text key, symbol) → targeted grep (`files_with_matches`/`count` first); cheaper and exact.
+- Full-file reads / broad grep → last resort. Read graphify-out/GRAPH_REPORT.md only for broad architecture review.
+- Graph results are hints, not proof: confirm against the real code before concluding or editing. The graph can lag behind edits made in the current session.
+- After modifying code files, run `graphify update .` (AST-only, no API cost).

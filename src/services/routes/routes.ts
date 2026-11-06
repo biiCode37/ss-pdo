@@ -283,6 +283,27 @@ export async function upsertDailyUnitSummaries(summaries: DailyUnitSummary[]): P
   }
 }
 
+const CROSS_PERIOD_COLUMNS =
+  'unit, year, month, day, toa_shift1, manual_shift1, toa_shift2, manual_shift2, total_toa, total_km, keterangan';
+const CROSS_PERIOD_PAGE_SIZE = 1000;
+
+/**
+ * Menyusun filter PostgREST `or` untuk setiap bulan dalam rentang (inklusif).
+ * Contoh: Okt–Nov 2026 → "and(year.eq.2026,month.eq.10),and(year.eq.2026,month.eq.11)"
+ */
+export function buildMonthRangeFilter(
+  startYear: number,
+  startMonth: number,
+  endYear: number,
+  endMonth: number
+): string {
+  const parts: string[] = [];
+  for (let idx = startYear * 12 + (startMonth - 1); idx <= endYear * 12 + (endMonth - 1); idx++) {
+    parts.push(`and(year.eq.${Math.floor(idx / 12)},month.eq.${(idx % 12) + 1})`);
+  }
+  return parts.join(',');
+}
+
 /**
  * Kueri akumulasi lintas bulan/tahun dari tabel Supabase daily_unit_summaries
  */
@@ -301,12 +322,24 @@ export async function getCrossPeriodAccumulation(
     const startDateNum = startYear * 10000 + startMonth * 100 + startDay;
     const endDateNum = endYear * 10000 + endMonth * 100 + endDay;
 
-    const { data, error } = await supabase
-      .from('daily_unit_summaries')
-      .select('*')
-      .eq('route_code', routeCode);
+    // BUG-QUOTA-200-04: filter bulan & proyeksi kolom di server, paginasi agar tidak terpotong batas 1.000 baris PostgREST
+    const monthFilter = buildMonthRangeFilter(startYear, startMonth, endYear, endMonth);
+    if (!monthFilter) return null;
 
-    if (error || !data) return null;
+    const data: any[] = [];
+    for (let from = 0; ; from += CROSS_PERIOD_PAGE_SIZE) {
+      const { data: page, error } = await supabase
+        .from('daily_unit_summaries')
+        .select(CROSS_PERIOD_COLUMNS)
+        .eq('route_code', routeCode)
+        .or(monthFilter)
+        .order('id', { ascending: true })
+        .range(from, from + CROSS_PERIOD_PAGE_SIZE - 1);
+
+      if (error || !page) return null;
+      data.push(...page);
+      if (page.length < CROSS_PERIOD_PAGE_SIZE) break;
+    }
 
     const filtered = data.filter((row: any) => {
       const dNum = row.year * 10000 + row.month * 100 + row.day;
