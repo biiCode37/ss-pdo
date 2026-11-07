@@ -71,7 +71,7 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
         <div
           style={{
             transform: `rotate(${pullDistance * 3}deg)`,
-            color: "var(--accent-color)",
+            color: "var(--color-link)",
           }}
         >
           <RefreshCw size={24} className={isRefreshing ? "spinner" : ""} />
@@ -135,9 +135,9 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
             disabled={isReauthenticating}
           >
             {isReauthenticating ? (
-              <RefreshCw size={14} className="spinner" />
+              <RefreshCw size={16} className="spinner" />
             ) : (
-              <RefreshCw size={14} />
+              <RefreshCw size={16} />
             )}
             {isReauthenticating ? TEXT_COMMON.STATUS.PROCESSING : TEXT_AUTH.REAUTH_BTN}
           </button>
@@ -190,7 +190,7 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--danger-color, #ef4444)" }}>
-            <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={20} style={{ flexShrink: 0 }} />
             <span>{TEXT_AUTH.SESSION_NEED_REAUTH}</span>
           </div>
           <button
@@ -200,7 +200,7 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
               backgroundColor: "var(--danger-color, #ef4444)",
               color: "white",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "8px",
               fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",

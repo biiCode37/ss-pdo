@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, ChevronLeft, ChevronRight, X, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Check } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { type MonitoringPeriodFilter } from "@/services/allRouteMonitoringService";
 import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
@@ -136,7 +136,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
           maxWidth: "380px",
           background: "var(--card-bg, #1a1a1a)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-          borderRadius: "20px",
+          borderRadius: "16px",
           padding: "20px",
           boxShadow: "0 16px 40px rgba(0, 0, 0, 0.5)",
           animation: "modalFadeIn 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -156,15 +156,14 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             data-testid="month-picker-modal-title"
             style={{
               margin: 0,
-              fontSize: "15px",
-              fontWeight: 800,
+              fontSize: "16px",
+              fontWeight: 700,
               color: "var(--text-primary, #ededed)",
               display: "flex",
               alignItems: "center",
               gap: "8px",
             }}
           >
-            <Calendar size={18} style={{ color: "var(--accent-color, #3ECF8E)" }} />
             {TEXT_MONITORING.PERIOD.MONTHLY_MODAL_TITLE}
           </h3>
           <button
@@ -183,7 +182,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             title={TEXT_COMMON.BUTTONS.CLOSE}
             aria-label={TEXT_COMMON.BUTTONS.CLOSE}
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 
@@ -225,8 +224,8 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
           <span
             data-testid="month-picker-current-year"
             style={{
-              fontSize: "15px",
-              fontWeight: 800,
+              fontSize: "16px",
+              fontWeight: 700,
               color: "var(--text-primary, #ededed)",
               letterSpacing: "0.5px",
             }}
@@ -262,7 +261,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
           <span
             style={{
               display: "block",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: 600,
               color: "var(--text-secondary, #888)",
               marginBottom: "6px",
@@ -277,17 +276,17 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               onClick={() => handleQuickSelect(0)}
               style={{
                 padding: "4px 10px",
-                borderRadius: "9999px",
-                fontSize: "11.5px",
+                borderRadius: "999px",
+                fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                 background:
                   selectedYear === currentYear && selectedMonth === currentMonth
-                    ? "rgba(62, 207, 142, 0.16)"
+                    ? "var(--color-state-active-bg)"
                     : "var(--input-bg, rgba(255, 255, 255, 0.04))",
                 color:
                   selectedYear === currentYear && selectedMonth === currentMonth
-                    ? "var(--accent-color, #3ECF8E)"
+                    ? "var(--color-state-active-fg)"
                     : "var(--text-secondary, #aaa)",
                 cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -301,8 +300,8 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               onClick={() => handleQuickSelect(1)}
               style={{
                 padding: "4px 10px",
-                borderRadius: "9999px",
-                fontSize: "11.5px",
+                borderRadius: "999px",
+                fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
@@ -319,8 +318,8 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               onClick={() => handleQuickSelect(2)}
               style={{
                 padding: "4px 10px",
-                borderRadius: "9999px",
-                fontSize: "11.5px",
+                borderRadius: "999px",
+                fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
@@ -359,31 +358,31 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
                   padding: "10px 4px",
                   borderRadius: "12px",
                   border: isSelected
-                    ? "1px solid var(--accent-color, #3ECF8E)"
+                    ? "1px solid var(--color-state-active-bg)"
                     : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                   background: isSelected
-                    ? "var(--accent-color, #3ECF8E)"
+                    ? "var(--color-state-active-bg)"
                     : isCurrent
-                    ? "rgba(62, 207, 142, 0.12)"
+                    ? "var(--color-action-secondary-bg)"
                     : "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   color: isSelected
-                    ? "#062817"
+                    ? "var(--color-state-active-fg)"
                     : isCurrent
-                    ? "var(--accent-color, #3ECF8E)"
+                    ? "var(--color-link)"
                     : "var(--text-primary, #ededed)",
-                  fontSize: "12.5px",
-                  fontWeight: isSelected ? 800 : isCurrent ? 700 : 500,
+                  fontSize: "13px",
+                  fontWeight: isSelected ? 700 : isCurrent ? 700 : 500,
                   cursor: "pointer",
                   transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "4px",
-                  boxShadow: isSelected ? "0 2px 10px rgba(62, 207, 142, 0.3)" : "none",
+                  boxShadow: isSelected ? "0 2px 10px var(--color-shadow)" : "none",
                 }}
               >
                 <span>{name.slice(0, 3)}</span>
-                {isSelected && <Check size={12} strokeWidth={3} />}
+                {isSelected && <Check size={16} strokeWidth={3} />}
               </button>
             );
           })}
@@ -397,7 +396,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             data-testid="month-picker-cancel-btn"
             style={{
               padding: "8px 14px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.15))",
               background: "transparent",
               color: "var(--text-secondary, #a3a3a3)",
@@ -414,9 +413,9 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             onClick={() => handleApply()}
             style={{
               padding: "8px 16px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               border: "none",
-              background: "var(--accent-color, #3ECF8E)",
+              background: "var(--color-action-primary-bg)",
               color: "#062817",
               fontSize: "13px",
               fontWeight: 700,
@@ -424,11 +423,11 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              boxShadow: "0 2px 8px rgba(62, 207, 142, 0.3)",
+              boxShadow: "0 2px 8px var(--color-shadow)",
             }}
           >
             {TEXT_MONITORING.PERIOD.APPLY_BTN}
-            <ChevronRight size={14} />
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>

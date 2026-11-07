@@ -92,7 +92,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
         }}
       >
         <Search
-          size={17}
+          size={16}
           style={{
             position: "absolute",
             left: "14px",
@@ -113,8 +113,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
             border: "1px solid var(--card-border, rgba(255,255,255,0.12))",
             background: "var(--card-bg, rgba(30, 41, 59, 0.6))",
             color: "var(--text-primary, #f8fafc)",
-            fontSize: "13.5px",
-            outline: "none",
+            fontSize: "14px",
             boxSizing: "border-box",
           }}
         />
@@ -138,17 +137,17 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
               onClick={() => onTabChange(tab.key as FilterTab)}
               style={{
                 padding: "6px 12px",
-                borderRadius: "10px",
-                fontSize: "12.5px",
+                borderRadius: "12px",
+                fontSize: "13px",
                 fontWeight: isActive ? 600 : 500,
                 border: "1px solid",
                 borderColor: isActive
-                  ? "#3b82f6"
+                  ? "var(--color-state-active-bg)"
                   : "var(--card-border, rgba(255,255,255,0.08))",
                 background: isActive
-                  ? "rgba(59, 130, 246, 0.15)"
+                  ? "var(--color-state-active-bg)"
                   : "rgba(255,255,255,0.03)",
-                color: isActive ? "#60a5fa" : "var(--text-secondary, #94a3b8)",
+                color: isActive ? "var(--color-state-active-fg)" : "var(--text-secondary, #94a3b8)",
                 whiteSpace: "nowrap",
                 cursor: "pointer",
                 display: "flex",
@@ -160,13 +159,13 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
               <span>{tab.label}</span>
               <span
                 style={{
-                  fontSize: "11px",
-                  padding: "1px 6px",
+                  fontSize: "12px",
+                  padding: "2px 6px",
                   borderRadius: "8px",
                   background: isActive
-                    ? "rgba(59, 130, 246, 0.3)"
+                    ? "var(--color-state-active-bg)"
                     : "rgba(255,255,255,0.08)",
-                  color: isActive ? "#ffffff" : "var(--text-secondary, #94a3b8)",
+                  color: isActive ? "var(--color-state-active-fg)" : "var(--text-secondary, #94a3b8)",
                 }}
               >
                 {tab.count}

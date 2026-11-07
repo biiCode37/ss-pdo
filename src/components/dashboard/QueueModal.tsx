@@ -51,7 +51,7 @@ export function QueueModal({
         border: "1px solid var(--color-border-subtle)",
       }}
     >
-        <h2 style={{ fontSize: "1.1rem", marginTop: 0, marginBottom: "16px" }}>
+        <h2 style={{ fontSize: "18px", marginTop: 0, marginBottom: "16px" }}>
           {TEXT_ALERTS.QUEUE_MODAL.TITLE}
         </h2>
         {queue.length === 0 ? (
@@ -76,7 +76,7 @@ export function QueueModal({
                     item.status === "pending"
                       ? "var(--warning-color)"
                       : item.status === "conflict"
-                        ? "var(--accent-color)"
+                        ? "var(--color-link)"
                         : "var(--danger-color)",
                 }}
               >
@@ -104,7 +104,7 @@ export function QueueModal({
                         showInfoToast(TEXT_ALERTS.QUEUE_MODAL.TOAST_RETRY);
                       }}
                     >
-                      <RotateCw size={14} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_RETRY}
+                      <RotateCw size={16} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_RETRY}
                     </button>
                     <button
                       className="btn btn-outline"
@@ -118,7 +118,7 @@ export function QueueModal({
                       }}
                       onClick={() => onDelete(item.id)}
                     >
-                      <Trash2 size={14} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_DELETE}
+                      <Trash2 size={16} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_DELETE}
                     </button>
                   </>
                 )}

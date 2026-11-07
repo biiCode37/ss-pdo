@@ -193,7 +193,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
           maxWidth: '520px',
           background: 'var(--card-bg, #1e1e1e)',
           border: '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
-          borderRadius: '20px',
+          borderRadius: '16px',
           padding: '24px',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
           position: 'relative',
@@ -233,15 +233,15 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'rgba(62, 207, 142, 0.15)',
+              background: 'var(--color-action-secondary-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--accent-color, #3ECF8E)',
+              color: 'var(--color-link)',
               flexShrink: 0,
             }}
           >
-            <CloudDownload size={22} />
+            <CloudDownload size={24} />
           </div>
           <div>
             <h2
@@ -275,7 +275,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
             alignItems: 'center',
             gap: '8px',
             padding: '8px 12px',
-            borderRadius: '10px',
+            borderRadius: '12px',
             background: isFutureMonth
               ? 'rgba(239, 68, 68, 0.12)'
               : 'var(--input-bg, rgba(255, 255, 255, 0.04))',
@@ -284,13 +284,13 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               : '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
             fontSize: '12px',
             fontWeight: 600,
-            color: isFutureMonth ? '#ef4444' : 'var(--accent-color, #3ECF8E)',
-            marginBottom: '18px',
+            color: isFutureMonth ? 'var(--color-error-fg)' : 'var(--color-link)',
+            marginBottom: '20px',
             width: '100%',
             boxSizing: 'border-box',
           }}
         >
-          <Calendar size={14} style={{ flexShrink: 0 }} />
+          <Calendar size={16} style={{ flexShrink: 0 }} />
           <span>
             {isFutureMonth
               ? TEXT_MONITORING.MONTHLY_SYNC.FUTURE_MONTH_ERR(targetMonthName, targetYear)
@@ -309,13 +309,13 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               borderRadius: '12px',
               background: 'rgba(239, 68, 68, 0.12)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#ef4444',
+              color: 'var(--color-error-fg)',
               fontSize: '13px',
               marginBottom: '16px',
               whiteSpace: 'pre-line',
             }}
           >
-            <AlertCircle size={18} style={{ flexShrink: 0, marginTop: '1px' }} />
+            <AlertCircle size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
             <div style={{ flex: 1, lineHeight: 1.4 }}>{errorMessage}</div>
           </div>
         )}
@@ -346,12 +346,11 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 width: '100%',
                 boxSizing: 'border-box',
                 padding: '10px 14px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-primary, #ededed)',
                 fontSize: '13px',
-                outline: 'none',
                 transition: 'border-color 0.15s ease',
               }}
             />
@@ -363,7 +362,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               <span
                 style={{
                   display: 'block',
-                  fontSize: '11px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   color: 'var(--text-secondary, #a3a3a3)',
                   marginBottom: '6px',
@@ -396,13 +395,13 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                         fontWeight: 600,
                         cursor: syncing ? 'not-allowed' : 'pointer',
                         border: isSelected
-                          ? '1px solid var(--accent-color, #3ECF8E)'
+                          ? "1px solid var(--color-state-active-bg)"
                           : '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
                         background: isSelected
-                          ? 'rgba(62, 207, 142, 0.15)'
+                          ? "var(--color-state-active-bg)"
                           : 'var(--input-bg, rgba(255, 255, 255, 0.04))',
                         color: isSelected
-                          ? 'var(--accent-color, #3ECF8E)'
+                          ? "var(--color-state-active-fg)"
                           : 'var(--text-secondary, #a3a3a3)',
                         transition: 'all 0.15s ease',
                       }}
@@ -437,12 +436,11 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 width: '100%',
                 boxSizing: 'border-box',
                 padding: '10px 14px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-primary, #ededed)',
                 fontSize: '13px',
-                outline: 'none',
                 transition: 'border-color 0.15s ease',
               }}
             />
@@ -471,7 +469,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 }}
               >
                 <span>{progress?.stepMessage || TEXT_MONITORING.MONTHLY_SYNC.STATUS_FETCHING}</span>
-                <span style={{ color: 'var(--accent-color, #3ECF8E)' }}>
+                <span style={{ color: 'var(--color-link)' }}>
                   {progress?.percent || 5}%
                 </span>
               </div>
@@ -479,7 +477,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 style={{
                   width: '100%',
                   height: '6px',
-                  borderRadius: '3px',
+                  borderRadius: '8px',
                   background: 'rgba(255, 255, 255, 0.1)',
                   overflow: 'hidden',
                 }}
@@ -488,8 +486,8 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                   style={{
                     height: '100%',
                     width: `${progress?.percent || 5}%`,
-                    background: 'var(--accent-color, #3ECF8E)',
-                    borderRadius: '3px',
+                    background: 'var(--color-action-primary-bg)',
+                    borderRadius: '8px',
                     transition: 'width 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
                   }}
                 />
@@ -513,7 +511,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               disabled={syncing}
               style={{
                 padding: '10px 16px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'transparent',
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-secondary, #a3a3a3)',
@@ -533,9 +531,9 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '10px 18px',
-                borderRadius: '10px',
-                background: 'var(--accent-color, #3ECF8E)',
+                padding: '10px 20px',
+                borderRadius: '12px',
+                background: 'var(--color-action-primary-bg)',
                 border: 'none',
                 color: '#000000',
                 fontSize: '13px',
@@ -543,7 +541,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 cursor: syncing ? 'wait' : 'pointer',
                 opacity: syncing ? 0.7 : 1,
                 transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
-                boxShadow: '0 2px 8px rgba(62, 207, 142, 0.25)',
+                boxShadow: '0 2px 8px var(--color-shadow)',
               }}
             >
               {syncing ? (

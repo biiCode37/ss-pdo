@@ -53,11 +53,11 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 padding: "4px 10px",
                 borderRadius: "8px",
                 fontSize: "12px",
-                fontWeight: 800,
+                fontWeight: 700,
                 letterSpacing: "0.4px",
-                background: "rgba(62, 207, 142, 0.12)",
-                color: "var(--accent-color, #3ECF8E)",
-                border: "1px solid rgba(62, 207, 142, 0.25)",
+                background: "var(--color-action-secondary-bg)",
+                color: "var(--color-link)",
+                border: "1px solid var(--color-border-subtle)",
                 cursor: "pointer",
               }}
               title={TEXT_MONITORING.ROUTE_CARD.OPEN_ROUTE_TITLE}
@@ -88,13 +88,13 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "3px",
+                  gap: "4px",
                   padding: "2px 6px",
-                  borderRadius: "6px",
-                  fontSize: "10.5px",
+                  borderRadius: "8px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.12)",
-                  color: "#10b981",
+                  color: "var(--color-success-fg)",
                   border: "1px solid rgba(16, 185, 129, 0.25)",
                 }}
                 title="Data dikirim melalui input aplikasi"
@@ -106,13 +106,13 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "3px",
+                  gap: "4px",
                   padding: "2px 6px",
-                  borderRadius: "6px",
-                  fontSize: "10.5px",
+                  borderRadius: "8px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(56, 189, 248, 0.12)",
-                  color: "#38bdf8",
+                  color: "var(--color-link)",
                   border: "1px solid rgba(56, 189, 248, 0.25)",
                 }}
                 title="Data ditarik langsung dari Google Sheet rute"
@@ -128,16 +128,16 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  padding: "3px 8px",
-                  borderRadius: "6px",
-                  fontSize: "11px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.12)",
-                  color: "#10b981",
+                  color: "var(--color-success-fg)",
                   border: "1px solid rgba(16, 185, 129, 0.25)",
                 }}
               >
-                <CheckCircle2 size={13} />
+                <CheckCircle2 size={16} />
                 {TEXT_MONITORING.ROUTE_CARD.BADGE_VERIFIED}
               </span>
             )}
@@ -147,16 +147,16 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                fontSize: "11px",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-info-bg)",
                 color: "var(--color-info-fg)",
                 border: "1px solid var(--color-info-border)",
               }}
             >
-              <Send size={13} />
+              <Send size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_SUBMITTED}
             </span>
           )}
@@ -166,16 +166,16 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                fontSize: "11px",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-warning-bg)",
                 color: "var(--color-warning-fg)",
                 border: "1px solid var(--color-warning-border)",
               }}
             >
-              <Clock size={13} />
+              <Clock size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_DRAFT}
             </span>
           )}
@@ -185,16 +185,16 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                fontSize: "11px",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 600,
                 background: "rgba(255, 255, 255, 0.05)",
                 color: "var(--text-secondary, #8b8b8b)",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               }}
             >
-              <AlertTriangle size={13} />
+              <AlertTriangle size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_EMPTY}
             </span>
           )}
@@ -205,7 +205,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
         <h3
           onClick={() => onSelectRoute?.(route.routeCode)}
           style={{
-            fontSize: "13.5px",
+            fontSize: "14px",
             fontWeight: 700,
             color: "var(--text-primary, #ededed)",
             margin: 0,
@@ -220,7 +220,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
         </h3>
 
         {/* Korwil Info */}
-        <div style={{ fontSize: "11px", color: "var(--text-secondary, #8b8b8b)" }}>
+        <div style={{ fontSize: "12px", color: "var(--text-secondary, #8b8b8b)" }}>
           {TEXT_MONITORING.ROUTE_CARD.KORWIL_PREFIX}{" "}
           <strong
             style={{
@@ -250,7 +250,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
         <div>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary, #8b8b8b)",
               textTransform: "uppercase",
               fontWeight: 600,
@@ -263,7 +263,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             className="tabular-nums"
             style={{
               fontSize: "13px",
-              fontWeight: 800,
+              fontWeight: 700,
               color: "var(--text-primary, #ededed)",
               marginTop: "2px",
             }}
@@ -273,10 +273,10 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
           <span
             className="tabular-nums"
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
-              marginTop: "1px",
+              marginTop: "2px",
             }}
           >
             S1:{route.realopsShift1} | S2:{route.realopsShift2}
@@ -287,7 +287,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
         <div>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary, #8b8b8b)",
               textTransform: "uppercase",
               fontWeight: 600,
@@ -300,8 +300,8 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             className="tabular-nums"
             style={{
               fontSize: "13px",
-              fontWeight: 800,
-              color: "var(--accent-color, #3ECF8E)",
+              fontWeight: 700,
+              color: "var(--color-link)",
               marginTop: "2px",
             }}
           >
@@ -310,10 +310,10 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
           <span
             className="tabular-nums"
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
-              marginTop: "1px",
+              marginTop: "2px",
             }}
           >
             S1:{formatNumber(route.totalShift1)} S2:
@@ -325,7 +325,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
         <div>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary, #8b8b8b)",
               textTransform: "uppercase",
               fontWeight: 600,
@@ -338,8 +338,8 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             className="tabular-nums"
             style={{
               fontSize: "13px",
-              fontWeight: 800,
-              color: "#38bdf8",
+              fontWeight: 700,
+              color: "var(--color-link)",
               marginTop: "2px",
             }}
           >
@@ -348,10 +348,10 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
           <span
             className="tabular-nums"
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
-              marginTop: "1px",
+              marginTop: "2px",
             }}
           >
             {TEXT_MONITORING.ROUTE_CARD.KM_PER_BUS_PREFIX}{" "}
@@ -367,17 +367,17 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             display: "flex",
             flexDirection: "column",
             gap: "4px",
-            fontSize: "11px",
+            fontSize: "12px",
           }}
         >
           {route.trafficJamSpots.length > 0 && (
             <div
               style={{
                 padding: "4px 8px",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "rgba(245, 158, 11, 0.1)",
                 border: "1px solid rgba(245, 158, 11, 0.2)",
-                color: "#f59e0b",
+                color: "var(--color-warning-fg)",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
@@ -391,7 +391,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             <div
               style={{
                 padding: "4px 8px",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                 color: "var(--text-secondary, #8b8b8b)",
@@ -415,7 +415,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
           alignItems: "center",
           paddingTop: "6px",
           borderTop: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
-          fontSize: "11px",
+          fontSize: "12px",
         }}
       >
         <span style={{ color: "var(--text-secondary, #8b8b8b)" }}>
@@ -435,15 +435,15 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
               gap: "4px",
               padding: "4px 10px",
               borderRadius: "8px",
-              background: "var(--accent-color, #3ECF8E)",
+              background: "var(--color-action-primary-bg)",
               color: "#ffffff",
               border: "none",
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 700,
               cursor: "pointer",
             }}
           >
-            <CheckCircle2 size={13} />
+            <CheckCircle2 size={16} />
             <span>{TEXT_MONITORING.ROUTE_CARD.BTN_VERIFY}</span>
           </button>
         )}

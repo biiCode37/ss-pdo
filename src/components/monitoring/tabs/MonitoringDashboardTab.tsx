@@ -49,16 +49,16 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             }}
           >
             {isAllConfirmed ? (
-              <CheckCircle2 size={19} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={20} style={{ color: "var(--color-success-fg)" }} />
             ) : (
-              <ShieldAlert size={19} style={{ color: "#F59E0B" }} />
+              <ShieldAlert size={20} style={{ color: "var(--color-warning-fg)" }} />
             )}
           </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "3px",
+              gap: "4px",
               minWidth: 0,
               flex: 1,
             }}
@@ -76,9 +76,9 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             </h3>
             <span
               style={{
-                fontSize: "12.5px",
+                fontSize: "13px",
                 fontWeight: 700,
-                color: isAllConfirmed ? "#10B981" : "var(--accent-color, #3ECF8E)",
+                color: isAllConfirmed ? "var(--color-success-fg)" : "var(--color-link)",
                 lineHeight: 1.25,
               }}
             >
@@ -95,7 +95,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
           style={{
             height: "10px",
             width: "100%",
-            borderRadius: "6px",
+            borderRadius: "8px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
             overflow: "hidden",
             marginBottom: "8px",
@@ -106,9 +106,9 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
               height: "100%",
               width: `${progressPct}%`,
               background: isAllConfirmed
-                ? "linear-gradient(90deg, #10B981 0%, #059669 100%)"
-                : "linear-gradient(90deg, #3ECF8E 0%, #10B981 100%)",
-              borderRadius: "6px",
+                ? "var(--color-success-fg)"
+                : "var(--color-action-primary-bg)",
+              borderRadius: "8px",
               transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
           />
@@ -119,7 +119,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            fontSize: "11px",
+            fontSize: "12px",
             color: "var(--text-secondary)",
           }}
         >

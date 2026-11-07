@@ -220,7 +220,7 @@ function RouteOperationalReportCardComponent({
       className="glass pdo-operational-card"
       style={{
         borderRadius: "16px",
-        padding: "16px 18px",
+        padding: "16px 20px",
         marginBottom: "16px",
         border: "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
         transition: "all 0.25s cubic-bezier(0.32, 0.72, 0, 1)",

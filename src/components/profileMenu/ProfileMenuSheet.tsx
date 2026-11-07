@@ -135,8 +135,8 @@ export function ProfileMenuSheet({
           maxHeight: "min(88dvh, 760px)",
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
-          borderTopLeftRadius: "24px",
-          borderTopRightRadius: "24px",
+          borderTopLeftRadius: "16px",
+          borderTopRightRadius: "16px",
           padding:
             "20px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px",
           background: "var(--card-bg)",

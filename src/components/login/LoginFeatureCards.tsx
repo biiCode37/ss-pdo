@@ -1,20 +1,17 @@
-import { Activity, Bus, Lock } from "lucide-react";
+
 import { TEXT_AUTH } from "../../constants/texts";
 
 export function LoginFeatureCards() {
   const features = [
     {
-      icon: Activity,
       title: TEXT_AUTH.FEATURE_CARDS.CARD_1_TITLE,
       desc: TEXT_AUTH.FEATURE_CARDS.CARD_1_DESC,
     },
     {
-      icon: Bus,
       title: TEXT_AUTH.FEATURE_CARDS.CARD_2_TITLE,
       desc: TEXT_AUTH.FEATURE_CARDS.CARD_2_DESC,
     },
     {
-      icon: Lock,
       title: TEXT_AUTH.FEATURE_CARDS.CARD_3_TITLE,
       desc: TEXT_AUTH.FEATURE_CARDS.CARD_3_DESC,
     },
@@ -50,14 +47,13 @@ export function LoginFeatureCards() {
         }}
       >
         {features.map((item, idx) => {
-          const IconComponent = item.icon;
           return (
             <div
               key={idx}
               className="glass"
               style={{
                 padding: "14px 16px",
-                borderRadius: "14px",
+                borderRadius: "12px",
                 textAlign: "left",
                 display: "flex",
                 flexDirection: "column",
@@ -70,24 +66,11 @@ export function LoginFeatureCards() {
                   display: "flex",
                   alignItems: "center",
                   gap: "8px",
-                  color: "var(--accent-color, #3ECF8E)",
+                  color: "var(--color-text-primary)",
                   fontWeight: 700,
                   fontSize: "13px",
                 }}
               >
-                <div
-                  style={{
-                    padding: "6px",
-                    borderRadius: "8px",
-                    backgroundColor: "rgba(62, 207, 142, 0.12)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  <IconComponent size={16} />
-                </div>
                 <span>{item.title}</span>
               </div>
               <p

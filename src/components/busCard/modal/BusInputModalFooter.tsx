@@ -22,10 +22,10 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
         gap: "10px",
         marginTop: "auto",
         paddingTop: isKeyboardOpen ? "8px" : "12px",
-        borderTop: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+        borderTop: "1px solid var(--color-border-subtle)",
         position: "sticky",
         bottom: 0,
-        background: "var(--card-bg, #171717)",
+        background: "var(--color-surface-default)",
         zIndex: 20,
       }}
     >
@@ -37,10 +37,10 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
           minHeight: isKeyboardOpen ? "40px" : "46px",
           padding: isKeyboardOpen ? "6px 12px" : "10px 14px",
           borderRadius: "12px",
-          border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-          background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-          color: "var(--text-secondary, #94a3b8)",
-          fontSize: isKeyboardOpen ? "0.85rem" : "0.9rem",
+          border: "1px solid var(--color-border-subtle)",
+          background: "var(--color-surface-subtle)",
+          color: "var(--color-text-secondary)",
+          fontSize: isKeyboardOpen ? "14px" : "14px",
           fontWeight: 600,
           cursor: "pointer",
           display: "flex",
@@ -70,7 +70,7 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
             ? "var(--color-disabled-bg)"
             : "var(--color-action-primary-bg)",
           color: isDisabled ? "var(--color-disabled-fg)" : "var(--color-action-primary-fg)",
-          fontSize: isKeyboardOpen ? "0.88rem" : "0.92rem",
+          fontSize: isKeyboardOpen ? "14px" : "14px",
           fontWeight: 700,
           cursor: isDisabled ? "not-allowed" : "pointer",
           boxShadow: isDisabled
@@ -79,7 +79,7 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
           transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
-        <Check size={isKeyboardOpen ? 16 : 18} />
+        <Check size={isKeyboardOpen ? 16 : 20} />
         <span>{TEXT_ALERTS.BUS_INPUT_MODAL.SAVE_BTN}</span>
       </button>
     </div>

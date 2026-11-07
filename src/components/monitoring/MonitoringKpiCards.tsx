@@ -35,7 +35,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             textTransform: "uppercase",
             color: "var(--text-secondary, #8b8b8b)",
@@ -47,14 +47,14 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
         <div
           style={{
             fontSize: "20px",
-            fontWeight: 800,
+            fontWeight: 700,
             color: "var(--text-primary, #ededed)",
           }}
         >
           {data.totalRealops} / {data.totalRenops}
           <span
             style={{
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: 500,
               color: "var(--text-secondary)",
               marginLeft: "4px",
@@ -68,13 +68,13 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            fontSize: "11.5px",
+            fontSize: "12px",
             paddingTop: "4px",
           }}
         >
           <span
             style={{
-              color: "var(--accent-color, #3ECF8E)",
+              color: "var(--color-link)",
               fontWeight: 700,
             }}
           >
@@ -104,7 +104,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             textTransform: "uppercase",
             color: "var(--text-secondary, #8b8b8b)",
@@ -117,14 +117,14 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
           className="tabular-nums"
           style={{
             fontSize: "20px",
-            fontWeight: 800,
-            color: "var(--accent-color, #3ECF8E)",
+            fontWeight: 700,
+            color: "var(--color-link)",
           }}
         >
           {formatNumber(data.totalTodayPassengers)}
           <span
             style={{
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: 500,
               color: "var(--text-secondary)",
               marginLeft: "4px",
@@ -138,7 +138,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            fontSize: "11.5px",
+            fontSize: "12px",
             paddingTop: "4px",
             color: "var(--text-secondary)",
           }}
@@ -179,7 +179,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             textTransform: "uppercase",
             color: "var(--text-secondary, #8b8b8b)",
@@ -190,12 +190,12 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
         </span>
         <div
           className="tabular-nums"
-          style={{ fontSize: "20px", fontWeight: 800, color: "#38bdf8" }}
+          style={{ fontSize: "20px", fontWeight: 700, color: "var(--color-link)" }}
         >
           {formatDecimal(data.totalKm, 1)}
           <span
             style={{
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: 500,
               color: "var(--text-secondary)",
               marginLeft: "4px",
@@ -209,7 +209,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            fontSize: "11.5px",
+            fontSize: "12px",
             paddingTop: "4px",
             color: "var(--text-secondary)",
           }}
@@ -239,7 +239,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             textTransform: "uppercase",
             color: "var(--text-secondary, #8b8b8b)",
@@ -252,14 +252,14 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
           style={{
             display: "flex",
             justifyContent: "space-between",
-            fontSize: "12.5px",
+            fontSize: "13px",
             fontWeight: 600,
           }}
         >
           <span style={{ color: "var(--text-secondary)" }}>
             {TEXT_MONITORING.KPI.SHIFT_1_ROW}
           </span>
-          <span style={{ color: "#38bdf8" }}>
+          <span style={{ color: "var(--color-link)" }}>
             {formatNumber(data.totalShift1)} (
             {formatDecimal(
               (data.totalShift1 / (data.totalTodayPassengers || 1)) * 100,
@@ -272,14 +272,14 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
           style={{
             display: "flex",
             justifyContent: "space-between",
-            fontSize: "12.5px",
+            fontSize: "13px",
             fontWeight: 600,
           }}
         >
           <span style={{ color: "var(--text-secondary)" }}>
             {TEXT_MONITORING.KPI.SHIFT_2_ROW}
           </span>
-          <span style={{ color: "#c084fc" }}>
+          <span style={{ color: "var(--color-shift-2-fg)" }}>
             {formatNumber(data.totalShift2)} (
             {formatDecimal(
               (data.totalShift2 / (data.totalTodayPassengers || 1)) * 100,

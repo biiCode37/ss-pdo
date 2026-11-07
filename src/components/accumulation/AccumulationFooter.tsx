@@ -41,17 +41,17 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
         style={{
           background: "rgba(56, 189, 248, 0.1)",
           border: "1px solid rgba(56, 189, 248, 0.25)",
-          borderRadius: "10px",
+          borderRadius: "12px",
           padding: "10px 14px",
-          fontSize: "0.82rem",
-          color: "var(--accent-color, #38bdf8)",
+          fontSize: "13px",
+          color: "var(--color-link)",
           fontWeight: 600,
           display: "flex",
           alignItems: "center",
           gap: "8px",
         }}
       >
-        <Layers size={14} style={{ flexShrink: 0 }} />
+        <Layers size={16} style={{ flexShrink: 0 }} />
         <span>
           {TEXT_DASHBOARD.ACCUMULATION_SHEET.PREVIEW_RANGE_LABEL(
             safeStartDay,
@@ -71,9 +71,9 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
           style={{
             background: "rgba(239, 68, 68, 0.12)",
             border: "1px solid rgba(239, 68, 68, 0.35)",
-            borderRadius: "10px",
+            borderRadius: "12px",
             padding: "10px 14px",
-            fontSize: "0.8rem",
+            fontSize: "13px",
             color: "var(--danger-color, #ef4444)",
             fontWeight: 600,
           }}
@@ -95,7 +95,7 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
           background: "var(--color-action-primary-bg)",
           color: "var(--color-action-primary-fg)",
           fontWeight: 700,
-          fontSize: "0.92rem",
+          fontSize: "14px",
           cursor: "pointer",
           boxShadow: "0 4px 14px var(--color-shadow)",
           transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -124,7 +124,7 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
             background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
             color: "var(--text-secondary, #94a3b8)",
             fontWeight: 600,
-            fontSize: "0.85rem",
+            fontSize: "14px",
             cursor: "pointer",
             transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
             display: "flex",

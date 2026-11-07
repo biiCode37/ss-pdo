@@ -69,7 +69,7 @@ export function BulkRouteSection({
       {/* Fallback Periode Bulan & Tahun */}
       <div style={{ display: 'flex', gap: '10px' }}>
         <div style={{ flex: 1 }}>
-          <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+          <label style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
             Bulan Default (Acuan / Fallback)
           </label>
           <select
@@ -88,7 +88,7 @@ export function BulkRouteSection({
         </div>
 
         <div style={{ width: '100px' }}>
-          <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+          <label style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
             Tahun
           </label>
           <input
@@ -104,7 +104,7 @@ export function BulkRouteSection({
 
       {/* Textarea Multi-Link */}
       <div>
-        <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+        <label style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
           {texts.TEXTAREA_LABEL}
         </label>
         <textarea
@@ -117,7 +117,7 @@ export function BulkRouteSection({
           style={{
             width: '100%',
             padding: '10px',
-            fontSize: '11.5px',
+            fontSize: '12px',
             fontFamily: 'monospace',
             lineHeight: '1.4',
             resize: 'vertical',
@@ -137,7 +137,7 @@ export function BulkRouteSection({
           justifyContent: 'center',
           gap: '6px',
           padding: '10px',
-          fontSize: '12.5px',
+          fontSize: '13px',
           backgroundColor: 'var(--bg-secondary, #27272a)',
           color: 'var(--text-primary)',
           border: '1px solid var(--border-color)',
@@ -145,12 +145,12 @@ export function BulkRouteSection({
       >
         {isInspecting ? (
           <>
-            <Loader2 className="spinner" size={14} />
+            <Loader2 className="spinner" size={16} />
             <span>{texts.INSPECTING_PROGRESS(inspectProgress.current, inspectProgress.total)}</span>
           </>
         ) : (
           <>
-            <Search size={14} />
+            <Search size={16} />
             <span>{texts.BTN_INSPECT}</span>
           </>
         )}
@@ -159,13 +159,13 @@ export function BulkRouteSection({
       {/* Pesan Error / Sukses */}
       {bulkFormError && (
         <div style={{ color: 'var(--danger-color)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <AlertCircle size={14} style={{ flexShrink: 0 }} />
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
           <span>{bulkFormError}</span>
         </div>
       )}
       {bulkSuccessMessage && (
-        <div style={{ color: 'var(--success-color, #10b981)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <CheckCircle size={14} style={{ flexShrink: 0 }} />
+        <div style={{ color: 'var(--success-color)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <CheckCircle size={16} style={{ flexShrink: 0 }} />
           <span>{bulkSuccessMessage}</span>
         </div>
       )}
@@ -178,7 +178,7 @@ export function BulkRouteSection({
               {texts.PREVIEW_TITLE} ({bulkItems.length})
             </span>
             {readyItemsCount > 0 && (
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', cursor: 'pointer' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer' }}>
                 <input
                   type="checkbox"
                   checked={allReadySelected}
@@ -217,7 +217,7 @@ export function BulkRouteSection({
                     borderRadius: '8px',
                     background: 'var(--bg-secondary, rgba(255, 255, 255, 0.03))',
                     border: '1px solid var(--border-color)',
-                    fontSize: '11.5px',
+                    fontSize: '12px',
                   }}
                 >
                   <input
@@ -234,7 +234,7 @@ export function BulkRouteSection({
                         style={{
                           fontWeight: 700,
                           color: isReady
-                            ? 'var(--success-color, #10b981)'
+                            ? 'var(--success-color)'
                             : isDuplicate
                             ? 'var(--warning-color, #f59e0b)'
                             : 'var(--text-primary)',
@@ -242,14 +242,14 @@ export function BulkRouteSection({
                       >
                         {item.routeCode || 'Rute ?'}
                       </span>
-                      <span style={{ fontSize: '10.5px', color: 'var(--text-secondary)' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                         ({MONTH_NAMES_ID[item.month] || item.month} {item.year})
                       </span>
                     </div>
 
                     <div
                       style={{
-                        fontSize: '10.5px',
+                        fontSize: '12px',
                         color: 'var(--text-secondary)',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
@@ -261,7 +261,7 @@ export function BulkRouteSection({
                     </div>
 
                     {item.errorMessage && (
-                      <div style={{ fontSize: '10px', color: 'var(--danger-color)', marginTop: '2px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--danger-color)', marginTop: '2px' }}>
                         {item.errorMessage}
                       </div>
                     )}
@@ -269,15 +269,15 @@ export function BulkRouteSection({
 
                   {/* Status Badge */}
                   <div style={{ flexShrink: 0 }}>
-                    {isItemInspecting && <Loader2 className="spinner" size={14} />}
+                    {isItemInspecting && <Loader2 className="spinner" size={16} />}
                     {isReady && (
                       <span
                         style={{
                           padding: '2px 6px',
-                          borderRadius: '4px',
-                          fontSize: '10px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
                           background: 'rgba(16, 185, 129, 0.15)',
-                          color: '#10b981',
+                          color: 'var(--color-success-fg)',
                           fontWeight: 600,
                         }}
                       >
@@ -288,10 +288,10 @@ export function BulkRouteSection({
                       <span
                         style={{
                           padding: '2px 6px',
-                          borderRadius: '4px',
-                          fontSize: '10px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
                           background: 'rgba(245, 158, 11, 0.15)',
-                          color: '#f59e0b',
+                          color: 'var(--color-warning-fg)',
                           fontWeight: 600,
                         }}
                       >
@@ -299,14 +299,14 @@ export function BulkRouteSection({
                       </span>
                     )}
                     {isError && (
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
                         <span
                           style={{
                             padding: '2px 6px',
-                            borderRadius: '4px',
-                            fontSize: '10px',
+                            borderRadius: '8px',
+                            fontSize: '12px',
                             background: 'rgba(239, 68, 68, 0.15)',
-                            color: '#ef4444',
+                            color: 'var(--color-error-fg)',
                             fontWeight: 600,
                           }}
                         >
@@ -318,10 +318,10 @@ export function BulkRouteSection({
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '3px',
-                            fontSize: '9.5px',
-                            padding: '2px 5px',
-                            borderRadius: '4px',
+                            gap: '4px',
+                            fontSize: '12px',
+                            padding: '2px 6px',
+                            borderRadius: '8px',
                             background: 'var(--bg-card, #18181b)',
                             border: '1px solid var(--border-color)',
                             color: 'var(--text-secondary)',
@@ -329,7 +329,7 @@ export function BulkRouteSection({
                           }}
                           title={SERVICE_ACCOUNT_EMAIL}
                         >
-                          {copiedEmail ? <Check size={10} color="#10b981" /> : <Copy size={10} />}
+                          {copiedEmail ? <Check size={16} color="var(--color-success-fg)" /> : <Copy size={16} />}
                           <span>{copiedEmail ? 'Disalin!' : 'Salin Email'}</span>
                         </button>
                       </div>
@@ -351,7 +351,7 @@ export function BulkRouteSection({
               padding: '12px',
               fontSize: '13px',
               fontWeight: 600,
-              backgroundColor: 'var(--color-action-primary-bg, #10b981)',
+              backgroundColor: 'var(--color-action-primary-bg)',
               color: 'var(--color-action-primary-fg, #ffffff)',
               display: 'flex',
               alignItems: 'center',

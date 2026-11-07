@@ -79,14 +79,14 @@ export const BusInputModalTrip: React.FC<BusInputModalTripProps> = ({
           alignItems: "center",
         }}
       >
-        <span style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", fontWeight: 500 }}>
+        <span style={{ fontSize: "14px", color: "var(--color-text-secondary)", fontWeight: 500 }}>
           {TEXT_ALERTS.BUS_INPUT_MODAL.TOTAL_TRIP_LABEL}
         </span>
         <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-          <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--color-info-fg)" }}>
+          <span style={{ fontSize: "20px", fontWeight: 700, color: "var(--color-info-fg)" }}>
             {totalRitasePP}
           </span>
-          <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-secondary)" }}>
+          <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-secondary)" }}>
             {TEXT_ALERTS.BUS_INPUT_MODAL.TRIP_UNIT} (PP)
           </span>
         </div>

@@ -40,22 +40,22 @@ export const ReportAccordionHeader: React.FC<ReportAccordionHeaderProps> = ({
           style={{
             width: "36px",
             height: "36px",
-            borderRadius: "10px",
-            background: "rgba(62, 207, 142, 0.12)",
-            color: "var(--accent-color, #3ECF8E)",
+            borderRadius: "12px",
+            background: "var(--color-action-secondary-bg)",
+            color: "var(--color-link)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
           }}
         >
-          <Bus size={18} />
+          <Bus size={20} />
         </div>
         <div>
           <h3
             style={{
               margin: 0,
-              fontSize: "15px",
+              fontSize: "16px",
               fontWeight: 700,
               color: "var(--text-primary)",
               letterSpacing: "-0.2px",
@@ -89,7 +89,7 @@ export const ReportAccordionHeader: React.FC<ReportAccordionHeaderProps> = ({
             color: "var(--text-secondary)",
           }}
         >
-          {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </div>
       </div>
     </div>

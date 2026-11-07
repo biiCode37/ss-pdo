@@ -1,14 +1,6 @@
 // ponytail: Implementasi modal bottom sheet mandiri berbasis vanilla CSS variables tanpa dependency modal eksternal
 import React, { useEffect, useMemo } from "react";
-import {
-  X,
-  ExternalLink,
-  Award,
-  Bus,
-  Users,
-  Route as RouteIcon,
-  Zap,
-} from "lucide-react";
+import { X, ExternalLink, Award, Bus, Users, Route as RouteIcon, Zap } from "lucide-react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
@@ -166,8 +158,8 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
           maxHeight: "88vh",
           background: "var(--card-bg, #18181b)",
           color: "var(--text-primary, #ffffff)",
-          borderTopLeftRadius: "24px",
-          borderTopRightRadius: "24px",
+          borderTopLeftRadius: "16px",
+          borderTopRightRadius: "16px",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
           boxShadow: "0 -8px 32px rgba(0, 0, 0, 0.45)",
           display: "flex",
@@ -190,7 +182,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               width: "40px",
               height: "4px",
-              borderRadius: "2px",
+              borderRadius: "8px",
               background: "rgba(255, 255, 255, 0.25)",
             }}
           />
@@ -199,7 +191,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
         {/* Header Rute */}
         <div
           style={{
-            padding: "12px 18px",
+            padding: "12px 20px",
             borderBottom: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
             display: "flex",
             alignItems: "flex-start",
@@ -214,10 +206,10 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                   padding: "4px 10px",
                   borderRadius: "8px",
                   fontSize: "14px",
-                  fontWeight: 800,
-                  background: "rgba(62, 207, 142, 0.15)",
-                  color: "var(--accent-color, #3ECF8E)",
-                  border: "1px solid rgba(62, 207, 142, 0.3)",
+                  fontWeight: 700,
+                  background: "var(--color-action-secondary-bg)",
+                  color: "var(--color-link)",
+                  border: "1px solid var(--color-border-subtle)",
                 }}
               >
                 {route.routeCode}
@@ -284,9 +276,9 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
           {bestRecord > 0 && (
             <div
               style={{
-                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(62, 207, 142, 0.05))",
-                border: "1px solid rgba(16, 185, 129, 0.25)",
-                borderRadius: "14px",
+                background: "var(--color-success-bg)",
+                border: "1px solid var(--color-success-border)",
+                borderRadius: "12px",
                 padding: "12px 14px",
                 display: "flex",
                 flexDirection: "column",
@@ -295,14 +287,14 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             >
               {/* Header Title di Dalam Card */}
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <Award size={15} style={{ color: "var(--accent-color, #10B981)" }} />
+                <Award size={16} style={{ color: "var(--color-link)" }} />
                 <span
                   style={{
-                    fontSize: "11.5px",
+                    fontSize: "12px",
                     fontWeight: 700,
                     textTransform: "uppercase",
                     letterSpacing: "0.03em",
-                    color: "var(--accent-color, #10B981)",
+                    color: "var(--color-link)",
                   }}
                 >
                   {t.RECORD_BADGE}
@@ -319,7 +311,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 }}
               >
                 {/* Sisi Kiri: Nilai Rekor */}
-                <div style={{ fontSize: "20px", fontWeight: 800, color: "var(--accent-color, #3ECF8E)" }}>
+                <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--color-link)" }}>
                   {formatNumber(bestRecord)}{" "}
                   <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--text-primary, #ededed)" }}>
                     {labels.UNIT_PAX}
@@ -333,7 +325,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                     style={{
                       fontSize: "12px",
                       fontWeight: 600,
-                      color: "var(--accent-color, #10B981)",
+                      color: "var(--color-link)",
                       background: "rgba(16, 185, 129, 0.12)",
                       padding: "4px 10px",
                       borderRadius: "8px",
@@ -354,41 +346,41 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <Bus size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Bus size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.FLEET}
               </h3>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px" }}>
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.RENOPS}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
-                  {formatNumber(renops)} <span style={{ fontSize: "10px", fontWeight: 400 }}>{labels.UNIT_BUS}</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+                  {formatNumber(renops)} <span style={{ fontSize: "12px", fontWeight: 400 }}>{labels.UNIT_BUS}</span>
                 </span>
               </div>
 
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.REALOPS}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
-                  {formatNumber(realops)} <span style={{ fontSize: "10px", fontWeight: 400 }}>{labels.UNIT_BUS}</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+                  {formatNumber(realops)} <span style={{ fontSize: "12px", fontWeight: 400 }}>{labels.UNIT_BUS}</span>
                 </span>
               </div>
 
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.FLEET_RATIO}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: fleetRatio >= 95 ? "#10B981" : "#F59E0B" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: fleetRatio >= 95 ? "var(--color-success-fg)" : "var(--color-warning-fg)" }}>
                   {formatDecimal(fleetRatio)}%
                 </span>
               </div>
@@ -402,7 +394,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      padding: "5px 8px",
+                      padding: "6px 8px",
                       borderRadius: "8px",
                       background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                       border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
@@ -410,14 +402,14 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                     }}
                   >
                     <div style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
-                      <span style={{ fontSize: "11.5px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
+                      <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                         {u.unit}
                       </span>
                       <span
                         style={{
-                          fontSize: "10.5px",
+                          fontSize: "12px",
                           color: "var(--text-secondary, #888)",
-                          marginTop: "1px",
+                          marginTop: "2px",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
@@ -430,23 +422,23 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                     <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
                       <span
                         style={{
-                          fontSize: "9px",
+                          fontSize: "12px",
                           fontWeight: 700,
                           background: u.badgeBg,
                           color: u.badgeColor,
-                          padding: "2px 5px",
-                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          borderRadius: "8px",
                         }}
                       >
                         {u.statusCode}
                       </span>
                       <span
                         style={{
-                          fontSize: "9px",
+                          fontSize: "12px",
                           fontWeight: 600,
                           color: "var(--text-secondary, #888)",
                           padding: "2px 4px",
-                          borderRadius: "4px",
+                          borderRadius: "8px",
                           background: "rgba(255, 255, 255, 0.06)",
                         }}
                       >
@@ -464,12 +456,12 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <Users size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Users size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.SHIFT_BREAKDOWN}
               </h3>
@@ -482,24 +474,24 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   padding: "10px",
                 }}
               >
-                <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-primary, #ededed)", marginBottom: "6px" }}>
+                <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-primary, #ededed)", marginBottom: "6px" }}>
                   {labels.SHIFT_1}
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-secondary, #888)", marginBottom: "2px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary, #888)", marginBottom: "2px" }}>
                   <span>{labels.TOA}:</span>
                   <span style={{ fontWeight: 600, color: "var(--text-primary, #ededed)" }}>{formatNumber(toaS1)}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-secondary, #888)", marginBottom: "4px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary, #888)", marginBottom: "4px" }}>
                   <span>{labels.MANUAL}:</span>
                   <span style={{ fontWeight: 600, color: "var(--text-primary, #ededed)" }}>{formatNumber(manualS1)}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11.5px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.1))", paddingTop: "4px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.1))", paddingTop: "4px" }}>
                   <span style={{ fontWeight: 700 }}>{labels.TOTAL}:</span>
-                  <span style={{ fontWeight: 800, color: "var(--accent-color, #3ECF8E)" }}>{formatNumber(totalS1)}</span>
+                  <span style={{ fontWeight: 700, color: "var(--color-link)" }}>{formatNumber(totalS1)}</span>
                 </div>
               </div>
 
@@ -508,24 +500,24 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   padding: "10px",
                 }}
               >
-                <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-primary, #ededed)", marginBottom: "6px" }}>
+                <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-primary, #ededed)", marginBottom: "6px" }}>
                   {labels.SHIFT_2}
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-secondary, #888)", marginBottom: "2px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary, #888)", marginBottom: "2px" }}>
                   <span>{labels.TOA}:</span>
                   <span style={{ fontWeight: 600, color: "var(--text-primary, #ededed)" }}>{formatNumber(toaS2)}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--text-secondary, #888)", marginBottom: "4px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary, #888)", marginBottom: "4px" }}>
                   <span>{labels.MANUAL}:</span>
                   <span style={{ fontWeight: 600, color: "var(--text-primary, #ededed)" }}>{formatNumber(manualS2)}</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11.5px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.1))", paddingTop: "4px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.1))", paddingTop: "4px" }}>
                   <span style={{ fontWeight: 700 }}>{labels.TOTAL}:</span>
-                  <span style={{ fontWeight: 800, color: "var(--accent-color, #3ECF8E)" }}>{formatNumber(totalS2)}</span>
+                  <span style={{ fontWeight: 700, color: "var(--color-link)" }}>{formatNumber(totalS2)}</span>
                 </div>
               </div>
             </div>
@@ -533,9 +525,9 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             {/* Total Pelanggan & Target */}
             <div
               style={{
-                background: "rgba(62, 207, 142, 0.08)",
-                border: "1px solid rgba(62, 207, 142, 0.2)",
-                borderRadius: "10px",
+                background: "var(--color-action-secondary-bg)",
+                border: "1px solid var(--color-border-subtle)",
+                borderRadius: "12px",
                 padding: "10px 12px",
                 display: "flex",
                 alignItems: "center",
@@ -545,16 +537,16 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               }}
             >
               <div>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.TOTAL_PAX}
                 </span>
-                <span style={{ fontSize: "16px", fontWeight: 800, color: "var(--accent-color, #3ECF8E)" }}>
-                  {formatNumber(totalPax)} <span style={{ fontSize: "11px", fontWeight: 500 }}>{labels.UNIT_PAX}</span>
+                <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--color-link)" }}>
+                  {formatNumber(totalPax)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{labels.UNIT_PAX}</span>
                 </span>
               </div>
 
               <div style={{ textAlign: "right" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.TARGET_PAX}: {formatNumber(targetPax)}
                 </span>
                 <span
@@ -562,9 +554,9 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                     fontSize: "12px",
                     fontWeight: 700,
                     padding: "2px 8px",
-                    borderRadius: "9999px",
+                    borderRadius: "999px",
                     background: paxPct >= 80 ? "rgba(16, 185, 129, 0.15)" : "rgba(245, 158, 11, 0.15)",
-                    color: paxPct >= 80 ? "#10B981" : "#F59E0B",
+                    color: paxPct >= 80 ? "var(--color-success-fg)" : "var(--color-warning-fg)",
                     display: "inline-block",
                     marginTop: "2px",
                   }}
@@ -580,12 +572,12 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <RouteIcon size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <RouteIcon size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.DISTANCE_RITASE}
               </h3>
@@ -593,44 +585,44 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px" }}>
               {/* KM Tempuh */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.KM_TEMPUH}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                   {Number.isInteger(kmTempuh) ? formatNumber(kmTempuh) : formatDecimal(kmTempuh, 2)}{" "}
-                  <span style={{ fontSize: "10px", fontWeight: 400 }}>{labels.UNIT_KM}</span>
+                  <span style={{ fontSize: "12px", fontWeight: 400 }}>{labels.UNIT_KM}</span>
                 </span>
               </div>
 
               {/* KM per Bus */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.KM_PER_BUS}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
-                  {formatDecimal(kmPerBus, 2)} <span style={{ fontSize: "10px", fontWeight: 400 }}>km/bus</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+                  {formatDecimal(kmPerBus, 2)} <span style={{ fontSize: "12px", fontWeight: 400 }}>km/bus</span>
                 </span>
               </div>
 
               {/* Total Ritase PP */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.TOTAL_RITASE_PP}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                   {Number.isInteger(totalRitasePp) ? formatNumber(totalRitasePp) : formatDecimal(totalRitasePp, 1)}{" "}
-                  <span style={{ fontSize: "10px", fontWeight: 400 }}>{labels.UNIT_RIT}</span>
+                  <span style={{ fontSize: "12px", fontWeight: 400 }}>{labels.UNIT_RIT}</span>
                 </span>
               </div>
 
               {/* Ritase per Bus */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.RITASE_PER_BUS}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
-                  {formatDecimal(ritasePerBus, 1)} <span style={{ fontSize: "10px", fontWeight: 400 }}>rit/bus</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+                  {formatDecimal(ritasePerBus, 1)} <span style={{ fontSize: "12px", fontWeight: 400 }}>rit/bus</span>
                 </span>
               </div>
             </div>
@@ -641,12 +633,12 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <Zap size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Zap size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.EFFICIENCY}
               </h3>
@@ -654,23 +646,23 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px" }}>
               {/* Pelanggan / KM Riil */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.PAX_PER_KM}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--accent-color, #3ECF8E)" }}>
-                  {formatDecimal(paxPerKm, 3)} <span style={{ fontSize: "10px", fontWeight: 400 }}>{labels.UNIT_PAX_PER_KM}</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-link)" }}>
+                  {formatDecimal(paxPerKm, 3)} <span style={{ fontSize: "12px", fontWeight: 400 }}>{labels.UNIT_PAX_PER_KM}</span>
                 </span>
               </div>
 
               {/* Target Pelanggan / KM */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)", display: "block" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.TARGET_PAX_PER_KM}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                   {formatDecimal(targetPaxPerKm)}{" "}
-                  <span style={{ fontSize: "10px", fontWeight: 500, color: paxPerKmPct >= 50 ? "#10B981" : "#F59E0B" }}>
+                  <span style={{ fontSize: "12px", fontWeight: 500, color: paxPerKmPct >= 50 ? "var(--color-success-fg)" : "var(--color-warning-fg)" }}>
                     ({formatDecimal(paxPerKmPct)}%)
                   </span>
                 </span>
@@ -682,17 +674,17 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                   gridColumn: "span 2",
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   padding: "8px 10px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                 }}
               >
-                <span style={{ fontSize: "11px", color: "var(--text-secondary, #888)" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
                   {labels.PAX_PER_BUS}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
-                  {formatNumber(paxPerBus)} <span style={{ fontSize: "11px", fontWeight: 500 }}>{labels.UNIT_PAX_PER_BUS}</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+                  {formatNumber(paxPerBus)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{labels.UNIT_PAX_PER_BUS}</span>
                 </span>
               </div>
             </div>
@@ -722,7 +714,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 width: "100%",
                 padding: "10px 16px",
                 borderRadius: "12px",
-                background: "var(--accent-color, #3ECF8E)",
+                background: "var(--color-action-primary-bg)",
                 color: "#0a0a0a",
                 border: "none",
                 fontSize: "13px",
@@ -732,7 +724,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 justifyContent: "center",
                 gap: "8px",
                 cursor: "pointer",
-                boxShadow: "0 2px 10px rgba(62, 207, 142, 0.25)",
+                boxShadow: "0 2px 10px var(--color-shadow)",
                 transition: "opacity 0.2s ease",
               }}
             >
@@ -752,7 +744,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               background: "transparent",
               color: "var(--text-secondary, #888)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 600,
               cursor: "pointer",
             }}

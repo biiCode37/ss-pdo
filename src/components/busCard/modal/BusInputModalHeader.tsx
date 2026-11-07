@@ -1,5 +1,5 @@
 import React from "react";
-import { Bus, Columns, Zap, X } from "lucide-react";
+import { Columns, Zap, X } from "lucide-react";
 import { TEXT_ALERTS } from "@/constants/texts";
 
 interface BusInputModalHeaderProps {
@@ -31,33 +31,17 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
         justifyContent: "space-between",
         alignItems: "center",
         paddingBottom: "12px",
-        borderBottom: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+        borderBottom: "1px solid var(--color-border-subtle)",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <div
-          style={{
-            width: "36px",
-            height: "36px",
-            borderRadius: "10px",
-            background: "linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.1))",
-            color: "var(--accent-color, #38bdf8)",
-            border: "1px solid rgba(56, 189, 248, 0.3)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          <Bus size={18} />
-        </div>
         <h2
           id={`bus-modal-title-${formId}`}
           style={{
-            fontSize: "1.15rem",
-            fontWeight: 800,
+            fontSize: "18px",
+            fontWeight: 700,
             margin: 0,
-            color: "var(--text-primary, #ededed)",
+            color: "var(--color-text-primary)",
             letterSpacing: "-0.01em",
           }}
         >
@@ -76,23 +60,23 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
               gap: "6px",
               height: "34px",
               padding: "0 12px",
-              borderRadius: "10px",
-              fontSize: "0.78rem",
+              borderRadius: "12px",
+              fontSize: "12px",
               fontWeight: 600,
               border: isExpandedAll
-                ? "1px solid rgba(56, 189, 248, 0.35)"
-                : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+                ? "1px solid var(--color-info-border)"
+                : "1px solid var(--color-border-subtle)",
               background: isExpandedAll
-                ? "rgba(56, 189, 248, 0.15)"
-                : "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                ? "var(--color-info-bg)"
+                : "var(--color-surface-subtle)",
               color: isExpandedAll
-                ? "var(--accent-color, #38bdf8)"
-                : "var(--text-secondary, #94a3b8)",
+                ? "var(--color-link)"
+                : "var(--color-text-secondary)",
               cursor: "pointer",
               transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
           >
-            <Columns size={13} />
+            <Columns size={16} />
             <span>
               {isExpandedAll
                 ? TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_SINGLE_FOCUS
@@ -110,14 +94,14 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             border: isSatset
-              ? "1px solid rgba(245, 158, 11, 0.5)"
-              : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+              ? "1px solid var(--color-warning-border)"
+              : "1px solid var(--color-border-subtle)",
             background: isSatset
-              ? "rgba(245, 158, 11, 0.15)"
-              : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-            color: isSatset ? "#f59e0b" : "var(--text-secondary, #94a3b8)",
+              ? "var(--color-warning-bg)"
+              : "var(--color-surface-subtle)",
+            color: isSatset ? "var(--color-warning-fg)" : "var(--color-text-secondary)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -126,7 +110,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
             flexShrink: 0,
           }}
         >
-          <Zap size={16} fill={isSatset ? "#f59e0b" : "none"} />
+          <Zap size={16} fill={isSatset ? "var(--color-warning-fg)" : "none"} />
         </button>
 
         <button
@@ -136,10 +120,10 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
-            background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-            color: "var(--text-secondary, #94a3b8)",
+            borderRadius: "12px",
+            background: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
+            color: "var(--color-text-secondary)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -148,7 +132,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
             flexShrink: 0,
           }}
         >
-          <X size={17} />
+          <X size={16} />
         </button>
       </div>
     </div>

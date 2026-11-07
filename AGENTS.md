@@ -84,6 +84,19 @@ Setiap audit kode atau refactor SS_PDO wajib didokumentasikan di `refactor-ss-pd
      `pnpm vitest run src/styles/tokens/color-contract.test.ts`
      dan dipastikan lulus 100% sebelum pekerjaan diserahkan.
 
+## Standar Konsistensi Tampilan UI (Anti-Slop)
+
+Aturan lengkap **WAJIB dibaca sebelum menyentuh kode UI**: [`.agents/rules/ui-consistency.md`](./.agents/rules/ui-consistency.md). Ringkasan yang tidak boleh dilanggar:
+1. **Pakai ulang dulu:** cek `.ui-button`, `.ui-toolbar-btn`, `.ui-chip-btn`, `.ui-input`, `.ui-input-group`, `ModalShell`, `UnitStatusBadge`, `alertUtils` sebelum membuat komponen/gaya baru. Dilarang menyalin komponen lalu mengubah sedikit gayanya.
+2. **Tanpa inline style statis baru** (warna, font, jarak, radius, border, bayangan); taruh di kelas `src/styles/components/*.css`.
+3. **Satu cincin fokus** untuk kolom teks (refact_213); dilarang `:focus` yang mengubah border/glow dan `outline: none` di luar pola `.ui-input-group`.
+4. **Tanpa gradasi, glow/neon, text-shadow, glassmorphism baru**; `--accent-color`/`#3ECF8E` adalah warisan dan dilarang di kode baru.
+5. **Skala wajib (dikunci ratchet):** font 12–24px (min 12px, px saja, bobot 400–700), ikon 16/20/24 hanya untuk navigasi/tombol ikon/status bertopang teks, jarak dari skala 0–64px (genap, tanpa nilai ganjil), radius 8/12/16/999/50%.
+6. **Teks bantuan minimal:** hanya untuk error, empty state, format input, dan aksi yang merusak data.
+7. Perubahan visual wajib diverifikasi di browser (light & dark). Mockup dibuat **hanya jika pengguna memintanya**.
+8. **Penjaga otomatis:** `src/styles/ui-debt-ratchet.test.ts` dan `src/styles/components/focus-ring.test.ts` wajib lulus. Jika jumlah pelanggaran naik, perbaiki kodenya; **dilarang menaikkan `BASELINE`** (hanya boleh diturunkan setelah merapikan).
+9. **Status aktif & warna teks:** tab/kapsul/segmen/chip aktif wajib `--color-state-active-bg/-fg` (bukan tint tipis); warna teks wajib token, bukan hex/rgba. Ritme jarak antarbagian 12px.
+
 ## Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation)
 
 1. **Aturan Emas Anti-Privilege Escalation:** Dilarang keras membuat policy RLS `FOR ALL TO anon USING (true)` atau memberikan `GRANT UPDATE/DELETE TO anon` pada tabel sensitif dan kolom identitas peran/status (`user_profiles.role_id`, `user_profiles.is_active`, `app_page_settings`, `daily_route_reports`, `daily_fleet_shifts`, `route_sheets`).

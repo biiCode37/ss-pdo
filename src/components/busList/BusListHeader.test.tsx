@@ -54,7 +54,7 @@ describe("BusListHeader Component", () => {
     const progressContainer = container.querySelector('[data-testid="daily-progress-container"]');
     expect(progressContainer).not.toBeNull();
     expect(container.textContent).toContain("Progres Harian");
-    expect(container.textContent).toContain("10/16 Unit (62%)");
+    expect(container.textContent).toContain("10/16 unit (62%)");
   });
 
   it("renders accumulation warning banner when tabName is AKUMULASI", async () => {

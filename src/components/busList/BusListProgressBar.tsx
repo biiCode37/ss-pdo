@@ -15,25 +15,11 @@ export const BusListProgressBar: React.FC<BusListProgressBarProps> = ({
   totalCount,
   progressPercent,
 }) => {
+  const isDone = totalCount > 0 && filledCount === totalCount;
   return (
     <div data-testid="daily-progress-container">
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 2px 4px 2px",
-          fontSize: "12px",
-          color: "var(--text-secondary)",
-        }}
-      >
-        <span
-          style={{
-            fontWeight: 600,
-            color: "var(--text-primary)",
-            letterSpacing: "-0.1px",
-          }}
-        >
+      <div className="buslist-progress-row">
+        <span className="buslist-progress-label">
           {activeCategory === "ALL"
             ? TEXT_DASHBOARD.BUS_LIST.DAILY_PROGRESS
             : TEXT_DASHBOARD.BUS_LIST.COLUMN_PREFIX(
@@ -41,41 +27,16 @@ export const BusListProgressBar: React.FC<BusListProgressBarProps> = ({
                   activeCategory,
               )}
         </span>
-        <span className="tabular-nums" style={{ fontSize: "11.5px" }}>
-          <strong
-            style={{
-              color:
-                filledCount === totalCount
-                  ? "var(--success-color)"
-                  : "var(--text-primary)",
-            }}
-          >
-            {filledCount}
-          </strong>
-          /{totalCount} Unit ({progressPercent}%)
+        <span className="tabular-nums">
+          <strong className="buslist-progress-label">{filledCount}</strong>
+          {TEXT_DASHBOARD.BUS_LIST.PROGRESS_COUNT_SUFFIX(totalCount, progressPercent)}
         </span>
       </div>
 
-      {/* 3px Hairline Progress Bar */}
-      <div
-        style={{
-          height: "3px",
-          background: "rgba(255, 255, 255, 0.08)",
-          borderRadius: "2px",
-          overflow: "hidden",
-          marginBottom: "2px",
-        }}
-      >
+      <div className="buslist-progress-track">
         <div
-          style={{
-            height: "100%",
-            background:
-              filledCount === totalCount
-                ? "var(--success-color)"
-                : "var(--accent-color)",
-            width: `${progressPercent}%`,
-            transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
-          }}
+          className={`buslist-progress-fill${isDone ? " buslist-progress-fill--done" : ""}`}
+          style={{ width: `${progressPercent}%` }}
         />
       </div>
     </div>

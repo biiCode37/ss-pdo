@@ -154,7 +154,7 @@ export function BusInputModal({
         alignItems: "flex-end",
         justifyContent: "center",
         bottom: isKeyboardOpen ? `${keyboardHeight}px` : 0,
-        backgroundColor: "rgba(0, 0, 0, 0.65)",
+        backgroundColor: "var(--color-surface-subtle)",
         backdropFilter: "blur(6px)",
         WebkitBackdropFilter: "blur(6px)",
         opacity: isClosing ? 0 : isMounted ? 1 : 0,
@@ -171,15 +171,15 @@ export function BusInputModal({
           : "min(92dvh, 780px)",
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        borderTopLeftRadius: "24px",
-        borderTopRightRadius: "24px",
+        borderTopLeftRadius: "16px",
+        borderTopRightRadius: "16px",
         padding: isKeyboardOpen
           ? "12px 16px 8px 16px"
           : "18px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px",
-        background: "var(--card-bg, #171717)",
-        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+        background: "var(--color-surface-default)",
+        border: "1px solid var(--color-border-subtle)",
         borderBottom: "none",
-        boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
+        boxShadow: "0 -10px 40px var(--color-shadow)",
         transform:
           isClosing || !isMounted
             ? "translateY(100%) scale(0.95)"
@@ -210,9 +210,9 @@ export function BusInputModal({
             style={{
               margin: "10px 0 0 0",
               padding: "10px 12px",
-              borderRadius: "10px",
-              background: "var(--color-warning-bg, rgba(234, 179, 8, 0.12))",
-              border: "1px solid var(--color-warning-border, rgba(234, 179, 8, 0.35))",
+              borderRadius: "12px",
+              background: "var(--color-warning-bg)",
+              border: "1px solid var(--color-warning-border)",
               display: "flex",
               flexDirection: "column",
               gap: "8px",
@@ -223,9 +223,9 @@ export function BusInputModal({
                 display: "flex",
                 alignItems: "flex-start",
                 gap: "8px",
-                fontSize: "0.8rem",
+                fontSize: "13px",
                 lineHeight: 1.45,
-                color: "var(--color-warning-fg, #eab308)",
+                color: "var(--color-warning-fg)",
               }}
             >
               <AlertCircle size={16} style={{ flexShrink: 0, marginTop: "2px" }} />
@@ -244,12 +244,12 @@ export function BusInputModal({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "5px 12px",
-                borderRadius: "6px",
-                background: "var(--color-warning-fg, #eab308)",
-                color: "#000",
+                padding: "6px 12px",
+                borderRadius: "8px",
+                background: "var(--color-warning-fg)",
+                color: "var(--color-text-secondary)",
                 fontWeight: 700,
-                fontSize: "0.78rem",
+                fontSize: "12px",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -277,14 +277,14 @@ export function BusInputModal({
               borderRadius: "8px",
               background:
                 form.validationErrors.length > 0
-                  ? "rgba(239, 68, 68, 0.15)"
-                  : "rgba(56, 189, 248, 0.1)",
+                  ? "var(--color-error-bg)"
+                  : "var(--color-info-bg)",
               border:
                 form.validationErrors.length > 0
-                  ? "1px solid rgba(239, 68, 68, 0.35)"
-                  : "1px solid rgba(56, 189, 248, 0.3)",
-              color: form.validationErrors.length > 0 ? "#f87171" : "inherit",
-              fontSize: "0.8rem",
+                  ? "1px solid var(--color-error-border)"
+                  : "1px solid var(--color-info-border)",
+              color: form.validationErrors.length > 0 ? "var(--color-error-fg)" : "inherit",
+              fontSize: "13px",
             }}
           >
             {form.validationErrors.length > 0 && (
@@ -297,7 +297,7 @@ export function BusInputModal({
                     fontWeight: 600,
                   }}
                 >
-                  <AlertCircle size={15} />
+                  <AlertCircle size={16} />
                   <span>{TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER}</span>
                 </div>
                 <ul style={{ margin: "4px 0 0 16px", padding: 0 }}>
@@ -317,18 +317,18 @@ export function BusInputModal({
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "5px",
-                    padding: "5px 12px",
-                    borderRadius: "6px",
-                    background: "#f59e0b",
-                    color: "#000",
+                    gap: "6px",
+                    padding: "6px 12px",
+                    borderRadius: "8px",
+                    background: "var(--color-warning-fg)",
+                    color: "var(--color-text-secondary)",
                     fontWeight: 700,
-                    fontSize: "0.78rem",
+                    fontSize: "12px",
                     border: "none",
                     cursor: "pointer",
                   }}
                 >
-                  <Sparkles size={13} />
+                  <Sparkles size={16} />
                   <span>
                     {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(
                       form.smartRolloverSuggestion.suggestedKm,
@@ -346,8 +346,8 @@ export function BusInputModal({
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  fontSize: "0.78rem",
-                  color: "var(--text-secondary, #cbd5e1)",
+                  fontSize: "12px",
+                  color: "var(--color-text-secondary)",
                   cursor: "pointer",
                 }}
               >
@@ -357,7 +357,7 @@ export function BusInputModal({
                   onChange={(e) => {
                     form.handleToggleBypassOdometerReset(e.target.checked);
                   }}
-                  style={{ accentColor: "var(--accent-color, #38bdf8)" }}
+                  style={{ accentColor: "var(--color-action-primary-bg)" }}
                 />
                 <span>
                   {TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL}

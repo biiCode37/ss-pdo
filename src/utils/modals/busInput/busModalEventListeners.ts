@@ -160,11 +160,11 @@ export function setupModalEventListeners(
       }
       const diff = inputNum - kmAwalNum;
       if (diff < 0) {
-        refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 700;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_SMALLER}</span>`;
+        refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 12px; color: var(--danger-color, #ef4444); font-weight: 700;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_SMALLER}</span>`;
       } else if (diff > MAX_SHIFT_DISTANCE_KM) {
-        refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--danger-color, #ef4444); font-weight: 800;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_EXCEEDS(diff, MAX_SHIFT_DISTANCE_KM)}</span>`;
+        refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 12px; color: var(--danger-color, #ef4444); font-weight: 700;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_EXCEEDS(diff, MAX_SHIFT_DISTANCE_KM)}</span>`;
       } else {
-        refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 11px; color: var(--success-color, #22c55e); font-weight: 700;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_VALID(diff)}</span>`;
+        refValSpan.innerHTML = `${escapeHtml(kmAwalRaw)} <span style="font-size: 12px; color: var(--success-color, #22c55e); font-weight: 700;">${TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_VALID(diff)}</span>`;
       }
     };
 

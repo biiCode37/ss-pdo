@@ -40,7 +40,7 @@ export const BusListSelectionBar: React.FC<BusListSelectionBarProps> = ({
         alignItems: "center",
         gap: "8px",
         padding: "8px 8px 8px 14px",
-        borderRadius: "14px",
+        borderRadius: "12px",
         background: "var(--color-surface-raised)",
         border: "1px solid var(--color-border-subtle)",
         boxShadow: "0 12px 32px -8px var(--color-shadow)",
@@ -70,11 +70,11 @@ export const BusListSelectionBar: React.FC<BusListSelectionBarProps> = ({
         style={{
           height: "36px",
           padding: "0 12px",
-          borderRadius: "10px",
+          borderRadius: "12px",
           border: "1px solid var(--color-border-subtle)",
           background: "transparent",
           color: "var(--color-text-secondary)",
-          fontSize: "12.5px",
+          fontSize: "13px",
           fontWeight: 600,
           cursor: "pointer",
         }}
@@ -89,11 +89,11 @@ export const BusListSelectionBar: React.FC<BusListSelectionBarProps> = ({
         style={{
           height: "36px",
           padding: "0 14px",
-          borderRadius: "10px",
+          borderRadius: "12px",
           border: "none",
           background: "var(--color-action-primary-bg)",
           color: "var(--color-action-primary-fg)",
-          fontSize: "12.5px",
+          fontSize: "13px",
           fontWeight: 700,
           display: "inline-flex",
           alignItems: "center",
@@ -103,7 +103,7 @@ export const BusListSelectionBar: React.FC<BusListSelectionBarProps> = ({
           opacity: canApply ? 1 : 0.55,
         }}
       >
-        {isSubmitting && <Loader2 size={13} className="spinner" />}
+        {isSubmitting && <Loader2 size={16} className="spinner" />}
         {TEXT_DASHBOARD.BUS_LIST.SELECTED_APPLY_BTN}
       </button>
     </div>,

@@ -1,11 +1,7 @@
 import type { BusData } from "@/services/googleSheets";
 import { parseIndonesianNumber, safeFormatNumber } from "@/utils/numberUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
-import {
-  Navigation,
-  AlertCircle,
-  ArrowRightLeft,
-} from "lucide-react";
+import { Navigation, AlertCircle, ArrowRightLeft } from "lucide-react";
 import { isUnitOff, isUnitTo, isUnitOffOrToEvdal } from "@/utils/keteranganUtils";
 
 interface BusCardSummaryProps {
@@ -78,7 +74,7 @@ export function BusCardSummary({
       return (
         <div
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             padding: "4px 10px",
             borderRadius: "8px",
@@ -87,10 +83,10 @@ export function BusCardSummary({
             border: `1px solid ${hasTrip ? "var(--color-border-subtle)" : "var(--color-error-border)"}`,
             display: "flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
-          <ArrowRightLeft size={12} style={{ flexShrink: 0 }} />
+          <ArrowRightLeft size={16} style={{ flexShrink: 0 }} />
           <span>
             Trip:{" "}
             {hasTrip
@@ -125,22 +121,22 @@ export function BusCardSummary({
     return (
       <div
         style={{
-          fontSize: "11.5px",
+          fontSize: "12px",
           fontWeight: 700,
           padding: "4px 10px",
           borderRadius: "8px",
-          backgroundColor: isFilled ? "var(--shift1-bg)" : "rgba(239, 68, 68, 0.12)",
-          color: isFilled ? "var(--shift1-color)" : "var(--danger-color)",
-          border: `1px solid ${isFilled ? "var(--shift1-border)" : "rgba(239, 68, 68, 0.25)"}`,
+          backgroundColor: isFilled ? "var(--color-shift-1-bg)" : "var(--color-error-bg)",
+          color: isFilled ? "var(--color-shift-1-fg)" : "var(--color-error-fg)",
+          border: `1px solid ${isFilled ? "var(--color-shift-1-border)" : "var(--color-error-border)"}`,
           display: "flex",
           alignItems: "center",
-          gap: "5px",
+          gap: "6px",
         }}
       >
         {isFilled ? (
-          <Navigation size={12} style={{ flexShrink: 0 }} />
+          <Navigation size={16} style={{ flexShrink: 0 }} />
         ) : (
-          <AlertCircle size={12} style={{ flexShrink: 0 }} />
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
         )}
         <span>
           {label}: {isFilled ? String(val) : TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}
@@ -175,12 +171,7 @@ export function BusCardSummary({
         <span className="bus-metric-label">
           {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_RITASE}
         </span>
-        <span
-          className="bus-metric-value"
-          style={{
-            color: "var(--color-text-primary)",
-          }}
-        >
+        <span className="bus-metric-value">
           {hasTrip && totalRit > 0 ? (
             <>
               {totalRitDisplay}{" "}
@@ -197,10 +188,7 @@ export function BusCardSummary({
         <span className="bus-metric-label">
           {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_KM}
         </span>
-        <span
-          className="bus-metric-value"
-          style={{ color: "var(--shift1-color)" }}
-        >
+        <span className="bus-metric-value">
           {hasKm ? (
             <>
               {safeFormatNumber(totalKm)}
@@ -217,10 +205,7 @@ export function BusCardSummary({
         <span className="bus-metric-label">
           {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_PASSENGER}
         </span>
-        <span
-          className="bus-metric-value"
-          style={{ color: "var(--text-primary)" }}
-        >
+        <span className="bus-metric-value">
           {hasPnp ? (
             <>
               {safeFormatNumber(totalPnp)}

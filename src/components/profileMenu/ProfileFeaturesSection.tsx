@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Globe,
-  Layers,
-  Sparkles,
-  Sun,
-  Moon,
-  CloudOff,
-  ChevronRight,
-} from "lucide-react";
+import { Globe, Layers, Sparkles, Sun, Moon, CloudOff, ChevronRight } from "lucide-react";
 import {
   showFormatSheetConfirm,
   showToast,
@@ -89,7 +81,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
     <div style={{ marginBottom: "20px" }}>
       <span
         style={{
-          fontSize: "10.5px",
+          fontSize: "12px",
           fontWeight: 700,
           letterSpacing: "0.5px",
           color: "var(--text-secondary)",
@@ -120,22 +112,22 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
               border: "1px solid var(--card-border)",
               color: "var(--text-primary)",
               fontWeight: 500,
-              fontSize: "13.5px",
+              fontSize: "14px",
               cursor: "pointer",
               opacity: isMonitoringUnderMaintenance ? 0.85 : 1,
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Globe size={18} style={{ color: "var(--accent-color)" }} />
+              <Globe size={20} style={{ color: "var(--color-link)" }} />
               <div style={{ textAlign: "left" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</span>
                   {isMonitoringUnderMaintenance && (
                     <span
                       style={{
-                        fontSize: "10px",
-                        padding: "1px 6px",
-                        borderRadius: "6px",
+                        fontSize: "12px",
+                        padding: "2px 6px",
+                        borderRadius: "8px",
                         background: "rgba(234, 179, 8, 0.15)",
                         color: "var(--warning-color, #eab308)",
                         border: "1px solid rgba(234, 179, 8, 0.3)",
@@ -148,9 +140,9 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                 </div>
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "var(--text-secondary)",
-                    marginTop: "1px",
+                    marginTop: "2px",
                   }}
                 >
                   {TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING_DESC}
@@ -181,12 +173,12 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "pointer",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Layers size={18} style={{ color: "var(--accent-color)" }} />
+            <Layers size={20} style={{ color: "var(--color-link)" }} />
             <span>{TEXT_DASHBOARD.PROFILE_MENU.CROSS_PERIOD}</span>
           </div>
           <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
@@ -207,20 +199,20 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: isFormatting ? "wait" : "pointer",
             opacity: isFormatting ? 0.7 : 1,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Sparkles size={18} style={{ color: "var(--accent-color)" }} />
+            <Sparkles size={20} style={{ color: "var(--color-link)" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET}</div>
               <div
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
-                  marginTop: "1px",
+                  marginTop: "2px",
                 }}
               >
                 {TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET_DESC}
@@ -244,15 +236,15 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "pointer",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             {isDarkMode ? (
-              <Sun size={18} style={{ color: "#f59e0b" }} />
+              <Sun size={20} style={{ color: "var(--color-warning-fg)" }} />
             ) : (
-              <Moon size={18} style={{ color: "var(--accent-color)" }} />
+              <Moon size={20} style={{ color: "var(--color-link)" }} />
             )}
             <span>{TEXT_DASHBOARD.PROFILE_MENU.THEME_MODE}</span>
           </div>
@@ -263,7 +255,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
               color: "var(--text-secondary)",
               background: "var(--surface-color)",
               padding: "4px 8px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               border: "1px solid var(--card-border)",
             }}
           >
@@ -290,7 +282,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <CloudOff size={18} />
+              <CloudOff size={20} />
               <span>
                 {!isOnline
                   ? TEXT_DASHBOARD.PROFILE_MENU.OFFLINE_MODE
@@ -303,8 +295,8 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                   background: "#f59e0b",
                   color: "#000",
                   padding: "2px 8px",
-                  borderRadius: "10px",
-                  fontSize: "11px",
+                  borderRadius: "12px",
+                  fontSize: "12px",
                   fontWeight: 700,
                 }}
               >

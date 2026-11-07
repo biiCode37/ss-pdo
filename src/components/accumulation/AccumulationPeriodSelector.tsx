@@ -65,7 +65,7 @@ export const AccumulationPeriodSelector: React.FC<
     width: "100%",
     height: "36px",
     padding: "0 8px",
-    fontSize: "12.5px",
+    fontSize: "13px",
     borderRadius: "8px",
     background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
     border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
@@ -74,13 +74,13 @@ export const AccumulationPeriodSelector: React.FC<
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: "9.5px",
+    fontSize: "12px",
     textTransform: "uppercase",
     letterSpacing: "0.04em",
     fontWeight: 700,
     color: "var(--text-secondary, #94a3b8)",
     display: "block",
-    marginBottom: "3px",
+    marginBottom: "4px",
   };
 
   return (
@@ -99,13 +99,13 @@ export const AccumulationPeriodSelector: React.FC<
             display: "flex",
             alignItems: "center",
             gap: "6px",
-            fontSize: "0.75rem",
+            fontSize: "12px",
             fontWeight: 700,
-            color: "var(--accent-color, #38bdf8)",
+            color: "var(--color-link)",
             marginBottom: "8px",
           }}
         >
-          <Calendar size={13} />
+          <Calendar size={16} />
           <span>{TEXT_DASHBOARD.ACCUMULATION_SHEET.FROM_LABEL}</span>
         </div>
         <div
@@ -176,13 +176,13 @@ export const AccumulationPeriodSelector: React.FC<
             display: "flex",
             alignItems: "center",
             gap: "6px",
-            fontSize: "0.75rem",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--shift2-color, #c084fc)",
             marginBottom: "8px",
           }}
         >
-          <Calendar size={13} />
+          <Calendar size={16} />
           <span>{TEXT_DASHBOARD.ACCUMULATION_SHEET.TO_LABEL}</span>
         </div>
         <div

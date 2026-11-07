@@ -54,20 +54,17 @@ function UnitSummaryDashboardComponent({
   }, []);
 
   return (
-    <div style={{ paddingTop: "12px" }}>
-      {/* Header & Search */}
-      <div className="search-container" style={{ marginBottom: "12px" }}>
-        <div className="search-input-wrapper" style={{ flex: 1 }}>
-          <Search className="search-icon" size={16} />
-          <input
-            type="text"
-            className="input-field search-input"
-            placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ height: "36px", fontSize: "12.5px", borderRadius: "10px" }}
-          />
-        </div>
+    <div>
+      {/* Pencarian: jarak ke header & daftar mengikuti ritme 12px (refact_221) */}
+      <div className="search-input-wrapper buslist-search page-search">
+        <Search className="search-icon" size={16} aria-hidden="true" />
+        <input
+          type="text"
+          className="input-field search-input"
+          placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
       {/* Grid Kartu Unit */}
@@ -95,7 +92,7 @@ function UnitSummaryDashboardComponent({
           style={{ textAlign: "center", padding: "32px" }}
         >
           <Bus
-            size={32}
+            size={24}
             style={{ color: "var(--text-secondary)", marginBottom: "8px" }}
           />
           <p>{TEXT_DASHBOARD.BUS_LIST.EMPTY_SUMMARY(searchQuery)}</p>

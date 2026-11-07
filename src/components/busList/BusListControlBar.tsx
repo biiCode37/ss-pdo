@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Search,
-  Filter,
-  CheckCircle2,
-  Loader2,
-  ChevronDown,
-  ListChecks,
-} from "lucide-react";
+import { Search, Filter, CheckCircle2, Loader2, ChevronDown } from "lucide-react";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import { BUS_CATEGORIES } from "./busListUtils";
 
@@ -46,46 +39,14 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
   onToggleSelectionMode,
 }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "clamp(6px, 1.5vw, 8px)",
-      }}
-    >
-      {/* Row 1: Set Jumlah Trip & Pilih Unit (Kiri) & Fokus Kolom (Kanan) */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "auto auto 1fr",
-          gap: "clamp(6px, 1.5vw, 8px)",
-          alignItems: "center",
-        }}
-      >
-        {/* Set Jumlah Trip Trigger Button (Kiri) */}
+    <div className="buslist-controls">
+      {/* Baris 1: Set Jumlah Trip, Pilih Unit, Fokus Kolom */}
+      <div className="buslist-controls-row buslist-controls-row--actions">
         <button
           type="button"
+          className="ui-toolbar-btn"
           onClick={onOpenBulkTripModal}
           disabled={isSubmittingBulk}
-          style={{
-            height: "36px",
-            padding: "0 12px",
-            borderRadius: "10px",
-            background: "var(--input-bg)",
-            border: "1px solid var(--card-border)",
-            color: "var(--text-primary)",
-            fontWeight: 600,
-            fontSize: "12px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "6px",
-            whiteSpace: "nowrap",
-            cursor: "pointer",
-            boxShadow: "none",
-            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
-            opacity: isSubmittingBulk ? 0.7 : 1,
-          }}
           title={
             bulkPergi && bulkPulang
               ? TEXT_DASHBOARD.BUS_LIST.SET_TRIP_WITH_COUNT(
@@ -95,151 +56,61 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
               : TEXT_DASHBOARD.BUS_LIST.SET_TRIP_TITLE
           }
         >
-          {isSubmittingBulk && (
-            <Loader2
-              size={13}
-              className="spinner"
-              style={{ color: "var(--accent-color)" }}
-            />
-          )}
-          <span style={{ color: "var(--text-primary)" }}>
+          {isSubmittingBulk && <Loader2 size={16} className="spinner" />}
+          <span>
             {TEXT_DASHBOARD.BUS_LIST.SET_TRIP_BTN}
             {bulkPergi && bulkPulang ? ` (${bulkPergi}/${bulkPulang})` : ""}
           </span>
         </button>
 
-        {/* Toggle Mode Pilih Unit (Set Trip Unit Terpilih) */}
         <button
           type="button"
+          className="ui-toolbar-btn"
           data-testid="btn-toggle-select-mode"
           onClick={onToggleSelectionMode}
           disabled={isSubmittingBulk}
           aria-pressed={isSelectionMode}
           title={TEXT_DASHBOARD.BUS_LIST.SELECT_MODE_TITLE}
-          style={{
-            height: "36px",
-            padding: "0 10px",
-            borderRadius: "10px",
-            background: isSelectionMode
-              ? "var(--color-action-primary-bg)"
-              : "var(--input-bg)",
-            border: isSelectionMode
-              ? "1px solid var(--color-action-primary-bg)"
-              : "1px solid var(--card-border)",
-            color: isSelectionMode
-              ? "var(--color-action-primary-fg)"
-              : "var(--color-text-primary)",
-            fontWeight: 600,
-            fontSize: "12px",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "5px",
-            whiteSpace: "nowrap",
-            cursor: "pointer",
-            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
-          }}
         >
-          <ListChecks size={14} />
           <span>{TEXT_DASHBOARD.BUS_LIST.SELECT_MODE_BTN}</span>
         </button>
 
-        {/* Dropdown Fokus Kolom (Kanan) */}
-        <div style={{ position: "relative", width: "100%", minWidth: 0 }}>
+        <div className="buslist-select-wrapper">
           <select
             value={activeCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="input-field"
-            style={{
-              height: "36px",
-              padding: "0 28px 0 10px",
-              fontSize: "12px",
-              fontWeight: 600,
-              borderRadius: "10px",
-              background: "var(--input-bg)",
-              border: "1px solid var(--card-border)",
-              color: "var(--text-primary)",
-              cursor: "pointer",
-              width: "100%",
-              appearance: "none",
-              WebkitAppearance: "none",
-              MozAppearance: "none",
-            }}
+            className="ui-toolbar-btn ui-toolbar-select"
+            aria-label={TEXT_DASHBOARD.BUS_LIST.FOCUS_COLUMN_ARIA}
           >
             {BUS_CATEGORIES.map((cat) => (
-              <option
-                key={cat.id}
-                value={cat.id}
-                style={{
-                  background: "var(--surface-color, #1e293b)",
-                  color: "var(--text-primary, #f8fafc)",
-                }}
-              >
+              <option key={cat.id} value={cat.id}>
                 {cat.label}
               </option>
             ))}
           </select>
-          <ChevronDown
-            size={14}
-            style={{
-              position: "absolute",
-              right: "9px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "var(--text-secondary)",
-              pointerEvents: "none",
-            }}
-          />
+          <ChevronDown size={16} className="buslist-select-chevron" aria-hidden="true" />
         </div>
       </div>
 
-      {/* Row 2: Pencarian & Filter Sisa Unit */}
-      <div
-        className="search-container"
-        style={{ display: "flex", gap: "clamp(6px, 1.5vw, 8px)", margin: 0 }}
-      >
-        <div className="search-input-wrapper" style={{ flex: 1 }}>
-          <Search className="search-icon" size={16} />
+      {/* Baris 2: Pencarian & Filter Sisa Unit */}
+      <div className="buslist-controls-row">
+        <div className="search-input-wrapper buslist-search">
+          <Search className="search-icon" size={16} aria-hidden="true" />
           <input
             type="text"
             className="input-field search-input"
             placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            style={{ height: "36px", fontSize: "12.5px", borderRadius: "10px" }}
           />
         </div>
         <button
-          className="btn"
-          style={{
-            width: "auto",
-            padding: "0 12px",
-            display: "flex",
-            gap: "5px",
-            alignItems: "center",
-            height: "36px",
-            fontSize: "12px",
-            fontWeight: 600,
-            borderRadius: "10px",
-            whiteSpace: "nowrap",
-            background: showOnlyUnfinished
-              ? "rgba(16, 185, 129, 0.15)"
-              : "var(--input-bg)",
-            border: showOnlyUnfinished
-              ? "1px solid rgba(16, 185, 129, 0.4)"
-              : "1px solid var(--card-border)",
-            color: showOnlyUnfinished
-              ? "var(--success-color, #10b981)"
-              : "var(--text-secondary)",
-            transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
-          }}
+          type="button"
+          className="ui-toolbar-btn"
+          aria-pressed={showOnlyUnfinished}
           onClick={onToggleUnfinished}
         >
-          {showOnlyUnfinished ? (
-            <CheckCircle2 size={14} style={{ color: "var(--success-color)" }} />
-          ) : (
-            <Filter size={14} />
-          )}
+          {showOnlyUnfinished ? <CheckCircle2 size={16} /> : <Filter size={16} />}
           {showOnlyUnfinished
             ? TEXT_DASHBOARD.BUS_LIST.FILTER_UNFINISHED
             : TEXT_DASHBOARD.BUS_LIST.FILTER_BTN}
@@ -286,7 +157,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             {skippedWithNotesCount > 0 && (
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--warning-text, #f59e0b)",
                 }}
               >

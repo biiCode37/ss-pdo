@@ -140,8 +140,8 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
       );
     });
 
-    expect(container.textContent).toContain('/1 Unit');
-    expect(container.textContent).not.toContain('/2 Unit');
+    expect(container.textContent).toContain('/1 unit');
+    expect(container.textContent).not.toContain('/2 unit');
   });
 
   it('renders progress bar consistently even when isShiftConfirmed is false for input visibility', async () => {
@@ -194,8 +194,8 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
     });
 
     // Dari 4 unit, hanya JAK.15-01 yang dihitung (3 lainnya berstatus OFF / TO EVDAL)
-    expect(container.textContent).toContain('/1 Unit');
-    expect(container.textContent).not.toContain('/4 Unit');
+    expect(container.textContent).toContain('/1 unit');
+    expect(container.textContent).not.toContain('/4 unit');
   });
 
   it('Set Jumlah Trip mengosongkan trip unit LIBUR (diperlakukan seperti OFF)', async () => {
@@ -240,8 +240,8 @@ describe('BusList Component - Shift Lock and Operational Restrictions', () => {
         />,
       );
     });
-    expect(container.textContent).toContain('/1 Unit');
-    expect(container.textContent).not.toContain('/2 Unit');
+    expect(container.textContent).toContain('/1 unit');
+    expect(container.textContent).not.toContain('/2 unit');
   });
 
   describe('Kosongkan trip lewat modal massal (kedua kolom dikosongkan)', () => {

@@ -1,11 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import {
-  MapPin,
-  ChevronDown,
-  ChevronLeft,
-  AlertTriangle,
-  CloudOff,
-} from "lucide-react";
+import { ChevronDown, ChevronLeft, AlertTriangle, CloudOff } from "lucide-react";
 import { UserProfileHeader } from "@/components/UserProfileHeader";
 import { RouteSelectorCard } from "@/components/RouteSelectorCard";
 import { TEXT_DASHBOARD } from "@/constants/texts";
@@ -138,9 +132,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "3px",
+                gap: "4px",
                 padding: "6px 8px",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 background: "var(--color-bg-surface, var(--card-bg, rgba(255, 255, 255, 0.06)))",
                 border: "1px solid var(--color-border-subtle, var(--border-color, rgba(255, 255, 255, 0.12)))",
                 color: "var(--color-text-secondary, var(--text-secondary, #a0aec0))",
@@ -153,7 +147,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               aria-label={TEXT_DASHBOARD.SWITCHER.TITLE}
               data-testid="back-to-monitoring-btn"
             >
-              <ChevronLeft size={14} style={{ flexShrink: 0 }} />
+              <ChevronLeft size={16} style={{ flexShrink: 0 }} />
               <span>{TEXT_DASHBOARD.SWITCHER.REGIONAL_MONITORING}</span>
             </button>
           )}
@@ -161,64 +155,30 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           {/* Badge Kode Rute Aktif */}
           <button
             type="button"
+            className="ui-chip-btn ui-chip-btn--accent"
             onClick={onOpenRouteSelector}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "4px",
-              padding: "6px 9px",
-              borderRadius: "10px",
-              background: "var(--color-selection-bg, rgba(62, 207, 142, 0.12))",
-              border: "1px solid var(--color-selection-border, rgba(62, 207, 142, 0.32))",
-              color: "var(--color-action-primary-bg, #3ECF8E)",
-              fontSize: "12px",
-              fontWeight: 700,
-              letterSpacing: "0.2px",
-              cursor: "pointer",
-              transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
-            }}
             title={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_TITLE(activeRouteCode)}
             aria-label={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_ARIA(activeRouteCode)}
             data-testid="active-route-badge-btn"
           >
-            <MapPin size={13} style={{ color: "var(--color-action-primary-bg, #3ECF8E)", flexShrink: 0 }} />
             <span>{activeRouteCode}</span>
-            <ChevronDown size={12} style={{ opacity: 0.65, flexShrink: 0 }} />
+            <ChevronDown size={16} aria-hidden="true" />
           </button>
 
           {queue.length > 0 && (
-            <div
+            <button
+              type="button"
+              className={`ui-chip-btn ${hasConflictOrFailedQueue ? "ui-chip-btn--error" : "ui-chip-btn--warning"}`}
               onClick={onOpenQueue}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                color: hasConflictOrFailedQueue
-                  ? "var(--color-danger-fg, var(--danger-color))"
-                  : "var(--color-warning-fg, var(--warning-color))",
-                fontSize: "11.5px",
-                fontWeight: "bold",
-                background: hasConflictOrFailedQueue
-                  ? "rgba(247, 85, 85, 0.12)"
-                  : "rgba(245, 158, 11, 0.12)",
-                padding: "3px 7px",
-                borderRadius: "20px",
-                cursor: "pointer",
-                border:
-                  "1px solid " +
-                  (hasConflictOrFailedQueue
-                    ? "rgba(247, 85, 85, 0.25)"
-                    : "rgba(245, 158, 11, 0.25)"),
-              }}
               title={TEXT_DASHBOARD.SYNC_QUEUE_TITLE}
             >
               {hasConflictOrFailedQueue ? (
-                <AlertTriangle size={13} />
+                <AlertTriangle size={16} aria-hidden="true" />
               ) : (
-                <CloudOff size={13} />
+                <CloudOff size={16} aria-hidden="true" />
               )}
               <span>{queue.length}</span>
-            </div>
+            </button>
           )}
         </div>
 

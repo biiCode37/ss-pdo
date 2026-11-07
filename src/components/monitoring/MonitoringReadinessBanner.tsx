@@ -59,7 +59,7 @@ export const MonitoringReadinessBanner: React.FC<
         <div style={{ textAlign: "right" }}>
           <span
             style={{
-              fontWeight: 800,
+              fontWeight: 700,
               color: "var(--text-primary, #ededed)",
               display: "block",
             }}
@@ -73,7 +73,7 @@ export const MonitoringReadinessBanner: React.FC<
           {appInputCount !== undefined && sheetSyncCount !== undefined && (
             <span
               style={{
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "var(--text-secondary, #8b8b8b)",
                 display: "block",
                 marginTop: "2px",
@@ -95,7 +95,7 @@ export const MonitoringReadinessBanner: React.FC<
         style={{
           width: "100%",
           height: "8px",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
           overflow: "hidden",
         }}
@@ -104,8 +104,8 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             height: "100%",
             width: `${pct}%`,
-            background: "linear-gradient(90deg, #3ECF8E 0%, #00C573 100%)",
-            borderRadius: "9999px",
+            background: "var(--color-action-primary-bg)",
+            borderRadius: "999px",
             transition: "width 0.4s ease",
           }}
         />
@@ -118,7 +118,7 @@ export const MonitoringReadinessBanner: React.FC<
           flexWrap: "wrap",
           alignItems: "center",
           gap: "14px",
-          fontSize: "11.5px",
+          fontSize: "12px",
           color: "var(--text-secondary, #8b8b8b)",
           paddingTop: "2px",
         }}
@@ -127,7 +127,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span
@@ -135,7 +135,7 @@ export const MonitoringReadinessBanner: React.FC<
               width: "8px",
               height: "8px",
               borderRadius: "50%",
-              background: "#10b981",
+              background: "var(--color-success-fg)",
             }}
           />
           {TEXT_MONITORING.READINESS.LEGEND_VERIFIED}{" "}
@@ -147,7 +147,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span
@@ -167,7 +167,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span
@@ -185,7 +185,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span

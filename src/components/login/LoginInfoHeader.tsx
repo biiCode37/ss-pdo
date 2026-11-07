@@ -14,7 +14,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
           width: "40px",
           height: "4px",
           backgroundColor: "rgba(255, 255, 255, 0.2)",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           margin: "0 auto 16px auto",
         }}
       />
@@ -25,7 +25,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "18px",
+          marginBottom: "20px",
           paddingBottom: "12px",
           borderBottom: "1px solid var(--border-color)",
         }}
@@ -35,16 +35,16 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
             style={{
               padding: "6px",
               borderRadius: "8px",
-              backgroundColor: "rgba(62, 207, 142, 0.15)",
-              color: "var(--accent-color, #3ECF8E)",
+              backgroundColor: "var(--color-action-secondary-bg)",
+              color: "var(--color-link)",
             }}
           >
-            <Info size={18} />
+            <Info size={20} />
           </div>
           <h3
             style={{
-              fontSize: "17px",
-              fontWeight: 800,
+              fontSize: "18px",
+              fontWeight: 700,
               margin: 0,
               color: "var(--text-primary)",
             }}
@@ -60,7 +60,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
             color: "var(--text-secondary)",
             cursor: "pointer",
             padding: "6px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -68,7 +68,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
           aria-label={TEXT_COMMON.BUTTONS.CLOSE}
           data-testid="close-info-modal-btn"
         >
-          <X size={18} />
+          <X size={20} />
         </button>
       </div>
     </>

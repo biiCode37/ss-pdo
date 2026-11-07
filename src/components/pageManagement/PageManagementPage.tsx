@@ -262,13 +262,13 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
               }}
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={20} />
             </button>
 
             <div>
               <h1
                 style={{
-                  fontSize: '17px',
+                  fontSize: '18px',
                   fontWeight: 700,
                   margin: 0,
                   color: 'var(--color-text-primary)',
@@ -279,7 +279,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
               {isSelectMode && (
                 <span
                   style={{
-                    fontSize: '11px',
+                    fontSize: '12px',
                     fontWeight: 600,
                     color: 'var(--color-action-primary-bg)',
                     display: 'block',
@@ -301,8 +301,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '7px 12px',
-                borderRadius: '10px',
+                padding: '8px 12px',
+                borderRadius: '12px',
                 background: isSelectMode
                   ? 'var(--color-action-primary-bg)'
                   : 'var(--color-surface-subtle)',
@@ -318,7 +318,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
               }}
             >
-              {isSelectMode ? <Check size={14} /> : <CheckSquare size={14} />}
+              {isSelectMode ? <Check size={16} /> : <CheckSquare size={16} />}
               <span>
                 {isSelectMode
                   ? TEXT_PAGE_MANAGEMENT.BULK_ACTION.EXIT_SELECT_MODE
@@ -331,17 +331,17 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '5px 10px',
-                borderRadius: '20px',
+                padding: '6px 10px',
+                borderRadius: '16px',
                 backgroundColor: 'var(--color-role-superadmin-bg)',
                 border: '1px solid var(--color-role-superadmin-border)',
                 color: 'var(--color-role-superadmin-fg)',
-                fontSize: '11px',
+                fontSize: '12px',
                 fontWeight: 600,
                 flexShrink: 0,
               }}
             >
-              <ShieldAlert size={13} />
+              <ShieldAlert size={16} />
               <span>{TEXT_PAGE_MANAGEMENT.SUPERADMIN_BADGE}</span>
             </div>
           </div>
@@ -365,12 +365,12 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 type="button"
                 onClick={handleSelectAll}
                 style={{
-                  padding: '5px 10px',
+                  padding: '6px 10px',
                   borderRadius: '8px',
                   background: 'var(--color-surface-subtle)',
                   border: '1px solid var(--color-border-subtle)',
                   color: 'var(--color-text-primary)',
-                  fontSize: '11.5px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   cursor: 'pointer',
                 }}
@@ -381,12 +381,12 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 type="button"
                 onClick={handleDeselectAll}
                 style={{
-                  padding: '5px 10px',
+                  padding: '6px 10px',
                   borderRadius: '8px',
                   background: 'var(--color-surface-subtle)',
                   border: '1px solid var(--color-border-subtle)',
                   color: 'var(--color-text-secondary)',
-                  fontSize: '11.5px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   cursor: 'pointer',
                 }}
@@ -395,7 +395,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
               </button>
             </div>
 
-            <span style={{ fontSize: '11.5px', color: 'var(--color-text-muted)' }}>
+            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
               {TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_HINT}
             </span>
           </div>
@@ -438,8 +438,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 onClick={() => setActiveCategory(tab.key)}
                 className="pm-filter-tab"
                 style={{
-                  padding: '7px 14px',
-                  borderRadius: '20px',
+                  padding: '8px 14px',
+                  borderRadius: '16px',
                   border: isActive
                     ? '1px solid var(--color-action-primary-bg)'
                     : '1px solid var(--color-border-subtle)',
@@ -447,7 +447,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     ? 'var(--color-action-primary-bg)'
                     : 'var(--color-surface-subtle)',
                   color: isActive ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
-                  fontSize: '12.5px',
+                  fontSize: '13px',
                   fontWeight: isActive ? 600 : 500,
                   whiteSpace: 'nowrap',
                   cursor: 'pointer',
@@ -482,7 +482,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                   style={{
                     width: '38px',
                     height: '38px',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     backgroundColor: 'var(--color-role-admin-bg)',
                     display: 'flex',
                     alignItems: 'center',
@@ -490,7 +490,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     color: 'var(--color-role-admin-fg)',
                   }}
                 >
-                  <Layout size={19} />
+                  <Layout size={20} />
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -508,21 +508,21 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '4px',
-                        fontSize: '10px',
+                        fontSize: '12px',
                         fontWeight: 700,
-                        padding: '2px 7px',
-                        borderRadius: '6px',
+                        padding: '2px 8px',
+                        borderRadius: '8px',
                         backgroundColor: 'var(--color-surface-subtle)',
                         color: 'var(--color-text-secondary)',
                       }}
                     >
-                      <Lock size={10} />
+                      <Lock size={16} />
                       {TEXT_PAGE_MANAGEMENT.STATUS.LOCKED}
                     </span>
                   </div>
                   <span
                     style={{
-                      fontSize: '11.5px',
+                      fontSize: '12px',
                       color: 'var(--color-text-secondary)',
                       display: 'block',
                       marginTop: '2px',
@@ -538,7 +538,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 style={{
                   width: '50px',
                   height: '30px',
-                  borderRadius: '15px',
+                  borderRadius: '16px',
                   backgroundColor: 'var(--color-success-fg)',
                   border: '2px solid var(--color-success-fg)',
                   boxSizing: 'border-box',
@@ -579,7 +579,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 border: '1px dashed var(--color-border-subtle)',
               }}
             >
-              <p style={{ margin: 0, fontSize: '13.5px', fontWeight: 500 }}>
+              <p style={{ margin: 0, fontSize: '14px', fontWeight: 500 }}>
                 {TEXT_PAGE_MANAGEMENT.CATEGORIES.EMPTY_FILTER}
               </p>
             </div>
@@ -658,7 +658,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     style={{
                       width: '38px',
                       height: '38px',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       backgroundColor: isEnabled
                         ? 'var(--color-success-bg)'
                         : 'var(--color-warning-bg)',
@@ -671,9 +671,9 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       flexShrink: 0,
                     }}
                   >
-                    {setting.category === 'page' && <Layout size={19} />}
-                    {setting.category === 'tab' && <Layers size={19} />}
-                    {setting.category === 'modal' && <Sliders size={19} />}
+                    {setting.category === 'page' && <Layout size={20} />}
+                    {setting.category === 'tab' && <Layers size={20} />}
+                    {setting.category === 'modal' && <Sliders size={20} />}
                   </div>
 
                   <div style={{ minWidth: 0 }}>
@@ -700,11 +700,11 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
-                          gap: '3px',
-                          fontSize: '10px',
+                          gap: '4px',
+                          fontSize: '12px',
                           fontWeight: 700,
-                          padding: '2px 7px',
-                          borderRadius: '6px',
+                          padding: '2px 8px',
+                          borderRadius: '8px',
                           backgroundColor: isEnabled
                             ? 'var(--color-success-bg)'
                             : 'var(--color-warning-bg)',
@@ -715,12 +715,12 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       >
                         {isEnabled ? (
                           <>
-                            <CheckCircle2 size={10} />
+                            <CheckCircle2 size={16} />
                             {TEXT_PAGE_MANAGEMENT.STATUS.ACTIVE}
                           </>
                         ) : (
                           <>
-                            <AlertCircle size={10} />
+                            <AlertCircle size={16} />
                             {TEXT_PAGE_MANAGEMENT.STATUS.MAINTENANCE}
                           </>
                         )}
@@ -739,7 +739,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     >
                       <span
                         style={{
-                          fontSize: '11px',
+                          fontSize: '12px',
                           color: 'var(--color-text-secondary)',
                           display: 'inline-flex',
                           alignItems: 'center',
@@ -757,10 +757,10 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       {whitelistCount > 0 && (
                         <span
                           style={{
-                            fontSize: '10px',
+                            fontSize: '12px',
                             fontWeight: 700,
-                            padding: '1px 6px',
-                            borderRadius: '6px',
+                            padding: '2px 6px',
+                            borderRadius: '8px',
                             backgroundColor: 'var(--color-success-bg)',
                             color: 'var(--color-success-fg)',
                           }}
@@ -772,10 +772,10 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       {blacklistCount > 0 && (
                         <span
                           style={{
-                            fontSize: '10px',
+                            fontSize: '12px',
                             fontWeight: 700,
-                            padding: '1px 6px',
-                            borderRadius: '6px',
+                            padding: '2px 6px',
+                            borderRadius: '8px',
                             backgroundColor: 'var(--color-error-bg)',
                             color: 'var(--color-error-fg)',
                           }}
@@ -804,7 +804,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         justifyContent: 'center',
                         width: '34px',
                         height: '34px',
-                        borderRadius: '10px',
+                        borderRadius: '12px',
                         background: 'var(--color-surface-subtle)',
                         border: '1px solid var(--color-border-subtle)',
                         color: 'var(--color-text-secondary)',
@@ -834,7 +834,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     style={{
                       width: '50px',
                       height: '30px',
-                      borderRadius: '15px',
+                      borderRadius: '16px',
                       backgroundColor: isEnabled
                         ? 'var(--color-success-fg)'
                         : 'var(--color-surface-subtle)',

@@ -22,7 +22,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
     <div style={{ marginBottom: "20px" }}>
       <span
         style={{
-          fontSize: "10.5px",
+          fontSize: "12px",
           fontWeight: 700,
           letterSpacing: "0.5px",
           color: "var(--text-secondary)",
@@ -52,19 +52,19 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "pointer",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Users size={18} style={{ color: "#3b82f6" }} />
+            <Users size={20} style={{ color: "var(--color-link)" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT}</div>
               <div
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
-                  marginTop: "1px",
+                  marginTop: "2px",
                 }}
               >
                 {TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT_DESC}
@@ -93,19 +93,19 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
               border: "1px solid var(--card-border)",
               color: "var(--text-primary)",
               fontWeight: 500,
-              fontSize: "13.5px",
+              fontSize: "14px",
               cursor: "pointer",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Sliders size={18} style={{ color: "#f59e0b" }} />
+              <Sliders size={20} style={{ color: "var(--color-warning-fg)" }} />
               <div style={{ textAlign: "left" }}>
                 <div>{TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT}</div>
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "var(--text-secondary)",
-                    marginTop: "1px",
+                    marginTop: "2px",
                   }}
                 >
                   {TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT_DESC}
@@ -132,21 +132,21 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-secondary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "not-allowed",
             opacity: 0.65,
           }}
           title={TEXT_DASHBOARD.PROFILE_MENU.COMING_SOON_TITLE}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <History size={18} style={{ color: "var(--text-secondary)" }} />
+            <History size={20} style={{ color: "var(--text-secondary)" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG}</div>
               <div
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
-                  marginTop: "1px",
+                  marginTop: "2px",
                 }}
               >
                 {TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG_DESC}
@@ -155,10 +155,10 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
           </div>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: 700,
-              padding: "2px 7px",
-              borderRadius: "6px",
+              padding: "2px 8px",
+              borderRadius: "8px",
               background: "rgba(245, 158, 11, 0.15)",
               color: "var(--warning-color, #f59e0b)",
               border: "1px solid rgba(245, 158, 11, 0.3)",

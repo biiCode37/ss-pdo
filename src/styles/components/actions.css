@@ -2,8 +2,8 @@
 .ui-button {
   border: 1px solid transparent;
   border-radius: 12px;
-  padding: 12px 18px;
-  min-height: 44px;
+  padding: 12px 20px;
+  min-height: 48px;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -51,7 +51,8 @@
   opacity: 1;
 }
 
-/* Indikator fokus aksesibilitas global (WCAG 2.4.7 & 2.4.13) */
+/* Indikator fokus aksesibilitas global (WCAG 2.4.7 & 2.4.13).
+   Kolom teks ditimpa aturan forms.css (cincin menimpa border, refact_213). */
 :where(button, a[href], input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;
@@ -66,3 +67,222 @@
   }
 }
 
+/* Tombol toolbar padat (Set Jumlah Trip, Pilih, Fokus Kolom, Filter) — refact_220.
+   Tinggi 40px: di atas minimum WCAG 2.5.8 (24px) tanpa membuat header lengket terlalu tinggi. */
+.ui-toolbar-btn {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.ui-toolbar-btn[aria-pressed="true"] {
+  background: var(--color-action-primary-bg);
+  border-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-fg);
+}
+
+.ui-toolbar-btn:disabled {
+  cursor: wait;
+}
+
+/* Varian <select> pada toolbar: rata kiri, ruang untuk ikon chevron di kanan. */
+.ui-toolbar-select {
+  width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+  padding-right: 32px;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: left;
+}
+
+/* Pil ringkas di header (rute aktif, status laporan, antrean, keluar akumulasi) — refact_220. */
+.ui-chip-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Pil aksen (mis. rute aktif): garis tepi tegas, bukan tint tipis — batas >= 3:1 (refact_221). */
+.ui-chip-btn--accent {
+  background: var(--color-surface-default);
+  border-color: var(--color-state-active-bg);
+  color: var(--color-link);
+}
+
+.ui-chip-btn--warning {
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+  color: var(--color-warning-fg);
+}
+
+.ui-chip-btn--error {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error-fg);
+}
+
+.ui-chip-btn--success {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success-fg);
+}
+
+.ui-chip-btn--info {
+  background: var(--color-info-bg);
+  border-color: var(--color-info-border);
+  color: var(--color-info-fg);
+}
+
+.ui-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+
+/* Kontrol segmen (tab modal, pilih Shift 1/2) — refact_222. Aktif via aria-selected/aria-pressed. */
+.ui-segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  padding: 4px;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+}
+
+.ui-segmented--inline {
+  display: inline-grid;
+}
+
+.ui-segmented-btn {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.ui-segmented-btn[aria-selected="true"],
+.ui-segmented-btn[aria-pressed="true"] {
+  background: var(--color-state-active-bg);
+  border-color: var(--color-state-active-bg);
+  color: var(--color-state-active-fg);
+}
+
+/* Tombol opsi/preset (BA, OFF, TO EVDAL, kode BA, + Manual, + Catatan) — refact_222. */
+.ui-option-btn {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.ui-option-btn[aria-pressed="true"] {
+  background: var(--color-state-active-bg);
+  border-color: var(--color-state-active-bg);
+  color: var(--color-state-active-fg);
+}
+
+/* Preset bermakna status: saat aktif berwarna solid status (teks = latar permukaan, diuji kontras). */
+.ui-option-btn[data-tone="warning"][aria-pressed="true"] {
+  background: var(--color-warning-fg);
+  border-color: var(--color-warning-fg);
+  color: var(--color-surface-default);
+}
+
+.ui-option-btn[data-tone="error"][aria-pressed="true"] {
+  background: var(--color-error-fg);
+  border-color: var(--color-error-fg);
+  color: var(--color-surface-default);
+}
+
+.ui-option-btn[data-tone="success"][aria-pressed="true"] {
+  background: var(--color-success-fg);
+  border-color: var(--color-success-fg);
+  color: var(--color-surface-default);
+}
+
+.ui-option-btn:disabled {
+  color: var(--color-text-muted);
+  background: var(--color-surface-subtle);
+  cursor: default;
+}
+
+/* Panel bernada status (info/peringatan/error) — refact_222. */
+.ui-tone-panel {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-info-border);
+  background: var(--color-info-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ui-tone-panel[data-tone="warning"] {
+  border-color: var(--color-warning-border);
+  background: var(--color-warning-bg);
+}
+
+.ui-tone-panel[data-tone="error"] {
+  border-color: var(--color-error-border);
+  background: var(--color-error-bg);
+}
+
+.ui-option-btn[aria-disabled="true"] {
+  color: var(--color-text-muted);
+  background: var(--color-surface-subtle);
+  cursor: not-allowed;
+}

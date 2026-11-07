@@ -39,16 +39,16 @@ export const MonitoringSupervisorTabs: React.FC<
               fontWeight: 700,
               whiteSpace: "nowrap",
               border: isSelected
-                ? "1px solid var(--accent-color, #3ECF8E)"
+                ? "1px solid var(--color-state-active-bg)"
                 : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               background: isSelected
-                ? "var(--accent-color, #3ECF8E)"
+                ? "var(--color-state-active-bg)"
                 : "var(--card-bg, rgba(23, 23, 23, 0.85))",
-              color: isSelected ? "#ffffff" : "var(--text-secondary, #8b8b8b)",
+              color: isSelected ? "var(--color-state-active-fg)" : "var(--text-secondary, #8b8b8b)",
               cursor: "pointer",
               transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
               boxShadow: isSelected
-                ? "0 4px 12px rgba(62, 207, 142, 0.25)"
+                ? "0 4px 12px var(--color-shadow)"
                 : "none",
             }}
           >

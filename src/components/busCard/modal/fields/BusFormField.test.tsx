@@ -239,7 +239,7 @@ describe("BusFormField Component", () => {
 
     const input = container.querySelector<HTMLInputElement>("#test-secondary");
     expect(input).not.toBeNull();
-    expect(input?.style.fontSize).toBe("0.95rem");
+    expect(input?.style.fontSize).toBe("16px");
     expect(input?.style.fontWeight).toBe("400");
   });
 });
@@ -306,7 +306,7 @@ describe("ShiftOptionChip Component", () => {
     expect(button).not.toBeNull();
     expect(button?.textContent).toBe("✓ Manual Shift 1");
     expect(button?.getAttribute("aria-pressed")).toBe("true");
-    expect(button?.style.background).toContain("rgba(56, 189, 248, 0.15)");
+    expect(button?.classList.contains("ui-option-btn")).toBe(true);
   });
 });
 

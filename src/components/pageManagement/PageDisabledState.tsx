@@ -24,7 +24,7 @@ export const PageDisabledState: React.FC<Props> = ({ message, onBack }) => {
         style={{
           width: '64px',
           height: '64px',
-          borderRadius: '20px',
+          borderRadius: '16px',
           background: 'var(--color-warning-bg)',
           border: '1px solid var(--color-warning-border)',
           display: 'flex',
@@ -34,7 +34,7 @@ export const PageDisabledState: React.FC<Props> = ({ message, onBack }) => {
           marginBottom: '20px',
         }}
       >
-        <Wrench size={32} />
+        <Wrench size={24} />
       </div>
 
       <h2

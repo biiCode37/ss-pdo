@@ -20,10 +20,10 @@ export function LoginInfoPermissionsSection({
           marginBottom: "8px",
         }}
       >
-        <FileSpreadsheet size={17} color="var(--accent-color, #3ECF8E)" />
+        <FileSpreadsheet size={16} color="var(--color-action-primary-bg)" />
         <h4
           style={{
-            fontSize: "15px",
+            fontSize: "16px",
             fontWeight: 700,
             color: "var(--text-primary)",
             margin: 0,
@@ -34,7 +34,7 @@ export function LoginInfoPermissionsSection({
       </div>
       <p
         style={{
-          fontSize: "12.5px",
+          fontSize: "13px",
           color: "var(--text-secondary)",
           lineHeight: 1.55,
           marginBottom: "10px",
@@ -50,7 +50,7 @@ export function LoginInfoPermissionsSection({
         style={{
           background: "none",
           border: "none",
-          color: "var(--accent-color, #3ECF8E)",
+          color: "var(--color-link)",
           fontSize: "12px",
           fontWeight: 600,
           display: "inline-flex",
@@ -61,7 +61,7 @@ export function LoginInfoPermissionsSection({
           marginBottom: "8px",
         }}
       >
-        {showDetails ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+        {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         <span>
           {showDetails
             ? TEXT_AUTH.HIDE_PERMISSIONS_DETAIL
@@ -74,7 +74,7 @@ export function LoginInfoPermissionsSection({
           data-testid="scope-details-box"
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             border: "1px solid var(--border-color)",
             fontSize: "12px",
@@ -89,7 +89,7 @@ export function LoginInfoPermissionsSection({
           </div>
           <div>• Akses baca & tulis Google Spreadsheet tugas operasional</div>
           <div>• Alamat email dan nama profil (verifikasi identitas petugas)</div>
-          <div style={{ marginTop: "6px", color: "var(--accent-color, #3ECF8E)" }}>
+          <div style={{ marginTop: "6px", color: "var(--color-link)" }}>
             Keamanan login dan transmisi token dienkripsi langsung oleh infrastruktur resmi Google.
           </div>
         </div>

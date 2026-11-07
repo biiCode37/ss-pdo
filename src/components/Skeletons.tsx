@@ -99,7 +99,7 @@ export function DailyToaTrendSkeleton() {
           alignItems: 'flex-end',
           justifyContent: 'space-between',
           height: '110px',
-          gap: '3px',
+          gap: '4px',
           paddingTop: '10px',
         }}
       >
@@ -296,7 +296,7 @@ export function AuditLogSkeleton({ count = 5 }: { count?: number }) {
               key={idx}
               className="glass"
               style={{
-                borderRadius: '14px',
+                borderRadius: '12px',
                 padding: '14px 16px',
                 display: 'flex',
                 alignItems: 'flex-start',

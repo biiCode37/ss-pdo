@@ -75,8 +75,8 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
         display: "flex",
         alignItems: "center",
         gap: "10px",
-        padding: "5px 12px 5px 6px",
-        borderRadius: "9999px",
+        padding: "6px 12px 6px 6px",
+        borderRadius: "999px",
         cursor: "pointer",
         transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
         userSelect: "none",
@@ -123,7 +123,7 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
             }}
           />
         ) : (
-          <User size={18} strokeWidth={2.2} />
+          <User size={20} strokeWidth={2.2} />
         )}
       </div>
 
@@ -138,8 +138,8 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
       >
         <span
           style={{
-            fontSize: "0.82rem",
-            fontWeight: 650,
+            fontSize: "13px",
+            fontWeight: 600,
             color: "var(--color-text-primary, var(--text-main))",
             whiteSpace: "nowrap",
             overflow: "hidden",
@@ -153,7 +153,7 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
         <span
           className={`header-role-badge ${roleConfig.className}`}
           style={{
-            fontSize: "0.68rem",
+            fontSize: "12px",
             fontWeight: 600,
             textTransform: "uppercase",
             letterSpacing: "0.04em",

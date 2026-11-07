@@ -90,7 +90,7 @@ export const UserManagementEmptyState: React.FC<
   return (
     <div
       style={{
-        padding: "60px 20px",
+        padding: "64px 20px",
         textAlign: "center",
         background: "var(--card-bg, rgba(30, 41, 59, 0.4))",
         borderRadius: "16px",
@@ -102,13 +102,13 @@ export const UserManagementEmptyState: React.FC<
       }}
     >
       <Users
-        size={36}
+        size={24}
         style={{ color: "var(--text-secondary, #64748b)", opacity: 0.5 }}
       />
       <h3
         style={{
           margin: 0,
-          fontSize: "15px",
+          fontSize: "16px",
           color: "var(--text-primary, #f8fafc)",
         }}
       >
@@ -117,7 +117,7 @@ export const UserManagementEmptyState: React.FC<
       <p
         style={{
           margin: 0,
-          fontSize: "12.5px",
+          fontSize: "13px",
           color: "var(--text-secondary, #94a3b8)",
           maxWidth: "300px",
         }}

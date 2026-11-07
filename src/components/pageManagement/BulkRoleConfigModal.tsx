@@ -79,7 +79,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
           width: '100%',
           maxWidth: '460px',
           backgroundColor: 'var(--color-surface-default)',
-          borderRadius: '20px',
+          borderRadius: '16px',
           border: '1px solid var(--color-border-subtle)',
           boxShadow: '0 20px 40px var(--color-shadow, rgba(0, 0, 0, 0.3))',
           display: 'flex',
@@ -100,11 +100,11 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Users size={18} style={{ color: 'var(--color-action-primary-bg)' }} />
+            <Users size={20} style={{ color: 'var(--color-action-primary-bg)' }} />
             <h3
               style={{
                 margin: 0,
-                fontSize: '15.5px',
+                fontSize: '16px',
                 fontWeight: 700,
                 color: 'var(--color-text-primary)',
               }}
@@ -120,7 +120,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
             style={{
               width: '34px',
               height: '34px',
-              borderRadius: '10px',
+              borderRadius: '12px',
               background: 'var(--color-surface-subtle)',
               border: '1px solid var(--color-border-subtle)',
               color: 'var(--color-text-secondary)',
@@ -138,7 +138,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
         <div style={{ padding: '20px' }}>
           <p
             style={{
-              fontSize: '12.5px',
+              fontSize: '13px',
               color: 'var(--color-text-secondary)',
               margin: '0 0 16px',
               lineHeight: 1.5,
@@ -203,14 +203,14 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
                         alignItems: 'center',
                         gap: '4px',
                         padding: '2px 8px',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         backgroundColor: 'var(--color-role-superadmin-bg)',
                         color: 'var(--color-role-superadmin-fg)',
-                        fontSize: '10px',
+                        fontSize: '12px',
                         fontWeight: 700,
                       }}
                     >
-                      <Lock size={10} />
+                      <Lock size={16} />
                       {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.SUPERADMIN_REQUIRED}
                     </span>
                   ) : (
@@ -237,12 +237,12 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             style={{
-              padding: '9px 16px',
-              borderRadius: '10px',
+              padding: '10px 16px',
+              borderRadius: '12px',
               background: 'var(--color-surface-subtle)',
               border: '1px solid var(--color-border-subtle)',
               color: 'var(--color-text-primary)',
-              fontSize: '12.5px',
+              fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
             }}
@@ -259,18 +259,18 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '9px 18px',
-              borderRadius: '10px',
+              padding: '10px 20px',
+              borderRadius: '12px',
               background: 'var(--color-action-primary-bg)',
               border: 'none',
               color: 'var(--color-action-primary-fg)',
-              fontSize: '12.5px',
+              fontSize: '13px',
               fontWeight: 600,
               cursor: isSaving ? 'wait' : 'pointer',
               opacity: isSaving ? 0.7 : 1,
             }}
           >
-            <Check size={14} />
+            <Check size={16} />
             {TEXT_PAGE_MANAGEMENT.BULK_ACTION.SAVE_ROLES_BTN}
           </button>
         </div>

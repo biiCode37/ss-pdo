@@ -31,10 +31,10 @@ export const ReportTrafficJamsSection: React.FC<
           marginBottom: "8px",
         }}
       >
-        <AlertTriangle size={14} color="var(--warning-color, #f59e0b)" />
+        <AlertTriangle size={16} color="var(--warning-color, #f59e0b)" />
         <label
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--text-secondary)",
             textTransform: "uppercase",
@@ -64,17 +64,17 @@ export const ReportTrafficJamsSection: React.FC<
               onClick={() => onToggleSpot(spot)}
               style={{
                 padding: "6px 12px",
-                borderRadius: "20px",
+                borderRadius: "16px",
                 fontSize: "12px",
                 fontWeight: isSelected ? 700 : 500,
                 background: isSelected
-                  ? "rgba(245, 158, 11, 0.18)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.04))",
                 color: isSelected
-                  ? "var(--warning-color, #f59e0b)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
                 border: isSelected
-                  ? "1px solid rgba(245, 158, 11, 0.45)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
                 cursor: "pointer",
                 transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -116,8 +116,8 @@ export const ReportTrafficJamsSection: React.FC<
           style={{
             flex: 1,
             padding: "8px 12px",
-            borderRadius: "10px",
-            fontSize: "12.5px",
+            borderRadius: "12px",
+            fontSize: "13px",
           }}
         />
         <button
@@ -125,7 +125,7 @@ export const ReportTrafficJamsSection: React.FC<
           onClick={onAddCustomSpot}
           style={{
             padding: "8px 14px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
             border: "1px solid var(--border-color, rgba(255, 255, 255, 0.1))",
             color: "var(--text-primary)",
@@ -138,7 +138,7 @@ export const ReportTrafficJamsSection: React.FC<
             transition: "background 0.15s ease",
           }}
         >
-          <Plus size={14} />{" "}
+          <Plus size={16} />{" "}
           <span>{TEXT_PDO_FORM.TRAFFIC_JAMS.ADD_BTN}</span>
         </button>
       </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { BarChart2, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
 interface ToaTrendHeaderProps {
@@ -22,15 +22,14 @@ export const ToaTrendHeader: React.FC<ToaTrendHeaderProps> = ({
     >
       <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
         <div className="analytics-card-title">
-          <BarChart2 size={18} />
           <span>{TEXT_DASHBOARD.TOA_TREND.TITLE}</span>
         </div>
         {unitFilter && (
           <div
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 600,
-              color: "var(--accent-color)",
+              color: "var(--color-link)",
               paddingLeft: "24px",
             }}
           >
@@ -40,7 +39,7 @@ export const ToaTrendHeader: React.FC<ToaTrendHeaderProps> = ({
       </div>
       <span
         style={{
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 700,
           color: "var(--text-secondary)",
           display: "flex",
@@ -48,7 +47,7 @@ export const ToaTrendHeader: React.FC<ToaTrendHeaderProps> = ({
           gap: "4px",
         }}
       >
-        <Calendar size={12} />
+        <Calendar size={16} />
         {effectiveMonthLabel}
       </span>
     </div>

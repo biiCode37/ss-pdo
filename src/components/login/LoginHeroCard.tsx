@@ -25,24 +25,9 @@ export function LoginHeroCard({
         marginBottom: "16px",
         position: "relative",
         overflow: "hidden",
-        borderRadius: "20px",
+        borderRadius: "16px",
       }}
     >
-      {/* Radial Glow Accent */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-50px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "220px",
-          height: "220px",
-          background:
-            "radial-gradient(circle, rgba(62, 207, 142, 0.22) 0%, rgba(62, 207, 142, 0) 70%)",
-          pointerEvents: "none",
-        }}
-      />
-
       <img
         src="/app-logo.png"
         alt="Logo PUSM"
@@ -50,22 +35,18 @@ export function LoginHeroCard({
           width: "80px",
           height: "80px",
           margin: "0 auto 14px auto",
-          borderRadius: "20px",
+          borderRadius: "16px",
           display: "block",
-          filter: "drop-shadow(0 8px 20px rgba(62, 207, 142, 0.28))",
         }}
       />
 
       <h1
         style={{
           fontSize: "28px",
-          fontWeight: 800,
+          fontWeight: 700,
           letterSpacing: "-0.5px",
           marginBottom: "4px",
-          background: "var(--title-gradient)",
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          WebkitTextFillColor: "transparent",
+          color: "var(--color-text-primary)",
           lineHeight: 1.2,
         }}
         aria-label={`${TEXT_DASHBOARD.APP_TITLE} - ${TEXT_DASHBOARD.APP_SUBTITLE}`}
@@ -90,11 +71,11 @@ export function LoginHeroCard({
         style={{
           display: "inline-block",
           padding: "4px 12px",
-          borderRadius: "20px",
-          backgroundColor: "rgba(62, 207, 142, 0.12)",
-          border: "1px solid rgba(62, 207, 142, 0.3)",
-          color: "var(--accent-color, #3ECF8E)",
-          fontSize: "11.5px",
+          borderRadius: "16px",
+          backgroundColor: "var(--color-action-secondary-bg)",
+          border: "1px solid var(--color-border-subtle)",
+          color: "var(--color-link)",
+          fontSize: "12px",
           fontWeight: 700,
           marginBottom: "12px",
           letterSpacing: "0.2px",
@@ -106,9 +87,9 @@ export function LoginHeroCard({
       <p
         style={{
           color: "var(--text-secondary)",
-          fontSize: "13.5px",
+          fontSize: "14px",
           lineHeight: 1.5,
-          marginBottom: "22px",
+          marginBottom: "24px",
           maxWidth: "460px",
           marginLeft: "auto",
           marginRight: "auto",
@@ -122,9 +103,9 @@ export function LoginHeroCard({
           className="error-text"
           role="alert"
           style={{
-            marginBottom: "18px",
+            marginBottom: "20px",
             padding: "10px 14px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "rgba(239, 68, 68, 0.12)",
             border: "1px solid rgba(239, 68, 68, 0.3)",
             fontSize: "13px",
@@ -152,9 +133,9 @@ export function LoginHeroCard({
           justifyContent: "center",
           gap: "10px",
           padding: "14px 20px",
-          fontSize: "15px",
+          fontSize: "16px",
           fontWeight: 700,
-          borderRadius: "14px",
+          borderRadius: "12px",
           opacity: isApiReady ? 1 : 0.5,
           cursor: isApiReady && !isLoading ? "pointer" : "not-allowed",
           transition: "transform 0.15s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.15s ease",
@@ -175,7 +156,7 @@ export function LoginHeroCard({
 
       <p
         style={{
-          fontSize: "11.5px",
+          fontSize: "12px",
           color: "var(--text-secondary)",
           marginTop: "12px",
           marginBottom: "14px",
@@ -194,7 +175,7 @@ export function LoginHeroCard({
           alignItems: "center",
           gap: "6px",
           padding: "6px 14px",
-          borderRadius: "20px",
+          borderRadius: "16px",
           background: "rgba(255, 255, 255, 0.04)",
           border: "1px solid var(--border-color, rgba(255, 255, 255, 0.1))",
           color: "var(--text-secondary)",
@@ -204,7 +185,7 @@ export function LoginHeroCard({
           transition: "all 0.15s ease",
         }}
       >
-        <Info size={14} color="var(--accent-color, #3ECF8E)" />
+        <Info size={16} color="var(--color-action-primary-bg)" />
         <span>Pelajari Aplikasi & Izin Akses</span>
       </button>
     </div>

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Gauge, Users, UserCheck, Bus, Activity } from "lucide-react";
+import { Gauge, Users, UserCheck, Bus } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { TEXT_DASHBOARD } from "../constants/texts";
@@ -27,20 +27,19 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         }}
       >
         <div className="analytics-card-title">
-          <Activity size={18} style={{ color: "var(--color-action-primary-bg)" }} />
           <span>{TEXT_DASHBOARD.KPIS.TITLE}</span>
         </div>
         {dateBadge && (
           <span
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 700,
               fontFamily: "monospace",
               color: "var(--color-action-primary-bg)",
               background: "var(--color-selection-bg)",
               border: "1px solid var(--color-border-control)",
               padding: "2px 8px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               whiteSpace: "nowrap",
               letterSpacing: "0.5px",
             }}
@@ -55,7 +54,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <Gauge size={13} style={{ color: "var(--color-success-fg)" }} />
+              <Gauge size={16} style={{ color: "var(--color-success-fg)" }} />
               {TEXT_DASHBOARD.KPIS.TOTAL_KM}
             </span>
           </div>
@@ -71,7 +70,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <Users size={13} style={{ color: "var(--color-action-primary-bg)" }} />
+              <Users size={16} style={{ color: "var(--color-action-primary-bg)" }} />
               {TEXT_DASHBOARD.KPIS.TOA_PASSENGERS}
             </span>
           </div>
@@ -87,7 +86,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <Bus size={13} style={{ color: "var(--color-shift-1-fg)" }} />
+              <Bus size={16} style={{ color: "var(--color-shift-1-fg)" }} />
               {TEXT_DASHBOARD.KPIS.KM_PER_BUS_LABEL}
             </span>
           </div>
@@ -103,7 +102,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         <div className="kpi-metric-card">
           <div className="kpi-metric-head">
             <span className="kpi-metric-label">
-              <UserCheck size={13} style={{ color: "var(--color-shift-2-fg)" }} />
+              <UserCheck size={16} style={{ color: "var(--color-shift-2-fg)" }} />
               {TEXT_DASHBOARD.KPIS.PASSENGERS_PER_KM_LABEL}
             </span>
           </div>

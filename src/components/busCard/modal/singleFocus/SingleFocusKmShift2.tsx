@@ -5,8 +5,7 @@ import { validateKmCrossDay } from "@/utils/modals/busInput/busModalValidation";
 import { parseIndonesianNumber } from "@/utils/numberUtils";
 import type { BusInputFormReturn } from "../useBusInputForm";
 import {
-  singleFocusPrimaryInputStyle,
-  getSingleFocusChipStyle,
+  singleFocusPrimaryInputStyle,
   singleFocusSubInputStyle,
   singleFocusLabelStyle,
   singleFocusHelperTextStyle,
@@ -94,7 +93,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                 onClick={form.handleCopyKmAkhir1ToAwal2}
                 style={singleFocusCopyBtnStyle}
               >
-                <Copy size={11} style={{ display: "inline", marginRight: "4px" }} />
+                <Copy size={16} style={{ display: "inline", marginRight: "4px" }} />
                 <span>{TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_AKHIR_S1_ACTION(kmAkhir1)}</span>
               </button>
             )}
@@ -120,12 +119,12 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               opacity: form.isKmAwal2Locked ? 0.45 : 1,
               cursor: form.isKmAwal2Locked ? "not-allowed" : "text",
               border: crossShiftError
-                ? "1.5px solid #ef4444"
+                ? "1.5px solid var(--color-error-border)"
                 : singleFocusPrimaryInputStyle.border,
               background: form.isKmAwal2Locked
-                ? "var(--card-border, rgba(0, 0, 0, 0.04))"
+                ? "var(--color-border-subtle)"
                 : crossShiftError
-                  ? "rgba(239, 68, 68, 0.08)"
+                  ? "var(--color-error-bg)"
                   : singleFocusPrimaryInputStyle.background,
             }}
           />
@@ -145,14 +144,14 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                 borderRadius: "8px",
                 background: "var(--color-error-bg)",
                 border: "1px solid var(--color-error-border)",
-                fontSize: "0.78rem",
+                fontSize: "12px",
                 color: "var(--color-error-fg)",
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
               }}
             >
-              <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+              <AlertTriangle size={16} style={{ flexShrink: 0 }} />
               <span>{crossShiftError}</span>
             </div>
           )}
@@ -165,7 +164,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                 borderRadius: "8px",
                 background: "var(--color-error-bg)",
                 border: "1px solid var(--color-error-border)",
-                fontSize: "0.78rem",
+                fontSize: "12px",
                 color: "var(--color-error-fg)",
                 display: "flex",
                 flexDirection: "column",
@@ -173,7 +172,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                <AlertTriangle size={16} style={{ flexShrink: 0 }} />
                 <span>{crossDayErrorS2}</span>
               </div>
               <label
@@ -182,8 +181,8 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                   alignItems: "center",
                   gap: "6px",
                   cursor: "pointer",
-                  color: "var(--text-secondary, #cbd5e1)",
-                  fontSize: "0.75rem",
+                  color: "var(--color-text-secondary)",
+                  fontSize: "12px",
                 }}
               >
                 <input
@@ -192,7 +191,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                   onChange={(e) =>
                     form.handleToggleBypassOdometerReset(e.target.checked)
                   }
-                  style={{ accentColor: "#c084fc" }}
+                  style={{ accentColor: "var(--color-shift-2-fg)" }}
                 />
                 <span>
                   {TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL}
@@ -216,7 +215,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                 ? TEXT_ALERTS.BUS_INPUT_MODAL.PLACEHOLDER_KM_LOCKED
                 : undefined
             }
-            style={getSingleFocusChipStyle(showKmAkhir2InSingle, form.isKmAkhir2Locked)}
+            className="ui-option-btn" aria-pressed={showKmAkhir2InSingle} aria-disabled={form.isKmAkhir2Locked}
           >
             {showKmAkhir2InSingle
               ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KM_AKHIR_2
@@ -225,7 +224,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
           <button
             type="button"
             onClick={() => setShowKeterangan((prev) => !prev)}
-            style={getSingleFocusChipStyle(showKeterangan)}
+            className="ui-option-btn" aria-pressed={showKeterangan}
           >
             {showKeterangan
               ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KETERANGAN
@@ -263,9 +262,9 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               style={{
                 ...singleFocusSubInputStyle(form.isKmAkhir2Locked),
                 border: kmLiveS2.status === "negative"
-                  ? "1px solid #ef4444"
+                  ? "1px solid var(--color-error-border)"
                   : singleFocusSubInputStyle(form.isKmAkhir2Locked).border,
-                background: kmLiveS2.status === "negative" ? "rgba(239, 68, 68, 0.08)" : undefined,
+                background: kmLiveS2.status === "negative" ? "var(--color-error-bg)" : undefined,
               }}
             />
           </div>
@@ -277,17 +276,17 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
             style={{
               padding: "8px 12px",
               borderRadius: "8px",
-              background: "rgba(239, 68, 68, 0.12)",
-              border: "1px solid rgba(239, 68, 68, 0.35)",
-              fontSize: "0.82rem",
+              background: "var(--color-error-bg)",
+              border: "1px solid var(--color-error-border)",
+              fontSize: "13px",
               fontWeight: 600,
-              color: "#f87171",
+              color: "var(--color-error-fg)",
               display: "flex",
               alignItems: "center",
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -297,17 +296,17 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
             style={{
               padding: "8px 12px",
               borderRadius: "8px",
-              background: "rgba(245, 158, 11, 0.12)",
-              border: "1px solid rgba(245, 158, 11, 0.35)",
-              fontSize: "0.82rem",
+              background: "var(--color-warning-bg)",
+              border: "1px solid var(--color-warning-border)",
+              fontSize: "13px",
               fontWeight: 600,
-              color: "#f59e0b",
+              color: "var(--color-warning-fg)",
               display: "flex",
               alignItems: "center",
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -315,7 +314,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
         {kmLiveS2.status !== "negative" && kmLiveS2.status !== "extreme" && kmDistanceS2 !== null && (
           <div style={singleFocusDistanceBadgeStyle(true)}>
             <span>{TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S2}</span>
-            <span style={{ fontWeight: 700, color: "var(--shift2-color, #7e22ce)" }}>
+            <span style={{ fontWeight: 700, color: "var(--color-shift-2-fg)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_VALUE_KM(kmDistanceS2)}
             </span>
           </div>
@@ -343,12 +342,12 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
             {kmAwal2 && (
               <span
                 style={{
-                  fontSize: "0.75rem",
-                  color: "var(--text-secondary, #6b7280)",
-                  background: "var(--input-bg, rgba(0, 0, 0, 0.04))",
+                  fontSize: "12px",
+                  color: "var(--color-text-secondary)",
+                  background: "var(--color-surface-subtle)",
                   padding: "2px 8px",
-                  borderRadius: "6px",
-                  border: "1px solid var(--card-border, rgba(0, 0, 0, 0.08))",
+                  borderRadius: "8px",
+                  border: "1px solid var(--color-border-subtle)",
                 }}
               >
                 {TEXT_ALERTS.BUS_INPUT_MODAL.REF_KM_AWAL_S2(kmAwal2)}
@@ -358,6 +357,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
           <input
             ref={singlePrimaryInputRef}
             id="single-input-kmAkhir2"
+            aria-invalid={kmLiveS2.status === "negative"}
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
@@ -376,12 +376,12 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               opacity: form.isKmAkhir2Locked ? 0.45 : 1,
               cursor: form.isKmAkhir2Locked ? "not-allowed" : "text",
               border: kmLiveS2.status === "negative"
-                ? "1.5px solid #ef4444"
+                ? "1.5px solid var(--color-error-border)"
                 : singleFocusPrimaryInputStyle.border,
               background: form.isKmAkhir2Locked
-                ? "var(--card-border, rgba(0, 0, 0, 0.04))"
+                ? "var(--color-border-subtle)"
                 : kmLiveS2.status === "negative"
-                  ? "rgba(239, 68, 68, 0.08)"
+                  ? "var(--color-error-bg)"
                   : singleFocusPrimaryInputStyle.background,
             }}
           />
@@ -393,17 +393,17 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
             style={{
               padding: "8px 12px",
               borderRadius: "8px",
-              background: "rgba(239, 68, 68, 0.12)",
-              border: "1px solid rgba(239, 68, 68, 0.35)",
-              fontSize: "0.82rem",
+              background: "var(--color-error-bg)",
+              border: "1px solid var(--color-error-border)",
+              fontSize: "13px",
               fontWeight: 600,
-              color: "#f87171",
+              color: "var(--color-error-fg)",
               display: "flex",
               alignItems: "center",
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -413,17 +413,17 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
             style={{
               padding: "8px 12px",
               borderRadius: "8px",
-              background: "rgba(245, 158, 11, 0.12)",
-              border: "1px solid rgba(245, 158, 11, 0.35)",
-              fontSize: "0.82rem",
+              background: "var(--color-warning-bg)",
+              border: "1px solid var(--color-warning-border)",
+              fontSize: "13px",
               fontWeight: 600,
-              color: "#f59e0b",
+              color: "var(--color-warning-fg)",
               display: "flex",
               alignItems: "center",
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -431,7 +431,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
         {kmLiveS2.status !== "negative" && kmLiveS2.status !== "extreme" && kmDistanceS2 !== null && (
           <div style={singleFocusDistanceBadgeStyle(true)}>
             <span>{TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S2}</span>
-            <span style={{ fontWeight: 700, color: "var(--shift2-color, #7e22ce)" }}>
+            <span style={{ fontWeight: 700, color: "var(--color-shift-2-fg)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_VALUE_KM(kmDistanceS2)}
             </span>
           </div>
@@ -441,7 +441,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
           <button
             type="button"
             onClick={() => setShowKeterangan((prev) => !prev)}
-            style={getSingleFocusChipStyle(showKeterangan)}
+            className="ui-option-btn" aria-pressed={showKeterangan}
           >
             {showKeterangan
               ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KETERANGAN

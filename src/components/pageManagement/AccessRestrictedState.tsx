@@ -25,7 +25,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '60vh',
-        padding: '36px 20px',
+        padding: '40px 20px',
         textAlign: 'center',
       }}
     >
@@ -34,7 +34,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
         style={{
           width: '68px',
           height: '68px',
-          borderRadius: '20px',
+          borderRadius: '16px',
           background: 'var(--color-role-superadmin-bg)',
           border: '1px solid var(--color-role-superadmin-border)',
           display: 'flex',
@@ -44,7 +44,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
           marginBottom: '20px',
         }}
       >
-        <ShieldAlert size={34} />
+        <ShieldAlert size={24} />
       </div>
 
       {/* Main Title & Subtitle */}
@@ -61,7 +61,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
 
       <p
         style={{
-          fontSize: '13.5px',
+          fontSize: '14px',
           lineHeight: '1.5',
           color: 'var(--color-text-secondary)',
           maxWidth: '380px',
@@ -77,7 +77,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
           width: '100%',
           maxWidth: '400px',
           padding: '16px',
-          borderRadius: '14px',
+          borderRadius: '12px',
           background: 'var(--color-surface-subtle)',
           border: '1px solid var(--color-border-subtle)',
           marginBottom: '28px',
@@ -86,7 +86,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
       >
         <span
           style={{
-            fontSize: '11.5px',
+            fontSize: '12px',
             fontWeight: 600,
             color: 'var(--color-text-muted)',
             display: 'block',
@@ -106,7 +106,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
                   alignItems: 'center',
                   gap: '10px',
                   padding: '8px 12px',
-                  borderRadius: '10px',
+                  borderRadius: '12px',
                   background: 'var(--color-surface-default)',
                   border: '1px solid var(--color-border-subtle)',
                 }}
@@ -124,7 +124,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
                     flexShrink: 0,
                   }}
                 >
-                  <UserCheck size={15} />
+                  <UserCheck size={16} />
                 </div>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <span
@@ -142,7 +142,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
                   </span>
                   <span
                     style={{
-                      fontSize: '11px',
+                      fontSize: '12px',
                       color: 'var(--color-text-muted)',
                       display: 'block',
                       overflow: 'hidden',
@@ -178,12 +178,12 @@ export const AccessRestrictedState: React.FC<Props> = ({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '11px 22px',
+            padding: '12px 24px',
             borderRadius: '12px',
             background: 'var(--color-action-primary-bg)',
             border: 'none',
             color: 'var(--color-action-primary-fg)',
-            fontSize: '13.5px',
+            fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
             minHeight: '44px',

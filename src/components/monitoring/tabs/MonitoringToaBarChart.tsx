@@ -114,14 +114,14 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
           alignItems: "center",
           justifyContent: "space-between",
           gap: "8px",
-          padding: "3px 6px",
-          borderRadius: "6px",
+          padding: "4px 6px",
+          borderRadius: "8px",
           cursor: "pointer",
           background: isSelected
-            ? "var(--input-bg, rgba(62, 207, 142, 0.1))"
+            ? "var(--input-bg)"
             : "transparent",
           border: isSelected
-            ? "1px solid var(--accent-color, #3ECF8E)"
+            ? "1px solid var(--color-action-primary-bg)"
             : "1px solid transparent",
           transition: "all 0.15s ease",
         }}
@@ -135,11 +135,11 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
           style={{
             width: "64px",
             minWidth: "64px",
-            fontSize: "11.5px",
-            fontWeight: isSelected ? 800 : 700,
+            fontSize: "12px",
+            fontWeight: isSelected ? 700 : 700,
             letterSpacing: "-0.2px",
             color: isSelected
-              ? "var(--accent-color, #3ECF8E)"
+              ? "var(--color-link)"
               : "var(--text-primary)",
             whiteSpace: "nowrap",
             lineHeight: 1.2,
@@ -156,7 +156,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
             flex: 1,
             height: "4px",
             background: "var(--card-border, rgba(255, 255, 255, 0.08))",
-            borderRadius: "2px",
+            borderRadius: "8px",
             overflow: "hidden",
             position: "relative",
           }}
@@ -166,15 +166,12 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               height: "100%",
               width: barWidth,
               minWidth: displayVal > 0 && isBarsAnimated ? "3px" : "0px",
-              borderRadius: "2px",
+              borderRadius: "8px",
               background: isSelected
-                ? "linear-gradient(90deg, #3ECF8E 0%, #10B981 100%)"
+                ? "var(--color-action-primary-bg)"
                 : displayVal > 0
-                  ? "linear-gradient(90deg, rgba(62, 207, 142, 0.85) 0%, #10B981 100%)"
+                  ? "var(--color-chart-1)"
                   : "transparent",
-              boxShadow: isSelected
-                ? "0 0 6px rgba(62, 207, 142, 0.5)"
-                : "none",
               transition: "width 0.65s cubic-bezier(0.32, 0.72, 0, 1)",
               transitionDelay: staggerDelay,
               willChange: "width",
@@ -188,10 +185,10 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
             width: "54px",
             minWidth: "54px",
             textAlign: "right",
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             color: isSelected
-              ? "var(--accent-color, #3ECF8E)"
+              ? "var(--color-link)"
               : displayVal > 0
                 ? "var(--text-primary)"
                 : "var(--text-secondary)",
@@ -220,8 +217,8 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <BarChart3
-            size={18}
-            style={{ color: "var(--accent-color, #3ECF8E)" }}
+            size={20}
+            style={{ color: "var(--color-link)" }}
           />
           <div>
             <h3
@@ -236,7 +233,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
             </h3>
             <p
               style={{
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "var(--text-secondary)",
                 margin: 0,
               }}
@@ -272,11 +269,11 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
             data-testid="toa-chart-tooltip"
             style={{
               background: "var(--card-bg, #1a1a1a)",
-              borderTop: "2px solid var(--accent-color, #3ECF8E)",
+              borderTop: "2px solid var(--color-action-primary-bg)",
               borderLeft: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
               borderRight: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-              borderTopLeftRadius: "20px",
-              borderTopRightRadius: "20px",
+              borderTopLeftRadius: "16px",
+              borderTopRightRadius: "16px",
               padding: "18px 20px calc(24px + env(safe-area-inset-bottom, 0px))",
               width: "100%",
               maxWidth: "520px",
@@ -308,11 +305,11 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                   <span
                     style={{
                       fontSize: "13px",
-                      fontWeight: 800,
-                      color: "var(--accent-color, #3ECF8E)",
-                      background: "rgba(62, 207, 142, 0.12)",
+                      fontWeight: 700,
+                      color: "var(--color-link)",
+                      background: "var(--color-action-secondary-bg)",
                       padding: "2px 8px",
-                      borderRadius: "6px",
+                      borderRadius: "8px",
                       letterSpacing: "0.5px",
                     }}
                   >
@@ -331,7 +328,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 {(selectedRoute.operatorName || selectedRoute.supervisorName) && (
                   <div
                     style={{
-                      fontSize: "11px",
+                      fontSize: "12px",
                       color: "var(--text-secondary)",
                     }}
                   >
@@ -384,7 +381,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               >
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "var(--text-secondary)",
                     marginBottom: "4px",
                     fontWeight: 500,
@@ -394,25 +391,25 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 </div>
                 <div
                   style={{
-                    fontSize: "17px",
-                    fontWeight: 800,
+                    fontSize: "18px",
+                    fontWeight: 700,
                     color: "var(--text-primary)",
                   }}
                 >
                   {((selectedRoute.toaShift1 || 0) + (selectedRoute.toaShift2 || 0) || selectedRoute.todayPassengers).toLocaleString("id-ID")}{" "}
-                  <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-secondary)" }}>
+                  <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)" }}>
                     {TEXT_MONITORING.DASHBOARD.CHART_TOA_UNIT}
                   </span>
                 </div>
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     fontWeight: 700,
                     marginTop: "2px",
                     color:
                       selectedRoute.targetHk > 0 &&
                       selectedRoute.todayPassengers >= selectedRoute.targetHk
-                        ? "#10B981"
+                        ? "var(--color-success-fg)"
                         : "#F59E0B",
                   }}
                 >
@@ -438,7 +435,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               >
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "var(--text-secondary)",
                     marginBottom: "4px",
                     fontWeight: 500,
@@ -448,7 +445,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 </div>
                 <div
                   style={{
-                    fontSize: "11.5px",
+                    fontSize: "12px",
                     color: "var(--text-primary)",
                     fontWeight: 600,
                     lineHeight: "1.4",
@@ -462,7 +459,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                 {selectedRoute.targetHk > 0 && (
                   <div
                     style={{
-                      fontSize: "10px",
+                      fontSize: "12px",
                       color: "var(--text-secondary)",
                       marginTop: "4px",
                     }}
@@ -526,8 +523,8 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
             borderRadius: "8px",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
             background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
-            color: "var(--accent-color, #3ECF8E)",
-            fontSize: "11px",
+            color: "var(--color-link)",
+            fontSize: "12px",
             fontWeight: 600,
             cursor: "pointer",
             transition: "all 0.2s ease",
@@ -539,7 +536,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               : TEXT_MONITORING.DASHBOARD.CHART_EXPAND_BTN(routes.length)}
           </span>
           <ChevronDown
-            size={13}
+            size={16}
             style={{
               transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
               transition: "transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)",

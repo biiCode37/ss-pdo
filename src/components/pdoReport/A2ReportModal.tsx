@@ -352,7 +352,7 @@ function A2ReportModalComponent({
         {/* Header */}
         <div
           style={{
-            padding: '14px 18px',
+            padding: '14px 20px',
             borderBottom: '1px solid var(--color-border-subtle)',
             display: 'flex',
             justifyContent: 'space-between',
@@ -361,13 +361,13 @@ function A2ReportModalComponent({
           }}
         >
           <div>
-            <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 700 }}>
               {TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE}
             </h2>
             <p
               style={{
                 margin: '4px 0 0',
-                fontSize: '0.82rem',
+                fontSize: '13px',
                 color: 'var(--color-text-muted, #94a3b8)',
               }}
             >
@@ -381,7 +381,7 @@ function A2ReportModalComponent({
               background: 'transparent',
               border: 'none',
               color: 'var(--color-text-muted, #94a3b8)',
-              fontSize: '1.4rem',
+              fontSize: '24px',
               cursor: 'pointer',
               padding: '4px 8px',
               lineHeight: 1,
@@ -415,10 +415,10 @@ function A2ReportModalComponent({
                 borderRadius: '8px',
                 border: 'none',
                 fontWeight: 600,
-                fontSize: '0.9rem',
+                fontSize: '14px',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 opacity: isSubmitting ? 0.7 : 1,
-                backgroundColor: shift === 1 ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
+                backgroundColor: shift === 1 ? "var(--color-state-active-bg)" : 'rgba(255, 255, 255, 0.08)',
                 color: '#fff',
                 transition: 'all 0.2s ease',
               }}
@@ -435,10 +435,10 @@ function A2ReportModalComponent({
                 borderRadius: '8px',
                 border: 'none',
                 fontWeight: 600,
-                fontSize: '0.9rem',
+                fontSize: '14px',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 opacity: isSubmitting ? 0.7 : 1,
-                backgroundColor: shift === 2 ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
+                backgroundColor: shift === 2 ? "var(--color-state-active-bg)" : 'rgba(255, 255, 255, 0.08)',
                 color: '#fff',
                 transition: 'all 0.2s ease',
               }}
@@ -459,7 +459,7 @@ function A2ReportModalComponent({
               <label
                 style={{
                   display: 'block',
-                  fontSize: '0.8rem',
+                  fontSize: '13px',
                   fontWeight: 600,
                   marginBottom: '6px',
                   color: 'var(--color-text-muted, #94a3b8)',
@@ -480,7 +480,7 @@ function A2ReportModalComponent({
                   border: '1px solid var(--color-border-subtle)',
                   backgroundColor: 'rgba(0, 0, 0, 0.2)',
                   color: '#fff',
-                  fontSize: '1rem',
+                  fontSize: '16px',
                   fontWeight: 600,
                   boxSizing: 'border-box',
                   opacity: isSubmitting ? 0.7 : 1,
@@ -492,7 +492,7 @@ function A2ReportModalComponent({
               <label
                 style={{
                   display: 'block',
-                  fontSize: '0.8rem',
+                  fontSize: '13px',
                   fontWeight: 600,
                   marginBottom: '6px',
                   color: 'var(--color-text-muted, #94a3b8)',
@@ -513,7 +513,7 @@ function A2ReportModalComponent({
                   border: '1px solid var(--color-border-subtle)',
                   backgroundColor: 'rgba(0, 0, 0, 0.2)',
                   color: '#fff',
-                  fontSize: '1rem',
+                  fontSize: '16px',
                   fontWeight: 600,
                   boxSizing: 'border-box',
                   opacity: isSubmitting ? 0.7 : 1,
@@ -530,14 +530,14 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid var(--color-border-subtle)',
                 borderRadius: '8px',
-                fontSize: '0.8rem',
+                fontSize: '13px',
                 color: 'var(--color-text-muted, #94a3b8)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
               }}
             >
-              <Loader2 size={14} className="animate-spin" />
+              <Loader2 size={16} className="animate-spin" />
               <span>Memeriksa status laporan di server...</span>
             </div>
           ) : isAlreadySaved ? (
@@ -548,14 +548,14 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(16, 185, 129, 0.12)',
                 border: '1px solid rgba(16, 185, 129, 0.3)',
                 borderRadius: '8px',
-                fontSize: '0.8rem',
-                color: '#6ee7b7',
+                fontSize: '13px',
+                color: 'var(--color-success-fg)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
               }}
             >
-              <CheckCircle size={15} style={{ flexShrink: 0, color: '#34d399' }} />
+              <CheckCircle size={16} style={{ flexShrink: 0, color: 'var(--color-success-fg)' }} />
               <span>{TEXT_PDO_FORM.A2_REPORT.SAVED_BANNER(shift, savedAtTime || undefined)}</span>
             </div>
           ) : (
@@ -566,8 +566,8 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 border: '1px solid rgba(59, 130, 246, 0.25)',
                 borderRadius: '8px',
-                fontSize: '0.8rem',
-                color: '#93c5fd',
+                fontSize: '13px',
+                color: 'var(--color-link)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
@@ -587,8 +587,8 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(239, 68, 68, 0.12)',
                 border: '1px solid rgba(239, 68, 68, 0.35)',
                 borderRadius: '8px',
-                fontSize: '0.82rem',
-                color: '#fca5a5',
+                fontSize: '13px',
+                color: 'var(--color-error-fg)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -596,7 +596,7 @@ function A2ReportModalComponent({
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <AlertCircle size={16} style={{ flexShrink: 0, color: '#ef4444' }} />
+                <AlertCircle size={16} style={{ flexShrink: 0, color: 'var(--color-error-fg)' }} />
                 <span>{errorMessage}</span>
               </div>
               <button
@@ -607,9 +607,9 @@ function A2ReportModalComponent({
                   background: 'rgba(239, 68, 68, 0.25)',
                   border: '1px solid rgba(239, 68, 68, 0.5)',
                   color: '#fff',
-                  borderRadius: '6px',
+                  borderRadius: '8px',
                   padding: '4px 10px',
-                  fontSize: '0.78rem',
+                  fontSize: '12px',
                   fontWeight: 600,
                   cursor: 'pointer',
                   flexShrink: 0,
@@ -632,7 +632,7 @@ function A2ReportModalComponent({
             >
               <span
                 style={{
-                  fontSize: '0.85rem',
+                  fontSize: '14px',
                   fontWeight: 600,
                   color: 'var(--color-text-muted, #94a3b8)',
                 }}
@@ -647,8 +647,8 @@ function A2ReportModalComponent({
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: isSubmitting ? '#64748b' : '#38bdf8',
-                  fontSize: '0.85rem',
+                  color: isSubmitting ? '#64748b' : 'var(--color-link)',
+                  fontSize: '14px',
                   fontWeight: 600,
                   cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   padding: '4px',
@@ -687,11 +687,11 @@ function A2ReportModalComponent({
                           width: busOptions.length > 0 ? '85px' : '105px',
                           minWidth: 0,
                           padding: '6px 8px',
-                          borderRadius: '6px',
+                          borderRadius: '8px',
                           border: '1px solid var(--color-border, #475569)',
                           backgroundColor: 'rgba(0, 0, 0, 0.2)',
                           color: '#fff',
-                          fontSize: '0.85rem',
+                          fontSize: '14px',
                           boxSizing: 'border-box',
                           opacity: isSubmitting ? 0.7 : 1,
                         }}
@@ -705,10 +705,10 @@ function A2ReportModalComponent({
                           style={{
                             background: 'rgba(56, 189, 248, 0.15)',
                             border: '1px solid rgba(56, 189, 248, 0.3)',
-                            color: '#38bdf8',
-                            borderRadius: '6px',
-                            padding: '6px 7px',
-                            fontSize: '0.75rem',
+                            color: 'var(--color-link)',
+                            borderRadius: '8px',
+                            padding: '6px 8px',
+                            fontSize: '12px',
                             cursor: isSubmitting ? 'not-allowed' : 'pointer',
                             flexShrink: 0,
                           }}
@@ -739,18 +739,18 @@ function A2ReportModalComponent({
                         minWidth: '95px',
                         flexShrink: 0,
                         padding: '6px 6px',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         border: '1px solid var(--color-border, #475569)',
                         backgroundColor: 'var(--color-surface-raised)',
                         color: item.unit_body ? 'var(--color-text-main, #f8fafc)' : 'var(--color-text-muted, #94a3b8)',
-                        fontSize: '0.82rem',
+                        fontSize: '13px',
                         fontWeight: 600,
                         cursor: isSubmitting ? 'not-allowed' : 'pointer',
                         boxSizing: 'border-box',
                         opacity: isSubmitting ? 0.7 : 1,
                       }}
                     >
-                      <option value="" disabled style={{ background: '#1e293b', color: '#94a3b8' }}>
+                      <option value="" disabled style={{ background: '#1e293b', color: 'var(--color-text-secondary)' }}>
                         {TEXT_PDO_FORM.A2_REPORT.SELECT_UNIT_PLACEHOLDER}
                       </option>
                       {item.unit_body && !busOptions.includes(item.unit_body) && (
@@ -765,7 +765,7 @@ function A2ReportModalComponent({
                       ))}
                       <option
                         value="__manual__"
-                        style={{ background: '#0f172a', color: '#38bdf8', fontWeight: 600 }}
+                        style={{ background: '#0f172a', color: 'var(--color-link)', fontWeight: 600 }}
                       >
                         {TEXT_PDO_FORM.A2_REPORT.CUSTOM_UNIT_OPTION}
                       </option>
@@ -782,11 +782,11 @@ function A2ReportModalComponent({
                       flex: 1,
                       minWidth: 0,
                       padding: '6px 8px',
-                      borderRadius: '6px',
+                      borderRadius: '8px',
                       border: '1px solid var(--color-border, #475569)',
                       backgroundColor: 'rgba(0, 0, 0, 0.2)',
                       color: '#fff',
-                      fontSize: '0.85rem',
+                      fontSize: '14px',
                       boxSizing: 'border-box',
                       opacity: isSubmitting ? 0.7 : 1,
                     }}
@@ -800,8 +800,8 @@ function A2ReportModalComponent({
                     style={{
                       background: 'rgba(239, 68, 68, 0.15)',
                       border: '1px solid rgba(239, 68, 68, 0.3)',
-                      color: '#f87171',
-                      borderRadius: '6px',
+                      color: 'var(--color-error-fg)',
+                      borderRadius: '8px',
                       width: '32px',
                       height: '32px',
                       minWidth: '32px',
@@ -814,7 +814,7 @@ function A2ReportModalComponent({
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
                   >
-                    <Trash2 size={15} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               ))}
@@ -825,7 +825,7 @@ function A2ReportModalComponent({
         {/* Footer */}
         <div
           style={{
-            padding: '12px 18px',
+            padding: '12px 20px',
             borderTop: '1px solid var(--color-border, #334155)',
             backgroundColor: 'var(--color-surface-raised)',
             display: 'flex',
@@ -841,12 +841,12 @@ function A2ReportModalComponent({
             onClick={onClose}
             disabled={isSubmitting}
             style={{
-              padding: '9px 16px',
+              padding: '10px 16px',
               borderRadius: '8px',
               border: '1px solid var(--color-border, #475569)',
               background: 'transparent',
               color: 'var(--color-text-muted, #94a3b8)',
-              fontSize: '0.88rem',
+              fontSize: '14px',
               fontWeight: 600,
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
               flexShrink: 0,
@@ -861,12 +861,12 @@ function A2ReportModalComponent({
             onClick={handleSubmit}
             disabled={isSubmitting}
             style={{
-              padding: '9px 18px',
+              padding: '10px 20px',
               borderRadius: '8px',
               border: 'none',
               background: '#2563eb',
               color: '#fff',
-              fontSize: '0.88rem',
+              fontSize: '14px',
               fontWeight: 600,
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
               display: 'flex',
@@ -880,7 +880,7 @@ function A2ReportModalComponent({
           >
             {isSubmitting ? (
               <>
-                <Loader2 size={15} className="animate-spin" />
+                <Loader2 size={16} className="animate-spin" />
                 <span>{TEXT_PDO_FORM.A2_REPORT.SAVING_BTN}</span>
               </>
             ) : (

@@ -246,16 +246,16 @@ export function buildConflictDiffHtml(
 
       return `
         <div style="padding: 10px 0; border-bottom: 1px solid var(--color-border-subtle);">
-          <div style="font-weight: 700; color: var(--color-text-primary); font-size: 12.5px; margin-bottom: 6px; text-align: left;">
+          <div style="font-weight: 700; color: var(--color-text-primary); font-size: 13px; margin-bottom: 6px; text-align: left;">
             🔹 ${escapeHtml(item.label)}
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; text-align: left;">
             <div style="background: var(--color-surface-raised); padding: 8px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
-              <div style="color: var(--color-text-muted); font-size: 10.5px; margin-bottom: 2px;">${TEXT_ALERTS.CONFLICT_DIFF.SERVER_HEADER}</div>
+              <div style="color: var(--color-text-muted); font-size: 12px; margin-bottom: 2px;">${TEXT_ALERTS.CONFLICT_DIFF.SERVER_HEADER}</div>
               <div style="font-weight: 600; color: var(--color-text-primary); word-break: break-word;">${serverDisplay}</div>
             </div>
             <div style="background: var(--color-surface-raised); padding: 8px; border-radius: 8px; border: 1px solid var(--color-warning-border);">
-              <div style="color: var(--color-warning-fg); font-size: 10.5px; margin-bottom: 2px;">${TEXT_ALERTS.CONFLICT_DIFF.USER_HEADER}</div>
+              <div style="color: var(--color-warning-fg); font-size: 12px; margin-bottom: 2px;">${TEXT_ALERTS.CONFLICT_DIFF.USER_HEADER}</div>
               <div style="font-weight: 600; color: var(--color-warning-fg); word-break: break-word;">${userDisplay}</div>
             </div>
           </div>
@@ -268,7 +268,7 @@ export function buildConflictDiffHtml(
     <div style="font-family: inherit;">
       ${introHtml}
       <div style="background: var(--color-surface-subtle); border-radius: 12px; padding: 10px 12px; border: 1px solid var(--color-border-subtle); max-height: 240px; overflow-y: auto;">
-        <div style="font-weight: 700; color: var(--color-text-secondary); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; text-align: left;">
+        <div style="font-weight: 700; color: var(--color-text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; text-align: left;">
           ${TEXT_ALERTS.CONFLICT_DIFF.SECTION_TITLE}
         </div>
         ${itemsHtml}

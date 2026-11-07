@@ -40,7 +40,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-color, #3ECF8E)",
+            color: "var(--color-link)",
             fontSize: "12px",
             fontWeight: 600,
             cursor: "pointer",
@@ -51,7 +51,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
             textDecoration: "none",
           }}
         >
-          <ShieldCheck size={14} />
+          <ShieldCheck size={16} />
           <span>{TEXT_AUTH.LEGAL.PRIVACY}</span>
         </a>
 
@@ -62,7 +62,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-color, #3ECF8E)",
+            color: "var(--color-link)",
             fontSize: "12px",
             fontWeight: 600,
             cursor: "pointer",
@@ -73,7 +73,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
             textDecoration: "none",
           }}
         >
-          <FileText size={14} />
+          <FileText size={16} />
           <span>{TEXT_AUTH.LEGAL.TERMS}</span>
         </a>
 
@@ -84,7 +84,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-color, #3ECF8E)",
+            color: "var(--color-link)",
             fontSize: "12px",
             fontWeight: 600,
             cursor: "pointer",
@@ -95,14 +95,14 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
             textDecoration: "none",
           }}
         >
-          <Mail size={14} />
+          <Mail size={16} />
           <span>{TEXT_AUTH.LEGAL.DEVELOPER}</span>
         </a>
       </div>
 
       <p
         style={{
-          fontSize: "11px",
+          fontSize: "12px",
           color: "var(--text-secondary)",
           margin: 0,
           lineHeight: 1.4,

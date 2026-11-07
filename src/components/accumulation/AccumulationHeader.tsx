@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Layers } from "lucide-react";
+import { X } from "lucide-react";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
 interface AccumulationHeaderProps {
@@ -24,7 +24,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
           style={{
             width: "36px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             background: "var(--card-border, rgba(255, 255, 255, 0.2))",
           }}
         />
@@ -42,29 +42,13 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.1))",
-              color: "var(--accent-color, #38bdf8)",
-              border: "1px solid rgba(56, 189, 248, 0.3)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <Layers size={18} />
-          </div>
           <div>
             <h3
               id="accumulation-sheet-title"
               style={{
                 margin: 0,
-                fontSize: "1.1rem",
-                fontWeight: 800,
+                fontSize: "18px",
+                fontWeight: 700,
                 color: "var(--text-primary, #ededed)",
                 letterSpacing: "-0.01em",
               }}
@@ -73,7 +57,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
             </h3>
             <span
               style={{
-                fontSize: "0.76rem",
+                fontSize: "12px",
                 color: "var(--text-secondary, #94a3b8)",
                 fontWeight: 500,
               }}
@@ -90,7 +74,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
             color: "var(--text-secondary, #94a3b8)",
@@ -102,7 +86,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
             flexShrink: 0,
           }}
         >
-          <X size={17} />
+          <X size={16} />
         </button>
       </div>
     </>

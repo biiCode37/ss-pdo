@@ -56,10 +56,10 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "5px",
-              padding: "7px 11px",
-              borderRadius: "10px",
-              fontSize: "12.5px",
+              gap: "6px",
+              padding: "8px 12px",
+              borderRadius: "12px",
+              fontSize: "13px",
               fontWeight: 600,
               border: "1px solid var(--card-border, rgba(255,255,255,0.15))",
               background: "rgba(255,255,255,0.05)",
@@ -80,7 +80,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             <h1
               style={{
                 margin: 0,
-                fontSize: "15.5px",
+                fontSize: "16px",
                 fontWeight: 700,
                 color: "var(--text-primary, #f8fafc)",
                 display: "flex",
@@ -92,7 +92,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
               }}
             >
               <Users
-                size={18}
+                size={20}
                 className="text-blue-500"
                 style={{ flexShrink: 0 }}
               />
@@ -101,7 +101,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             <p
               style={{
                 margin: 0,
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "var(--text-secondary, #94a3b8)",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -126,8 +126,8 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             disabled={isLoading}
             className="btn btn-outline"
             style={{
-              padding: "7px 9px",
-              borderRadius: "10px",
+              padding: "8px 10px",
+              borderRadius: "12px",
               border: "1px solid var(--card-border, rgba(255,255,255,0.12))",
               background: "rgba(255,255,255,0.04)",
               color: "var(--text-secondary, #94a3b8)",
@@ -140,7 +140,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             title={TEXT_USER_MANAGEMENT.HEADER.REFRESH_TITLE}
           >
             <RefreshCw
-              size={15}
+              size={16}
               className={isLoading ? "animate-spin" : ""}
             />
           </button>
@@ -150,21 +150,20 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "5px",
-              padding: "7px 13px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-              color: "#ffffff",
+              gap: "6px",
+              padding: "8px 14px",
+              borderRadius: "12px",
+              background: "var(--color-action-primary-bg)",
+              color: "var(--color-action-primary-fg)",
               border: "none",
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 600,
               cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)",
               whiteSpace: "nowrap",
               transition: "all 0.15s ease",
             }}
           >
-            <UserPlus size={15} />
+            <UserPlus size={16} />
             <span>{TEXT_USER_MANAGEMENT.HEADER.ADD_BTN}</span>
           </button>
         </div>

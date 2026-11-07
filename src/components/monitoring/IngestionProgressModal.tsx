@@ -59,7 +59,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
           maxWidth: "420px",
           background: "var(--card-bg, #161616)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-          borderRadius: "20px",
+          borderRadius: "16px",
           padding: "24px 20px",
           boxShadow: "0 24px 48px rgba(0, 0, 0, 0.4)",
           display: "flex",
@@ -70,23 +70,6 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
           overflow: "hidden",
         }}
       >
-        {/* Subtle decorative glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "140px",
-            height: "140px",
-            background: isComplete
-              ? "radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%)"
-              : "radial-gradient(circle, rgba(62, 207, 142, 0.25) 0%, transparent 70%)",
-            borderRadius: "50%",
-            pointerEvents: "none",
-          }}
-        />
-
         {/* Animated Icon Container */}
         <div
           style={{
@@ -95,10 +78,10 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             borderRadius: "16px",
             background: isComplete
               ? "rgba(16, 185, 129, 0.15)"
-              : "rgba(62, 207, 142, 0.12)",
+              : "var(--color-action-secondary-bg)",
             border: isComplete
               ? "1.5px solid rgba(16, 185, 129, 0.4)"
-              : "1.5px solid rgba(62, 207, 142, 0.3)",
+              : "1.5px solid var(--color-border-subtle)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -106,23 +89,23 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             position: "relative",
             boxShadow: isComplete
               ? "0 0 20px rgba(16, 185, 129, 0.3)"
-              : "0 0 20px rgba(62, 207, 142, 0.2)",
+              : "0 0 20px var(--color-shadow)",
             transition: "all 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
         >
           {isComplete ? (
             <CheckCircle2
-              size={30}
+              size={24}
               style={{
-                color: "#10b981",
+                color: "var(--color-success-fg)",
                 animation: "scaleIn 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
               }}
             />
           ) : (
             <CloudDownload
-              size={28}
+              size={24}
               style={{
-                color: "var(--accent-color, #3ECF8E)",
+                color: "var(--color-link)",
                 animation: "bounce 1.5s infinite ease-in-out",
               }}
             />
@@ -146,7 +129,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                   height: "100%",
                   width: "100%",
                   borderRadius: "50%",
-                  background: "var(--accent-color, #3ECF8E)",
+                  background: "var(--color-action-primary-bg)",
                   opacity: 0.75,
                   animation: "ping 1.2s cubic-bezier(0, 0, 0.2, 1) infinite",
                 }}
@@ -158,7 +141,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                   borderRadius: "50%",
                   height: "12px",
                   width: "12px",
-                  background: "var(--accent-color, #3ECF8E)",
+                  background: "var(--color-action-primary-bg)",
                 }}
               />
             </span>
@@ -169,8 +152,8 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
         <h3
           id="ingestion-modal-title"
           style={{
-            fontSize: "17px",
-            fontWeight: 800,
+            fontSize: "18px",
+            fontWeight: 700,
             margin: "0 0 4px 0",
             color: "var(--text-primary, #ededed)",
             letterSpacing: "-0.2px",
@@ -182,7 +165,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
           style={{
             fontSize: "12px",
             color: "var(--text-secondary, #8b8b8b)",
-            margin: "0 0 18px 0",
+            margin: "0 0 20px 0",
             lineHeight: 1.4,
           }}
         >
@@ -216,7 +199,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             >
               {!isComplete ? (
                 <>
-                  <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} />
+                  <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
                   <span>
                     {progress?.totalDays && progress.totalDays > 1
                       ? TEXT_MONITORING.INGESTION.PROGRESS_COUNT_RANGE(
@@ -233,8 +216,8 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                 </>
               ) : (
                 <>
-                  <Sparkles size={13} style={{ color: "#10b981" }} />
-                  <span style={{ color: "#10b981" }}>
+                  <Sparkles size={16} style={{ color: "var(--color-success-fg)" }} />
+                  <span style={{ color: "var(--color-success-fg)" }}>
                     {TEXT_MONITORING.INGESTION.PROGRESS_COMPLETE_LABEL}
                   </span>
                 </>
@@ -242,8 +225,8 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             </span>
             <span
               style={{
-                color: "var(--accent-color, #3ECF8E)",
-                fontWeight: 800,
+                color: "var(--color-link)",
+                fontWeight: 700,
               }}
             >
               {percent}%
@@ -265,13 +248,10 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                 width: `${percent}%`,
                 height: "100%",
                 background: isComplete
-                  ? "linear-gradient(90deg, #10b981 0%, #34d399 100%)"
-                  : "linear-gradient(90deg, #3ECF8E 0%, #10b981 100%)",
+                  ? "var(--color-success-fg)"
+                  : "var(--color-action-primary-bg)",
                 borderRadius: "999px",
                 transition: "width 0.35s cubic-bezier(0.32, 0.72, 0, 1)",
-                boxShadow: isComplete
-                  ? "0 0 10px rgba(16, 185, 129, 0.4)"
-                  : "0 0 10px rgba(62, 207, 142, 0.4)",
               }}
             />
           </div>
@@ -285,7 +265,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
             borderRadius: "12px",
             padding: "8px 12px",
-            fontSize: "11.5px",
+            fontSize: "12px",
             color: "var(--text-secondary, #9a9a9a)",
             display: "flex",
             alignItems: "center",
@@ -298,12 +278,12 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             <span
               style={{
                 padding: "2px 6px",
-                borderRadius: "6px",
-                background: "rgba(62, 207, 142, 0.15)",
-                color: "var(--accent-color, #3ECF8E)",
+                borderRadius: "8px",
+                background: "var(--color-action-secondary-bg)",
+                color: "var(--color-link)",
                 fontWeight: 700,
-                fontSize: "11px",
-                border: "1px solid rgba(62, 207, 142, 0.25)",
+                fontSize: "12px",
+                border: "1px solid var(--color-border-subtle)",
               }}
             >
               {progress.currentRouteCode}
@@ -330,10 +310,10 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
               marginTop: "16px",
               padding: "8px 24px",
               borderRadius: "12px",
-              background: "var(--accent-color, #3ECF8E)",
+              background: "var(--color-action-primary-bg)",
               color: "#000",
               fontWeight: 700,
-              fontSize: "12.5px",
+              fontSize: "13px",
               border: "none",
               cursor: "pointer",
               transition: "transform 0.15s ease",

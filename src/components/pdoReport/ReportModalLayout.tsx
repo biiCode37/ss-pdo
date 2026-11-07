@@ -45,8 +45,8 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
         overflowY: "auto",
         padding:
           "16px 20px calc(28px + env(safe-area-inset-bottom, 16px)) 20px",
-        borderTopLeftRadius: "24px",
-        borderTopRightRadius: "24px",
+        borderTopLeftRadius: "16px",
+        borderTopRightRadius: "16px",
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
         backgroundColor: "var(--color-surface-raised)",
@@ -71,7 +71,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
           style={{
             width: "36px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             backgroundColor: "var(--text-secondary)",
             opacity: 0.35,
           }}
@@ -95,22 +95,22 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
             style={{
               width: "36px",
               height: "36px",
-              borderRadius: "10px",
-              background: "rgba(62, 207, 142, 0.12)",
-              color: "var(--accent-color, #3ECF8E)",
+              borderRadius: "12px",
+              background: "var(--color-action-secondary-bg)",
+              color: "var(--color-link)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
             }}
           >
-            <Bus size={18} />
+            <Bus size={20} />
           </div>
           <div>
             <h3
               style={{
                 margin: 0,
-                fontSize: "15px",
+                fontSize: "16px",
                 fontWeight: 700,
                 color: "var(--text-primary)",
                 letterSpacing: "-0.2px",
@@ -149,7 +149,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
               }}
               title={TEXT_COMMON.BUTTONS.CLOSE}
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           )}
         </div>

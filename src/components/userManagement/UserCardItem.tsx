@@ -85,12 +85,12 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               {isSelf && (
                 <span
                   style={{
-                    fontSize: "10px",
+                    fontSize: "12px",
                     fontWeight: 700,
-                    padding: "1px 5px",
-                    borderRadius: "5px",
+                    padding: "2px 6px",
+                    borderRadius: "8px",
                     background: "rgba(59, 130, 246, 0.2)",
-                    color: "#60a5fa",
+                    color: "var(--color-link)",
                   }}
                 >
                   {TEXT_USER_MANAGEMENT.CARD.YOU_BADGE}
@@ -125,10 +125,10 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
         <div
           style={{
             padding: "8px 10px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "rgba(255, 255, 255, 0.03)",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-            fontSize: "11.5px",
+            fontSize: "12px",
             color: "var(--text-secondary, #94a3b8)",
             lineHeight: 1.4,
           }}
@@ -143,14 +143,14 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          fontSize: "11px",
+          fontSize: "12px",
           color: "var(--text-secondary, #64748b)",
           paddingTop: "6px",
           borderTop: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          <Clock size={11} />
+          <Clock size={16} />
           <span>
             {user.last_login_at
               ? new Date(user.last_login_at).toLocaleDateString("id-ID", {
@@ -200,7 +200,6 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               padding: "2px 0",
               cursor: isSelf ? "not-allowed" : "pointer",
               opacity: isSelf ? 0.45 : 1,
-              outline: "none",
             }}
             title={
               isSelf
@@ -214,10 +213,10 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               style={{
                 width: "36px",
                 height: "20px",
-                borderRadius: "9999px",
-                background: isActive ? "#10b981" : "rgba(255, 255, 255, 0.16)",
+                borderRadius: "999px",
+                background: isActive ? "var(--color-state-active-bg)" : "rgba(255, 255, 255, 0.16)",
                 border: isActive
-                  ? "1px solid rgba(16, 185, 129, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.15))",
                 position: "relative",
                 transition:
@@ -245,7 +244,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               style={{
                 fontSize: "12px",
                 fontWeight: 600,
-                color: isActive ? "#34d399" : "var(--text-secondary, #94a3b8)",
+                color: isActive ? "var(--color-success-fg)" : "var(--text-secondary, #94a3b8)",
                 userSelect: "none",
               }}
             >
@@ -263,7 +262,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
                 style={{
                   padding: "6px 12px",
                   borderRadius: "8px",
-                  fontSize: "11.5px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   border:
                     "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",

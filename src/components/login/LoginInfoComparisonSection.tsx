@@ -12,10 +12,10 @@ export function LoginInfoComparisonSection() {
           marginBottom: "8px",
         }}
       >
-        <Zap size={17} color="var(--accent-color, #3ECF8E)" />
+        <Zap size={16} color="var(--color-action-primary-bg)" />
         <h4
           style={{
-            fontSize: "15px",
+            fontSize: "16px",
             fontWeight: 700,
             color: "var(--text-primary)",
             margin: 0,
@@ -39,14 +39,14 @@ export function LoginInfoComparisonSection() {
         <div
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
           }}
         >
           <div
             style={{
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 700,
               marginBottom: "8px",
               color: "var(--text-primary)",
@@ -64,7 +64,7 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <XCircle size={15} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
+              <XCircle size={16} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
               <span>
                 <strong style={{ color: "var(--color-error-fg)" }}>Spreadsheet Biasa:</strong> Sel kecil, sering zoom in/out melelahkan.
               </span>
@@ -78,7 +78,7 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <CheckCircle2 size={15} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={16} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
               <span>
                 <strong style={{ color: "var(--color-success-fg)" }}>PUSM:</strong> Tampilan kartu responsif, pas dioperasikan dengan satu tangan.
               </span>
@@ -90,14 +90,14 @@ export function LoginInfoComparisonSection() {
         <div
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
           }}
         >
           <div
             style={{
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 700,
               marginBottom: "8px",
               color: "var(--text-primary)",
@@ -115,7 +115,7 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <XCircle size={15} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
+              <XCircle size={16} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
               <span>
                 <strong style={{ color: "var(--color-error-fg)" }}>Spreadsheet Biasa:</strong> Rawan salah ketik format sel atau rumus terhapus.
               </span>
@@ -129,7 +129,7 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <CheckCircle2 size={15} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={16} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
               <span>
                 <strong style={{ color: "var(--color-success-fg)" }}>PUSM:</strong> Form terarah otomatis memformat data tanpa menyentuh rumus sheet.
               </span>
@@ -141,14 +141,14 @@ export function LoginInfoComparisonSection() {
         <div
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
           }}
         >
           <div
             style={{
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 700,
               marginBottom: "8px",
               color: "var(--text-primary)",
@@ -166,7 +166,7 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <XCircle size={15} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
+              <XCircle size={16} color="var(--color-error-fg)" style={{ flexShrink: 0 }} />
               <span>
                 <strong style={{ color: "var(--color-error-fg)" }}>Spreadsheet Biasa:</strong> Harus membuka puluhan tab dan menjumlah manual.
               </span>
@@ -180,7 +180,7 @@ export function LoginInfoComparisonSection() {
                 color: "var(--text-secondary)",
               }}
             >
-              <CheckCircle2 size={15} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
+              <CheckCircle2 size={16} color="var(--color-success-fg)" style={{ flexShrink: 0 }} />
               <span>
                 <strong style={{ color: "var(--color-success-fg)" }}>PUSM:</strong> Akumulasi otomatis lintas tanggal dalam satu ketukan.
               </span>

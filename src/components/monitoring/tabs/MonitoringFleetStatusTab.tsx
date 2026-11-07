@@ -2,16 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING, TEXT_FLEET_STATUS } from "@/constants/texts";
-import {
-  Bus,
-  CheckCircle2,
-  AlertTriangle,
-  ShieldCheck,
-  ChevronDown,
-  ChevronUp,
-  Edit3,
-  Clock,
-} from "lucide-react";
+import { Bus, CheckCircle2, AlertTriangle, ShieldCheck, ChevronDown, ChevronUp, Edit3, Clock } from "lucide-react";
 import { sortRoutesByCode } from "@/utils/routeSorting";
 import { normalizeRouteCode } from "@/services/googleSheets/globalReportReader";
 import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
@@ -452,7 +443,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
         className="monitoring-card"
         style={{
           background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
-          borderRadius: "14px",
+          borderRadius: "12px",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
           padding: "12px 14px",
           marginBottom: "10px",
@@ -466,11 +457,11 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             marginBottom: "10px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-            <Bus size={17} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <Bus size={16} style={{ color: "var(--color-link)" }} />
             <h3
               style={{
-                fontSize: "13.5px",
+                fontSize: "14px",
                 fontWeight: 700,
                 margin: 0,
                 color: "var(--text-primary)",
@@ -482,12 +473,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           </div>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: 600,
               color: "var(--text-secondary)",
               background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              padding: "2px 7px",
-              borderRadius: "5px",
+              padding: "2px 8px",
+              borderRadius: "8px",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
             }}
           >
@@ -500,7 +491,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "7px",
+            gap: "8px",
           }}
         >
           {/* Total Armada */}
@@ -508,13 +499,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-              borderRadius: "10px",
-              padding: "7px 9px",
+              borderRadius: "12px",
+              padding: "8px 10px",
             }}
           >
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 display: "block",
@@ -525,14 +516,14 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             <div
               style={{
                 fontSize: "16px",
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "var(--text-primary)",
                 marginTop: "2px",
                 lineHeight: 1.2,
               }}
             >
               {stats.totalFleet}{" "}
-              <span style={{ fontSize: "10px", fontWeight: 500 }}>Unit</span>
+              <span style={{ fontSize: "12px", fontWeight: 500 }}>Unit</span>
             </div>
           </div>
 
@@ -541,8 +532,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               background: "rgba(16, 185, 129, 0.06)",
               border: "1px solid rgba(16, 185, 129, 0.2)",
-              borderRadius: "10px",
-              padding: "7px 9px",
+              borderRadius: "12px",
+              padding: "8px 10px",
             }}
           >
             <div
@@ -554,20 +545,20 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             >
               <span
                 style={{
-                  fontSize: "10px",
+                  fontSize: "12px",
                   fontWeight: 600,
-                  color: "#10B981",
+                  color: "var(--color-success-fg)",
                 }}
               >
                 {TEXT_MONITORING.FLEET_TAB.SGO_LABEL}
               </span>
-              <CheckCircle2 size={11} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={16} style={{ color: "var(--color-success-fg)" }} />
             </div>
             <div
               style={{
                 fontSize: "16px",
-                fontWeight: 800,
-                color: "#10B981",
+                fontWeight: 700,
+                color: "var(--color-success-fg)",
                 marginTop: "2px",
                 lineHeight: 1.2,
               }}
@@ -575,7 +566,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               {stats.totalBeroperasi}{" "}
               <span
                 style={{
-                  fontSize: "9.5px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
                 }}
@@ -596,8 +587,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 stats.totalTerkendala > 0
                   ? "1px solid rgba(245, 158, 11, 0.25)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-              borderRadius: "10px",
-              padding: "7px 9px",
+              borderRadius: "12px",
+              padding: "8px 10px",
             }}
           >
             <div
@@ -609,32 +600,32 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             >
               <span
                 style={{
-                  fontSize: "10px",
+                  fontSize: "12px",
                   fontWeight: 600,
-                  color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-secondary)",
+                  color: stats.totalTerkendala > 0 ? "var(--color-warning-fg)" : "var(--text-secondary)",
                 }}
               >
                 {TEXT_MONITORING.FLEET_TAB.NON_SGO_LABEL}
               </span>
               {stats.totalTerkendala > 0 && (
-                <AlertTriangle size={11} style={{ color: "#F59E0B" }} />
+                <AlertTriangle size={16} style={{ color: "var(--color-warning-fg)" }} />
               )}
             </div>
             <div
               style={{
                 fontSize: "16px",
-                fontWeight: 800,
-                color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-primary)",
+                fontWeight: 700,
+                color: stats.totalTerkendala > 0 ? "var(--color-warning-fg)" : "var(--text-primary)",
                 marginTop: "2px",
                 lineHeight: 1.2,
               }}
             >
               {stats.totalTerkendala}{" "}
-              <span style={{ fontSize: "10px", fontWeight: 500 }}>Unit</span>
+              <span style={{ fontSize: "12px", fontWeight: 500 }}>Unit</span>
             </div>
             <div
               style={{
-                fontSize: "8.5px",
+                fontSize: "12px",
                 color: "var(--text-secondary)",
                 marginTop: "2px",
                 whiteSpace: "nowrap",
@@ -653,7 +644,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "5px",
+          gap: "6px",
           marginBottom: "10px",
         }}
       >
@@ -662,7 +653,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           className="no-scrollbar"
           style={{
             display: "flex",
-            gap: "5px",
+            gap: "6px",
             overflowX: "auto",
           }}
         >
@@ -670,15 +661,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setShiftFilter("all")}
             style={{
-              padding: "4px 9px",
-              borderRadius: "7px",
-              fontSize: "10.5px",
+              padding: "4px 10px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: shiftFilter === "all" ? 700 : 500,
               background:
                 shiftFilter === "all"
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: shiftFilter === "all" ? "#000" : "var(--text-secondary)",
+              color: shiftFilter === "all" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -691,15 +682,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setShiftFilter(1)}
             style={{
-              padding: "4px 9px",
-              borderRadius: "7px",
-              fontSize: "10.5px",
+              padding: "4px 10px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: shiftFilter === 1 ? 700 : 500,
               background:
                 shiftFilter === 1
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: shiftFilter === 1 ? "#000" : "var(--text-secondary)",
+              color: shiftFilter === 1 ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -712,15 +703,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setShiftFilter(2)}
             style={{
-              padding: "4px 9px",
-              borderRadius: "7px",
-              fontSize: "10.5px",
+              padding: "4px 10px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: shiftFilter === 2 ? 700 : 500,
               background:
                 shiftFilter === 2
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: shiftFilter === 2 ? "#000" : "var(--text-secondary)",
+              color: shiftFilter === 2 ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -735,7 +726,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           className="no-scrollbar"
           style={{
             display: "flex",
-            gap: "5px",
+            gap: "6px",
             overflowX: "auto",
           }}
         >
@@ -743,17 +734,17 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setStatusFilter("all")}
             style={{
-              padding: "3px 8px",
-              borderRadius: "6px",
-              fontSize: "10px",
+              padding: "4px 8px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
-                  ? "var(--input-bg, rgba(255, 255, 255, 0.15))"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
               color:
                 statusFilter === "all"
-                  ? "var(--text-primary)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
@@ -767,15 +758,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setStatusFilter("BA")}
             style={{
-              padding: "3px 8px",
-              borderRadius: "6px",
-              fontSize: "10px",
+              padding: "4px 8px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: statusFilter === "BA" ? 700 : 500,
               background:
                 statusFilter === "BA"
-                  ? "rgba(251, 146, 60, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "BA" ? "#FB923C" : "var(--text-secondary)",
+              color: statusFilter === "BA" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(251, 146, 60, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -788,15 +779,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setStatusFilter("TEKNIS")}
             style={{
-              padding: "3px 8px",
-              borderRadius: "6px",
-              fontSize: "10px",
+              padding: "4px 8px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: statusFilter === "TEKNIS" ? 700 : 500,
               background:
                 statusFilter === "TEKNIS"
-                  ? "rgba(56, 189, 248, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "TEKNIS" ? "#38BDF8" : "var(--text-secondary)",
+              color: statusFilter === "TEKNIS" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(56, 189, 248, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -809,15 +800,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setStatusFilter("TO")}
             style={{
-              padding: "3px 8px",
-              borderRadius: "6px",
-              fontSize: "10px",
+              padding: "4px 8px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: statusFilter === "TO" ? 700 : 500,
               background:
                 statusFilter === "TO"
-                  ? "rgba(245, 158, 11, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "TO" ? "#F59E0B" : "var(--text-secondary)",
+              color: statusFilter === "TO" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(245, 158, 11, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -830,15 +821,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setStatusFilter("OFF")}
             style={{
-              padding: "3px 8px",
-              borderRadius: "6px",
-              fontSize: "10px",
+              padding: "4px 8px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: statusFilter === "OFF" ? 700 : 500,
               background:
                 statusFilter === "OFF"
-                  ? "rgba(244, 63, 94, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "OFF" ? "#F43F5E" : "var(--text-secondary)",
+              color: statusFilter === "OFF" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(244, 63, 94, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -851,15 +842,15 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             type="button"
             onClick={() => setStatusFilter("SO")}
             style={{
-              padding: "3px 8px",
-              borderRadius: "6px",
-              fontSize: "10px",
+              padding: "4px 8px",
+              borderRadius: "8px",
+              fontSize: "12px",
               fontWeight: statusFilter === "SO" ? 700 : 500,
               background:
                 statusFilter === "SO"
-                  ? "rgba(168, 85, 247, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "SO" ? "#A855F7" : "var(--text-secondary)",
+              color: statusFilter === "SO" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(168, 85, 247, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -876,14 +867,14 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           style={{
             background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-            borderRadius: "14px",
+            borderRadius: "12px",
             padding: "32px 14px",
             textAlign: "center",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "7px",
+            gap: "8px",
           }}
         >
           <div
@@ -904,8 +895,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <h4
             style={{
               margin: 0,
-              fontSize: "13.5px",
-              fontWeight: 800,
+              fontSize: "14px",
+              fontWeight: 700,
               color: "var(--text-primary)",
             }}
           >
@@ -914,7 +905,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: 0,
-              fontSize: "11.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               maxWidth: "340px",
               lineHeight: 1.4,
@@ -929,14 +920,14 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           style={{
             background: "rgba(16, 185, 129, 0.05)",
             border: "1px solid rgba(16, 185, 129, 0.25)",
-            borderRadius: "14px",
+            borderRadius: "12px",
             padding: "20px 14px",
             textAlign: "center",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "7px",
+            gap: "8px",
             marginBottom: "12px",
           }}
         >
@@ -949,7 +940,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#10B981",
+              color: "var(--color-success-fg)",
             }}
           >
             <ShieldCheck size={24} />
@@ -957,8 +948,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <h4
             style={{
               margin: 0,
-              fontSize: "13.5px",
-              fontWeight: 800,
+              fontSize: "14px",
+              fontWeight: 700,
               color: "var(--text-primary)",
             }}
           >
@@ -967,7 +958,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: 0,
-              fontSize: "11.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               maxWidth: "360px",
               lineHeight: 1.4,
@@ -987,18 +978,18 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: "7px",
+              marginBottom: "8px",
               padding: "0 2px",
             }}
           >
             <span
               style={{
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: 700,
-                color: "#F59E0B",
+                color: "var(--color-warning-fg)",
                 display: "flex",
                 alignItems: "center",
-                gap: "5px",
+                gap: "6px",
               }}
             >
               <span>⚠️</span>
@@ -1015,13 +1006,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   : collapseAllRoutes()
               }
               style={{
-                fontSize: "10.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
-                padding: "2px 5px",
+                padding: "2px 6px",
               }}
             >
               {areAllCollapsed
@@ -1043,7 +1034,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                     background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
                     borderRadius: "12px",
                     border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-                    padding: "9px 11px",
+                    padding: "10px 12px",
                     transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
                   }}
                 >
@@ -1064,20 +1055,20 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "7px",
+                        gap: "8px",
                         minWidth: 0,
                         flex: 1,
                       }}
                     >
                       <span
                         style={{
-                          padding: "2px 7px",
-                          borderRadius: "6px",
-                          fontSize: "11px",
-                          fontWeight: 800,
-                          background: "rgba(62, 207, 142, 0.12)",
-                          color: "var(--accent-color, #3ECF8E)",
-                          border: "1px solid rgba(62, 207, 142, 0.25)",
+                          padding: "2px 8px",
+                          borderRadius: "8px",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          background: "var(--color-action-secondary-bg)",
+                          color: "var(--color-link)",
+                          border: "1px solid var(--color-border-subtle)",
                           flexShrink: 0,
                         }}
                       >
@@ -1085,7 +1076,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       </span>
                       <span
                         style={{
-                          fontSize: "11px",
+                          fontSize: "12px",
                           color: "var(--text-secondary)",
                           fontWeight: 600,
                           overflow: "hidden",
@@ -1130,10 +1121,10 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          borderRadius: "6px",
+                          borderRadius: "8px",
                           border: "1px solid rgba(56, 189, 248, 0.25)",
                           background: "rgba(56, 189, 248, 0.12)",
-                          color: "#38bdf8",
+                          color: "var(--color-link)",
                           cursor: "pointer",
                           padding: 0,
                           flexShrink: 0,
@@ -1141,7 +1132,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         title={TEXT_FLEET_STATUS.QUICK_KORLAP.MODAL_TITLE}
                         aria-label="Koreksi Data Rute"
                       >
-                        <Edit3 size={12} />
+                        <Edit3 size={16} />
                       </button>
 
                       {/* Badge Kendala: [Jumlah] + Icon Warning (Tanpa Icon Bus) */}
@@ -1149,18 +1140,18 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: "3px",
-                          fontSize: "10.5px",
+                          gap: "4px",
+                          fontSize: "12px",
                           fontWeight: 700,
-                          color: "#F59E0B",
+                          color: "var(--color-warning-fg)",
                           background: "rgba(245, 158, 11, 0.12)",
                           padding: "2px 6px",
-                          borderRadius: "5px",
+                          borderRadius: "8px",
                           border: "1px solid rgba(245, 158, 11, 0.25)",
                         }}
                       >
                         <span>{group.units.length}</span>
-                        <AlertTriangle size={11} style={{ color: "#F59E0B" }} />
+                        <AlertTriangle size={16} style={{ color: "var(--color-warning-fg)" }} />
                       </span>
 
                       {/* Chevron Toggle */}
@@ -1172,9 +1163,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         }}
                       >
                         {isExpanded ? (
-                          <ChevronUp size={14} />
+                          <ChevronUp size={16} />
                         ) : (
-                          <ChevronDown size={14} />
+                          <ChevronDown size={16} />
                         )}
                       </div>
                     </div>
@@ -1186,9 +1177,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       style={{
                         display: "flex",
                         flexDirection: "column",
-                        gap: "5px",
+                        gap: "6px",
                         marginTop: "8px",
-                        paddingTop: "7px",
+                        paddingTop: "8px",
                         borderTop:
                           "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
                       }}
@@ -1200,8 +1191,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
-                            padding: "5px 8px",
-                            borderRadius: "7px",
+                            padding: "6px 8px",
+                            borderRadius: "8px",
                             background:
                               "var(--input-bg, rgba(255, 255, 255, 0.03))",
                             border:
@@ -1220,8 +1211,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           >
                             <span
                               style={{
-                                fontSize: "11.5px",
-                                fontWeight: 800,
+                                fontSize: "12px",
+                                fontWeight: 700,
                                 color: "var(--text-primary)",
                                 letterSpacing: "0.2px",
                               }}
@@ -1230,9 +1221,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             </span>
                             <span
                               style={{
-                                fontSize: "10.5px",
+                                fontSize: "12px",
                                 color: "var(--text-secondary)",
-                                marginTop: "1px",
+                                marginTop: "2px",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
@@ -1254,13 +1245,13 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           >
                             <span
                               style={{
-                                fontSize: "9px",
+                                fontSize: "12px",
                                 fontWeight: 700,
                                 background: unit.badgeBg,
                                 color: unit.badgeColor,
                                 border: unit.badgeBorder ? `1px solid ${unit.badgeBorder}` : "none",
-                                padding: "2px 5px",
-                                borderRadius: "4px",
+                                padding: "2px 6px",
+                                borderRadius: "8px",
                                 letterSpacing: "0.2px",
                               }}
                             >
@@ -1298,11 +1289,11 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               marginBottom: "6px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              <ShieldCheck size={15} style={{ color: "#10B981" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <ShieldCheck size={16} style={{ color: "var(--color-success-fg)" }} />
               <span
                 style={{
-                  fontSize: "11.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   color: "var(--text-primary)",
                 }}
@@ -1312,12 +1303,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "12px",
                 fontWeight: 700,
-                color: "#10B981",
+                color: "var(--color-success-fg)",
                 background: "rgba(16, 185, 129, 0.12)",
                 padding: "2px 6px",
-                borderRadius: "5px",
+                borderRadius: "8px",
                 border: "1px solid rgba(16, 185, 129, 0.25)",
               }}
             >
@@ -1328,7 +1319,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: "0 0 8px 0",
-              fontSize: "10.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               lineHeight: 1.3,
             }}
@@ -1348,12 +1339,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               <span
                 key={nr.routeCode}
                 style={{
-                  padding: "2px 7px",
-                  borderRadius: "5px",
-                  fontSize: "10.5px",
+                  padding: "2px 8px",
+                  borderRadius: "8px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.08)",
-                  color: "#10B981",
+                  color: "var(--color-success-fg)",
                   border: "1px solid rgba(16, 185, 129, 0.2)",
                   cursor: "default",
                 }}
@@ -1374,7 +1365,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
             borderRadius: "12px",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
-            padding: "9px 12px",
+            padding: "10px 12px",
           }}
         >
           <div
@@ -1382,14 +1373,14 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: "5px",
+              marginBottom: "6px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              <Clock size={13} style={{ color: "var(--text-secondary)" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <Clock size={16} style={{ color: "var(--text-secondary)" }} />
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
                 }}
@@ -1399,12 +1390,12 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
             <span
               style={{
-                fontSize: "9.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                padding: "1px 5px",
-                borderRadius: "4px",
+                padding: "2px 6px",
+                borderRadius: "8px",
               }}
             >
               {pendingRoutes.length} Rute
@@ -1416,7 +1407,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               display: "flex",
               flexWrap: "wrap",
               gap: "4px",
-              marginTop: "5px",
+              marginTop: "6px",
             }}
           >
             {pendingRoutes.map((pr) => (
@@ -1424,8 +1415,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 key={pr.routeCode}
                 style={{
                   padding: "2px 6px",
-                  borderRadius: "5px",
-                  fontSize: "10px",
+                  borderRadius: "8px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
                   color: "var(--text-secondary)",

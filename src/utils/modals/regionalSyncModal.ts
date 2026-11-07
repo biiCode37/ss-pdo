@@ -49,9 +49,9 @@ export async function showRegionalSyncModal(
         ${escapeHtml(TEXT_MONITORING.SYNC_MODAL.DESC)}
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 12px; background: rgba(62, 207, 142, 0.06); border: 1px solid rgba(62, 207, 142, 0.25);">
+      <div style="display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 12px; background: var(--color-action-secondary-bg); border: 1px solid var(--color-border-subtle);">
         <div>
-          <label for="swal-global-sheet-url" style="font-size: 11px; font-weight: 700; color: var(--text-secondary, #8b8b8b); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <label for="swal-global-sheet-url" style="font-size: 12px; font-weight: 700; color: var(--text-secondary, #8b8b8b); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${escapeHtml(TEXT_MONITORING.SYNC_MODAL.LABEL_URL)}
           </label>
           <input
@@ -59,12 +59,12 @@ export async function showRegionalSyncModal(
             type="text"
             placeholder="${escapeHtml(TEXT_MONITORING.SYNC_MODAL.PLACEHOLDER_URL)}"
             value="${escapeHtml(initialUrl)}"
-            style="width: 100%; box-sizing: border-box; padding: 9px 12px; font-size: 13px; border-radius: 8px; border: 1px solid var(--card-border, rgba(255,255,255,0.15)); background: var(--input-bg, rgba(0,0,0,0.25)); color: var(--text-primary, #ededed);"
+            style="width: 100%; box-sizing: border-box; padding: 10px 12px; font-size: 13px; border-radius: 8px; border: 1px solid var(--card-border, rgba(255,255,255,0.15)); background: var(--input-bg, rgba(0,0,0,0.25)); color: var(--text-primary, #ededed);"
           />
         </div>
 
         <div>
-          <label for="swal-global-sheet-name" style="font-size: 11px; font-weight: 700; color: var(--text-secondary, #8b8b8b); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <label for="swal-global-sheet-name" style="font-size: 12px; font-weight: 700; color: var(--text-secondary, #8b8b8b); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${escapeHtml(TEXT_MONITORING.SYNC_MODAL.LABEL_SHEET_NAME)}
           </label>
           <input
@@ -72,7 +72,7 @@ export async function showRegionalSyncModal(
             type="text"
             placeholder="${escapeHtml(TEXT_MONITORING.SYNC_MODAL.PLACEHOLDER_SHEET_NAME)}"
             value="${escapeHtml(initialSheetName)}"
-            style="width: 100%; box-sizing: border-box; padding: 9px 12px; font-size: 13px; border-radius: 8px; border: 1px solid var(--card-border, rgba(255,255,255,0.15)); background: var(--input-bg, rgba(0,0,0,0.25)); color: var(--text-primary, #ededed);"
+            style="width: 100%; box-sizing: border-box; padding: 10px 12px; font-size: 13px; border-radius: 8px; border: 1px solid var(--card-border, rgba(255,255,255,0.15)); background: var(--input-bg, rgba(0,0,0,0.25)); color: var(--text-primary, #ededed);"
           />
         </div>
       </div>

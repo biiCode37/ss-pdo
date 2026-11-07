@@ -24,7 +24,7 @@ export function renderSpecificModalHtml(
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
         ${headerHtml}
         <div>
-          <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             TOA Shift 1
           </label>
           <input
@@ -40,7 +40,7 @@ export function renderSpecificModalHtml(
         </div>
 
         <div id="swal-wrapper-manualShift1" class="swal-revealed-field" style="display: ${hasManual1 ? "block" : "none"};">
-          <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             Manual Shift 1
           </label>
           <input
@@ -51,7 +51,7 @@ export function renderSpecificModalHtml(
             class="input-field"
             placeholder="0"
             value="${escapeHtml(bus.manualShift1 || "")}"
-            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; width: 100%;"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 12px; width: 100%;"
           />
         </div>
 
@@ -70,7 +70,7 @@ export function renderSpecificModalHtml(
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
         ${headerHtml}
         <div>
-          <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--shift1-color, #38bdf8); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_TOTAL_TOA}
           </label>
           <input
@@ -86,7 +86,7 @@ export function renderSpecificModalHtml(
         </div>
 
         <div id="swal-wrapper-manualShift2" class="swal-revealed-field" style="display: ${hasManual2 ? "block" : "none"};">
-          <label style="display: block; font-size: 11px; font-weight: 700; color: var(--shift2-color, #c084fc); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--shift2-color, #c084fc); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_MANUAL_S2}
           </label>
           <input
@@ -97,7 +97,7 @@ export function renderSpecificModalHtml(
             class="input-field"
             placeholder="0"
             value="${escapeHtml(bus.manualShift2 || "")}"
-            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; width: 100%;"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 12px; width: 100%;"
           />
         </div>
 
@@ -115,12 +115,12 @@ export function renderSpecificModalHtml(
     return `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
         ${headerHtml}
-        <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
-          <div style="font-size: 11px; font-weight: 800; color: var(--accent-color); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
+        <div style="padding: 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--color-action-primary-bg); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_TRIP_CARD}
           </div>
           <div>
-            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
               ${escapeHtml(tripPergiLabel)}
             </label>
             <input
@@ -128,13 +128,13 @@ export function renderSpecificModalHtml(
               type="number"
               inputmode="numeric"
               class="input-field"
-              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--color-action-primary-bg); width: 100%;"
               value="${escapeHtml(bus.tripPergi || "")}"
               placeholder="0"
             />
           </div>
           <div>
-            <label style="font-size: 11px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
+            <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
               ${escapeHtml(tripPulangLabel)}
             </label>
             <input
@@ -142,7 +142,7 @@ export function renderSpecificModalHtml(
               type="number"
               inputmode="numeric"
               class="input-field"
-              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--color-action-primary-bg); width: 100%;"
               value="${escapeHtml(bus.tripPulang || "")}"
               placeholder="0"
             />
@@ -165,7 +165,7 @@ export function renderSpecificModalHtml(
         ${headerHtml}
         <div>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
               ${escapeHtml(singleMeta.label)}
             </label>
             ${
@@ -182,24 +182,24 @@ export function renderSpecificModalHtml(
           ${
             activeCategory === "kmAkhir1"
               ? `
-            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-radius: 10px; background: rgba(56, 189, 248, 0.08); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); margin-bottom: 8px; font-size: 12px;">
-              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;">
+            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.08); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); margin-bottom: 8px; font-size: 12px;">
+              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--shift1-color, #38bdf8);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S1}
               </span>
-              <span id="swal-km-ref-val" style="font-weight: 800; color: var(--shift1-color, #38bdf8); font-size: 13px; letter-spacing: 0.3px;">
+              <span id="swal-km-ref-val" style="font-weight: 700; color: var(--shift1-color, #38bdf8); font-size: 13px; letter-spacing: 0.3px;">
                 ${bus.kmAwal1 ? `${escapeHtml(bus.kmAwal1)}` : `<span style="color: var(--text-secondary); font-weight: 600;">${TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}</span>`}
               </span>
             </div>
           `
               : activeCategory === "kmAkhir2"
                 ? `
-            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-radius: 10px; background: rgba(192, 132, 252, 0.08); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25)); margin-bottom: 8px; font-size: 12px;">
-              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;">
+            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 12px; background: rgba(192, 132, 252, 0.08); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25)); margin-bottom: 8px; font-size: 12px;">
+              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--shift2-color, #c084fc);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S2}
               </span>
-              <span id="swal-km-ref-val" style="font-weight: 800; color: var(--shift2-color, #c084fc); font-size: 13px; letter-spacing: 0.3px;">
+              <span id="swal-km-ref-val" style="font-weight: 700; color: var(--shift2-color, #c084fc); font-size: 13px; letter-spacing: 0.3px;">
                 ${bus.kmAwal2 ? `${escapeHtml(bus.kmAwal2)}` : `<span style="color: var(--text-secondary); font-weight: 600;">${TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}</span>`}
               </span>
             </div>
@@ -214,7 +214,7 @@ export function renderSpecificModalHtml(
             class="input-field"
             placeholder="${escapeHtml(singleMeta.placeholder)}"
             value="${escapeHtml(currentVal)}"
-            style="font-size: 20px; font-weight: 700; text-align: center; height: 48px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+            style="font-size: 20px; font-weight: 700; text-align: center; height: 48px; border-radius: 12px; border: 1.5px solid var(--color-action-primary-bg); width: 100%;"
           />
         </div>
 

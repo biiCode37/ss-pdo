@@ -23,7 +23,7 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
         style={{
           display: "flex",
           alignItems: "flex-start",
-          gap: "7px",
+          gap: "8px",
           lineHeight: 1.4,
         }}
       >
@@ -51,8 +51,8 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
             <span
               className="note-shift-prefix"
               style={{
-                fontSize: "11px",
-                fontWeight: 800,
+                fontSize: "12px",
+                fontWeight: 700,
                 color: "var(--color-text-secondary)",
                 marginRight: "6px",
               }}
@@ -71,7 +71,7 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
       {parts.map((part, index) => renderItem(part, index))}
     </div>
   );

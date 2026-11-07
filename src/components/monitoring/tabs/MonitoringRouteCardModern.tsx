@@ -73,7 +73,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
         border: isSubmitted
           ? "1px solid rgba(56, 189, 248, 0.35)"
           : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-        padding: "13px 14px",
+        padding: "14px 14px",
         display: "flex",
         flexDirection: "column",
         gap: "10px",
@@ -100,10 +100,10 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               padding: "4px 10px",
               borderRadius: "8px",
               fontSize: "13px",
-              fontWeight: 800,
-              background: "rgba(62, 207, 142, 0.12)",
-              color: "var(--accent-color, #3ECF8E)",
-              border: "1px solid rgba(62, 207, 142, 0.3)",
+              fontWeight: 700,
+              background: "var(--color-action-secondary-bg)",
+              color: "var(--color-link)",
+              border: "1px solid var(--color-border-subtle)",
               letterSpacing: "0.2px",
               display: "inline-block",
             }}
@@ -124,7 +124,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
             </div>
             <div
               style={{
-                fontSize: "10.5px",
+                fontSize: "12px",
                 color: "var(--text-secondary)",
                 marginTop: "2px",
               }}
@@ -139,7 +139,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
             flexWrap: "wrap",
             justifyContent: "flex-end",
           }}
@@ -150,10 +150,10 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "3px",
+                gap: "4px",
                 padding: "2px 6px",
-                borderRadius: "6px",
-                fontSize: "10.5px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-success-bg)",
                 color: "var(--color-success-fg)",
@@ -168,10 +168,10 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "3px",
+                gap: "4px",
                 padding: "2px 6px",
-                borderRadius: "6px",
-                fontSize: "10.5px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-info-bg)",
                 color: "var(--color-info-fg)",
@@ -200,22 +200,22 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 justifyContent: "center",
                 gap: "4px",
                 padding: "2px 6px",
-                borderRadius: "6px",
-                fontSize: "10px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 600,
                 background: isSyncing
                   ? "rgba(56, 189, 248, 0.25)"
                   : "var(--bg-secondary, rgba(255, 255, 255, 0.05))",
-                color: isSyncing ? "#38bdf8" : "var(--text-secondary)",
+                color: isSyncing ? "var(--color-link)" : "var(--text-secondary)",
                 border: "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
                 cursor: isSyncing ? "wait" : "pointer",
                 transition: "all 0.15s ease",
               }}
             >
               {isSyncing ? (
-                <Loader2 size={11} className="animate-spin text-sky-400" />
+                <Loader2 size={16} className="animate-spin text-sky-400" />
               ) : (
-                <RefreshCw size={11} />
+                <RefreshCw size={16} />
               )}
             </button>
           )}
@@ -226,16 +226,16 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                fontSize: "11px",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-success-bg)",
                 color: "var(--color-success-fg)",
                 border: "1px solid var(--color-success-border)",
               }}
             >
-              <CheckCircle2 size={12} />
+              <CheckCircle2 size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_VERIFIED}
             </span>
           )}
@@ -246,16 +246,16 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                fontSize: "11px",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-info-bg)",
                 color: "var(--color-info-fg)",
                 border: "1px solid var(--color-info-border)",
               }}
             >
-              <Send size={12} />
+              <Send size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_SUBMITTED}
             </span>
           )}
@@ -266,16 +266,16 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                fontSize: "11px",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-warning-bg)",
                 color: "var(--color-warning-fg)",
                 border: "1px solid var(--color-warning-border)",
               }}
             >
-              <Clock size={12} />
+              <Clock size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_DRAFT}
             </span>
           )}
@@ -286,16 +286,16 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                fontSize: "11px",
+                padding: "4px 8px",
+                borderRadius: "8px",
+                fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-surface-subtle)",
                 color: "var(--color-text-muted)",
                 border: "1px solid var(--color-border-control)",
               }}
             >
-              <AlertTriangle size={12} />
+              <AlertTriangle size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_EMPTY}
             </span>
           )}
@@ -311,7 +311,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
           borderRadius: "12px",
-          padding: "9px 8px",
+          padding: "10px 8px",
           textAlign: "center",
         }}
       >
@@ -319,7 +319,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
         <div>
           <div
             style={{
-              fontSize: "10.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               fontWeight: 600,
             }}
@@ -329,7 +329,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           <div
             style={{
               fontSize: "14px",
-              fontWeight: 800,
+              fontWeight: 700,
               color: "var(--text-primary)",
               marginTop: "2px",
             }}
@@ -338,9 +338,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           </div>
           <div
             style={{
-              fontSize: "9.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
-              marginTop: "1px",
+              marginTop: "2px",
               whiteSpace: "nowrap",
             }}
           >
@@ -352,7 +352,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
         <div>
           <div
             style={{
-              fontSize: "10.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               fontWeight: 600,
             }}
@@ -362,8 +362,8 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           <div
             style={{
               fontSize: "14px",
-              fontWeight: 800,
-              color: "var(--accent-color, #3ECF8E)",
+              fontWeight: 700,
+              color: "var(--color-link)",
               marginTop: "2px",
               display: "flex",
               alignItems: "center",
@@ -374,9 +374,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
             <span>{route.todayPassengers.toLocaleString("id-ID")}</span>
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "12px",
                 fontWeight: 700,
-                color: "var(--accent-color, #3ECF8E)",
+                color: "var(--color-link)",
               }}
             >
               ({paxPct})
@@ -384,9 +384,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           </div>
           <div
             style={{
-              fontSize: "9.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
-              marginTop: "1px",
+              marginTop: "2px",
               whiteSpace: "nowrap",
             }}
           >
@@ -399,7 +399,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
         <div>
           <div
             style={{
-              fontSize: "10.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               fontWeight: 600,
             }}
@@ -409,7 +409,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           <div
             style={{
               fontSize: "14px",
-              fontWeight: 800,
+              fontWeight: 700,
               color: "var(--text-primary)",
               marginTop: "2px",
             }}
@@ -418,9 +418,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           </div>
           <div
             style={{
-              fontSize: "9.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
-              marginTop: "1px",
+              marginTop: "2px",
               whiteSpace: "nowrap",
             }}
           >
@@ -436,17 +436,17 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
           alignItems: "center",
           justifyContent: "space-between",
           gap: "8px",
-          paddingTop: "1px",
+          paddingTop: "2px",
         }}
       >
         {/* Left: Trend Chips H-1 & H-7 */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: 600,
               padding: "2px 6px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.07))",
               color: "var(--text-secondary)",
@@ -458,10 +458,10 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
 
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: 600,
               padding: "2px 6px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.07))",
               color: "var(--text-secondary)",
@@ -486,21 +486,20 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "5px",
+                gap: "6px",
                 padding: "6px 12px",
                 borderRadius: "8px",
-                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                color: "#ffffff",
+                background: "var(--color-action-primary-bg)",
+                color: "var(--color-action-primary-fg)",
                 border: "none",
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: 700,
                 cursor: isVerifying ? "wait" : "pointer",
                 opacity: isVerifying ? 0.7 : 1,
-                boxShadow: "0 2px 8px rgba(16, 185, 129, 0.3)",
                 transition: "all 0.15s ease",
               }}
             >
-              <Check size={13} />
+              <Check size={16} />
               <span>{TEXT_MONITORING.ROUTE_CARD.BTN_VERIFY}</span>
             </button>
           )}
@@ -514,7 +513,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               opacity: 0.6,
             }}
           >
-            <ChevronRight size={15} />
+            <ChevronRight size={16} />
           </div>
         </div>
       </div>

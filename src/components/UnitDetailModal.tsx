@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useRef, useCallback } from "react";
-import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle, Repeat } from "lucide-react";
+import { X, Navigation, Users, AlertTriangle, Repeat } from "lucide-react";
 import type { BusData } from "../services/googleSheets";
 import { calculateUnitMetrics } from "../utils/unitAnalytics";
 import { safeFormatNumber } from "../utils/numberUtils";
@@ -96,8 +96,8 @@ export function UnitDetailModal({
         maxHeight: "min(88dvh, 760px)",
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        borderTopLeftRadius: "24px",
-        borderTopRightRadius: "24px",
+        borderTopLeftRadius: "16px",
+        borderTopRightRadius: "16px",
         padding: "16px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px",
         background: "var(--card-bg, #171717)",
         border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
@@ -128,7 +128,7 @@ export function UnitDetailModal({
           style={{
             width: "36px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             background: "var(--card-border, rgba(255, 255, 255, 0.2))",
           }}
         />
@@ -145,36 +145,20 @@ export function UnitDetailModal({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.1))",
-              color: "var(--accent-color, #38bdf8)",
-              border: "1px solid rgba(56, 189, 248, 0.3)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <Bus size={18} />
-          </div>
           <div>
             <h3
               id="unit-detail-modal-title"
               style={{
                 margin: 0,
-                fontSize: "1.2rem",
-                fontWeight: 800,
+                fontSize: "20px",
+                fontWeight: 700,
                 color: "var(--text-primary, #ededed)",
                 letterSpacing: "-0.01em",
               }}
             >
               {unit}
             </h3>
-            <span style={{ fontSize: "0.78rem", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
               {TEXT_UNIT_DETAIL.TITLE}
             </span>
           </div>
@@ -187,7 +171,7 @@ export function UnitDetailModal({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
             color: "var(--text-secondary, #94a3b8)",
@@ -199,7 +183,7 @@ export function UnitDetailModal({
             flexShrink: 0,
           }}
         >
-          <X size={17} />
+          <X size={16} />
         </button>
       </div>
 
@@ -209,7 +193,7 @@ export function UnitDetailModal({
         <div
           style={{
             padding: "12px",
-            borderRadius: "14px",
+            borderRadius: "12px",
             background: "var(--shift1-bg, rgba(2, 132, 199, 0.08))",
             border: "1px solid var(--shift1-border, rgba(2, 132, 199, 0.2))",
             display: "flex",
@@ -219,7 +203,7 @@ export function UnitDetailModal({
         >
           <div
             style={{
-              fontSize: "0.75rem",
+              fontSize: "12px",
               fontWeight: 700,
               color: "var(--shift1-color, #38bdf8)",
               display: "flex",
@@ -231,9 +215,9 @@ export function UnitDetailModal({
             {dateBadge && (
               <span
                 style={{
-                  fontSize: "0.68rem",
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  fontSize: "12px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--shift1-bg, rgba(2, 132, 199, 0.15))",
                   color: "var(--shift1-color, #38bdf8)",
                   border: "1px solid var(--shift1-border, rgba(2, 132, 199, 0.3))",
@@ -247,21 +231,21 @@ export function UnitDetailModal({
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Navigation size={13} style={{ color: "var(--shift1-color, #38bdf8)", flexShrink: 0 }} />
-              <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--shift1-color, #38bdf8)" }}>
+              <Navigation size={16} style={{ color: "var(--shift1-color, #38bdf8)", flexShrink: 0 }} />
+              <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--shift1-color, #38bdf8)" }}>
                 {safeFormatNumber(metrics.kmShift1)}
               </span>
-              <span style={{ fontSize: "0.72rem", color: "var(--text-secondary, #94a3b8)", fontWeight: 600 }}>
+              <span style={{ fontSize: "12px", color: "var(--text-secondary, #94a3b8)", fontWeight: 600 }}>
                 {TEXT_UNIT_DETAIL.KM_UNIT}
               </span>
             </div>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Users size={13} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
-              <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+              <Users size={16} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
+              <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {safeFormatNumber(metrics.totalShift1Pnp)}
               </span>
-              <span style={{ fontSize: "0.72rem", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
+              <span style={{ fontSize: "12px", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
                 {TEXT_UNIT_DETAIL.PASSENGER_UNIT}
               </span>
             </div>
@@ -269,11 +253,11 @@ export function UnitDetailModal({
             {metrics.manualShift1 > 0 && (
               <div
                 style={{
-                  fontSize: "0.68rem",
+                  fontSize: "12px",
                   color: "var(--text-secondary, #94a3b8)",
                   background: "var(--input-bg, rgba(0, 0, 0, 0.2))",
                   padding: "2px 6px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                   marginTop: "2px",
                 }}
@@ -288,7 +272,7 @@ export function UnitDetailModal({
         <div
           style={{
             padding: "12px",
-            borderRadius: "14px",
+            borderRadius: "12px",
             background: "var(--shift2-bg, rgba(126, 34, 206, 0.08))",
             border: "1px solid var(--shift2-border, rgba(126, 34, 206, 0.2))",
             display: "flex",
@@ -298,7 +282,7 @@ export function UnitDetailModal({
         >
           <div
             style={{
-              fontSize: "0.75rem",
+              fontSize: "12px",
               fontWeight: 700,
               color: "var(--shift2-color, #c084fc)",
               display: "flex",
@@ -310,9 +294,9 @@ export function UnitDetailModal({
             {dateBadge && (
               <span
                 style={{
-                  fontSize: "0.68rem",
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  fontSize: "12px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--shift2-bg, rgba(126, 34, 206, 0.15))",
                   color: "var(--shift2-color, #c084fc)",
                   border: "1px solid var(--shift2-border, rgba(126, 34, 206, 0.3))",
@@ -326,21 +310,21 @@ export function UnitDetailModal({
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Navigation size={13} style={{ color: "var(--shift2-color, #c084fc)", flexShrink: 0 }} />
-              <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--shift2-color, #c084fc)" }}>
+              <Navigation size={16} style={{ color: "var(--shift2-color, #c084fc)", flexShrink: 0 }} />
+              <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--shift2-color, #c084fc)" }}>
                 {safeFormatNumber(metrics.kmShift2)}
               </span>
-              <span style={{ fontSize: "0.72rem", color: "var(--text-secondary, #94a3b8)", fontWeight: 600 }}>
+              <span style={{ fontSize: "12px", color: "var(--text-secondary, #94a3b8)", fontWeight: 600 }}>
                 {TEXT_UNIT_DETAIL.KM_UNIT}
               </span>
             </div>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Users size={13} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
-              <span style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+              <Users size={16} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
+              <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {safeFormatNumber(metrics.totalShift2Pnp)}
               </span>
-              <span style={{ fontSize: "0.72rem", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
+              <span style={{ fontSize: "12px", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
                 {TEXT_UNIT_DETAIL.PASSENGER_UNIT}
               </span>
             </div>
@@ -348,11 +332,11 @@ export function UnitDetailModal({
             {metrics.manualShift2 > 0 && (
               <div
                 style={{
-                  fontSize: "0.68rem",
+                  fontSize: "12px",
                   color: "var(--text-secondary, #94a3b8)",
                   background: "var(--input-bg, rgba(0, 0, 0, 0.2))",
                   padding: "2px 6px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                   marginTop: "2px",
                 }}
@@ -368,7 +352,7 @@ export function UnitDetailModal({
       <div
         style={{
           padding: "12px 14px",
-          borderRadius: "14px",
+          borderRadius: "12px",
           background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
           display: "flex",
@@ -378,9 +362,9 @@ export function UnitDetailModal({
       >
         <div
           style={{
-            fontSize: "0.78rem",
+            fontSize: "12px",
             fontWeight: 700,
-            color: "var(--accent-color, #38bdf8)",
+            color: "var(--color-link)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -390,11 +374,11 @@ export function UnitDetailModal({
           {dateBadge && (
             <span
               style={{
-                fontSize: "0.68rem",
-                padding: "1px 6px",
-                borderRadius: "6px",
+                fontSize: "12px",
+                padding: "2px 6px",
+                borderRadius: "8px",
                 background: "rgba(56, 189, 248, 0.12)",
-                color: "var(--accent-color, #38bdf8)",
+                color: "var(--color-link)",
                 border: "1px solid rgba(56, 189, 248, 0.25)",
                 fontWeight: 600,
               }}
@@ -409,18 +393,18 @@ export function UnitDetailModal({
           <div
             style={{
               padding: "8px 6px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "rgba(0, 0, 0, 0.15)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
             <span
               style={{
-                fontSize: "9px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: "var(--text-secondary, #94a3b8)",
                 letterSpacing: "0.5px",
@@ -429,9 +413,9 @@ export function UnitDetailModal({
             >
               {TEXT_UNIT_DETAIL.STRIP_RITASE}
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-              <Repeat size={12} style={{ color: "var(--accent-color, #38bdf8)" }} />
-              <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--text-primary, #ededed)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <Repeat size={16} style={{ color: "var(--color-link)" }} />
+              <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {metrics.tripPergi || "0"}/{metrics.tripPulang || "0"}
               </span>
             </div>
@@ -441,18 +425,18 @@ export function UnitDetailModal({
           <div
             style={{
               padding: "8px 6px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "rgba(0, 0, 0, 0.15)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
             <span
               style={{
-                fontSize: "9px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: "var(--text-secondary, #94a3b8)",
                 letterSpacing: "0.5px",
@@ -462,10 +446,10 @@ export function UnitDetailModal({
               {TEXT_UNIT_DETAIL.STRIP_TOTAL_KM}
             </span>
             <div style={{ display: "flex", alignItems: "baseline", gap: "2px" }}>
-              <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--shift1-color, #38bdf8)" }}>
+              <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--shift1-color, #38bdf8)" }}>
                 {safeFormatNumber(metrics.totalKm)}
               </span>
-              <span style={{ fontSize: "0.65rem", color: "var(--text-secondary, #94a3b8)", fontWeight: 600 }}>
+              <span style={{ fontSize: "12px", color: "var(--text-secondary, #94a3b8)", fontWeight: 600 }}>
                 {TEXT_UNIT_DETAIL.KM_UNIT}
               </span>
             </div>
@@ -475,18 +459,18 @@ export function UnitDetailModal({
           <div
             style={{
               padding: "8px 6px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "rgba(0, 0, 0, 0.15)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
             <span
               style={{
-                fontSize: "9px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: "var(--text-secondary, #94a3b8)",
                 letterSpacing: "0.5px",
@@ -496,10 +480,10 @@ export function UnitDetailModal({
               {TEXT_UNIT_DETAIL.STRIP_PASSENGERS}
             </span>
             <div style={{ display: "flex", alignItems: "baseline", gap: "2px" }}>
-              <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--shift2-color, #c084fc)" }}>
+              <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--shift2-color, #c084fc)" }}>
                 {safeFormatNumber(metrics.totalPassengers)}
               </span>
-              <span style={{ fontSize: "0.65rem", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
+              <span style={{ fontSize: "12px", color: "var(--text-secondary, #94a3b8)", fontWeight: 500 }}>
                 {TEXT_UNIT_DETAIL.PASSENGER_UNIT}
               </span>
             </div>
@@ -509,11 +493,11 @@ export function UnitDetailModal({
         {metrics.manualShift1 + metrics.manualShift2 > 0 && (
           <div
             style={{
-              fontSize: "0.7rem",
+              fontSize: "12px",
               color: "var(--text-secondary, #94a3b8)",
               background: "var(--input-bg, rgba(0, 0, 0, 0.2))",
-              padding: "3px 8px",
-              borderRadius: "6px",
+              padding: "4px 8px",
+              borderRadius: "8px",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               textAlign: "center",
             }}
@@ -536,14 +520,14 @@ export function UnitDetailModal({
       <div
         style={{
           padding: "14px",
-          borderRadius: "14px",
+          borderRadius: "12px",
           background: "var(--card-bg, #1e293b)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
         }}
       >
         <div
           style={{
-            fontSize: "0.82rem",
+            fontSize: "13px",
             fontWeight: 700,
             marginBottom: "10px",
             color: "var(--text-primary, #ededed)",
@@ -552,7 +536,6 @@ export function UnitDetailModal({
             gap: "6px",
           }}
         >
-          <MessageSquare size={16} style={{ color: "var(--accent-color, #38bdf8)" }} />
           <span>{TEXT_UNIT_DETAIL.NOTES_SECTION_TITLE}</span>
         </div>
 
@@ -565,7 +548,7 @@ export function UnitDetailModal({
                   display: "flex",
                   alignItems: "flex-start",
                   gap: "8px",
-                  fontSize: "0.75rem",
+                  fontSize: "12px",
                   color: "var(--warning-text, #f59e0b)",
                   fontWeight: 600,
                   background: "var(--warning-badge-bg, rgba(245, 158, 11, 0.1))",
@@ -575,8 +558,8 @@ export function UnitDetailModal({
                 }}
               >
                 <AlertTriangle
-                  size={14}
-                  style={{ color: "var(--warning-color, #f59e0b)", flexShrink: 0, marginTop: "1px" }}
+                  size={16}
+                  style={{ color: "var(--warning-color, #f59e0b)", flexShrink: 0, marginTop: "2px" }}
                 />
                 <span style={{ lineHeight: 1.4, wordBreak: "break-word", textTransform: "uppercase" }}>
                   {n}
@@ -588,7 +571,7 @@ export function UnitDetailModal({
           <p
             style={{
               margin: 0,
-              fontSize: "0.78rem",
+              fontSize: "12px",
               color: "var(--text-secondary, #94a3b8)",
               fontStyle: "italic",
             }}

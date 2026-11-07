@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Calendar, ChevronRight, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import {
   type MonitoringPeriodFilter,
@@ -95,8 +95,8 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
         width: "100%",
         boxSizing: "border-box",
         background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
-        borderRadius: "9999px",
-        padding: "3px",
+        borderRadius: "999px",
+        padding: "4px",
         border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
         gap: "4px",
         userSelect: "none",
@@ -117,7 +117,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           justifyContent: "center",
           textAlign: "center",
           padding: "6px 8px",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           border: "none",
           fontSize: "12px",
           fontWeight: currentPeriod.mode === "daily" ? 700 : 500,
@@ -158,7 +158,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           justifyContent: "center",
           textAlign: "center",
           padding: "6px 8px",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           border: "none",
           fontSize: "12px",
           fontWeight: currentPeriod.mode === "weekly" ? 700 : 500,
@@ -199,7 +199,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           justifyContent: "center",
           textAlign: "center",
           padding: "6px 8px",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           border: "none",
           fontSize: "12px",
           fontWeight: currentPeriod.mode === "monthly" ? 700 : 500,
@@ -240,7 +240,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
           justifyContent: "center",
           textAlign: "center",
           padding: "6px 8px",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           border: "none",
           fontSize: "12px",
           fontWeight: currentPeriod.mode === "custom" ? 700 : 500,
@@ -308,7 +308,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                 data-testid="custom-period-modal-title"
                 style={{
                   margin: 0,
-                  fontSize: "15px",
+                  fontSize: "16px",
                   fontWeight: 700,
                   color: "var(--text-primary, #ededed)",
                   display: "flex",
@@ -316,7 +316,6 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                   gap: "8px",
                 }}
               >
-                <Calendar size={18} style={{ color: "var(--accent-color, #3ECF8E)" }} />
                 {TEXT_MONITORING.PERIOD.CUSTOM_MODAL_TITLE}
               </h3>
               <button
@@ -333,7 +332,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                 title={TEXT_COMMON.BUTTONS.CLOSE}
                 aria-label={TEXT_COMMON.BUTTONS.CLOSE}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
@@ -358,7 +357,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    borderRadius: "10px",
+                    borderRadius: "12px",
                     border: "1px solid var(--card-border, rgba(255, 255, 255, 0.15))",
                     background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
                     color: "var(--text-primary, #ededed)",
@@ -387,7 +386,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                   style={{
                     width: "100%",
                     padding: "8px 12px",
-                    borderRadius: "10px",
+                    borderRadius: "12px",
                     border: "1px solid var(--card-border, rgba(255, 255, 255, 0.15))",
                     background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
                     color: "var(--text-primary, #ededed)",
@@ -403,7 +402,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                 onClick={() => setIsCustomModalOpen(false)}
                 style={{
                   padding: "8px 14px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.15))",
                   background: "transparent",
                   color: "var(--text-secondary, #a3a3a3)",
@@ -420,9 +419,9 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                 onClick={handleApplyCustom}
                 style={{
                   padding: "8px 16px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   border: "none",
-                  background: "var(--accent-color, #3ECF8E)",
+                  background: "var(--color-action-primary-bg)",
                   color: "#062817",
                   fontSize: "13px",
                   fontWeight: 700,
@@ -430,11 +429,11 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  boxShadow: "0 2px 8px rgba(62, 207, 142, 0.3)",
+                  boxShadow: "0 2px 8px var(--color-shadow)",
                 }}
               >
                 {TEXT_MONITORING.PERIOD.APPLY_BTN}
-                <ChevronRight size={14} />
+                <ChevronRight size={16} />
               </button>
             </div>
           </div>

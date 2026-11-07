@@ -154,7 +154,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             }}
           >
             <Search
-              size={15}
+              size={16}
               style={{
                 position: "absolute",
                 left: "12px",
@@ -170,13 +170,12 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               placeholder={TEXT_MONITORING.ROUTES_TAB.SEARCH_PLACEHOLDER}
               style={{
                 width: "100%",
-                padding: "8px 32px 8px 34px",
-                borderRadius: "10px",
+                padding: "8px 32px 8px 32px",
+                borderRadius: "12px",
                 background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
                 color: "var(--text-primary)",
-                fontSize: "12.5px",
-                outline: "none",
+                fontSize: "13px",
               }}
             />
             {searchQuery && (
@@ -195,7 +194,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                   alignItems: "center",
                 }}
               >
-                <X size={14} />
+                <X size={16} />
               </button>
             )}
           </div>
@@ -212,21 +211,20 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 alignItems: "center",
                 gap: "6px",
                 padding: "8px 14px",
-                borderRadius: "10px",
-                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                color: "#ffffff",
+                borderRadius: "12px",
+                background: "var(--color-action-primary-bg)",
+                color: "var(--color-action-primary-fg)",
                 border: "none",
                 fontSize: "12px",
                 fontWeight: 700,
                 cursor: isBulking ? "wait" : "pointer",
                 opacity: isBulking ? 0.7 : 1,
-                boxShadow: "0 4px 12px rgba(16, 185, 129, 0.3)",
                 whiteSpace: "nowrap",
                 flexShrink: 0,
                 transition: "all 0.2s ease",
               }}
             >
-              <CheckCheck size={15} />
+              <CheckCheck size={16} />
               <span>
                 {TEXT_MONITORING.BULK_VERIFY.BUTTON_LABEL(
                   submittedRoutes.length,
@@ -251,15 +249,15 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("all")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: statusFilter === "all" ? "#000" : "var(--text-secondary)",
+              color: statusFilter === "all" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -273,21 +271,21 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("submitted")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "submitted" ? 700 : 500,
               background:
                 statusFilter === "submitted"
-                  ? "rgba(56, 189, 248, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
               color:
                 statusFilter === "submitted"
-                  ? "#38bdf8"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border:
                 statusFilter === "submitted"
-                  ? "1px solid rgba(56, 189, 248, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -301,21 +299,21 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("uncompleted")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "uncompleted" ? 700 : 500,
               background:
                 statusFilter === "uncompleted"
-                  ? "rgba(245, 158, 11, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
               color:
                 statusFilter === "uncompleted"
-                  ? "#f59e0b"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border:
                 statusFilter === "uncompleted"
-                  ? "1px solid rgba(245, 158, 11, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -329,21 +327,21 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("verified")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "verified" ? 700 : 500,
               background:
                 statusFilter === "verified"
-                  ? "rgba(16, 185, 129, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
               color:
                 statusFilter === "verified"
-                  ? "#10b981"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border:
                 statusFilter === "verified"
-                  ? "1px solid rgba(16, 185, 129, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -371,13 +369,13 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               display: "flex",
               alignItems: "center",
               gap: "4px",
-              fontSize: "11px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               marginRight: "4px",
               flexShrink: 0,
             }}
           >
-            <Filter size={12} />
+            <Filter size={16} />
             <span>{TEXT_MONITORING.ROUTES_TAB.KORWIL_LABEL}</span>
           </div>
 
@@ -387,15 +385,15 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             style={{
               padding: "4px 10px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: selectedSupervisor === "all" ? 700 : 500,
               background:
                 selectedSupervisor === "all"
-                  ? "var(--input-bg, rgba(255, 255, 255, 0.15))"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
               color:
                 selectedSupervisor === "all"
-                  ? "var(--text-primary)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
@@ -414,15 +412,15 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               style={{
                 padding: "4px 10px",
                 borderRadius: "8px",
-                fontSize: "11px",
+                fontSize: "12px",
                 fontWeight: selectedSupervisor === spv ? 700 : 500,
                 background:
                   selectedSupervisor === spv
-                    ? "var(--input-bg, rgba(255, 255, 255, 0.15))"
+                    ? "var(--color-state-active-bg)"
                     : "transparent",
                 color:
                   selectedSupervisor === spv
-                    ? "var(--text-primary)"
+                    ? "var(--color-state-active-fg)"
                     : "var(--text-secondary)",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                 cursor: "pointer",

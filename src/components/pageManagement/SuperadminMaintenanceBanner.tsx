@@ -17,7 +17,7 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess, s
         borderBottom: '1px solid var(--color-warning-border)',
         padding: '8px 16px',
         margin: '-12px -16px 10px -16px',
-        borderRadius: '0 0 10px 10px',
+        borderRadius: '0 0 12px 12px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -28,7 +28,7 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess, s
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-        <AlertTriangle size={15} style={{ color: 'var(--color-warning-fg)', flexShrink: 0 }} />
+        <AlertTriangle size={16} style={{ color: 'var(--color-warning-fg)', flexShrink: 0 }} />
         <span
           style={{
             whiteSpace: 'nowrap',
@@ -47,13 +47,13 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess, s
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '5px',
+            gap: '6px',
             padding: '4px 10px',
-            borderRadius: '6px',
+            borderRadius: '8px',
             backgroundColor: 'var(--color-warning-fg)',
             color: 'var(--color-surface-default)',
             border: 'none',
-            fontSize: '11px',
+            fontSize: '12px',
             fontWeight: 700,
             cursor: 'pointer',
             flexShrink: 0,
@@ -61,7 +61,7 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess, s
             transition: 'opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
           }}
         >
-          <Settings size={12} />
+          <Settings size={16} />
           {TEXT_PAGE_MANAGEMENT.SUPERADMIN_BANNER.MANAGE_BTN}
         </button>
       )}

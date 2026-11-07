@@ -94,7 +94,7 @@ export function AddRouteModal({
           maxHeight: 'min(90dvh, 760px)',
           overflowY: 'auto',
           padding: '24px 20px',
-          borderRadius: '20px',
+          borderRadius: '16px',
           textAlign: 'left',
           position: 'relative',
           backgroundColor: 'var(--color-surface-raised)',
@@ -122,19 +122,19 @@ export function AddRouteModal({
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                background: 'rgba(62, 207, 142, 0.12)',
-                color: 'var(--accent-color, #3ECF8E)',
+                background: 'var(--color-action-secondary-bg)',
+                color: 'var(--color-link)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Plus size={18} />
+              <Plus size={20} />
             </div>
             <h3
               style={{
                 fontSize: '16px',
-                fontWeight: 800,
+                fontWeight: 700,
                 margin: 0,
                 color: 'var(--text-primary)',
               }}
@@ -158,7 +158,7 @@ export function AddRouteModal({
             }}
             aria-label={TEXT_COMMON.CLOSE}
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 
@@ -167,8 +167,8 @@ export function AddRouteModal({
           style={{
             display: 'flex',
             background: 'var(--color-surface-subtle)',
-            padding: '3px',
-            borderRadius: '10px',
+            padding: '4px',
+            borderRadius: '12px',
             marginBottom: '16px',
             border: '1px solid var(--color-border-subtle)',
           }}
@@ -181,7 +181,7 @@ export function AddRouteModal({
               padding: '6px 10px',
               fontSize: '12px',
               fontWeight: activeTab === 'single' ? 600 : 500,
-              borderRadius: '7px',
+              borderRadius: '8px',
               border: 'none',
               background: activeTab === 'single' ? 'var(--color-action-primary-bg)' : 'transparent',
               color: activeTab === 'single' ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
@@ -199,7 +199,7 @@ export function AddRouteModal({
               padding: '6px 10px',
               fontSize: '12px',
               fontWeight: activeTab === 'bulk' ? 600 : 500,
-              borderRadius: '7px',
+              borderRadius: '8px',
               border: 'none',
               background: activeTab === 'bulk' ? 'var(--color-action-primary-bg)' : 'transparent',
               color: activeTab === 'bulk' ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
@@ -236,7 +236,7 @@ export function AddRouteModal({
             <div style={{ marginBottom: '12px' }}>
           <label
             style={{
-              fontSize: '11.5px',
+              fontSize: '12px',
               fontWeight: 700,
               color: 'var(--text-secondary)',
               display: 'block',
@@ -246,10 +246,11 @@ export function AddRouteModal({
             {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_LABEL_CODE}
           </label>
           <div
+            className="ui-input-group"
             style={{
               display: 'flex',
               alignItems: 'stretch',
-              borderRadius: '10px',
+              borderRadius: '12px',
               overflow: 'hidden',
               border: '1px solid var(--color-border-control)',
               background: 'var(--color-surface-default)',
@@ -260,10 +261,10 @@ export function AddRouteModal({
                 display: 'flex',
                 alignItems: 'center',
                 padding: '0 14px',
-                background: 'rgba(62, 207, 142, 0.15)',
-                color: 'var(--accent-color, #3ECF8E)',
-                fontWeight: 800,
-                fontSize: '13.5px',
+                background: 'var(--color-action-secondary-bg)',
+                color: 'var(--color-link)',
+                fontWeight: 700,
+                fontSize: '14px',
                 letterSpacing: '0.5px',
                 borderRight: '1px solid var(--color-border-control)',
                 userSelect: 'none',
@@ -280,15 +281,16 @@ export function AddRouteModal({
               style={{
                 flex: 1,
                 border: 'none',
+                outline: 'none',
                 borderRadius: 0,
                 background: 'transparent',
                 padding: '10px 14px',
-                fontSize: '13.5px',
+                fontSize: '14px',
                 fontWeight: 600,
               }}
             />
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px', marginLeft: '2px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', marginLeft: '2px' }}>
             {TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_INPUT_HINT}
           </div>
         </div>
@@ -298,7 +300,7 @@ export function AddRouteModal({
           <div>
             <label
               style={{
-                fontSize: '11.5px',
+                fontSize: '12px',
                 fontWeight: 700,
                 color: 'var(--text-secondary)',
                 display: 'block',
@@ -311,7 +313,7 @@ export function AddRouteModal({
               className="input-field"
               value={newMonth}
               onChange={(e) => onMonthChange(Number(e.target.value))}
-              style={{ width: '100%', padding: '10px', borderRadius: '10px' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '12px' }}
             >
               {MONTH_NAMES_ID.slice(1).map((name, idx) => (
                 <option key={idx + 1} value={idx + 1}>{name}</option>
@@ -321,7 +323,7 @@ export function AddRouteModal({
           <div>
             <label
               style={{
-                fontSize: '11.5px',
+                fontSize: '12px',
                 fontWeight: 700,
                 color: 'var(--text-secondary)',
                 display: 'block',
@@ -339,7 +341,7 @@ export function AddRouteModal({
                 const parsed = parseInt(e.target.value, 10);
                 onYearChange(isNaN(parsed) ? new Date().getFullYear() : parsed);
               }}
-              style={{ width: '100%', padding: '10px', borderRadius: '10px' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '12px' }}
               min={2020}
               max={2099}
             />
@@ -350,7 +352,7 @@ export function AddRouteModal({
         <div style={{ marginBottom: '14px' }}>
           <label
             style={{
-              fontSize: '11.5px',
+              fontSize: '12px',
               fontWeight: 700,
               color: 'var(--text-secondary)',
               display: 'block',
@@ -368,8 +370,8 @@ export function AddRouteModal({
             style={{
               width: '100%',
               padding: '10px 12px',
-              borderRadius: '10px',
-              fontSize: '12.5px',
+              borderRadius: '12px',
+              fontSize: '13px',
             }}
           />
         </div>
@@ -381,11 +383,11 @@ export function AddRouteModal({
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              fontSize: '11.5px',
+              fontSize: '12px',
               color: 'var(--warning-color, #f59e0b)',
               background: 'rgba(245, 158, 11, 0.12)',
               border: '1px solid rgba(245, 158, 11, 0.35)',
-              borderRadius: '10px',
+              borderRadius: '12px',
               padding: '10px 12px',
               marginBottom: '12px',
               lineHeight: '1.45',
@@ -398,20 +400,20 @@ export function AddRouteModal({
 
         {/* Live Status Inspection Badge */}
         {checkStatus === 'checking' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--accent-color)', marginBottom: '12px' }}>
-            <Loader2 className="spinner" size={14} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-link)', marginBottom: '12px' }}>
+            <Loader2 className="spinner" size={16} />
             <span>{checkMessage || TEXT_DASHBOARD.ROUTE_SELECTOR.CHECKING_ACCESS}</span>
           </div>
         )}
         {checkStatus === 'valid' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--success-color, #10b981)', marginBottom: '12px', fontWeight: 600 }}>
-            <CheckCircle size={15} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success-color)', marginBottom: '12px', fontWeight: 600 }}>
+            <CheckCircle size={16} />
             <span>{checkMessage}</span>
           </div>
         )}
         {checkStatus === 'invalid' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--danger-color)', marginBottom: '12px' }}>
-            <AlertCircle size={15} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--danger-color)', marginBottom: '12px' }}>
+            <AlertCircle size={16} />
             <span>{checkMessage}</span>
           </div>
         )}
@@ -439,7 +441,7 @@ export function AddRouteModal({
             gap: '8px',
           }}
         >
-          {isSaving ? <Loader2 className="spinner" size={18} /> : null}
+          {isSaving ? <Loader2 className="spinner" size={20} /> : null}
           <span>{isSaving ? TEXT_DASHBOARD.ROUTE_SELECTOR.SAVING_ROUTE : TEXT_DASHBOARD.ROUTE_SELECTOR.SAVE_ROUTE_BTN}</span>
         </button>
           </>

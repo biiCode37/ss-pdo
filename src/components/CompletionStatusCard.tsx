@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { FileText } from "lucide-react";
+
 import type { AnalyticsSummary } from "../utils/analytics";
 import { FormattedNoteText } from "./FormattedNoteText";
 import { TEXT_DASHBOARD } from "../constants/texts";
@@ -29,7 +29,6 @@ function CompletionStatusCardComponent({
         }}
       >
         <div className="analytics-card-title" style={{ marginTop: "2px" }}>
-          <FileText size={18} />
           <span>{TEXT_DASHBOARD.COMPLETION_STATUS.TITLE}</span>
         </div>
         <div
@@ -37,7 +36,7 @@ function CompletionStatusCardComponent({
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-end",
-            gap: "3px",
+            gap: "4px",
             flexShrink: 0,
           }}
         >
@@ -47,11 +46,11 @@ function CompletionStatusCardComponent({
                 fontSize: "12px",
                 fontWeight: 700,
                 fontFamily: "monospace",
-                color: "var(--accent-color)",
-                background: "rgba(62, 207, 142, 0.12)",
-                border: "1px solid rgba(62, 207, 142, 0.25)",
-                padding: "3px 8px",
-                borderRadius: "6px",
+                color: "var(--color-link)",
+                background: "var(--color-action-secondary-bg)",
+                border: "1px solid var(--color-border-subtle)",
+                padding: "4px 8px",
+                borderRadius: "8px",
                 whiteSpace: "nowrap",
                 letterSpacing: "0.5px",
               }}
@@ -61,9 +60,9 @@ function CompletionStatusCardComponent({
           )}
           <span
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 600,
-              color: hasNotes ? "var(--accent-color)" : "var(--text-secondary)",
+              color: hasNotes ? "var(--color-link)" : "var(--text-secondary)",
             }}
           >
             {TEXT_DASHBOARD.COMPLETION_STATUS.UNIT_COUNT(hasNotes ? summary.busesWithNotes.length : 0)}
@@ -98,11 +97,11 @@ function CompletionStatusCardComponent({
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-start",
-                padding: "9px 12px",
+                padding: "10px 12px",
                 background: "var(--input-bg)",
                 border: "1px solid var(--card-border)",
-                borderRadius: "10px",
-                fontSize: "12.5px",
+                borderRadius: "12px",
+                fontSize: "13px",
                 cursor: "pointer",
                 transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
                 gap: "10px",
@@ -111,19 +110,17 @@ function CompletionStatusCardComponent({
             >
               <span
                 style={{
-                  fontSize: "11.5px",
-                  fontWeight: 800,
-                  color: "#061a10",
-                  background:
-                    "linear-gradient(135deg, #3ECF8E 0%, #24B47E 100%)",
-                  padding: "3px 8px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "var(--color-success-fg)",
+                  background: "var(--color-success-bg)",
+                  padding: "4px 8px",
                   minWidth: "92px",
                   display: "inline-flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   letterSpacing: "0.3px",
-                  boxShadow: "0 2px 6px rgba(62, 207, 142, 0.35)",
                   whiteSpace: "nowrap",
                   flexShrink: 0,
                 }}

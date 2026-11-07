@@ -24,11 +24,11 @@ export const ToaTrendErrorState: React.FC<ToaTrendErrorStateProps> = ({
       <div
         style={{
           padding: "14px 16px",
-          borderRadius: "10px",
+          borderRadius: "12px",
           background: "rgba(245, 158, 11, 0.08)",
           border: "1px solid rgba(245, 158, 11, 0.25)",
           color: "var(--warning-text, #d97706)",
-          fontSize: "12.5px",
+          fontSize: "13px",
           display: "flex",
           alignItems: "center",
           gap: "8px",

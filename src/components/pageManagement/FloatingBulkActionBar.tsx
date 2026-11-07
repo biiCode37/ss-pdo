@@ -41,7 +41,7 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
         maxWidth: '680px',
         backgroundColor: 'var(--color-surface-default)',
         border: '1px solid var(--color-border-subtle)',
-        borderRadius: '20px',
+        borderRadius: '16px',
         boxShadow: '0 12px 36px var(--color-shadow, rgba(0, 0, 0, 0.28))',
         padding: '12px 16px',
         display: 'flex',
@@ -72,7 +72,7 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
             flexShrink: 0,
           }}
         >
-          <X size={15} />
+          <X size={16} />
         </button>
 
         <span
@@ -108,9 +108,9 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '5px',
-            padding: '7px 11px',
-            borderRadius: '10px',
+            gap: '6px',
+            padding: '8px 12px',
+            borderRadius: '12px',
             backgroundColor: 'var(--color-success-bg)',
             border: '1px solid var(--color-success-border)',
             color: 'var(--color-success-fg)',
@@ -121,7 +121,7 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
             minHeight: '36px',
           }}
         >
-          <CheckCircle2 size={14} />
+          <CheckCircle2 size={16} />
           <span>{TEXT_PAGE_MANAGEMENT.BULK_ACTION.ACTION_ENABLE_ALL}</span>
         </button>
 
@@ -134,9 +134,9 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '5px',
-            padding: '7px 11px',
-            borderRadius: '10px',
+            gap: '6px',
+            padding: '8px 12px',
+            borderRadius: '12px',
             backgroundColor: 'var(--color-warning-bg)',
             border: '1px solid var(--color-warning-border)',
             color: 'var(--color-warning-fg)',
@@ -147,7 +147,7 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
             minHeight: '36px',
           }}
         >
-          <AlertCircle size={14} />
+          <AlertCircle size={16} />
           <span>{TEXT_PAGE_MANAGEMENT.BULK_ACTION.ACTION_DISABLE_ALL}</span>
         </button>
 
@@ -160,9 +160,9 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '5px',
-            padding: '7px 11px',
-            borderRadius: '10px',
+            gap: '6px',
+            padding: '8px 12px',
+            borderRadius: '12px',
             backgroundColor: 'var(--color-action-primary-bg)',
             border: 'none',
             color: 'var(--color-action-primary-fg)',
@@ -173,7 +173,7 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
             minHeight: '36px',
           }}
         >
-          <Users size={14} />
+          <Users size={16} />
           <span>{TEXT_PAGE_MANAGEMENT.BULK_ACTION.ACTION_SET_ROLES}</span>
         </button>
 
@@ -186,9 +186,9 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '5px',
-            padding: '7px 11px',
-            borderRadius: '10px',
+            gap: '6px',
+            padding: '8px 12px',
+            borderRadius: '12px',
             backgroundColor: 'var(--color-surface-subtle)',
             border: '1px solid var(--color-border-subtle)',
             color: 'var(--color-text-secondary)',
@@ -199,7 +199,7 @@ export const FloatingBulkActionBar: React.FC<Props> = ({
             minHeight: '36px',
           }}
         >
-          <RotateCcw size={14} />
+          <RotateCcw size={16} />
           <span>{TEXT_PAGE_MANAGEMENT.BULK_ACTION.ACTION_RESET_DEFAULT}</span>
         </button>
       </div>

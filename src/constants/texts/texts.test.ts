@@ -425,6 +425,9 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_ALERTS.BULK_TRIP.DESCRIPTION_SELECTED(3)).toContain('3 unit terpilih');
     expect(TEXT_ALERTS.BULK_TRIP.SKIPPED_NOTE(2)).toContain('2 unit berstatus OFF/TO EVDAL dilewati');
     expect(TEXT_DASHBOARD.BUS_LIST.SELECT_MODE_BTN).toBe('Pilih');
+    expect(TEXT_DASHBOARD.BUS_LIST.FOCUS_COLUMN_ARIA).toBe('Pilih kolom yang ditampilkan');
+    expect(TEXT_DASHBOARD.BUS_LIST.PROGRESS_COUNT_SUFFIX(21, 0)).toBe('/21 unit (0%)');
+    expect(TEXT_DASHBOARD.ROUTE_SELECTOR.EXIT_ACCUMULATION_TITLE).toContain('mode akumulasi');
     expect(TEXT_DASHBOARD.BUS_LIST.SELECTED_COUNT(4)).toBe('4 unit dipilih');
     expect(TEXT_DASHBOARD.BUS_LIST.SELECTED_APPLY_BTN).toBe('Set Trip Terpilih');
     expect(TEXT_DASHBOARD.BUS_LIST.SELECT_UNIT_ARIA('TJ-01')).toBe('Pilih unit TJ-01');
@@ -439,7 +442,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY).toBe('Hanya Shift 2');
     expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE).toBe('Parsial');
     expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY).toBe('Belum Terisi');
-    expect(TEXT_DASHBOARD.UNIT_CARD.LABEL_RITASE).toBe('RITASE');
+    expect(TEXT_DASHBOARD.UNIT_CARD.LABEL_RITASE).toBe('Ritase');
     expect(TEXT_DASHBOARD.UNIT_CARD.ARIA_VIEW_DETAIL('101')).toBe('Lihat detail unit 101');
     expect(TEXT_DASHBOARD.BUS_LIST.ALL_UNITS_FILLED).toContain('selesai diisi');
   });

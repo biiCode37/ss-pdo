@@ -39,12 +39,12 @@ export const ToaShiftComparison: React.FC<ToaShiftComparisonProps> = ({
         border: `1px solid ${isError ? "var(--color-error-border)" : "var(--color-border-subtle)"}`,
       }}
     >
-      <span style={{ fontSize: "0.72rem", color: "var(--color-text-secondary)" }}>{label}</span>
+      <span style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{label}</span>
       <span
         data-testid={testId}
         style={{
-          fontSize: "0.95rem",
-          fontWeight: 800,
+          fontSize: "16px",
+          fontWeight: 700,
           color: isError ? "var(--color-error-fg)" : "var(--color-text-primary)",
         }}
       >
@@ -75,11 +75,11 @@ export const ToaShiftComparison: React.FC<ToaShiftComparisonProps> = ({
             background: "var(--color-error-bg)",
             border: "1px solid var(--color-error-border)",
             color: "var(--color-error-fg)",
-            fontSize: "0.78rem",
+            fontSize: "12px",
             fontWeight: 600,
           }}
         >
-          <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+          <AlertTriangle size={16} style={{ flexShrink: 0 }} />
           <span>{live.formattedText}</span>
         </div>
       )}

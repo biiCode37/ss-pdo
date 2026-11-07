@@ -60,10 +60,13 @@ describe('UnitStatusBadge', () => {
     });
   });
   it('refact_212: kartu berstatus hanya mewarnai garis tepi kiri & kanan, latar tetap netral', () => {
+    // refact_219: tepi status digambar oleh .bus-card::after (inset kiri & kanan) dari --unit-edge.
+    const after = indexCss.match(/\.bus-card::after\s*\{([^}]*)\}/)?.[1] ?? '';
+    expect(after).toMatch(/inset 4px 0 0 var\(--unit-edge/);
+    expect(after).toMatch(/inset -4px 0 0 var\(--unit-edge/);
     for (const cls of ['unit-status-off', 'unit-status-kendala', 'unit-status-to']) {
       const rule = indexCss.match(new RegExp(`\\.bus-card\\.${cls}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
-      expect(rule, cls).toMatch(/border-left-color:/);
-      expect(rule, cls).toMatch(/border-right-color:/);
+      expect(rule, cls).toMatch(/--unit-edge:\s*var\(--color-unit-/);
       expect(rule, cls).not.toMatch(/background/);
     }
   });

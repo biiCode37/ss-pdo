@@ -32,11 +32,13 @@ export const CrossDayKmIndicator: React.FC<CrossDayKmIndicatorProps> = ({
         alignItems: "center",
         gap: "8px",
         flexWrap: "wrap",
-        padding: "6px 10px",
+        // refact_222: kondisi normal tampil sebagai baris biasa (tanpa kotak di dalam kotak);
+        // kotak hanya untuk peringatan selisih ekstrem.
+        padding: isExtreme ? "6px 10px" : 0,
         borderRadius: "8px",
-        background: isExtreme ? "var(--color-warning-bg)" : "var(--color-info-bg)",
-        border: `1px solid ${isExtreme ? "var(--color-warning-border)" : "var(--color-info-border)"}`,
-        fontSize: "0.78rem",
+        background: isExtreme ? "var(--color-warning-bg)" : "transparent",
+        border: isExtreme ? "1px solid var(--color-warning-border)" : "none",
+        fontSize: "12px",
       }}
     >
       <span style={{ color: "var(--color-text-secondary)" }}>
@@ -47,7 +49,7 @@ export const CrossDayKmIndicator: React.FC<CrossDayKmIndicatorProps> = ({
       </span>
       <span
         style={{
-          fontWeight: 800,
+          fontWeight: 700,
           color: isExtreme ? "var(--color-warning-fg)" : "var(--color-info-fg)",
         }}
       >

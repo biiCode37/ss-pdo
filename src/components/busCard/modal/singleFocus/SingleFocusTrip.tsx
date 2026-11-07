@@ -6,7 +6,6 @@ import { TEXT_ALERTS } from "@/constants/texts";
 import type { BusInputFormReturn } from "../useBusInputForm";
 import {
   singleFocusPrimaryInputStyle,
-  getSingleFocusChipStyle,
   singleFocusLabelStyle,
 } from "./singleFocusStyles";
 
@@ -89,7 +88,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
             style={{
               ...singleFocusPrimaryInputStyle,
               textAlign: "center",
-              fontSize: "1.25rem",
+              fontSize: "20px",
             }}
           />
         </div>
@@ -114,7 +113,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
             style={{
               ...singleFocusPrimaryInputStyle,
               textAlign: "center",
-              fontSize: "1.25rem",
+              fontSize: "20px",
             }}
           />
         </div>
@@ -124,7 +123,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
       <div
         style={{
           padding: "10px 14px",
-          borderRadius: "10px",
+          borderRadius: "12px",
           background: "var(--color-info-bg)",
           border: "1px solid var(--color-info-border)",
           display: "flex",
@@ -134,7 +133,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
       >
         <span
           style={{
-            fontSize: "0.82rem",
+            fontSize: "13px",
             color: "var(--color-text-secondary)",
             fontWeight: 500,
           }}
@@ -144,8 +143,8 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
         <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
           <span
             style={{
-              fontSize: "1.2rem",
-              fontWeight: 800,
+              fontSize: "20px",
+              fontWeight: 700,
               color: "var(--color-info-fg)",
             }}
           >
@@ -153,7 +152,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
           </span>
           <span
             style={{
-              fontSize: "0.8rem",
+              fontSize: "13px",
               fontWeight: 600,
               color: "var(--color-text-secondary)",
             }}
@@ -169,7 +168,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
           type="button"
           data-testid="chip-toggle-keterangan"
           onClick={() => setShowKeterangan((prev) => !prev)}
-          style={getSingleFocusChipStyle(showKeterangan)}
+          className="ui-option-btn" aria-pressed={showKeterangan}
         >
           {showKeterangan
             ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KETERANGAN

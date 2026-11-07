@@ -7,14 +7,7 @@ import { parseIndonesianNumber } from "../utils/numberUtils";
 import { UnitStatusBadge } from "./ui/UnitStatusBadge";
 import { UNIT_STATUS_CARD_CLASS } from "./ui/unitStatusClass";
 import { TEXT_DASHBOARD } from "../constants/texts";
-import {
-  Bus,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  XCircle,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock, AlertCircle, XCircle } from "lucide-react";
 import type { UnitSummaryItem, UnitShiftStatus } from "../utils/unitAnalytics";
 
 interface Props {
@@ -23,110 +16,23 @@ interface Props {
   onSelectUnit: (unit: string) => void;
 }
 
+// Badge status shift memakai komponen bersama .ui-status (refact_221) — warna dari token teruji kontras.
+const STATUS_BADGE: Record<UnitShiftStatus, { tone: string; Icon: typeof CheckCircle2; label: string }> = {
+  FULL_COMPLETE: { tone: "success", Icon: CheckCircle2, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE },
+  SHIFT_1_ONLY: { tone: "warning", Icon: AlertCircle, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY },
+  SHIFT_2_ONLY: { tone: "warning", Icon: AlertCircle, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY },
+  INCOMPLETE: { tone: "warning", Icon: Clock, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE },
+  EMPTY: { tone: "neutral", Icon: XCircle, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY },
+};
+
 function renderStatusBadge(status: UnitShiftStatus) {
-  switch (status) {
-    case "FULL_COMPLETE":
-      return (
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(34, 197, 94, 0.12)",
-            color: "var(--success-color, #22c55e)",
-            border: "1px solid rgba(34, 197, 94, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "5px",
-          }}
-        >
-          <CheckCircle2 size={13} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE}</span>
-        </span>
-      );
-    case "SHIFT_1_ONLY":
-      return (
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(245, 158, 11, 0.12)",
-            color: "#f59e0b",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "5px",
-          }}
-        >
-          <AlertCircle size={13} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY}</span>
-        </span>
-      );
-    case "SHIFT_2_ONLY":
-      return (
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(245, 158, 11, 0.12)",
-            color: "#f59e0b",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "5px",
-          }}
-        >
-          <AlertCircle size={13} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY}</span>
-        </span>
-      );
-    case "INCOMPLETE":
-      return (
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(245, 158, 11, 0.12)",
-            color: "#f59e0b",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "5px",
-          }}
-        >
-          <Clock size={13} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE}</span>
-        </span>
-      );
-    case "EMPTY":
-    default:
-      return (
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 600,
-            padding: "3px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(255, 255, 255, 0.05)",
-            color: "var(--text-secondary)",
-            border: "1px solid var(--card-border)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "5px",
-          }}
-        >
-          <XCircle size={13} style={{ flexShrink: 0, opacity: 0.7 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY}</span>
-        </span>
-      );
-  }
+  const { tone, Icon, label } = STATUS_BADGE[status] ?? STATUS_BADGE.EMPTY;
+  return (
+    <span className="ui-status" data-tone={tone}>
+      <Icon size={16} aria-hidden="true" />
+      <span>{label}</span>
+    </span>
+  );
 }
 
 function UnitCardComponent({ item, onSelectUnit }: Props) {
@@ -182,14 +88,10 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
             display: "flex",
             alignItems: "center",
             gap: "8px",
-            fontWeight: 800,
+            fontWeight: 700,
             fontSize: "16px",
           }}
         >
-          <Bus
-            size={16}
-            style={{ color: "var(--accent-color)", flexShrink: 0 }}
-          />
           <span className="bus-card-unit">{item.unit}</span>
         </div>
 
@@ -223,7 +125,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
         {/* Kolom 2: Total KM Tempuh */}
         <div className="bus-metric-col">
           <span className="bus-metric-label">{TEXT_DASHBOARD.UNIT_CARD.LABEL_KM}</span>
-          <span className="bus-metric-value" style={{ color: "var(--shift1-color)" }}>
+          <span className="bus-metric-value">
             {item.totalKm > 0 ? (
               <>
                 {safeFormatNumber(item.totalKm)}
@@ -238,7 +140,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
         {/* Kolom 3: Total Pelanggan */}
         <div className="bus-metric-col">
           <span className="bus-metric-label">{TEXT_DASHBOARD.UNIT_CARD.LABEL_PASSENGER}</span>
-          <span className="bus-metric-value" style={{ color: "var(--text-primary)" }}>
+          <span className="bus-metric-value">
             {item.totalPassengers > 0 ? (
               <>
                 {safeFormatNumber(item.totalPassengers)}
@@ -257,7 +159,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
           style={{
             padding: "8px 16px 10px 16px",
             borderTop: "1px solid var(--card-border)",
-            fontSize: "11.5px",
+            fontSize: "12px",
             color: "var(--warning-text)",
             fontWeight: 600,
             letterSpacing: "0.01em",
@@ -268,7 +170,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
           }}
         >
           <AlertTriangle
-            size={13}
+            size={16}
             style={{ color: "var(--orange-color, #f97316)", flexShrink: 0, marginTop: "2px" }}
           />
           <div

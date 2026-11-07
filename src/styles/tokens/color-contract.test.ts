@@ -108,6 +108,21 @@ for (const fg of [
   }
 }
 
+// Kontrak Status Aktif (refact_221): kapsul/tab/segmen aktif harus terlihat jelas.
+// Teks di atas kapsul aktif >= 4.5:1, dan kapsul aktif vs wadahnya (semua permukaan + dock) >= 3:1.
+// Tint tipis (selection-bg, action-secondary-bg, rgba 0.1-0.2) DILARANG dipakai sebagai penanda aktif.
+contracts.push(["state-active-fg", "state-active-bg", 4.5]);
+for (const bg of [...surfaces, "dock-bg"]) {
+  contracts.push(["state-active-bg", bg, 3]);
+}
+// Ikon/label tidak aktif di dock tetap terbaca.
+contracts.push(["text-secondary", "dock-bg", 4.5]);
+contracts.push(["text-primary", "dock-bg", 4.5]);
+// Chip preset status aktif (refact_222): teks warna permukaan di atas latar solid status.
+for (const tone of ["warning-fg", "error-fg", "success-fg"]) {
+  contracts.push(["surface-default", tone, 4.5]);
+}
+
 // Kontrak Kartu Status Unit: teks kartu di atas latar status (4.5:1) & garis tepi status vs permukaan (3:1)
 for (const status of ["unit-off", "unit-kendala", "unit-to"]) {
   for (const fg of ["text-primary", "text-secondary"]) {

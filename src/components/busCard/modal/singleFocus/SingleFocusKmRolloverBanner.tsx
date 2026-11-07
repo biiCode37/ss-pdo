@@ -19,9 +19,9 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
       style={{
         marginTop: "8px",
         padding: "10px 12px",
-        borderRadius: "10px",
-        background: "var(--warning-badge-bg, rgba(245, 158, 11, 0.12))",
-        border: "1px solid var(--warning-color, rgba(245, 158, 11, 0.35))",
+        borderRadius: "12px",
+        background: "var(--warning-badge-bg)",
+        border: "1px solid var(--color-warning-fg)",
         display: "flex",
         flexDirection: "column",
         gap: "6px",
@@ -29,21 +29,21 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
     >
       <div
         style={{
-          fontSize: "0.8rem",
-          color: "var(--warning-banner-title, #9a3412)",
+          fontSize: "13px",
+          color: "var(--warning-banner-title)",
           display: "flex",
           alignItems: "center",
           gap: "6px",
           fontWeight: 700,
         }}
       >
-        <Sparkles size={14} />
+        <Sparkles size={16} />
         <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_DETECTED_TITLE}</span>
       </div>
       <div
         style={{
-          fontSize: "0.76rem",
-          color: "var(--warning-banner-text, var(--text-primary, #ededed))",
+          fontSize: "12px",
+          color: "var(--warning-banner-text)",
           lineHeight: 1.4,
         }}
       >
@@ -60,18 +60,18 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
           display: "inline-flex",
           alignItems: "center",
           gap: "4px",
-          padding: "5px 12px",
-          borderRadius: "6px",
-          background: "var(--warning-color, #f59e0b)",
-          color: "var(--warning-btn-text, #000)",
+          padding: "6px 12px",
+          borderRadius: "8px",
+          background: "var(--color-warning-fg)",
+          color: "var(--warning-btn-text)",
           fontWeight: 700,
-          fontSize: "0.78rem",
+          fontSize: "12px",
           border: "none",
           cursor: "pointer",
           marginTop: "2px",
         }}
       >
-        <Sparkles size={13} />
+        <Sparkles size={16} />
         <span>
           {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(
             suggestion.suggestedKm,

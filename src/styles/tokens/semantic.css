@@ -21,6 +21,11 @@
   --color-focus-ring: var(--p-blue-700);
   --color-selection-bg: var(--p-blue-100);
   --color-selection-fg: var(--p-blue-900);
+  /* Status aktif (tab, kapsul dock, segmen, toggle) — wajib >= 3:1 vs permukaan (refact_221) */
+  --color-state-active-bg: var(--p-blue-700);
+  --color-state-active-fg: var(--p-white);
+  --color-dock-bg: var(--p-white);
+  --color-dock-border: var(--p-slate-300);
   --color-success-bg: var(--p-green-100);
   --color-success-fg: var(--p-green-800);
   --color-success-border: var(--p-green-300);
@@ -104,6 +109,11 @@
   --color-focus-ring: var(--p-blue-300);
   --color-selection-bg: var(--p-info-950);
   --color-selection-fg: var(--p-blue-300);
+  /* Status aktif (tab, kapsul dock, segmen, toggle) — wajib >= 3:1 vs permukaan (refact_221) */
+  --color-state-active-bg: var(--p-blue-300);
+  --color-state-active-fg: var(--p-blue-950);
+  --color-dock-bg: var(--p-ink-800);
+  --color-dock-border: var(--p-slate-600);
   --color-success-bg: var(--p-green-950);
   --color-success-fg: var(--p-green-300);
   --color-success-border: var(--p-green-800);

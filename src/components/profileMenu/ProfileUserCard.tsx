@@ -31,7 +31,7 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
           style={{
             width: "40px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             background: "var(--text-secondary)",
             opacity: 0.3,
           }}
@@ -45,9 +45,9 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
           alignItems: "center",
           justifyContent: "space-between",
           padding: "12px 14px",
-          background: "rgba(62, 207, 142, 0.06)",
+          background: "var(--color-action-secondary-bg)",
           borderRadius: "16px",
-          border: "1px solid rgba(62, 207, 142, 0.18)",
+          border: "1px solid var(--color-border-subtle)",
           marginBottom: "20px",
         }}
       >
@@ -71,7 +71,6 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
                 borderRadius: "50%",
                 objectFit: "cover",
                 flexShrink: 0,
-                boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
               }}
             />
           ) : (
@@ -80,23 +79,22 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
                 width: "42px",
                 height: "42px",
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #3ECF8E, #24B47E)",
+                background: "var(--color-action-secondary-bg)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#061a10",
+                color: "var(--color-action-secondary-fg)",
                 flexShrink: 0,
-                boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
               }}
             >
-              <User size={22} />
+              <User size={24} />
             </div>
           )}
           <div style={{ minWidth: 0, overflow: "hidden" }}>
             <div
               style={{
                 fontWeight: 700,
-                fontSize: "14.5px",
+                fontSize: "14px",
                 color: "var(--text-primary)",
                 display: "flex",
                 alignItems: "center",
@@ -113,7 +111,7 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
             </div>
             <span
               style={{
-                fontSize: "11.5px",
+                fontSize: "12px",
                 color: "var(--text-secondary)",
                 display: "block",
                 whiteSpace: "nowrap",

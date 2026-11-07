@@ -164,8 +164,8 @@ export const PageAccessConfigModal: React.FC<Props> = ({
             maxWidth: '560px',
             maxHeight: '90vh',
             backgroundColor: 'var(--color-surface-default)',
-            borderTopLeftRadius: '24px',
-            borderTopRightRadius: '24px',
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
             border: '1px solid var(--color-border-subtle)',
             boxShadow: '0 -10px 40px var(--color-shadow, rgba(0, 0, 0, 0.35))',
             display: 'flex',
@@ -178,7 +178,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
           {/* Header Bar */}
           <div
             style={{
-              padding: '18px 20px 14px',
+              padding: '20px 20px 14px',
               borderBottom: '1px solid var(--color-border-subtle)',
               display: 'flex',
               alignItems: 'center',
@@ -187,7 +187,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
           >
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ShieldCheck size={18} style={{ color: 'var(--color-action-primary-bg)' }} />
+                <ShieldCheck size={20} style={{ color: 'var(--color-action-primary-bg)' }} />
                 <h3
                   style={{
                     margin: 0,
@@ -218,7 +218,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'var(--color-surface-subtle)',
                 border: '1px solid var(--color-border-subtle)',
                 color: 'var(--color-text-secondary)',
@@ -228,7 +228,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 cursor: 'pointer',
               }}
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           </div>
 
@@ -276,13 +276,13 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                     borderRadius: '12px',
                     border: 'none',
                     backgroundColor: isActive
-                      ? 'var(--color-surface-default)'
+                      ? "var(--color-state-active-bg)"
                       : 'transparent',
                     color: isActive
-                      ? 'var(--color-text-primary)'
+                      ? "var(--color-state-active-fg)"
                       : 'var(--color-text-secondary)',
                     fontWeight: isActive ? 600 : 500,
-                    fontSize: '12.5px',
+                    fontSize: '13px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -296,9 +296,9 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                   {tab.badge > 0 && (
                     <span
                       style={{
-                        padding: '1px 6px',
-                        borderRadius: '10px',
-                        fontSize: '10.5px',
+                        padding: '2px 6px',
+                        borderRadius: '12px',
+                        fontSize: '12px',
                         fontWeight: 700,
                         backgroundColor: isActive
                           ? 'var(--color-action-primary-bg)'
@@ -330,7 +330,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <p
                   style={{
-                    fontSize: '12.5px',
+                    fontSize: '13px',
                     color: 'var(--color-text-secondary)',
                     margin: '0 0 10px',
                   }}
@@ -350,7 +350,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '12px 14px',
-                        borderRadius: '14px',
+                        borderRadius: '12px',
                         backgroundColor: isChecked
                           ? 'var(--color-surface-subtle)'
                           : 'var(--color-surface-default)',
@@ -379,7 +379,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                         <div>
                           <span
                             style={{
-                              fontSize: '13.5px',
+                              fontSize: '14px',
                               fontWeight: 600,
                               color: 'var(--color-text-primary)',
                               display: 'block',
@@ -397,14 +397,14 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             alignItems: 'center',
                             gap: '4px',
                             padding: '2px 8px',
-                            borderRadius: '6px',
+                            borderRadius: '8px',
                             backgroundColor: 'var(--color-role-superadmin-bg)',
                             color: 'var(--color-role-superadmin-fg)',
-                            fontSize: '10.5px',
+                            fontSize: '12px',
                             fontWeight: 700,
                           }}
                         >
-                          <Lock size={10} />
+                          <Lock size={16} />
                           {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.SUPERADMIN_REQUIRED}
                         </span>
                       ) : (
@@ -439,7 +439,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       alignItems: 'center',
                       gap: '6px',
                       padding: '8px 12px',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       background: 'var(--color-action-primary-bg)',
                       border: 'none',
                       color: 'var(--color-action-primary-fg)',
@@ -448,7 +448,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <UserPlus size={14} />
+                    <UserPlus size={16} />
                     {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.BTN_ADD_ACCOUNT}
                   </button>
                 </div>
@@ -490,7 +490,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             padding: '4px',
                           }}
                         >
-                          <Trash2 size={15} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     ))}
@@ -498,7 +498,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 ) : (
                   <div
                     style={{
-                      padding: '36px 0',
+                      padding: '40px 0',
                       textAlign: 'center',
                       color: 'var(--color-text-muted)',
                       fontSize: '13px',
@@ -533,7 +533,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       alignItems: 'center',
                       gap: '6px',
                       padding: '8px 12px',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       background: 'var(--color-danger-bg)',
                       border: 'none',
                       color: 'var(--color-danger-fg)',
@@ -542,7 +542,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <Ban size={14} />
+                    <Ban size={16} />
                     {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.BTN_ADD_ACCOUNT}
                   </button>
                 </div>
@@ -584,7 +584,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             padding: '4px',
                           }}
                         >
-                          <Trash2 size={15} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     ))}
@@ -592,7 +592,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 ) : (
                   <div
                     style={{
-                      padding: '36px 0',
+                      padding: '40px 0',
                       textAlign: 'center',
                       color: 'var(--color-text-muted)',
                       fontSize: '13px',
@@ -620,7 +620,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
               type="button"
               onClick={onClose}
               style={{
-                padding: '10px 18px',
+                padding: '10px 20px',
                 borderRadius: '12px',
                 background: 'var(--color-surface-subtle)',
                 border: '1px solid var(--color-border-subtle)',
@@ -643,7 +643,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '10px 22px',
+                padding: '10px 24px',
                 borderRadius: '12px',
                 background: 'var(--color-action-primary-bg)',
                 border: 'none',

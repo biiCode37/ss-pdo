@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Sun, Moon, Split } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { TEXT_DASHBOARD } from "../constants/texts";
@@ -29,20 +29,19 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
         }}
       >
         <div className="analytics-card-title">
-          <Split size={18} style={{ color: "var(--color-shift-1-fg)" }} />
           <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TITLE}</span>
         </div>
         {dateBadge && (
           <span
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 700,
               fontFamily: "monospace",
               color: "var(--color-action-primary-bg)",
               background: "var(--color-selection-bg)",
               border: "1px solid var(--color-border-control)",
               padding: "2px 8px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               whiteSpace: "nowrap",
               letterSpacing: "0.5px",
             }}
@@ -89,16 +88,16 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Sun size={15} />
+              <Sun size={16} />
               <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_1}</span>
             </div>
             {totalBothShifts > 0 && (
               <span
                 style={{
-                  fontSize: "10.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--color-shift-1-bg)",
                   color: "var(--color-shift-1-fg)",
                   border: "1px solid var(--color-shift-1-border)",
@@ -144,16 +143,16 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Moon size={15} />
+              <Moon size={16} />
               <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_2}</span>
             </div>
             {totalBothShifts > 0 && (
               <span
                 style={{
-                  fontSize: "10.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--color-shift-2-bg)",
                   color: "var(--color-shift-2-fg)",
                   border: "1px solid var(--color-shift-2-border)",

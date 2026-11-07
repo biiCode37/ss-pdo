@@ -25,10 +25,10 @@ export const ReportHeadwaySection: React.FC<ReportHeadwaySectionProps> = ({
           marginBottom: "8px",
         }}
       >
-        <Clock size={14} color="var(--accent-color, #3ECF8E)" />
+        <Clock size={16} color="var(--color-action-primary-bg)" />
         <label
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--text-secondary)",
             textTransform: "uppercase",
@@ -50,7 +50,7 @@ export const ReportHeadwaySection: React.FC<ReportHeadwaySectionProps> = ({
           <label
             htmlFor="headway-fastest"
             style={{
-              fontSize: "11px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
               marginBottom: "4px",
@@ -79,7 +79,7 @@ export const ReportHeadwaySection: React.FC<ReportHeadwaySectionProps> = ({
           <label
             htmlFor="headway-slowest"
             style={{
-              fontSize: "11px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
               marginBottom: "4px",

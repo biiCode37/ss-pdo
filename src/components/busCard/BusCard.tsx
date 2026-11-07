@@ -88,15 +88,7 @@ function BusCardComponent({
         outlineOffset: isSelectionMode && isSelected ? "-2px" : undefined,
       }}
     >
-        <div
-          className="bus-card-header"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "12px 16px",
-          }}
-        >
+        <div className="bus-card-header">
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             {isSelectionMode && (
               <span
@@ -107,7 +99,7 @@ function BusCardComponent({
                 style={{
                   width: "20px",
                   height: "20px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   flexShrink: 0,
                   display: "inline-flex",
                   alignItems: "center",
@@ -120,10 +112,10 @@ function BusCardComponent({
                   transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
                 }}
               >
-                {isSelected && <Check size={14} strokeWidth={3} />}
+                {isSelected && <Check size={16} strokeWidth={3} />}
               </span>
             )}
-            <span className="bus-card-unit" style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
+            <span className="bus-card-unit" style={{ fontWeight: 700, fontSize: "16px" }}>{bus.unit}</span>
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
                 {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}
@@ -145,9 +137,9 @@ function BusCardComponent({
             <UnitStatusBadge keterangan={keteranganHariIni} />
             {isLoading && (
               <Loader2
-                size={14}
+                size={16}
                 className="spinner"
-                style={{ color: "var(--accent-color)", flexShrink: 0 }}
+                style={{ color: "var(--color-link)", flexShrink: 0 }}
               />
             )}
           </div>
@@ -168,8 +160,8 @@ function BusCardComponent({
         <div
           style={{
             padding: "8px 16px 10px 16px",
-            borderTop: "1px solid var(--card-border)",
-            fontSize: "11.5px",
+            borderTop: "1px solid var(--color-border-subtle)",
+            fontSize: "12px",
             color: "var(--color-text-primary)",
             fontWeight: 600,
             letterSpacing: "0.01em",
@@ -179,7 +171,7 @@ function BusCardComponent({
           }}
         >
           <AlertTriangle
-            size={13}
+            size={16}
             style={{
               color: "var(--color-text-secondary)",
               flexShrink: 0,
