@@ -5,7 +5,6 @@ import type { BusInputFormReturn } from "../useBusInputForm";
 import { ToaShiftComparison } from "../fields/ToaShiftComparison";
 import {
   singleFocusPrimaryInputStyle,
-  getSingleFocusChipStyle,
   singleFocusSubInputStyle,
   singleFocusLabelStyle,
   singleFocusHelperTextStyle,
@@ -68,7 +67,7 @@ export const SingleFocusToa: React.FC<SingleFocusToaProps> = ({
           <button
             type="button"
             onClick={() => setShowManual1((prev) => !prev)}
-            style={getSingleFocusChipStyle(showManual1)}
+            className="ui-option-btn" aria-pressed={showManual1}
           >
             {showManual1
               ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_MANUAL_S1
@@ -77,7 +76,7 @@ export const SingleFocusToa: React.FC<SingleFocusToaProps> = ({
           <button
             type="button"
             onClick={() => setShowKeterangan((prev) => !prev)}
-            style={getSingleFocusChipStyle(showKeterangan)}
+            className="ui-option-btn" aria-pressed={showKeterangan}
           >
             {showKeterangan
               ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KETERANGAN
@@ -148,7 +147,7 @@ export const SingleFocusToa: React.FC<SingleFocusToaProps> = ({
           <button
             type="button"
             onClick={() => setShowManual2((prev) => !prev)}
-            style={getSingleFocusChipStyle(showManual2)}
+            className="ui-option-btn" aria-pressed={showManual2}
           >
             {showManual2
               ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_MANUAL_S2
@@ -157,7 +156,7 @@ export const SingleFocusToa: React.FC<SingleFocusToaProps> = ({
           <button
             type="button"
             onClick={() => setShowKeterangan((prev) => !prev)}
-            style={getSingleFocusChipStyle(showKeterangan)}
+            className="ui-option-btn" aria-pressed={showKeterangan}
           >
             {showKeterangan
               ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KETERANGAN

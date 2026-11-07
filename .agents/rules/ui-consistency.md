@@ -6,7 +6,7 @@ Aturan warna, kontras WCAG, kamus teks `src/constants/texts/`, dan quality gate 
 
 ## 1. Pakai ulang dulu, baru buat
 Sebelum membuat komponen atau gaya baru, **wajib** cek yang sudah ada:
-- Kelas CSS: `.ui-button` (+ `--primary`, `--secondary`, `--danger`), `.ui-toolbar-btn` (+ `.ui-toolbar-select`, aktif via `aria-pressed`), `.ui-chip-btn` (+ `--accent/--warning/--error/--success/--info`, `.ui-chip-dot`), `.ui-input`, `.ui-input-group`, `.ui-status`, `.ui-chart-*` di `src/styles/components/`.
+- Kelas CSS: `.ui-button` (+ `--primary`, `--secondary`, `--danger`), `.ui-toolbar-btn` (+ `.ui-toolbar-select`, aktif via `aria-pressed`), `.ui-chip-btn` (+ `--accent/--warning/--error/--success/--info`, `.ui-chip-dot`), `.ui-segmented` + `.ui-segmented-btn` (tab/segmen), `.ui-option-btn` (opsi/preset, `data-tone` untuk preset status), `.ui-tone-panel`, `.ui-status[data-tone]` (badge status), `.ui-input`, `.ui-input-group`, `.ui-status`, `.ui-chart-*` di `src/styles/components/`.
 - Komponen: `ModalShell`, `UnitStatusBadge` (`src/components/ui/`), `RoleBadge`, `Skeletons`, `BusFormField` (`busCard/modal/fields/`).
 - Dialog/toast: `src/utils/alertUtils.ts` (`showSuccessToast`, `showConfirmDialog`, dll.) dan `pdoSwal` di `swalBase.ts`.
 

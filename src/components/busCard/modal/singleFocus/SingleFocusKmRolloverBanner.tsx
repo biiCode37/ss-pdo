@@ -20,8 +20,8 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
         marginTop: "8px",
         padding: "10px 12px",
         borderRadius: "12px",
-        background: "var(--warning-badge-bg, rgba(245, 158, 11, 0.12))",
-        border: "1px solid var(--warning-color, rgba(245, 158, 11, 0.35))",
+        background: "var(--warning-badge-bg)",
+        border: "1px solid var(--color-warning-fg)",
         display: "flex",
         flexDirection: "column",
         gap: "6px",
@@ -30,7 +30,7 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
       <div
         style={{
           fontSize: "13px",
-          color: "var(--warning-banner-title, #9a3412)",
+          color: "var(--warning-banner-title)",
           display: "flex",
           alignItems: "center",
           gap: "6px",
@@ -43,7 +43,7 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
       <div
         style={{
           fontSize: "12px",
-          color: "var(--warning-banner-text, var(--text-primary, #ededed))",
+          color: "var(--warning-banner-text)",
           lineHeight: 1.4,
         }}
       >
@@ -62,8 +62,8 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
           gap: "4px",
           padding: "6px 12px",
           borderRadius: "8px",
-          background: "var(--warning-color, #f59e0b)",
-          color: "var(--warning-btn-text, #000)",
+          background: "var(--color-warning-fg)",
+          color: "var(--warning-btn-text)",
           fontWeight: 700,
           fontSize: "12px",
           border: "none",

@@ -57,16 +57,16 @@ export const BusFormField = forwardRef<HTMLInputElement, BusFormFieldProps>(
       padding: "10px 12px",
       borderRadius: "12px",
       border: hasError
-        ? "1.5px solid rgba(239, 68, 68, 0.8)"
+        ? "1.5px solid var(--color-error-border)"
         : isHero
-          ? "1.5px solid var(--card-border, rgba(255, 255, 255, 0.12))"
-          : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+          ? "1.5px solid var(--color-border-subtle)"
+          : "1px solid var(--color-border-subtle)",
       background: disabled
-        ? "rgba(255, 255, 255, 0.03)"
+        ? "var(--color-surface-subtle)"
         : hasError
-          ? "rgba(239, 68, 68, 0.08)"
-          : "var(--input-bg, rgba(0, 0, 0, 0.25))",
-      color: "var(--text-primary, #ededed)",
+          ? "var(--color-error-bg)"
+          : "var(--color-surface-subtle)",
+      color: "var(--color-text-primary)",
       fontSize: isHero ? "18px" : "16px",
       fontWeight: isHero ? 700 : 400,
       boxSizing: "border-box",
@@ -79,7 +79,7 @@ export const BusFormField = forwardRef<HTMLInputElement, BusFormFieldProps>(
     const baseLabelStyle: React.CSSProperties = {
       fontSize: isHero ? "13px" : "12px",
       fontWeight: isHero ? 700 : 600,
-      color: "var(--text-secondary, #8b8b8b)",
+      color: "var(--color-text-secondary)",
       display: "block",
       marginBottom: isHero ? "6px" : "4px",
       ...labelStyle,

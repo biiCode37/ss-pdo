@@ -118,6 +118,10 @@ for (const bg of [...surfaces, "dock-bg"]) {
 // Ikon/label tidak aktif di dock tetap terbaca.
 contracts.push(["text-secondary", "dock-bg", 4.5]);
 contracts.push(["text-primary", "dock-bg", 4.5]);
+// Chip preset status aktif (refact_222): teks warna permukaan di atas latar solid status.
+for (const tone of ["warning-fg", "error-fg", "success-fg"]) {
+  contracts.push(["surface-default", tone, 4.5]);
+}
 
 // Kontrak Kartu Status Unit: teks kartu di atas latar status (4.5:1) & garis tepi status vs permukaan (3:1)
 for (const status of ["unit-off", "unit-kendala", "unit-to"]) {

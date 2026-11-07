@@ -160,7 +160,7 @@ function BusCardComponent({
         <div
           style={{
             padding: "8px 16px 10px 16px",
-            borderTop: "1px solid var(--card-border)",
+            borderTop: "1px solid var(--color-border-subtle)",
             fontSize: "12px",
             color: "var(--color-text-primary)",
             fontWeight: 600,

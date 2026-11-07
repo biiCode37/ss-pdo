@@ -306,7 +306,7 @@ describe("ShiftOptionChip Component", () => {
     expect(button).not.toBeNull();
     expect(button?.textContent).toBe("✓ Manual Shift 1");
     expect(button?.getAttribute("aria-pressed")).toBe("true");
-    expect(button?.style.background).toContain("rgba(56, 189, 248, 0.15)");
+    expect(button?.classList.contains("ui-option-btn")).toBe(true);
   });
 });
 

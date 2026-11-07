@@ -110,16 +110,16 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
           borderRadius: "12px",
           background:
             kmLiveS1.status === "negative"
-              ? "rgba(239, 68, 68, 0.12)"
+              ? "var(--color-error-bg)"
               : kmLiveS1.status === "extreme"
-                ? "rgba(245, 158, 11, 0.12)"
-                : "rgba(56, 189, 248, 0.08)",
+                ? "var(--color-warning-bg)"
+                : "var(--color-info-bg)",
           border: `1px solid ${
             kmLiveS1.status === "negative"
-              ? "rgba(239, 68, 68, 0.3)"
+              ? "var(--color-error-border)"
               : kmLiveS1.status === "extreme"
-                ? "rgba(245, 158, 11, 0.3)"
-                : "rgba(56, 189, 248, 0.2)"
+                ? "var(--color-warning-border)"
+                : "var(--color-info-border)"
           }`,
           display: "flex",
           flexDirection: "column",
@@ -136,10 +136,10 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-            <span style={{ color: "var(--text-secondary, #94a3b8)" }}>
+            <span style={{ color: "var(--color-text-secondary)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S1}
             </span>
-            <span style={{ fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+            <span style={{ fontWeight: 700, color: "var(--color-text-primary)" }}>
               {kmAwal1 || TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}
             </span>
             {form.previousDayKmAkhir2 && !isKmAwalSaved && (
@@ -148,7 +148,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   fontSize: "12px",
                   padding: "2px 6px",
                   borderRadius: "8px",
-                  background: "rgba(245, 158, 11, 0.15)",
+                  background: "var(--color-warning-bg)",
                   color: "var(--color-warning-fg)",
                   fontWeight: 600,
                 }}
@@ -165,8 +165,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             type="button"
             onClick={() => setShowKmAwalEdit((prev) => !prev)}
             style={{
-              background: "rgba(56, 189, 248, 0.12)",
-              border: "1px solid rgba(56, 189, 248, 0.25)",
+              background: "var(--color-info-bg)",
+              border: "1px solid var(--color-info-border)",
               borderRadius: "8px",
               color: "var(--color-link)",
               fontSize: "12px",
@@ -199,11 +199,11 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               justifyContent: "space-between",
               alignItems: "center",
               paddingTop: "6px",
-              borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.08))",
+              borderTop: "1px dashed var(--color-border-subtle)",
               fontSize: "13px",
             }}
           >
-            <span style={{ color: "var(--text-secondary, #94a3b8)" }}>
+            <span style={{ color: "var(--color-text-secondary)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S1}
             </span>
             <span
@@ -213,16 +213,16 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                 borderRadius: "8px",
                 background:
                   kmLiveS1.status === "negative"
-                    ? "rgba(239, 68, 68, 0.2)"
+                    ? "var(--color-error-bg)"
                     : kmLiveS1.status === "extreme"
-                      ? "rgba(245, 158, 11, 0.2)"
-                      : "rgba(56, 189, 248, 0.15)",
+                      ? "var(--color-warning-bg)"
+                      : "var(--color-info-bg)",
                 color:
                   kmLiveS1.status === "negative"
-                    ? "#f87171"
+                    ? "var(--color-error-fg)"
                     : kmLiveS1.status === "extreme"
-                      ? "#f59e0b"
-                      : "#38bdf8",
+                      ? "var(--color-warning-fg)"
+                      : "var(--color-link)",
               }}
             >
               {kmDistanceS1} KM
@@ -244,8 +244,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               borderRadius: "8px",
               background:
                 kmLiveS1.status === "negative"
-                  ? "rgba(239, 68, 68, 0.1)"
-                  : "rgba(245, 158, 11, 0.1)",
+                  ? "var(--color-error-bg)"
+                  : "var(--color-warning-bg)",
             }}
           >
             <AlertTriangle size={16} style={{ flexShrink: 0 }} />
@@ -255,7 +255,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
 
         {/* Collapsible Edit KM Awal S1 */}
         {showKmAwalEdit && (
-          <div style={{ marginTop: "6px", paddingTop: "6px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.08))" }}>
+          <div style={{ marginTop: "6px", paddingTop: "6px", borderTop: "1px dashed var(--color-border-subtle)" }}>
             <BusFormField
               id="input-km-awal-1"
               label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S1}
@@ -273,8 +273,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   marginTop: "8px",
                   padding: "8px 12px",
                   borderRadius: "8px",
-                  background: "rgba(239, 68, 68, 0.12)",
-                  border: "1px solid rgba(239, 68, 68, 0.35)",
+                  background: "var(--color-error-bg)",
+                  border: "1px solid var(--color-error-border)",
                   fontSize: "12px",
                   color: "var(--color-error-fg)",
                   display: "flex",
@@ -292,7 +292,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     alignItems: "center",
                     gap: "6px",
                     cursor: "pointer",
-                    color: "var(--text-secondary, #cbd5e1)",
+                    color: "var(--color-text-secondary)",
                     fontSize: "12px",
                   }}
                 >
@@ -302,7 +302,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     onChange={(e) =>
                       form.handleToggleBypassOdometerReset(e.target.checked)
                     }
-                    style={{ accentColor: "#38bdf8" }}
+                    style={{ accentColor: "var(--color-action-primary-bg)" }}
                   />
                   <span>
                     {TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL}
@@ -317,8 +317,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   marginTop: "8px",
                   padding: "10px 12px",
                   borderRadius: "12px",
-                  background: "rgba(245, 158, 11, 0.12)",
-                  border: "1px solid rgba(245, 158, 11, 0.35)",
+                  background: "var(--color-warning-bg)",
+                  border: "1px solid var(--color-warning-border)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "6px",
@@ -337,7 +337,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   <Sparkles size={16} />
                   <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_DETECTED_TITLE}</span>
                 </div>
-                <div style={{ fontSize: "12px", color: "var(--text-secondary, #cbd5e1)", lineHeight: 1.4 }}>
+                <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", lineHeight: 1.4 }}>
                   {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_SUGGESTION_TEXT(
                     form.smartRolloverSuggestion.suggestedKm,
                     form.smartRolloverSuggestion.diff,
@@ -353,8 +353,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     gap: "4px",
                     padding: "4px 10px",
                     borderRadius: "8px",
-                    background: "#f59e0b",
-                    color: "#000",
+                    background: "var(--color-warning-fg)",
+                    color: "var(--color-text-secondary)",
                     fontWeight: 700,
                     fontSize: "12px",
                     border: "none",
@@ -400,8 +400,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
           style={{
             padding: "10px 12px",
             borderRadius: "12px",
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+            background: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
           }}
         >
           <BusFormField
@@ -426,8 +426,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
           style={{
             padding: "10px 12px",
             borderRadius: "12px",
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+            background: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
           }}
         >
           <KeteranganPresetBar
@@ -448,9 +448,9 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               width: "100%",
               padding: "10px 12px",
               borderRadius: "12px",
-              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-              background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
-              color: "var(--text-primary, #ededed)",
+              border: "1px solid var(--color-border-subtle)",
+              background: "var(--color-surface-subtle)",
+              color: "var(--color-text-primary)",
               fontSize: "16px",
               boxSizing: "border-box",
               resize: "none",

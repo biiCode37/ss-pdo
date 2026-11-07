@@ -107,16 +107,16 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           borderRadius: "12px",
           background:
             kmLiveS2.status === "negative"
-              ? "rgba(239, 68, 68, 0.12)"
+              ? "var(--color-error-bg)"
               : kmLiveS2.status === "extreme"
-                ? "rgba(245, 158, 11, 0.12)"
-                : "rgba(192, 132, 252, 0.08)",
+                ? "var(--color-warning-bg)"
+                : "var(--color-shift-2-bg)",
           border: `1px solid ${
             kmLiveS2.status === "negative"
-              ? "rgba(239, 68, 68, 0.3)"
+              ? "var(--color-error-border)"
               : kmLiveS2.status === "extreme"
-                ? "rgba(245, 158, 11, 0.3)"
-                : "rgba(192, 132, 252, 0.2)"
+                ? "var(--color-warning-border)"
+                : "var(--color-shift-2-border)"
           }`,
           display: "flex",
           flexDirection: "column",
@@ -135,10 +135,10 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-            <span style={{ color: "var(--text-secondary, #94a3b8)" }}>
+            <span style={{ color: "var(--color-text-secondary)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S2}
             </span>
-            <span style={{ fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
+            <span style={{ fontWeight: 700, color: "var(--color-text-primary)" }}>
               {kmAwal2 || TEXT_ALERTS.BUS_INPUT_MODAL.NOT_FILLED_YET}
             </span>
 
@@ -149,8 +149,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                 onClick={handleCopyKmAkhir1ToAwal2}
                 title={TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_TITLE}
                 style={{
-                  background: "rgba(56, 189, 248, 0.15)",
-                  border: "1px solid rgba(56, 189, 248, 0.3)",
+                  background: "var(--color-info-bg)",
+                  border: "1px solid var(--color-info-border)",
                   color: "var(--color-link)",
                   fontSize: "12px",
                   fontWeight: 700,
@@ -172,8 +172,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             type="button"
             onClick={() => setShowKmAwalEdit((prev) => !prev)}
             style={{
-              background: "rgba(192, 132, 252, 0.15)",
-              border: "1px solid rgba(192, 132, 252, 0.3)",
+              background: "var(--color-shift-2-bg)",
+              border: "1px solid var(--color-shift-2-border)",
               borderRadius: "8px",
               color: "var(--color-shift-2-fg)",
               fontSize: "12px",
@@ -199,11 +199,11 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               justifyContent: "space-between",
               alignItems: "center",
               paddingTop: "6px",
-              borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.08))",
+              borderTop: "1px dashed var(--color-border-subtle)",
               fontSize: "13px",
             }}
           >
-            <span style={{ color: "var(--text-secondary, #94a3b8)" }}>
+            <span style={{ color: "var(--color-text-secondary)" }}>
               {TEXT_ALERTS.BUS_INPUT_MODAL.DISTANCE_LABEL_S2}
             </span>
             <span
@@ -213,16 +213,16 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                 borderRadius: "8px",
                 background:
                   kmLiveS2.status === "negative"
-                    ? "rgba(239, 68, 68, 0.2)"
+                    ? "var(--color-error-bg)"
                     : kmLiveS2.status === "extreme"
-                      ? "rgba(245, 158, 11, 0.2)"
-                      : "rgba(192, 132, 252, 0.15)",
+                      ? "var(--color-warning-bg)"
+                      : "var(--color-shift-2-bg)",
                 color:
                   kmLiveS2.status === "negative"
-                    ? "#f87171"
+                    ? "var(--color-error-fg)"
                     : kmLiveS2.status === "extreme"
-                      ? "#f59e0b"
-                      : "#c084fc",
+                      ? "var(--color-warning-fg)"
+                      : "var(--color-shift-2-fg)",
               }}
             >
               {kmDistanceS2} KM
@@ -255,7 +255,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
 
         {/* Collapsible Edit KM Awal S2 */}
         {showKmAwalEdit && (
-          <div style={{ marginTop: "6px", paddingTop: "6px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.08))" }}>
+          <div style={{ marginTop: "6px", paddingTop: "6px", borderTop: "1px dashed var(--color-border-subtle)" }}>
             <BusFormField
               id="input-km-awal-2"
               label={TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_AWAL_S2}
@@ -279,8 +279,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                   marginTop: "8px",
                   padding: "8px 12px",
                   borderRadius: "8px",
-                  background: "rgba(239, 68, 68, 0.12)",
-                  border: "1px solid rgba(239, 68, 68, 0.35)",
+                  background: "var(--color-error-bg)",
+                  border: "1px solid var(--color-error-border)",
                   fontSize: "12px",
                   color: "var(--color-error-fg)",
                   display: "flex",
@@ -325,8 +325,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           style={{
             padding: "10px 12px",
             borderRadius: "12px",
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+            background: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
           }}
         >
           <BusFormField
@@ -351,8 +351,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
           style={{
             padding: "10px 12px",
             borderRadius: "12px",
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
+            background: "var(--color-surface-subtle)",
+            border: "1px solid var(--color-border-subtle)",
           }}
         >
           <KeteranganPresetBar
@@ -373,9 +373,9 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               width: "100%",
               padding: "10px 12px",
               borderRadius: "12px",
-              border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-              background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
-              color: "var(--text-primary, #ededed)",
+              border: "1px solid var(--color-border-subtle)",
+              background: "var(--color-surface-subtle)",
+              color: "var(--color-text-primary)",
               fontSize: "16px",
               boxSizing: "border-box",
               resize: "none",

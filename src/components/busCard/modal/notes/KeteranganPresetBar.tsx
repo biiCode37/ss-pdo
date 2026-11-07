@@ -81,226 +81,64 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
   const texts = TEXT_ALERTS.BUS_INPUT_MODAL.PRESETS;
   const hasValue = Boolean(value && value.trim());
 
+  // refact_222: satu komponen tombol opsi (.ui-option-btn). Preset bermakna status
+  // memakai data-tone agar warna aktifnya tetap memberi petunjuk (OFF kuning, TO merah, OKB/Renop hijau).
+  const presets: Array<{ key: string; label: string; active: boolean; tone?: string; onClick: () => void; show: boolean }> = [
+    { key: "ba", label: texts.BTN_BA, active: isBaActive, onClick: handleToggleBa, show: true },
+    { key: "off", label: texts.BTN_OFF, active: isOffActive, tone: "warning", onClick: handleToggleOff, show: true },
+    { key: "to", label: texts.BTN_TO_EVDAL, active: isToEvdalActive, tone: "error", onClick: handleToggleToEvdal, show: true },
+    { key: "okb", label: texts.BTN_OKB, active: isOkbActive, tone: "success", onClick: handleToggleOkb, show: isShift2 },
+    { key: "renop", label: texts.BTN_RENOP, active: isRenopActive, tone: "success", onClick: handleToggleRenop, show: isShift2 },
+  ];
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "8px" }}>
-      {shiftLabel && (
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 700,
-            color: "var(--text-secondary, #94a3b8)",
-            textTransform: "uppercase",
-            letterSpacing: "0.5px",
-          }}
-        >
-          {shiftLabel}
-        </span>
-      )}
+    <div className="ket-presets">
+      {shiftLabel && <span className="ket-presets-label">{shiftLabel}</span>}
 
-      {/* Baris 1: Preset Buttons Utama [BA] [OFF] [TO EVDAL] [OKB] [Renop] dan Tombol [Reset] */}
-      <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-        {/* Tombol Preset BA (Multi-select) */}
-        <button
-          type="button"
-          onClick={handleToggleBa}
-          style={{
-            padding: "6px 12px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            fontWeight: 700,
-            cursor: "pointer",
-            border: isBaActive
-              ? "1px solid var(--color-action-primary-bg)"
-              : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-            background: isBaActive
-              ? "rgba(56, 189, 248, 0.2)"
-              : "rgba(255, 255, 255, 0.05)",
-            color: isBaActive
-              ? "var(--color-link)"
-              : "var(--text-primary, #f8fafc)",
-            transition: "all 0.15s ease",
-          }}
-        >
-          {texts.BTN_BA}
-        </button>
-
-        {/* Tombol Preset OFF (Kuning, Multi-select) */}
-        <button
-          type="button"
-          onClick={handleToggleOff}
-          style={{
-            padding: "6px 12px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            fontWeight: 700,
-            cursor: "pointer",
-            border: isOffActive
-              ? "1px solid #eab308"
-              : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-            background: isOffActive
-              ? "rgba(234, 179, 8, 0.2)"
-              : "rgba(255, 255, 255, 0.05)",
-            color: isOffActive ? "var(--color-warning-fg)" : "var(--text-primary, #f8fafc)",
-            transition: "all 0.15s ease",
-          }}
-        >
-          {texts.BTN_OFF}
-        </button>
-
-        {/* Tombol Preset TO EVDAL (Merah, Multi-select) */}
-        <button
-          type="button"
-          onClick={handleToggleToEvdal}
-          style={{
-            padding: "6px 12px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            fontWeight: 700,
-            cursor: "pointer",
-            border: isToEvdalActive
-              ? "1px solid #ef4444"
-              : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-            background: isToEvdalActive
-              ? "rgba(239, 68, 68, 0.2)"
-              : "rgba(255, 255, 255, 0.05)",
-            color: isToEvdalActive ? "var(--color-error-fg)" : "var(--text-primary, #f8fafc)",
-            transition: "all 0.15s ease",
-          }}
-        >
-          {texts.BTN_TO_EVDAL}
-        </button>
-
-        {/* Khusus Shift 2: Tombol Preset OKB (HIJAU saat aktif, Multi-select) */}
-        {isShift2 && (
+      <div className="ket-presets-row">
+        {presets.filter((p) => p.show).map((p) => (
           <button
+            key={p.key}
             type="button"
-            onClick={handleToggleOkb}
-            style={{
-              padding: "6px 12px",
-              borderRadius: "8px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer",
-              border: isOkbActive
-                ? "1px solid var(--color-success-border)"
-                : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-              background: isOkbActive
-                ? "rgba(16, 185, 129, 0.2)"
-                : "rgba(255, 255, 255, 0.05)",
-              color: isOkbActive ? "var(--color-success-fg)" : "var(--text-primary, #f8fafc)",
-              transition: "all 0.15s ease",
-            }}
+            className="ui-option-btn"
+            data-tone={p.tone}
+            aria-pressed={p.active}
+            onClick={p.onClick}
           >
-            {texts.BTN_OKB}
+            {p.label}
           </button>
-        )}
+        ))}
 
-        {/* Khusus Shift 2: Tombol Preset Renop (Emerald / Hijau, Multi-select) */}
-        {isShift2 && (
-          <button
-            type="button"
-            onClick={handleToggleRenop}
-            style={{
-              padding: "6px 12px",
-              borderRadius: "8px",
-              fontSize: "12px",
-              fontWeight: 700,
-              cursor: "pointer",
-              border: isRenopActive
-                ? "1px solid var(--color-success-border)"
-                : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-              background: isRenopActive
-                ? "rgba(16, 185, 129, 0.2)"
-                : "rgba(255, 255, 255, 0.05)",
-              color: isRenopActive ? "var(--color-success-fg)" : "var(--text-primary, #f8fafc)",
-              transition: "all 0.15s ease",
-            }}
-          >
-            {texts.BTN_RENOP}
-          </button>
-        )}
-
-        {/* Tombol Reset (Membersihkan semua teks & preset) */}
         <button
           type="button"
           data-testid="reset-keterangan-btn"
+          className="ui-option-btn ket-presets-reset"
           onClick={handleReset}
           disabled={!hasValue}
-          style={{
-            marginLeft: "auto",
-            padding: "6px 12px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            fontWeight: 600,
-            cursor: hasValue ? "pointer" : "default",
-            border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
-            background: hasValue
-              ? "rgba(255, 255, 255, 0.08)"
-              : "rgba(255, 255, 255, 0.03)",
-            color: hasValue
-              ? "var(--text-secondary, #94a3b8)"
-              : "rgba(255, 255, 255, 0.2)",
-            opacity: hasValue ? 1 : 0.4,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            transition: "all 0.15s ease",
-          }}
           title={texts.RESET_TOOLTIP}
           aria-label={texts.RESET_TOOLTIP}
         >
-          <RotateCcw size={16} />
+          <RotateCcw size={16} aria-hidden="true" />
           <span>{texts.BTN_RESET}</span>
         </button>
       </div>
 
-      {/* Baris 2: Pill Ringkas Jenis BA [01, 02, 03, 04] (Hanya muncul jika BA aktif) */}
+      {/* Kode BA (hanya saat BA aktif) */}
       {isBaActive && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            flexWrap: "wrap",
-            padding: "6px 8px",
-            borderRadius: "12px",
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
-          }}
-        >
-          {(texts.BA_CODES || ["01", "02", "03", "04"]).map((code) => {
-            const isCodeActive = currentBaCode === code;
-            const title =
-              texts.BA_TYPES[code as keyof typeof texts.BA_TYPES] || `BA.${code}`;
-            return (
-              <button
-                key={code}
-                type="button"
-                data-ba-code={code}
-                title={title}
-                onClick={() => handleSelectBaCode(code as "01" | "02" | "03" | "04")}
-                style={{
-                  padding: "4px 10px",
-                  borderRadius: "8px",
-                  fontSize: "12px",
-                  fontWeight: isCodeActive ? 700 : 600,
-                  cursor: "pointer",
-                  border: isCodeActive
-                    ? "1px solid var(--color-action-primary-bg)"
-                    : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
-                  background: isCodeActive
-                    ? "rgba(56, 189, 248, 0.25)"
-                    : "rgba(255, 255, 255, 0.05)",
-                  color: isCodeActive
-                    ? "var(--color-link)"
-                    : "var(--text-secondary, #94a3b8)",
-                  transition: "all 0.15s ease",
-                }}
-              >
-                {code}
-              </button>
-            );
-          })}
+        <div className="ket-presets-row">
+          {(texts.BA_CODES || ["01", "02", "03", "04"]).map((code) => (
+            <button
+              key={code}
+              type="button"
+              data-ba-code={code}
+              className="ui-option-btn"
+              aria-pressed={currentBaCode === code}
+              title={texts.BA_TYPES[code as keyof typeof texts.BA_TYPES] || `BA.${code}`}
+              onClick={() => handleSelectBaCode(code as "01" | "02" | "03" | "04")}
+            >
+              {code}
+            </button>
+          ))}
         </div>
       )}
     </div>

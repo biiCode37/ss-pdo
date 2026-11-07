@@ -154,7 +154,7 @@ export function BusInputModal({
         alignItems: "flex-end",
         justifyContent: "center",
         bottom: isKeyboardOpen ? `${keyboardHeight}px` : 0,
-        backgroundColor: "rgba(0, 0, 0, 0.65)",
+        backgroundColor: "var(--color-surface-subtle)",
         backdropFilter: "blur(6px)",
         WebkitBackdropFilter: "blur(6px)",
         opacity: isClosing ? 0 : isMounted ? 1 : 0,
@@ -176,10 +176,10 @@ export function BusInputModal({
         padding: isKeyboardOpen
           ? "12px 16px 8px 16px"
           : "18px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px",
-        background: "var(--card-bg, #171717)",
-        border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
+        background: "var(--color-surface-default)",
+        border: "1px solid var(--color-border-subtle)",
         borderBottom: "none",
-        boxShadow: "0 -10px 40px rgba(0, 0, 0, 0.5)",
+        boxShadow: "0 -10px 40px var(--color-shadow)",
         transform:
           isClosing || !isMounted
             ? "translateY(100%) scale(0.95)"
@@ -211,8 +211,8 @@ export function BusInputModal({
               margin: "10px 0 0 0",
               padding: "10px 12px",
               borderRadius: "12px",
-              background: "var(--color-warning-bg, rgba(234, 179, 8, 0.12))",
-              border: "1px solid var(--color-warning-border, rgba(234, 179, 8, 0.35))",
+              background: "var(--color-warning-bg)",
+              border: "1px solid var(--color-warning-border)",
               display: "flex",
               flexDirection: "column",
               gap: "8px",
@@ -225,7 +225,7 @@ export function BusInputModal({
                 gap: "8px",
                 fontSize: "13px",
                 lineHeight: 1.45,
-                color: "var(--color-warning-fg, #eab308)",
+                color: "var(--color-warning-fg)",
               }}
             >
               <AlertCircle size={16} style={{ flexShrink: 0, marginTop: "2px" }} />
@@ -246,8 +246,8 @@ export function BusInputModal({
                 gap: "6px",
                 padding: "6px 12px",
                 borderRadius: "8px",
-                background: "var(--color-warning-fg, #eab308)",
-                color: "#000",
+                background: "var(--color-warning-fg)",
+                color: "var(--color-text-secondary)",
                 fontWeight: 700,
                 fontSize: "12px",
                 border: "none",
@@ -277,12 +277,12 @@ export function BusInputModal({
               borderRadius: "8px",
               background:
                 form.validationErrors.length > 0
-                  ? "rgba(239, 68, 68, 0.15)"
-                  : "rgba(56, 189, 248, 0.1)",
+                  ? "var(--color-error-bg)"
+                  : "var(--color-info-bg)",
               border:
                 form.validationErrors.length > 0
-                  ? "1px solid rgba(239, 68, 68, 0.35)"
-                  : "1px solid rgba(56, 189, 248, 0.3)",
+                  ? "1px solid var(--color-error-border)"
+                  : "1px solid var(--color-info-border)",
               color: form.validationErrors.length > 0 ? "var(--color-error-fg)" : "inherit",
               fontSize: "13px",
             }}
@@ -320,8 +320,8 @@ export function BusInputModal({
                     gap: "6px",
                     padding: "6px 12px",
                     borderRadius: "8px",
-                    background: "#f59e0b",
-                    color: "#000",
+                    background: "var(--color-warning-fg)",
+                    color: "var(--color-text-secondary)",
                     fontWeight: 700,
                     fontSize: "12px",
                     border: "none",
@@ -347,7 +347,7 @@ export function BusInputModal({
                   alignItems: "center",
                   gap: "6px",
                   fontSize: "12px",
-                  color: "var(--text-secondary, #cbd5e1)",
+                  color: "var(--color-text-secondary)",
                   cursor: "pointer",
                 }}
               >

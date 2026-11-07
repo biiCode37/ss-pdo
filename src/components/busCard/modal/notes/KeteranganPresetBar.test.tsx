@@ -150,7 +150,8 @@ describe("KeteranganPresetBar Component", () => {
     const offBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "OFF"
     );
-    expect(offBtnActive?.style.color).toContain("var(--color-warning-fg)");
+    expect(offBtnActive?.getAttribute("aria-pressed")).toBe("true");
+    expect(offBtnActive?.getAttribute("data-tone")).toBe("warning");
     act(() => {
       offBtnActive!.click();
     });
@@ -178,7 +179,8 @@ describe("KeteranganPresetBar Component", () => {
     const evdalBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "TO EVDAL"
     );
-    expect(evdalBtnActive?.style.color).toContain("var(--color-error-fg)");
+    expect(evdalBtnActive?.getAttribute("aria-pressed")).toBe("true");
+    expect(evdalBtnActive?.getAttribute("data-tone")).toBe("error");
     act(() => {
       evdalBtnActive!.click();
     });
@@ -224,7 +226,8 @@ describe("KeteranganPresetBar Component", () => {
     const okbBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "OKB"
     );
-    expect(okbBtnActive?.style.color).toContain("var(--color-success-fg)");
+    expect(okbBtnActive?.getAttribute("aria-pressed")).toBe("true");
+    expect(okbBtnActive?.getAttribute("data-tone")).toBe("success");
     act(() => {
       okbBtnActive!.click();
     });
@@ -254,7 +257,8 @@ describe("KeteranganPresetBar Component", () => {
     const renopBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "Renop"
     );
-    expect(renopBtnActive?.style.color).toContain("var(--color-success-fg)");
+    expect(renopBtnActive?.getAttribute("aria-pressed")).toBe("true");
+    expect(renopBtnActive?.getAttribute("data-tone")).toBe("success");
     act(() => {
       renopBtnActive!.click();
     });

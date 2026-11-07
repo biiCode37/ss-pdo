@@ -54,7 +54,7 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
     <div
       style={{
         paddingTop: "6px",
-        borderTop: "1px dashed var(--card-border, rgba(0, 0, 0, 0.1))",
+        borderTop: "1px dashed var(--color-border-subtle)",
       }}
     >
       <KeteranganPresetBar
@@ -68,7 +68,7 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
         style={{
           fontSize: "13px",
           fontWeight: 600,
-          color: "var(--text-secondary, #6b7280)",
+          color: "var(--color-text-secondary)",
           display: "block",
           marginBottom: "4px",
         }}
@@ -88,9 +88,9 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
           width: "100%",
           padding: "10px 12px",
           borderRadius: "12px",
-          border: "1px solid var(--card-border, rgba(0, 0, 0, 0.12))",
-          background: "var(--input-bg, rgba(243, 244, 246, 0.9))",
-          color: "var(--text-primary, #171717)",
+          border: "1px solid var(--color-border-subtle)",
+          background: "var(--color-surface-subtle)",
+          color: "var(--color-text-primary)",
           fontSize: "14px",
           boxSizing: "border-box",
           resize: "none",

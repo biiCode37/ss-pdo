@@ -425,7 +425,8 @@ describe("BusInputModalSingleFocus Component", () => {
 
       expect(container.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-100));
       const input = container.querySelector("#single-input-kmAkhir1") as HTMLInputElement;
-      expect(input.style.border).toMatch(/ef4444|239,\s*68,\s*68/);
+      // refact_222: status negatif diekspos lewat aria-invalid (border memakai token --color-error-fg).
+      expect(input.getAttribute("aria-invalid")).toBe("true");
     });
 
     it("merender peringatan negatif merah saat kmLiveS2 berstatus negative pada kmAkhir2", () => {
@@ -444,7 +445,8 @@ describe("BusInputModalSingleFocus Component", () => {
 
       expect(container.textContent).toContain(TEXT_ALERTS.BUS_INPUT_MODAL.DIFF_NEGATIVE(-100));
       const input = container.querySelector("#single-input-kmAkhir2") as HTMLInputElement;
-      expect(input.style.border).toMatch(/ef4444|239,\s*68,\s*68/);
+      // refact_222: status negatif diekspos lewat aria-invalid (border memakai token --color-error-fg).
+      expect(input.getAttribute("aria-invalid")).toBe("true");
     });
 
     it("merender peringatan antar-shift saat kmAwal2 lebih kecil dari kmAkhir1", () => {

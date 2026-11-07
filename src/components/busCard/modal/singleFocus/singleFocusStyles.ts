@@ -5,34 +5,12 @@ export const singleFocusPrimaryInputStyle: React.CSSProperties = {
   padding: "12px 14px",
   borderRadius: "12px",
   border: "1.5px solid var(--color-border-control)",
-  background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
-  color: "var(--text-primary, #ededed)",
+  background: "var(--color-surface-subtle)",
+  color: "var(--color-text-primary)",
   fontSize: "18px",
   fontWeight: 700,
   boxSizing: "border-box",
 };
-
-export const getSingleFocusChipStyle = (
-  isActive: boolean,
-  isDisabled: boolean = false,
-): React.CSSProperties => ({
-  padding: "6px 10px",
-  borderRadius: "8px",
-  fontSize: "12px",
-  fontWeight: 600,
-  border: "1px solid",
-  borderColor: isActive
-    ? "var(--shift1-color, #0284c7)"
-    : "var(--card-border, rgba(255, 255, 255, 0.12))",
-  background: isActive
-    ? "var(--shift1-bg, rgba(2, 132, 199, 0.15))"
-    : "var(--input-bg, rgba(255, 255, 255, 0.04))",
-  color: isActive
-    ? "var(--shift1-action-text, #38bdf8)"
-    : "var(--text-secondary, #94a3b8)",
-  cursor: isDisabled ? "not-allowed" : "pointer",
-  opacity: isDisabled ? 0.45 : 1,
-});
 
 export const singleFocusSubInputStyle = (
   isLocked: boolean = false,
@@ -40,11 +18,11 @@ export const singleFocusSubInputStyle = (
   width: "100%",
   padding: "10px 12px",
   borderRadius: "12px",
-  border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+  border: "1px solid var(--color-border-subtle)",
   background: isLocked
-    ? "rgba(255, 255, 255, 0.03)"
-    : "var(--input-bg, rgba(0, 0, 0, 0.25))",
-  color: "var(--text-primary, #ededed)",
+    ? "var(--color-surface-subtle)"
+    : "var(--color-surface-subtle)",
+  color: "var(--color-text-primary)",
   fontSize: "16px",
   boxSizing: "border-box",
   opacity: isLocked ? 0.45 : 1,
@@ -54,14 +32,14 @@ export const singleFocusSubInputStyle = (
 export const singleFocusLabelStyle: React.CSSProperties = {
   fontSize: "14px",
   fontWeight: 700,
-  color: "var(--text-primary, #ededed)",
+  color: "var(--color-text-primary)",
   display: "block",
   marginBottom: "6px",
 };
 
 export const singleFocusHelperTextStyle: React.CSSProperties = {
   fontSize: "13px",
-  color: "var(--text-secondary, #94a3b8)",
+  color: "var(--color-text-secondary)",
   display: "block",
   marginTop: "4px",
 };
@@ -72,16 +50,16 @@ export const singleFocusDistanceBadgeStyle = (
   padding: "8px 12px",
   borderRadius: "8px",
   background: isShift2
-    ? "var(--shift2-bg, rgba(126, 34, 206, 0.12))"
-    : "var(--shift1-bg, rgba(2, 132, 199, 0.12))",
+    ? "var(--color-shift-2-bg)"
+    : "var(--color-shift-1-bg)",
   border: isShift2
-    ? "1px solid var(--shift2-border, rgba(126, 34, 206, 0.25))"
-    : "1px solid var(--shift1-border, rgba(2, 132, 199, 0.25))",
+    ? "1px solid var(--color-shift-2-border)"
+    : "1px solid var(--color-shift-1-border)",
   fontSize: "13px",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  color: "var(--text-primary, #ededed)",
+  color: "var(--color-text-primary)",
 });
 
 export const singleFocusCopyBtnStyle: React.CSSProperties = {
@@ -89,8 +67,8 @@ export const singleFocusCopyBtnStyle: React.CSSProperties = {
   borderRadius: "8px",
   fontSize: "12px",
   fontWeight: 600,
-  background: "var(--shift1-bg, rgba(2, 132, 199, 0.15))",
-  border: "1px solid var(--shift1-border, rgba(2, 132, 199, 0.3))",
-  color: "var(--shift1-action-text, #38bdf8)",
+  background: "var(--color-shift-1-bg)",
+  border: "1px solid var(--color-shift-1-border)",
+  color: "var(--color-shift-1-fg)",
   cursor: "pointer",
 };

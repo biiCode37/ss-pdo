@@ -6,7 +6,6 @@ import { TEXT_ALERTS } from "@/constants/texts";
 import type { BusInputFormReturn } from "../useBusInputForm";
 import {
   singleFocusPrimaryInputStyle,
-  getSingleFocusChipStyle,
   singleFocusLabelStyle,
 } from "./singleFocusStyles";
 
@@ -169,7 +168,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
           type="button"
           data-testid="chip-toggle-keterangan"
           onClick={() => setShowKeterangan((prev) => !prev)}
-          style={getSingleFocusChipStyle(showKeterangan)}
+          className="ui-option-btn" aria-pressed={showKeterangan}
         >
           {showKeterangan
             ? TEXT_ALERTS.BUS_INPUT_MODAL.CHIP_ACTIVE_KETERANGAN

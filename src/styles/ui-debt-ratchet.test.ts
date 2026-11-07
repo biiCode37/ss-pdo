@@ -12,11 +12,11 @@ import { describe, test, expect } from "vitest";
  */
 const BASELINE = {
   // Diukur 07 Nov 2026 setelah refact_217 (ikon dirapikan).
-  rawHexColor: 506,
-  rgbHslFunction: 799,
+  rawHexColor: 415,
+  rgbHslFunction: 631,
   gradient: 0,
   gradientText: 0,
-  inlineStyleObject: 1948,
+  inlineStyleObject: 1920,
   // refact_216: tipografi dinormalisasi ke skala, dikunci di nol.
   fontSizeBelow12px: 0,
   fontSizeOffScale: 0,
@@ -29,9 +29,9 @@ const BASELINE = {
   radiusOffScale: 0,
   spacingOffScale: 0,
   // refact_221: status aktif (tab/segmen/chip/kapsul) wajib memakai --color-state-active-*.
-  weakActiveState: 12, // sisa: modal input bus (tahap berikutnya), baris grafik TOA, kartu halaman
+  weakActiveState: 2, // sisa: sorotan baris terpilih (grafik TOA, kartu Kelola Halaman)
   // refact_221: warna teks mentah (hex/rgba) tidak teruji kontras di 2 tema — wajib token.
-  rawTextColor: 37, // sisa: putih/hitam di atas latar solid (perlu tinjau konteks)
+  rawTextColor: 34, // sisa: putih/hitam di atas latar solid (perlu tinjau konteks)
 } as const;
 
 type Metric = keyof typeof BASELINE;
@@ -129,7 +129,8 @@ const weakActiveStates = (): number => {
   const jsxRe = new RegExp(String.raw`(?:background|backgroundColor):\s*([^?,{}]+?)\?\s*` + VAL + String.raw`\s*:`, "g");
   const ACTIVE_COND = /active|Active|selected|Selected|formatType|selectedShift|activeTab/;
   const OK_ON = /state-active-bg|action-primary-bg|(error|warning|success|danger|info|role|unit)-(bg|fg|border)|239, ?68, ?68|ef4444|f87171/;
-  const OK_CSS_BG = /state-active-bg|action-primary-bg|danger-bg|transparent|none/;
+  // Latar solid status (warning/error/success-fg) sah untuk chip preset bertone — diuji di color-contract.
+  const OK_CSS_BG = /state-active-bg|action-primary-bg|danger-bg|(warning|error|success)-fg|transparent|none/;
   let n = 0;
   for (const s of sources) {
     if (s.isCss) {
