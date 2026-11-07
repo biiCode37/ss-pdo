@@ -16,110 +16,23 @@ interface Props {
   onSelectUnit: (unit: string) => void;
 }
 
+// Badge status shift memakai komponen bersama .ui-status (refact_221) — warna dari token teruji kontras.
+const STATUS_BADGE: Record<UnitShiftStatus, { tone: string; Icon: typeof CheckCircle2; label: string }> = {
+  FULL_COMPLETE: { tone: "success", Icon: CheckCircle2, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE },
+  SHIFT_1_ONLY: { tone: "warning", Icon: AlertCircle, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY },
+  SHIFT_2_ONLY: { tone: "warning", Icon: AlertCircle, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY },
+  INCOMPLETE: { tone: "warning", Icon: Clock, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE },
+  EMPTY: { tone: "neutral", Icon: XCircle, label: TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY },
+};
+
 function renderStatusBadge(status: UnitShiftStatus) {
-  switch (status) {
-    case "FULL_COMPLETE":
-      return (
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 700,
-            padding: "4px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(34, 197, 94, 0.12)",
-            color: "var(--success-color, #22c55e)",
-            border: "1px solid rgba(34, 197, 94, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-        >
-          <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE}</span>
-        </span>
-      );
-    case "SHIFT_1_ONLY":
-      return (
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 700,
-            padding: "4px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(245, 158, 11, 0.12)",
-            color: "#f59e0b",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-        >
-          <AlertCircle size={16} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY}</span>
-        </span>
-      );
-    case "SHIFT_2_ONLY":
-      return (
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 700,
-            padding: "4px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(245, 158, 11, 0.12)",
-            color: "#f59e0b",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-        >
-          <AlertCircle size={16} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY}</span>
-        </span>
-      );
-    case "INCOMPLETE":
-      return (
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 700,
-            padding: "4px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(245, 158, 11, 0.12)",
-            color: "#f59e0b",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-        >
-          <Clock size={16} style={{ flexShrink: 0 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE}</span>
-        </span>
-      );
-    case "EMPTY":
-    default:
-      return (
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 600,
-            padding: "4px 8px",
-            borderRadius: "8px",
-            backgroundColor: "rgba(255, 255, 255, 0.05)",
-            color: "var(--text-secondary)",
-            border: "1px solid var(--card-border)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-          }}
-        >
-          <XCircle size={16} style={{ flexShrink: 0, opacity: 0.7 }} />
-          <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY}</span>
-        </span>
-      );
-  }
+  const { tone, Icon, label } = STATUS_BADGE[status] ?? STATUS_BADGE.EMPTY;
+  return (
+    <span className="ui-status" data-tone={tone}>
+      <Icon size={16} aria-hidden="true" />
+      <span>{label}</span>
+    </span>
+  );
 }
 
 function UnitCardComponent({ item, onSelectUnit }: Props) {

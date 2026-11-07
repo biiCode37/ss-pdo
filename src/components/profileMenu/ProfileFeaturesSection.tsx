@@ -118,7 +118,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Globe size={20} style={{ color: "var(--accent-color)" }} />
+              <Globe size={20} style={{ color: "var(--color-link)" }} />
               <div style={{ textAlign: "left" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</span>
@@ -178,7 +178,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Layers size={20} style={{ color: "var(--accent-color)" }} />
+            <Layers size={20} style={{ color: "var(--color-link)" }} />
             <span>{TEXT_DASHBOARD.PROFILE_MENU.CROSS_PERIOD}</span>
           </div>
           <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
@@ -205,7 +205,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Sparkles size={20} style={{ color: "var(--accent-color)" }} />
+            <Sparkles size={20} style={{ color: "var(--color-link)" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET}</div>
               <div
@@ -242,9 +242,9 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             {isDarkMode ? (
-              <Sun size={20} style={{ color: "#f59e0b" }} />
+              <Sun size={20} style={{ color: "var(--color-warning-fg)" }} />
             ) : (
-              <Moon size={20} style={{ color: "var(--accent-color)" }} />
+              <Moon size={20} style={{ color: "var(--color-link)" }} />
             )}
             <span>{TEXT_DASHBOARD.PROFILE_MENU.THEME_MODE}</span>
           </div>

@@ -40,7 +40,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-color, #3ECF8E)",
+            color: "var(--color-link)",
             fontSize: "12px",
             fontWeight: 600,
             cursor: "pointer",
@@ -62,7 +62,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-color, #3ECF8E)",
+            color: "var(--color-link)",
             fontSize: "12px",
             fontWeight: 600,
             cursor: "pointer",
@@ -84,7 +84,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-color, #3ECF8E)",
+            color: "var(--color-link)",
             fontSize: "12px",
             fontWeight: 600,
             cursor: "pointer",

@@ -45,9 +45,9 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
           alignItems: "center",
           justifyContent: "space-between",
           padding: "12px 14px",
-          background: "rgba(62, 207, 142, 0.06)",
+          background: "var(--color-action-secondary-bg)",
           borderRadius: "16px",
-          border: "1px solid rgba(62, 207, 142, 0.18)",
+          border: "1px solid var(--color-border-subtle)",
           marginBottom: "20px",
         }}
       >

@@ -142,12 +142,12 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
                 fontWeight: isActive ? 600 : 500,
                 border: "1px solid",
                 borderColor: isActive
-                  ? "#3b82f6"
+                  ? "var(--color-state-active-bg)"
                   : "var(--card-border, rgba(255,255,255,0.08))",
                 background: isActive
-                  ? "rgba(59, 130, 246, 0.15)"
+                  ? "var(--color-state-active-bg)"
                   : "rgba(255,255,255,0.03)",
-                color: isActive ? "#60a5fa" : "var(--text-secondary, #94a3b8)",
+                color: isActive ? "var(--color-state-active-fg)" : "var(--text-secondary, #94a3b8)",
                 whiteSpace: "nowrap",
                 cursor: "pointer",
                 display: "flex",
@@ -163,9 +163,9 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
                   padding: "2px 6px",
                   borderRadius: "8px",
                   background: isActive
-                    ? "rgba(59, 130, 246, 0.3)"
+                    ? "var(--color-state-active-bg)"
                     : "rgba(255,255,255,0.08)",
-                  color: isActive ? "#ffffff" : "var(--text-secondary, #94a3b8)",
+                  color: isActive ? "var(--color-state-active-fg)" : "var(--text-secondary, #94a3b8)",
                 }}
               >
                 {tab.count}

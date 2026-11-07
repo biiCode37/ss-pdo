@@ -418,7 +418,7 @@ function A2ReportModalComponent({
                 fontSize: '14px',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 opacity: isSubmitting ? 0.7 : 1,
-                backgroundColor: shift === 1 ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
+                backgroundColor: shift === 1 ? "var(--color-state-active-bg)" : 'rgba(255, 255, 255, 0.08)',
                 color: '#fff',
                 transition: 'all 0.2s ease',
               }}
@@ -438,7 +438,7 @@ function A2ReportModalComponent({
                 fontSize: '14px',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 opacity: isSubmitting ? 0.7 : 1,
-                backgroundColor: shift === 2 ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
+                backgroundColor: shift === 2 ? "var(--color-state-active-bg)" : 'rgba(255, 255, 255, 0.08)',
                 color: '#fff',
                 transition: 'all 0.2s ease',
               }}
@@ -549,13 +549,13 @@ function A2ReportModalComponent({
                 border: '1px solid rgba(16, 185, 129, 0.3)',
                 borderRadius: '8px',
                 fontSize: '13px',
-                color: '#6ee7b7',
+                color: 'var(--color-success-fg)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
               }}
             >
-              <CheckCircle size={16} style={{ flexShrink: 0, color: '#34d399' }} />
+              <CheckCircle size={16} style={{ flexShrink: 0, color: 'var(--color-success-fg)' }} />
               <span>{TEXT_PDO_FORM.A2_REPORT.SAVED_BANNER(shift, savedAtTime || undefined)}</span>
             </div>
           ) : (
@@ -567,7 +567,7 @@ function A2ReportModalComponent({
                 border: '1px solid rgba(59, 130, 246, 0.25)',
                 borderRadius: '8px',
                 fontSize: '13px',
-                color: '#93c5fd',
+                color: 'var(--color-link)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
@@ -588,7 +588,7 @@ function A2ReportModalComponent({
                 border: '1px solid rgba(239, 68, 68, 0.35)',
                 borderRadius: '8px',
                 fontSize: '13px',
-                color: '#fca5a5',
+                color: 'var(--color-error-fg)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -596,7 +596,7 @@ function A2ReportModalComponent({
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <AlertCircle size={16} style={{ flexShrink: 0, color: '#ef4444' }} />
+                <AlertCircle size={16} style={{ flexShrink: 0, color: 'var(--color-error-fg)' }} />
                 <span>{errorMessage}</span>
               </div>
               <button
@@ -647,7 +647,7 @@ function A2ReportModalComponent({
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: isSubmitting ? '#64748b' : '#38bdf8',
+                  color: isSubmitting ? '#64748b' : 'var(--color-link)',
                   fontSize: '14px',
                   fontWeight: 600,
                   cursor: isSubmitting ? 'not-allowed' : 'pointer',
@@ -705,7 +705,7 @@ function A2ReportModalComponent({
                           style={{
                             background: 'rgba(56, 189, 248, 0.15)',
                             border: '1px solid rgba(56, 189, 248, 0.3)',
-                            color: '#38bdf8',
+                            color: 'var(--color-link)',
                             borderRadius: '8px',
                             padding: '6px 8px',
                             fontSize: '12px',
@@ -750,7 +750,7 @@ function A2ReportModalComponent({
                         opacity: isSubmitting ? 0.7 : 1,
                       }}
                     >
-                      <option value="" disabled style={{ background: '#1e293b', color: '#94a3b8' }}>
+                      <option value="" disabled style={{ background: '#1e293b', color: 'var(--color-text-secondary)' }}>
                         {TEXT_PDO_FORM.A2_REPORT.SELECT_UNIT_PLACEHOLDER}
                       </option>
                       {item.unit_body && !busOptions.includes(item.unit_body) && (
@@ -765,7 +765,7 @@ function A2ReportModalComponent({
                       ))}
                       <option
                         value="__manual__"
-                        style={{ background: '#0f172a', color: '#38bdf8', fontWeight: 600 }}
+                        style={{ background: '#0f172a', color: 'var(--color-link)', fontWeight: 600 }}
                       >
                         {TEXT_PDO_FORM.A2_REPORT.CUSTOM_UNIT_OPTION}
                       </option>
@@ -800,7 +800,7 @@ function A2ReportModalComponent({
                     style={{
                       background: 'rgba(239, 68, 68, 0.15)',
                       border: '1px solid rgba(239, 68, 68, 0.3)',
-                      color: '#f87171',
+                      color: 'var(--color-error-fg)',
                       borderRadius: '8px',
                       width: '32px',
                       height: '32px',

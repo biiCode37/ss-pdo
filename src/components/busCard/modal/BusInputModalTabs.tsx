@@ -72,7 +72,7 @@ export const BusInputModalTabs: React.FC<BusInputModalTabsProps> = ({
                 ? "var(--card-bg, #1e293b)"
                 : "transparent",
               color: isActive
-                ? "var(--accent-color, #38bdf8)"
+                ? "var(--color-link)"
                 : "var(--text-secondary, #94a3b8)",
               border: isActive
                 ? "1px solid rgba(56, 189, 248, 0.25)"

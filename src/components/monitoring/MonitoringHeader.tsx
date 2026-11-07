@@ -299,7 +299,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
             >
               <Calendar
                 size={16}
-                style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
+                style={{ color: "var(--color-link)", flexShrink: 0 }}
               />
               <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                 {currentPeriod && currentPeriod.mode !== "daily"
@@ -465,9 +465,9 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                     width: "36px",
                     height: "36px",
                     borderRadius: "12px",
-                    background: "rgba(62, 207, 142, 0.14)",
-                    border: "1px solid rgba(62, 207, 142, 0.3)",
-                    color: "var(--accent-color, #3ECF8E)",
+                    background: "var(--color-action-secondary-bg)",
+                    border: "1px solid var(--color-border-subtle)",
+                    color: "var(--color-link)",
                     cursor: syncing18Routes || loading || refreshing ? "not-allowed" : "pointer",
                     opacity: syncing18Routes || loading || refreshing ? 0.6 : 1,
                     transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",

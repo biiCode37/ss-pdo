@@ -101,9 +101,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               borderRadius: "8px",
               fontSize: "13px",
               fontWeight: 700,
-              background: "rgba(62, 207, 142, 0.12)",
-              color: "var(--accent-color, #3ECF8E)",
-              border: "1px solid rgba(62, 207, 142, 0.3)",
+              background: "var(--color-action-secondary-bg)",
+              color: "var(--color-link)",
+              border: "1px solid var(--color-border-subtle)",
               letterSpacing: "0.2px",
               display: "inline-block",
             }}
@@ -206,7 +206,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 background: isSyncing
                   ? "rgba(56, 189, 248, 0.25)"
                   : "var(--bg-secondary, rgba(255, 255, 255, 0.05))",
-                color: isSyncing ? "#38bdf8" : "var(--text-secondary)",
+                color: isSyncing ? "var(--color-link)" : "var(--text-secondary)",
                 border: "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
                 cursor: isSyncing ? "wait" : "pointer",
                 transition: "all 0.15s ease",
@@ -363,7 +363,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
             style={{
               fontSize: "14px",
               fontWeight: 700,
-              color: "var(--accent-color, #3ECF8E)",
+              color: "var(--color-link)",
               marginTop: "2px",
               display: "flex",
               alignItems: "center",
@@ -376,7 +376,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "var(--accent-color, #3ECF8E)",
+                color: "var(--color-link)",
               }}
             >
               ({paxPct})

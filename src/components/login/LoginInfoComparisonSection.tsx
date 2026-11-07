@@ -12,7 +12,7 @@ export function LoginInfoComparisonSection() {
           marginBottom: "8px",
         }}
       >
-        <Zap size={16} color="var(--accent-color, #3ECF8E)" />
+        <Zap size={16} color="var(--color-action-primary-bg)" />
         <h4
           style={{
             fontSize: "16px",

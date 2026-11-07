@@ -68,13 +68,13 @@ export const ReportTrafficJamsSection: React.FC<
                 fontSize: "12px",
                 fontWeight: isSelected ? 700 : 500,
                 background: isSelected
-                  ? "rgba(245, 158, 11, 0.18)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.04))",
                 color: isSelected
-                  ? "var(--warning-color, #f59e0b)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
                 border: isSelected
-                  ? "1px solid rgba(245, 158, 11, 0.45)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
                 cursor: "pointer",
                 transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",

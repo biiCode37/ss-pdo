@@ -48,7 +48,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
     ? "1px solid rgba(16, 185, 129, 0.15)"
     : "1px solid var(--card-border, rgba(255, 255, 255, 0.06))";
 
-  const pctColor = isRed ? "#EF4444" : "#10B981";
+  const pctColor = isRed ? "#EF4444" : "var(--color-success-fg)";
   const pctBg = isRed ? "rgba(239, 68, 68, 0.12)" : "rgba(16, 185, 129, 0.12)";
 
   return (
@@ -247,12 +247,12 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
               marginBottom: "8px",
             }}
           >
-            <Trophy size={16} style={{ color: "#F59E0B" }} />
+            <Trophy size={16} style={{ color: "var(--color-warning-fg)" }} />
             <span
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#F59E0B",
+                color: "var(--color-warning-fg)",
               }}
             >
               {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TOP_3}
@@ -282,12 +282,12 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
               marginBottom: "8px",
             }}
           >
-            <Target size={16} style={{ color: "#10B981" }} />
+            <Target size={16} style={{ color: "var(--color-success-fg)" }} />
             <span
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#10B981",
+                color: "var(--color-success-fg)",
               }}
             >
               {TEXT_MONITORING.DASHBOARD.LEADERBOARD.TOP_ACHIEVEMENT}
@@ -317,12 +317,12 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
               marginBottom: "8px",
             }}
           >
-            <AlertTriangle size={16} style={{ color: "#EF4444" }} />
+            <AlertTriangle size={16} style={{ color: "var(--color-error-fg)" }} />
             <span
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#EF4444",
+                color: "var(--color-error-fg)",
               }}
             >
               {TEXT_MONITORING.DASHBOARD.LEADERBOARD.BOTTOM_3}

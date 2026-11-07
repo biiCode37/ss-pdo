@@ -276,10 +276,10 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                     borderRadius: '12px',
                     border: 'none',
                     backgroundColor: isActive
-                      ? 'var(--color-surface-default)'
+                      ? "var(--color-state-active-bg)"
                       : 'transparent',
                     color: isActive
-                      ? 'var(--color-text-primary)'
+                      ? "var(--color-state-active-fg)"
                       : 'var(--color-text-secondary)',
                     fontWeight: isActive ? 600 : 500,
                     fontSize: '13px',

@@ -90,7 +90,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
                     padding: "2px 6px",
                     borderRadius: "8px",
                     background: "rgba(59, 130, 246, 0.2)",
-                    color: "#60a5fa",
+                    color: "var(--color-link)",
                   }}
                 >
                   {TEXT_USER_MANAGEMENT.CARD.YOU_BADGE}
@@ -214,9 +214,9 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
                 width: "36px",
                 height: "20px",
                 borderRadius: "999px",
-                background: isActive ? "#10b981" : "rgba(255, 255, 255, 0.16)",
+                background: isActive ? "var(--color-state-active-bg)" : "rgba(255, 255, 255, 0.16)",
                 border: isActive
-                  ? "1px solid rgba(16, 185, 129, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.15))",
                 position: "relative",
                 transition:
@@ -244,7 +244,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               style={{
                 fontSize: "12px",
                 fontWeight: 600,
-                color: isActive ? "#34d399" : "var(--text-secondary, #94a3b8)",
+                color: isActive ? "var(--color-success-fg)" : "var(--text-secondary, #94a3b8)",
                 userSelect: "none",
               }}
             >

@@ -95,6 +95,7 @@ Aturan lengkap **WAJIB dibaca sebelum menyentuh kode UI**: [`.agents/rules/ui-co
 6. **Teks bantuan minimal:** hanya untuk error, empty state, format input, dan aksi yang merusak data.
 7. Perubahan visual wajib diverifikasi di browser (light & dark). Mockup dibuat **hanya jika pengguna memintanya**.
 8. **Penjaga otomatis:** `src/styles/ui-debt-ratchet.test.ts` dan `src/styles/components/focus-ring.test.ts` wajib lulus. Jika jumlah pelanggaran naik, perbaiki kodenya; **dilarang menaikkan `BASELINE`** (hanya boleh diturunkan setelah merapikan).
+9. **Status aktif & warna teks:** tab/kapsul/segmen/chip aktif wajib `--color-state-active-bg/-fg` (bukan tint tipis); warna teks wajib token, bukan hex/rgba. Ritme jarak antarbagian 12px.
 
 ## Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation)
 

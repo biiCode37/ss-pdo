@@ -458,7 +458,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Bus size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+            <Bus size={16} style={{ color: "var(--color-link)" }} />
             <h3
               style={{
                 fontSize: "14px",
@@ -547,18 +547,18 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 style={{
                   fontSize: "12px",
                   fontWeight: 600,
-                  color: "#10B981",
+                  color: "var(--color-success-fg)",
                 }}
               >
                 {TEXT_MONITORING.FLEET_TAB.SGO_LABEL}
               </span>
-              <CheckCircle2 size={16} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={16} style={{ color: "var(--color-success-fg)" }} />
             </div>
             <div
               style={{
                 fontSize: "16px",
                 fontWeight: 700,
-                color: "#10B981",
+                color: "var(--color-success-fg)",
                 marginTop: "2px",
                 lineHeight: 1.2,
               }}
@@ -602,20 +602,20 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 style={{
                   fontSize: "12px",
                   fontWeight: 600,
-                  color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-secondary)",
+                  color: stats.totalTerkendala > 0 ? "var(--color-warning-fg)" : "var(--text-secondary)",
                 }}
               >
                 {TEXT_MONITORING.FLEET_TAB.NON_SGO_LABEL}
               </span>
               {stats.totalTerkendala > 0 && (
-                <AlertTriangle size={16} style={{ color: "#F59E0B" }} />
+                <AlertTriangle size={16} style={{ color: "var(--color-warning-fg)" }} />
               )}
             </div>
             <div
               style={{
                 fontSize: "16px",
                 fontWeight: 700,
-                color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-primary)",
+                color: stats.totalTerkendala > 0 ? "var(--color-warning-fg)" : "var(--text-primary)",
                 marginTop: "2px",
                 lineHeight: 1.2,
               }}
@@ -667,9 +667,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: shiftFilter === "all" ? 700 : 500,
               background:
                 shiftFilter === "all"
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: shiftFilter === "all" ? "#000" : "var(--text-secondary)",
+              color: shiftFilter === "all" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -688,9 +688,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: shiftFilter === 1 ? 700 : 500,
               background:
                 shiftFilter === 1
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: shiftFilter === 1 ? "#000" : "var(--text-secondary)",
+              color: shiftFilter === 1 ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -709,9 +709,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: shiftFilter === 2 ? 700 : 500,
               background:
                 shiftFilter === 2
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: shiftFilter === 2 ? "#000" : "var(--text-secondary)",
+              color: shiftFilter === 2 ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -740,11 +740,11 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
-                  ? "var(--input-bg, rgba(255, 255, 255, 0.15))"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
               color:
                 statusFilter === "all"
-                  ? "var(--text-primary)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
@@ -764,9 +764,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: statusFilter === "BA" ? 700 : 500,
               background:
                 statusFilter === "BA"
-                  ? "rgba(251, 146, 60, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "BA" ? "#FB923C" : "var(--text-secondary)",
+              color: statusFilter === "BA" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(251, 146, 60, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -785,9 +785,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: statusFilter === "TEKNIS" ? 700 : 500,
               background:
                 statusFilter === "TEKNIS"
-                  ? "rgba(56, 189, 248, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "TEKNIS" ? "#38BDF8" : "var(--text-secondary)",
+              color: statusFilter === "TEKNIS" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(56, 189, 248, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -806,9 +806,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: statusFilter === "TO" ? 700 : 500,
               background:
                 statusFilter === "TO"
-                  ? "rgba(245, 158, 11, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "TO" ? "#F59E0B" : "var(--text-secondary)",
+              color: statusFilter === "TO" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(245, 158, 11, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -827,9 +827,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: statusFilter === "OFF" ? 700 : 500,
               background:
                 statusFilter === "OFF"
-                  ? "rgba(244, 63, 94, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "OFF" ? "#F43F5E" : "var(--text-secondary)",
+              color: statusFilter === "OFF" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(244, 63, 94, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -848,9 +848,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               fontWeight: statusFilter === "SO" ? 700 : 500,
               background:
                 statusFilter === "SO"
-                  ? "rgba(168, 85, 247, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
-              color: statusFilter === "SO" ? "#A855F7" : "var(--text-secondary)",
+              color: statusFilter === "SO" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid rgba(168, 85, 247, 0.25)",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -940,7 +940,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#10B981",
+              color: "var(--color-success-fg)",
             }}
           >
             <ShieldCheck size={24} />
@@ -986,7 +986,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#F59E0B",
+                color: "var(--color-warning-fg)",
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
@@ -1066,9 +1066,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           borderRadius: "8px",
                           fontSize: "12px",
                           fontWeight: 700,
-                          background: "rgba(62, 207, 142, 0.12)",
-                          color: "var(--accent-color, #3ECF8E)",
-                          border: "1px solid rgba(62, 207, 142, 0.25)",
+                          background: "var(--color-action-secondary-bg)",
+                          color: "var(--color-link)",
+                          border: "1px solid var(--color-border-subtle)",
                           flexShrink: 0,
                         }}
                       >
@@ -1124,7 +1124,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           borderRadius: "8px",
                           border: "1px solid rgba(56, 189, 248, 0.25)",
                           background: "rgba(56, 189, 248, 0.12)",
-                          color: "#38bdf8",
+                          color: "var(--color-link)",
                           cursor: "pointer",
                           padding: 0,
                           flexShrink: 0,
@@ -1143,7 +1143,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           gap: "4px",
                           fontSize: "12px",
                           fontWeight: 700,
-                          color: "#F59E0B",
+                          color: "var(--color-warning-fg)",
                           background: "rgba(245, 158, 11, 0.12)",
                           padding: "2px 6px",
                           borderRadius: "8px",
@@ -1151,7 +1151,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         }}
                       >
                         <span>{group.units.length}</span>
-                        <AlertTriangle size={16} style={{ color: "#F59E0B" }} />
+                        <AlertTriangle size={16} style={{ color: "var(--color-warning-fg)" }} />
                       </span>
 
                       {/* Chevron Toggle */}
@@ -1290,7 +1290,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <ShieldCheck size={16} style={{ color: "#10B981" }} />
+              <ShieldCheck size={16} style={{ color: "var(--color-success-fg)" }} />
               <span
                 style={{
                   fontSize: "12px",
@@ -1305,7 +1305,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#10B981",
+                color: "var(--color-success-fg)",
                 background: "rgba(16, 185, 129, 0.12)",
                 padding: "2px 6px",
                 borderRadius: "8px",
@@ -1344,7 +1344,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.08)",
-                  color: "#10B981",
+                  color: "var(--color-success-fg)",
                   border: "1px solid rgba(16, 185, 129, 0.2)",
                   cursor: "default",
                 }}

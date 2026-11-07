@@ -283,7 +283,7 @@ export function BusInputModal({
                 form.validationErrors.length > 0
                   ? "1px solid rgba(239, 68, 68, 0.35)"
                   : "1px solid rgba(56, 189, 248, 0.3)",
-              color: form.validationErrors.length > 0 ? "#f87171" : "inherit",
+              color: form.validationErrors.length > 0 ? "var(--color-error-fg)" : "inherit",
               fontSize: "13px",
             }}
           >
@@ -357,7 +357,7 @@ export function BusInputModal({
                   onChange={(e) => {
                     form.handleToggleBypassOdometerReset(e.target.checked);
                   }}
-                  style={{ accentColor: "var(--accent-color, #38bdf8)" }}
+                  style={{ accentColor: "var(--color-action-primary-bg)" }}
                 />
                 <span>
                   {TEXT_ALERTS.BUS_INPUT_MODAL.BYPASS_ODOMETER_RESET_LABEL}

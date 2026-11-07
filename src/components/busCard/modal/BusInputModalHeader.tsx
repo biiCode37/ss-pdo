@@ -70,7 +70,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
                 ? "rgba(56, 189, 248, 0.15)"
                 : "var(--input-bg, rgba(255, 255, 255, 0.05))",
               color: isExpandedAll
-                ? "var(--accent-color, #38bdf8)"
+                ? "var(--color-link)"
                 : "var(--text-secondary, #94a3b8)",
               cursor: "pointer",
               transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -101,7 +101,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
             background: isSatset
               ? "rgba(245, 158, 11, 0.15)"
               : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-            color: isSatset ? "#f59e0b" : "var(--text-secondary, #94a3b8)",
+            color: isSatset ? "var(--color-warning-fg)" : "var(--text-secondary, #94a3b8)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

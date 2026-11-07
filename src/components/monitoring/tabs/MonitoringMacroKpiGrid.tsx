@@ -33,8 +33,8 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
       subtext: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TARGET_PCT(formatId(targetPctNum, 1)),
       subtextPositive: targetPctNum >= 100,
       icon: Users,
-      color: "#3ECF8E",
-      bgGradient: "rgba(62, 207, 142, 0.08)",
+      color: "var(--color-link)",
+      bgGradient: "var(--color-action-secondary-bg)",
     },
     {
       id: "trips",
@@ -44,7 +44,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
       subtext: `${formatId(data.averageTripsPerBus || 0, 1)} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.TRIPS_SUFFIX} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PER_BUS}`,
       subtextPositive: (data.averageTripsPerBus || 0) >= 6.5,
       icon: Repeat,
-      color: "#38BDF8",
+      color: "var(--color-link)",
       bgGradient: "rgba(56, 189, 248, 0.08)",
     },
     {
@@ -55,7 +55,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
       subtext: `${formatId(data.averageKmPerBus, 1)} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.DISTANCE_SUFFIX} ${TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PER_BUS}`,
       subtextPositive: true,
       icon: Navigation,
-      color: "#F59E0B",
+      color: "var(--color-warning-fg)",
       bgGradient: "rgba(245, 158, 11, 0.08)",
     },
     {
@@ -66,7 +66,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
       subtext: TEXT_MONITORING.DASHBOARD.MACRO_KPIS.SUBTEXT_PER_KM(paxPerKm),
       subtextPositive: paxPerBusNum >= 150,
       icon: TrendingUp,
-      color: "#A855F7",
+      color: "var(--color-shift-2-fg)",
       bgGradient: "rgba(168, 85, 247, 0.08)",
     },
   ];

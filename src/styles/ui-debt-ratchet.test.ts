@@ -12,22 +12,26 @@ import { describe, test, expect } from "vitest";
  */
 const BASELINE = {
   // Diukur 07 Nov 2026 setelah refact_217 (ikon dirapikan).
-  rawHexColor: 769,
-  rgbHslFunction: 904,
+  rawHexColor: 506,
+  rgbHslFunction: 799,
   gradient: 0,
   gradientText: 0,
-  inlineStyleObject: 1962,
+  inlineStyleObject: 1948,
   // refact_216: tipografi dinormalisasi ke skala, dikunci di nol.
   fontSizeBelow12px: 0,
   fontSizeOffScale: 0,
   fontWeightHeavy: 0,
   iconSizeOffScale: 0,
-  legacyAccentColor: 231,
+  legacyAccentColor: 0,
   textShadow: 0,
-  backdropFilter: 33,
+  backdropFilter: 29,
   // refact_218: radius & jarak dinormalisasi ke skala, dikunci di nol.
   radiusOffScale: 0,
   spacingOffScale: 0,
+  // refact_221: status aktif (tab/segmen/chip/kapsul) wajib memakai --color-state-active-*.
+  weakActiveState: 12, // sisa: modal input bus (tahap berikutnya), baris grafik TOA, kartu halaman
+  // refact_221: warna teks mentah (hex/rgba) tidak teruji kontras di 2 tema — wajib token.
+  rawTextColor: 37, // sisa: putih/hitam di atas latar solid (perlu tinjau konteks)
 } as const;
 
 type Metric = keyof typeof BASELINE;
@@ -114,6 +118,36 @@ const pxValues = (jsxProp: string, cssProp: string): number[] => {
   return out;
 };
 
+/**
+ * Penanda status aktif yang lemah (refact_221):
+ * - JSX: `background: <kondisi aktif> ? <nilai> : ...` dengan nilai selain token aksi/aktif/status semantik.
+ * - CSS: aturan `.active`, `[aria-pressed="true"]`, `[aria-selected="true"]`, `[aria-current]`
+ *   yang latarnya bukan --color-state-active-bg / --color-action-primary-bg / --color-danger-bg.
+ */
+const weakActiveStates = (): number => {
+  const VAL = String.raw`("[^"]*"|'[^']*'|[^:,{}]+?)`;
+  const jsxRe = new RegExp(String.raw`(?:background|backgroundColor):\s*([^?,{}]+?)\?\s*` + VAL + String.raw`\s*:`, "g");
+  const ACTIVE_COND = /active|Active|selected|Selected|formatType|selectedShift|activeTab/;
+  const OK_ON = /state-active-bg|action-primary-bg|(error|warning|success|danger|info|role|unit)-(bg|fg|border)|239, ?68, ?68|ef4444|f87171/;
+  const OK_CSS_BG = /state-active-bg|action-primary-bg|danger-bg|transparent|none/;
+  let n = 0;
+  for (const s of sources) {
+    if (s.isCss) {
+      const css = s.text.replace(/\/\*[\s\S]*?\*\//g, "");
+      for (const [, sel, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        if (!/\.active\b|aria-pressed="true"|aria-selected="true"|aria-current/.test(sel)) continue;
+        const bg = body.match(/background(?:-color)?:\s*([^;]+)/)?.[1];
+        if (bg && !OK_CSS_BG.test(bg)) n++;
+      }
+      continue;
+    }
+    for (const [, cond, on] of s.text.matchAll(jsxRe)) {
+      if (ACTIVE_COND.test(cond) && !OK_ON.test(on)) n++;
+    }
+  }
+  return n;
+};
+
 const measure = (): Record<Metric, number> => {
   const sizes = fontSizesPx();
   const radii = pxValues(
@@ -135,6 +169,8 @@ const measure = (): Record<Metric, number> => {
     fontWeightHeavy: countMatches(/(?:fontWeight:\s*["']?|fontWeight=["{]|font-weight:\s*)(?:800|900)\b/g),
     iconSizeOffScale: iconSizes().filter((n) => !ICON_SIZE_SCALE.has(n)).length,
     legacyAccentColor: countMatches(/--accent-color|#3ecf8e|#24b47e/gi),
+    weakActiveState: weakActiveStates(),
+    rawTextColor: countMatches(/(?<![\w-])color:\s*["']?(?:#[0-9a-fA-F]{3,8}\b|rgba?\()/g),
     textShadow: countMatches(/textShadow|text-shadow/g),
     backdropFilter: countMatches(/backdropFilter|backdrop-filter/g),
     radiusOffScale: radii.filter((px) => !RADIUS_SCALE.has(px)).length,

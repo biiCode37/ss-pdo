@@ -122,8 +122,8 @@ export function AddRouteModal({
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                background: 'rgba(62, 207, 142, 0.12)',
-                color: 'var(--accent-color, #3ECF8E)',
+                background: 'var(--color-action-secondary-bg)',
+                color: 'var(--color-link)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -261,8 +261,8 @@ export function AddRouteModal({
                 display: 'flex',
                 alignItems: 'center',
                 padding: '0 14px',
-                background: 'rgba(62, 207, 142, 0.15)',
-                color: 'var(--accent-color, #3ECF8E)',
+                background: 'var(--color-action-secondary-bg)',
+                color: 'var(--color-link)',
                 fontWeight: 700,
                 fontSize: '14px',
                 letterSpacing: '0.5px',
@@ -400,13 +400,13 @@ export function AddRouteModal({
 
         {/* Live Status Inspection Badge */}
         {checkStatus === 'checking' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--accent-color)', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--color-link)', marginBottom: '12px' }}>
             <Loader2 className="spinner" size={16} />
             <span>{checkMessage || TEXT_DASHBOARD.ROUTE_SELECTOR.CHECKING_ACCESS}</span>
           </div>
         )}
         {checkStatus === 'valid' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success-color, #10b981)', marginBottom: '12px', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success-color)', marginBottom: '12px', fontWeight: 600 }}>
             <CheckCircle size={16} />
             <span>{checkMessage}</span>
           </div>

@@ -150,7 +150,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 gap: "8px",
               }}
             >
-              <Award size={20} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Award size={20} style={{ color: "var(--color-link)" }} />
               {TEXT_MONITORING.KORWIL_TAB.TOTAL_WILAYAH_CARD}
             </h2>
             <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block", marginTop: "2px" }}>
@@ -164,9 +164,9 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               borderRadius: "999px",
               fontSize: "12px",
               fontWeight: 700,
-              background: "rgba(62, 207, 142, 0.12)",
-              color: "var(--accent-color, #3ECF8E)",
-              border: "1px solid rgba(62, 207, 142, 0.3)",
+              background: "var(--color-action-secondary-bg)",
+              color: "var(--color-link)",
+              border: "1px solid var(--color-border-subtle)",
             }}
           >
             {TEXT_MONITORING.KORWIL_TAB.ROUTES_COUNT(data.routes.length || 18)}
@@ -233,7 +233,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
             <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
               {TEXT_MONITORING.KPI.PASSENGER_LABEL}
             </span>
-            <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)", marginTop: "2px" }}>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--color-link)", marginTop: "2px" }}>
               {formatNumber(data.totalTodayPassengers)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.PASSENGER_UNIT}</span>
             </div>
             <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
@@ -305,12 +305,12 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                     width: "40px",
                     height: "40px",
                     borderRadius: "12px",
-                    background: "rgba(62, 207, 142, 0.12)",
-                    border: "1px solid rgba(62, 207, 142, 0.25)",
+                    background: "var(--color-action-secondary-bg)",
+                    border: "1px solid var(--color-border-subtle)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "var(--accent-color, #3ECF8E)",
+                    color: "var(--color-link)",
                     flexShrink: 0,
                   }}
                 >
@@ -416,7 +416,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
                   {TEXT_MONITORING.KPI.PASSENGER_LABEL}
                 </span>
-                <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-link)" }}>
                   {formatNumber(team.totalTodayPassengers)} {TEXT_MONITORING.KPI.PASSENGER_UNIT}
                 </div>
               </div>
@@ -511,8 +511,8 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                             borderRadius: "8px",
                             fontSize: "12px",
                             fontWeight: 700,
-                            background: "rgba(62, 207, 142, 0.12)",
-                            color: "var(--accent-color, #3ECF8E)",
+                            background: "var(--color-action-secondary-bg)",
+                            color: "var(--color-link)",
                           }}
                         >
                           {route.routeCode}

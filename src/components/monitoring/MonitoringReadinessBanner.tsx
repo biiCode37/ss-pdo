@@ -135,7 +135,7 @@ export const MonitoringReadinessBanner: React.FC<
               width: "8px",
               height: "8px",
               borderRadius: "50%",
-              background: "#10b981",
+              background: "var(--color-success-fg)",
             }}
           />
           {TEXT_MONITORING.READINESS.LEGEND_VERIFIED}{" "}

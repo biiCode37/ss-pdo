@@ -55,9 +55,9 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 fontSize: "12px",
                 fontWeight: 700,
                 letterSpacing: "0.4px",
-                background: "rgba(62, 207, 142, 0.12)",
-                color: "var(--accent-color, #3ECF8E)",
-                border: "1px solid rgba(62, 207, 142, 0.25)",
+                background: "var(--color-action-secondary-bg)",
+                color: "var(--color-link)",
+                border: "1px solid var(--color-border-subtle)",
                 cursor: "pointer",
               }}
               title={TEXT_MONITORING.ROUTE_CARD.OPEN_ROUTE_TITLE}
@@ -94,7 +94,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                   fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.12)",
-                  color: "#10b981",
+                  color: "var(--color-success-fg)",
                   border: "1px solid rgba(16, 185, 129, 0.25)",
                 }}
                 title="Data dikirim melalui input aplikasi"
@@ -112,7 +112,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                   fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(56, 189, 248, 0.12)",
-                  color: "#38bdf8",
+                  color: "var(--color-link)",
                   border: "1px solid rgba(56, 189, 248, 0.25)",
                 }}
                 title="Data ditarik langsung dari Google Sheet rute"
@@ -133,7 +133,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                   fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.12)",
-                  color: "#10b981",
+                  color: "var(--color-success-fg)",
                   border: "1px solid rgba(16, 185, 129, 0.25)",
                 }}
               >
@@ -301,7 +301,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             style={{
               fontSize: "13px",
               fontWeight: 700,
-              color: "var(--accent-color, #3ECF8E)",
+              color: "var(--color-link)",
               marginTop: "2px",
             }}
           >
@@ -339,7 +339,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             style={{
               fontSize: "13px",
               fontWeight: 700,
-              color: "#38bdf8",
+              color: "var(--color-link)",
               marginTop: "2px",
             }}
           >
@@ -377,7 +377,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 borderRadius: "8px",
                 background: "rgba(245, 158, 11, 0.1)",
                 border: "1px solid rgba(245, 158, 11, 0.2)",
-                color: "#f59e0b",
+                color: "var(--color-warning-fg)",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
@@ -435,7 +435,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
               gap: "4px",
               padding: "4px 10px",
               borderRadius: "8px",
-              background: "var(--accent-color, #3ECF8E)",
+              background: "var(--color-action-primary-bg)",
               color: "#ffffff",
               border: "none",
               fontSize: "12px",

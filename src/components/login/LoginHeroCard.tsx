@@ -72,9 +72,9 @@ export function LoginHeroCard({
           display: "inline-block",
           padding: "4px 12px",
           borderRadius: "16px",
-          backgroundColor: "rgba(62, 207, 142, 0.12)",
-          border: "1px solid rgba(62, 207, 142, 0.3)",
-          color: "var(--accent-color, #3ECF8E)",
+          backgroundColor: "var(--color-action-secondary-bg)",
+          border: "1px solid var(--color-border-subtle)",
+          color: "var(--color-link)",
           fontSize: "12px",
           fontWeight: 700,
           marginBottom: "12px",
@@ -185,7 +185,7 @@ export function LoginHeroCard({
           transition: "all 0.15s ease",
         }}
       >
-        <Info size={16} color="var(--accent-color, #3ECF8E)" />
+        <Info size={16} color="var(--color-action-primary-bg)" />
         <span>Pelajari Aplikasi & Izin Akses</span>
       </button>
     </div>

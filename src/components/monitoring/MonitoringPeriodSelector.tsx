@@ -421,7 +421,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                   padding: "8px 16px",
                   borderRadius: "12px",
                   border: "none",
-                  background: "var(--accent-color, #3ECF8E)",
+                  background: "var(--color-action-primary-bg)",
                   color: "#062817",
                   fontSize: "13px",
                   fontWeight: 700,
@@ -429,7 +429,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  boxShadow: "0 2px 8px rgba(62, 207, 142, 0.3)",
+                  boxShadow: "0 2px 8px var(--color-shadow)",
                 }}
               >
                 {TEXT_MONITORING.PERIOD.APPLY_BTN}

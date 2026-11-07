@@ -243,7 +243,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
         >
           <FileSpreadsheet
             size={20}
-            style={{ color: "var(--accent-color, #3ECF8E)" }}
+            style={{ color: "var(--color-link)" }}
           />
           <h3
             style={{
@@ -282,9 +282,9 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               fontWeight: format === 1 ? 700 : 500,
               background:
                 format === 1
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.04))",
-              color: format === 1 ? "#000" : "var(--text-primary)",
+              color: format === 1 ? "var(--color-state-active-fg)" : "var(--text-primary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               textAlign: "center",
@@ -308,9 +308,9 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               fontWeight: format === 2 ? 700 : 500,
               background:
                 format === 2
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.04))",
-              color: format === 2 ? "#000" : "var(--text-primary)",
+              color: format === 2 ? "var(--color-state-active-fg)" : "var(--text-primary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               textAlign: "center",
@@ -334,9 +334,9 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               fontWeight: format === 3 ? 700 : 500,
               background:
                 format === 3
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.04))",
-              color: format === 3 ? "#000" : "var(--text-primary)",
+              color: format === 3 ? "var(--color-state-active-fg)" : "var(--text-primary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               textAlign: "center",
@@ -371,12 +371,12 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                 fontWeight: format3Shift === 1 ? 700 : 500,
                 background:
                   format3Shift === 1
-                    ? "rgba(245, 158, 11, 0.2)"
+                    ? "var(--color-state-active-bg)"
                     : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                color: format3Shift === 1 ? "#F59E0B" : "var(--text-secondary)",
+                color: format3Shift === 1 ? "var(--color-state-active-fg)" : "var(--text-secondary)",
                 border:
                   format3Shift === 1
-                    ? "1px solid rgba(245, 158, 11, 0.35)"
+                    ? "1px solid var(--color-state-active-bg)"
                     : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                 cursor: "pointer",
               }}
@@ -398,12 +398,12 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                 fontWeight: format3Shift === 2 ? 700 : 500,
                 background:
                   format3Shift === 2
-                    ? "rgba(99, 102, 241, 0.2)"
+                    ? "var(--color-state-active-bg)"
                     : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                color: format3Shift === 2 ? "#818CF8" : "var(--text-secondary)",
+                color: format3Shift === 2 ? "var(--color-state-active-fg)" : "var(--text-secondary)",
                 border:
                   format3Shift === 2
-                    ? "1px solid rgba(99, 102, 241, 0.35)"
+                    ? "1px solid var(--color-state-active-bg)"
                     : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                 cursor: "pointer",
               }}
@@ -435,7 +435,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               marginBottom: "8px",
             }}
           >
-            <AlertTriangle size={20} style={{ color: "#F59E0B" }} />
+            <AlertTriangle size={20} style={{ color: "var(--color-warning-fg)" }} />
             <h4
               style={{
                 fontSize: "14px",
@@ -504,9 +504,9 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                       display: "inline-flex",
                       alignItems: "center",
                       gap: "4px",
-                      background: "rgba(62, 207, 142, 0.15)",
-                      color: "var(--accent-color, #3ECF8E)",
-                      border: "1px solid rgba(62, 207, 142, 0.3)",
+                      background: "var(--color-action-secondary-bg)",
+                      color: "var(--color-link)",
+                      border: "1px solid var(--color-border-subtle)",
                       borderRadius: "8px",
                       padding: "4px 8px",
                       fontSize: "12px",

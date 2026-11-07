@@ -82,7 +82,7 @@ export function renderFullModalHtml(
 
       <!-- Panel 3: Trip Operasional -->
       <div id="swal-panel-trip" class="swal-panel-section" data-panel="trip" style="display: ${initTab === "trip" ? "block" : "none"}; padding: 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
-        <div style="font-size: 12px; font-weight: 700; color: var(--accent-color); margin-bottom: 8px; text-transform: uppercase;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--color-action-primary-bg); margin-bottom: 8px; text-transform: uppercase;">
           ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_TRIP}
         </div>
         <div style="display: flex; flex-direction: column; gap: 8px;">

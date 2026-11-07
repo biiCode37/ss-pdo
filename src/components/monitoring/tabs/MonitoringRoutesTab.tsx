@@ -255,9 +255,9 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
-                  ? "var(--accent-color, #3ECF8E)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-              color: statusFilter === "all" ? "#000" : "var(--text-secondary)",
+              color: statusFilter === "all" ? "var(--color-state-active-fg)" : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -277,15 +277,15 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               fontWeight: statusFilter === "submitted" ? 700 : 500,
               background:
                 statusFilter === "submitted"
-                  ? "rgba(56, 189, 248, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
               color:
                 statusFilter === "submitted"
-                  ? "#38bdf8"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border:
                 statusFilter === "submitted"
-                  ? "1px solid rgba(56, 189, 248, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -305,15 +305,15 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               fontWeight: statusFilter === "uncompleted" ? 700 : 500,
               background:
                 statusFilter === "uncompleted"
-                  ? "rgba(245, 158, 11, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
               color:
                 statusFilter === "uncompleted"
-                  ? "#f59e0b"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border:
                 statusFilter === "uncompleted"
-                  ? "1px solid rgba(245, 158, 11, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -333,15 +333,15 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               fontWeight: statusFilter === "verified" ? 700 : 500,
               background:
                 statusFilter === "verified"
-                  ? "rgba(16, 185, 129, 0.2)"
+                  ? "var(--color-state-active-bg)"
                   : "var(--input-bg, rgba(255, 255, 255, 0.05))",
               color:
                 statusFilter === "verified"
-                  ? "#10b981"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border:
                 statusFilter === "verified"
-                  ? "1px solid rgba(16, 185, 129, 0.4)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
               whiteSpace: "nowrap",
@@ -389,11 +389,11 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               fontWeight: selectedSupervisor === "all" ? 700 : 500,
               background:
                 selectedSupervisor === "all"
-                  ? "var(--input-bg, rgba(255, 255, 255, 0.15))"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
               color:
                 selectedSupervisor === "all"
-                  ? "var(--text-primary)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--text-secondary)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               cursor: "pointer",
@@ -416,11 +416,11 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 fontWeight: selectedSupervisor === spv ? 700 : 500,
                 background:
                   selectedSupervisor === spv
-                    ? "var(--input-bg, rgba(255, 255, 255, 0.15))"
+                    ? "var(--color-state-active-bg)"
                     : "transparent",
                 color:
                   selectedSupervisor === spv
-                    ? "var(--text-primary)"
+                    ? "var(--color-state-active-fg)"
                     : "var(--text-secondary)",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                 cursor: "pointer",

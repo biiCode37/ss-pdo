@@ -150,7 +150,7 @@ describe("KeteranganPresetBar Component", () => {
     const offBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "OFF"
     );
-    expect(offBtnActive?.style.color).toContain("#eab308");
+    expect(offBtnActive?.style.color).toContain("var(--color-warning-fg)");
     act(() => {
       offBtnActive!.click();
     });
@@ -178,7 +178,7 @@ describe("KeteranganPresetBar Component", () => {
     const evdalBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "TO EVDAL"
     );
-    expect(evdalBtnActive?.style.color).toContain("#ef4444");
+    expect(evdalBtnActive?.style.color).toContain("var(--color-error-fg)");
     act(() => {
       evdalBtnActive!.click();
     });
@@ -224,7 +224,7 @@ describe("KeteranganPresetBar Component", () => {
     const okbBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "OKB"
     );
-    expect(okbBtnActive?.style.color).toContain("#10b981");
+    expect(okbBtnActive?.style.color).toContain("var(--color-success-fg)");
     act(() => {
       okbBtnActive!.click();
     });
@@ -254,7 +254,7 @@ describe("KeteranganPresetBar Component", () => {
     const renopBtnActive = Array.from(container.querySelectorAll("button")).find(
       (b) => b.textContent?.trim() === "Renop"
     );
-    expect(renopBtnActive?.style.color).toContain("#10b981");
+    expect(renopBtnActive?.style.color).toContain("var(--color-success-fg)");
     act(() => {
       renopBtnActive!.click();
     });

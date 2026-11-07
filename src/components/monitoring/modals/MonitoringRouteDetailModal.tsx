@@ -374,15 +374,15 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               fontWeight: activeTab === "operasional" ? 700 : 500,
               backgroundColor:
                 activeTab === "operasional"
-                  ? "var(--color-surface-default)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
               color:
                 activeTab === "operasional"
-                  ? "var(--color-text-primary)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--color-text-secondary)",
               border:
                 activeTab === "operasional"
-                  ? "1px solid var(--color-border-subtle)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid transparent",
               boxShadow:
                 activeTab === "operasional"
@@ -407,15 +407,15 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               fontWeight: activeTab === "shift" ? 700 : 500,
               backgroundColor:
                 activeTab === "shift"
-                  ? "var(--color-surface-default)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
               color:
                 activeTab === "shift"
-                  ? "var(--color-text-primary)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--color-text-secondary)",
               border:
                 activeTab === "shift"
-                  ? "1px solid var(--color-border-subtle)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid transparent",
               boxShadow:
                 activeTab === "shift"
@@ -440,15 +440,15 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               fontWeight: activeTab === "produktivitas" ? 700 : 500,
               backgroundColor:
                 activeTab === "produktivitas"
-                  ? "var(--color-surface-default)"
+                  ? "var(--color-state-active-bg)"
                   : "transparent",
               color:
                 activeTab === "produktivitas"
-                  ? "var(--color-text-primary)"
+                  ? "var(--color-state-active-fg)"
                   : "var(--color-text-secondary)",
               border:
                 activeTab === "produktivitas"
-                  ? "1px solid var(--color-border-subtle)"
+                  ? "1px solid var(--color-state-active-bg)"
                   : "1px solid transparent",
               boxShadow:
                 activeTab === "produktivitas"

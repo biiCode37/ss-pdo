@@ -71,7 +71,7 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
         <div
           style={{
             transform: `rotate(${pullDistance * 3}deg)`,
-            color: "var(--accent-color)",
+            color: "var(--color-link)",
           }}
         >
           <RefreshCw size={24} className={isRefreshing ? "spinner" : ""} />

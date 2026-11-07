@@ -74,7 +74,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
         >
           <span
             style={{
-              color: "var(--accent-color, #3ECF8E)",
+              color: "var(--color-link)",
               fontWeight: 700,
             }}
           >
@@ -118,7 +118,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
           style={{
             fontSize: "20px",
             fontWeight: 700,
-            color: "var(--accent-color, #3ECF8E)",
+            color: "var(--color-link)",
           }}
         >
           {formatNumber(data.totalTodayPassengers)}
@@ -190,7 +190,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
         </span>
         <div
           className="tabular-nums"
-          style={{ fontSize: "20px", fontWeight: 700, color: "#38bdf8" }}
+          style={{ fontSize: "20px", fontWeight: 700, color: "var(--color-link)" }}
         >
           {formatDecimal(data.totalKm, 1)}
           <span
@@ -259,7 +259,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
           <span style={{ color: "var(--text-secondary)" }}>
             {TEXT_MONITORING.KPI.SHIFT_1_ROW}
           </span>
-          <span style={{ color: "#38bdf8" }}>
+          <span style={{ color: "var(--color-link)" }}>
             {formatNumber(data.totalShift1)} (
             {formatDecimal(
               (data.totalShift1 / (data.totalTodayPassengers || 1)) * 100,
@@ -279,7 +279,7 @@ export const MonitoringKpiCards: React.FC<MonitoringKpiCardsProps> = ({
           <span style={{ color: "var(--text-secondary)" }}>
             {TEXT_MONITORING.KPI.SHIFT_2_ROW}
           </span>
-          <span style={{ color: "#c084fc" }}>
+          <span style={{ color: "var(--color-shift-2-fg)" }}>
             {formatNumber(data.totalShift2)} (
             {formatDecimal(
               (data.totalShift2 / (data.totalTodayPassengers || 1)) * 100,

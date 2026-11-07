@@ -364,7 +364,7 @@ export function UnitDetailModal({
           style={{
             fontSize: "12px",
             fontWeight: 700,
-            color: "var(--accent-color, #38bdf8)",
+            color: "var(--color-link)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -378,7 +378,7 @@ export function UnitDetailModal({
                 padding: "2px 6px",
                 borderRadius: "8px",
                 background: "rgba(56, 189, 248, 0.12)",
-                color: "var(--accent-color, #38bdf8)",
+                color: "var(--color-link)",
                 border: "1px solid rgba(56, 189, 248, 0.25)",
                 fontWeight: 600,
               }}
@@ -414,7 +414,7 @@ export function UnitDetailModal({
               {TEXT_UNIT_DETAIL.STRIP_RITASE}
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-              <Repeat size={16} style={{ color: "var(--accent-color, #38bdf8)" }} />
+              <Repeat size={16} style={{ color: "var(--color-link)" }} />
               <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {metrics.tripPergi || "0"}/{metrics.tripPulang || "0"}
               </span>

@@ -76,7 +76,7 @@ export function QueueModal({
                     item.status === "pending"
                       ? "var(--warning-color)"
                       : item.status === "conflict"
-                        ? "var(--accent-color)"
+                        ? "var(--color-link)"
                         : "var(--danger-color)",
                 }}
               >

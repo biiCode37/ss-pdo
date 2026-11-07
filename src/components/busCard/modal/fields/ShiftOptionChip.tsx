@@ -36,13 +36,13 @@ export const ShiftOptionChip: React.FC<ShiftOptionChipProps> = ({
         fontWeight: 600,
         border: "1px solid",
         borderColor: isActive
-          ? "var(--accent-color, #38bdf8)"
+          ? "var(--color-action-primary-bg)"
           : "var(--card-border, rgba(255, 255, 255, 0.1))",
         background: isActive
           ? "rgba(56, 189, 248, 0.15)"
           : "rgba(255, 255, 255, 0.04)",
         color: isActive
-          ? "var(--accent-color, #38bdf8)"
+          ? "var(--color-link)"
           : "var(--text-secondary, #8b8b8b)",
         cursor: "pointer",
         transition: "all 0.15s cubic-bezier(0.32, 0.72, 0, 1)",

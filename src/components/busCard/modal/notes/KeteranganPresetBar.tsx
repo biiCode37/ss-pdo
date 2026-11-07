@@ -110,13 +110,13 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             fontWeight: 700,
             cursor: "pointer",
             border: isBaActive
-              ? "1px solid var(--accent-color, #38bdf8)"
+              ? "1px solid var(--color-action-primary-bg)"
               : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
             background: isBaActive
               ? "rgba(56, 189, 248, 0.2)"
               : "rgba(255, 255, 255, 0.05)",
             color: isBaActive
-              ? "var(--accent-color, #38bdf8)"
+              ? "var(--color-link)"
               : "var(--text-primary, #f8fafc)",
             transition: "all 0.15s ease",
           }}
@@ -140,7 +140,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             background: isOffActive
               ? "rgba(234, 179, 8, 0.2)"
               : "rgba(255, 255, 255, 0.05)",
-            color: isOffActive ? "#eab308" : "var(--text-primary, #f8fafc)",
+            color: isOffActive ? "var(--color-warning-fg)" : "var(--text-primary, #f8fafc)",
             transition: "all 0.15s ease",
           }}
         >
@@ -163,7 +163,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             background: isToEvdalActive
               ? "rgba(239, 68, 68, 0.2)"
               : "rgba(255, 255, 255, 0.05)",
-            color: isToEvdalActive ? "#ef4444" : "var(--text-primary, #f8fafc)",
+            color: isToEvdalActive ? "var(--color-error-fg)" : "var(--text-primary, #f8fafc)",
             transition: "all 0.15s ease",
           }}
         >
@@ -182,12 +182,12 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
               fontWeight: 700,
               cursor: "pointer",
               border: isOkbActive
-                ? "1px solid #10b981"
+                ? "1px solid var(--color-success-border)"
                 : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
               background: isOkbActive
                 ? "rgba(16, 185, 129, 0.2)"
                 : "rgba(255, 255, 255, 0.05)",
-              color: isOkbActive ? "#10b981" : "var(--text-primary, #f8fafc)",
+              color: isOkbActive ? "var(--color-success-fg)" : "var(--text-primary, #f8fafc)",
               transition: "all 0.15s ease",
             }}
           >
@@ -207,12 +207,12 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
               fontWeight: 700,
               cursor: "pointer",
               border: isRenopActive
-                ? "1px solid #10b981"
+                ? "1px solid var(--color-success-border)"
                 : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
               background: isRenopActive
                 ? "rgba(16, 185, 129, 0.2)"
                 : "rgba(255, 255, 255, 0.05)",
-              color: isRenopActive ? "#10b981" : "var(--text-primary, #f8fafc)",
+              color: isRenopActive ? "var(--color-success-fg)" : "var(--text-primary, #f8fafc)",
               transition: "all 0.15s ease",
             }}
           >
@@ -286,13 +286,13 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
                   fontWeight: isCodeActive ? 700 : 600,
                   cursor: "pointer",
                   border: isCodeActive
-                    ? "1px solid var(--accent-color, #38bdf8)"
+                    ? "1px solid var(--color-action-primary-bg)"
                     : "1px solid var(--border-color, rgba(255, 255, 255, 0.15))",
                   background: isCodeActive
                     ? "rgba(56, 189, 248, 0.25)"
                     : "rgba(255, 255, 255, 0.05)",
                   color: isCodeActive
-                    ? "var(--accent-color, #38bdf8)"
+                    ? "var(--color-link)"
                     : "var(--text-secondary, #94a3b8)",
                   transition: "all 0.15s ease",
                 }}

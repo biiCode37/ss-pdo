@@ -233,11 +233,11 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               width: '42px',
               height: '42px',
               borderRadius: '12px',
-              background: 'rgba(62, 207, 142, 0.15)',
+              background: 'var(--color-action-secondary-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--accent-color, #3ECF8E)',
+              color: 'var(--color-link)',
               flexShrink: 0,
             }}
           >
@@ -284,7 +284,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               : '1px solid var(--card-border, rgba(255, 255, 255, 0.08))',
             fontSize: '12px',
             fontWeight: 600,
-            color: isFutureMonth ? '#ef4444' : 'var(--accent-color, #3ECF8E)',
+            color: isFutureMonth ? 'var(--color-error-fg)' : 'var(--color-link)',
             marginBottom: '20px',
             width: '100%',
             boxSizing: 'border-box',
@@ -309,7 +309,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               borderRadius: '12px',
               background: 'rgba(239, 68, 68, 0.12)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#ef4444',
+              color: 'var(--color-error-fg)',
               fontSize: '13px',
               marginBottom: '16px',
               whiteSpace: 'pre-line',
@@ -395,13 +395,13 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                         fontWeight: 600,
                         cursor: syncing ? 'not-allowed' : 'pointer',
                         border: isSelected
-                          ? '1px solid var(--accent-color, #3ECF8E)'
+                          ? "1px solid var(--color-state-active-bg)"
                           : '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
                         background: isSelected
-                          ? 'rgba(62, 207, 142, 0.15)'
+                          ? "var(--color-state-active-bg)"
                           : 'var(--input-bg, rgba(255, 255, 255, 0.04))',
                         color: isSelected
-                          ? 'var(--accent-color, #3ECF8E)'
+                          ? "var(--color-state-active-fg)"
                           : 'var(--text-secondary, #a3a3a3)',
                         transition: 'all 0.15s ease',
                       }}
@@ -469,7 +469,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 }}
               >
                 <span>{progress?.stepMessage || TEXT_MONITORING.MONTHLY_SYNC.STATUS_FETCHING}</span>
-                <span style={{ color: 'var(--accent-color, #3ECF8E)' }}>
+                <span style={{ color: 'var(--color-link)' }}>
                   {progress?.percent || 5}%
                 </span>
               </div>
@@ -486,7 +486,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                   style={{
                     height: '100%',
                     width: `${progress?.percent || 5}%`,
-                    background: 'var(--accent-color, #3ECF8E)',
+                    background: 'var(--color-action-primary-bg)',
                     borderRadius: '8px',
                     transition: 'width 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
                   }}
@@ -533,7 +533,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 gap: '8px',
                 padding: '10px 20px',
                 borderRadius: '12px',
-                background: 'var(--accent-color, #3ECF8E)',
+                background: 'var(--color-action-primary-bg)',
                 border: 'none',
                 color: '#000000',
                 fontSize: '13px',
@@ -541,7 +541,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 cursor: syncing ? 'wait' : 'pointer',
                 opacity: syncing ? 0.7 : 1,
                 transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
-                boxShadow: '0 2px 8px rgba(62, 207, 142, 0.25)',
+                boxShadow: '0 2px 8px var(--color-shadow)',
               }}
             >
               {syncing ? (

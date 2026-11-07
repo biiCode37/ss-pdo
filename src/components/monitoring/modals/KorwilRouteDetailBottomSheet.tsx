@@ -207,9 +207,9 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                   borderRadius: "8px",
                   fontSize: "14px",
                   fontWeight: 700,
-                  background: "rgba(62, 207, 142, 0.15)",
-                  color: "var(--accent-color, #3ECF8E)",
-                  border: "1px solid rgba(62, 207, 142, 0.3)",
+                  background: "var(--color-action-secondary-bg)",
+                  color: "var(--color-link)",
+                  border: "1px solid var(--color-border-subtle)",
                 }}
               >
                 {route.routeCode}
@@ -287,14 +287,14 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             >
               {/* Header Title di Dalam Card */}
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <Award size={16} style={{ color: "var(--accent-color, #10B981)" }} />
+                <Award size={16} style={{ color: "var(--color-link)" }} />
                 <span
                   style={{
                     fontSize: "12px",
                     fontWeight: 700,
                     textTransform: "uppercase",
                     letterSpacing: "0.03em",
-                    color: "var(--accent-color, #10B981)",
+                    color: "var(--color-link)",
                   }}
                 >
                   {t.RECORD_BADGE}
@@ -311,7 +311,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 }}
               >
                 {/* Sisi Kiri: Nilai Rekor */}
-                <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>
+                <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--color-link)" }}>
                   {formatNumber(bestRecord)}{" "}
                   <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--text-primary, #ededed)" }}>
                     {labels.UNIT_PAX}
@@ -325,7 +325,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                     style={{
                       fontSize: "12px",
                       fontWeight: 600,
-                      color: "var(--accent-color, #10B981)",
+                      color: "var(--color-link)",
                       background: "rgba(16, 185, 129, 0.12)",
                       padding: "4px 10px",
                       borderRadius: "8px",
@@ -351,7 +351,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <Bus size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Bus size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.FLEET}
               </h3>
@@ -380,7 +380,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.FLEET_RATIO}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 700, color: fleetRatio >= 95 ? "#10B981" : "#F59E0B" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: fleetRatio >= 95 ? "var(--color-success-fg)" : "var(--color-warning-fg)" }}>
                   {formatDecimal(fleetRatio)}%
                 </span>
               </div>
@@ -461,7 +461,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <Users size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Users size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.SHIFT_BREAKDOWN}
               </h3>
@@ -491,7 +491,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.1))", paddingTop: "4px" }}>
                   <span style={{ fontWeight: 700 }}>{labels.TOTAL}:</span>
-                  <span style={{ fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>{formatNumber(totalS1)}</span>
+                  <span style={{ fontWeight: 700, color: "var(--color-link)" }}>{formatNumber(totalS1)}</span>
                 </div>
               </div>
 
@@ -517,7 +517,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.1))", paddingTop: "4px" }}>
                   <span style={{ fontWeight: 700 }}>{labels.TOTAL}:</span>
-                  <span style={{ fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>{formatNumber(totalS2)}</span>
+                  <span style={{ fontWeight: 700, color: "var(--color-link)" }}>{formatNumber(totalS2)}</span>
                 </div>
               </div>
             </div>
@@ -525,8 +525,8 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             {/* Total Pelanggan & Target */}
             <div
               style={{
-                background: "rgba(62, 207, 142, 0.08)",
-                border: "1px solid rgba(62, 207, 142, 0.2)",
+                background: "var(--color-action-secondary-bg)",
+                border: "1px solid var(--color-border-subtle)",
                 borderRadius: "12px",
                 padding: "10px 12px",
                 display: "flex",
@@ -540,7 +540,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.TOTAL_PAX}
                 </span>
-                <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>
+                <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--color-link)" }}>
                   {formatNumber(totalPax)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{labels.UNIT_PAX}</span>
                 </span>
               </div>
@@ -556,7 +556,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                     padding: "2px 8px",
                     borderRadius: "999px",
                     background: paxPct >= 80 ? "rgba(16, 185, 129, 0.15)" : "rgba(245, 158, 11, 0.15)",
-                    color: paxPct >= 80 ? "#10B981" : "#F59E0B",
+                    color: paxPct >= 80 ? "var(--color-success-fg)" : "var(--color-warning-fg)",
                     display: "inline-block",
                     marginTop: "2px",
                   }}
@@ -577,7 +577,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <RouteIcon size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <RouteIcon size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.DISTANCE_RITASE}
               </h3>
@@ -638,7 +638,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-              <Zap size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Zap size={16} style={{ color: "var(--color-link)" }} />
               <h3 style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {t.SECTIONS.EFFICIENCY}
               </h3>
@@ -650,7 +650,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.PAX_PER_KM}
                 </span>
-                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-link)" }}>
                   {formatDecimal(paxPerKm, 3)} <span style={{ fontSize: "12px", fontWeight: 400 }}>{labels.UNIT_PAX_PER_KM}</span>
                 </span>
               </div>
@@ -662,7 +662,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 </span>
                 <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                   {formatDecimal(targetPaxPerKm)}{" "}
-                  <span style={{ fontSize: "12px", fontWeight: 500, color: paxPerKmPct >= 50 ? "#10B981" : "#F59E0B" }}>
+                  <span style={{ fontSize: "12px", fontWeight: 500, color: paxPerKmPct >= 50 ? "var(--color-success-fg)" : "var(--color-warning-fg)" }}>
                     ({formatDecimal(paxPerKmPct)}%)
                   </span>
                 </span>
@@ -714,7 +714,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 width: "100%",
                 padding: "10px 16px",
                 borderRadius: "12px",
-                background: "var(--accent-color, #3ECF8E)",
+                background: "var(--color-action-primary-bg)",
                 color: "#0a0a0a",
                 border: "none",
                 fontSize: "13px",
@@ -724,7 +724,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 justifyContent: "center",
                 gap: "8px",
                 cursor: "pointer",
-                boxShadow: "0 2px 10px rgba(62, 207, 142, 0.25)",
+                boxShadow: "0 2px 10px var(--color-shadow)",
                 transition: "opacity 0.2s ease",
               }}
             >

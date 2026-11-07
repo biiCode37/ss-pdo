@@ -101,7 +101,7 @@ export const AccumulationPeriodSelector: React.FC<
             gap: "6px",
             fontSize: "12px",
             fontWeight: 700,
-            color: "var(--accent-color, #38bdf8)",
+            color: "var(--color-link)",
             marginBottom: "8px",
           }}
         >

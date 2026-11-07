@@ -43,7 +43,7 @@ export async function promptAddUserModal(
     html: `
       <div style="text-align:left;font-size:13px;display:flex;flex-direction:column;gap:14px;margin-top:6px;">
         <div>
-          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_LABEL} <span style="color:#ef4444">*</span></label>
+          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_LABEL} <span style="color:var(--color-error-fg)">*</span></label>
           <input id="swal-email" type="email" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_PLACEHOLDER}" class="pdo-swal-input" />
         </div>
         <div>

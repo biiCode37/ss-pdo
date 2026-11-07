@@ -46,9 +46,9 @@ function CompletionStatusCardComponent({
                 fontSize: "12px",
                 fontWeight: 700,
                 fontFamily: "monospace",
-                color: "var(--accent-color)",
-                background: "rgba(62, 207, 142, 0.12)",
-                border: "1px solid rgba(62, 207, 142, 0.25)",
+                color: "var(--color-link)",
+                background: "var(--color-action-secondary-bg)",
+                border: "1px solid var(--color-border-subtle)",
                 padding: "4px 8px",
                 borderRadius: "8px",
                 whiteSpace: "nowrap",
@@ -62,7 +62,7 @@ function CompletionStatusCardComponent({
             style={{
               fontSize: "12px",
               fontWeight: 600,
-              color: hasNotes ? "var(--accent-color)" : "var(--text-secondary)",
+              color: hasNotes ? "var(--color-link)" : "var(--text-secondary)",
             }}
           >
             {TEXT_DASHBOARD.COMPLETION_STATUS.UNIT_COUNT(hasNotes ? summary.busesWithNotes.length : 0)}

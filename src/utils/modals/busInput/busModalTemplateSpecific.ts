@@ -116,7 +116,7 @@ export function renderSpecificModalHtml(
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
         ${headerHtml}
         <div style="padding: 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
-          <div style="font-size: 12px; font-weight: 700; color: var(--accent-color); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--color-action-primary-bg); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_TRIP_CARD}
           </div>
           <div>
@@ -128,7 +128,7 @@ export function renderSpecificModalHtml(
               type="number"
               inputmode="numeric"
               class="input-field"
-              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--color-action-primary-bg); width: 100%;"
               value="${escapeHtml(bus.tripPergi || "")}"
               placeholder="0"
             />
@@ -142,7 +142,7 @@ export function renderSpecificModalHtml(
               type="number"
               inputmode="numeric"
               class="input-field"
-              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+              style="font-size: 20px; font-weight: 700; text-align: center; height: 46px; border-radius: 12px; border: 1.5px solid var(--color-action-primary-bg); width: 100%;"
               value="${escapeHtml(bus.tripPulang || "")}"
               placeholder="0"
             />
@@ -214,7 +214,7 @@ export function renderSpecificModalHtml(
             class="input-field"
             placeholder="${escapeHtml(singleMeta.placeholder)}"
             value="${escapeHtml(currentVal)}"
-            style="font-size: 20px; font-weight: 700; text-align: center; height: 48px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
+            style="font-size: 20px; font-weight: 700; text-align: center; height: 48px; border-radius: 12px; border: 1.5px solid var(--color-action-primary-bg); width: 100%;"
           />
         </div>
 

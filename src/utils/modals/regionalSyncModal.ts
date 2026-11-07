@@ -49,7 +49,7 @@ export async function showRegionalSyncModal(
         ${escapeHtml(TEXT_MONITORING.SYNC_MODAL.DESC)}
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 12px; background: rgba(62, 207, 142, 0.06); border: 1px solid rgba(62, 207, 142, 0.25);">
+      <div style="display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 12px; background: var(--color-action-secondary-bg); border: 1px solid var(--color-border-subtle);">
         <div>
           <label for="swal-global-sheet-url" style="font-size: 12px; font-weight: 700; color: var(--text-secondary, #8b8b8b); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${escapeHtml(TEXT_MONITORING.SYNC_MODAL.LABEL_URL)}

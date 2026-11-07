@@ -20,7 +20,7 @@ export function LoginInfoPermissionsSection({
           marginBottom: "8px",
         }}
       >
-        <FileSpreadsheet size={16} color="var(--accent-color, #3ECF8E)" />
+        <FileSpreadsheet size={16} color="var(--color-action-primary-bg)" />
         <h4
           style={{
             fontSize: "16px",
@@ -50,7 +50,7 @@ export function LoginInfoPermissionsSection({
         style={{
           background: "none",
           border: "none",
-          color: "var(--accent-color, #3ECF8E)",
+          color: "var(--color-link)",
           fontSize: "12px",
           fontWeight: 600,
           display: "inline-flex",
@@ -89,7 +89,7 @@ export function LoginInfoPermissionsSection({
           </div>
           <div>• Akses baca & tulis Google Spreadsheet tugas operasional</div>
           <div>• Alamat email dan nama profil (verifikasi identitas petugas)</div>
-          <div style={{ marginTop: "6px", color: "var(--accent-color, #3ECF8E)" }}>
+          <div style={{ marginTop: "6px", color: "var(--color-link)" }}>
             Keamanan login dan transmisi token dienkripsi langsung oleh infrastruktur resmi Google.
           </div>
         </div>

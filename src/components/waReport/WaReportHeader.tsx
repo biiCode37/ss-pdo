@@ -22,7 +22,7 @@ export function WaReportHeader({ onClose }: WaReportHeaderProps) {
             height: "36px",
             borderRadius: "12px",
             background: "rgba(37, 211, 102, 0.12)",
-            color: "#25D366",
+            color: "var(--color-success-fg)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

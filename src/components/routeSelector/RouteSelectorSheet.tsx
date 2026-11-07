@@ -193,7 +193,7 @@ export function RouteSelectorSheet({
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--accent-color)',
+              color: 'var(--color-link)',
               fontSize: '12px',
               fontWeight: 600,
               cursor: 'pointer',

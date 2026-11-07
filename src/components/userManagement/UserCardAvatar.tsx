@@ -48,7 +48,7 @@ export const UserCardAvatar: React.FC<UserCardAvatarProps> = ({
         borderRadius: "12px",
         background: "rgba(59, 130, 246, 0.12)",
         border: "1px solid rgba(59, 130, 246, 0.25)",
-        color: "#60a5fa",
+        color: "var(--color-link)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

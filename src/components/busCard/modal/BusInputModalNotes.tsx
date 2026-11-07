@@ -178,7 +178,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             id="toggle-apply-all-shifts"
             checked={applyAllShifts}
             onChange={(e) => handleToggleApplyAll(e.target.checked)}
-            style={{ accentColor: "var(--accent-color, #38bdf8)", cursor: "pointer" }}
+            style={{ accentColor: "var(--color-action-primary-bg)", cursor: "pointer" }}
           />
           <span>{texts.PRESETS.APPLY_ALL_SHIFTS}</span>
         </label>
@@ -261,7 +261,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             fontFamily: "monospace",
             fontWeight: 600,
             color: combinedPreview
-              ? "var(--accent-color, #38bdf8)"
+              ? "var(--color-link)"
               : "var(--text-secondary, #64748b)",
             wordBreak: "break-all",
           }}

@@ -282,11 +282,11 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                 background:
                   selectedYear === currentYear && selectedMonth === currentMonth
-                    ? "rgba(62, 207, 142, 0.16)"
+                    ? "var(--color-state-active-bg)"
                     : "var(--input-bg, rgba(255, 255, 255, 0.04))",
                 color:
                   selectedYear === currentYear && selectedMonth === currentMonth
-                    ? "var(--accent-color, #3ECF8E)"
+                    ? "var(--color-state-active-fg)"
                     : "var(--text-secondary, #aaa)",
                 cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -358,17 +358,17 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
                   padding: "10px 4px",
                   borderRadius: "12px",
                   border: isSelected
-                    ? "1px solid var(--accent-color, #3ECF8E)"
+                    ? "1px solid var(--color-state-active-bg)"
                     : "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                   background: isSelected
-                    ? "var(--accent-color, #3ECF8E)"
+                    ? "var(--color-state-active-bg)"
                     : isCurrent
-                    ? "rgba(62, 207, 142, 0.12)"
+                    ? "var(--color-action-secondary-bg)"
                     : "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   color: isSelected
-                    ? "#062817"
+                    ? "var(--color-state-active-fg)"
                     : isCurrent
-                    ? "var(--accent-color, #3ECF8E)"
+                    ? "var(--color-link)"
                     : "var(--text-primary, #ededed)",
                   fontSize: "13px",
                   fontWeight: isSelected ? 700 : isCurrent ? 700 : 500,
@@ -378,7 +378,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "4px",
-                  boxShadow: isSelected ? "0 2px 10px rgba(62, 207, 142, 0.3)" : "none",
+                  boxShadow: isSelected ? "0 2px 10px var(--color-shadow)" : "none",
                 }}
               >
                 <span>{name.slice(0, 3)}</span>
@@ -415,7 +415,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               padding: "8px 16px",
               borderRadius: "12px",
               border: "none",
-              background: "var(--accent-color, #3ECF8E)",
+              background: "var(--color-action-primary-bg)",
               color: "#062817",
               fontSize: "13px",
               fontWeight: 700,
@@ -423,7 +423,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              boxShadow: "0 2px 8px rgba(62, 207, 142, 0.3)",
+              boxShadow: "0 2px 8px var(--color-shadow)",
             }}
           >
             {TEXT_MONITORING.PERIOD.APPLY_BTN}

@@ -12,12 +12,11 @@
 
 
 
-  --accent-color: #3ECF8E;
 
 
 
   --danger-color: #f75555;
-  --success-color: #3ECF8E;
+  --success-color: var(--color-action-primary-bg);
   --warning-color: #f59e0b;
   --orange-color: #fb923c;
 
@@ -56,7 +55,6 @@
 
 
 
-  --accent-color: #24B47E;
 
 
 
@@ -142,7 +140,8 @@ input[type="number"] {
 .app-container {
   max-width: 480px;
   margin: 0 auto;
-  padding: clamp(12px, 2.5vw, 16px) clamp(12px, 2.5vw, 16px) calc(76px + env(safe-area-inset-bottom, 12px)) clamp(12px, 2.5vw, 16px);
+  /* Ruang bawah = jarak dock (14px) + tinggi dock (~54px) + 20px agar konten terakhir tidak tertutup (refact_221) */
+  padding: clamp(12px, 2.5vw, 16px) clamp(12px, 2.5vw, 16px) calc(88px + env(safe-area-inset-bottom, 0px)) clamp(12px, 2.5vw, 16px);
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -191,7 +190,7 @@ input[type="number"] {
   flex-shrink: 0;
   background: var(--color-surface-raised);
   padding: 12px clamp(12px, 2.5vw, 16px);
-  margin: calc(-1 * clamp(12px, 2.5vw, 16px)) calc(-1 * clamp(12px, 2.5vw, 16px)) 14px;
+  margin: calc(-1 * clamp(12px, 2.5vw, 16px)) calc(-1 * clamp(12px, 2.5vw, 16px)) 12px;
   border-bottom: 1px solid var(--color-border-subtle);
   box-shadow: 0 2px 8px var(--color-shadow);
 }
@@ -349,7 +348,7 @@ input[type="number"] {
 }
 .bus-card-badge-trip:hover {
   filter: brightness(1.08);
-  border-color: var(--accent-color) !important;
+  border-color: var(--color-action-primary-bg) !important;
 }
 .bus-card-badge-trip:active {
   transform: scale(0.95);
@@ -461,7 +460,11 @@ select.input-field {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 6px;
+}
+
+/* Kolom cari halaman (Armada): ritme 12px ke daftar (refact_221) */
+.page-search {
+  margin-bottom: 12px;
 }
 .bus-card {
   position: relative;
@@ -679,7 +682,7 @@ select.input-field {
   background: var(--color-action-primary-bg);
   color: var(--color-action-primary-fg);
 
-  box-shadow: 0 4px 10px rgba(62, 207, 142, 0.3);
+  box-shadow: 0 4px 10px var(--color-shadow);
 }
 
 /* Bottom Navigation Bar (Expanding Pill Solid Floating Dock) */
@@ -734,35 +737,12 @@ body[style*="overflow: hidden"] .bottom-nav-wrapper {
   max-width: fit-content;
   padding: 4px 6px;
 
-  /* Elevated High-Contrast Dark Floating Capsule */
-  background: rgba(26, 28, 34, 0.94);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  /* Dock melayang: warna dari token (refact_221) */
+  background: var(--color-dock-bg);
+  border: 1px solid var(--color-dock-border);
   border-radius: 999px;
-
-  /* Premium High-Elevation Shadow for Clear Contrast */
-  box-shadow:
-    0 20px 48px -4px rgba(0, 0, 0, 0.85),
-    0 8px 24px -2px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-
+  box-shadow: 0 8px 24px var(--color-shadow), 0 2px 6px var(--color-shadow);
   transition: all 0.28s cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-/* High-Contrast Light Mode Floating Capsule */
-[data-theme="light"] .bottom-nav,
-body.light-mode .bottom-nav {
-  background: rgba(255, 255, 255, 0.96) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1.5px solid rgba(15, 23, 42, 0.22) !important;
-  box-shadow:
-    0 18px 44px -4px rgba(15, 23, 42, 0.24),
-    0 6px 18px -2px rgba(15, 23, 42, 0.14),
-    0 0 0 1px rgba(0, 0, 0, 0.05),
-    inset 0 1.5px 0 rgba(255, 255, 255, 1) !important;
 }
 
 /* Tab Items (Ergonomic Minimum Tap Target 44px) */
@@ -771,13 +751,13 @@ body.light-mode .bottom-nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
+  min-height: 44px;
   min-width: 44px;
   padding: 8px 12px;
   border-radius: 999px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-text-secondary);
   cursor: pointer;
   touch-action: manipulation;
   transition: all 0.25s cubic-bezier(0.32, 0.72, 0, 1);
@@ -785,36 +765,19 @@ body.light-mode .bottom-nav {
   -webkit-tap-highlight-color: transparent;
 }
 
-[data-theme="light"] .bottom-nav-item,
-body.light-mode .bottom-nav-item {
-  color: #475569;
-}
-
-[data-theme="light"] .bottom-nav-item:hover,
-body.light-mode .bottom-nav-item:hover {
-  color: #0f172a;
-}
-
 .bottom-nav-item:hover {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .bottom-nav-item:active {
   transform: scale(0.94);
 }
 
-/* Expanding Pill Active Tab */
+/* Kapsul tab aktif: kontras >= 3:1 vs dock, teks >= 4.5:1 (refact_221) */
 .bottom-nav-item.active {
-  background: var(--color-selection-bg);
-  color: var(--color-selection-fg) !important;
+  background: var(--color-state-active-bg);
+  color: var(--color-state-active-fg);
   padding: 8px 16px;
-  box-shadow: 0 4px 14px var(--color-shadow);
-}
-
-[data-theme="light"] .bottom-nav-item.active {
-  background: var(--color-selection-bg);
-  color: var(--color-selection-fg) !important;
-  box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 .bottom-nav-icon-wrapper {
@@ -879,8 +842,7 @@ body.light-mode .bottom-nav-item:hover {
 .analytics-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-top: 16px;
+  gap: 12px;
 }
 
 .analytics-card {
@@ -940,7 +902,7 @@ body.light-mode .bottom-nav-item:hover {
 }
 
 .kpi-metric-card:hover {
-  border-color: rgba(62, 207, 142, 0.3);
+  border-color: var(--color-border-subtle);
 }
 
 .kpi-metric-head {
@@ -1230,18 +1192,18 @@ body.light-mode .bottom-nav-item:hover {
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
-  background: rgba(62, 207, 142, 0.15);
-  color: var(--accent-color) !important;
-  border: 1px solid rgba(62, 207, 142, 0.3);
+  background: var(--color-action-secondary-bg);
+  color: var(--color-link) !important;
+  border: 1px solid var(--color-border-subtle);
 }
 
 .morph-pill-badge span,
 .morph-pill-badge label {
-  color: var(--accent-color) !important;
+  color: var(--color-link) !important;
 }
 
 .morph-pill-badge > svg {
-  color: var(--accent-color) !important;
+  color: var(--color-link) !important;
 }
 
 [data-theme="light"] .morph-pill-badge {
@@ -1256,7 +1218,7 @@ body.light-mode .bottom-nav-item:hover {
 }
 
 [data-theme="light"] .morph-pill-badge > svg {
-  color: #24B47E !important;
+  color: var(--color-link) !important;
 }
 
 /* Form Content Overlay */
@@ -1297,7 +1259,7 @@ body.light-mode .bottom-nav-item:hover {
   align-items: center;
   gap: 6px;
   background: rgba(56, 189, 248, 0.16);
-  color: var(--accent-color);
+  color: var(--color-link);
   font-size: 12px;
   font-weight: 700;
   padding: 4px 10px;
@@ -1771,7 +1733,7 @@ div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-error {
 
 div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-success {
   border-color: rgba(16, 185, 129, 0.45) !important;
-  color: #10b981 !important;
+  color: var(--color-success-fg) !important;
   background: rgba(16, 185, 129, 0.08) !important;
 }
 
@@ -1959,8 +1921,8 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 }
 
 .pdo-swal-chip:hover {
-  background: rgba(62, 207, 142, 0.12);
-  color: var(--accent-color);
+  background: var(--color-action-secondary-bg);
+  color: var(--color-link);
 
 }
 
@@ -2010,10 +1972,9 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 }
 
 .swal-segment-btn.active {
-  background: var(--card-bg, #0f172a);
-  color: var(--text-primary);
-  border-color: var(--card-border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  background: var(--color-state-active-bg);
+  color: var(--color-state-active-fg);
+  border-color: var(--color-state-active-bg);
 }
 
 .swal-panel-section {
@@ -2072,11 +2033,10 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 }
 
 .swal-note-chip.active {
-  background: var(--accent-color, #38bdf8);
-  color: #000 !important;
-  border-color: var(--accent-color, #38bdf8);
+  background: var(--color-state-active-bg);
+  color: var(--color-state-active-fg) !important;
+  border-color: var(--color-state-active-bg);
   font-weight: 700;
-  box-shadow: 0 2px 6px var(--color-shadow);
 }
 
 .swal-note-chip[data-type="ba"] {
@@ -2092,10 +2052,9 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 }
 
 .swal-note-chip[data-type="ba"].active {
-  background: #ef4444 !important;
-  color: #fff !important;
-  border-color: #ef4444 !important;
-  box-shadow: 0 2px 6px var(--color-shadow);
+  background: var(--color-danger-bg) !important;
+  color: var(--color-danger-fg) !important;
+  border-color: var(--color-danger-bg) !important;
 }
 
 .swal-note-chip-clear {
@@ -2167,20 +2126,19 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
 }
 
 .pdo-satset-toggle:hover {
-  border-color: var(--accent-color, #38bdf8);
+  border-color: var(--color-action-primary-bg);
   color: var(--text-primary);
   background: var(--card-bg, rgba(255, 255, 255, 0.1));
 }
 
 .pdo-satset-toggle.active {
-  background: var(--color-success-bg);
-  border-color: var(--color-success-border);
-  color: var(--color-success-fg);
-  box-shadow: 0 1px 4px var(--color-shadow);
+  background: var(--color-state-active-bg);
+  border-color: var(--color-state-active-bg);
+  color: var(--color-state-active-fg);
 }
 
 .pdo-satset-toggle.active .satset-icon {
-  color: var(--color-success-fg);
+  color: var(--color-state-active-fg);
   filter: none;
 }
 

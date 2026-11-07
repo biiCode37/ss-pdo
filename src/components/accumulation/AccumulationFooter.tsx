@@ -44,7 +44,7 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
           borderRadius: "12px",
           padding: "10px 14px",
           fontSize: "13px",
-          color: "var(--accent-color, #38bdf8)",
+          color: "var(--color-link)",
           fontWeight: 600,
           display: "flex",
           alignItems: "center",

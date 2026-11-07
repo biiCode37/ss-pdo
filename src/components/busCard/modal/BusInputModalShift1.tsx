@@ -149,7 +149,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   padding: "2px 6px",
                   borderRadius: "8px",
                   background: "rgba(245, 158, 11, 0.15)",
-                  color: "#f59e0b",
+                  color: "var(--color-warning-fg)",
                   fontWeight: 600,
                 }}
               >
@@ -168,7 +168,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               background: "rgba(56, 189, 248, 0.12)",
               border: "1px solid rgba(56, 189, 248, 0.25)",
               borderRadius: "8px",
-              color: "var(--accent-color, #38bdf8)",
+              color: "var(--color-link)",
               fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",
@@ -236,7 +236,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             style={{
               fontSize: "12px",
               fontWeight: 600,
-              color: kmLiveS1.status === "negative" ? "#f87171" : "#f59e0b",
+              color: kmLiveS1.status === "negative" ? "var(--color-error-fg)" : "var(--color-warning-fg)",
               display: "flex",
               alignItems: "center",
               gap: "6px",
@@ -276,7 +276,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   background: "rgba(239, 68, 68, 0.12)",
                   border: "1px solid rgba(239, 68, 68, 0.35)",
                   fontSize: "12px",
-                  color: "#f87171",
+                  color: "var(--color-error-fg)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "6px",
@@ -327,7 +327,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                 <div
                   style={{
                     fontSize: "13px",
-                    color: "#f59e0b",
+                    color: "var(--color-warning-fg)",
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",

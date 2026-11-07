@@ -139,7 +139,7 @@ function BusCardComponent({
               <Loader2
                 size={16}
                 className="spinner"
-                style={{ color: "var(--accent-color)", flexShrink: 0 }}
+                style={{ color: "var(--color-link)", flexShrink: 0 }}
               />
             )}
           </div>

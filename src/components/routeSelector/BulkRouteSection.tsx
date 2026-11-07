@@ -164,7 +164,7 @@ export function BulkRouteSection({
         </div>
       )}
       {bulkSuccessMessage && (
-        <div style={{ color: 'var(--success-color, #10b981)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ color: 'var(--success-color)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
           <CheckCircle size={16} style={{ flexShrink: 0 }} />
           <span>{bulkSuccessMessage}</span>
         </div>
@@ -234,7 +234,7 @@ export function BulkRouteSection({
                         style={{
                           fontWeight: 700,
                           color: isReady
-                            ? 'var(--success-color, #10b981)'
+                            ? 'var(--success-color)'
                             : isDuplicate
                             ? 'var(--warning-color, #f59e0b)'
                             : 'var(--text-primary)',
@@ -277,7 +277,7 @@ export function BulkRouteSection({
                           borderRadius: '8px',
                           fontSize: '12px',
                           background: 'rgba(16, 185, 129, 0.15)',
-                          color: '#10b981',
+                          color: 'var(--color-success-fg)',
                           fontWeight: 600,
                         }}
                       >
@@ -291,7 +291,7 @@ export function BulkRouteSection({
                           borderRadius: '8px',
                           fontSize: '12px',
                           background: 'rgba(245, 158, 11, 0.15)',
-                          color: '#f59e0b',
+                          color: 'var(--color-warning-fg)',
                           fontWeight: 600,
                         }}
                       >
@@ -306,7 +306,7 @@ export function BulkRouteSection({
                             borderRadius: '8px',
                             fontSize: '12px',
                             background: 'rgba(239, 68, 68, 0.15)',
-                            color: '#ef4444',
+                            color: 'var(--color-error-fg)',
                             fontWeight: 600,
                           }}
                         >
@@ -329,7 +329,7 @@ export function BulkRouteSection({
                           }}
                           title={SERVICE_ACCOUNT_EMAIL}
                         >
-                          {copiedEmail ? <Check size={16} color="#10b981" /> : <Copy size={16} />}
+                          {copiedEmail ? <Check size={16} color="var(--color-success-fg)" /> : <Copy size={16} />}
                           <span>{copiedEmail ? 'Disalin!' : 'Salin Email'}</span>
                         </button>
                       </div>
@@ -351,7 +351,7 @@ export function BulkRouteSection({
               padding: '12px',
               fontSize: '13px',
               fontWeight: 600,
-              backgroundColor: 'var(--color-action-primary-bg, #10b981)',
+              backgroundColor: 'var(--color-action-primary-bg)',
               color: 'var(--color-action-primary-fg, #ffffff)',
               display: 'flex',
               alignItems: 'center',

@@ -57,7 +57,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Users size={20} style={{ color: "#3b82f6" }} />
+            <Users size={20} style={{ color: "var(--color-link)" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT}</div>
               <div
@@ -98,7 +98,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Sliders size={20} style={{ color: "#f59e0b" }} />
+              <Sliders size={20} style={{ color: "var(--color-warning-fg)" }} />
               <div style={{ textAlign: "left" }}>
                 <div>{TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT}</div>
                 <div

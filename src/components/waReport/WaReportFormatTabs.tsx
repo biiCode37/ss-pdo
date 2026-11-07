@@ -45,7 +45,7 @@ export function WaReportFormatTabs({
             alignItems: "center",
             gap: "10px",
             fontSize: "12px",
-            color: "#d97706",
+            color: "var(--color-warning-fg)",
           }}
         >
           <AlertTriangle size={20} style={{ flexShrink: 0 }} />
@@ -74,9 +74,9 @@ export function WaReportFormatTabs({
           style={{
             padding: "6px 4px",
             borderRadius: "8px",
-            border: formatType === "format1" ? "1px solid var(--color-border-control)" : "1px solid transparent",
-            background: formatType === "format1" ? "var(--color-selection-bg)" : "transparent",
-            color: formatType === "format1" ? "var(--color-selection-fg)" : "var(--color-text-secondary)",
+            border: formatType === "format1" ? "1px solid var(--color-state-active-bg)" : "1px solid transparent",
+            background: formatType === "format1" ? "var(--color-state-active-bg)" : "transparent",
+            color: formatType === "format1" ? "var(--color-state-active-fg)" : "var(--color-text-secondary)",
             boxShadow: formatType === "format1" ? "0 2px 8px var(--color-shadow)" : "none",
             cursor: "pointer",
             display: "flex",
@@ -102,9 +102,9 @@ export function WaReportFormatTabs({
           style={{
             padding: "6px 4px",
             borderRadius: "8px",
-            border: formatType === "format2" ? "1px solid var(--color-border-control)" : "1px solid transparent",
-            background: formatType === "format2" ? "var(--color-selection-bg)" : "transparent",
-            color: formatType === "format2" ? "var(--color-selection-fg)" : "var(--color-text-secondary)",
+            border: formatType === "format2" ? "1px solid var(--color-state-active-bg)" : "1px solid transparent",
+            background: formatType === "format2" ? "var(--color-state-active-bg)" : "transparent",
+            color: formatType === "format2" ? "var(--color-state-active-fg)" : "var(--color-text-secondary)",
             boxShadow: formatType === "format2" ? "0 2px 8px var(--color-shadow)" : "none",
             cursor: "pointer",
             display: "flex",
@@ -130,9 +130,9 @@ export function WaReportFormatTabs({
           style={{
             padding: "6px 4px",
             borderRadius: "8px",
-            border: formatType === "format3" ? "1px solid var(--color-border-control)" : "1px solid transparent",
-            background: formatType === "format3" ? "var(--color-selection-bg)" : "transparent",
-            color: formatType === "format3" ? "var(--color-selection-fg)" : "var(--color-text-secondary)",
+            border: formatType === "format3" ? "1px solid var(--color-state-active-bg)" : "1px solid transparent",
+            background: formatType === "format3" ? "var(--color-state-active-bg)" : "transparent",
+            color: formatType === "format3" ? "var(--color-state-active-fg)" : "var(--color-text-secondary)",
             boxShadow: formatType === "format3" ? "0 2px 8px var(--color-shadow)" : "none",
             cursor: "pointer",
             display: "flex",
@@ -173,9 +173,9 @@ export function WaReportFormatTabs({
             style={{
               padding: "8px 12px",
               borderRadius: "8px",
-              border: selectedShift === 1 ? "1px solid var(--shift1-color, #38bdf8)" : "1px solid transparent",
-              background: selectedShift === 1 ? "var(--shift1-bg, rgba(56, 189, 248, 0.18))" : "transparent",
-              color: selectedShift === 1 ? "var(--shift1-color, #38bdf8)" : "var(--text-secondary, #94a3b8)",
+              border: selectedShift === 1 ? "1px solid var(--color-state-active-bg)" : "1px solid transparent",
+              background: selectedShift === 1 ? "var(--color-state-active-bg)" : "transparent",
+              color: selectedShift === 1 ? "var(--color-state-active-fg)" : "var(--text-secondary, #94a3b8)",
               fontSize: "12px",
               fontWeight: selectedShift === 1 ? 700 : 500,
               cursor: "pointer",
@@ -194,9 +194,9 @@ export function WaReportFormatTabs({
             style={{
               padding: "8px 12px",
               borderRadius: "8px",
-              border: selectedShift === 2 ? "1px solid var(--shift2-color, #c084fc)" : "1px solid transparent",
-              background: selectedShift === 2 ? "var(--shift2-bg, rgba(192, 132, 252, 0.18))" : "transparent",
-              color: selectedShift === 2 ? "var(--shift2-color, #c084fc)" : "var(--text-secondary, #94a3b8)",
+              border: selectedShift === 2 ? "1px solid var(--color-state-active-bg)" : "1px solid transparent",
+              background: selectedShift === 2 ? "var(--color-state-active-bg)" : "transparent",
+              color: selectedShift === 2 ? "var(--color-state-active-fg)" : "var(--text-secondary, #94a3b8)",
               fontSize: "12px",
               fontWeight: selectedShift === 2 ? 700 : 500,
               cursor: "pointer",
@@ -233,9 +233,9 @@ export function WaReportFormatTabs({
                 style={{
                   padding: "6px 12px",
                   borderRadius: "16px",
-                  border: active ? "1px solid #2563eb" : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-                  background: active ? "#2563eb" : "var(--input-bg, rgba(255, 255, 255, 0.05))",
-                  color: active ? "#ffffff" : "var(--text-secondary, #94a3b8)",
+                  border: active ? "1px solid var(--color-state-active-bg)" : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
+                  background: active ? "var(--color-state-active-bg)" : "var(--input-bg, rgba(255, 255, 255, 0.05))",
+                  color: active ? "var(--color-state-active-fg)" : "var(--text-secondary, #94a3b8)",
                   fontSize: "12px",
                   fontWeight: active ? 600 : 500,
                   whiteSpace: "nowrap",
@@ -263,7 +263,7 @@ export function WaReportFormatTabs({
             gap: "4px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#f87171", fontWeight: 700, fontSize: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-error-fg)", fontWeight: 700, fontSize: "12px" }}>
             <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{TEXT_WA_REPORT.BLOCKING_TITLE(selectedShift)}</span>
           </div>
@@ -293,7 +293,7 @@ export function WaReportFormatTabs({
                   borderRadius: "8px",
                   background: "rgba(239, 68, 68, 0.2)",
                   border: "1px solid rgba(239, 68, 68, 0.4)",
-                  color: "#f87171",
+                  color: "var(--color-error-fg)",
                   whiteSpace: "nowrap",
                   letterSpacing: "0.2px",
                   cursor: onQuickEditRoute ? "pointer" : "default",

@@ -30,7 +30,6 @@
   --warning-color: var(--color-warning-fg);
   --accent-bg: var(--color-selection-bg);
   --accent-border: var(--color-border-subtle);
-  --accent-color: var(--color-action-primary-bg);
   --info-color: var(--color-info-fg);
   --success-color: var(--color-success-fg);
   --danger-color: var(--color-error-fg);

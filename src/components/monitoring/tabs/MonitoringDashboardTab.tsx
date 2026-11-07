@@ -49,9 +49,9 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             }}
           >
             {isAllConfirmed ? (
-              <CheckCircle2 size={20} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={20} style={{ color: "var(--color-success-fg)" }} />
             ) : (
-              <ShieldAlert size={20} style={{ color: "#F59E0B" }} />
+              <ShieldAlert size={20} style={{ color: "var(--color-warning-fg)" }} />
             )}
           </div>
           <div
@@ -78,7 +78,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
               style={{
                 fontSize: "13px",
                 fontWeight: 700,
-                color: isAllConfirmed ? "#10B981" : "var(--accent-color, #3ECF8E)",
+                color: isAllConfirmed ? "var(--color-success-fg)" : "var(--color-link)",
                 lineHeight: 1.25,
               }}
             >

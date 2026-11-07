@@ -29,7 +29,7 @@ export const ToaTrendHeader: React.FC<ToaTrendHeaderProps> = ({
             style={{
               fontSize: "12px",
               fontWeight: 600,
-              color: "var(--accent-color)",
+              color: "var(--color-link)",
               paddingLeft: "24px",
             }}
           >

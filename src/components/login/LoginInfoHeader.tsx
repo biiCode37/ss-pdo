@@ -35,8 +35,8 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
             style={{
               padding: "6px",
               borderRadius: "8px",
-              backgroundColor: "rgba(62, 207, 142, 0.15)",
-              color: "var(--accent-color, #3ECF8E)",
+              backgroundColor: "var(--color-action-secondary-bg)",
+              color: "var(--color-link)",
             }}
           >
             <Info size={20} />
