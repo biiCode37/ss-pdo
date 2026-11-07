@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import type { PageKey, AppPageSetting, BulkActionType } from '@/types/pageManagement';
 import { DEFAULT_PAGE_SETTINGS } from '@/types/pageManagement';
+import { evaluatePageAccess } from '../../supabase/functions/_shared/pageAccess.ts';
 import {
   fetchPageSettings,
   getCachedSettings,
@@ -98,63 +99,12 @@ export const PageAccessProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const canAccessPage = useCallback(
     (pageKey: PageKey, userRole?: string | null, userEmail?: string | null): boolean => {
-      const role = userRole ? userRole.toLowerCase().trim() : null;
-
-      // 1. Superadmin memiliki kuasa penuh untuk mengakses seluruh halaman (master bypass)
-      if (role === 'superadmin') return true;
-
-      const setting = settingsMap[pageKey];
-      if (!setting) return true;
-
-      // 2. Master Switch: Jika sedang dinonaktifkan (mode perbaikan)
-      if (!setting.is_enabled) return false;
-
-      // Ambil dan normalisasi email user aktif
+      // Aturan tunggal dipakai bersama Edge Function (route-confirmation) agar klien & server tidak berbeda
       const rawEmail =
         userEmail ||
-        (typeof localStorage !== 'undefined'
-          ? localStorage.getItem('PDO_USER_EMAIL')
-          : null) ||
+        (typeof localStorage !== 'undefined' ? localStorage.getItem('PDO_USER_EMAIL') : null) ||
         '';
-      const email = rawEmail.toLowerCase().trim();
-
-      // 3. User Blacklist (Explicit Deny) - Prioritas tertinggi untuk personil
-      if (email && Array.isArray(setting.denied_user_emails) && setting.denied_user_emails.length > 0) {
-        const isBlacklisted = setting.denied_user_emails.some(
-          (e) => e.toLowerCase().trim() === email
-        );
-        if (isBlacklisted) return false;
-      }
-
-      // 4. User Whitelist (Explicit Allow) - Prioritas kedua untuk personil
-      if (email && Array.isArray(setting.allowed_user_emails) && setting.allowed_user_emails.length > 0) {
-        const isWhitelisted = setting.allowed_user_emails.some(
-          (e) => e.toLowerCase().trim() === email
-        );
-        if (isWhitelisted) return true;
-      }
-
-      // 5. Role Baseline
-      if (Array.isArray(setting.allowed_roles) && setting.allowed_roles.length > 0) {
-        if (!role) return false;
-        // Normalisasi peran petugas menjadi pdo
-        const normalizedRole = role === 'petugas' ? 'pdo' : role;
-        return setting.allowed_roles.some(
-          (r) => r.toLowerCase().trim() === normalizedRole
-        );
-      }
-
-      // Fallback legacy guard jika konfigurasi peran belum terisi
-      if (
-        (pageKey === 'regional_monitoring' ||
-          pageKey === 'regional_summary' ||
-          pageKey === 'regional_wa_report') &&
-        (role === 'pdo' || role === 'petugas')
-      ) {
-        return false;
-      }
-
-      return true;
+      return evaluatePageAccess(pageKey, settingsMap[pageKey], userRole, rawEmail);
     },
     [settingsMap]
   );
