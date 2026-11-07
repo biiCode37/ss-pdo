@@ -41,7 +41,7 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
         style={{
           background: "rgba(56, 189, 248, 0.1)",
           border: "1px solid rgba(56, 189, 248, 0.25)",
-          borderRadius: "10px",
+          borderRadius: "12px",
           padding: "10px 14px",
           fontSize: "13px",
           color: "var(--accent-color, #38bdf8)",
@@ -71,7 +71,7 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
           style={{
             background: "rgba(239, 68, 68, 0.12)",
             border: "1px solid rgba(239, 68, 68, 0.35)",
-            borderRadius: "10px",
+            borderRadius: "12px",
             padding: "10px 14px",
             fontSize: "13px",
             color: "var(--danger-color, #ef4444)",

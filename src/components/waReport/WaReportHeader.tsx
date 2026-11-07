@@ -20,7 +20,7 @@ export function WaReportHeader({ onClose }: WaReportHeaderProps) {
           style={{
             width: "36px",
             height: "36px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "rgba(37, 211, 102, 0.12)",
             color: "#25D366",
             display: "flex",

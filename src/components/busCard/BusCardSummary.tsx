@@ -83,7 +83,7 @@ export function BusCardSummary({
             border: `1px solid ${hasTrip ? "var(--color-border-subtle)" : "var(--color-error-border)"}`,
             display: "flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <ArrowRightLeft size={16} style={{ flexShrink: 0 }} />
@@ -130,7 +130,7 @@ export function BusCardSummary({
           border: `1px solid ${isFilled ? "var(--shift1-border)" : "rgba(239, 68, 68, 0.25)"}`,
           display: "flex",
           alignItems: "center",
-          gap: "5px",
+          gap: "6px",
         }}
       >
         {isFilled ? (

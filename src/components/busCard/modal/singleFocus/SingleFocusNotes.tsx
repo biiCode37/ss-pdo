@@ -87,7 +87,7 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
         style={{
           width: "100%",
           padding: "10px 12px",
-          borderRadius: "10px",
+          borderRadius: "12px",
           border: "1px solid var(--card-border, rgba(0, 0, 0, 0.12))",
           background: "var(--input-bg, rgba(243, 244, 246, 0.9))",
           color: "var(--text-primary, #171717)",

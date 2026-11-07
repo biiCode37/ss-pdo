@@ -231,7 +231,7 @@ export function WaReportFormatTabs({
                 type="button"
                 onClick={() => onSelectSupervisor(item.id as SupervisorFilter)}
                 style={{
-                  padding: "5px 12px",
+                  padding: "6px 12px",
                   borderRadius: "16px",
                   border: active ? "1px solid #2563eb" : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                   background: active ? "#2563eb" : "var(--input-bg, rgba(255, 255, 255, 0.05))",
@@ -289,8 +289,8 @@ export function WaReportFormatTabs({
                 style={{
                   fontSize: "12px",
                   fontWeight: 700,
-                  padding: "3px 8px",
-                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
                   background: "rgba(239, 68, 68, 0.2)",
                   border: "1px solid rgba(239, 68, 68, 0.4)",
                   color: "#f87171",

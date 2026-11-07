@@ -301,8 +301,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '7px 12px',
-                borderRadius: '10px',
+                padding: '8px 12px',
+                borderRadius: '12px',
                 background: isSelectMode
                   ? 'var(--color-action-primary-bg)'
                   : 'var(--color-surface-subtle)',
@@ -331,8 +331,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '5px 10px',
-                borderRadius: '20px',
+                padding: '6px 10px',
+                borderRadius: '16px',
                 backgroundColor: 'var(--color-role-superadmin-bg)',
                 border: '1px solid var(--color-role-superadmin-border)',
                 color: 'var(--color-role-superadmin-fg)',
@@ -365,7 +365,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 type="button"
                 onClick={handleSelectAll}
                 style={{
-                  padding: '5px 10px',
+                  padding: '6px 10px',
                   borderRadius: '8px',
                   background: 'var(--color-surface-subtle)',
                   border: '1px solid var(--color-border-subtle)',
@@ -381,7 +381,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 type="button"
                 onClick={handleDeselectAll}
                 style={{
-                  padding: '5px 10px',
+                  padding: '6px 10px',
                   borderRadius: '8px',
                   background: 'var(--color-surface-subtle)',
                   border: '1px solid var(--color-border-subtle)',
@@ -438,8 +438,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 onClick={() => setActiveCategory(tab.key)}
                 className="pm-filter-tab"
                 style={{
-                  padding: '7px 14px',
-                  borderRadius: '20px',
+                  padding: '8px 14px',
+                  borderRadius: '16px',
                   border: isActive
                     ? '1px solid var(--color-action-primary-bg)'
                     : '1px solid var(--color-border-subtle)',
@@ -482,7 +482,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                   style={{
                     width: '38px',
                     height: '38px',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     backgroundColor: 'var(--color-role-admin-bg)',
                     display: 'flex',
                     alignItems: 'center',
@@ -510,8 +510,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         gap: '4px',
                         fontSize: '12px',
                         fontWeight: 700,
-                        padding: '2px 7px',
-                        borderRadius: '6px',
+                        padding: '2px 8px',
+                        borderRadius: '8px',
                         backgroundColor: 'var(--color-surface-subtle)',
                         color: 'var(--color-text-secondary)',
                       }}
@@ -538,7 +538,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 style={{
                   width: '50px',
                   height: '30px',
-                  borderRadius: '15px',
+                  borderRadius: '16px',
                   backgroundColor: 'var(--color-success-fg)',
                   border: '2px solid var(--color-success-fg)',
                   boxSizing: 'border-box',
@@ -658,7 +658,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     style={{
                       width: '38px',
                       height: '38px',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       backgroundColor: isEnabled
                         ? 'var(--color-success-bg)'
                         : 'var(--color-warning-bg)',
@@ -700,11 +700,11 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
-                          gap: '3px',
+                          gap: '4px',
                           fontSize: '12px',
                           fontWeight: 700,
-                          padding: '2px 7px',
-                          borderRadius: '6px',
+                          padding: '2px 8px',
+                          borderRadius: '8px',
                           backgroundColor: isEnabled
                             ? 'var(--color-success-bg)'
                             : 'var(--color-warning-bg)',
@@ -759,8 +759,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                           style={{
                             fontSize: '12px',
                             fontWeight: 700,
-                            padding: '1px 6px',
-                            borderRadius: '6px',
+                            padding: '2px 6px',
+                            borderRadius: '8px',
                             backgroundColor: 'var(--color-success-bg)',
                             color: 'var(--color-success-fg)',
                           }}
@@ -774,8 +774,8 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                           style={{
                             fontSize: '12px',
                             fontWeight: 700,
-                            padding: '1px 6px',
-                            borderRadius: '6px',
+                            padding: '2px 6px',
+                            borderRadius: '8px',
                             backgroundColor: 'var(--color-error-bg)',
                             color: 'var(--color-error-fg)',
                           }}
@@ -804,7 +804,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         justifyContent: 'center',
                         width: '34px',
                         height: '34px',
-                        borderRadius: '10px',
+                        borderRadius: '12px',
                         background: 'var(--color-surface-subtle)',
                         border: '1px solid var(--color-border-subtle)',
                         color: 'var(--color-text-secondary)',
@@ -834,7 +834,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     style={{
                       width: '50px',
                       height: '30px',
-                      borderRadius: '15px',
+                      borderRadius: '16px',
                       backgroundColor: isEnabled
                         ? 'var(--color-success-fg)'
                         : 'var(--color-surface-subtle)',

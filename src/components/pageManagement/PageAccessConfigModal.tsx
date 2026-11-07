@@ -164,8 +164,8 @@ export const PageAccessConfigModal: React.FC<Props> = ({
             maxWidth: '560px',
             maxHeight: '90vh',
             backgroundColor: 'var(--color-surface-default)',
-            borderTopLeftRadius: '24px',
-            borderTopRightRadius: '24px',
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
             border: '1px solid var(--color-border-subtle)',
             boxShadow: '0 -10px 40px var(--color-shadow, rgba(0, 0, 0, 0.35))',
             display: 'flex',
@@ -178,7 +178,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
           {/* Header Bar */}
           <div
             style={{
-              padding: '18px 20px 14px',
+              padding: '20px 20px 14px',
               borderBottom: '1px solid var(--color-border-subtle)',
               display: 'flex',
               alignItems: 'center',
@@ -218,7 +218,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'var(--color-surface-subtle)',
                 border: '1px solid var(--color-border-subtle)',
                 color: 'var(--color-text-secondary)',
@@ -296,8 +296,8 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                   {tab.badge > 0 && (
                     <span
                       style={{
-                        padding: '1px 6px',
-                        borderRadius: '10px',
+                        padding: '2px 6px',
+                        borderRadius: '12px',
                         fontSize: '12px',
                         fontWeight: 700,
                         backgroundColor: isActive
@@ -350,7 +350,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '12px 14px',
-                        borderRadius: '14px',
+                        borderRadius: '12px',
                         backgroundColor: isChecked
                           ? 'var(--color-surface-subtle)'
                           : 'var(--color-surface-default)',
@@ -397,7 +397,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             alignItems: 'center',
                             gap: '4px',
                             padding: '2px 8px',
-                            borderRadius: '6px',
+                            borderRadius: '8px',
                             backgroundColor: 'var(--color-role-superadmin-bg)',
                             color: 'var(--color-role-superadmin-fg)',
                             fontSize: '12px',
@@ -439,7 +439,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       alignItems: 'center',
                       gap: '6px',
                       padding: '8px 12px',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       background: 'var(--color-action-primary-bg)',
                       border: 'none',
                       color: 'var(--color-action-primary-fg)',
@@ -498,7 +498,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 ) : (
                   <div
                     style={{
-                      padding: '36px 0',
+                      padding: '40px 0',
                       textAlign: 'center',
                       color: 'var(--color-text-muted)',
                       fontSize: '13px',
@@ -533,7 +533,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       alignItems: 'center',
                       gap: '6px',
                       padding: '8px 12px',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       background: 'var(--color-danger-bg)',
                       border: 'none',
                       color: 'var(--color-danger-fg)',
@@ -592,7 +592,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 ) : (
                   <div
                     style={{
-                      padding: '36px 0',
+                      padding: '40px 0',
                       textAlign: 'center',
                       color: 'var(--color-text-muted)',
                       fontSize: '13px',
@@ -620,7 +620,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
               type="button"
               onClick={onClose}
               style={{
-                padding: '10px 18px',
+                padding: '10px 20px',
                 borderRadius: '12px',
                 background: 'var(--color-surface-subtle)',
                 border: '1px solid var(--color-border-subtle)',
@@ -643,7 +643,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '10px 22px',
+                padding: '10px 24px',
                 borderRadius: '12px',
                 background: 'var(--color-action-primary-bg)',
                 border: 'none',

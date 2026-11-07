@@ -45,8 +45,8 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
         overflowY: "auto",
         padding:
           "16px 20px calc(28px + env(safe-area-inset-bottom, 16px)) 20px",
-        borderTopLeftRadius: "24px",
-        borderTopRightRadius: "24px",
+        borderTopLeftRadius: "16px",
+        borderTopRightRadius: "16px",
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
         backgroundColor: "var(--color-surface-raised)",
@@ -71,7 +71,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
           style={{
             width: "36px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             backgroundColor: "var(--text-secondary)",
             opacity: 0.35,
           }}
@@ -95,7 +95,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
             style={{
               width: "36px",
               height: "36px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "rgba(62, 207, 142, 0.12)",
               color: "var(--accent-color, #3ECF8E)",
               display: "flex",

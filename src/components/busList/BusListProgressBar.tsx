@@ -61,7 +61,7 @@ export const BusListProgressBar: React.FC<BusListProgressBarProps> = ({
         style={{
           height: "3px",
           background: "rgba(255, 255, 255, 0.08)",
-          borderRadius: "2px",
+          borderRadius: "8px",
           overflow: "hidden",
           marginBottom: "2px",
         }}

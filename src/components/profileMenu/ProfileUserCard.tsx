@@ -31,7 +31,7 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
           style={{
             width: "40px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             background: "var(--text-secondary)",
             opacity: 0.3,
           }}

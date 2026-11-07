@@ -24,7 +24,7 @@ export function renderSmartKeteranganSection(
         rows="3"
         class="input-field"
         placeholder="${TEXT_ALERTS.BUS_INPUT_MODAL.NOTES_DETAIL_PLACEHOLDER}"
-        style="width: 100%; border: 1.5px solid var(--card-border); border-radius: 10px; background: var(--input-bg, var(--card-bg)); padding: 8px 10px; font-size: 13px; font-weight: 600; color: var(--text-primary); box-sizing: border-box; resize: none; line-height: 1.4;"
+        style="width: 100%; border: 1.5px solid var(--card-border); border-radius: 12px; background: var(--input-bg, var(--card-bg)); padding: 8px 10px; font-size: 13px; font-weight: 600; color: var(--text-primary); box-sizing: border-box; resize: none; line-height: 1.4;"
       >${escapeHtml(initialKeterangan)}</textarea>
     </div>
   `;

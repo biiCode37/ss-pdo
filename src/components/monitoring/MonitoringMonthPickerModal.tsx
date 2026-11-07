@@ -136,7 +136,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
           maxWidth: "380px",
           background: "var(--card-bg, #1a1a1a)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-          borderRadius: "20px",
+          borderRadius: "16px",
           padding: "20px",
           boxShadow: "0 16px 40px rgba(0, 0, 0, 0.5)",
           animation: "modalFadeIn 0.22s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -276,7 +276,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               onClick={() => handleQuickSelect(0)}
               style={{
                 padding: "4px 10px",
-                borderRadius: "9999px",
+                borderRadius: "999px",
                 fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
@@ -300,7 +300,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               onClick={() => handleQuickSelect(1)}
               style={{
                 padding: "4px 10px",
-                borderRadius: "9999px",
+                borderRadius: "999px",
                 fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
@@ -318,7 +318,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               onClick={() => handleQuickSelect(2)}
               style={{
                 padding: "4px 10px",
-                borderRadius: "9999px",
+                borderRadius: "999px",
                 fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
@@ -396,7 +396,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             data-testid="month-picker-cancel-btn"
             style={{
               padding: "8px 14px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.15))",
               background: "transparent",
               color: "var(--text-secondary, #a3a3a3)",
@@ -413,7 +413,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             onClick={() => handleApply()}
             style={{
               padding: "8px 16px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               border: "none",
               background: "var(--accent-color, #3ECF8E)",
               color: "#062817",

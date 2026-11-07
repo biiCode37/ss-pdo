@@ -347,7 +347,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                   color: "var(--text-secondary, #6b7280)",
                   background: "var(--input-bg, rgba(0, 0, 0, 0.04))",
                   padding: "2px 8px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   border: "1px solid var(--card-border, rgba(0, 0, 0, 0.08))",
                 }}
               >

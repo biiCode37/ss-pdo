@@ -16,7 +16,7 @@ export const getSingleFocusChipStyle = (
   isActive: boolean,
   isDisabled: boolean = false,
 ): React.CSSProperties => ({
-  padding: "5px 10px",
+  padding: "6px 10px",
   borderRadius: "8px",
   fontSize: "12px",
   fontWeight: 600,
@@ -39,7 +39,7 @@ export const singleFocusSubInputStyle = (
 ): React.CSSProperties => ({
   width: "100%",
   padding: "10px 12px",
-  borderRadius: "10px",
+  borderRadius: "12px",
   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
   background: isLocked
     ? "rgba(255, 255, 255, 0.03)"
@@ -86,7 +86,7 @@ export const singleFocusDistanceBadgeStyle = (
 
 export const singleFocusCopyBtnStyle: React.CSSProperties = {
   padding: "4px 8px",
-  borderRadius: "6px",
+  borderRadius: "8px",
   fontSize: "12px",
   fontWeight: 600,
   background: "var(--shift1-bg, rgba(2, 132, 199, 0.15))",

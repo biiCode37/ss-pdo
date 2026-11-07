@@ -25,12 +25,18 @@ const BASELINE = {
   legacyAccentColor: 236,
   textShadow: 0,
   backdropFilter: 34,
+  // refact_218: radius & jarak dinormalisasi ke skala, dikunci di nol.
+  radiusOffScale: 0,
+  spacingOffScale: 0,
 } as const;
 
 type Metric = keyof typeof BASELINE;
 
 const FONT_SIZE_SCALE = new Set([12, 13, 14, 16, 18, 20, 24, 28]);
 const ICON_SIZE_SCALE = new Set([16, 20, 24]);
+const RADIUS_SCALE = new Set([0, 8, 12, 16, 999]);
+// Kelipatan 2 sampai 16, lalu kelipatan 4/8; nilai > 64px (lebar tata letak) tidak dihitung.
+const SPACING_SCALE = new Set([0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 40, 48, 56, 64]);
 
 const srcDir = pathResolve(__dirname, "..");
 // Token primitif memang berisi hex; sheetColorUtils = SSOT warna Google Sheets (bukan UI).
@@ -92,8 +98,32 @@ const iconSizes = (): number[] => {
   return out;
 };
 
+/** Nilai `px` non-negatif literal pada properti radius atau jarak (JSX, CSS, dan CSS di string template). */
+const pxValues = (jsxProp: string, cssProp: string): number[] => {
+  const out: number[] = [];
+  const jsxRe = new RegExp(`\\b(?:${jsxProp}):([^,}]+)`, "g");
+  const cssRe = new RegExp(`(?<![\\w-])(?:${cssProp}):\\s*([^;}"'\`<>]+)`, "g");
+  for (const s of sources) {
+    const segs = [...s.text.matchAll(cssRe)].map((m) => m[1]);
+    if (!s.isCss) segs.push(...[...s.text.matchAll(jsxRe)].map((m) => m[1]));
+    for (const seg of segs) {
+      if (/var\(|calc|\$\{|env\(|clamp|min\(|max\(/.test(seg)) continue;
+      for (const [, n] of seg.matchAll(/(?<![\w.$-])(\d+(?:\.\d+)?)px(?![\w.])/g)) out.push(Number(n));
+    }
+  }
+  return out;
+};
+
 const measure = (): Record<Metric, number> => {
   const sizes = fontSizesPx();
+  const radii = pxValues(
+    "borderRadius|border(?:Top|Bottom)(?:Left|Right)Radius",
+    "border-radius|border-(?:top|bottom)-(?:left|right)-radius",
+  );
+  const spaces = pxValues(
+    "(?:padding|margin|gap|rowGap|columnGap)(?:Top|Bottom|Left|Right|Inline|Block)?",
+    "(?:padding|margin|gap|row-gap|column-gap)(?:-(?:top|bottom|left|right))?",
+  );
   return {
     rawHexColor: countMatches(/#[0-9a-fA-F]{3,8}\b/g),
     rgbHslFunction: countMatches(/\b(?:rgba?|hsla?)\(/g),
@@ -107,6 +137,8 @@ const measure = (): Record<Metric, number> => {
     legacyAccentColor: countMatches(/--accent-color|#3ecf8e|#24b47e/gi),
     textShadow: countMatches(/textShadow|text-shadow/g),
     backdropFilter: countMatches(/backdropFilter|backdrop-filter/g),
+    radiusOffScale: radii.filter((px) => !RADIUS_SCALE.has(px)).length,
+    spacingOffScale: spaces.filter((px) => px <= 64 && px >= 1 && !SPACING_SCALE.has(px)).length,
   };
 };
 

@@ -155,8 +155,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                   fontSize: "12px",
                   fontWeight: 700,
                   cursor: "pointer",
-                  padding: "3px 8px",
-                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
@@ -174,15 +174,15 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
             style={{
               background: "rgba(192, 132, 252, 0.15)",
               border: "1px solid rgba(192, 132, 252, 0.3)",
-              borderRadius: "6px",
+              borderRadius: "8px",
               color: "#c084fc",
               fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",
-              padding: "3px 8px",
+              padding: "4px 8px",
               display: "inline-flex",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
               flexShrink: 0,
             }}
           >
@@ -210,7 +210,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               style={{
                 fontWeight: 700,
                 padding: "2px 8px",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background:
                   kmLiveS2.status === "negative"
                     ? "rgba(239, 68, 68, 0.2)"
@@ -240,8 +240,8 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              padding: "5px 8px",
-              borderRadius: "6px",
+              padding: "6px 8px",
+              borderRadius: "8px",
               background:
                 kmLiveS2.status === "negative"
                   ? "var(--color-error-bg)"

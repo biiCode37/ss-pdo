@@ -71,10 +71,10 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
           aria-label={texts.PRESETS.ARIA_SELECT_NOTE_SHIFT}
           style={{
             display: "inline-flex",
-            padding: "3px",
+            padding: "4px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
             border: "1px solid var(--border-color, rgba(255, 255, 255, 0.1))",
-            borderRadius: "10px",
+            borderRadius: "12px",
             gap: "4px",
           }}
         >
@@ -83,7 +83,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             onClick={() => setActiveNoteShift(1)}
             style={{
               padding: "4px 12px",
-              borderRadius: "7px",
+              borderRadius: "8px",
               fontSize: "12px",
               fontWeight: activeNoteShift === 1 ? 700 : 500,
               cursor: "pointer",
@@ -124,7 +124,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             onClick={() => setActiveNoteShift(2)}
             style={{
               padding: "4px 12px",
-              borderRadius: "7px",
+              borderRadius: "8px",
               fontSize: "12px",
               fontWeight: activeNoteShift === 2 ? 700 : 500,
               cursor: "pointer",
@@ -237,7 +237,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
       <div
         style={{
           padding: "8px 12px",
-          borderRadius: "10px",
+          borderRadius: "12px",
           background: "rgba(255, 255, 255, 0.02)",
           border: "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
           display: "flex",

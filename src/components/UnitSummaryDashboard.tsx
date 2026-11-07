@@ -65,7 +65,7 @@ function UnitSummaryDashboardComponent({
             placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ height: "36px", fontSize: "13px", borderRadius: "10px" }}
+            style={{ height: "36px", fontSize: "13px", borderRadius: "12px" }}
           />
         </div>
       </div>

@@ -60,7 +60,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
               gap: "6px",
               height: "34px",
               padding: "0 12px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               fontSize: "12px",
               fontWeight: 600,
               border: isExpandedAll
@@ -94,7 +94,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             border: isSatset
               ? "1px solid rgba(245, 158, 11, 0.5)"
               : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
@@ -120,7 +120,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
             color: "var(--text-secondary, #94a3b8)",

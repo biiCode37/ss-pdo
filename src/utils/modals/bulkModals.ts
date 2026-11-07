@@ -48,7 +48,7 @@ export async function showBulkTripModal(
         ${descriptionHtml}
       </div>
 
-      <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
+      <div style="padding: 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
         <div>
           <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px; line-height: 1.3;">
             ${tripPergiLabel}
@@ -58,7 +58,7 @@ export async function showBulkTripModal(
             type="number"
             inputmode="numeric"
             class="input-field"
-            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; border: 1.5px solid var(--accent-color); width: 100%;"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
             value="${escapeHtml(currentPergi)}"
             placeholder="0"
           />
@@ -73,7 +73,7 @@ export async function showBulkTripModal(
             type="number"
             inputmode="numeric"
             class="input-field"
-            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; border: 1.5px solid var(--accent-color); width: 100%;"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 12px; border: 1.5px solid var(--accent-color); width: 100%;"
             value="${escapeHtml(currentPulang)}"
             placeholder="0"
           />
@@ -225,16 +225,16 @@ export async function showBulkCopyKmModal(
       ${
         skippedWithNotesCount > 0
           ? `
-        <div style="font-size: 12px; color: var(--warning-text, #d97706); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); padding: 8px 12px; border-radius: 10px; line-height: 1.4;">
+        <div style="font-size: 12px; color: var(--warning-text, #d97706); background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); padding: 8px 12px; border-radius: 12px; line-height: 1.4;">
           ${TEXT_ALERTS.BULK_COPY_KM.SKIPPED_WITH_NOTES(escapeHtml(skippedWithNotesCount))}
         </div>
       `
           : ""
       }
 
-      <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25));">
         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: ${isOnlyEmptyAvailable ? "pointer" : "default"}; user-select: none; opacity: ${isOnlyEmptyAvailable ? "1" : "0.55"};">
-          <input type="radio" name="swal-bulk-copy-mode" value="only_empty" ${isOnlyEmptyAvailable ? "checked" : "disabled"} style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
+          <input type="radio" name="swal-bulk-copy-mode" value="only_empty" ${isOnlyEmptyAvailable ? "checked" : "disabled"} style="margin-top: 4px; accent-color: var(--accent-color); transform: scale(1.1);" />
           <div>
             <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">
               ${TEXT_ALERTS.BULK_COPY_KM.MODE_ONLY_EMPTY(escapeHtml(emptyKmAwal2Count))}
@@ -248,7 +248,7 @@ export async function showBulkCopyKmModal(
         <div style="height: 1px; background: var(--card-border); margin: 4px 0;"></div>
 
         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; user-select: none;">
-          <input type="radio" name="swal-bulk-copy-mode" value="all" ${!isOnlyEmptyAvailable ? "checked" : ""} style="margin-top: 3px; accent-color: var(--accent-color); transform: scale(1.1);" />
+          <input type="radio" name="swal-bulk-copy-mode" value="all" ${!isOnlyEmptyAvailable ? "checked" : ""} style="margin-top: 4px; accent-color: var(--accent-color); transform: scale(1.1);" />
           <div>
             <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">${TEXT_ALERTS.BULK_COPY_KM.MODE_ALL(escapeHtml(totalUnitsWithKmS1))}</div>
             <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">${TEXT_ALERTS.BULK_COPY_KM.MODE_ALL_DESC}</div>

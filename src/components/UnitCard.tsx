@@ -24,14 +24,14 @@ function renderStatusBadge(status: UnitShiftStatus) {
           style={{
             fontSize: "12px",
             fontWeight: 700,
-            padding: "3px 8px",
+            padding: "4px 8px",
             borderRadius: "8px",
             backgroundColor: "rgba(34, 197, 94, 0.12)",
             color: "var(--success-color, #22c55e)",
             border: "1px solid rgba(34, 197, 94, 0.25)",
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
@@ -44,14 +44,14 @@ function renderStatusBadge(status: UnitShiftStatus) {
           style={{
             fontSize: "12px",
             fontWeight: 700,
-            padding: "3px 8px",
+            padding: "4px 8px",
             borderRadius: "8px",
             backgroundColor: "rgba(245, 158, 11, 0.12)",
             color: "#f59e0b",
             border: "1px solid rgba(245, 158, 11, 0.25)",
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <AlertCircle size={16} style={{ flexShrink: 0 }} />
@@ -64,14 +64,14 @@ function renderStatusBadge(status: UnitShiftStatus) {
           style={{
             fontSize: "12px",
             fontWeight: 700,
-            padding: "3px 8px",
+            padding: "4px 8px",
             borderRadius: "8px",
             backgroundColor: "rgba(245, 158, 11, 0.12)",
             color: "#f59e0b",
             border: "1px solid rgba(245, 158, 11, 0.25)",
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <AlertCircle size={16} style={{ flexShrink: 0 }} />
@@ -84,14 +84,14 @@ function renderStatusBadge(status: UnitShiftStatus) {
           style={{
             fontSize: "12px",
             fontWeight: 700,
-            padding: "3px 8px",
+            padding: "4px 8px",
             borderRadius: "8px",
             backgroundColor: "rgba(245, 158, 11, 0.12)",
             color: "#f59e0b",
             border: "1px solid rgba(245, 158, 11, 0.25)",
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <Clock size={16} style={{ flexShrink: 0 }} />
@@ -105,14 +105,14 @@ function renderStatusBadge(status: UnitShiftStatus) {
           style={{
             fontSize: "12px",
             fontWeight: 600,
-            padding: "3px 8px",
+            padding: "4px 8px",
             borderRadius: "8px",
             backgroundColor: "rgba(255, 255, 255, 0.05)",
             color: "var(--text-secondary)",
             border: "1px solid var(--card-border)",
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <XCircle size={16} style={{ flexShrink: 0, opacity: 0.7 }} />

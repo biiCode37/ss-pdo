@@ -88,7 +88,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
             className="monitoring-card"
             style={{
               background: "var(--card-bg, rgba(23, 23, 23, 0.7))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               padding: "12px 14px",
               position: "relative",

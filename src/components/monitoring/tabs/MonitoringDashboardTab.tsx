@@ -58,7 +58,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "3px",
+              gap: "4px",
               minWidth: 0,
               flex: 1,
             }}
@@ -95,7 +95,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
           style={{
             height: "10px",
             width: "100%",
-            borderRadius: "6px",
+            borderRadius: "8px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
             overflow: "hidden",
             marginBottom: "8px",
@@ -108,7 +108,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
               background: isAllConfirmed
                 ? "var(--color-success-fg)"
                 : "var(--color-action-primary-bg)",
-              borderRadius: "6px",
+              borderRadius: "8px",
               transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
           />

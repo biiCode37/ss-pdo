@@ -114,8 +114,8 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
           alignItems: "center",
           justifyContent: "space-between",
           gap: "8px",
-          padding: "3px 6px",
-          borderRadius: "6px",
+          padding: "4px 6px",
+          borderRadius: "8px",
           cursor: "pointer",
           background: isSelected
             ? "var(--input-bg, rgba(62, 207, 142, 0.1))"
@@ -156,7 +156,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
             flex: 1,
             height: "4px",
             background: "var(--card-border, rgba(255, 255, 255, 0.08))",
-            borderRadius: "2px",
+            borderRadius: "8px",
             overflow: "hidden",
             position: "relative",
           }}
@@ -166,7 +166,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               height: "100%",
               width: barWidth,
               minWidth: displayVal > 0 && isBarsAnimated ? "3px" : "0px",
-              borderRadius: "2px",
+              borderRadius: "8px",
               background: isSelected
                 ? "var(--color-action-primary-bg)"
                 : displayVal > 0
@@ -272,8 +272,8 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               borderTop: "2px solid var(--accent-color, #3ECF8E)",
               borderLeft: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
               borderRight: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-              borderTopLeftRadius: "20px",
-              borderTopRightRadius: "20px",
+              borderTopLeftRadius: "16px",
+              borderTopRightRadius: "16px",
               padding: "18px 20px calc(24px + env(safe-area-inset-bottom, 0px))",
               width: "100%",
               maxWidth: "520px",
@@ -309,7 +309,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
                       color: "var(--accent-color, #3ECF8E)",
                       background: "rgba(62, 207, 142, 0.12)",
                       padding: "2px 8px",
-                      borderRadius: "6px",
+                      borderRadius: "8px",
                       letterSpacing: "0.5px",
                     }}
                   >

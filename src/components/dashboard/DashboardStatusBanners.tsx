@@ -200,7 +200,7 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
               backgroundColor: "var(--danger-color, #ef4444)",
               color: "white",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "8px",
               fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",

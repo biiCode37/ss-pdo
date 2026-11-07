@@ -14,7 +14,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
           width: "40px",
           height: "4px",
           backgroundColor: "rgba(255, 255, 255, 0.2)",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           margin: "0 auto 16px auto",
         }}
       />
@@ -25,7 +25,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "18px",
+          marginBottom: "20px",
           paddingBottom: "12px",
           borderBottom: "1px solid var(--border-color)",
         }}
@@ -60,7 +60,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
             color: "var(--text-secondary)",
             cursor: "pointer",
             padding: "6px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

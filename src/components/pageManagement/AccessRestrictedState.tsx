@@ -25,7 +25,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '60vh',
-        padding: '36px 20px',
+        padding: '40px 20px',
         textAlign: 'center',
       }}
     >
@@ -34,7 +34,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
         style={{
           width: '68px',
           height: '68px',
-          borderRadius: '20px',
+          borderRadius: '16px',
           background: 'var(--color-role-superadmin-bg)',
           border: '1px solid var(--color-role-superadmin-border)',
           display: 'flex',
@@ -77,7 +77,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
           width: '100%',
           maxWidth: '400px',
           padding: '16px',
-          borderRadius: '14px',
+          borderRadius: '12px',
           background: 'var(--color-surface-subtle)',
           border: '1px solid var(--color-border-subtle)',
           marginBottom: '28px',
@@ -106,7 +106,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
                   alignItems: 'center',
                   gap: '10px',
                   padding: '8px 12px',
-                  borderRadius: '10px',
+                  borderRadius: '12px',
                   background: 'var(--color-surface-default)',
                   border: '1px solid var(--color-border-subtle)',
                 }}
@@ -178,7 +178,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '11px 22px',
+            padding: '12px 24px',
             borderRadius: '12px',
             background: 'var(--color-action-primary-bg)',
             border: 'none',

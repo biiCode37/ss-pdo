@@ -170,8 +170,8 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               placeholder={TEXT_MONITORING.ROUTES_TAB.SEARCH_PLACEHOLDER}
               style={{
                 width: "100%",
-                padding: "8px 32px 8px 34px",
-                borderRadius: "10px",
+                padding: "8px 32px 8px 32px",
+                borderRadius: "12px",
                 background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
                 color: "var(--text-primary)",
@@ -211,7 +211,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 alignItems: "center",
                 gap: "6px",
                 padding: "8px 14px",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 background: "var(--color-action-primary-bg)",
                 color: "var(--color-action-primary-fg)",
                 border: "none",
@@ -249,7 +249,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("all")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
               fontSize: "12px",
               fontWeight: statusFilter === "all" ? 700 : 500,
@@ -271,7 +271,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("submitted")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
               fontSize: "12px",
               fontWeight: statusFilter === "submitted" ? 700 : 500,
@@ -299,7 +299,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("uncompleted")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
               fontSize: "12px",
               fontWeight: statusFilter === "uncompleted" ? 700 : 500,
@@ -327,7 +327,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             type="button"
             onClick={() => setStatusFilter("verified")}
             style={{
-              padding: "5px 11px",
+              padding: "6px 12px",
               borderRadius: "8px",
               fontSize: "12px",
               fontWeight: statusFilter === "verified" ? 700 : 500,

@@ -107,7 +107,7 @@ function BusCardComponent({
                 style={{
                   width: "20px",
                   height: "20px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   flexShrink: 0,
                   display: "inline-flex",
                   alignItems: "center",

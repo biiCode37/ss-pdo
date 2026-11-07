@@ -146,8 +146,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               <span
                 style={{
                   fontSize: "12px",
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "rgba(245, 158, 11, 0.15)",
                   color: "#f59e0b",
                   fontWeight: 600,
@@ -167,15 +167,15 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             style={{
               background: "rgba(56, 189, 248, 0.12)",
               border: "1px solid rgba(56, 189, 248, 0.25)",
-              borderRadius: "6px",
+              borderRadius: "8px",
               color: "var(--accent-color, #38bdf8)",
               fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",
-              padding: "3px 8px",
+              padding: "4px 8px",
               display: "inline-flex",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
               flexShrink: 0,
             }}
           >
@@ -210,7 +210,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               style={{
                 fontWeight: 700,
                 padding: "2px 8px",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background:
                   kmLiveS1.status === "negative"
                     ? "rgba(239, 68, 68, 0.2)"
@@ -240,8 +240,8 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               display: "flex",
               alignItems: "center",
               gap: "6px",
-              padding: "5px 8px",
-              borderRadius: "6px",
+              padding: "6px 8px",
+              borderRadius: "8px",
               background:
                 kmLiveS1.status === "negative"
                   ? "rgba(239, 68, 68, 0.1)"
@@ -316,7 +316,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                 style={{
                   marginTop: "8px",
                   padding: "10px 12px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   background: "rgba(245, 158, 11, 0.12)",
                   border: "1px solid rgba(245, 158, 11, 0.35)",
                   display: "flex",
@@ -352,7 +352,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     alignItems: "center",
                     gap: "4px",
                     padding: "4px 10px",
-                    borderRadius: "6px",
+                    borderRadius: "8px",
                     background: "#f59e0b",
                     color: "#000",
                     fontWeight: 700,

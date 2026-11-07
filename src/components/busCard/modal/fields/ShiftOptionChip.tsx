@@ -31,7 +31,7 @@ export const ShiftOptionChip: React.FC<ShiftOptionChipProps> = ({
       title={title}
       style={{
         padding: "6px 12px",
-        borderRadius: "9999px",
+        borderRadius: "999px",
         fontSize: "12px",
         fontWeight: 600,
         border: "1px solid",

@@ -59,7 +59,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
           maxWidth: "420px",
           background: "var(--card-bg, #161616)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
-          borderRadius: "20px",
+          borderRadius: "16px",
           padding: "24px 20px",
           boxShadow: "0 24px 48px rgba(0, 0, 0, 0.4)",
           display: "flex",
@@ -165,7 +165,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
           style={{
             fontSize: "12px",
             color: "var(--text-secondary, #8b8b8b)",
-            margin: "0 0 18px 0",
+            margin: "0 0 20px 0",
             lineHeight: 1.4,
           }}
         >
@@ -278,7 +278,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             <span
               style={{
                 padding: "2px 6px",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "rgba(62, 207, 142, 0.15)",
                 color: "var(--accent-color, #3ECF8E)",
                 fontWeight: 700,

@@ -80,7 +80,7 @@ export const AccumulationPeriodSelector: React.FC<
     fontWeight: 700,
     color: "var(--text-secondary, #94a3b8)",
     display: "block",
-    marginBottom: "3px",
+    marginBottom: "4px",
   };
 
   return (

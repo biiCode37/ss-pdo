@@ -17,7 +17,7 @@ export const ReportIssuesSection: React.FC<ReportIssuesSectionProps> = ({
 }) => {
   return (
     <>
-      <div style={{ marginBottom: "18px" }}>
+      <div style={{ marginBottom: "20px" }}>
         <label
           htmlFor="kendala-text"
           style={{
@@ -42,7 +42,7 @@ export const ReportIssuesSection: React.FC<ReportIssuesSectionProps> = ({
           style={{
             width: "100%",
             padding: "10px 12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             fontSize: "13px",
             fontFamily: "inherit",
             resize: "vertical",

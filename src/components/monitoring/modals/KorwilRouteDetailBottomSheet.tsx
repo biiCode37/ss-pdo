@@ -158,8 +158,8 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
           maxHeight: "88vh",
           background: "var(--card-bg, #18181b)",
           color: "var(--text-primary, #ffffff)",
-          borderTopLeftRadius: "24px",
-          borderTopRightRadius: "24px",
+          borderTopLeftRadius: "16px",
+          borderTopRightRadius: "16px",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
           boxShadow: "0 -8px 32px rgba(0, 0, 0, 0.45)",
           display: "flex",
@@ -182,7 +182,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               width: "40px",
               height: "4px",
-              borderRadius: "2px",
+              borderRadius: "8px",
               background: "rgba(255, 255, 255, 0.25)",
             }}
           />
@@ -191,7 +191,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
         {/* Header Rute */}
         <div
           style={{
-            padding: "12px 18px",
+            padding: "12px 20px",
             borderBottom: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
             display: "flex",
             alignItems: "flex-start",
@@ -278,7 +278,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               style={{
                 background: "var(--color-success-bg)",
                 border: "1px solid var(--color-success-border)",
-                borderRadius: "14px",
+                borderRadius: "12px",
                 padding: "12px 14px",
                 display: "flex",
                 flexDirection: "column",
@@ -346,7 +346,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
@@ -358,7 +358,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px" }}>
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.RENOPS}
                 </span>
@@ -367,7 +367,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 </span>
               </div>
 
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.REALOPS}
                 </span>
@@ -376,7 +376,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 </span>
               </div>
 
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.FLEET_RATIO}
                 </span>
@@ -394,7 +394,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      padding: "5px 8px",
+                      padding: "6px 8px",
                       borderRadius: "8px",
                       background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                       border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
@@ -409,7 +409,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                         style={{
                           fontSize: "12px",
                           color: "var(--text-secondary, #888)",
-                          marginTop: "1px",
+                          marginTop: "2px",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
@@ -426,8 +426,8 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                           fontWeight: 700,
                           background: u.badgeBg,
                           color: u.badgeColor,
-                          padding: "2px 5px",
-                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          borderRadius: "8px",
                         }}
                       >
                         {u.statusCode}
@@ -438,7 +438,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                           fontWeight: 600,
                           color: "var(--text-secondary, #888)",
                           padding: "2px 4px",
-                          borderRadius: "4px",
+                          borderRadius: "8px",
                           background: "rgba(255, 255, 255, 0.06)",
                         }}
                       >
@@ -456,7 +456,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
@@ -474,7 +474,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   padding: "10px",
                 }}
               >
@@ -500,7 +500,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   padding: "10px",
                 }}
               >
@@ -527,7 +527,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               style={{
                 background: "rgba(62, 207, 142, 0.08)",
                 border: "1px solid rgba(62, 207, 142, 0.2)",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 padding: "10px 12px",
                 display: "flex",
                 alignItems: "center",
@@ -554,7 +554,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                     fontSize: "12px",
                     fontWeight: 700,
                     padding: "2px 8px",
-                    borderRadius: "9999px",
+                    borderRadius: "999px",
                     background: paxPct >= 80 ? "rgba(16, 185, 129, 0.15)" : "rgba(245, 158, 11, 0.15)",
                     color: paxPct >= 80 ? "#10B981" : "#F59E0B",
                     display: "inline-block",
@@ -572,7 +572,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
@@ -585,7 +585,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px" }}>
               {/* KM Tempuh */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.KM_TEMPUH}
                 </span>
@@ -596,7 +596,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               </div>
 
               {/* KM per Bus */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.KM_PER_BUS}
                 </span>
@@ -606,7 +606,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               </div>
 
               {/* Total Ritase PP */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.TOTAL_RITASE_PP}
                 </span>
@@ -617,7 +617,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               </div>
 
               {/* Ritase per Bus */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.RITASE_PER_BUS}
                 </span>
@@ -633,7 +633,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             style={{
               background: "var(--card-bg, rgba(255, 255, 255, 0.03))",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
-              borderRadius: "14px",
+              borderRadius: "12px",
               padding: "12px 14px",
             }}
           >
@@ -646,7 +646,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "8px" }}>
               {/* Pelanggan / KM Riil */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.PAX_PER_KM}
                 </span>
@@ -656,7 +656,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
               </div>
 
               {/* Target Pelanggan / KM */}
-              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "10px" }}>
+              <div style={{ background: "var(--input-bg, rgba(255, 255, 255, 0.03))", padding: "8px 10px", borderRadius: "12px" }}>
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
                   {labels.TARGET_PAX_PER_KM}
                 </span>
@@ -674,7 +674,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
                   gridColumn: "span 2",
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   padding: "8px 10px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",

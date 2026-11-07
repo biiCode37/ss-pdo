@@ -41,7 +41,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
               background: "var(--color-selection-bg)",
               border: "1px solid var(--color-border-control)",
               padding: "2px 8px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               whiteSpace: "nowrap",
               letterSpacing: "0.5px",
             }}
@@ -96,8 +96,8 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
                 style={{
                   fontSize: "12px",
                   fontWeight: 700,
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--color-shift-1-bg)",
                   color: "var(--color-shift-1-fg)",
                   border: "1px solid var(--color-shift-1-border)",
@@ -151,8 +151,8 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
                 style={{
                   fontSize: "12px",
                   fontWeight: 700,
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--color-shift-2-bg)",
                   color: "var(--color-shift-2-fg)",
                   border: "1px solid var(--color-shift-2-border)",

@@ -51,7 +51,7 @@ export function renderSpecificModalHtml(
             class="input-field"
             placeholder="0"
             value="${escapeHtml(bus.manualShift1 || "")}"
-            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; width: 100%;"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 12px; width: 100%;"
           />
         </div>
 
@@ -97,7 +97,7 @@ export function renderSpecificModalHtml(
             class="input-field"
             placeholder="0"
             value="${escapeHtml(bus.manualShift2 || "")}"
-            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 10px; width: 100%;"
+            style="font-size: 16px; font-weight: 700; text-align: center; height: 42px; border-radius: 12px; width: 100%;"
           />
         </div>
 
@@ -115,7 +115,7 @@ export function renderSpecificModalHtml(
     return `
       <div class="swal-bus-input-container" style="text-align: left; display: flex; flex-direction: column; gap: 10px;">
         ${headerHtml}
-        <div style="padding: 12px; border-radius: 14px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
+        <div style="padding: 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.06); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); display: flex; flex-direction: column; gap: 10px;">
           <div style="font-size: 12px; font-weight: 700; color: var(--accent-color); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
             ${TEXT_ALERTS.BUS_INPUT_MODAL.SECTION_TRIP_CARD}
           </div>
@@ -182,8 +182,8 @@ export function renderSpecificModalHtml(
           ${
             activeCategory === "kmAkhir1"
               ? `
-            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-radius: 10px; background: rgba(56, 189, 248, 0.08); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); margin-bottom: 8px; font-size: 12px;">
-              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;">
+            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 12px; background: rgba(56, 189, 248, 0.08); border: 1px solid var(--shift1-border, rgba(56, 189, 248, 0.25)); margin-bottom: 8px; font-size: 12px;">
+              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--shift1-color, #38bdf8);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S1}
               </span>
@@ -194,8 +194,8 @@ export function renderSpecificModalHtml(
           `
               : activeCategory === "kmAkhir2"
                 ? `
-            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-radius: 10px; background: rgba(192, 132, 252, 0.08); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25)); margin-bottom: 8px; font-size: 12px;">
-              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;">
+            <div id="swal-info-km-reference" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 12px; background: rgba(192, 132, 252, 0.08); border: 1px solid var(--shift2-border, rgba(192, 132, 252, 0.25)); margin-bottom: 8px; font-size: 12px;">
+              <span style="font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--shift2-color, #c084fc);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_KM_REF_S2}
               </span>

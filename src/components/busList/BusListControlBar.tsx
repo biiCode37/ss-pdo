@@ -63,7 +63,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
           style={{
             height: "36px",
             padding: "0 12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg)",
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
@@ -112,7 +112,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
           style={{
             height: "36px",
             padding: "0 10px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: isSelectionMode
               ? "var(--color-action-primary-bg)"
               : "var(--input-bg)",
@@ -127,7 +127,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "5px",
+            gap: "6px",
             whiteSpace: "nowrap",
             cursor: "pointer",
             transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -148,7 +148,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
               padding: "0 28px 0 10px",
               fontSize: "12px",
               fontWeight: 600,
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "var(--input-bg)",
               border: "1px solid var(--card-border)",
               color: "var(--text-primary)",
@@ -199,7 +199,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            style={{ height: "36px", fontSize: "13px", borderRadius: "10px" }}
+            style={{ height: "36px", fontSize: "13px", borderRadius: "12px" }}
           />
         </div>
         <button
@@ -208,12 +208,12 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             width: "auto",
             padding: "0 12px",
             display: "flex",
-            gap: "5px",
+            gap: "6px",
             alignItems: "center",
             height: "36px",
             fontSize: "12px",
             fontWeight: 600,
-            borderRadius: "10px",
+            borderRadius: "12px",
             whiteSpace: "nowrap",
             background: showOnlyUnfinished
               ? "rgba(16, 185, 129, 0.15)"

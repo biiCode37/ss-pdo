@@ -53,7 +53,7 @@ export function LoginFeatureCards() {
               className="glass"
               style={{
                 padding: "14px 16px",
-                borderRadius: "14px",
+                borderRadius: "12px",
                 textAlign: "left",
                 display: "flex",
                 flexDirection: "column",

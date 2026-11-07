@@ -64,7 +64,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
                 style={{
                   fontSize: "12px",
                   color: "var(--text-secondary)",
-                  marginTop: "1px",
+                  marginTop: "2px",
                 }}
               >
                 {TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT_DESC}
@@ -105,7 +105,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
                   style={{
                     fontSize: "12px",
                     color: "var(--text-secondary)",
-                    marginTop: "1px",
+                    marginTop: "2px",
                   }}
                 >
                   {TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT_DESC}
@@ -146,7 +146,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
                 style={{
                   fontSize: "12px",
                   color: "var(--text-secondary)",
-                  marginTop: "1px",
+                  marginTop: "2px",
                 }}
               >
                 {TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG_DESC}
@@ -157,8 +157,8 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
             style={{
               fontSize: "12px",
               fontWeight: 700,
-              padding: "2px 7px",
-              borderRadius: "6px",
+              padding: "2px 8px",
+              borderRadius: "8px",
               background: "rgba(245, 158, 11, 0.15)",
               color: "var(--warning-color, #f59e0b)",
               border: "1px solid rgba(245, 158, 11, 0.3)",

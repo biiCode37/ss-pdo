@@ -88,9 +88,9 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "3px",
+                  gap: "4px",
                   padding: "2px 6px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.12)",
@@ -106,9 +106,9 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "3px",
+                  gap: "4px",
                   padding: "2px 6px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(56, 189, 248, 0.12)",
@@ -128,8 +128,8 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  padding: "3px 8px",
-                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.12)",
@@ -147,8 +147,8 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
+                padding: "4px 8px",
+                borderRadius: "8px",
                 fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-info-bg)",
@@ -166,8 +166,8 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
+                padding: "4px 8px",
+                borderRadius: "8px",
                 fontSize: "12px",
                 fontWeight: 700,
                 background: "var(--color-warning-bg)",
@@ -185,8 +185,8 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "4px",
-                padding: "3px 8px",
-                borderRadius: "6px",
+                padding: "4px 8px",
+                borderRadius: "8px",
                 fontSize: "12px",
                 fontWeight: 600,
                 background: "rgba(255, 255, 255, 0.05)",
@@ -276,7 +276,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
               fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
-              marginTop: "1px",
+              marginTop: "2px",
             }}
           >
             S1:{route.realopsShift1} | S2:{route.realopsShift2}
@@ -313,7 +313,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
               fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
-              marginTop: "1px",
+              marginTop: "2px",
             }}
           >
             S1:{formatNumber(route.totalShift1)} S2:
@@ -351,7 +351,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
               fontSize: "12px",
               color: "var(--text-secondary)",
               display: "block",
-              marginTop: "1px",
+              marginTop: "2px",
             }}
           >
             {TEXT_MONITORING.ROUTE_CARD.KM_PER_BUS_PREFIX}{" "}
@@ -374,7 +374,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             <div
               style={{
                 padding: "4px 8px",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "rgba(245, 158, 11, 0.1)",
                 border: "1px solid rgba(245, 158, 11, 0.2)",
                 color: "#f59e0b",
@@ -391,7 +391,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
             <div
               style={{
                 padding: "4px 8px",
-                borderRadius: "6px",
+                borderRadius: "8px",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                 color: "var(--text-secondary, #8b8b8b)",

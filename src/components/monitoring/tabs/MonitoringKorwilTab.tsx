@@ -161,7 +161,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
           <span
             style={{
               padding: "4px 10px",
-              borderRadius: "9999px",
+              borderRadius: "999px",
               fontSize: "12px",
               fontWeight: 700,
               background: "rgba(62, 207, 142, 0.12)",
@@ -345,7 +345,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               <div
                 style={{
                   padding: "4px 10px",
-                  borderRadius: "9999px",
+                  borderRadius: "999px",
                   background: badgeBg,
                   color: badgeColor,
                   border: `1px solid ${badgeBorder}`,
@@ -372,7 +372,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   padding: "8px 10px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                 }}
               >
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
@@ -391,7 +391,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   padding: "8px 10px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                 }}
               >
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
@@ -410,7 +410,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   padding: "8px 10px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                 }}
               >
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
@@ -426,7 +426,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 style={{
                   background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
                   padding: "8px 10px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                 }}
               >
                 <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
@@ -449,7 +449,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               style={{
                 width: "100%",
                 padding: "8px 12px",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 border: "1px dashed var(--card-border, rgba(255, 255, 255, 0.15))",
                 background: isExpanded ? "rgba(255, 255, 255, 0.03)" : "transparent",
                 color: "var(--text-primary, #ededed)",
@@ -508,7 +508,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                         <span
                           style={{
                             padding: "2px 6px",
-                            borderRadius: "6px",
+                            borderRadius: "8px",
                             fontSize: "12px",
                             fontWeight: 700,
                             background: "rgba(62, 207, 142, 0.12)",

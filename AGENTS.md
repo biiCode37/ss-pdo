@@ -91,7 +91,7 @@ Aturan lengkap **WAJIB dibaca sebelum menyentuh kode UI**: [`.agents/rules/ui-co
 2. **Tanpa inline style statis baru** (warna, font, jarak, radius, border, bayangan); taruh di kelas `src/styles/components/*.css`.
 3. **Satu cincin fokus** untuk kolom teks (refact_213); dilarang `:focus` yang mengubah border/glow dan `outline: none` di luar pola `.ui-input-group`.
 4. **Tanpa gradasi, glow/neon, text-shadow, glassmorphism baru**; `--accent-color`/`#3ECF8E` adalah warisan dan dilarang di kode baru.
-5. **Skala sementara:** font 12–24px (min 12px, px saja, bobot 400–700), ikon 16/20/24 hanya untuk navigasi/tombol ikon/status bertopang teks, jarak kelipatan 4, radius 8/12/16/999.
+5. **Skala wajib (dikunci ratchet):** font 12–24px (min 12px, px saja, bobot 400–700), ikon 16/20/24 hanya untuk navigasi/tombol ikon/status bertopang teks, jarak dari skala 0–64px (genap, tanpa nilai ganjil), radius 8/12/16/999/50%.
 6. **Teks bantuan minimal:** hanya untuk error, empty state, format input, dan aksi yang merusak data.
 7. Perubahan visual wajib diverifikasi di browser (light & dark). Mockup dibuat **hanya jika pengguna memintanya**.
 8. **Penjaga otomatis:** `src/styles/ui-debt-ratchet.test.ts` dan `src/styles/components/focus-ring.test.ts` wajib lulus. Jika jumlah pelanggaran naik, perbaiki kodenya; **dilarang menaikkan `BASELINE`** (hanya boleh diturunkan setelah merapikan).

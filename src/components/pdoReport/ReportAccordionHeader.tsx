@@ -40,7 +40,7 @@ export const ReportAccordionHeader: React.FC<ReportAccordionHeaderProps> = ({
           style={{
             width: "36px",
             height: "36px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "rgba(62, 207, 142, 0.12)",
             color: "var(--accent-color, #3ECF8E)",
             display: "flex",

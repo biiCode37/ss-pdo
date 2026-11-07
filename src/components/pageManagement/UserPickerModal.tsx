@@ -101,7 +101,7 @@ export const UserPickerModal: React.FC<Props> = ({
           maxWidth: '480px',
           maxHeight: '85vh',
           backgroundColor: 'var(--color-surface-default)',
-          borderRadius: '20px',
+          borderRadius: '16px',
           border: '1px solid var(--color-border-subtle)',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
           display: 'flex',
@@ -142,7 +142,7 @@ export const UserPickerModal: React.FC<Props> = ({
               justifyContent: 'center',
               width: '36px',
               height: '36px',
-              borderRadius: '10px',
+              borderRadius: '12px',
               background: 'var(--color-surface-subtle)',
               border: '1px solid var(--color-border-subtle)',
               color: 'var(--color-text-secondary)',
@@ -213,7 +213,7 @@ export const UserPickerModal: React.FC<Props> = ({
           }}
         >
           {isLoading ? (
-            <div style={{ padding: '30px 0', textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+            <div style={{ padding: '32px 0', textAlign: 'center', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
               Memuat pengguna...
             </div>
           ) : filteredUsers.length > 0 ? (
@@ -289,7 +289,7 @@ export const UserPickerModal: React.FC<Props> = ({
               </div>
             ))
           ) : (
-            <div style={{ padding: '36px 0', textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '13px' }}>
+            <div style={{ padding: '40px 0', textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '13px' }}>
               {searchQuery
                 ? TEXT_PAGE_MANAGEMENT.USER_PICKER.NO_USERS_FOUND
                 : TEXT_PAGE_MANAGEMENT.USER_PICKER.EMPTY_LIST}

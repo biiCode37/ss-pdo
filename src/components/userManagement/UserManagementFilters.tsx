@@ -137,7 +137,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
               onClick={() => onTabChange(tab.key as FilterTab)}
               style={{
                 padding: "6px 12px",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 fontSize: "13px",
                 fontWeight: isActive ? 600 : 500,
                 border: "1px solid",
@@ -160,7 +160,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
               <span
                 style={{
                   fontSize: "12px",
-                  padding: "1px 6px",
+                  padding: "2px 6px",
                   borderRadius: "8px",
                   background: isActive
                     ? "rgba(59, 130, 246, 0.3)"

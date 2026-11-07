@@ -2,8 +2,8 @@
 .ui-button {
   border: 1px solid transparent;
   border-radius: 12px;
-  padding: 12px 18px;
-  min-height: 44px;
+  padding: 12px 20px;
+  min-height: 48px;
   font: inherit;
   font-weight: 700;
   cursor: pointer;

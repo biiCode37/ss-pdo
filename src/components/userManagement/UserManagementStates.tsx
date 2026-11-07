@@ -90,7 +90,7 @@ export const UserManagementEmptyState: React.FC<
   return (
     <div
       style={{
-        padding: "60px 20px",
+        padding: "64px 20px",
         textAlign: "center",
         background: "var(--card-bg, rgba(30, 41, 59, 0.4))",
         borderRadius: "16px",

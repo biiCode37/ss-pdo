@@ -80,7 +80,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
                   color: "var(--shift1-action-text, #0369a1)",
                   background: "var(--shift1-bg, rgba(2, 132, 199, 0.08))",
                   padding: "2px 8px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontWeight: 600,
                 }}
               >
@@ -310,7 +310,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
                   color: "var(--text-secondary, #6b7280)",
                   background: "var(--input-bg, rgba(0, 0, 0, 0.04))",
                   padding: "2px 8px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   border: "1px solid var(--card-border, rgba(0, 0, 0, 0.08))",
                 }}
               >

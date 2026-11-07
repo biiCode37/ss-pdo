@@ -74,7 +74,7 @@ export function LoginInfoPermissionsSection({
           data-testid="scope-details-box"
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             border: "1px solid var(--border-color)",
             fontSize: "12px",

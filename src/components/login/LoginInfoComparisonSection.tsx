@@ -39,7 +39,7 @@ export function LoginInfoComparisonSection() {
         <div
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
           }}
@@ -90,7 +90,7 @@ export function LoginInfoComparisonSection() {
         <div
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
           }}
@@ -141,7 +141,7 @@ export function LoginInfoComparisonSection() {
         <div
           style={{
             padding: "12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
           }}

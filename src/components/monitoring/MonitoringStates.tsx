@@ -36,7 +36,7 @@ export const MonitoringStates: React.FC<MonitoringStatesProps> = ({
               key={i}
               style={{
                 height: "90px",
-                borderRadius: "14px",
+                borderRadius: "12px",
                 background: "var(--card-bg, rgba(255, 255, 255, 0.04))",
                 animation: "pulse 1.5s ease-in-out infinite",
               }}
@@ -110,8 +110,8 @@ export const MonitoringStates: React.FC<MonitoringStatesProps> = ({
           onClick={onRetry}
           style={{
             marginTop: "6px",
-            padding: "8px 18px",
-            borderRadius: "10px",
+            padding: "8px 20px",
+            borderRadius: "12px",
             background: "var(--danger-color, #ef4444)",
             color: "#ffffff",
             border: "none",

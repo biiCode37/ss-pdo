@@ -24,7 +24,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
           style={{
             width: "36px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             background: "var(--card-border, rgba(255, 255, 255, 0.2))",
           }}
         />
@@ -74,7 +74,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
             color: "var(--text-secondary, #94a3b8)",

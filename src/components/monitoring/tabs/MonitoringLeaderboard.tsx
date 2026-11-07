@@ -103,7 +103,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "5px",
+              gap: "6px",
               minWidth: 0,
             }}
           >
@@ -124,8 +124,8 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
                 fontWeight: 700,
                 color: pctColor,
                 background: pctBg,
-                padding: "1.5px 5px",
-                borderRadius: "5px",
+                padding: "2px 6px",
+                borderRadius: "8px",
                 display: "inline-flex",
                 alignItems: "center",
                 lineHeight: 1.2,
@@ -142,7 +142,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
               fontSize: "12px",
               color: "var(--text-secondary)",
               lineHeight: 1.25,
-              marginTop: "1.5px",
+              marginTop: "2px",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -174,7 +174,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
             fontSize: "12px",
             color: "var(--text-secondary)",
             lineHeight: 1.25,
-            marginTop: "1.5px",
+            marginTop: "2px",
             whiteSpace: "nowrap",
           }}
         >

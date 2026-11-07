@@ -52,9 +52,9 @@ Jika butuh varian, tambahkan prop atau kelas modifier pada komponen yang ada. **
 - Label tombol: kata kerja, 1–3 kata ("Simpan", "Isi data", "Hapus unit").
 - Semua teks tetap lewat `src/constants/texts/`.
 
-## 8. Tata letak & jarak (skala SEMENTARA)
-- Jarak (padding, margin, gap) kelipatan 4: **4, 8, 12, 16, 20, 24, 32**.
-- Radius: **8** (chip, kontrol kecil), **12** (input, tombol, kartu), **16** (modal, bottom sheet), **999px** (pill, avatar).
+## 8. Tata letak & jarak (berlaku sejak refact_218, dikunci ratchet)
+- Jarak (padding, margin, gap) hanya dari skala: **0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 40, 48, 56, 64** px. Dilarang nilai ganjil/pecahan (1, 3, 5, 7, 9, 11, 13, 18, 3.5px, dst.).
+- Radius hanya: **8** (chip, kontrol kecil), **12** (input, tombol, kartu), **16** (modal, bottom sheet), **999px** (pill), **50%** (lingkaran).
 - Gutter layar 16px. Padding kartu 12–16px. Hindari kartu di dalam kartu.
 - Mobile-first: rapi di lebar **360px**, tanpa scroll horizontal; dicek di light & dark.
 

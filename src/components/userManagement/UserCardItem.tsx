@@ -87,8 +87,8 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
                   style={{
                     fontSize: "12px",
                     fontWeight: 700,
-                    padding: "1px 5px",
-                    borderRadius: "5px",
+                    padding: "2px 6px",
+                    borderRadius: "8px",
                     background: "rgba(59, 130, 246, 0.2)",
                     color: "#60a5fa",
                   }}
@@ -125,7 +125,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
         <div
           style={{
             padding: "8px 10px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "rgba(255, 255, 255, 0.03)",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
             fontSize: "12px",
@@ -213,7 +213,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               style={{
                 width: "36px",
                 height: "20px",
-                borderRadius: "9999px",
+                borderRadius: "999px",
                 background: isActive ? "#10b981" : "rgba(255, 255, 255, 0.16)",
                 border: isActive
                   ? "1px solid rgba(16, 185, 129, 0.4)"

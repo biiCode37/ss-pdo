@@ -29,7 +29,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
         style={{
           background: "var(--total-bg)",
           border: "1px solid var(--total-border)",
-          borderRadius: "10px",
+          borderRadius: "12px",
           padding: "8px 10px",
           display: "flex",
           flexDirection: "column",
@@ -70,7 +70,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
         style={{
           background: "var(--danger-badge-bg)",
           border: "1px solid var(--card-border)",
-          borderRadius: "10px",
+          borderRadius: "12px",
           padding: "8px 10px",
           display: "flex",
           flexDirection: "column",
@@ -111,7 +111,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
         style={{
           background: "var(--info-badge-bg)",
           border: "1px solid var(--card-border)",
-          borderRadius: "10px",
+          borderRadius: "12px",
           padding: "8px 10px",
           display: "flex",
           flexDirection: "column",

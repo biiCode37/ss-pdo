@@ -193,7 +193,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
           maxWidth: '520px',
           background: 'var(--card-bg, #1e1e1e)',
           border: '1px solid var(--card-border, rgba(255, 255, 255, 0.1))',
-          borderRadius: '20px',
+          borderRadius: '16px',
           padding: '24px',
           boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
           position: 'relative',
@@ -275,7 +275,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
             alignItems: 'center',
             gap: '8px',
             padding: '8px 12px',
-            borderRadius: '10px',
+            borderRadius: '12px',
             background: isFutureMonth
               ? 'rgba(239, 68, 68, 0.12)'
               : 'var(--input-bg, rgba(255, 255, 255, 0.04))',
@@ -285,7 +285,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
             fontSize: '12px',
             fontWeight: 600,
             color: isFutureMonth ? '#ef4444' : 'var(--accent-color, #3ECF8E)',
-            marginBottom: '18px',
+            marginBottom: '20px',
             width: '100%',
             boxSizing: 'border-box',
           }}
@@ -315,7 +315,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               whiteSpace: 'pre-line',
             }}
           >
-            <AlertCircle size={20} style={{ flexShrink: 0, marginTop: '1px' }} />
+            <AlertCircle size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
             <div style={{ flex: 1, lineHeight: 1.4 }}>{errorMessage}</div>
           </div>
         )}
@@ -346,7 +346,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 width: '100%',
                 boxSizing: 'border-box',
                 padding: '10px 14px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-primary, #ededed)',
@@ -436,7 +436,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 width: '100%',
                 boxSizing: 'border-box',
                 padding: '10px 14px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'var(--input-bg, rgba(255, 255, 255, 0.05))',
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-primary, #ededed)',
@@ -477,7 +477,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 style={{
                   width: '100%',
                   height: '6px',
-                  borderRadius: '3px',
+                  borderRadius: '8px',
                   background: 'rgba(255, 255, 255, 0.1)',
                   overflow: 'hidden',
                 }}
@@ -487,7 +487,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                     height: '100%',
                     width: `${progress?.percent || 5}%`,
                     background: 'var(--accent-color, #3ECF8E)',
-                    borderRadius: '3px',
+                    borderRadius: '8px',
                     transition: 'width 0.3s cubic-bezier(0.32, 0.72, 0, 1)',
                   }}
                 />
@@ -511,7 +511,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               disabled={syncing}
               style={{
                 padding: '10px 16px',
-                borderRadius: '10px',
+                borderRadius: '12px',
                 background: 'transparent',
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-secondary, #a3a3a3)',
@@ -531,8 +531,8 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '10px 18px',
-                borderRadius: '10px',
+                padding: '10px 20px',
+                borderRadius: '12px',
                 background: 'var(--accent-color, #3ECF8E)',
                 border: 'none',
                 color: '#000000',

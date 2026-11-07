@@ -95,7 +95,7 @@ export const MonitoringReadinessBanner: React.FC<
         style={{
           width: "100%",
           height: "8px",
-          borderRadius: "9999px",
+          borderRadius: "999px",
           background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
           overflow: "hidden",
         }}
@@ -105,7 +105,7 @@ export const MonitoringReadinessBanner: React.FC<
             height: "100%",
             width: `${pct}%`,
             background: "var(--color-action-primary-bg)",
-            borderRadius: "9999px",
+            borderRadius: "999px",
             transition: "width 0.4s ease",
           }}
         />
@@ -127,7 +127,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span
@@ -147,7 +147,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span
@@ -167,7 +167,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span
@@ -185,7 +185,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
           }}
         >
           <span

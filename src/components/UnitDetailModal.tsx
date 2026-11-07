@@ -96,8 +96,8 @@ export function UnitDetailModal({
         maxHeight: "min(88dvh, 760px)",
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        borderTopLeftRadius: "24px",
-        borderTopRightRadius: "24px",
+        borderTopLeftRadius: "16px",
+        borderTopRightRadius: "16px",
         padding: "16px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px",
         background: "var(--card-bg, #171717)",
         border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
@@ -128,7 +128,7 @@ export function UnitDetailModal({
           style={{
             width: "36px",
             height: "4px",
-            borderRadius: "2px",
+            borderRadius: "8px",
             background: "var(--card-border, rgba(255, 255, 255, 0.2))",
           }}
         />
@@ -171,7 +171,7 @@ export function UnitDetailModal({
           style={{
             width: "34px",
             height: "34px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
             color: "var(--text-secondary, #94a3b8)",
@@ -193,7 +193,7 @@ export function UnitDetailModal({
         <div
           style={{
             padding: "12px",
-            borderRadius: "14px",
+            borderRadius: "12px",
             background: "var(--shift1-bg, rgba(2, 132, 199, 0.08))",
             border: "1px solid var(--shift1-border, rgba(2, 132, 199, 0.2))",
             display: "flex",
@@ -216,8 +216,8 @@ export function UnitDetailModal({
               <span
                 style={{
                   fontSize: "12px",
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--shift1-bg, rgba(2, 132, 199, 0.15))",
                   color: "var(--shift1-color, #38bdf8)",
                   border: "1px solid var(--shift1-border, rgba(2, 132, 199, 0.3))",
@@ -257,7 +257,7 @@ export function UnitDetailModal({
                   color: "var(--text-secondary, #94a3b8)",
                   background: "var(--input-bg, rgba(0, 0, 0, 0.2))",
                   padding: "2px 6px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                   marginTop: "2px",
                 }}
@@ -272,7 +272,7 @@ export function UnitDetailModal({
         <div
           style={{
             padding: "12px",
-            borderRadius: "14px",
+            borderRadius: "12px",
             background: "var(--shift2-bg, rgba(126, 34, 206, 0.08))",
             border: "1px solid var(--shift2-border, rgba(126, 34, 206, 0.2))",
             display: "flex",
@@ -295,8 +295,8 @@ export function UnitDetailModal({
               <span
                 style={{
                   fontSize: "12px",
-                  padding: "1px 6px",
-                  borderRadius: "6px",
+                  padding: "2px 6px",
+                  borderRadius: "8px",
                   background: "var(--shift2-bg, rgba(126, 34, 206, 0.15))",
                   color: "var(--shift2-color, #c084fc)",
                   border: "1px solid var(--shift2-border, rgba(126, 34, 206, 0.3))",
@@ -336,7 +336,7 @@ export function UnitDetailModal({
                   color: "var(--text-secondary, #94a3b8)",
                   background: "var(--input-bg, rgba(0, 0, 0, 0.2))",
                   padding: "2px 6px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
                   marginTop: "2px",
                 }}
@@ -352,7 +352,7 @@ export function UnitDetailModal({
       <div
         style={{
           padding: "12px 14px",
-          borderRadius: "14px",
+          borderRadius: "12px",
           background: "var(--input-bg, rgba(255, 255, 255, 0.03))",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
           display: "flex",
@@ -375,8 +375,8 @@ export function UnitDetailModal({
             <span
               style={{
                 fontSize: "12px",
-                padding: "1px 6px",
-                borderRadius: "6px",
+                padding: "2px 6px",
+                borderRadius: "8px",
                 background: "rgba(56, 189, 248, 0.12)",
                 color: "var(--accent-color, #38bdf8)",
                 border: "1px solid rgba(56, 189, 248, 0.25)",
@@ -393,13 +393,13 @@ export function UnitDetailModal({
           <div
             style={{
               padding: "8px 6px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "rgba(0, 0, 0, 0.15)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
             <span
@@ -413,7 +413,7 @@ export function UnitDetailModal({
             >
               {TEXT_UNIT_DETAIL.STRIP_RITASE}
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
               <Repeat size={16} style={{ color: "var(--accent-color, #38bdf8)" }} />
               <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {metrics.tripPergi || "0"}/{metrics.tripPulang || "0"}
@@ -425,13 +425,13 @@ export function UnitDetailModal({
           <div
             style={{
               padding: "8px 6px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "rgba(0, 0, 0, 0.15)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
             <span
@@ -459,13 +459,13 @@ export function UnitDetailModal({
           <div
             style={{
               padding: "8px 6px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "rgba(0, 0, 0, 0.15)",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "3px",
+              gap: "4px",
             }}
           >
             <span
@@ -496,8 +496,8 @@ export function UnitDetailModal({
               fontSize: "12px",
               color: "var(--text-secondary, #94a3b8)",
               background: "var(--input-bg, rgba(0, 0, 0, 0.2))",
-              padding: "3px 8px",
-              borderRadius: "6px",
+              padding: "4px 8px",
+              borderRadius: "8px",
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               textAlign: "center",
             }}
@@ -520,7 +520,7 @@ export function UnitDetailModal({
       <div
         style={{
           padding: "14px",
-          borderRadius: "14px",
+          borderRadius: "12px",
           background: "var(--card-bg, #1e293b)",
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
         }}
@@ -559,7 +559,7 @@ export function UnitDetailModal({
               >
                 <AlertTriangle
                   size={16}
-                  style={{ color: "var(--warning-color, #f59e0b)", flexShrink: 0, marginTop: "1px" }}
+                  style={{ color: "var(--warning-color, #f59e0b)", flexShrink: 0, marginTop: "2px" }}
                 />
                 <span style={{ lineHeight: 1.4, wordBreak: "break-word", textTransform: "uppercase" }}>
                   {n}

@@ -161,8 +161,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
           maxHeight: "90vh",
           backgroundColor: "var(--color-surface-default)",
           color: "var(--color-text-primary)",
-          borderTopLeftRadius: "24px",
-          borderTopRightRadius: "24px",
+          borderTopLeftRadius: "16px",
+          borderTopRightRadius: "16px",
           border: "1px solid var(--color-border-subtle)",
           boxShadow: "0 -8px 36px var(--color-shadow, rgba(0, 0, 0, 0.35))",
           display: "flex",
@@ -186,7 +186,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
             style={{
               width: "38px",
               height: "4px",
-              borderRadius: "2px",
+              borderRadius: "8px",
               backgroundColor: "var(--color-border-control)",
               opacity: 0.5,
             }}
@@ -196,7 +196,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
         {/* Modal Header */}
         <div
           style={{
-            padding: "12px 18px",
+            padding: "12px 20px",
             borderBottom: "1px solid var(--color-border-subtle)",
             display: "flex",
             alignItems: "flex-start",
@@ -256,8 +256,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  padding: "3px 8px",
-                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: 700,
                   backgroundColor: "var(--color-success-bg)",
@@ -275,8 +275,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  padding: "3px 8px",
-                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: 700,
                   backgroundColor: "var(--color-info-bg)",
@@ -294,8 +294,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  padding: "3px 8px",
-                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: 700,
                   backgroundColor: "var(--color-warning-bg)",
@@ -313,8 +313,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "4px",
-                  padding: "3px 8px",
-                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: 700,
                   backgroundColor: "var(--color-surface-subtle)",
@@ -369,7 +369,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
             onClick={() => setActiveTab("operasional")}
             style={{
               padding: "8px 4px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               fontSize: "12px",
               fontWeight: activeTab === "operasional" ? 700 : 500,
               backgroundColor:
@@ -402,7 +402,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
             onClick={() => setActiveTab("shift")}
             style={{
               padding: "8px 4px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               fontSize: "12px",
               fontWeight: activeTab === "shift" ? 700 : 500,
               backgroundColor:
@@ -435,7 +435,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
             onClick={() => setActiveTab("produktivitas")}
             style={{
               padding: "8px 4px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               fontSize: "12px",
               fontWeight: activeTab === "produktivitas" ? 700 : 500,
               backgroundColor:
@@ -467,7 +467,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
         <div
           className="no-scrollbar"
           style={{
-            padding: "16px 18px",
+            padding: "16px 20px",
             overflowY: "auto",
             overscrollBehavior: "contain",
             WebkitOverflowScrolling: "touch",
@@ -616,7 +616,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                 data-testid="route-modal-fleet-section"
                 style={{
                   backgroundColor: "var(--color-surface-subtle)",
-                  borderRadius: "14px",
+                  borderRadius: "12px",
                   padding: "14px",
                   border: "1px solid var(--color-border-subtle)",
                   display: "flex",
@@ -671,7 +671,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                         color: "var(--color-warning-fg)",
                         backgroundColor: "var(--color-warning-bg)",
                         padding: "2px 8px",
-                        borderRadius: "6px",
+                        borderRadius: "8px",
                         border: "1px solid var(--color-warning-border)",
                       }}
                     >
@@ -690,7 +690,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                         color: "var(--color-success-fg)",
                         backgroundColor: "var(--color-success-bg)",
                         padding: "2px 8px",
-                        borderRadius: "6px",
+                        borderRadius: "8px",
                         border: "1px solid var(--color-success-border)",
                       }}
                     >
@@ -718,7 +718,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                           alignItems: "center",
                           justifyContent: "space-between",
                           padding: "8px 12px",
-                          borderRadius: "10px",
+                          borderRadius: "12px",
                           backgroundColor: "var(--color-surface-default)",
                           border: "1px solid var(--color-border-subtle)",
                           gap: "10px",
@@ -774,8 +774,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                               background: u.badgeBg,
                               color: u.badgeColor,
                               border: u.badgeBorder ? `1px solid ${u.badgeBorder}` : "none",
-                              padding: "2px 7px",
-                              borderRadius: "5px",
+                              padding: "2px 8px",
+                              borderRadius: "8px",
                               letterSpacing: "0.2px",
                             }}
                           >
@@ -793,7 +793,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                       alignItems: "center",
                       gap: "10px",
                       padding: "10px 12px",
-                      borderRadius: "10px",
+                      borderRadius: "12px",
                       backgroundColor: "var(--color-success-bg)",
                       border: "1px solid var(--color-success-border)",
                     }}
@@ -818,7 +818,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                       alignItems: "center",
                       gap: "10px",
                       padding: "10px 12px",
-                      borderRadius: "10px",
+                      borderRadius: "12px",
                       backgroundColor: "var(--color-surface-default)",
                       border: "1px dashed var(--color-border-subtle)",
                     }}
@@ -846,7 +846,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               <div
                 style={{
                   backgroundColor: "var(--color-surface-subtle)",
-                  borderRadius: "14px",
+                  borderRadius: "12px",
                   padding: "14px 16px",
                   border: "1px solid var(--color-border-subtle)",
                   display: "flex",
@@ -886,7 +886,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                       fontSize: "12px",
                       fontWeight: 700,
                       color: "var(--color-success-fg)",
-                      marginTop: "1px",
+                      marginTop: "2px",
                     }}
                   >
                     {tMetrics.ACHIEVEMENT_PCT(paxPct)}
@@ -898,7 +898,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               <div
                 style={{
                   backgroundColor: "var(--color-surface-subtle)",
-                  borderRadius: "14px",
+                  borderRadius: "12px",
                   padding: "14px",
                   border: "1px solid var(--color-border-subtle)",
                   width: "100%",
@@ -909,21 +909,21 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   {tMetrics.SHIFT_1_HEADER}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px", textAlign: "center" }}>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.TOA_LABEL}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "3px", color: "var(--color-text-primary)" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "4px", color: "var(--color-text-primary)" }}>
                       {(route.toaShift1 || 0).toLocaleString("id-ID")}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.MANUAL_LABEL}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "3px", color: "var(--color-text-primary)" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "4px", color: "var(--color-text-primary)" }}>
                       {(route.manualShift1 || 0).toLocaleString("id-ID")}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.TOTAL_SHIFT_LABEL}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-action-primary-bg)", marginTop: "3px" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-action-primary-bg)", marginTop: "4px" }}>
                       {(route.totalShift1 || (route.toaShift1 + route.manualShift1) || 0).toLocaleString("id-ID")}
                     </div>
                   </div>
@@ -934,7 +934,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               <div
                 style={{
                   backgroundColor: "var(--color-surface-subtle)",
-                  borderRadius: "14px",
+                  borderRadius: "12px",
                   padding: "14px",
                   border: "1px solid var(--color-border-subtle)",
                   width: "100%",
@@ -945,21 +945,21 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   {tMetrics.SHIFT_2_HEADER}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "8px", textAlign: "center" }}>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.TOA_LABEL}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "3px", color: "var(--color-text-primary)" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "4px", color: "var(--color-text-primary)" }}>
                       {(route.toaShift2 || 0).toLocaleString("id-ID")}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.MANUAL_LABEL}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "3px", color: "var(--color-text-primary)" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "4px", color: "var(--color-text-primary)" }}>
                       {(route.manualShift2 || 0).toLocaleString("id-ID")}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 8px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.TOTAL_SHIFT_LABEL}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-action-primary-bg)", marginTop: "3px" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-action-primary-bg)", marginTop: "4px" }}>
                       {(route.totalShift2 || (route.toaShift2 + route.manualShift2) || 0).toLocaleString("id-ID")}
                     </div>
                   </div>
@@ -970,7 +970,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               <div
                 style={{
                   backgroundColor: "var(--color-surface-subtle)",
-                  borderRadius: "14px",
+                  borderRadius: "12px",
                   padding: "14px",
                   border: "1px solid var(--color-border-subtle)",
                   width: "100%",
@@ -981,15 +981,15 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   {tMetrics.HISTORICAL_HEADER}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 12px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 12px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.PAX_YESTERDAY}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "3px", color: "var(--color-text-primary)" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "4px", color: "var(--color-text-primary)" }}>
                       {route.yesterdayPassengers ? route.yesterdayPassengers.toLocaleString("id-ID") : "-"}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 12px", borderRadius: "10px" }}>
+                  <div style={{ backgroundColor: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", padding: "10px 12px", borderRadius: "12px" }}>
                     <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>{tMetrics.PAX_LAST_WEEK}</div>
-                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "3px", color: "var(--color-text-primary)" }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, marginTop: "4px", color: "var(--color-text-primary)" }}>
                       {route.lastWeekPassengers ? route.lastWeekPassengers.toLocaleString("id-ID") : "-"}
                     </div>
                   </div>
@@ -1105,8 +1105,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
             data-testid="modal-btn-close"
             onClick={onClose}
             style={{
-              padding: "9px 16px",
-              borderRadius: "10px",
+              padding: "10px 16px",
+              borderRadius: "12px",
               backgroundColor: "var(--color-surface-subtle)",
               color: "var(--color-text-primary)",
               border: "1px solid var(--color-border-subtle)",
@@ -1129,8 +1129,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              padding: "9px 16px",
-              borderRadius: "10px",
+              padding: "10px 16px",
+              borderRadius: "12px",
               backgroundColor: "var(--color-action-primary-bg)",
               color: "var(--color-action-primary-fg)",
               border: "none",
@@ -1156,8 +1156,8 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "9px 16px",
-                borderRadius: "10px",
+                padding: "10px 16px",
+                borderRadius: "12px",
                 backgroundColor: "var(--color-success-fg)",
                 color: "var(--color-surface-default)",
                 border: "none",

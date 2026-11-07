@@ -132,9 +132,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "3px",
+                gap: "4px",
                 padding: "6px 8px",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 background: "var(--color-bg-surface, var(--card-bg, rgba(255, 255, 255, 0.06)))",
                 border: "1px solid var(--color-border-subtle, var(--border-color, rgba(255, 255, 255, 0.12)))",
                 color: "var(--color-text-secondary, var(--text-secondary, #a0aec0))",
@@ -160,8 +160,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               display: "inline-flex",
               alignItems: "center",
               gap: "4px",
-              padding: "6px 9px",
-              borderRadius: "10px",
+              padding: "6px 10px",
+              borderRadius: "12px",
               background: "var(--color-selection-bg, rgba(62, 207, 142, 0.12))",
               border: "1px solid var(--color-selection-border, rgba(62, 207, 142, 0.32))",
               color: "var(--color-action-primary-bg, #3ECF8E)",
@@ -186,7 +186,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "5px",
+                gap: "6px",
                 color: hasConflictOrFailedQueue
                   ? "var(--color-danger-fg, var(--danger-color))"
                   : "var(--color-warning-fg, var(--warning-color))",
@@ -195,8 +195,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 background: hasConflictOrFailedQueue
                   ? "rgba(247, 85, 85, 0.12)"
                   : "rgba(245, 158, 11, 0.12)",
-                padding: "3px 7px",
-                borderRadius: "20px",
+                padding: "4px 8px",
+                borderRadius: "16px",
                 cursor: "pointer",
                 border:
                   "1px solid " +

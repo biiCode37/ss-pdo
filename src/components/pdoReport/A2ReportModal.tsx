@@ -352,7 +352,7 @@ function A2ReportModalComponent({
         {/* Header */}
         <div
           style={{
-            padding: '14px 18px',
+            padding: '14px 20px',
             borderBottom: '1px solid var(--color-border-subtle)',
             display: 'flex',
             justifyContent: 'space-between',
@@ -607,7 +607,7 @@ function A2ReportModalComponent({
                   background: 'rgba(239, 68, 68, 0.25)',
                   border: '1px solid rgba(239, 68, 68, 0.5)',
                   color: '#fff',
-                  borderRadius: '6px',
+                  borderRadius: '8px',
                   padding: '4px 10px',
                   fontSize: '12px',
                   fontWeight: 600,
@@ -687,7 +687,7 @@ function A2ReportModalComponent({
                           width: busOptions.length > 0 ? '85px' : '105px',
                           minWidth: 0,
                           padding: '6px 8px',
-                          borderRadius: '6px',
+                          borderRadius: '8px',
                           border: '1px solid var(--color-border, #475569)',
                           backgroundColor: 'rgba(0, 0, 0, 0.2)',
                           color: '#fff',
@@ -706,8 +706,8 @@ function A2ReportModalComponent({
                             background: 'rgba(56, 189, 248, 0.15)',
                             border: '1px solid rgba(56, 189, 248, 0.3)',
                             color: '#38bdf8',
-                            borderRadius: '6px',
-                            padding: '6px 7px',
+                            borderRadius: '8px',
+                            padding: '6px 8px',
                             fontSize: '12px',
                             cursor: isSubmitting ? 'not-allowed' : 'pointer',
                             flexShrink: 0,
@@ -739,7 +739,7 @@ function A2ReportModalComponent({
                         minWidth: '95px',
                         flexShrink: 0,
                         padding: '6px 6px',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         border: '1px solid var(--color-border, #475569)',
                         backgroundColor: 'var(--color-surface-raised)',
                         color: item.unit_body ? 'var(--color-text-main, #f8fafc)' : 'var(--color-text-muted, #94a3b8)',
@@ -782,7 +782,7 @@ function A2ReportModalComponent({
                       flex: 1,
                       minWidth: 0,
                       padding: '6px 8px',
-                      borderRadius: '6px',
+                      borderRadius: '8px',
                       border: '1px solid var(--color-border, #475569)',
                       backgroundColor: 'rgba(0, 0, 0, 0.2)',
                       color: '#fff',
@@ -801,7 +801,7 @@ function A2ReportModalComponent({
                       background: 'rgba(239, 68, 68, 0.15)',
                       border: '1px solid rgba(239, 68, 68, 0.3)',
                       color: '#f87171',
-                      borderRadius: '6px',
+                      borderRadius: '8px',
                       width: '32px',
                       height: '32px',
                       minWidth: '32px',
@@ -825,7 +825,7 @@ function A2ReportModalComponent({
         {/* Footer */}
         <div
           style={{
-            padding: '12px 18px',
+            padding: '12px 20px',
             borderTop: '1px solid var(--color-border, #334155)',
             backgroundColor: 'var(--color-surface-raised)',
             display: 'flex',
@@ -841,7 +841,7 @@ function A2ReportModalComponent({
             onClick={onClose}
             disabled={isSubmitting}
             style={{
-              padding: '9px 16px',
+              padding: '10px 16px',
               borderRadius: '8px',
               border: '1px solid var(--color-border, #475569)',
               background: 'transparent',
@@ -861,7 +861,7 @@ function A2ReportModalComponent({
             onClick={handleSubmit}
             disabled={isSubmitting}
             style={{
-              padding: '9px 18px',
+              padding: '10px 20px',
               borderRadius: '8px',
               border: 'none',
               background: '#2563eb',

@@ -26,7 +26,7 @@ export function WaReportPreview({
           background: "var(--bg-color, #0b0f19)",
           color: "var(--text-primary, #e2e8f0)",
           padding: "12px 14px",
-          borderRadius: "14px",
+          borderRadius: "12px",
           fontFamily: "monospace",
           fontSize: "12px",
           lineHeight: 1.45,

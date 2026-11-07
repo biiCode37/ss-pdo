@@ -145,7 +145,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                   color: "var(--text-secondary, #8b8b8b)",
                   fontWeight: 500,
                   display: "block",
-                  marginTop: "1px",
+                  marginTop: "2px",
                 }}
               >
                 {TEXT_MONITORING.HEADER.SUBTITLE}
@@ -314,7 +314,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                   color: "var(--text-secondary, #8b8b8b)",
                   opacity: 0.7,
                   flexShrink: 0,
-                  marginLeft: "1px",
+                  marginLeft: "2px",
                 }}
               />
               <input

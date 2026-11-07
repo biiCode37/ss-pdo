@@ -171,8 +171,8 @@ export function BusInputModal({
           : "min(92dvh, 780px)",
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        borderTopLeftRadius: "24px",
-        borderTopRightRadius: "24px",
+        borderTopLeftRadius: "16px",
+        borderTopRightRadius: "16px",
         padding: isKeyboardOpen
           ? "12px 16px 8px 16px"
           : "18px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px",
@@ -210,7 +210,7 @@ export function BusInputModal({
             style={{
               margin: "10px 0 0 0",
               padding: "10px 12px",
-              borderRadius: "10px",
+              borderRadius: "12px",
               background: "var(--color-warning-bg, rgba(234, 179, 8, 0.12))",
               border: "1px solid var(--color-warning-border, rgba(234, 179, 8, 0.35))",
               display: "flex",
@@ -244,8 +244,8 @@ export function BusInputModal({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "6px",
-                padding: "5px 12px",
-                borderRadius: "6px",
+                padding: "6px 12px",
+                borderRadius: "8px",
                 background: "var(--color-warning-fg, #eab308)",
                 color: "#000",
                 fontWeight: 700,
@@ -317,9 +317,9 @@ export function BusInputModal({
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "5px",
-                    padding: "5px 12px",
-                    borderRadius: "6px",
+                    gap: "6px",
+                    padding: "6px 12px",
+                    borderRadius: "8px",
                     background: "#f59e0b",
                     color: "#000",
                     fontWeight: 700,

@@ -79,7 +79,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
           width: '100%',
           maxWidth: '460px',
           backgroundColor: 'var(--color-surface-default)',
-          borderRadius: '20px',
+          borderRadius: '16px',
           border: '1px solid var(--color-border-subtle)',
           boxShadow: '0 20px 40px var(--color-shadow, rgba(0, 0, 0, 0.3))',
           display: 'flex',
@@ -120,7 +120,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
             style={{
               width: '34px',
               height: '34px',
-              borderRadius: '10px',
+              borderRadius: '12px',
               background: 'var(--color-surface-subtle)',
               border: '1px solid var(--color-border-subtle)',
               color: 'var(--color-text-secondary)',
@@ -203,7 +203,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
                         alignItems: 'center',
                         gap: '4px',
                         padding: '2px 8px',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         backgroundColor: 'var(--color-role-superadmin-bg)',
                         color: 'var(--color-role-superadmin-fg)',
                         fontSize: '12px',
@@ -237,8 +237,8 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             style={{
-              padding: '9px 16px',
-              borderRadius: '10px',
+              padding: '10px 16px',
+              borderRadius: '12px',
               background: 'var(--color-surface-subtle)',
               border: '1px solid var(--color-border-subtle)',
               color: 'var(--color-text-primary)',
@@ -259,8 +259,8 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '9px 18px',
-              borderRadius: '10px',
+              padding: '10px 20px',
+              borderRadius: '12px',
               background: 'var(--color-action-primary-bg)',
               border: 'none',
               color: 'var(--color-action-primary-fg)',

@@ -307,7 +307,7 @@ function QuickKorlapFleetModalComponent({
                 onClick={() => setCurrentShift(1)}
                 style={{
                   flex: 1,
-                  padding: '7px 12px',
+                  padding: '8px 12px',
                   borderRadius: '8px',
                   fontSize: '14px',
                   fontWeight: 700,
@@ -325,7 +325,7 @@ function QuickKorlapFleetModalComponent({
                 onClick={() => setCurrentShift(2)}
                 style={{
                   flex: 1,
-                  padding: '7px 12px',
+                  padding: '8px 12px',
                   borderRadius: '8px',
                   fontSize: '14px',
                   fontWeight: 700,
@@ -471,7 +471,7 @@ function QuickKorlapFleetModalComponent({
             onClick={onClose}
             disabled={isSubmitting}
             style={{
-              padding: '10px 18px',
+              padding: '10px 20px',
               borderRadius: '8px',
               border: '1px solid var(--color-border, #475569)',
               background: 'transparent',

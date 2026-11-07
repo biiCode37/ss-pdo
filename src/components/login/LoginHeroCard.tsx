@@ -25,7 +25,7 @@ export function LoginHeroCard({
         marginBottom: "16px",
         position: "relative",
         overflow: "hidden",
-        borderRadius: "20px",
+        borderRadius: "16px",
       }}
     >
       <img
@@ -35,7 +35,7 @@ export function LoginHeroCard({
           width: "80px",
           height: "80px",
           margin: "0 auto 14px auto",
-          borderRadius: "20px",
+          borderRadius: "16px",
           display: "block",
         }}
       />
@@ -71,7 +71,7 @@ export function LoginHeroCard({
         style={{
           display: "inline-block",
           padding: "4px 12px",
-          borderRadius: "20px",
+          borderRadius: "16px",
           backgroundColor: "rgba(62, 207, 142, 0.12)",
           border: "1px solid rgba(62, 207, 142, 0.3)",
           color: "var(--accent-color, #3ECF8E)",
@@ -89,7 +89,7 @@ export function LoginHeroCard({
           color: "var(--text-secondary)",
           fontSize: "14px",
           lineHeight: 1.5,
-          marginBottom: "22px",
+          marginBottom: "24px",
           maxWidth: "460px",
           marginLeft: "auto",
           marginRight: "auto",
@@ -103,9 +103,9 @@ export function LoginHeroCard({
           className="error-text"
           role="alert"
           style={{
-            marginBottom: "18px",
+            marginBottom: "20px",
             padding: "10px 14px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             backgroundColor: "rgba(239, 68, 68, 0.12)",
             border: "1px solid rgba(239, 68, 68, 0.3)",
             fontSize: "13px",
@@ -135,7 +135,7 @@ export function LoginHeroCard({
           padding: "14px 20px",
           fontSize: "16px",
           fontWeight: 700,
-          borderRadius: "14px",
+          borderRadius: "12px",
           opacity: isApiReady ? 1 : 0.5,
           cursor: isApiReady && !isLoading ? "pointer" : "not-allowed",
           transition: "transform 0.15s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.15s ease",
@@ -175,7 +175,7 @@ export function LoginHeroCard({
           alignItems: "center",
           gap: "6px",
           padding: "6px 14px",
-          borderRadius: "20px",
+          borderRadius: "16px",
           background: "rgba(255, 255, 255, 0.04)",
           border: "1px solid var(--border-color, rgba(255, 255, 255, 0.1))",
           color: "var(--text-secondary)",

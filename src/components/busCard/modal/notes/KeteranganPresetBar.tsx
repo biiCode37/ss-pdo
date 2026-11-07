@@ -104,7 +104,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           type="button"
           onClick={handleToggleBa}
           style={{
-            padding: "5px 12px",
+            padding: "6px 12px",
             borderRadius: "8px",
             fontSize: "12px",
             fontWeight: 700,
@@ -129,7 +129,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           type="button"
           onClick={handleToggleOff}
           style={{
-            padding: "5px 12px",
+            padding: "6px 12px",
             borderRadius: "8px",
             fontSize: "12px",
             fontWeight: 700,
@@ -152,7 +152,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           type="button"
           onClick={handleToggleToEvdal}
           style={{
-            padding: "5px 12px",
+            padding: "6px 12px",
             borderRadius: "8px",
             fontSize: "12px",
             fontWeight: 700,
@@ -176,7 +176,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             type="button"
             onClick={handleToggleOkb}
             style={{
-              padding: "5px 12px",
+              padding: "6px 12px",
               borderRadius: "8px",
               fontSize: "12px",
               fontWeight: 700,
@@ -201,7 +201,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             type="button"
             onClick={handleToggleRenop}
             style={{
-              padding: "5px 12px",
+              padding: "6px 12px",
               borderRadius: "8px",
               fontSize: "12px",
               fontWeight: 700,
@@ -228,7 +228,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           disabled={!hasValue}
           style={{
             marginLeft: "auto",
-            padding: "5px 11px",
+            padding: "6px 12px",
             borderRadius: "8px",
             fontSize: "12px",
             fontWeight: 600,
@@ -243,7 +243,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             opacity: hasValue ? 1 : 0.4,
             display: "inline-flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
             transition: "all 0.15s ease",
           }}
           title={texts.RESET_TOOLTIP}
@@ -263,7 +263,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             gap: "6px",
             flexWrap: "wrap",
             padding: "6px 8px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "rgba(255, 255, 255, 0.03)",
             border: "1px solid var(--border-color, rgba(255, 255, 255, 0.08))",
           }}
@@ -281,7 +281,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
                 onClick={() => handleSelectBaCode(code as "01" | "02" | "03" | "04")}
                 style={{
                   padding: "4px 10px",
-                  borderRadius: "6px",
+                  borderRadius: "8px",
                   fontSize: "12px",
                   fontWeight: isCodeActive ? 700 : 600,
                   cursor: "pointer",

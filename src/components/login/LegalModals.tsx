@@ -191,7 +191,7 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
             <div
               style={{
                 padding: "16px",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 backgroundColor: "var(--color-surface-subtle)",
                 border: "1px solid var(--color-border-subtle)",
                 marginTop: "12px",
@@ -236,7 +236,7 @@ export function LegalModals({ activeModal, onClose }: LegalModalsProps) {
             className="btn"
             onClick={onClose}
             style={{
-              padding: "8px 18px",
+              padding: "8px 20px",
               fontSize: "13px",
               borderRadius: "8px",
             }}

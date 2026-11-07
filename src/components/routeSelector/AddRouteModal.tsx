@@ -94,7 +94,7 @@ export function AddRouteModal({
           maxHeight: 'min(90dvh, 760px)',
           overflowY: 'auto',
           padding: '24px 20px',
-          borderRadius: '20px',
+          borderRadius: '16px',
           textAlign: 'left',
           position: 'relative',
           backgroundColor: 'var(--color-surface-raised)',
@@ -167,8 +167,8 @@ export function AddRouteModal({
           style={{
             display: 'flex',
             background: 'var(--color-surface-subtle)',
-            padding: '3px',
-            borderRadius: '10px',
+            padding: '4px',
+            borderRadius: '12px',
             marginBottom: '16px',
             border: '1px solid var(--color-border-subtle)',
           }}
@@ -181,7 +181,7 @@ export function AddRouteModal({
               padding: '6px 10px',
               fontSize: '12px',
               fontWeight: activeTab === 'single' ? 600 : 500,
-              borderRadius: '7px',
+              borderRadius: '8px',
               border: 'none',
               background: activeTab === 'single' ? 'var(--color-action-primary-bg)' : 'transparent',
               color: activeTab === 'single' ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
@@ -199,7 +199,7 @@ export function AddRouteModal({
               padding: '6px 10px',
               fontSize: '12px',
               fontWeight: activeTab === 'bulk' ? 600 : 500,
-              borderRadius: '7px',
+              borderRadius: '8px',
               border: 'none',
               background: activeTab === 'bulk' ? 'var(--color-action-primary-bg)' : 'transparent',
               color: activeTab === 'bulk' ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
@@ -250,7 +250,7 @@ export function AddRouteModal({
             style={{
               display: 'flex',
               alignItems: 'stretch',
-              borderRadius: '10px',
+              borderRadius: '12px',
               overflow: 'hidden',
               border: '1px solid var(--color-border-control)',
               background: 'var(--color-surface-default)',
@@ -313,7 +313,7 @@ export function AddRouteModal({
               className="input-field"
               value={newMonth}
               onChange={(e) => onMonthChange(Number(e.target.value))}
-              style={{ width: '100%', padding: '10px', borderRadius: '10px' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '12px' }}
             >
               {MONTH_NAMES_ID.slice(1).map((name, idx) => (
                 <option key={idx + 1} value={idx + 1}>{name}</option>
@@ -341,7 +341,7 @@ export function AddRouteModal({
                 const parsed = parseInt(e.target.value, 10);
                 onYearChange(isNaN(parsed) ? new Date().getFullYear() : parsed);
               }}
-              style={{ width: '100%', padding: '10px', borderRadius: '10px' }}
+              style={{ width: '100%', padding: '10px', borderRadius: '12px' }}
               min={2020}
               max={2099}
             />
@@ -370,7 +370,7 @@ export function AddRouteModal({
             style={{
               width: '100%',
               padding: '10px 12px',
-              borderRadius: '10px',
+              borderRadius: '12px',
               fontSize: '13px',
             }}
           />
@@ -387,7 +387,7 @@ export function AddRouteModal({
               color: 'var(--warning-color, #f59e0b)',
               background: 'rgba(245, 158, 11, 0.12)',
               border: '1px solid rgba(245, 158, 11, 0.35)',
-              borderRadius: '10px',
+              borderRadius: '12px',
               padding: '10px 12px',
               marginBottom: '12px',
               lineHeight: '1.45',

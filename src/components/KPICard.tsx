@@ -39,7 +39,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
               background: "var(--color-selection-bg)",
               border: "1px solid var(--color-border-control)",
               padding: "2px 8px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               whiteSpace: "nowrap",
               letterSpacing: "0.5px",
             }}

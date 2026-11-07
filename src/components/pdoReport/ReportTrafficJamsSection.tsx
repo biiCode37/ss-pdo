@@ -64,7 +64,7 @@ export const ReportTrafficJamsSection: React.FC<
               onClick={() => onToggleSpot(spot)}
               style={{
                 padding: "6px 12px",
-                borderRadius: "20px",
+                borderRadius: "16px",
                 fontSize: "12px",
                 fontWeight: isSelected ? 700 : 500,
                 background: isSelected
@@ -116,7 +116,7 @@ export const ReportTrafficJamsSection: React.FC<
           style={{
             flex: 1,
             padding: "8px 12px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             fontSize: "13px",
           }}
         />
@@ -125,7 +125,7 @@ export const ReportTrafficJamsSection: React.FC<
           onClick={onAddCustomSpot}
           style={{
             padding: "8px 14px",
-            borderRadius: "10px",
+            borderRadius: "12px",
             background: "var(--input-bg, rgba(255, 255, 255, 0.06))",
             border: "1px solid var(--border-color, rgba(255, 255, 255, 0.1))",
             color: "var(--text-primary)",

@@ -56,9 +56,9 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "5px",
-              padding: "7px 11px",
-              borderRadius: "10px",
+              gap: "6px",
+              padding: "8px 12px",
+              borderRadius: "12px",
               fontSize: "13px",
               fontWeight: 600,
               border: "1px solid var(--card-border, rgba(255,255,255,0.15))",
@@ -126,8 +126,8 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             disabled={isLoading}
             className="btn btn-outline"
             style={{
-              padding: "7px 9px",
-              borderRadius: "10px",
+              padding: "8px 10px",
+              borderRadius: "12px",
               border: "1px solid var(--card-border, rgba(255,255,255,0.12))",
               background: "rgba(255,255,255,0.04)",
               color: "var(--text-secondary, #94a3b8)",
@@ -150,9 +150,9 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "5px",
-              padding: "7px 13px",
-              borderRadius: "10px",
+              gap: "6px",
+              padding: "8px 14px",
+              borderRadius: "12px",
               background: "var(--color-action-primary-bg)",
               color: "var(--color-action-primary-fg)",
               border: "none",

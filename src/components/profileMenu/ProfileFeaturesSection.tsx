@@ -126,8 +126,8 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                     <span
                       style={{
                         fontSize: "12px",
-                        padding: "1px 6px",
-                        borderRadius: "6px",
+                        padding: "2px 6px",
+                        borderRadius: "8px",
                         background: "rgba(234, 179, 8, 0.15)",
                         color: "var(--warning-color, #eab308)",
                         border: "1px solid rgba(234, 179, 8, 0.3)",
@@ -142,7 +142,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                   style={{
                     fontSize: "12px",
                     color: "var(--text-secondary)",
-                    marginTop: "1px",
+                    marginTop: "2px",
                   }}
                 >
                   {TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING_DESC}
@@ -212,7 +212,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                 style={{
                   fontSize: "12px",
                   color: "var(--text-secondary)",
-                  marginTop: "1px",
+                  marginTop: "2px",
                 }}
               >
                 {TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET_DESC}
@@ -255,7 +255,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
               color: "var(--text-secondary)",
               background: "var(--surface-color)",
               padding: "4px 8px",
-              borderRadius: "6px",
+              borderRadius: "8px",
               border: "1px solid var(--card-border)",
             }}
           >
@@ -295,7 +295,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                   background: "#f59e0b",
                   color: "#000",
                   padding: "2px 8px",
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   fontSize: "12px",
                   fontWeight: 700,
                 }}
