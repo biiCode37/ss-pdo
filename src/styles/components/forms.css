@@ -11,8 +11,25 @@
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.ui-input:focus {
-  border-color: var(--color-focus-ring);
+/* Satu cincin fokus untuk semua kolom teks (refact_213): outline 2px digambar
+   di dalam tepi kotak sehingga menutupi border — tidak ada cincin kedua.
+   Pakai :is() (bukan :where) agar spesifisitasnya mengalahkan aturan global actions.css. */
+:is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="button"], [type="submit"], [type="reset"], [type="file"], [type="color"]), select, textarea):focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
+}
+
+/* Kolom tanpa border di dalam pembungkus berbingkai: cincin pindah ke pembungkus. */
+.ui-input-group:focus-within {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
+}
+
+@media (forced-colors: active) {
+  :where(input, select, textarea):focus-visible,
+  .ui-input-group:focus-within {
+    outline-color: Highlight;
+  }
 }
 
 .ui-input::placeholder {

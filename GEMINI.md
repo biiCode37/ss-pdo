@@ -6,6 +6,8 @@ Aturan utama disinkronkan secara penuh dengan [`.agents/AGENTS.md`](./.agents/AG
 
 > **Golden Rule Efisiensi Token & Anti Over-Engineering** (A. urutan navigasi graphify ➔ grep ➔ read, B. prinsip anti over-engineering/ponytail, C. Pola Pikir Kritis — bukan "yes-man") berlaku penuh sesuai bagian dengan judul yang sama di [`AGENTS.md`](./AGENTS.md).
 
+> **Standar Konsistensi Tampilan UI (Anti-Slop)** — WAJIB dibaca dan dipatuhi sebelum menyentuh kode UI: [`.agents/rules/ui-consistency.md`](./.agents/rules/ui-consistency.md) (pakai ulang komponen, tanpa inline style statis, satu cincin fokus, tanpa gradasi/glow, skala font/ikon/jarak/radius, teks bantuan minimal, mockup light & dark sebelum implementasi).
+
 ---
 
 ## 🎨 Standar Sistem Warna & Aksesibilitas Desain UI/UX (Refactor 174)

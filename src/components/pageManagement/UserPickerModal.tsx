@@ -156,7 +156,7 @@ export const UserPickerModal: React.FC<Props> = ({
 
         {/* Search Input Bar */}
         <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--color-border-subtle)' }}>
-          <div
+          <div className="ui-input-group"
             style={{
               display: 'flex',
               alignItems: 'center',

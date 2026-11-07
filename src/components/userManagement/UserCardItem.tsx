@@ -200,7 +200,6 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               padding: "2px 0",
               cursor: isSelf ? "not-allowed" : "pointer",
               opacity: isSelf ? 0.45 : 1,
-              outline: "none",
             }}
             title={
               isSelf

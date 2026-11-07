@@ -114,7 +114,6 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
             background: "var(--card-bg, rgba(30, 41, 59, 0.6))",
             color: "var(--text-primary, #f8fafc)",
             fontSize: "13.5px",
-            outline: "none",
             boxSizing: "border-box",
           }}
         />

@@ -341,11 +341,6 @@ input[type="number"] {
   font-size: 16px;
   transition: border-color 0.12s ease;
 }
-.input-field:focus {
-  outline: 2px solid var(--color-focus-ring);
-  outline-offset: 1px;
-  border-color: var(--color-focus-ring);
-}
 .input-field::placeholder {
   color: var(--color-text-muted);
   opacity: 1;
@@ -1793,12 +1788,12 @@ div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-question {
   color: #0f172a !important;
 }
 
-.pdo-swal-input:focus,
-.pdo-swal-select:focus {
-  border-color: var(--color-focus-ring) !important;
+/* SweetAlert2 bawaan mematikan outline dan memasang glow box-shadow pada kolom
+   fokus; samakan dengan cincin tunggal forms.css (refact_213). */
+div:where(.swal2-container) :is(input:not([type="checkbox"], [type="radio"], [type="range"]), select, textarea):focus {
+  box-shadow: none !important;
   outline: 2px solid var(--color-focus-ring) !important;
-  outline-offset: 1px !important;
-  box-shadow: 0 0 0 3px var(--color-selection-bg) !important;
+  outline-offset: -2px !important;
 }
 
 .pdo-swal-input::placeholder {
@@ -1899,12 +1894,6 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   font-weight: 600 !important;
   margin: 12px 0 0 0 !important;
   padding: 8px 12px !important;
-}
-
-.swal-bus-input-container input:focus {
-
-  border-color: var(--accent-color) !important;
-  box-shadow: 0 0 0 2px rgba(62, 207, 142, 0.25) !important;
 }
 
 /* Progressive Disclosure Chips */

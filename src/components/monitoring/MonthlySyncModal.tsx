@@ -351,7 +351,6 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-primary, #ededed)',
                 fontSize: '13px',
-                outline: 'none',
                 transition: 'border-color 0.15s ease',
               }}
             />
@@ -442,7 +441,6 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
                 border: '1px solid var(--card-border, rgba(255, 255, 255, 0.12))',
                 color: 'var(--text-primary, #ededed)',
                 fontSize: '13px',
-                outline: 'none',
                 transition: 'border-color 0.15s ease',
               }}
             />

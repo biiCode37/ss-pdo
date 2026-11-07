@@ -176,7 +176,6 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
                 color: "var(--text-primary)",
                 fontSize: "12.5px",
-                outline: "none",
               }}
             />
             {searchQuery && (

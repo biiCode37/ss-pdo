@@ -4,7 +4,7 @@ export const singleFocusPrimaryInputStyle: React.CSSProperties = {
   width: "100%",
   padding: "12px 14px",
   borderRadius: "12px",
-  border: "1.5px solid var(--accent-color, #38bdf8)",
+  border: "1.5px solid var(--color-border-control)",
   background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
   color: "var(--text-primary, #ededed)",
   fontSize: "1.15rem",

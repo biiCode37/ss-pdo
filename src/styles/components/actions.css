@@ -51,7 +51,8 @@
   opacity: 1;
 }
 
-/* Indikator fokus aksesibilitas global (WCAG 2.4.7 & 2.4.13) */
+/* Indikator fokus aksesibilitas global (WCAG 2.4.7 & 2.4.13).
+   Kolom teks ditimpa aturan forms.css (cincin menimpa border, refact_213). */
 :where(button, a[href], input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;

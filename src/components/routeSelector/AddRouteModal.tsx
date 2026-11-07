@@ -246,6 +246,7 @@ export function AddRouteModal({
             {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_LABEL_CODE}
           </label>
           <div
+            className="ui-input-group"
             style={{
               display: 'flex',
               alignItems: 'stretch',
@@ -280,6 +281,7 @@ export function AddRouteModal({
               style={{
                 flex: 1,
                 border: 'none',
+                outline: 'none',
                 borderRadius: 0,
                 background: 'transparent',
                 padding: '10px 14px',
