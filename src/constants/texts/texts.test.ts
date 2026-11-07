@@ -512,6 +512,16 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.NO_DATA_DESC).toContain('Belum ada laporan');
   });
 
+  it('exports TEXT_MONITORING.SUBMISSION untuk fitur siap kirim', () => {
+    expect(TEXT_MONITORING.NAV.SUBMISSION).toBe('Siap Kirim');
+    expect(TEXT_MONITORING.SUBMISSION.SUMMARY(12, 18)).toBe('Siap kirim 12/18');
+    expect(TEXT_MONITORING.SUBMISSION.ISSUE_MISSING('Trip pulang')).toBe('Trip pulang kosong');
+    expect(TEXT_MONITORING.SUBMISSION.CONFIRMED_BY('Budi', '21.40')).toBe('Dikonfirmasi Budi pukul 21.40');
+    expect(TEXT_MONITORING.SUBMISSION.BACKLOG_TITLE(3)).toContain('3 rute belum dikonfirmasi');
+    expect(TEXT_MONITORING.SUBMISSION.ERRORS.REASON_REQUIRED).toBeTruthy();
+    expect(TEXT_MONITORING.PENDING_UPDATE.RELOAD).toBe('Muat ulang');
+  });
+
   it('exports TEXT_WA_REPORT with studio title, format labels, and actions', () => {
     expect(TEXT_WA_REPORT.STUDIO_TITLE).toBe('Report Studio WhatsApp');
     expect(TEXT_WA_REPORT.MODAL_TITLE).toBe('Generator Laporan WhatsApp');
