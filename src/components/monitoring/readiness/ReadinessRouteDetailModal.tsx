@@ -30,6 +30,9 @@ export function ReadinessRouteDetailModal({
   if (!view) return null;
 
   const c = view.completeness;
+  const problems = c ? c.issues.filter((i) => i.status !== "WAJAR") : [];
+  const wajarIssues = c ? c.issues.filter((i) => i.status === "WAJAR") : [];
+  const hasIssues = problems.length > 0 || wajarIssues.length > 0;
   const needsReason = view.issueCount > 0;
   const canConfirm = !busy && (!needsReason || reason.trim().length >= REASON_MIN_LENGTH);
 
@@ -71,10 +74,10 @@ export function ReadinessRouteDetailModal({
       <div className="submission-modal__body">
         {!c && <p className="submission-modal__text">{T.DETAIL_NO_DATA}</p>}
         {c && c.status !== "ok" && <p className="submission-modal__text">{T.DETAIL_FORMAT_ERROR}</p>}
-        {c && c.status === "ok" && c.issues.length === 0 && <p className="submission-modal__text">{T.DETAIL_NO_ISSUES}</p>}
-        {c && c.status === "ok" && c.issues.length > 0 && (
+        {c && c.status === "ok" && problems.length === 0 && <p className="submission-modal__text">{T.DETAIL_NO_ISSUES}</p>}
+        {c && c.status === "ok" && hasIssues && (
           <ul className="submission-issues">
-            {c.issues.map((issue) => (
+            {problems.map((issue) => (
               <li key={issue.unit} className="submission-issue">
                 <span className="submission-issue__unit">{issue.unit}</span>
                 <span className="ui-status" data-tone={issue.status === "SEBAGIAN" ? "warning" : "error"}>
@@ -86,6 +89,17 @@ export function ReadinessRouteDetailModal({
                 </span>
               </li>
             ))}
+            {wajarIssues.map((issue) => {
+              const fields = (issue.missing || []).map((f) => T.FIELD[f]).join(", ");
+              return (
+                <li key={issue.unit} className="submission-issue">
+                  <span className="submission-issue__unit">{issue.unit}</span>
+                  <span className="ui-status" data-tone="neutral">
+                    {T.ISSUE_WAJAR(fields, issue.note ?? "")}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

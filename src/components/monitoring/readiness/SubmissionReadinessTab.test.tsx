@@ -125,4 +125,52 @@ describe('SubmissionReadinessTab', () => {
       state.rows = originalRows;
     }
   });
+
+  it('menampilkan rute dengan unit wajar sebagai lengkap pada kartu dan membuka modal dengan unit wajar', async () => {
+    const originalRows = state.rows;
+    state.rows = [
+      {
+        route_id: 1,
+        route_code: 'JAK.01',
+        last_synced_at: null,
+        completeness: {
+          v: 1,
+          computedAt: '',
+          status: 'ok',
+          fingerprint: 'f-wajar',
+          counts: { LENGKAP: 9, WAJAR: 1, DIKECUALIKAN: 0, BELUM_DIISI: 0, JANGGAL: 0, SEBAGIAN: 0 } as any,
+          issues: [
+            { unit: 'KWK 222179', status: 'WAJAR', missing: ['toaShift1'], note: 'Keur' },
+          ],
+        },
+      },
+    ] as any;
+    try {
+      await act(async () => {
+        root.render(
+          <SubmissionReadinessTab
+            selectedDate="2026-11-07"
+            onSelectDate={vi.fn()}
+            segment="kelengkapan"
+            onSegmentChange={vi.fn()}
+            armadaContent={null}
+          />,
+        );
+      });
+      const card = [...container.querySelectorAll<HTMLButtonElement>('.submission-card')].find((c) =>
+        c.textContent?.includes('JAK.01'),
+      );
+      expect(card?.textContent).toContain('10/10 unit lengkap');
+
+      await act(async () => {
+        card?.click();
+      });
+      expect(document.body.textContent).toContain(TEXT_MONITORING.SUBMISSION.DETAIL_NO_ISSUES);
+      const wajarStatus = document.body.querySelector('.submission-issue .ui-status');
+      expect(wajarStatus?.getAttribute('data-tone')).toBe('neutral');
+      expect(wajarStatus?.textContent).toBe('Wajar · TOA S1 kosong · Keur');
+    } finally {
+      state.rows = originalRows;
+    }
+  });
 });
