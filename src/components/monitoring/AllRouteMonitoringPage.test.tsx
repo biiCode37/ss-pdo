@@ -5,7 +5,6 @@ import { act } from 'react';
 import {
   AllRouteMonitoringPage,
   REALTIME_MIN_DEBOUNCE_MS,
-  REALTIME_MIN_INTERVAL_MS,
 } from './AllRouteMonitoringPage';
 import * as regionalService from '@/services/allRouteMonitoringService';
 import * as regionalIngestionService from '@/services/regionalIngestionService';
@@ -19,7 +18,23 @@ vi.mock('@/services/regionalIngestionService', () => ({
   ingestRegionalRouteSummariesForRange: vi.fn().mockResolvedValue({ success: true, syncedFromSheet: 5, skippedFromApp: 1, errors: [] }),
   ingestSingleRouteSummary: vi.fn(),
   ingestSingleRouteSummaryForRange: vi.fn().mockResolvedValue({ success: true, syncedDays: 7, errors: [] }),
+  getWibTodayString: () => '2026-09-02',
 }));
+
+// Tab Siap Kirim punya test sendiri (readiness/*); di sini cukup stub yang meneruskan konten segmen Armada
+// dan mendaftarkan fungsi cek ulang semua palsu yang bisa dikendalikan test.
+const readinessRecheck = { fn: vi.fn(async () => {}) };
+vi.mock('./readiness/SubmissionReadinessTab', async () => {
+  const { useEffect } = await import('react');
+  return {
+    SubmissionReadinessTab: ({ armadaContent, segment, onRegisterRecheckAll }: {
+      armadaContent: unknown; segment: string; onRegisterRecheckAll?: (fn: () => Promise<void>) => void;
+    }) => {
+      useEffect(() => { onRegisterRecheckAll?.(() => readinessRecheck.fn()); }, [onRegisterRecheckAll]);
+      return segment === 'armada' ? armadaContent : <div data-testid="readiness-tab" />;
+    },
+  };
+});
 
 vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services/allRouteMonitoringService')>();
@@ -239,6 +254,8 @@ describe('AllRouteMonitoringPage Component', () => {
     (regionalService.fetchRegionalMonitoringData as ReturnType<typeof vi.fn>).mockResolvedValue(mockData);
     (dailyReportService.verifyDailyRouteReport as ReturnType<typeof vi.fn>).mockResolvedValue(true);
     (fleetService.fetchDailyFleetShiftsByDate as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+    // Test lama menguji tab capaian; tab default kini Siap Kirim, jadi set tab tersimpan ke Dashboard
+    sessionStorage.setItem('SS_MONITORING_ACTIVE_TAB', 'dashboard');
 
     container = document.createElement('div');
     document.body.appendChild(container);
@@ -253,7 +270,7 @@ describe('AllRouteMonitoringPage Component', () => {
     vi.clearAllMocks();
   });
 
-  it('renders executive dashboard tab by default with KPIs and chart', async () => {
+  it('renders executive dashboard tab when it is the saved tab', async () => {
     await act(async () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
     });
@@ -593,7 +610,7 @@ describe('AllRouteMonitoringPage Component', () => {
     expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
   });
 
-  it('debounces rapid realtime events and only triggers silent reload once after 3000ms', async () => {
+  it('event realtime beruntun hanya memunculkan banner sekali tanpa request tambahan', async () => {
     vi.useFakeTimers();
     (regionalService.fetchRegionalMonitoringData as any).mockClear();
     (regionalService.fetchRegionalMonitoringData as any).mockResolvedValue(mockData);
@@ -601,31 +618,68 @@ describe('AllRouteMonitoringPage Component', () => {
     await act(async () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
     });
-
     expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
+    expect(container.textContent).not.toContain(TEXT_MONITORING.PENDING_UPDATE.MESSAGE);
 
-    // Simulate 5 incoming realtime events within 1 second
-    expect(realtimeCallback).toBeTruthy();
     act(() => {
-      realtimeCallback?.();
-      realtimeCallback?.();
-      realtimeCallback?.();
-      realtimeCallback?.();
-      realtimeCallback?.();
+      for (let i = 0; i < 10; i++) realtimeCallback?.();
     });
-
-    // Before 3000ms, should NOT have called fetch again
-    expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
-
-    // Advance timers by 3000ms
     await act(async () => {
-      vi.advanceTimersByTime(3000);
+      vi.advanceTimersByTime(REALTIME_MIN_DEBOUNCE_MS);
     });
 
-    // After debounce finishes, should only have executed 1 additional silent reload
-    expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
-
+    // Tidak ada muat ulang otomatis; hanya banner yang muncul
+    expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
+    expect(container.textContent).toContain(TEXT_MONITORING.PENDING_UPDATE.MESSAGE);
     vi.useRealTimers();
+  });
+
+  it('tab Siap Kirim (default) tidak memuat data capaian saat dibuka', async () => {
+    sessionStorage.removeItem('SS_MONITORING_ACTIVE_TAB');
+    (regionalService.fetchRegionalMonitoringData as any).mockClear();
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+    expect(container.querySelector('[data-testid="readiness-tab"]')).not.toBeNull();
+    expect(regionalService.fetchRegionalMonitoringData).not.toHaveBeenCalled();
+  });
+
+  it('tombol refresh header di tab Siap Kirim menjadi "Cek ulang semua rute" dan tidak terkunci (data capaian tidak dimuat)', async () => {
+    sessionStorage.removeItem('SS_MONITORING_ACTIVE_TAB');
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+    const refresh = container.querySelector('[data-testid="monitoring-refresh-btn"]') as HTMLButtonElement | null;
+    expect(refresh?.getAttribute('aria-label')).toBe(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_TITLE);
+    expect(refresh?.disabled).toBe(false);
+  });
+
+  it('tombol refresh di tab Siap Kirim menjalankan cek ulang semua rute (bukan muat data capaian) dan terkunci selama berjalan', async () => {
+    sessionStorage.removeItem('SS_MONITORING_ACTIVE_TAB');
+    (regionalService.fetchRegionalMonitoringData as any).mockClear();
+    let finish: () => void = () => {};
+    readinessRecheck.fn = vi.fn(() => new Promise<void>((resolve) => { finish = resolve; }));
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+    const refresh = container.querySelector('[data-testid="monitoring-refresh-btn"]') as HTMLButtonElement;
+
+    await act(async () => { refresh.click(); });
+    expect(readinessRecheck.fn).toHaveBeenCalledTimes(1);
+    expect(refresh.disabled).toBe(true);
+    expect(regionalService.fetchRegionalMonitoringData).not.toHaveBeenCalled();
+
+    await act(async () => { finish(); });
+    expect(refresh.disabled).toBe(false);
+    readinessRecheck.fn = vi.fn(async () => {});
+  });
+
+  it('memetakan tab tersimpan lama fleet_status ke siap_kirim', async () => {
+    sessionStorage.setItem('SS_MONITORING_ACTIVE_TAB', 'fleet_status');
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+    expect(container.querySelector('[data-testid="readiness-tab"]')).not.toBeNull();
   });
 
   describe('BUG-QUOTA-200: proteksi kuota egress', () => {
@@ -653,57 +707,6 @@ describe('AllRouteMonitoringPage Component', () => {
         expect.objectContaining({ table: 'daily_route_reports', filter: 'date=eq.2026-10-14' }),
         expect.any(Function),
       );
-    });
-
-    it('membatasi muat ulang hening maksimal 1 kali per 60 detik', async () => {
-      vi.useFakeTimers();
-      await act(async () => {
-        root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
-      });
-
-      act(() => realtimeCallback?.());
-      await act(async () => {
-        vi.advanceTimersByTime(REALTIME_MIN_DEBOUNCE_MS);
-      });
-      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
-
-      // Event berikutnya 5 detik kemudian tidak boleh memuat ulang sebelum 60 detik sejak muat terakhir
-      await act(async () => {
-        vi.advanceTimersByTime(5000);
-      });
-      act(() => realtimeCallback?.());
-      await act(async () => {
-        vi.advanceTimersByTime(REALTIME_MIN_DEBOUNCE_MS);
-      });
-      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
-
-      await act(async () => {
-        vi.advanceTimersByTime(REALTIME_MIN_INTERVAL_MS);
-      });
-      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(3);
-    });
-
-    it('tidak memuat ulang saat tab tersembunyi dan memuat 1 kali saat tab kembali terlihat', async () => {
-      vi.useFakeTimers();
-      await act(async () => {
-        root.render(<AllRouteMonitoringPage currentDate="2026-10-14" />);
-      });
-
-      visibility = 'hidden';
-      act(() => {
-        realtimeCallback?.();
-        realtimeCallback?.();
-      });
-      await act(async () => {
-        vi.advanceTimersByTime(REALTIME_MIN_INTERVAL_MS);
-      });
-      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(1);
-
-      visibility = 'visible';
-      await act(async () => {
-        document.dispatchEvent(new Event('visibilitychange'));
-      });
-      expect(regionalService.fetchRegionalMonitoringData).toHaveBeenCalledTimes(2);
     });
 
     it('memakai armada shift dari hasil regional tanpa request fleet shift ganda (BUG-QUOTA-200-03)', async () => {

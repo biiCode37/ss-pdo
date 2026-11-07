@@ -147,6 +147,21 @@ describe('dailyRouteReportService', () => {
     expect(saved.id).toBe(99);
   });
 
+  it('upsertDailyRouteReport tidak pernah mengirim kolom completeness milik webhook (laporan lama yang di-spread)', async () => {
+    const chain: any = {};
+    chain.upsert = vi.fn().mockReturnValue(chain);
+    chain.select = vi.fn().mockReturnValue(chain);
+    chain.single = vi.fn().mockResolvedValue({ data: { id: 1 }, error: null });
+    (supabase.from as any).mockReturnValue(chain);
+
+    const staleRow = { route_id: 2, route_code: 'JAK.15', date: '2026-11-07', completeness: { v: 1, fingerprint: 'lama' } };
+    await upsertDailyRouteReport(staleRow as any);
+
+    const sent = chain.upsert.mock.calls[0][0];
+    expect(sent).not.toHaveProperty('completeness');
+    expect(sent).toMatchObject({ route_id: 2, route_code: 'JAK.15', date: '2026-11-07' });
+  });
+
   it('upsertDailyRouteReport saves fleet status snapshots and confirmation flags', async () => {
     const inputWithFleet = {
       route_id: 1,

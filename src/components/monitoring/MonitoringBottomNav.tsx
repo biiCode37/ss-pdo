@@ -1,8 +1,8 @@
 import { memo } from "react";
-import { LayoutDashboard, Route, Bus, FileSpreadsheet, Users } from "lucide-react";
+import { LayoutDashboard, Route, ClipboardCheck, FileSpreadsheet, Users } from "lucide-react";
 import { TEXT_MONITORING } from "@/constants/texts";
 
-export type MonitoringTab = "dashboard" | "routes" | "fleet_status" | "wa_report" | "korwil";
+export type MonitoringTab = "dashboard" | "routes" | "siap_kirim" | "wa_report" | "korwil";
 
 export interface MonitoringBottomNavProps {
   activeTab: MonitoringTab;
@@ -23,9 +23,9 @@ const NAV_ITEMS: NavItemConfig[] = [
     icon: Route,
   },
   {
-    id: "fleet_status",
-    label: TEXT_MONITORING.NAV.FLEET_STATUS,
-    icon: Bus,
+    id: "siap_kirim",
+    label: TEXT_MONITORING.NAV.SUBMISSION,
+    icon: ClipboardCheck,
   },
   {
     id: "dashboard",
@@ -67,7 +67,7 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
               aria-selected={isActive}
               data-testid={`monitoring-tab-${item.id}`}
               className={`bottom-nav-item monitoring-tab-btn ${isActive ? "active" : ""}`}
-              onClick={() => onSelectTab(item.id)}
+              onClick={() => (isActive ? window.scrollTo({ top: 0, behavior: "smooth" }) : onSelectTab(item.id))}
               title={item.label}
               aria-label={item.label}
             >

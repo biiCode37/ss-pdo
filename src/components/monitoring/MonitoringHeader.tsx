@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ChevronDown, Calendar, RefreshCw, CloudDownload } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import {
@@ -16,6 +16,8 @@ export interface MonitoringHeaderProps {
   onStepDate: (days: number) => void;
   onDateInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRefresh: () => void;
+  /** Label tombol refresh bila berbeda dari bawaan (mis. "Cek ulang semua rute" di tab Siap Kirim) */
+  refreshTitle?: string;
   refreshing: boolean;
   loading: boolean;
   onOpenWaModal?: () => void;
@@ -34,6 +36,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   onStepDate,
   onDateInputChange,
   onRefresh,
+  refreshTitle = TEXT_MONITORING.HEADER.REFRESH_TITLE,
   refreshing,
   loading,
   onSync18Routes,
@@ -45,6 +48,25 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
 }) => {
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
+
+  const headerRef = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const updateHeight = () => {
+      document.documentElement.style.setProperty(
+        "--sticky-header-height",
+        `${header.offsetHeight}px`,
+      );
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty("--sticky-header-height");
+    };
+  }, []);
 
   const isDaily = !currentPeriod || currentPeriod.mode === "daily";
   const isMonthly = currentPeriod?.mode === "monthly";
@@ -92,6 +114,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
 
   return (
     <header
+      ref={headerRef}
       style={{
         position: "sticky",
         top: 0,
@@ -417,8 +440,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 transition: "all 0.2s ease",
                 flexShrink: 0,
               }}
-              title={TEXT_MONITORING.HEADER.REFRESH_TITLE}
-              aria-label={TEXT_MONITORING.HEADER.REFRESH_TITLE}
+              title={refreshTitle}
+              aria-label={refreshTitle}
             >
               <RefreshCw
                 size={16}

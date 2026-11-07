@@ -21,6 +21,7 @@ describe('MonitoringHeader Component', () => {
     });
     container.remove();
     vi.clearAllMocks();
+    document.documentElement.style.removeProperty('--sticky-header-height');
   });
 
   const renderHeader = async (props?: Partial<MonitoringHeaderProps>) => {
@@ -317,5 +318,15 @@ describe('MonitoringHeader Component', () => {
 
     const profileBtn = container.querySelector('[data-testid="user-profile-header-btn"]');
     expect(profileBtn).toBeNull();
+  });
+
+  it('measures the header when it mounts and clears the offset on unmount', async () => {
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(120);
+    await renderHeader();
+    expect(document.documentElement.style.getPropertyValue('--sticky-header-height')).toBe('120px');
+    act(() => {
+      root.unmount();
+    });
+    expect(document.documentElement.style.getPropertyValue('--sticky-header-height')).toBe('');
   });
 });

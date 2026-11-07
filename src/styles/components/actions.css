@@ -159,6 +159,13 @@
   color: var(--color-info-fg);
 }
 
+/* Chip filter yang sedang aktif: kapsul status aktif (sama dengan segmen), menimpa nada warna chip (refact_224). */
+.ui-chip-btn[aria-pressed="true"] {
+  background: var(--color-state-active-bg);
+  border-color: var(--color-state-active-bg);
+  color: var(--color-state-active-fg);
+}
+
 .ui-chip-dot {
   width: 6px;
   height: 6px;

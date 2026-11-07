@@ -512,6 +512,24 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.ROUTE_DETAIL_MODAL.FLEET_SECTION.NO_DATA_DESC).toContain('Belum ada laporan');
   });
 
+  it('exports TEXT_MONITORING.SUBMISSION untuk fitur siap kirim', () => {
+    expect(TEXT_MONITORING.NAV.SUBMISSION).toBe('Cek Data');
+    expect(TEXT_MONITORING.SUBMISSION.SUMMARY(12, 18)).toBe('Siap kirim 12/18');
+    expect(TEXT_MONITORING.SUBMISSION.ISSUE_MISSING('Trip pulang')).toBe('Trip pulang kosong');
+    expect(TEXT_MONITORING.SUBMISSION.ISSUE_WAJAR('TOA S1', 'Program Keur/ Renops')).toBe('Wajar · TOA S1 kosong · Program Keur/ Renops');
+    expect(TEXT_MONITORING.SUBMISSION.ISSUE_WAJAR('Total TOA', '')).toBe('Wajar · Total TOA kosong');
+    expect(TEXT_MONITORING.SUBMISSION.CONFIRMED_BY('Budi', '21.40')).toBe('Dikonfirmasi Budi pukul 21.40');
+    expect(TEXT_MONITORING.SUBMISSION.BACKLOG_TITLE(3)).toContain('3 rute belum dikonfirmasi');
+    expect(TEXT_MONITORING.SUBMISSION.ERRORS.REASON_REQUIRED).toBeTruthy();
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_TITLE).toBe("Cek ulang semua rute");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_PROGRESS(7, 18)).toBe("Mengecek 7/18…");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_DONE(18)).toBe("18 rute selesai dicek ulang");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_PARTIAL(2, 18)).toContain("2 dari 18 rute gagal");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_COOLDOWN(90)).toContain("90 detik");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_OFFLINE).toBeTruthy();
+    expect(TEXT_MONITORING.PENDING_UPDATE.RELOAD).toBe('Muat ulang');
+  });
+
   it('exports TEXT_WA_REPORT with studio title, format labels, and actions', () => {
     expect(TEXT_WA_REPORT.STUDIO_TITLE).toBe('Report Studio WhatsApp');
     expect(TEXT_WA_REPORT.MODAL_TITLE).toBe('Generator Laporan WhatsApp');
