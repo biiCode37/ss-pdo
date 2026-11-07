@@ -72,4 +72,21 @@
 | 4. `graphify update .` | Lulus | Graf diperbarui |
 | Tambahan: `deno check supabase/functions/sheets-proxy/index.ts` | Lulus | Deno 2.9.3 |
 
-**Belum diverifikasi (menunggu deploy):** probe produksi (header palsu → 401, `health` tanpa `client_email`) dan alur sesi end-to-end di aplikasi (baca, simpan, dan format sel).
+### Verifikasi Produksi (6 Nov 2026, setelah PA `5cff3ed` dan deploy `sheets-proxy` v3 oleh pemilik)
+
+Probe dari luar:
+
+| Uji | Hasil |
+|---|---|
+| `spreadsheets.get` dengan `apikey: x` (sebelumnya 200 + judul spreadsheet) | **401** `PROXY_SESSION_INVALID` |
+| `values.get` dengan `x-proxy-session` palsu | **401** `PROXY_SESSION_INVALID` |
+| `session` dengan `x-google-token` palsu | **401** `GOOGLE_AUTH_REQUIRED` |
+| `health` | `{"ok":true,"configured":true}` (tanpa `client_email`) |
+
+Log `function_edge_logs` dan `activity_logs`:
+- Perangkat pemilik (15:24 UTC): `health` 200 → `session` 200 (269 ms) → baca Sheets 200 → `UPDATE_BUS_DATA` / `UPDATE_BULK_BUS_DATA` JAK.115 tercatat (15:25).
+- Ponsel Android petugas: 401 berpola bundle lama (retry 1,5 dtk / 3 dtk) pukul 15:12. Setelah aplikasi dimuat ulang, 15:13:40 menerima 401 → `session` 200 → rangkaian baca 200, lalu simpan JAK.15 berhasil (15:21–15:22 UTC). Ini membuktikan alur pembaruan sesi saat 401 bekerja.
+- `POST /rest/v1/daily_unit_summaries` sejak 15:13: 40× **200**. Upsert pasca-refact_204 juga terbukti berjalan dari aplikasi sungguhan.
+- Masih ada 1 perangkat (IP `114.10.x`) dengan pola 401 bundle lama pukul 15:21 UTC; perangkat itu perlu memuat ulang aplikasi.
+
+**Belum diverifikasi:** aksi format sel (`batchUpdate` + allowlist `repeatCell`) dari aplikasi, dan penolakan request non-`repeatCell` dengan sesi sah, karena keduanya tidak diuji dari luar tanpa sesi sah.
