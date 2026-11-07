@@ -16,7 +16,7 @@ import type { SubmissionConfirmation } from '@/services/submissionReadinessServi
 
 const comp = (over: Partial<RouteCompleteness['counts']> = {}, fingerprint = 'aaaa0001'): RouteCompleteness => ({
   v: 1, computedAt: '2026-11-07T14:00:00.000Z', status: 'ok',
-  counts: { LENGKAP: 10, DIKECUALIKAN: 0, BELUM_DIISI: 0, JANGGAL: 0, SEBAGIAN: 0, ...over },
+  counts: { LENGKAP: 10, WAJAR: 0, DIKECUALIKAN: 0, BELUM_DIISI: 0, JANGGAL: 0, SEBAGIAN: 0, ...over },
   issues: [], fingerprint,
 });
 const conf = (routeId: number, date: string, fingerprint: string | null = 'aaaa0001'): SubmissionConfirmation => ({

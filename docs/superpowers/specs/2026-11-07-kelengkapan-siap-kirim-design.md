@@ -24,7 +24,10 @@ Kolom **wajib**: Trip Pergi, Trip Pulang, TOA S1, Total TOA. Kolom **opsional**:
 | `DIKECUALIKAN` | Keempat kolom wajib kosong **dan** keterangan berklasifikasi bukan `NORMAL` (OFF_LIBUR / KENDALA / TO) |
 | `BELUM_DIISI` | Keempat kolom wajib kosong **dan** keterangan `NORMAL` (kosong) |
 | `JANGGAL` | (a) salah satu trip terisi, tapi TOA S1 **dan** Total TOA kosong; atau (b) TOA S1 atau Total TOA terisi, tapi kedua trip kosong; atau (c) Total TOA < TOA S1 (keduanya terisi) |
+| `WAJAR` | *(revisi 8 Nov 2026, opsi D)* Ritase lengkap, **hanya** TOA S1 **atau** Total TOA yang kosong, **dan** unit punya keterangan bukan-NORMAL. Unit itu jalan satu shift (NP2, keur, renops, dst.). Bukan masalah, tetapi tetap dicantumkan di detail beserta cuplikan keterangan (≤ 40 karakter) |
 | `SEBAGIAN` | Selain di atas: ada data, tapi minimal satu kolom wajib kosong |
+
+> **Revisi 8 Nov 2026 (opsi D):** prefiks shift pada keterangan **diabaikan**. Petugas yang mengisi langsung di sheet tidak menulis prefiks, sementara aplikasi menambahkan "S1:" bahkan untuk status seharian (OFF/T.O). Total TOA juga lazim tidak diisi untuk unit yang tidak jalan di shift 2. Unit tanpa keterangan tetap wajib mengisi keempat kolom.
 
 - Keterangan **hanya** membebaskan baris yang kosong total. Unit yang sempat beroperasi lalu kendala tetap diperiksa normal.
 - **Klasifikasi keterangan memakai aturan yang sama dengan `classifyUnitKeterangan` di `src/utils/keteranganUtils.ts`.** Yang dibutuhkan hanya NORMAL vs bukan-NORMAL; NORMAL = kosong atau `SO`/`SGO` (boleh berprefiks S1:/S2:). Pengecualian terdokumentasi: `-` dan `0` dianggap tanpa keterangan. Regex lokal yang sekarang ada di `sheet-sync-webhook` tidak dipakai untuk kelengkapan. Kesetaraan dijaga dengan uji paritas (§7).

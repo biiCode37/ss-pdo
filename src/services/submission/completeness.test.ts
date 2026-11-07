@@ -60,8 +60,28 @@ describe('classifyUnitRow', () => {
     expect(classifyUnitRow({ ...base, tripPulang: '' })).toEqual({ status: 'SEBAGIAN', missing: ['tripPulang'] });
     expect(classifyUnitRow({ ...base, totalToa: '-' })).toEqual({ status: 'SEBAGIAN', missing: ['totalToa'] });
   });
-  it('keterangan tidak membebaskan baris yang sudah berisi data', () => {
+  it('keterangan tidak membebaskan ritase tanpa TOA sama sekali (tetap JANGGAL)', () => {
     expect(classifyUnitRow({ ...base, toaShift1: '', totalToa: '', keterangan: 'MOGOK' }).status).toBe('JANGGAL');
+  });
+
+  describe('opsi D: unit berketerangan yang hanya jalan satu shift (WAJAR)', () => {
+    it('TOA S1 kosong + Total TOA terisi + keterangan (tanpa prefiks) → WAJAR', () => {
+      // Kasus nyata JAK.115 KWK 222179, 7 Nov 2026
+      expect(classifyUnitRow({ ...base, toaShift1: '', totalToa: 166, keterangan: 'Program Keur/ Renops' }))
+        .toEqual({ status: 'WAJAR', missing: ['toaShift1'] });
+    });
+    it('Total TOA kosong + TOA S1 terisi + keterangan berprefiks apa pun → WAJAR (prefiks diabaikan)', () => {
+      expect(classifyUnitRow({ ...base, totalToa: '', keterangan: 'S2: NP2' })).toEqual({ status: 'WAJAR', missing: ['totalToa'] });
+      expect(classifyUnitRow({ ...base, totalToa: '', keterangan: 'S1: NP2' })).toEqual({ status: 'WAJAR', missing: ['totalToa'] });
+    });
+    it('tanpa keterangan (atau SO/SGO/-) tetap SEBAGIAN', () => {
+      expect(classifyUnitRow({ ...base, toaShift1: '' })).toEqual({ status: 'SEBAGIAN', missing: ['toaShift1'] });
+      expect(classifyUnitRow({ ...base, totalToa: '', keterangan: 'SO' })).toEqual({ status: 'SEBAGIAN', missing: ['totalToa'] });
+    });
+    it('trip yang kosong tidak dimaklumi walau ada keterangan', () => {
+      expect(classifyUnitRow({ ...base, tripPulang: '', totalToa: '', keterangan: 'NP2' }))
+        .toEqual({ status: 'SEBAGIAN', missing: ['tripPulang', 'totalToa'] });
+    });
   });
 });
 
@@ -80,7 +100,7 @@ describe('computeRouteCompleteness', () => {
     const c = computeRouteCompleteness(rows, now);
     expect(c.status).toBe('ok');
     expect(c.computedAt).toBe('2026-11-07T14:00:00.000Z');
-    expect(c.counts).toEqual({ LENGKAP: 1, DIKECUALIKAN: 1, BELUM_DIISI: 1, JANGGAL: 1, SEBAGIAN: 1 });
+    expect(c.counts).toEqual({ LENGKAP: 1, WAJAR: 0, DIKECUALIKAN: 1, BELUM_DIISI: 1, JANGGAL: 1, SEBAGIAN: 1 });
     expect(c.issues).toEqual([
       { unit: 'KLM 541', status: 'SEBAGIAN', missing: ['tripPulang'] },
       { unit: 'KLM 543', status: 'BELUM_DIISI' },
@@ -118,6 +138,16 @@ describe('computeRouteCompleteness', () => {
     expect(reordered.fingerprint).toBe(a.fingerprint);
     expect(toaChanged.fingerprint).not.toBe(a.fingerprint);
     expect(ketChanged.fingerprint).not.toBe(a.fingerprint);
+  });
+
+  it('unit WAJAR dicantumkan dengan cuplikan keterangan, dihitung terpisah, dan bukan masalah', () => {
+    const longKet = 'Program Keur/ Renops di terminal Tanjung Priok sejak pagi';
+    const c = computeRouteCompleteness([HEADER, row('KWK 222179', 6, 6, '', 166, longKet), row('KLM 540', 5, 5, 100, 180)], now);
+    expect(c.counts).toEqual({ LENGKAP: 1, WAJAR: 1, DIKECUALIKAN: 0, BELUM_DIISI: 0, JANGGAL: 0, SEBAGIAN: 0 });
+    expect(c.issues).toEqual([
+      { unit: 'KWK 222179', status: 'WAJAR', missing: ['toaShift1'], note: longKet.slice(0, 40) },
+    ]);
+    expect(countCompletenessIssues(c)).toBe(0);
   });
 
   it('countCompletenessIssues menganggap data kosong sebagai 1 masalah', () => {

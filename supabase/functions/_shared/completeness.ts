@@ -1,16 +1,22 @@
 // Modul murni (tanpa API Deno/DOM): dipakai sheet-sync-webhook dan route-confirmation, diuji lewat Vitest.
 // Aturan: docs/superpowers/specs/2026-11-07-kelengkapan-siap-kirim-design.md §2.
 
-export type UnitCompletenessStatus = 'LENGKAP' | 'DIKECUALIKAN' | 'BELUM_DIISI' | 'JANGGAL' | 'SEBAGIAN';
+// WAJAR (opsi D, 8 Nov 2026): unit berketerangan yang hanya jalan satu shift — salah satu kolom TOA kosong itu sah
+export type UnitCompletenessStatus = 'LENGKAP' | 'WAJAR' | 'DIKECUALIKAN' | 'BELUM_DIISI' | 'JANGGAL' | 'SEBAGIAN';
 export type RequiredField = 'tripPergi' | 'tripPulang' | 'toaShift1' | 'totalToa';
 export type AnomalyReason = 'RITASE_TANPA_TOA' | 'TOA_TANPA_RITASE' | 'TOTAL_TOA_KURANG';
 
 export interface UnitIssue {
   unit: string;
-  status: 'BELUM_DIISI' | 'JANGGAL' | 'SEBAGIAN';
+  // WAJAR dicantumkan sebagai informasi (bukan masalah) agar korlap tetap bisa menilai
+  status: 'BELUM_DIISI' | 'JANGGAL' | 'SEBAGIAN' | 'WAJAR';
   missing?: RequiredField[];
   reason?: AnomalyReason;
+  /** Cuplikan keterangan (maks. 40 karakter), hanya untuk status WAJAR */
+  note?: string;
 }
+
+const WAJAR_NOTE_MAX_LENGTH = 40;
 
 export interface RouteCompleteness {
   v: 1;
@@ -175,6 +181,10 @@ export function classifyUnitRow(cells: UnitCells): {
   }
   const missing = REQUIRED_FIELDS.filter((f) => !filled[f]);
   if (missing.length === 0) return { status: 'LENGKAP' };
+  // Opsi D: unit berketerangan (prefiks shift diabaikan — tidak bisa dipercaya untuk input di luar aplikasi)
+  // yang ritasenya lengkap dan hanya salah satu kolom TOA kosong dianggap wajar (jalan satu shift: NP2, keur, renops, dst.)
+  const onlyToaMissing = missing.every((f) => f === 'toaShift1' || f === 'totalToa');
+  if (onlyToaMissing && isExemptingKeterangan(cells.keterangan)) return { status: 'WAJAR', missing };
   return { status: 'SEBAGIAN', missing };
 }
 
@@ -194,7 +204,7 @@ function fnv1a(input: string): string {
 }
 
 function emptyCounts(): Record<UnitCompletenessStatus, number> {
-  return { LENGKAP: 0, DIKECUALIKAN: 0, BELUM_DIISI: 0, JANGGAL: 0, SEBAGIAN: 0 };
+  return { LENGKAP: 0, WAJAR: 0, DIKECUALIKAN: 0, BELUM_DIISI: 0, JANGGAL: 0, SEBAGIAN: 0 };
 }
 
 export function computeRouteCompleteness(rows: unknown[][], now: Date = new Date()): RouteCompleteness {
@@ -221,10 +231,16 @@ export function computeRouteCompleteness(rows: unknown[][], now: Date = new Date
     };
     const result = classifyUnitRow(cells);
     counts[result.status] += 1;
-    if (result.status === 'BELUM_DIISI' || result.status === 'JANGGAL' || result.status === 'SEBAGIAN') {
+    if (
+      result.status === 'BELUM_DIISI' ||
+      result.status === 'JANGGAL' ||
+      result.status === 'SEBAGIAN' ||
+      result.status === 'WAJAR'
+    ) {
       const issue: UnitIssue = { unit, status: result.status };
       if (result.missing) issue.missing = result.missing;
       if (result.reason) issue.reason = result.reason;
+      if (result.status === 'WAJAR') issue.note = String(cells.keterangan ?? '').trim().slice(0, WAJAR_NOTE_MAX_LENGTH);
       issues.push(issue);
     }
     fpParts.push(
