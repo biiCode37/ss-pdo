@@ -13,10 +13,10 @@ export function renderSmartKeteranganSection(
   return `
     <div id="${escapeHtml(wrapperId)}" class="swal-revealed-field" style="display: ${isRevealed ? "block" : "none"}; margin-top: 4px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <label style="display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
+        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
           ${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_NOTES}
         </label>
-        <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600;">${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_OPTIONAL}</span>
+        <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">${TEXT_ALERTS.BUS_INPUT_MODAL.LABEL_OPTIONAL}</span>
       </div>
 
       <textarea

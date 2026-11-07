@@ -50,8 +50,8 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
               id="accumulation-sheet-title"
               style={{
                 margin: 0,
-                fontSize: "1.1rem",
-                fontWeight: 800,
+                fontSize: "18px",
+                fontWeight: 700,
                 color: "var(--text-primary, #ededed)",
                 letterSpacing: "-0.01em",
               }}
@@ -60,7 +60,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
             </h3>
             <span
               style={{
-                fontSize: "0.76rem",
+                fontSize: "12px",
                 color: "var(--text-secondary, #94a3b8)",
                 fontWeight: 500,
               }}

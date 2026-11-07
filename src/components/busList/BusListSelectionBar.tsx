@@ -74,7 +74,7 @@ export const BusListSelectionBar: React.FC<BusListSelectionBarProps> = ({
           border: "1px solid var(--color-border-subtle)",
           background: "transparent",
           color: "var(--color-text-secondary)",
-          fontSize: "12.5px",
+          fontSize: "13px",
           fontWeight: 600,
           cursor: "pointer",
         }}
@@ -93,7 +93,7 @@ export const BusListSelectionBar: React.FC<BusListSelectionBarProps> = ({
           border: "none",
           background: "var(--color-action-primary-bg)",
           color: "var(--color-action-primary-fg)",
-          fontSize: "12.5px",
+          fontSize: "13px",
           fontWeight: 700,
           display: "inline-flex",
           alignItems: "center",

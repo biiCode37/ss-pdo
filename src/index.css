@@ -157,7 +157,7 @@ input[type="number"] {
 }
 .app-header h1 {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.025em;
   color: var(--text-primary);
 }
@@ -499,7 +499,7 @@ select.input-field {
 }
 
 .bus-metric-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -508,8 +508,8 @@ select.input-field {
 }
 
 .bus-metric-value {
-  font-size: 13.5px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: baseline;
@@ -518,7 +518,7 @@ select.input-field {
 }
 
 .bus-metric-unit {
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--text-secondary);
   margin-left: 2px;
@@ -635,7 +635,7 @@ select.input-field {
     padding: 6px 12px;
   }
   .monitoring-bottom-nav-wrapper .bottom-nav-label {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 
@@ -786,8 +786,8 @@ body.light-mode .bottom-nav-item:hover {
   right: -8px;
   background: #f59e0b;
   color: #000000;
-  font-size: 9.5px;
-  font-weight: 900;
+  font-size: 12px;
+  font-weight: 700;
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
@@ -819,12 +819,12 @@ body.light-mode .bottom-nav-item:hover {
 
 .gradient-title-text {
   color: var(--color-text-primary);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .analytics-card-title {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: none;
   letter-spacing: 0.2px;
   display: flex;
@@ -834,7 +834,7 @@ body.light-mode .bottom-nav-item:hover {
 
 .analytics-card-title > span {
   color: var(--color-text-primary);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .analytics-card-title > svg {
@@ -879,7 +879,7 @@ body.light-mode .bottom-nav-item:hover {
 }
 
 .kpi-metric-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -898,14 +898,14 @@ body.light-mode .bottom-nav-item:hover {
 
 .kpi-metric-value {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
   font-variant-numeric: tabular-nums;
   word-break: break-all;
 }
 
 .kpi-metric-unit {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -923,7 +923,7 @@ body.light-mode .bottom-nav-item:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -955,7 +955,7 @@ body.light-mode .bottom-nav-item:hover {
 }
 
 .analytics-stat-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
   display: flex;
@@ -967,7 +967,7 @@ body.light-mode .bottom-nav-item:hover {
 
 .analytics-stat-value {
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 700;
   margin-top: 4px;
 }
 
@@ -1049,7 +1049,7 @@ body.light-mode .bottom-nav-item:hover {
   background: var(--color-error-bg);
   color: var(--color-error-fg);
   border: 1px solid var(--color-error-border);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   padding: 3px 8px;
   border-radius: 6px;
@@ -1156,7 +1156,7 @@ body.light-mode .bottom-nav-item:hover {
   gap: 5px;
   padding: 4px 10px;
   border-radius: 9999px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   background: rgba(62, 207, 142, 0.15);
   color: var(--accent-color) !important;
@@ -1247,7 +1247,7 @@ body.light-mode .bottom-nav-item:hover {
   background: var(--input-bg);
   border: 1px solid var(--color-border-control);
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 999px;
@@ -1605,7 +1605,7 @@ div:where(.swal2-container) .pdo-swal-popup {
 
 div:where(.swal2-container) .pdo-swal-popup .swal2-title {
   color: var(--text-primary) !important;
-  font-size: 1.15rem !important;
+  font-size: 18px !important;
   font-weight: 700 !important;
   padding: 0 0 8px 0 !important;
   line-height: 1.35 !important;
@@ -1613,7 +1613,7 @@ div:where(.swal2-container) .pdo-swal-popup .swal2-title {
 
 div:where(.swal2-container) .pdo-swal-popup .swal2-html-container {
   color: var(--text-secondary) !important;
-  font-size: 0.88rem !important;
+  font-size: 14px !important;
   line-height: 1.5 !important;
   margin: 8px 0 20px 0 !important;
 }
@@ -1632,7 +1632,7 @@ div:where(.swal2-container) .pdo-swal-popup .swal2-actions {
   border: none !important;
   border-radius: 12px !important;
   padding: 12px 18px !important;
-  font-size: 0.88rem !important;
+  font-size: 14px !important;
   font-weight: 700 !important;
   flex: 1 !important;
   cursor: pointer !important;
@@ -1660,7 +1660,7 @@ div:where(.swal2-container) .pdo-swal-popup .swal2-actions {
   border: 1px solid var(--card-border) !important;
   border-radius: 12px !important;
   padding: 12px 18px !important;
-  font-size: 0.88rem !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   flex: 1 !important;
   cursor: pointer !important;
@@ -1716,7 +1716,7 @@ div:where(.swal2-container) .pdo-swal-popup .swal2-icon.swal2-question {
   box-sizing: border-box !important;
   padding: 10px 14px !important;
   border-radius: 12px !important;
-  font-size: 13.5px !important;
+  font-size: 14px !important;
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.15)) !important;
   background: var(--input-bg, rgba(255, 255, 255, 0.05)) !important;
   color: var(--text-primary, #f8fafc) !important;
@@ -1780,7 +1780,7 @@ div:where(.swal2-container) .pdo-swal-toast {
 
 .pdo-swal-toast .swal2-title {
   color: var(--text-primary) !important;
-  font-size: 0.88rem !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   margin: 0 !important;
 }
@@ -1855,7 +1855,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   color: var(--danger-color, #ef4444) !important;
   border: 1px solid rgba(239, 68, 68, 0.3) !important;
   border-radius: 10px !important;
-  font-size: 12.5px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   margin: 12px 0 0 0 !important;
   padding: 8px 12px !important;
@@ -1875,7 +1875,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border: 1px dashed var(--card-border);
   color: var(--text-secondary);
   border-radius: 20px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   padding: 6px 12px;
   cursor: pointer;
@@ -1921,7 +1921,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   background: transparent;
   border: 1px solid transparent;
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   padding: 7px 2px;
   border-radius: 8px;
@@ -1954,7 +1954,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border: 1px solid rgba(56, 189, 248, 0.3);
   color: var(--shift1-color, #38bdf8);
   border-radius: 6px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   padding: 2px 7px;
   cursor: pointer;
@@ -1981,7 +1981,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
   color: var(--text-secondary);
   border-radius: 6px;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 700;
   padding: 3px 7px;
   cursor: pointer;
@@ -2003,7 +2003,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   background: var(--accent-color, #38bdf8);
   color: #000 !important;
   border-color: var(--accent-color, #38bdf8);
-  font-weight: 800;
+  font-weight: 700;
   box-shadow: 0 2px 6px var(--color-shadow);
 }
 
@@ -2031,7 +2031,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   border: 1px dashed var(--card-border, rgba(255, 255, 255, 0.15));
   color: var(--text-secondary);
   border-radius: 6px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   padding: 3px 6px;
   cursor: pointer;
@@ -2205,7 +2205,7 @@ div:where(.swal2-container) .pdo-swal-bus-modal .swal2-validation-message {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   padding: 2px 7px;
   border-radius: 6px;

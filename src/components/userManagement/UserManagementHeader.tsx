@@ -59,7 +59,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
               gap: "5px",
               padding: "7px 11px",
               borderRadius: "10px",
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 600,
               border: "1px solid var(--card-border, rgba(255,255,255,0.15))",
               background: "rgba(255,255,255,0.05)",
@@ -80,7 +80,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             <h1
               style={{
                 margin: 0,
-                fontSize: "15.5px",
+                fontSize: "16px",
                 fontWeight: 700,
                 color: "var(--text-primary, #f8fafc)",
                 display: "flex",
@@ -101,7 +101,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             <p
               style={{
                 margin: 0,
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "var(--text-secondary, #94a3b8)",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
@@ -156,7 +156,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
               background: "var(--color-action-primary-bg)",
               color: "var(--color-action-primary-fg)",
               border: "none",
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 600,
               cursor: "pointer",
               whiteSpace: "nowrap",

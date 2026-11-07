@@ -113,7 +113,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
             border: "1px solid var(--card-border, rgba(255,255,255,0.12))",
             background: "var(--card-bg, rgba(30, 41, 59, 0.6))",
             color: "var(--text-primary, #f8fafc)",
-            fontSize: "13.5px",
+            fontSize: "14px",
             boxSizing: "border-box",
           }}
         />
@@ -138,7 +138,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
               style={{
                 padding: "6px 12px",
                 borderRadius: "10px",
-                fontSize: "12.5px",
+                fontSize: "13px",
                 fontWeight: isActive ? 600 : 500,
                 border: "1px solid",
                 borderColor: isActive
@@ -159,7 +159,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
               <span>{tab.label}</span>
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   padding: "1px 6px",
                   borderRadius: "8px",
                   background: isActive

@@ -206,7 +206,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             placeholder={TEXT_DASHBOARD.BUS_LIST.SEARCH_PLACEHOLDER}
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            style={{ height: "36px", fontSize: "12.5px", borderRadius: "10px" }}
+            style={{ height: "36px", fontSize: "13px", borderRadius: "10px" }}
           />
         </div>
         <button
@@ -286,7 +286,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             {skippedWithNotesCount > 0 && (
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--warning-text, #f59e0b)",
                 }}
               >

@@ -34,7 +34,7 @@ export const ReportTrafficJamsSection: React.FC<
         <AlertTriangle size={14} color="var(--warning-color, #f59e0b)" />
         <label
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--text-secondary)",
             textTransform: "uppercase",
@@ -117,7 +117,7 @@ export const ReportTrafficJamsSection: React.FC<
             flex: 1,
             padding: "8px 12px",
             borderRadius: "10px",
-            fontSize: "12.5px",
+            fontSize: "13px",
           }}
         />
         <button

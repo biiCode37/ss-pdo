@@ -110,7 +110,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
             <h3
               style={{
                 margin: 0,
-                fontSize: "15px",
+                fontSize: "16px",
                 fontWeight: 700,
                 color: "var(--text-primary)",
                 letterSpacing: "-0.2px",

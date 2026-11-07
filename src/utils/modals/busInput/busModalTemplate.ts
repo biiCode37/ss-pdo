@@ -33,7 +33,7 @@ export function renderSatsetToggle(isSatset: boolean): string {
 export function renderModalHeader(unit: string, isSatset: boolean): string {
   return `
     <div class="swal-bus-modal-header" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; margin-bottom: 10px; border-bottom: 1px solid var(--card-border);">
-      <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px;">${escapeHtml(unit)}</span>
+      <span style="font-size: 18px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.2px;">${escapeHtml(unit)}</span>
       ${renderSatsetToggle(isSatset)}
     </div>
   `;

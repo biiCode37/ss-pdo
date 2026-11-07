@@ -28,7 +28,7 @@ export const ToaTrendHeader: React.FC<ToaTrendHeaderProps> = ({
         {unitFilter && (
           <div
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 600,
               color: "var(--accent-color)",
               paddingLeft: "24px",
@@ -40,7 +40,7 @@ export const ToaTrendHeader: React.FC<ToaTrendHeaderProps> = ({
       </div>
       <span
         style={{
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 700,
           color: "var(--text-secondary)",
           display: "flex",

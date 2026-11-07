@@ -87,11 +87,11 @@ export function WaReportFormatTabs({
             transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "11.5px", fontWeight: 700 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 700 }}>
             <FileText size={12} />
             <span>{TEXT_WA_REPORT.FORMAT_TABS.FORMAT_1}</span>
           </div>
-          <span style={{ fontSize: "9.5px", opacity: 0.8, fontWeight: 500 }}>
+          <span style={{ fontSize: "12px", opacity: 0.8, fontWeight: 500 }}>
             {TEXT_WA_REPORT.FORMAT_TABS.FORMAT_1_SUB}
           </span>
         </button>
@@ -115,11 +115,11 @@ export function WaReportFormatTabs({
             transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "11.5px", fontWeight: 700 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 700 }}>
             <FileText size={12} />
             <span>{TEXT_WA_REPORT.FORMAT_TABS.FORMAT_2}</span>
           </div>
-          <span style={{ fontSize: "9.5px", opacity: 0.8, fontWeight: 500 }}>
+          <span style={{ fontSize: "12px", opacity: 0.8, fontWeight: 500 }}>
             {TEXT_WA_REPORT.FORMAT_TABS.FORMAT_2_SUB}
           </span>
         </button>
@@ -143,11 +143,11 @@ export function WaReportFormatTabs({
             transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "11.5px", fontWeight: 700 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 700 }}>
             <FileText size={12} />
             <span>{TEXT_WA_REPORT.FORMAT_TABS.FORMAT_3}</span>
           </div>
-          <span style={{ fontSize: "9.5px", opacity: 0.8, fontWeight: 500 }}>
+          <span style={{ fontSize: "12px", opacity: 0.8, fontWeight: 500 }}>
             {TEXT_WA_REPORT.FORMAT_TABS.FORMAT_3_SUB}
           </span>
         </button>
@@ -236,7 +236,7 @@ export function WaReportFormatTabs({
                   border: active ? "1px solid #2563eb" : "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                   background: active ? "#2563eb" : "var(--input-bg, rgba(255, 255, 255, 0.05))",
                   color: active ? "#ffffff" : "var(--text-secondary, #94a3b8)",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontWeight: active ? 600 : 500,
                   whiteSpace: "nowrap",
                   cursor: "pointer",
@@ -267,7 +267,7 @@ export function WaReportFormatTabs({
             <AlertTriangle size={15} style={{ flexShrink: 0 }} />
             <span>{TEXT_WA_REPORT.BLOCKING_TITLE(selectedShift)}</span>
           </div>
-          <p style={{ margin: 0, fontSize: "11px", color: "var(--text-secondary, #94a3b8)", lineHeight: 1.35 }}>
+          <p style={{ margin: 0, fontSize: "12px", color: "var(--text-secondary, #94a3b8)", lineHeight: 1.35 }}>
             {TEXT_WA_REPORT.BLOCKING_DESC(unconfirmedRoutes.length)}
           </p>
           <div
@@ -287,7 +287,7 @@ export function WaReportFormatTabs({
                 onClick={() => onQuickEditRoute?.({ id: r.id, routeCode: r.routeCode })}
                 title={`Input cepat data armada rute ${r.routeCode}`}
                 style={{
-                  fontSize: "10.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   padding: "3px 8px",
                   borderRadius: "6px",
@@ -303,7 +303,7 @@ export function WaReportFormatTabs({
                 }}
               >
                 <span>{r.routeCode}</span>
-                {onQuickEditRoute && <span style={{ fontSize: "9px", opacity: 0.8 }}>✏️</span>}
+                {onQuickEditRoute && <span style={{ fontSize: "12px", opacity: 0.8 }}>✏️</span>}
               </button>
             ))}
           </div>

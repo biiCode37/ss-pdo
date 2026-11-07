@@ -35,7 +35,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
         {dateBadge && (
           <span
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 700,
               fontFamily: "monospace",
               color: "var(--color-action-primary-bg)",
@@ -95,7 +95,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             {totalBothShifts > 0 && (
               <span
                 style={{
-                  fontSize: "10.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   padding: "1px 6px",
                   borderRadius: "6px",
@@ -150,7 +150,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             {totalBothShifts > 0 && (
               <span
                 style={{
-                  fontSize: "10.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   padding: "1px 6px",
                   borderRadius: "6px",

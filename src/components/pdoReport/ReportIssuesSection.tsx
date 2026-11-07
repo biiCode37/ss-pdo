@@ -21,7 +21,7 @@ export const ReportIssuesSection: React.FC<ReportIssuesSectionProps> = ({
         <label
           htmlFor="kendala-text"
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--text-secondary)",
             textTransform: "uppercase",
@@ -43,7 +43,7 @@ export const ReportIssuesSection: React.FC<ReportIssuesSectionProps> = ({
             width: "100%",
             padding: "10px 12px",
             borderRadius: "10px",
-            fontSize: "12.5px",
+            fontSize: "13px",
             fontFamily: "inherit",
             resize: "vertical",
             lineHeight: 1.5,

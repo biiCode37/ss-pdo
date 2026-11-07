@@ -152,8 +152,8 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
         <h3
           id="ingestion-modal-title"
           style={{
-            fontSize: "17px",
-            fontWeight: 800,
+            fontSize: "18px",
+            fontWeight: 700,
             margin: "0 0 4px 0",
             color: "var(--text-primary, #ededed)",
             letterSpacing: "-0.2px",
@@ -226,7 +226,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             <span
               style={{
                 color: "var(--accent-color, #3ECF8E)",
-                fontWeight: 800,
+                fontWeight: 700,
               }}
             >
               {percent}%
@@ -265,7 +265,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
             borderRadius: "12px",
             padding: "8px 12px",
-            fontSize: "11.5px",
+            fontSize: "12px",
             color: "var(--text-secondary, #9a9a9a)",
             display: "flex",
             alignItems: "center",
@@ -282,7 +282,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                 background: "rgba(62, 207, 142, 0.15)",
                 color: "var(--accent-color, #3ECF8E)",
                 fontWeight: 700,
-                fontSize: "11px",
+                fontSize: "12px",
                 border: "1px solid rgba(62, 207, 142, 0.25)",
               }}
             >
@@ -313,7 +313,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
               background: "var(--accent-color, #3ECF8E)",
               color: "#000",
               fontWeight: 700,
-              fontSize: "12.5px",
+              fontSize: "13px",
               border: "none",
               cursor: "pointer",
               transition: "transform 0.15s ease",

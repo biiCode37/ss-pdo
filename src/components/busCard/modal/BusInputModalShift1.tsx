@@ -132,7 +132,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            fontSize: "0.82rem",
+            fontSize: "13px",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
@@ -145,7 +145,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             {form.previousDayKmAkhir2 && !isKmAwalSaved && (
               <span
                 style={{
-                  fontSize: "0.72rem",
+                  fontSize: "12px",
                   padding: "1px 6px",
                   borderRadius: "6px",
                   background: "rgba(245, 158, 11, 0.15)",
@@ -169,7 +169,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               border: "1px solid rgba(56, 189, 248, 0.25)",
               borderRadius: "6px",
               color: "var(--accent-color, #38bdf8)",
-              fontSize: "0.75rem",
+              fontSize: "12px",
               fontWeight: 600,
               cursor: "pointer",
               padding: "3px 8px",
@@ -200,7 +200,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               alignItems: "center",
               paddingTop: "6px",
               borderTop: "1px dashed var(--card-border, rgba(255, 255, 255, 0.08))",
-              fontSize: "0.8rem",
+              fontSize: "13px",
             }}
           >
             <span style={{ color: "var(--text-secondary, #94a3b8)" }}>
@@ -208,7 +208,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
             </span>
             <span
               style={{
-                fontWeight: 800,
+                fontWeight: 700,
                 padding: "2px 8px",
                 borderRadius: "6px",
                 background:
@@ -234,7 +234,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
         {kmLiveS1.formattedText && kmLiveS1.status !== "normal" && (
           <div
             style={{
-              fontSize: "0.78rem",
+              fontSize: "12px",
               fontWeight: 600,
               color: kmLiveS1.status === "negative" ? "#f87171" : "#f59e0b",
               display: "flex",
@@ -275,7 +275,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   borderRadius: "8px",
                   background: "rgba(239, 68, 68, 0.12)",
                   border: "1px solid rgba(239, 68, 68, 0.35)",
-                  fontSize: "0.78rem",
+                  fontSize: "12px",
                   color: "#f87171",
                   display: "flex",
                   flexDirection: "column",
@@ -293,7 +293,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     gap: "6px",
                     cursor: "pointer",
                     color: "var(--text-secondary, #cbd5e1)",
-                    fontSize: "0.75rem",
+                    fontSize: "12px",
                   }}
                 >
                   <input
@@ -326,7 +326,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               >
                 <div
                   style={{
-                    fontSize: "0.8rem",
+                    fontSize: "13px",
                     color: "#f59e0b",
                     display: "flex",
                     alignItems: "center",
@@ -337,7 +337,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   <Sparkles size={14} />
                   <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_DETECTED_TITLE}</span>
                 </div>
-                <div style={{ fontSize: "0.76rem", color: "var(--text-secondary, #cbd5e1)", lineHeight: 1.4 }}>
+                <div style={{ fontSize: "12px", color: "var(--text-secondary, #cbd5e1)", lineHeight: 1.4 }}>
                   {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_SUGGESTION_TEXT(
                     form.smartRolloverSuggestion.suggestedKm,
                     form.smartRolloverSuggestion.diff,
@@ -356,7 +356,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     background: "#f59e0b",
                     color: "#000",
                     fontWeight: 700,
-                    fontSize: "0.78rem",
+                    fontSize: "12px",
                     border: "none",
                     cursor: "pointer",
                     marginTop: "2px",
@@ -451,7 +451,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
               background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
               color: "var(--text-primary, #ededed)",
-              fontSize: "0.95rem",
+              fontSize: "16px",
               boxSizing: "border-box",
               resize: "none",
               fontFamily: "inherit",

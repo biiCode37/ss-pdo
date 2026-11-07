@@ -148,8 +148,8 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
           <div>
             <h2
               style={{
-                fontSize: "15px",
-                fontWeight: 800,
+                fontSize: "16px",
+                fontWeight: 700,
                 color: "var(--text-primary, #ededed)",
                 margin: 0,
                 display: "flex",
@@ -160,7 +160,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               <Award size={18} style={{ color: "var(--accent-color, #3ECF8E)" }} />
               {TEXT_MONITORING.KORWIL_TAB.TOTAL_WILAYAH_CARD}
             </h2>
-            <span style={{ fontSize: "11px", color: "var(--text-secondary, #888)", display: "block", marginTop: "2px" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block", marginTop: "2px" }}>
               {TEXT_MONITORING.KORWIL_TAB.TOTAL_WILAYAH_DESC}
             </span>
           </div>
@@ -169,7 +169,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
             style={{
               padding: "4px 10px",
               borderRadius: "9999px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: 700,
               background: "rgba(62, 207, 142, 0.12)",
               color: "var(--accent-color, #3ECF8E)",
@@ -197,13 +197,13 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
             }}
           >
-            <span style={{ fontSize: "11px", color: "var(--text-secondary, #888)", display: "block" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
               {TEXT_MONITORING.KPI.FLEET_LABEL}
             </span>
-            <div style={{ fontSize: "17px", fontWeight: 800, color: "var(--text-primary, #ededed)", marginTop: "2px" }}>
-              {formatNumber(data.totalRealops)} <span style={{ fontSize: "11px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.FLEET_UNIT}</span>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary, #ededed)", marginTop: "2px" }}>
+              {formatNumber(data.totalRealops)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.FLEET_UNIT}</span>
             </div>
-            <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
               {formatNumber(data.totalRenops)} Renops
             </span>
           </div>
@@ -217,13 +217,13 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
             }}
           >
-            <span style={{ fontSize: "11px", color: "var(--text-secondary, #888)", display: "block" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
               {TEXT_MONITORING.KPI.KM_LABEL}
             </span>
-            <div style={{ fontSize: "17px", fontWeight: 800, color: "var(--text-primary, #ededed)", marginTop: "2px" }}>
-              {formatNumber(data.totalKm)} <span style={{ fontSize: "11px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.KM_UNIT}</span>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary, #ededed)", marginTop: "2px" }}>
+              {formatNumber(data.totalKm)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.KM_UNIT}</span>
             </div>
-            <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
               {formatDecimal(data.averageKmPerBus)} {TEXT_MONITORING.DASHBOARD.MACRO_KPIS.PER_BUS}
             </span>
           </div>
@@ -237,13 +237,13 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
             }}
           >
-            <span style={{ fontSize: "11px", color: "var(--text-secondary, #888)", display: "block" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
               {TEXT_MONITORING.KPI.PASSENGER_LABEL}
             </span>
-            <div style={{ fontSize: "17px", fontWeight: 800, color: "var(--accent-color, #3ECF8E)", marginTop: "2px" }}>
-              {formatNumber(data.totalTodayPassengers)} <span style={{ fontSize: "11px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.PASSENGER_UNIT}</span>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)", marginTop: "2px" }}>
+              {formatNumber(data.totalTodayPassengers)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{TEXT_MONITORING.KPI.PASSENGER_UNIT}</span>
             </div>
-            <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
               {formatDecimal(targetPct)}% Capaian
             </span>
           </div>
@@ -257,13 +257,13 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
               border: "1px solid var(--card-border, rgba(255, 255, 255, 0.06))",
             }}
           >
-            <span style={{ fontSize: "11px", color: "var(--text-secondary, #888)", display: "block" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block" }}>
               {TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP}
             </span>
-            <div style={{ fontSize: "17px", fontWeight: 800, color: "var(--text-primary, #ededed)", marginTop: "2px" }}>
-              {formatNumber(totalRitasePp)} <span style={{ fontSize: "11px", fontWeight: 500 }}>{TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.UNIT_RIT}</span>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary, #ededed)", marginTop: "2px" }}>
+              {formatNumber(totalRitasePp)} <span style={{ fontSize: "12px", fontWeight: 500 }}>{TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.UNIT_RIT}</span>
             </div>
-            <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)" }}>
+            <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
               {formatDecimal(avgRitasePerBus)} {TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.UNIT_RIT_PER_BUS}
             </span>
           </div>
@@ -326,8 +326,8 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 <div>
                   <h3
                     style={{
-                      fontSize: "15px",
-                      fontWeight: 800,
+                      fontSize: "16px",
+                      fontWeight: 700,
                       color: "var(--text-primary, #ededed)",
                       margin: 0,
                       lineHeight: 1.2,
@@ -337,7 +337,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   </h3>
                   <span
                     style={{
-                      fontSize: "11px",
+                      fontSize: "12px",
                       color: "var(--text-secondary, #888)",
                       display: "block",
                       marginTop: "2px",
@@ -356,7 +356,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   background: badgeBg,
                   color: badgeColor,
                   border: `1px solid ${badgeBorder}`,
-                  fontSize: "11.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   whiteSpace: "nowrap",
                 }}
@@ -382,12 +382,12 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   borderRadius: "10px",
                 }}
               >
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
                   {TEXT_MONITORING.KPI.FLEET_LABEL}
                 </span>
                 <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                   {formatNumber(team.totalRealops)} {TEXT_MONITORING.KPI.FLEET_UNIT}{" "}
-                  <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)", fontWeight: 400 }}>
+                  <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", fontWeight: 400 }}>
                     ({formatNumber(team.totalRenops)} Ren)
                   </span>
                 </div>
@@ -401,12 +401,12 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   borderRadius: "10px",
                 }}
               >
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
                   {TEXT_MONITORING.KPI.KM_LABEL}
                 </span>
                 <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                   {formatNumber(team.totalKm)} km{" "}
-                  <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)", fontWeight: 400 }}>
+                  <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", fontWeight: 400 }}>
                     ({formatDecimal(team.averageKmPerBus)} km/bus)
                   </span>
                 </div>
@@ -420,7 +420,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   borderRadius: "10px",
                 }}
               >
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
                   {TEXT_MONITORING.KPI.PASSENGER_LABEL}
                 </span>
                 <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--accent-color, #3ECF8E)" }}>
@@ -436,12 +436,12 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                   borderRadius: "10px",
                 }}
               >
-                <span style={{ fontSize: "10.5px", color: "var(--text-secondary, #888)" }}>
+                <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)" }}>
                   {TEXT_MONITORING.ROUTE_DETAIL_MODAL.METRICS.TOTAL_RITASE_PP}
                 </span>
                 <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                   {formatNumber(team.totalRitasePp)} rit{" "}
-                  <span style={{ fontSize: "10px", color: "var(--text-secondary, #888)", fontWeight: 400 }}>
+                  <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", fontWeight: 400 }}>
                     ({formatDecimal(team.averageRitasePerBus)} rit/bus)
                   </span>
                 </div>
@@ -516,8 +516,8 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                           style={{
                             padding: "2px 6px",
                             borderRadius: "6px",
-                            fontSize: "11px",
-                            fontWeight: 800,
+                            fontSize: "12px",
+                            fontWeight: 700,
                             background: "rgba(62, 207, 142, 0.12)",
                             color: "var(--accent-color, #3ECF8E)",
                           }}
@@ -539,11 +539,11 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                       </div>
 
                       <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-                        <div style={{ textAlign: "right", fontSize: "11px" }}>
+                        <div style={{ textAlign: "right", fontSize: "12px" }}>
                           <span style={{ fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                             {formatNumber(route.todayPassengers)} org
                           </span>
-                          <span style={{ color: "var(--text-secondary, #888)", display: "block", fontSize: "10px" }}>
+                          <span style={{ color: "var(--text-secondary, #888)", display: "block", fontSize: "12px" }}>
                             {formatNumber(routeRitasePp)} rit
                           </span>
                         </div>

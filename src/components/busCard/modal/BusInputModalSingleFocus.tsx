@@ -42,7 +42,7 @@ export const BusInputModalSingleFocus: React.FC<BusInputModalSingleFocusProps> =
             background: "var(--color-info-bg)",
             border: "1px solid var(--color-info-border)",
             color: "var(--color-info-fg)",
-            fontSize: "0.82rem",
+            fontSize: "13px",
             fontWeight: 600,
             display: "flex",
             alignItems: "center",

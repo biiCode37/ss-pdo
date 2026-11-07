@@ -41,8 +41,8 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
         <h2
           id={`bus-modal-title-${formId}`}
           style={{
-            fontSize: "1.15rem",
-            fontWeight: 800,
+            fontSize: "18px",
+            fontWeight: 700,
             margin: 0,
             color: "var(--text-primary, #ededed)",
             letterSpacing: "-0.01em",
@@ -64,7 +64,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
               height: "34px",
               padding: "0 12px",
               borderRadius: "10px",
-              fontSize: "0.78rem",
+              fontSize: "12px",
               fontWeight: 600,
               border: isExpandedAll
                 ? "1px solid rgba(56, 189, 248, 0.35)"

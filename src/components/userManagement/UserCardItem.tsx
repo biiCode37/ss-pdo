@@ -85,7 +85,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
               {isSelf && (
                 <span
                   style={{
-                    fontSize: "10px",
+                    fontSize: "12px",
                     fontWeight: 700,
                     padding: "1px 5px",
                     borderRadius: "5px",
@@ -128,7 +128,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
             borderRadius: "10px",
             background: "rgba(255, 255, 255, 0.03)",
             border: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
-            fontSize: "11.5px",
+            fontSize: "12px",
             color: "var(--text-secondary, #94a3b8)",
             lineHeight: 1.4,
           }}
@@ -143,7 +143,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          fontSize: "11px",
+          fontSize: "12px",
           color: "var(--text-secondary, #64748b)",
           paddingTop: "6px",
           borderTop: "1px solid var(--card-border, rgba(255, 255, 255, 0.05))",
@@ -262,7 +262,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
                 style={{
                   padding: "6px 12px",
                   borderRadius: "8px",
-                  fontSize: "11.5px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   border:
                     "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",

@@ -26,7 +26,7 @@ export const ProfileMenuFooter: React.FC<ProfileMenuFooterProps> = ({
       <div style={{ textAlign: "center", padding: "0 8px 2px 8px" }}>
         <p
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             color: "var(--text-secondary)",
             margin: 0,
             lineHeight: 1.4,

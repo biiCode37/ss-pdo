@@ -76,7 +76,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
             {resolvedBusKmAwal1 && (
               <span
                 style={{
-                  fontSize: "0.75rem",
+                  fontSize: "12px",
                   color: "var(--shift1-action-text, #0369a1)",
                   background: "var(--shift1-bg, rgba(2, 132, 199, 0.08))",
                   padding: "2px 8px",
@@ -128,7 +128,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
                 borderRadius: "8px",
                 background: "var(--color-error-bg)",
                 border: "1px solid var(--color-error-border)",
-                fontSize: "0.78rem",
+                fontSize: "12px",
                 color: "var(--color-error-fg)",
                 display: "flex",
                 flexDirection: "column",
@@ -146,7 +146,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
                   gap: "6px",
                   cursor: "pointer",
                   color: "var(--text-secondary, #cbd5e1)",
-                  fontSize: "0.75rem",
+                  fontSize: "12px",
                 }}
               >
                 <input
@@ -242,7 +242,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               borderRadius: "8px",
               background: "rgba(239, 68, 68, 0.12)",
               border: "1px solid rgba(239, 68, 68, 0.35)",
-              fontSize: "0.82rem",
+              fontSize: "13px",
               fontWeight: 600,
               color: "#f87171",
               display: "flex",
@@ -262,7 +262,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               borderRadius: "8px",
               background: "rgba(245, 158, 11, 0.12)",
               border: "1px solid rgba(245, 158, 11, 0.35)",
-              fontSize: "0.82rem",
+              fontSize: "13px",
               fontWeight: 600,
               color: "#f59e0b",
               display: "flex",
@@ -306,7 +306,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
             {kmAwal1 && (
               <span
                 style={{
-                  fontSize: "0.75rem",
+                  fontSize: "12px",
                   color: "var(--text-secondary, #6b7280)",
                   background: "var(--input-bg, rgba(0, 0, 0, 0.04))",
                   padding: "2px 8px",
@@ -358,7 +358,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               borderRadius: "8px",
               background: "rgba(239, 68, 68, 0.12)",
               border: "1px solid rgba(239, 68, 68, 0.35)",
-              fontSize: "0.82rem",
+              fontSize: "13px",
               fontWeight: 600,
               color: "#f87171",
               display: "flex",
@@ -378,7 +378,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               borderRadius: "8px",
               background: "rgba(245, 158, 11, 0.12)",
               border: "1px solid rgba(245, 158, 11, 0.35)",
-              fontSize: "0.82rem",
+              fontSize: "13px",
               fontWeight: 600,
               color: "#f59e0b",
               display: "flex",

@@ -69,7 +69,7 @@ export function BulkRouteSection({
       {/* Fallback Periode Bulan & Tahun */}
       <div style={{ display: 'flex', gap: '10px' }}>
         <div style={{ flex: 1 }}>
-          <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+          <label style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
             Bulan Default (Acuan / Fallback)
           </label>
           <select
@@ -88,7 +88,7 @@ export function BulkRouteSection({
         </div>
 
         <div style={{ width: '100px' }}>
-          <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+          <label style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
             Tahun
           </label>
           <input
@@ -104,7 +104,7 @@ export function BulkRouteSection({
 
       {/* Textarea Multi-Link */}
       <div>
-        <label style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+        <label style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
           {texts.TEXTAREA_LABEL}
         </label>
         <textarea
@@ -117,7 +117,7 @@ export function BulkRouteSection({
           style={{
             width: '100%',
             padding: '10px',
-            fontSize: '11.5px',
+            fontSize: '12px',
             fontFamily: 'monospace',
             lineHeight: '1.4',
             resize: 'vertical',
@@ -137,7 +137,7 @@ export function BulkRouteSection({
           justifyContent: 'center',
           gap: '6px',
           padding: '10px',
-          fontSize: '12.5px',
+          fontSize: '13px',
           backgroundColor: 'var(--bg-secondary, #27272a)',
           color: 'var(--text-primary)',
           border: '1px solid var(--border-color)',
@@ -178,7 +178,7 @@ export function BulkRouteSection({
               {texts.PREVIEW_TITLE} ({bulkItems.length})
             </span>
             {readyItemsCount > 0 && (
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', cursor: 'pointer' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', cursor: 'pointer' }}>
                 <input
                   type="checkbox"
                   checked={allReadySelected}
@@ -217,7 +217,7 @@ export function BulkRouteSection({
                     borderRadius: '8px',
                     background: 'var(--bg-secondary, rgba(255, 255, 255, 0.03))',
                     border: '1px solid var(--border-color)',
-                    fontSize: '11.5px',
+                    fontSize: '12px',
                   }}
                 >
                   <input
@@ -242,14 +242,14 @@ export function BulkRouteSection({
                       >
                         {item.routeCode || 'Rute ?'}
                       </span>
-                      <span style={{ fontSize: '10.5px', color: 'var(--text-secondary)' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                         ({MONTH_NAMES_ID[item.month] || item.month} {item.year})
                       </span>
                     </div>
 
                     <div
                       style={{
-                        fontSize: '10.5px',
+                        fontSize: '12px',
                         color: 'var(--text-secondary)',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
@@ -261,7 +261,7 @@ export function BulkRouteSection({
                     </div>
 
                     {item.errorMessage && (
-                      <div style={{ fontSize: '10px', color: 'var(--danger-color)', marginTop: '2px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--danger-color)', marginTop: '2px' }}>
                         {item.errorMessage}
                       </div>
                     )}
@@ -275,7 +275,7 @@ export function BulkRouteSection({
                         style={{
                           padding: '2px 6px',
                           borderRadius: '4px',
-                          fontSize: '10px',
+                          fontSize: '12px',
                           background: 'rgba(16, 185, 129, 0.15)',
                           color: '#10b981',
                           fontWeight: 600,
@@ -289,7 +289,7 @@ export function BulkRouteSection({
                         style={{
                           padding: '2px 6px',
                           borderRadius: '4px',
-                          fontSize: '10px',
+                          fontSize: '12px',
                           background: 'rgba(245, 158, 11, 0.15)',
                           color: '#f59e0b',
                           fontWeight: 600,
@@ -304,7 +304,7 @@ export function BulkRouteSection({
                           style={{
                             padding: '2px 6px',
                             borderRadius: '4px',
-                            fontSize: '10px',
+                            fontSize: '12px',
                             background: 'rgba(239, 68, 68, 0.15)',
                             color: '#ef4444',
                             fontWeight: 600,
@@ -319,7 +319,7 @@ export function BulkRouteSection({
                             display: 'flex',
                             alignItems: 'center',
                             gap: '3px',
-                            fontSize: '9.5px',
+                            fontSize: '12px',
                             padding: '2px 5px',
                             borderRadius: '4px',
                             background: 'var(--bg-card, #18181b)',

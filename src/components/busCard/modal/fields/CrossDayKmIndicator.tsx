@@ -36,7 +36,7 @@ export const CrossDayKmIndicator: React.FC<CrossDayKmIndicatorProps> = ({
         borderRadius: "8px",
         background: isExtreme ? "var(--color-warning-bg)" : "var(--color-info-bg)",
         border: `1px solid ${isExtreme ? "var(--color-warning-border)" : "var(--color-info-border)"}`,
-        fontSize: "0.78rem",
+        fontSize: "12px",
       }}
     >
       <span style={{ color: "var(--color-text-secondary)" }}>
@@ -47,7 +47,7 @@ export const CrossDayKmIndicator: React.FC<CrossDayKmIndicatorProps> = ({
       </span>
       <span
         style={{
-          fontWeight: 800,
+          fontWeight: 700,
           color: isExtreme ? "var(--color-warning-fg)" : "var(--color-info-fg)",
         }}
       >

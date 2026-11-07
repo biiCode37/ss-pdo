@@ -67,8 +67,8 @@ export const BusFormField = forwardRef<HTMLInputElement, BusFormFieldProps>(
           ? "rgba(239, 68, 68, 0.08)"
           : "var(--input-bg, rgba(0, 0, 0, 0.25))",
       color: "var(--text-primary, #ededed)",
-      fontSize: isHero ? "1.15rem" : "0.95rem",
-      fontWeight: isHero ? 800 : 400,
+      fontSize: isHero ? "18px" : "16px",
+      fontWeight: isHero ? 700 : 400,
       boxSizing: "border-box",
       textAlign: isHero ? "left" : undefined,
       opacity: disabled ? 0.45 : 1,
@@ -77,7 +77,7 @@ export const BusFormField = forwardRef<HTMLInputElement, BusFormFieldProps>(
     };
 
     const baseLabelStyle: React.CSSProperties = {
-      fontSize: isHero ? "0.82rem" : "0.78rem",
+      fontSize: isHero ? "13px" : "12px",
       fontWeight: isHero ? 700 : 600,
       color: "var(--text-secondary, #8b8b8b)",
       display: "block",

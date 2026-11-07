@@ -104,7 +104,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
             <h3
               style={{
                 margin: 0,
-                fontSize: '15.5px',
+                fontSize: '16px',
                 fontWeight: 700,
                 color: 'var(--color-text-primary)',
               }}
@@ -138,7 +138,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
         <div style={{ padding: '20px' }}>
           <p
             style={{
-              fontSize: '12.5px',
+              fontSize: '13px',
               color: 'var(--color-text-secondary)',
               margin: '0 0 16px',
               lineHeight: 1.5,
@@ -206,7 +206,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
                         borderRadius: '6px',
                         backgroundColor: 'var(--color-role-superadmin-bg)',
                         color: 'var(--color-role-superadmin-fg)',
-                        fontSize: '10px',
+                        fontSize: '12px',
                         fontWeight: 700,
                       }}
                     >
@@ -242,7 +242,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
               background: 'var(--color-surface-subtle)',
               border: '1px solid var(--color-border-subtle)',
               color: 'var(--color-text-primary)',
-              fontSize: '12.5px',
+              fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
             }}
@@ -264,7 +264,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
               background: 'var(--color-action-primary-bg)',
               border: 'none',
               color: 'var(--color-action-primary-fg)',
-              fontSize: '12.5px',
+              fontSize: '13px',
               fontWeight: 600,
               cursor: isSaving ? 'wait' : 'pointer',
               opacity: isSaving ? 0.7 : 1,

@@ -32,10 +32,10 @@ Jika butuh varian, tambahkan prop atau kelas modifier pada komponen yang ada. **
 - Status (OFF, TO, kendala, sukses, error) **selalu disertai label teks**, tidak boleh hanya warna.
 - Bayangan hanya untuk lapisan melayang (modal, sheet, dropdown). Kartu biasa cukup border tipis, tanpa bayangan.
 
-## 5. Tipografi (skala SEMENTARA, sampai disetujui pengguna)
+## 5. Tipografi (berlaku sejak refact_216, dikunci ratchet)
 - Ukuran yang diizinkan (px): **12, 13, 14, 16, 18, 20, 24**, plus **28** khusus angka besar. **Minimal 12px**; dilarang 8–11px dan nilai pecahan seperti 11.5px atau 0.78rem.
 - Satuan ukuran huruf: **px**. Jangan mencampur `rem` dan `px` di komponen yang sama.
-- Bobot: **400, 500, 600, 700**. Bobot 800 hanya untuk satu angka utama per layar.
+- Bobot: **400, 500, 600, 700** saja. Dilarang 800/900 (termasuk angka utama).
 - Angka dalam tabel, kartu unit, dan KPI memakai `font-variant-numeric: tabular-nums`.
 - Font mengikuti `body`. `monospace` hanya untuk pratinjau teks laporan WA atau kode.
 - Dilarang kalimat dalam HURUF KAPITAL SEMUA; kapital hanya untuk singkatan (KM, TOA, OFF, TO).

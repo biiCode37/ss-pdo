@@ -59,7 +59,7 @@ export const MonitoringReadinessBanner: React.FC<
         <div style={{ textAlign: "right" }}>
           <span
             style={{
-              fontWeight: 800,
+              fontWeight: 700,
               color: "var(--text-primary, #ededed)",
               display: "block",
             }}
@@ -73,7 +73,7 @@ export const MonitoringReadinessBanner: React.FC<
           {appInputCount !== undefined && sheetSyncCount !== undefined && (
             <span
               style={{
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "var(--text-secondary, #8b8b8b)",
                 display: "block",
                 marginTop: "2px",
@@ -118,7 +118,7 @@ export const MonitoringReadinessBanner: React.FC<
           flexWrap: "wrap",
           alignItems: "center",
           gap: "14px",
-          fontSize: "11.5px",
+          fontSize: "12px",
           color: "var(--text-secondary, #8b8b8b)",
           paddingTop: "2px",
         }}

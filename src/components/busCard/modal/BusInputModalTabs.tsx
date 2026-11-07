@@ -66,7 +66,7 @@ export const BusInputModalTabs: React.FC<BusInputModalTabsProps> = ({
               height: "34px",
               padding: "0 6px",
               borderRadius: "9px",
-              fontSize: "0.8rem",
+              fontSize: "13px",
               fontWeight: isActive ? 700 : 500,
               background: isActive
                 ? "var(--card-bg, #1e293b)"

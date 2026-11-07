@@ -175,7 +175,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 background: "var(--card-bg, rgba(23, 23, 23, 0.75))",
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.1))",
                 color: "var(--text-primary)",
-                fontSize: "12.5px",
+                fontSize: "13px",
               }}
             />
             {searchQuery && (
@@ -251,7 +251,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             style={{
               padding: "5px 11px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
@@ -273,7 +273,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             style={{
               padding: "5px 11px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "submitted" ? 700 : 500,
               background:
                 statusFilter === "submitted"
@@ -301,7 +301,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             style={{
               padding: "5px 11px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "uncompleted" ? 700 : 500,
               background:
                 statusFilter === "uncompleted"
@@ -329,7 +329,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             style={{
               padding: "5px 11px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: statusFilter === "verified" ? 700 : 500,
               background:
                 statusFilter === "verified"
@@ -369,7 +369,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               display: "flex",
               alignItems: "center",
               gap: "4px",
-              fontSize: "11px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               marginRight: "4px",
               flexShrink: 0,
@@ -385,7 +385,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             style={{
               padding: "4px 10px",
               borderRadius: "8px",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: selectedSupervisor === "all" ? 700 : 500,
               background:
                 selectedSupervisor === "all"
@@ -412,7 +412,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               style={{
                 padding: "4px 10px",
                 borderRadius: "8px",
-                fontSize: "11px",
+                fontSize: "12px",
                 fontWeight: selectedSupervisor === spv ? 700 : 500,
                 background:
                   selectedSupervisor === spv

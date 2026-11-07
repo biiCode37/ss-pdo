@@ -123,7 +123,7 @@ function BusCardComponent({
                 {isSelected && <Check size={14} strokeWidth={3} />}
               </span>
             )}
-            <span className="bus-card-unit" style={{ fontWeight: 800, fontSize: "16px" }}>{bus.unit}</span>
+            <span className="bus-card-unit" style={{ fontWeight: 700, fontSize: "16px" }}>{bus.unit}</span>
             {(saveStatus === "queued" || isQueued) && (
               <span className="bus-card-status status-queued">
                 {TEXT_DASHBOARD.BUS_CARD_ACTIONS.WAITING_SIGNAL}
@@ -169,7 +169,7 @@ function BusCardComponent({
           style={{
             padding: "8px 16px 10px 16px",
             borderTop: "1px solid var(--card-border)",
-            fontSize: "11.5px",
+            fontSize: "12px",
             color: "var(--color-text-primary)",
             fontWeight: 600,
             letterSpacing: "0.01em",

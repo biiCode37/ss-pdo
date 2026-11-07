@@ -361,13 +361,13 @@ function A2ReportModalComponent({
           }}
         >
           <div>
-            <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 700 }}>
               {TEXT_PDO_FORM.A2_REPORT.MODAL_TITLE}
             </h2>
             <p
               style={{
                 margin: '4px 0 0',
-                fontSize: '0.82rem',
+                fontSize: '13px',
                 color: 'var(--color-text-muted, #94a3b8)',
               }}
             >
@@ -381,7 +381,7 @@ function A2ReportModalComponent({
               background: 'transparent',
               border: 'none',
               color: 'var(--color-text-muted, #94a3b8)',
-              fontSize: '1.4rem',
+              fontSize: '24px',
               cursor: 'pointer',
               padding: '4px 8px',
               lineHeight: 1,
@@ -415,7 +415,7 @@ function A2ReportModalComponent({
                 borderRadius: '8px',
                 border: 'none',
                 fontWeight: 600,
-                fontSize: '0.9rem',
+                fontSize: '14px',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 opacity: isSubmitting ? 0.7 : 1,
                 backgroundColor: shift === 1 ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
@@ -435,7 +435,7 @@ function A2ReportModalComponent({
                 borderRadius: '8px',
                 border: 'none',
                 fontWeight: 600,
-                fontSize: '0.9rem',
+                fontSize: '14px',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
                 opacity: isSubmitting ? 0.7 : 1,
                 backgroundColor: shift === 2 ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
@@ -459,7 +459,7 @@ function A2ReportModalComponent({
               <label
                 style={{
                   display: 'block',
-                  fontSize: '0.8rem',
+                  fontSize: '13px',
                   fontWeight: 600,
                   marginBottom: '6px',
                   color: 'var(--color-text-muted, #94a3b8)',
@@ -480,7 +480,7 @@ function A2ReportModalComponent({
                   border: '1px solid var(--color-border-subtle)',
                   backgroundColor: 'rgba(0, 0, 0, 0.2)',
                   color: '#fff',
-                  fontSize: '1rem',
+                  fontSize: '16px',
                   fontWeight: 600,
                   boxSizing: 'border-box',
                   opacity: isSubmitting ? 0.7 : 1,
@@ -492,7 +492,7 @@ function A2ReportModalComponent({
               <label
                 style={{
                   display: 'block',
-                  fontSize: '0.8rem',
+                  fontSize: '13px',
                   fontWeight: 600,
                   marginBottom: '6px',
                   color: 'var(--color-text-muted, #94a3b8)',
@@ -513,7 +513,7 @@ function A2ReportModalComponent({
                   border: '1px solid var(--color-border-subtle)',
                   backgroundColor: 'rgba(0, 0, 0, 0.2)',
                   color: '#fff',
-                  fontSize: '1rem',
+                  fontSize: '16px',
                   fontWeight: 600,
                   boxSizing: 'border-box',
                   opacity: isSubmitting ? 0.7 : 1,
@@ -530,7 +530,7 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid var(--color-border-subtle)',
                 borderRadius: '8px',
-                fontSize: '0.8rem',
+                fontSize: '13px',
                 color: 'var(--color-text-muted, #94a3b8)',
                 display: 'flex',
                 alignItems: 'center',
@@ -548,7 +548,7 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(16, 185, 129, 0.12)',
                 border: '1px solid rgba(16, 185, 129, 0.3)',
                 borderRadius: '8px',
-                fontSize: '0.8rem',
+                fontSize: '13px',
                 color: '#6ee7b7',
                 display: 'flex',
                 alignItems: 'center',
@@ -566,7 +566,7 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 border: '1px solid rgba(59, 130, 246, 0.25)',
                 borderRadius: '8px',
-                fontSize: '0.8rem',
+                fontSize: '13px',
                 color: '#93c5fd',
                 display: 'flex',
                 alignItems: 'center',
@@ -587,7 +587,7 @@ function A2ReportModalComponent({
                 backgroundColor: 'rgba(239, 68, 68, 0.12)',
                 border: '1px solid rgba(239, 68, 68, 0.35)',
                 borderRadius: '8px',
-                fontSize: '0.82rem',
+                fontSize: '13px',
                 color: '#fca5a5',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -609,7 +609,7 @@ function A2ReportModalComponent({
                   color: '#fff',
                   borderRadius: '6px',
                   padding: '4px 10px',
-                  fontSize: '0.78rem',
+                  fontSize: '12px',
                   fontWeight: 600,
                   cursor: 'pointer',
                   flexShrink: 0,
@@ -632,7 +632,7 @@ function A2ReportModalComponent({
             >
               <span
                 style={{
-                  fontSize: '0.85rem',
+                  fontSize: '14px',
                   fontWeight: 600,
                   color: 'var(--color-text-muted, #94a3b8)',
                 }}
@@ -648,7 +648,7 @@ function A2ReportModalComponent({
                   background: 'transparent',
                   border: 'none',
                   color: isSubmitting ? '#64748b' : '#38bdf8',
-                  fontSize: '0.85rem',
+                  fontSize: '14px',
                   fontWeight: 600,
                   cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   padding: '4px',
@@ -691,7 +691,7 @@ function A2ReportModalComponent({
                           border: '1px solid var(--color-border, #475569)',
                           backgroundColor: 'rgba(0, 0, 0, 0.2)',
                           color: '#fff',
-                          fontSize: '0.85rem',
+                          fontSize: '14px',
                           boxSizing: 'border-box',
                           opacity: isSubmitting ? 0.7 : 1,
                         }}
@@ -708,7 +708,7 @@ function A2ReportModalComponent({
                             color: '#38bdf8',
                             borderRadius: '6px',
                             padding: '6px 7px',
-                            fontSize: '0.75rem',
+                            fontSize: '12px',
                             cursor: isSubmitting ? 'not-allowed' : 'pointer',
                             flexShrink: 0,
                           }}
@@ -743,7 +743,7 @@ function A2ReportModalComponent({
                         border: '1px solid var(--color-border, #475569)',
                         backgroundColor: 'var(--color-surface-raised)',
                         color: item.unit_body ? 'var(--color-text-main, #f8fafc)' : 'var(--color-text-muted, #94a3b8)',
-                        fontSize: '0.82rem',
+                        fontSize: '13px',
                         fontWeight: 600,
                         cursor: isSubmitting ? 'not-allowed' : 'pointer',
                         boxSizing: 'border-box',
@@ -786,7 +786,7 @@ function A2ReportModalComponent({
                       border: '1px solid var(--color-border, #475569)',
                       backgroundColor: 'rgba(0, 0, 0, 0.2)',
                       color: '#fff',
-                      fontSize: '0.85rem',
+                      fontSize: '14px',
                       boxSizing: 'border-box',
                       opacity: isSubmitting ? 0.7 : 1,
                     }}
@@ -846,7 +846,7 @@ function A2ReportModalComponent({
               border: '1px solid var(--color-border, #475569)',
               background: 'transparent',
               color: 'var(--color-text-muted, #94a3b8)',
-              fontSize: '0.88rem',
+              fontSize: '14px',
               fontWeight: 600,
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
               flexShrink: 0,
@@ -866,7 +866,7 @@ function A2ReportModalComponent({
               border: 'none',
               background: '#2563eb',
               color: '#fff',
-              fontSize: '0.88rem',
+              fontSize: '14px',
               fontWeight: 600,
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
               display: 'flex',

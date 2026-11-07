@@ -34,7 +34,7 @@ export const ReportArmadaSection: React.FC<ReportArmadaSectionProps> = ({
       >
         <label
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--text-secondary)",
             textTransform: "uppercase",
@@ -93,7 +93,7 @@ export const ReportArmadaSection: React.FC<ReportArmadaSectionProps> = ({
               <label
                 htmlFor="renops-s1"
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
                   display: "block",
                   marginBottom: "4px",
@@ -122,7 +122,7 @@ export const ReportArmadaSection: React.FC<ReportArmadaSectionProps> = ({
               <label
                 htmlFor="realops-s1"
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
                   display: "block",
                   marginBottom: "4px",
@@ -190,7 +190,7 @@ export const ReportArmadaSection: React.FC<ReportArmadaSectionProps> = ({
               <label
                 htmlFor="renops-s2"
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
                   display: "block",
                   marginBottom: "4px",
@@ -219,7 +219,7 @@ export const ReportArmadaSection: React.FC<ReportArmadaSectionProps> = ({
               <label
                 htmlFor="realops-s2"
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
                   display: "block",
                   marginBottom: "4px",

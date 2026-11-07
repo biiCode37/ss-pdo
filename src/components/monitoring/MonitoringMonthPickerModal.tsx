@@ -156,8 +156,8 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             data-testid="month-picker-modal-title"
             style={{
               margin: 0,
-              fontSize: "15px",
-              fontWeight: 800,
+              fontSize: "16px",
+              fontWeight: 700,
               color: "var(--text-primary, #ededed)",
               display: "flex",
               alignItems: "center",
@@ -225,8 +225,8 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
           <span
             data-testid="month-picker-current-year"
             style={{
-              fontSize: "15px",
-              fontWeight: 800,
+              fontSize: "16px",
+              fontWeight: 700,
               color: "var(--text-primary, #ededed)",
               letterSpacing: "0.5px",
             }}
@@ -262,7 +262,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
           <span
             style={{
               display: "block",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: 600,
               color: "var(--text-secondary, #888)",
               marginBottom: "6px",
@@ -278,7 +278,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               style={{
                 padding: "4px 10px",
                 borderRadius: "9999px",
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                 background:
@@ -302,7 +302,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               style={{
                 padding: "4px 10px",
                 borderRadius: "9999px",
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
@@ -320,7 +320,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               style={{
                 padding: "4px 10px",
                 borderRadius: "9999px",
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
@@ -371,8 +371,8 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
                     : isCurrent
                     ? "var(--accent-color, #3ECF8E)"
                     : "var(--text-primary, #ededed)",
-                  fontSize: "12.5px",
-                  fontWeight: isSelected ? 800 : isCurrent ? 700 : 500,
+                  fontSize: "13px",
+                  fontWeight: isSelected ? 700 : isCurrent ? 700 : 500,
                   cursor: "pointer",
                   transition: "all 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
                   display: "flex",

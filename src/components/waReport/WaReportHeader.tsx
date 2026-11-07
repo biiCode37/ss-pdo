@@ -34,7 +34,7 @@ export function WaReportHeader({ onClose }: WaReportHeaderProps) {
           <h2
             style={{
               margin: 0,
-              fontSize: "16.5px",
+              fontSize: "16px",
               fontWeight: 700,
               color: "var(--text-primary, #ededed)",
             }}
@@ -43,7 +43,7 @@ export function WaReportHeader({ onClose }: WaReportHeaderProps) {
           </h2>
           <span
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               color: "var(--text-secondary, #8b8b8b)",
             }}
           >

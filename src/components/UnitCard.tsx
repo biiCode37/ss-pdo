@@ -29,7 +29,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
       return (
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             padding: "3px 8px",
             borderRadius: "8px",
@@ -49,7 +49,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
       return (
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             padding: "3px 8px",
             borderRadius: "8px",
@@ -69,7 +69,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
       return (
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             padding: "3px 8px",
             borderRadius: "8px",
@@ -89,7 +89,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
       return (
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 700,
             padding: "3px 8px",
             borderRadius: "8px",
@@ -110,7 +110,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
       return (
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 600,
             padding: "3px 8px",
             borderRadius: "8px",
@@ -182,7 +182,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
             display: "flex",
             alignItems: "center",
             gap: "8px",
-            fontWeight: 800,
+            fontWeight: 700,
             fontSize: "16px",
           }}
         >
@@ -257,7 +257,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
           style={{
             padding: "8px 16px 10px 16px",
             borderTop: "1px solid var(--card-border)",
-            fontSize: "11.5px",
+            fontSize: "12px",
             color: "var(--warning-text)",
             fontWeight: 600,
             letterSpacing: "0.01em",

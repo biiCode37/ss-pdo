@@ -51,8 +51,8 @@ export function FormattedNoteText({ text }: { text?: string | null }) {
             <span
               className="note-shift-prefix"
               style={{
-                fontSize: "11px",
-                fontWeight: 800,
+                fontSize: "12px",
+                fontWeight: 700,
                 color: "var(--color-text-secondary)",
                 marginRight: "6px",
               }}

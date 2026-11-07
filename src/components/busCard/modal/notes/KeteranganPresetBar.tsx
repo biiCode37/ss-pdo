@@ -86,7 +86,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
       {shiftLabel && (
         <span
           style={{
-            fontSize: "0.76rem",
+            fontSize: "12px",
             fontWeight: 700,
             color: "var(--text-secondary, #94a3b8)",
             textTransform: "uppercase",
@@ -106,7 +106,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           style={{
             padding: "5px 12px",
             borderRadius: "8px",
-            fontSize: "0.78rem",
+            fontSize: "12px",
             fontWeight: 700,
             cursor: "pointer",
             border: isBaActive
@@ -131,7 +131,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           style={{
             padding: "5px 12px",
             borderRadius: "8px",
-            fontSize: "0.78rem",
+            fontSize: "12px",
             fontWeight: 700,
             cursor: "pointer",
             border: isOffActive
@@ -154,7 +154,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           style={{
             padding: "5px 12px",
             borderRadius: "8px",
-            fontSize: "0.78rem",
+            fontSize: "12px",
             fontWeight: 700,
             cursor: "pointer",
             border: isToEvdalActive
@@ -178,7 +178,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             style={{
               padding: "5px 12px",
               borderRadius: "8px",
-              fontSize: "0.78rem",
+              fontSize: "12px",
               fontWeight: 700,
               cursor: "pointer",
               border: isOkbActive
@@ -203,7 +203,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             style={{
               padding: "5px 12px",
               borderRadius: "8px",
-              fontSize: "0.78rem",
+              fontSize: "12px",
               fontWeight: 700,
               cursor: "pointer",
               border: isRenopActive
@@ -230,7 +230,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
             marginLeft: "auto",
             padding: "5px 11px",
             borderRadius: "8px",
-            fontSize: "0.76rem",
+            fontSize: "12px",
             fontWeight: 600,
             cursor: hasValue ? "pointer" : "default",
             border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
@@ -282,8 +282,8 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
                 style={{
                   padding: "4px 10px",
                   borderRadius: "6px",
-                  fontSize: "0.78rem",
-                  fontWeight: isCodeActive ? 800 : 600,
+                  fontSize: "12px",
+                  fontWeight: isCodeActive ? 700 : 600,
                   cursor: "pointer",
                   border: isCodeActive
                     ? "1px solid var(--accent-color, #38bdf8)"

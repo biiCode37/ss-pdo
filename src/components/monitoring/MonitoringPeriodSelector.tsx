@@ -308,7 +308,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                 data-testid="custom-period-modal-title"
                 style={{
                   margin: 0,
-                  fontSize: "15px",
+                  fontSize: "16px",
                   fontWeight: 700,
                   color: "var(--text-primary, #ededed)",
                   display: "flex",

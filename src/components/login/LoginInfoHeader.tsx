@@ -43,8 +43,8 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
           </div>
           <h3
             style={{
-              fontSize: "17px",
-              fontWeight: 800,
+              fontSize: "18px",
+              fontWeight: 700,
               margin: 0,
               color: "var(--text-primary)",
             }}

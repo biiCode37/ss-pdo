@@ -53,7 +53,7 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess, s
             backgroundColor: 'var(--color-warning-fg)',
             color: 'var(--color-surface-default)',
             border: 'none',
-            fontSize: '11px',
+            fontSize: '12px',
             fontWeight: 700,
             cursor: 'pointer',
             flexShrink: 0,

@@ -17,9 +17,10 @@ const BASELINE = {
   gradient: 0,
   gradientText: 0,
   inlineStyleObject: 2008,
-  fontSizeBelow12px: 386,
-  fontSizeOffScale: 619,
-  fontWeightHeavy: 106,
+  // refact_216: tipografi dinormalisasi ke skala, dikunci di nol.
+  fontSizeBelow12px: 0,
+  fontSizeOffScale: 0,
+  fontWeightHeavy: 0,
   iconSizeOffScale: 274,
   legacyAccentColor: 247,
   textShadow: 0,
@@ -57,15 +58,21 @@ const countMatches = (re: RegExp, pick: (s: (typeof sources)[number]) => boolean
 /** Semua ukuran huruf literal (px) dari `fontSize:` (TS/TSX) dan `font-size:` (CSS). */
 const fontSizesPx = (): number[] => {
   const out: number[] = [];
-  for (const s of sources) {
-    const segRe = s.isCss ? /font-size:\s*([^;}]+)/g : /fontSize:\s*([^,}\n]+)/g;
-    for (const [, seg] of s.text.matchAll(segRe)) {
-      if (seg.includes("var(")) continue;
-      for (const [, num, unit] of seg.matchAll(/(?<![\w.-])(\d+(?:\.\d+)?)(px|rem)?(?![\w%])/g)) {
-        if (s.isCss && !unit) continue; // CSS tanpa satuan (mis. 0) bukan ukuran huruf
-        out.push(unit === "rem" ? Number(num) * 16 : Number(num));
-      }
+  const collect = (seg: string, needsUnit: boolean) => {
+    if (seg.includes("var(")) return;
+    for (const [, num, unit] of seg.matchAll(/(?<![\w.$-])(\d+(?:\.\d+)?)(px|rem)?(?![\w%.])/g)) {
+      if (needsUnit && !unit) continue; // CSS tanpa satuan (mis. 0) bukan ukuran huruf
+      out.push(unit === "rem" ? Number(num) * 16 : Number(num));
     }
+  };
+  for (const s of sources) {
+    if (s.isCss) {
+      for (const [, seg] of s.text.matchAll(/font-size:\s*([^;}]+)/g)) collect(seg, true);
+      continue;
+    }
+    // Objek style JSX (termasuk ternary multi-baris) dan CSS di string template SweetAlert.
+    for (const [, seg] of s.text.matchAll(/fontSize:([^,}]+)/g)) collect(seg, false);
+    for (const [, seg] of s.text.matchAll(/font-size:\s*([^;}"'`<>]+)/g)) collect(seg, true);
   }
   return out;
 };

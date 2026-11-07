@@ -75,7 +75,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
         <span
           style={{
             fontWeight: 600,
-            fontSize: "12.5px",
+            fontSize: "13px",
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -111,7 +111,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
             borderRadius: "8px",
             color: "var(--color-warning-fg, #eab308)",
             padding: "5px 9px",
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             cursor: "pointer",
             flexShrink: 0,
@@ -174,7 +174,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
               borderRadius: "8px",
               color: statusColor,
               padding: "5px 9px",
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 700,
               cursor: "pointer",
               flexShrink: 0,

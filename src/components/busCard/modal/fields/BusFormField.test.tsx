@@ -239,7 +239,7 @@ describe("BusFormField Component", () => {
 
     const input = container.querySelector<HTMLInputElement>("#test-secondary");
     expect(input).not.toBeNull();
-    expect(input?.style.fontSize).toBe("0.95rem");
+    expect(input?.style.fontSize).toBe("16px");
     expect(input?.style.fontWeight).toBe("400");
   });
 });

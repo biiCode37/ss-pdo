@@ -84,7 +84,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             style={{
               padding: "4px 12px",
               borderRadius: "7px",
-              fontSize: "0.78rem",
+              fontSize: "12px",
               fontWeight: activeNoteShift === 1 ? 700 : 500,
               cursor: "pointer",
               border:
@@ -125,7 +125,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             style={{
               padding: "4px 12px",
               borderRadius: "7px",
-              fontSize: "0.78rem",
+              fontSize: "12px",
               fontWeight: activeNoteShift === 2 ? 700 : 500,
               cursor: "pointer",
               border:
@@ -167,7 +167,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            fontSize: "0.78rem",
+            fontSize: "12px",
             color: "var(--text-secondary, #94a3b8)",
             cursor: "pointer",
             userSelect: "none",
@@ -224,7 +224,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
             border: "1px solid var(--border-color, rgba(255, 255, 255, 0.12))",
             background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
             color: "var(--text-primary, #ededed)",
-            fontSize: "0.9rem",
+            fontSize: "14px",
             lineHeight: 1.5,
             boxSizing: "border-box",
             resize: "none",
@@ -247,7 +247,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
       >
         <span
           style={{
-            fontSize: "0.72rem",
+            fontSize: "12px",
             fontWeight: 600,
             color: "var(--text-secondary, #94a3b8)",
             letterSpacing: "0.3px",
@@ -257,7 +257,7 @@ export const BusInputModalNotes: React.FC<BusInputModalNotesProps> = ({ form }) 
         </span>
         <div
           style={{
-            fontSize: "0.85rem",
+            fontSize: "14px",
             fontFamily: "monospace",
             fontWeight: 600,
             color: combinedPreview

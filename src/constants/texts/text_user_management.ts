@@ -64,7 +64,7 @@ export const TEXT_USER_MANAGEMENT = {
   MODAL_STATUS: {
     TITLE: 'Konfirmasi Status Akun',
     PROMPT: (actionText: string, email: string) =>
-      `<p style="margin:0;font-size:13.5px;color:var(--text-secondary);line-height:1.5;">Apakah Anda yakin ingin <strong>${actionText}</strong> akses login untuk <strong style="color:var(--text-primary)">${email}</strong>?</p>`,
+      `<p style="margin:0;font-size:14px;color:var(--text-secondary);line-height:1.5;">Apakah Anda yakin ingin <strong>${actionText}</strong> akses login untuk <strong style="color:var(--text-primary)">${email}</strong>?</p>`,
     CONFIRM_ACTIVATE: 'Ya, Aktifkan',
     CONFIRM_DEACTIVATE: 'Ya, Nonaktifkan',
     ACTION_ACTIVATE: 'mengaktifkan',

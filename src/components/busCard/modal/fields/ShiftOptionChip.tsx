@@ -32,7 +32,7 @@ export const ShiftOptionChip: React.FC<ShiftOptionChipProps> = ({
       style={{
         padding: "6px 12px",
         borderRadius: "9999px",
-        fontSize: "0.78rem",
+        fontSize: "12px",
         fontWeight: 600,
         border: "1px solid",
         borderColor: isActive

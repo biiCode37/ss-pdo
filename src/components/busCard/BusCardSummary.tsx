@@ -78,7 +78,7 @@ export function BusCardSummary({
       return (
         <div
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 700,
             padding: "4px 10px",
             borderRadius: "8px",
@@ -125,7 +125,7 @@ export function BusCardSummary({
     return (
       <div
         style={{
-          fontSize: "11.5px",
+          fontSize: "12px",
           fontWeight: 700,
           padding: "4px 10px",
           borderRadius: "8px",

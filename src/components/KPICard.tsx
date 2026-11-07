@@ -33,7 +33,7 @@ function KPICardComponent({ summary, dateBadge }: Props) {
         {dateBadge && (
           <span
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 700,
               fontFamily: "monospace",
               color: "var(--color-action-primary-bg)",

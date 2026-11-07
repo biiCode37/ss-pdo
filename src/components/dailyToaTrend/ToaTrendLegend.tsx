@@ -9,7 +9,7 @@ export const ToaTrendLegend: React.FC = () => {
         justifyContent: "flex-end",
         gap: "12px",
         marginBottom: "8px",
-        fontSize: "11px",
+        fontSize: "12px",
         fontWeight: 600,
         color: "var(--text-secondary)",
       }}

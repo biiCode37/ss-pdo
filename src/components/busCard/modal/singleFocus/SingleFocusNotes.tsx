@@ -66,7 +66,7 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
       <label
         htmlFor="single-input-keterangan"
         style={{
-          fontSize: "0.8rem",
+          fontSize: "13px",
           fontWeight: 600,
           color: "var(--text-secondary, #6b7280)",
           display: "block",
@@ -91,7 +91,7 @@ export const SingleFocusNotes: React.FC<SingleFocusNotesProps> = ({ form }) => {
           border: "1px solid var(--card-border, rgba(0, 0, 0, 0.12))",
           background: "var(--input-bg, rgba(243, 244, 246, 0.9))",
           color: "var(--text-primary, #171717)",
-          fontSize: "0.9rem",
+          fontSize: "14px",
           boxSizing: "border-box",
           resize: "none",
           fontFamily: "inherit",

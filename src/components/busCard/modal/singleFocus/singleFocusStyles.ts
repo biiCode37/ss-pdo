@@ -7,7 +7,7 @@ export const singleFocusPrimaryInputStyle: React.CSSProperties = {
   border: "1.5px solid var(--color-border-control)",
   background: "var(--input-bg, rgba(0, 0, 0, 0.25))",
   color: "var(--text-primary, #ededed)",
-  fontSize: "1.15rem",
+  fontSize: "18px",
   fontWeight: 700,
   boxSizing: "border-box",
 };
@@ -18,7 +18,7 @@ export const getSingleFocusChipStyle = (
 ): React.CSSProperties => ({
   padding: "5px 10px",
   borderRadius: "8px",
-  fontSize: "0.75rem",
+  fontSize: "12px",
   fontWeight: 600,
   border: "1px solid",
   borderColor: isActive
@@ -45,14 +45,14 @@ export const singleFocusSubInputStyle = (
     ? "rgba(255, 255, 255, 0.03)"
     : "var(--input-bg, rgba(0, 0, 0, 0.25))",
   color: "var(--text-primary, #ededed)",
-  fontSize: "0.95rem",
+  fontSize: "16px",
   boxSizing: "border-box",
   opacity: isLocked ? 0.45 : 1,
   cursor: isLocked ? "not-allowed" : "text",
 });
 
 export const singleFocusLabelStyle: React.CSSProperties = {
-  fontSize: "0.85rem",
+  fontSize: "14px",
   fontWeight: 700,
   color: "var(--text-primary, #ededed)",
   display: "block",
@@ -60,7 +60,7 @@ export const singleFocusLabelStyle: React.CSSProperties = {
 };
 
 export const singleFocusHelperTextStyle: React.CSSProperties = {
-  fontSize: "0.8rem",
+  fontSize: "13px",
   color: "var(--text-secondary, #94a3b8)",
   display: "block",
   marginTop: "4px",
@@ -77,7 +77,7 @@ export const singleFocusDistanceBadgeStyle = (
   border: isShift2
     ? "1px solid var(--shift2-border, rgba(126, 34, 206, 0.25))"
     : "1px solid var(--shift1-border, rgba(2, 132, 199, 0.25))",
-  fontSize: "0.82rem",
+  fontSize: "13px",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
@@ -87,7 +87,7 @@ export const singleFocusDistanceBadgeStyle = (
 export const singleFocusCopyBtnStyle: React.CSSProperties = {
   padding: "4px 8px",
   borderRadius: "6px",
-  fontSize: "0.75rem",
+  fontSize: "12px",
   fontWeight: 600,
   background: "var(--shift1-bg, rgba(2, 132, 199, 0.15))",
   border: "1px solid var(--shift1-border, rgba(2, 132, 199, 0.3))",

@@ -40,7 +40,7 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
           border: "1px solid var(--card-border, rgba(255, 255, 255, 0.12))",
           background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
           color: "var(--text-secondary, #94a3b8)",
-          fontSize: isKeyboardOpen ? "0.85rem" : "0.9rem",
+          fontSize: isKeyboardOpen ? "14px" : "14px",
           fontWeight: 600,
           cursor: "pointer",
           display: "flex",
@@ -70,7 +70,7 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
             ? "var(--color-disabled-bg)"
             : "var(--color-action-primary-bg)",
           color: isDisabled ? "var(--color-disabled-fg)" : "var(--color-action-primary-fg)",
-          fontSize: isKeyboardOpen ? "0.88rem" : "0.92rem",
+          fontSize: isKeyboardOpen ? "14px" : "14px",
           fontWeight: 700,
           cursor: isDisabled ? "not-allowed" : "pointer",
           boxShadow: isDisabled

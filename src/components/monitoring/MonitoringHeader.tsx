@@ -135,8 +135,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
             <div>
               <h1
                 style={{
-                  fontSize: "17px",
-                  fontWeight: 800,
+                  fontSize: "18px",
+                  fontWeight: 700,
                   margin: 0,
                   display: "flex",
                   alignItems: "center",
@@ -148,7 +148,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               </h1>
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary, #8b8b8b)",
                   fontWeight: 500,
                   display: "block",

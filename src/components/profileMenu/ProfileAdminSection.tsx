@@ -22,7 +22,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
     <div style={{ marginBottom: "20px" }}>
       <span
         style={{
-          fontSize: "10.5px",
+          fontSize: "12px",
           fontWeight: 700,
           letterSpacing: "0.5px",
           color: "var(--text-secondary)",
@@ -52,7 +52,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "pointer",
           }}
         >
@@ -62,7 +62,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
               <div>{TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT}</div>
               <div
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
                   marginTop: "1px",
                 }}
@@ -93,7 +93,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
               border: "1px solid var(--card-border)",
               color: "var(--text-primary)",
               fontWeight: 500,
-              fontSize: "13.5px",
+              fontSize: "14px",
               cursor: "pointer",
             }}
           >
@@ -103,7 +103,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
                 <div>{TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT}</div>
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "var(--text-secondary)",
                     marginTop: "1px",
                   }}
@@ -132,7 +132,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-secondary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "not-allowed",
             opacity: 0.65,
           }}
@@ -144,7 +144,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
               <div>{TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG}</div>
               <div
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
                   marginTop: "1px",
                 }}
@@ -155,7 +155,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
           </div>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: 700,
               padding: "2px 7px",
               borderRadius: "6px",

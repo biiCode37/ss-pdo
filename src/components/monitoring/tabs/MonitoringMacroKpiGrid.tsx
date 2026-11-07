@@ -106,7 +106,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
             >
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
                 }}
@@ -140,8 +140,8 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
             >
               <span
                 style={{
-                  fontSize: "19px",
-                  fontWeight: 800,
+                  fontSize: "20px",
+                  fontWeight: 700,
                   color: "var(--text-primary)",
                   letterSpacing: "-0.5px",
                 }}
@@ -150,7 +150,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
               </span>
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
                 }}
@@ -162,7 +162,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
             {/* Subtext */}
             <div
               style={{
-                fontSize: "10.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: kpi.subtextPositive ? "var(--color-success-fg)" : "var(--color-text-secondary)",
               }}

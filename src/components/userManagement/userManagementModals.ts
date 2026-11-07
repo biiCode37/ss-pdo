@@ -43,21 +43,21 @@ export async function promptAddUserModal(
     html: `
       <div style="text-align:left;font-size:13px;display:flex;flex-direction:column;gap:14px;margin-top:6px;">
         <div>
-          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_LABEL} <span style="color:#ef4444">*</span></label>
+          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_LABEL} <span style="color:#ef4444">*</span></label>
           <input id="swal-email" type="email" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.EMAIL_PLACEHOLDER}" class="pdo-swal-input" />
         </div>
         <div>
-          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NAME_LABEL}</label>
+          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NAME_LABEL}</label>
           <input id="swal-name" type="text" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.NAME_PLACEHOLDER}" class="pdo-swal-input" />
         </div>
         <div>
-          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.ROLE_LABEL}</label>
+          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.ROLE_LABEL}</label>
           <select id="swal-role" class="pdo-swal-select">
             ${roleOptionsHtml}
           </select>
         </div>
         <div>
-          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:12.5px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NOTES_LABEL}</label>
+          <label style="display:block;margin-bottom:6px;font-weight:600;font-size:13px;color:var(--text-secondary)">${TEXT_USER_MANAGEMENT.MODAL_ADD.NOTES_LABEL}</label>
           <input id="swal-notes" type="text" placeholder="${TEXT_USER_MANAGEMENT.MODAL_ADD.NOTES_PLACEHOLDER}" class="pdo-swal-input" />
         </div>
       </div>
@@ -118,7 +118,7 @@ export async function promptEditRoleModal(
     title: TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.TITLE,
     html: `
       <div style="text-align:left;font-size:13px;margin-top:6px;">
-        <p style="margin:0 0 10px;color:var(--text-secondary);font-size:12.5px;">${TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.PROMPT(escapeHtml(user.email))}</p>
+        <p style="margin:0 0 10px;color:var(--text-secondary);font-size:13px;">${TEXT_USER_MANAGEMENT.MODAL_EDIT_ROLE.PROMPT(escapeHtml(user.email))}</p>
         <select id="swal-new-role" class="pdo-swal-select">
           <option value="pdo" ${user.role === "pdo" ? "selected" : ""}>${TEXT_USER_MANAGEMENT.ROLES.PDO_OPTION}</option>
           <option value="korlap" ${user.role === "korlap" ? "selected" : ""}>${TEXT_USER_MANAGEMENT.ROLES.KORLAP_OPTION}</option>

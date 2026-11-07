@@ -61,7 +61,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
 
       <p
         style={{
-          fontSize: '13.5px',
+          fontSize: '14px',
           lineHeight: '1.5',
           color: 'var(--color-text-secondary)',
           maxWidth: '380px',
@@ -86,7 +86,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
       >
         <span
           style={{
-            fontSize: '11.5px',
+            fontSize: '12px',
             fontWeight: 600,
             color: 'var(--color-text-muted)',
             display: 'block',
@@ -142,7 +142,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
                   </span>
                   <span
                     style={{
-                      fontSize: '11px',
+                      fontSize: '12px',
                       color: 'var(--color-text-muted)',
                       display: 'block',
                       overflow: 'hidden',
@@ -183,7 +183,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
             background: 'var(--color-action-primary-bg)',
             border: 'none',
             color: 'var(--color-action-primary-fg)',
-            fontSize: '13.5px',
+            fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
             minHeight: '44px',

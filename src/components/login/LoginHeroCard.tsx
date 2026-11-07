@@ -43,7 +43,7 @@ export function LoginHeroCard({
       <h1
         style={{
           fontSize: "28px",
-          fontWeight: 800,
+          fontWeight: 700,
           letterSpacing: "-0.5px",
           marginBottom: "4px",
           color: "var(--color-text-primary)",
@@ -75,7 +75,7 @@ export function LoginHeroCard({
           backgroundColor: "rgba(62, 207, 142, 0.12)",
           border: "1px solid rgba(62, 207, 142, 0.3)",
           color: "var(--accent-color, #3ECF8E)",
-          fontSize: "11.5px",
+          fontSize: "12px",
           fontWeight: 700,
           marginBottom: "12px",
           letterSpacing: "0.2px",
@@ -87,7 +87,7 @@ export function LoginHeroCard({
       <p
         style={{
           color: "var(--text-secondary)",
-          fontSize: "13.5px",
+          fontSize: "14px",
           lineHeight: 1.5,
           marginBottom: "22px",
           maxWidth: "460px",
@@ -133,7 +133,7 @@ export function LoginHeroCard({
           justifyContent: "center",
           gap: "10px",
           padding: "14px 20px",
-          fontSize: "15px",
+          fontSize: "16px",
           fontWeight: 700,
           borderRadius: "14px",
           opacity: isApiReady ? 1 : 0.5,
@@ -156,7 +156,7 @@ export function LoginHeroCard({
 
       <p
         style={{
-          fontSize: "11.5px",
+          fontSize: "12px",
           color: "var(--text-secondary)",
           marginTop: "12px",
           marginBottom: "14px",

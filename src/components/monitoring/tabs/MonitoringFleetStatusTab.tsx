@@ -470,7 +470,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             <Bus size={17} style={{ color: "var(--accent-color, #3ECF8E)" }} />
             <h3
               style={{
-                fontSize: "13.5px",
+                fontSize: "14px",
                 fontWeight: 700,
                 margin: 0,
                 color: "var(--text-primary)",
@@ -482,7 +482,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           </div>
           <span
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: 600,
               color: "var(--text-secondary)",
               background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
@@ -514,7 +514,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           >
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 display: "block",
@@ -525,14 +525,14 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             <div
               style={{
                 fontSize: "16px",
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "var(--text-primary)",
                 marginTop: "2px",
                 lineHeight: 1.2,
               }}
             >
               {stats.totalFleet}{" "}
-              <span style={{ fontSize: "10px", fontWeight: 500 }}>Unit</span>
+              <span style={{ fontSize: "12px", fontWeight: 500 }}>Unit</span>
             </div>
           </div>
 
@@ -554,7 +554,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             >
               <span
                 style={{
-                  fontSize: "10px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "#10B981",
                 }}
@@ -566,7 +566,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             <div
               style={{
                 fontSize: "16px",
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "#10B981",
                 marginTop: "2px",
                 lineHeight: 1.2,
@@ -575,7 +575,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               {stats.totalBeroperasi}{" "}
               <span
                 style={{
-                  fontSize: "9.5px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
                 }}
@@ -609,7 +609,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             >
               <span
                 style={{
-                  fontSize: "10px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-secondary)",
                 }}
@@ -623,18 +623,18 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             <div
               style={{
                 fontSize: "16px",
-                fontWeight: 800,
+                fontWeight: 700,
                 color: stats.totalTerkendala > 0 ? "#F59E0B" : "var(--text-primary)",
                 marginTop: "2px",
                 lineHeight: 1.2,
               }}
             >
               {stats.totalTerkendala}{" "}
-              <span style={{ fontSize: "10px", fontWeight: 500 }}>Unit</span>
+              <span style={{ fontSize: "12px", fontWeight: 500 }}>Unit</span>
             </div>
             <div
               style={{
-                fontSize: "8.5px",
+                fontSize: "12px",
                 color: "var(--text-secondary)",
                 marginTop: "2px",
                 whiteSpace: "nowrap",
@@ -672,7 +672,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "4px 9px",
               borderRadius: "7px",
-              fontSize: "10.5px",
+              fontSize: "12px",
               fontWeight: shiftFilter === "all" ? 700 : 500,
               background:
                 shiftFilter === "all"
@@ -693,7 +693,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "4px 9px",
               borderRadius: "7px",
-              fontSize: "10.5px",
+              fontSize: "12px",
               fontWeight: shiftFilter === 1 ? 700 : 500,
               background:
                 shiftFilter === 1
@@ -714,7 +714,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "4px 9px",
               borderRadius: "7px",
-              fontSize: "10.5px",
+              fontSize: "12px",
               fontWeight: shiftFilter === 2 ? 700 : 500,
               background:
                 shiftFilter === 2
@@ -745,7 +745,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "3px 8px",
               borderRadius: "6px",
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: statusFilter === "all" ? 700 : 500,
               background:
                 statusFilter === "all"
@@ -769,7 +769,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "3px 8px",
               borderRadius: "6px",
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: statusFilter === "BA" ? 700 : 500,
               background:
                 statusFilter === "BA"
@@ -790,7 +790,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "3px 8px",
               borderRadius: "6px",
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: statusFilter === "TEKNIS" ? 700 : 500,
               background:
                 statusFilter === "TEKNIS"
@@ -811,7 +811,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "3px 8px",
               borderRadius: "6px",
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: statusFilter === "TO" ? 700 : 500,
               background:
                 statusFilter === "TO"
@@ -832,7 +832,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "3px 8px",
               borderRadius: "6px",
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: statusFilter === "OFF" ? 700 : 500,
               background:
                 statusFilter === "OFF"
@@ -853,7 +853,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             style={{
               padding: "3px 8px",
               borderRadius: "6px",
-              fontSize: "10px",
+              fontSize: "12px",
               fontWeight: statusFilter === "SO" ? 700 : 500,
               background:
                 statusFilter === "SO"
@@ -904,8 +904,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <h4
             style={{
               margin: 0,
-              fontSize: "13.5px",
-              fontWeight: 800,
+              fontSize: "14px",
+              fontWeight: 700,
               color: "var(--text-primary)",
             }}
           >
@@ -914,7 +914,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: 0,
-              fontSize: "11.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               maxWidth: "340px",
               lineHeight: 1.4,
@@ -957,8 +957,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <h4
             style={{
               margin: 0,
-              fontSize: "13.5px",
-              fontWeight: 800,
+              fontSize: "14px",
+              fontWeight: 700,
               color: "var(--text-primary)",
             }}
           >
@@ -967,7 +967,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: 0,
-              fontSize: "11.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               maxWidth: "360px",
               lineHeight: 1.4,
@@ -993,7 +993,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           >
             <span
               style={{
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: "#F59E0B",
                 display: "flex",
@@ -1015,7 +1015,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                   : collapseAllRoutes()
               }
               style={{
-                fontSize: "10.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 background: "transparent",
@@ -1073,8 +1073,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         style={{
                           padding: "2px 7px",
                           borderRadius: "6px",
-                          fontSize: "11px",
-                          fontWeight: 800,
+                          fontSize: "12px",
+                          fontWeight: 700,
                           background: "rgba(62, 207, 142, 0.12)",
                           color: "var(--accent-color, #3ECF8E)",
                           border: "1px solid rgba(62, 207, 142, 0.25)",
@@ -1085,7 +1085,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                       </span>
                       <span
                         style={{
-                          fontSize: "11px",
+                          fontSize: "12px",
                           color: "var(--text-secondary)",
                           fontWeight: 600,
                           overflow: "hidden",
@@ -1150,7 +1150,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           display: "inline-flex",
                           alignItems: "center",
                           gap: "3px",
-                          fontSize: "10.5px",
+                          fontSize: "12px",
                           fontWeight: 700,
                           color: "#F59E0B",
                           background: "rgba(245, 158, 11, 0.12)",
@@ -1220,8 +1220,8 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           >
                             <span
                               style={{
-                                fontSize: "11.5px",
-                                fontWeight: 800,
+                                fontSize: "12px",
+                                fontWeight: 700,
                                 color: "var(--text-primary)",
                                 letterSpacing: "0.2px",
                               }}
@@ -1230,7 +1230,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                             </span>
                             <span
                               style={{
-                                fontSize: "10.5px",
+                                fontSize: "12px",
                                 color: "var(--text-secondary)",
                                 marginTop: "1px",
                                 overflow: "hidden",
@@ -1254,7 +1254,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                           >
                             <span
                               style={{
-                                fontSize: "9px",
+                                fontSize: "12px",
                                 fontWeight: 700,
                                 background: unit.badgeBg,
                                 color: unit.badgeColor,
@@ -1302,7 +1302,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               <ShieldCheck size={15} style={{ color: "#10B981" }} />
               <span
                 style={{
-                  fontSize: "11.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   color: "var(--text-primary)",
                 }}
@@ -1312,7 +1312,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: "#10B981",
                 background: "rgba(16, 185, 129, 0.12)",
@@ -1328,7 +1328,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           <p
             style={{
               margin: "0 0 8px 0",
-              fontSize: "10.5px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               lineHeight: 1.3,
             }}
@@ -1350,7 +1350,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 style={{
                   padding: "2px 7px",
                   borderRadius: "5px",
-                  fontSize: "10.5px",
+                  fontSize: "12px",
                   fontWeight: 700,
                   background: "rgba(16, 185, 129, 0.08)",
                   color: "#10B981",
@@ -1389,7 +1389,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               <Clock size={13} style={{ color: "var(--text-secondary)" }} />
               <span
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   color: "var(--text-secondary)",
                 }}
@@ -1399,7 +1399,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             </div>
             <span
               style={{
-                fontSize: "9.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: "var(--text-secondary)",
                 background: "var(--input-bg, rgba(255, 255, 255, 0.05))",
@@ -1425,7 +1425,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 style={{
                   padding: "2px 6px",
                   borderRadius: "5px",
-                  fontSize: "10px",
+                  fontSize: "12px",
                   fontWeight: 600,
                   background: "var(--input-bg, rgba(255, 255, 255, 0.04))",
                   color: "var(--text-secondary)",

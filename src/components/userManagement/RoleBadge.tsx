@@ -89,8 +89,8 @@ export const RoleBadge: React.FC<RoleBadgeProps> = ({
   }
 
   const sizeStyles: Record<"xs" | "sm" | "md", React.CSSProperties> = {
-    xs: { fontSize: "10.5px", padding: "2px 7px", gap: "4px" },
-    sm: { fontSize: "11.5px", padding: "3.5px 9px", gap: "5.5px" },
+    xs: { fontSize: "12px", padding: "2px 7px", gap: "4px" },
+    sm: { fontSize: "12px", padding: "3.5px 9px", gap: "5.5px" },
     md: { fontSize: "13px", padding: "4.5px 12px", gap: "6.5px" },
   };
 

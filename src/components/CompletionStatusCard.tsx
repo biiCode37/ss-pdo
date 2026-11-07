@@ -61,7 +61,7 @@ function CompletionStatusCardComponent({
           )}
           <span
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 600,
               color: hasNotes ? "var(--accent-color)" : "var(--text-secondary)",
             }}
@@ -102,7 +102,7 @@ function CompletionStatusCardComponent({
                 background: "var(--input-bg)",
                 border: "1px solid var(--card-border)",
                 borderRadius: "10px",
-                fontSize: "12.5px",
+                fontSize: "13px",
                 cursor: "pointer",
                 transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
                 gap: "10px",
@@ -111,8 +111,8 @@ function CompletionStatusCardComponent({
             >
               <span
                 style={{
-                  fontSize: "11.5px",
-                  fontWeight: 800,
+                  fontSize: "12px",
+                  fontWeight: 700,
                   color: "var(--color-success-fg)",
                   background: "var(--color-success-bg)",
                   padding: "3px 8px",

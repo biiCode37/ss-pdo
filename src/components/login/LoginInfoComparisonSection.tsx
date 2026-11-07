@@ -15,7 +15,7 @@ export function LoginInfoComparisonSection() {
         <Zap size={17} color="var(--accent-color, #3ECF8E)" />
         <h4
           style={{
-            fontSize: "15px",
+            fontSize: "16px",
             fontWeight: 700,
             color: "var(--text-primary)",
             margin: 0,
@@ -46,7 +46,7 @@ export function LoginInfoComparisonSection() {
         >
           <div
             style={{
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 700,
               marginBottom: "8px",
               color: "var(--text-primary)",
@@ -97,7 +97,7 @@ export function LoginInfoComparisonSection() {
         >
           <div
             style={{
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 700,
               marginBottom: "8px",
               color: "var(--text-primary)",
@@ -148,7 +148,7 @@ export function LoginInfoComparisonSection() {
         >
           <div
             style={{
-              fontSize: "12.5px",
+              fontSize: "13px",
               fontWeight: 700,
               marginBottom: "8px",
               color: "var(--text-primary)",

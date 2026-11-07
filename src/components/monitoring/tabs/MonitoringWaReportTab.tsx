@@ -279,7 +279,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               padding: "10px 12px",
               borderRadius: "12px",
               fontSize: "12px",
-              fontWeight: format === 1 ? 800 : 500,
+              fontWeight: format === 1 ? 700 : 500,
               background:
                 format === 1
                   ? "var(--accent-color, #3ECF8E)"
@@ -305,7 +305,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               padding: "10px 12px",
               borderRadius: "12px",
               fontSize: "12px",
-              fontWeight: format === 2 ? 800 : 500,
+              fontWeight: format === 2 ? 700 : 500,
               background:
                 format === 2
                   ? "var(--accent-color, #3ECF8E)"
@@ -331,7 +331,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               padding: "10px 12px",
               borderRadius: "12px",
               fontSize: "12px",
-              fontWeight: format === 3 ? 800 : 500,
+              fontWeight: format === 3 ? 700 : 500,
               background:
                 format === 3
                   ? "var(--accent-color, #3ECF8E)"
@@ -367,7 +367,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                 gap: "6px",
                 padding: "6px 14px",
                 borderRadius: "10px",
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: format3Shift === 1 ? 700 : 500,
                 background:
                   format3Shift === 1
@@ -394,7 +394,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                 gap: "6px",
                 padding: "6px 14px",
                 borderRadius: "10px",
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: format3Shift === 2 ? 700 : 500,
                 background:
                   format3Shift === 2
@@ -438,7 +438,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
             <AlertTriangle size={18} style={{ color: "#F59E0B" }} />
             <h4
               style={{
-                fontSize: "13.5px",
+                fontSize: "14px",
                 fontWeight: 700,
                 color: "var(--text-primary)",
                 margin: 0,
@@ -486,7 +486,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                   <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-primary)" }}>
                     {pr.routeCode}
                   </span>
-                  <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
+                  <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
                     Target: {pr.renops}
                   </span>
                   <button
@@ -509,7 +509,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                       border: "1px solid rgba(62, 207, 142, 0.3)",
                       borderRadius: "6px",
                       padding: "4px 8px",
-                      fontSize: "11px",
+                      fontSize: "12px",
                       fontWeight: 600,
                       cursor: "pointer",
                     }}

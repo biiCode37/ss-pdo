@@ -89,7 +89,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
             style={{
               ...singleFocusPrimaryInputStyle,
               textAlign: "center",
-              fontSize: "1.25rem",
+              fontSize: "20px",
             }}
           />
         </div>
@@ -114,7 +114,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
             style={{
               ...singleFocusPrimaryInputStyle,
               textAlign: "center",
-              fontSize: "1.25rem",
+              fontSize: "20px",
             }}
           />
         </div>
@@ -134,7 +134,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
       >
         <span
           style={{
-            fontSize: "0.82rem",
+            fontSize: "13px",
             color: "var(--color-text-secondary)",
             fontWeight: 500,
           }}
@@ -144,8 +144,8 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
         <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
           <span
             style={{
-              fontSize: "1.2rem",
-              fontWeight: 800,
+              fontSize: "20px",
+              fontWeight: 700,
               color: "var(--color-info-fg)",
             }}
           >
@@ -153,7 +153,7 @@ export const SingleFocusTrip: React.FC<SingleFocusTripProps> = ({
           </span>
           <span
             style={{
-              fontSize: "0.8rem",
+              fontSize: "13px",
               fontWeight: 600,
               color: "var(--color-text-secondary)",
             }}

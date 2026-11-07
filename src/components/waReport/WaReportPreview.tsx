@@ -28,7 +28,7 @@ export function WaReportPreview({
           padding: "12px 14px",
           borderRadius: "14px",
           fontFamily: "monospace",
-          fontSize: "11.5px",
+          fontSize: "12px",
           lineHeight: 1.45,
           whiteSpace: "pre-wrap",
           marginBottom: "14px",

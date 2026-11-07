@@ -55,7 +55,7 @@ export const ReportAccordionHeader: React.FC<ReportAccordionHeaderProps> = ({
           <h3
             style={{
               margin: 0,
-              fontSize: "15px",
+              fontSize: "16px",
               fontWeight: 700,
               color: "var(--text-primary)",
               letterSpacing: "-0.2px",

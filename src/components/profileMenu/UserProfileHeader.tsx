@@ -138,8 +138,8 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
       >
         <span
           style={{
-            fontSize: "0.82rem",
-            fontWeight: 650,
+            fontSize: "13px",
+            fontWeight: 600,
             color: "var(--color-text-primary, var(--text-main))",
             whiteSpace: "nowrap",
             overflow: "hidden",
@@ -153,7 +153,7 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
         <span
           className={`header-role-badge ${roleConfig.className}`}
           style={{
-            fontSize: "0.68rem",
+            fontSize: "12px",
             fontWeight: 600,
             textTransform: "uppercase",
             letterSpacing: "0.04em",

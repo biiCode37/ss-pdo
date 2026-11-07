@@ -196,7 +196,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 color: hasConflictOrFailedQueue
                   ? "var(--color-danger-fg, var(--danger-color))"
                   : "var(--color-warning-fg, var(--warning-color))",
-                fontSize: "11.5px",
+                fontSize: "12px",
                 fontWeight: "bold",
                 background: hasConflictOrFailedQueue
                   ? "rgba(247, 85, 85, 0.12)"

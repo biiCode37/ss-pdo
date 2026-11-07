@@ -18,7 +18,7 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
     <div className="monitoring-card">
       <h3
         style={{
-          fontSize: "13.5px",
+          fontSize: "14px",
           fontWeight: 700,
           margin: "0 0 12px 0",
           color: "var(--text-primary)",
@@ -97,7 +97,7 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             <span
               style={{
                 fontSize: "12px",
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "var(--text-primary)",
               }}
             >
@@ -107,19 +107,19 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
           <div
             style={{
               fontSize: "16px",
-              fontWeight: 800,
+              fontWeight: 700,
               color: "var(--text-primary)",
               letterSpacing: "-0.3px",
             }}
           >
             {data.totalShift1.toLocaleString("id-ID")}{" "}
-            <span style={{ fontSize: "11px", fontWeight: 500 }}>
+            <span style={{ fontSize: "12px", fontWeight: 500 }}>
               {TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.UNIT_LABEL}
             </span>
           </div>
           <div
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               marginTop: "2px",
             }}
@@ -163,7 +163,7 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             <span
               style={{
                 fontSize: "12px",
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "var(--text-primary)",
               }}
             >
@@ -173,19 +173,19 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
           <div
             style={{
               fontSize: "16px",
-              fontWeight: 800,
+              fontWeight: 700,
               color: "var(--text-primary)",
               letterSpacing: "-0.3px",
             }}
           >
             {data.totalShift2.toLocaleString("id-ID")}{" "}
-            <span style={{ fontSize: "11px", fontWeight: 500 }}>
+            <span style={{ fontSize: "12px", fontWeight: 500 }}>
               {TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.UNIT_LABEL}
             </span>
           </div>
           <div
             style={{
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               marginTop: "2px",
             }}

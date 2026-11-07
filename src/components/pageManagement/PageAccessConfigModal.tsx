@@ -282,7 +282,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       ? 'var(--color-text-primary)'
                       : 'var(--color-text-secondary)',
                     fontWeight: isActive ? 600 : 500,
-                    fontSize: '12.5px',
+                    fontSize: '13px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -298,7 +298,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       style={{
                         padding: '1px 6px',
                         borderRadius: '10px',
-                        fontSize: '10.5px',
+                        fontSize: '12px',
                         fontWeight: 700,
                         backgroundColor: isActive
                           ? 'var(--color-action-primary-bg)'
@@ -330,7 +330,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <p
                   style={{
-                    fontSize: '12.5px',
+                    fontSize: '13px',
                     color: 'var(--color-text-secondary)',
                     margin: '0 0 10px',
                   }}
@@ -379,7 +379,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                         <div>
                           <span
                             style={{
-                              fontSize: '13.5px',
+                              fontSize: '14px',
                               fontWeight: 600,
                               color: 'var(--color-text-primary)',
                               display: 'block',
@@ -400,7 +400,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             borderRadius: '6px',
                             backgroundColor: 'var(--color-role-superadmin-bg)',
                             color: 'var(--color-role-superadmin-fg)',
-                            fontSize: '10.5px',
+                            fontSize: '12px',
                             fontWeight: 700,
                           }}
                         >

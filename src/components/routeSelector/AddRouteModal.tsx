@@ -134,7 +134,7 @@ export function AddRouteModal({
             <h3
               style={{
                 fontSize: '16px',
-                fontWeight: 800,
+                fontWeight: 700,
                 margin: 0,
                 color: 'var(--text-primary)',
               }}
@@ -236,7 +236,7 @@ export function AddRouteModal({
             <div style={{ marginBottom: '12px' }}>
           <label
             style={{
-              fontSize: '11.5px',
+              fontSize: '12px',
               fontWeight: 700,
               color: 'var(--text-secondary)',
               display: 'block',
@@ -263,8 +263,8 @@ export function AddRouteModal({
                 padding: '0 14px',
                 background: 'rgba(62, 207, 142, 0.15)',
                 color: 'var(--accent-color, #3ECF8E)',
-                fontWeight: 800,
-                fontSize: '13.5px',
+                fontWeight: 700,
+                fontSize: '14px',
                 letterSpacing: '0.5px',
                 borderRight: '1px solid var(--color-border-control)',
                 userSelect: 'none',
@@ -285,12 +285,12 @@ export function AddRouteModal({
                 borderRadius: 0,
                 background: 'transparent',
                 padding: '10px 14px',
-                fontSize: '13.5px',
+                fontSize: '14px',
                 fontWeight: 600,
               }}
             />
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px', marginLeft: '2px' }}>
+          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', marginLeft: '2px' }}>
             {TEXT_DASHBOARD.ROUTE_SELECTOR.ROUTE_INPUT_HINT}
           </div>
         </div>
@@ -300,7 +300,7 @@ export function AddRouteModal({
           <div>
             <label
               style={{
-                fontSize: '11.5px',
+                fontSize: '12px',
                 fontWeight: 700,
                 color: 'var(--text-secondary)',
                 display: 'block',
@@ -323,7 +323,7 @@ export function AddRouteModal({
           <div>
             <label
               style={{
-                fontSize: '11.5px',
+                fontSize: '12px',
                 fontWeight: 700,
                 color: 'var(--text-secondary)',
                 display: 'block',
@@ -352,7 +352,7 @@ export function AddRouteModal({
         <div style={{ marginBottom: '14px' }}>
           <label
             style={{
-              fontSize: '11.5px',
+              fontSize: '12px',
               fontWeight: 700,
               color: 'var(--text-secondary)',
               display: 'block',
@@ -371,7 +371,7 @@ export function AddRouteModal({
               width: '100%',
               padding: '10px 12px',
               borderRadius: '10px',
-              fontSize: '12.5px',
+              fontSize: '13px',
             }}
           />
         </div>
@@ -383,7 +383,7 @@ export function AddRouteModal({
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              fontSize: '11.5px',
+              fontSize: '12px',
               color: 'var(--warning-color, #f59e0b)',
               background: 'rgba(245, 158, 11, 0.12)',
               border: '1px solid rgba(245, 158, 11, 0.35)',
@@ -400,19 +400,19 @@ export function AddRouteModal({
 
         {/* Live Status Inspection Badge */}
         {checkStatus === 'checking' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--accent-color)', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--accent-color)', marginBottom: '12px' }}>
             <Loader2 className="spinner" size={14} />
             <span>{checkMessage || TEXT_DASHBOARD.ROUTE_SELECTOR.CHECKING_ACCESS}</span>
           </div>
         )}
         {checkStatus === 'valid' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--success-color, #10b981)', marginBottom: '12px', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success-color, #10b981)', marginBottom: '12px', fontWeight: 600 }}>
             <CheckCircle size={15} />
             <span>{checkMessage}</span>
           </div>
         )}
         {checkStatus === 'invalid' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: 'var(--danger-color)', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--danger-color)', marginBottom: '12px' }}>
             <AlertCircle size={15} />
             <span>{checkMessage}</span>
           </div>

@@ -223,7 +223,7 @@ export function BusInputModal({
                 display: "flex",
                 alignItems: "flex-start",
                 gap: "8px",
-                fontSize: "0.8rem",
+                fontSize: "13px",
                 lineHeight: 1.45,
                 color: "var(--color-warning-fg, #eab308)",
               }}
@@ -249,7 +249,7 @@ export function BusInputModal({
                 background: "var(--color-warning-fg, #eab308)",
                 color: "#000",
                 fontWeight: 700,
-                fontSize: "0.78rem",
+                fontSize: "12px",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -284,7 +284,7 @@ export function BusInputModal({
                   ? "1px solid rgba(239, 68, 68, 0.35)"
                   : "1px solid rgba(56, 189, 248, 0.3)",
               color: form.validationErrors.length > 0 ? "#f87171" : "inherit",
-              fontSize: "0.8rem",
+              fontSize: "13px",
             }}
           >
             {form.validationErrors.length > 0 && (
@@ -323,7 +323,7 @@ export function BusInputModal({
                     background: "#f59e0b",
                     color: "#000",
                     fontWeight: 700,
-                    fontSize: "0.78rem",
+                    fontSize: "12px",
                     border: "none",
                     cursor: "pointer",
                   }}
@@ -346,7 +346,7 @@ export function BusInputModal({
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  fontSize: "0.78rem",
+                  fontSize: "12px",
                   color: "var(--text-secondary, #cbd5e1)",
                   cursor: "pointer",
                 }}

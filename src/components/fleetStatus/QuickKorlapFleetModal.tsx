@@ -251,13 +251,13 @@ function QuickKorlapFleetModalComponent({
           }}
         >
           <div>
-            <h2 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700 }}>
+            <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>
               {TEXT_FLEET_STATUS.QUICK_KORLAP.MODAL_TITLE}
             </h2>
             <p
               style={{
                 margin: '4px 0 0',
-                fontSize: '0.85rem',
+                fontSize: '14px',
                 color: 'var(--color-text-muted)',
               }}
             >
@@ -271,7 +271,7 @@ function QuickKorlapFleetModalComponent({
               background: 'transparent',
               border: 'none',
               color: 'var(--color-text-muted)',
-              fontSize: '1.4rem',
+              fontSize: '24px',
               cursor: 'pointer',
             }}
           >
@@ -293,7 +293,7 @@ function QuickKorlapFleetModalComponent({
             <label
               style={{
                 display: 'block',
-                fontSize: '0.8rem',
+                fontSize: '13px',
                 fontWeight: 600,
                 marginBottom: '6px',
                 color: 'var(--color-text-muted)',
@@ -309,7 +309,7 @@ function QuickKorlapFleetModalComponent({
                   flex: 1,
                   padding: '7px 12px',
                   borderRadius: '8px',
-                  fontSize: '0.85rem',
+                  fontSize: '14px',
                   fontWeight: 700,
                   border: currentShift === 1 ? '1px solid var(--accent-color, #3ECF8E)' : '1px solid var(--color-border, #334155)',
                   background: currentShift === 1 ? 'rgba(62, 207, 142, 0.15)' : 'rgba(0, 0, 0, 0.15)',
@@ -327,7 +327,7 @@ function QuickKorlapFleetModalComponent({
                   flex: 1,
                   padding: '7px 12px',
                   borderRadius: '8px',
-                  fontSize: '0.85rem',
+                  fontSize: '14px',
                   fontWeight: 700,
                   border: currentShift === 2 ? '1px solid var(--accent-color, #3ECF8E)' : '1px solid var(--color-border, #334155)',
                   background: currentShift === 2 ? 'rgba(62, 207, 142, 0.15)' : 'rgba(0, 0, 0, 0.15)',
@@ -352,7 +352,7 @@ function QuickKorlapFleetModalComponent({
               <label
                 style={{
                   display: 'block',
-                  fontSize: '0.8rem',
+                  fontSize: '13px',
                   fontWeight: 600,
                   marginBottom: '6px',
                   color: 'var(--color-text-muted)',
@@ -373,7 +373,7 @@ function QuickKorlapFleetModalComponent({
                   border: '1px solid var(--color-border-subtle)',
                   backgroundColor: 'var(--color-surface-subtle)',
                   color: 'var(--color-text-primary)',
-                  fontSize: '1rem',
+                  fontSize: '16px',
                   fontWeight: 600,
                   boxSizing: 'border-box',
                 }}
@@ -384,7 +384,7 @@ function QuickKorlapFleetModalComponent({
               <label
                 style={{
                   display: 'block',
-                  fontSize: '0.8rem',
+                  fontSize: '13px',
                   fontWeight: 600,
                   marginBottom: '6px',
                   color: 'var(--color-text-muted)',
@@ -405,7 +405,7 @@ function QuickKorlapFleetModalComponent({
                   border: '1px solid var(--color-border-subtle)',
                   backgroundColor: 'var(--color-surface-subtle)',
                   color: 'var(--color-text-primary)',
-                  fontSize: '1rem',
+                  fontSize: '16px',
                   fontWeight: 600,
                   boxSizing: 'border-box',
                 }}
@@ -417,7 +417,7 @@ function QuickKorlapFleetModalComponent({
             <label
               style={{
                 display: 'block',
-                fontSize: '0.8rem',
+                fontSize: '13px',
                 fontWeight: 600,
                 marginBottom: '6px',
                 color: 'var(--color-text-muted)',
@@ -438,7 +438,7 @@ function QuickKorlapFleetModalComponent({
                 border: '1px solid var(--color-border-subtle)',
                 backgroundColor: 'var(--color-surface-subtle)',
                 color: 'var(--color-text-primary)',
-                fontSize: '0.9rem',
+                fontSize: '14px',
                 boxSizing: 'border-box',
                 resize: 'vertical',
                 lineHeight: 1.4,
@@ -447,7 +447,7 @@ function QuickKorlapFleetModalComponent({
             <p
               style={{
                 margin: '4px 0 0',
-                fontSize: '0.75rem',
+                fontSize: '12px',
                 color: 'var(--color-text-muted)',
               }}
             >
@@ -476,7 +476,7 @@ function QuickKorlapFleetModalComponent({
               border: '1px solid var(--color-border, #475569)',
               background: 'transparent',
               color: 'var(--color-text-muted)',
-              fontSize: '0.9rem',
+              fontSize: '14px',
               fontWeight: 600,
               cursor: 'pointer',
             }}
@@ -494,7 +494,7 @@ function QuickKorlapFleetModalComponent({
               border: 'none',
               background: 'var(--accent-color, #3ECF8E)',
               color: '#000',
-              fontSize: '0.9rem',
+              fontSize: '14px',
               fontWeight: 700,
               cursor: isSubmitting ? 'not-allowed' : 'pointer',
               opacity: isSubmitting ? 0.7 : 1,

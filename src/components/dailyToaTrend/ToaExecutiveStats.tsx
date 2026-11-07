@@ -38,7 +38,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 600,
             color: "var(--text-secondary)",
             display: "flex",
@@ -60,7 +60,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
         >
           {peakItem ? safeFormatNumber(peakItem.totalToa) : "0"}
         </span>
-        <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
+        <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
           {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{peakItem ? peakItem.day : "-"}
         </span>
       </div>
@@ -79,7 +79,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 600,
             color: "var(--text-secondary)",
             display: "flex",
@@ -101,7 +101,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
         >
           {lowestItem ? safeFormatNumber(lowestItem.totalToa) : "0"}
         </span>
-        <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
+        <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
           {TEXT_DASHBOARD.TOA_TREND.DATE_PREFIX}{lowestItem ? lowestItem.day : "-"}
         </span>
       </div>
@@ -120,7 +120,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
       >
         <span
           style={{
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 600,
             color: "var(--text-secondary)",
             display: "flex",
@@ -142,7 +142,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
         >
           {safeFormatNumber(avgToa)}
         </span>
-        <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
+        <span style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
           {TEXT_DASHBOARD.TOA_TREND.AVG_UNIT}
         </span>
       </div>

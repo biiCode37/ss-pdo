@@ -6,7 +6,7 @@ export function LoginInfoAboutSection() {
     <div style={{ marginBottom: "24px" }}>
       <h4
         style={{
-          fontSize: "15px",
+          fontSize: "16px",
           fontWeight: 700,
           color: "var(--text-primary)",
           marginBottom: "8px",
@@ -38,7 +38,7 @@ export function LoginInfoAboutSection() {
             borderRadius: "10px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
-            fontSize: "12.5px",
+            fontSize: "13px",
             lineHeight: 1.45,
           }}
         >
@@ -64,7 +64,7 @@ export function LoginInfoAboutSection() {
             borderRadius: "10px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
-            fontSize: "12.5px",
+            fontSize: "13px",
             lineHeight: 1.45,
           }}
         >
@@ -90,7 +90,7 @@ export function LoginInfoAboutSection() {
             borderRadius: "10px",
             backgroundColor: "var(--color-surface-subtle)",
             border: "1px solid var(--color-border-subtle)",
-            fontSize: "12.5px",
+            fontSize: "13px",
             lineHeight: 1.45,
           }}
         >

@@ -53,7 +53,7 @@ export const UserCardAvatar: React.FC<UserCardAvatarProps> = ({
         alignItems: "center",
         justifyContent: "center",
         fontWeight: 700,
-        fontSize: "15px",
+        fontSize: "16px",
         flexShrink: 0,
       }}
     >

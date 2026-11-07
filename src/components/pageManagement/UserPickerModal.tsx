@@ -178,7 +178,7 @@ export const UserPickerModal: React.FC<Props> = ({
                 border: 'none',
                 background: 'transparent',
                 color: 'var(--color-text-primary)',
-                fontSize: '13.5px',
+                fontSize: '14px',
                 outline: 'none',
               }}
               autoFocus
@@ -257,7 +257,7 @@ export const UserPickerModal: React.FC<Props> = ({
                   <div style={{ minWidth: 0 }}>
                     <span
                       style={{
-                        fontSize: '13.5px',
+                        fontSize: '14px',
                         fontWeight: 600,
                         color: 'var(--color-text-primary)',
                         display: 'block',
@@ -270,7 +270,7 @@ export const UserPickerModal: React.FC<Props> = ({
                     </span>
                     <span
                       style={{
-                        fontSize: '11.5px',
+                        fontSize: '12px',
                         color: 'var(--color-text-muted)',
                         display: 'block',
                         overflow: 'hidden',

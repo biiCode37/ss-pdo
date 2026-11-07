@@ -268,7 +268,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
             <div>
               <h1
                 style={{
-                  fontSize: '17px',
+                  fontSize: '18px',
                   fontWeight: 700,
                   margin: 0,
                   color: 'var(--color-text-primary)',
@@ -279,7 +279,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
               {isSelectMode && (
                 <span
                   style={{
-                    fontSize: '11px',
+                    fontSize: '12px',
                     fontWeight: 600,
                     color: 'var(--color-action-primary-bg)',
                     display: 'block',
@@ -336,7 +336,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 backgroundColor: 'var(--color-role-superadmin-bg)',
                 border: '1px solid var(--color-role-superadmin-border)',
                 color: 'var(--color-role-superadmin-fg)',
-                fontSize: '11px',
+                fontSize: '12px',
                 fontWeight: 600,
                 flexShrink: 0,
               }}
@@ -370,7 +370,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                   background: 'var(--color-surface-subtle)',
                   border: '1px solid var(--color-border-subtle)',
                   color: 'var(--color-text-primary)',
-                  fontSize: '11.5px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   cursor: 'pointer',
                 }}
@@ -386,7 +386,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                   background: 'var(--color-surface-subtle)',
                   border: '1px solid var(--color-border-subtle)',
                   color: 'var(--color-text-secondary)',
-                  fontSize: '11.5px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   cursor: 'pointer',
                 }}
@@ -395,7 +395,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
               </button>
             </div>
 
-            <span style={{ fontSize: '11.5px', color: 'var(--color-text-muted)' }}>
+            <span style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
               {TEXT_PAGE_MANAGEMENT.BULK_ACTION.SELECT_HINT}
             </span>
           </div>
@@ -447,7 +447,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     ? 'var(--color-action-primary-bg)'
                     : 'var(--color-surface-subtle)',
                   color: isActive ? 'var(--color-action-primary-fg)' : 'var(--color-text-secondary)',
-                  fontSize: '12.5px',
+                  fontSize: '13px',
                   fontWeight: isActive ? 600 : 500,
                   whiteSpace: 'nowrap',
                   cursor: 'pointer',
@@ -508,7 +508,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '4px',
-                        fontSize: '10px',
+                        fontSize: '12px',
                         fontWeight: 700,
                         padding: '2px 7px',
                         borderRadius: '6px',
@@ -522,7 +522,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                   </div>
                   <span
                     style={{
-                      fontSize: '11.5px',
+                      fontSize: '12px',
                       color: 'var(--color-text-secondary)',
                       display: 'block',
                       marginTop: '2px',
@@ -579,7 +579,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 border: '1px dashed var(--color-border-subtle)',
               }}
             >
-              <p style={{ margin: 0, fontSize: '13.5px', fontWeight: 500 }}>
+              <p style={{ margin: 0, fontSize: '14px', fontWeight: 500 }}>
                 {TEXT_PAGE_MANAGEMENT.CATEGORIES.EMPTY_FILTER}
               </p>
             </div>
@@ -701,7 +701,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '3px',
-                          fontSize: '10px',
+                          fontSize: '12px',
                           fontWeight: 700,
                           padding: '2px 7px',
                           borderRadius: '6px',
@@ -739,7 +739,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     >
                       <span
                         style={{
-                          fontSize: '11px',
+                          fontSize: '12px',
                           color: 'var(--color-text-secondary)',
                           display: 'inline-flex',
                           alignItems: 'center',
@@ -757,7 +757,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       {whitelistCount > 0 && (
                         <span
                           style={{
-                            fontSize: '10px',
+                            fontSize: '12px',
                             fontWeight: 700,
                             padding: '1px 6px',
                             borderRadius: '6px',
@@ -772,7 +772,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       {blacklistCount > 0 && (
                         <span
                           style={{
-                            fontSize: '10px',
+                            fontSize: '12px',
                             fontWeight: 700,
                             padding: '1px 6px',
                             borderRadius: '6px',

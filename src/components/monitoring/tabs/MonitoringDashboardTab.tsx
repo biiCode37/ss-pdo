@@ -76,7 +76,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             </h3>
             <span
               style={{
-                fontSize: "12.5px",
+                fontSize: "13px",
                 fontWeight: 700,
                 color: isAllConfirmed ? "#10B981" : "var(--accent-color, #3ECF8E)",
                 lineHeight: 1.25,
@@ -119,7 +119,7 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            fontSize: "11px",
+            fontSize: "12px",
             color: "var(--text-secondary)",
           }}
         >

@@ -23,7 +23,7 @@ export function LoginInfoPermissionsSection({
         <FileSpreadsheet size={17} color="var(--accent-color, #3ECF8E)" />
         <h4
           style={{
-            fontSize: "15px",
+            fontSize: "16px",
             fontWeight: 700,
             color: "var(--text-primary)",
             margin: 0,
@@ -34,7 +34,7 @@ export function LoginInfoPermissionsSection({
       </div>
       <p
         style={{
-          fontSize: "12.5px",
+          fontSize: "13px",
           color: "var(--text-secondary)",
           lineHeight: 1.55,
           marginBottom: "10px",

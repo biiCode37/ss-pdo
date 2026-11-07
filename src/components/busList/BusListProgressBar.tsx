@@ -41,7 +41,7 @@ export const BusListProgressBar: React.FC<BusListProgressBarProps> = ({
                   activeCategory,
               )}
         </span>
-        <span className="tabular-nums" style={{ fontSize: "11.5px" }}>
+        <span className="tabular-nums" style={{ fontSize: "12px" }}>
           <strong
             style={{
               color:

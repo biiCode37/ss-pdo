@@ -89,7 +89,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
     <div style={{ marginBottom: "20px" }}>
       <span
         style={{
-          fontSize: "10.5px",
+          fontSize: "12px",
           fontWeight: 700,
           letterSpacing: "0.5px",
           color: "var(--text-secondary)",
@@ -120,7 +120,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
               border: "1px solid var(--card-border)",
               color: "var(--text-primary)",
               fontWeight: 500,
-              fontSize: "13.5px",
+              fontSize: "14px",
               cursor: "pointer",
               opacity: isMonitoringUnderMaintenance ? 0.85 : 1,
             }}
@@ -133,7 +133,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                   {isMonitoringUnderMaintenance && (
                     <span
                       style={{
-                        fontSize: "10px",
+                        fontSize: "12px",
                         padding: "1px 6px",
                         borderRadius: "6px",
                         background: "rgba(234, 179, 8, 0.15)",
@@ -148,7 +148,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                 </div>
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "var(--text-secondary)",
                     marginTop: "1px",
                   }}
@@ -181,7 +181,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "pointer",
           }}
         >
@@ -207,7 +207,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: isFormatting ? "wait" : "pointer",
             opacity: isFormatting ? 0.7 : 1,
           }}
@@ -218,7 +218,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
               <div>{TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET}</div>
               <div
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "var(--text-secondary)",
                   marginTop: "1px",
                 }}
@@ -244,7 +244,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             border: "1px solid var(--card-border)",
             color: "var(--text-primary)",
             fontWeight: 500,
-            fontSize: "13.5px",
+            fontSize: "14px",
             cursor: "pointer",
           }}
         >
@@ -304,7 +304,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
                   color: "#000",
                   padding: "2px 8px",
                   borderRadius: "10px",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontWeight: 700,
                 }}
               >

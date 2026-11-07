@@ -362,7 +362,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               <span
                 style={{
                   display: 'block',
-                  fontSize: '11px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   color: 'var(--text-secondary, #a3a3a3)',
                   marginBottom: '6px',

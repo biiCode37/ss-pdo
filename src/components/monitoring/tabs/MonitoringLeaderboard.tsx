@@ -79,8 +79,8 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
             borderRadius: "50%",
             background: rankBg,
             color: rankColor,
-            fontSize: "10.5px",
-            fontWeight: 800,
+            fontSize: "12px",
+            fontWeight: 700,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -109,7 +109,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
           >
             <span
               style={{
-                fontSize: "12.5px",
+                fontSize: "13px",
                 fontWeight: 700,
                 color: "var(--text-primary)",
                 lineHeight: 1.25,
@@ -120,7 +120,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
             </span>
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: pctColor,
                 background: pctBg,
@@ -139,7 +139,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
             style={{
               display: "block",
               maxWidth: "100%",
-              fontSize: "10px",
+              fontSize: "12px",
               color: "var(--text-secondary)",
               lineHeight: 1.25,
               marginTop: "1.5px",
@@ -171,7 +171,7 @@ const LeaderboardItemRow: React.FC<LeaderboardItemRowProps> = ({
         </div>
         <div
           style={{
-            fontSize: "10px",
+            fontSize: "12px",
             color: "var(--text-secondary)",
             lineHeight: 1.25,
             marginTop: "1.5px",

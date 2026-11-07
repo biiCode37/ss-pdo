@@ -102,7 +102,7 @@ export function LoginFooter({ onSelectModal }: LoginFooterProps) {
 
       <p
         style={{
-          fontSize: "11px",
+          fontSize: "12px",
           color: "var(--text-secondary)",
           margin: 0,
           lineHeight: 1.4,

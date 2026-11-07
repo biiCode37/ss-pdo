@@ -51,7 +51,7 @@ export function QueueModal({
         border: "1px solid var(--color-border-subtle)",
       }}
     >
-        <h2 style={{ fontSize: "1.1rem", marginTop: 0, marginBottom: "16px" }}>
+        <h2 style={{ fontSize: "18px", marginTop: 0, marginBottom: "16px" }}>
           {TEXT_ALERTS.QUEUE_MODAL.TITLE}
         </h2>
         {queue.length === 0 ? (
