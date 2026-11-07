@@ -47,4 +47,19 @@ describe('SubmissionReadinessTab', () => {
     expect(container.textContent).toContain('ARMADA');
     expect(container.querySelector('.submission-card')).toBeNull();
   });
+
+  it('membuka modal detail dengan struktur header, close button, body, dan footer', async () => {
+    await act(async () => {
+      root.render(<SubmissionReadinessTab selectedDate="2026-11-07" onSelectDate={vi.fn()} segment="kelengkapan" onSegmentChange={vi.fn()} armadaContent={null} />);
+    });
+    const firstCard = container.querySelector<HTMLButtonElement>('.submission-card');
+    expect(firstCard).toBeTruthy();
+    await act(async () => {
+      firstCard?.click();
+    });
+    expect(document.querySelector('.submission-modal__header')).toBeTruthy();
+    expect(document.querySelector('.submission-modal__close')).toBeTruthy();
+    expect(document.querySelector('.submission-modal__body')).toBeTruthy();
+    expect(document.querySelector('.submission-modal__footer')).toBeTruthy();
+  });
 });
