@@ -95,4 +95,34 @@ describe('SubmissionReadinessTab', () => {
     cards = container.querySelectorAll('.submission-card');
     expect(cards).toHaveLength(2);
   });
+
+  it('filter masalah kembali ke semua rute bila kategori aktif menjadi 0 (chip hilang, tidak terjebak daftar kosong)', async () => {
+    const props = { selectedDate: '2026-11-07', onSelectDate: vi.fn(), segment: 'kelengkapan' as const, onSegmentChange: vi.fn(), armadaContent: null };
+    await act(async () => {
+      root.render(<SubmissionReadinessTab {...props} />);
+    });
+    const janggalChip = [...container.querySelectorAll<HTMLButtonElement>('.ui-chip-btn')].find((btn) =>
+      btn.textContent?.includes(TEXT_MONITORING.SUBMISSION.SUMMARY_JANGGAL(1)),
+    );
+    await act(async () => {
+      janggalChip?.click();
+    });
+    expect(container.querySelectorAll('.submission-card')).toHaveLength(1);
+
+    // Petugas membetulkan data: pembaruan Realtime membawa baris baru tanpa unit janggal
+    const originalRows = state.rows;
+    const first = originalRows[0];
+    state.rows = [{
+      ...first,
+      completeness: { ...first.completeness, counts: { ...first.completeness.counts, JANGGAL: 0 }, issues: [] },
+    }];
+    try {
+      await act(async () => {
+        root.render(<SubmissionReadinessTab {...props} />);
+      });
+      expect(container.querySelectorAll('.submission-card')).toHaveLength(2);
+    } finally {
+      state.rows = originalRows;
+    }
+  });
 });

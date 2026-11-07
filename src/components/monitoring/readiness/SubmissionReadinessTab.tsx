@@ -56,12 +56,17 @@ export function SubmissionReadinessTab({
     () => buildReadinessViews(readiness.routes, readiness.rows, readiness.confirmations, selectedDate),
     [readiness.routes, readiness.rows, readiness.confirmations, selectedDate],
   );
-  const filteredByWatchlist = onlyWatchlist && watchlist.length > 0 ? views.filter((v) => watchlist.includes(v.routeId)) : views;
-  const visibleViews = useMemo(
-    () => filterViewsByProblem(filteredByWatchlist, problemFilter),
-    [filteredByWatchlist, problemFilter],
-  );
   const summary = summarizeViews(views);
+  // Bila kategori yang difilter menjadi 0 (chip-nya hilang), kembali ke semua rute agar tidak terjebak daftar kosong
+  const problemCounts: Record<ProblemFilter, number> = {
+    all: 1,
+    janggal: summary.janggal,
+    belum: summary.belumDiisi,
+    changed: summary.changed,
+  };
+  const activeProblemFilter: ProblemFilter = problemCounts[problemFilter] > 0 ? problemFilter : "all";
+  const filteredByWatchlist = onlyWatchlist && watchlist.length > 0 ? views.filter((v) => watchlist.includes(v.routeId)) : views;
+  const visibleViews = filterViewsByProblem(filteredByWatchlist, activeProblemFilter);
   const backlog = useMemo(
     () => computeBacklog({
       routes: readiness.routes, confirmations: readiness.confirmations, todayWib: readiness.todayWib,
@@ -95,8 +100,8 @@ export function SubmissionReadinessTab({
               <button
                 type="button"
                 className="ui-chip-btn ui-chip-btn--error"
-                aria-pressed={problemFilter === "janggal"}
-                onClick={() => setProblemFilter((prev) => (prev === "janggal" ? "all" : "janggal"))}
+                aria-pressed={activeProblemFilter === "janggal"}
+                onClick={() => setProblemFilter(activeProblemFilter === "janggal" ? "all" : "janggal")}
               >
                 {T.SUMMARY_JANGGAL(summary.janggal)}
               </button>
@@ -105,8 +110,8 @@ export function SubmissionReadinessTab({
               <button
                 type="button"
                 className="ui-chip-btn ui-chip-btn--error"
-                aria-pressed={problemFilter === "belum"}
-                onClick={() => setProblemFilter((prev) => (prev === "belum" ? "all" : "belum"))}
+                aria-pressed={activeProblemFilter === "belum"}
+                onClick={() => setProblemFilter(activeProblemFilter === "belum" ? "all" : "belum")}
               >
                 {T.SUMMARY_BELUM(summary.belumDiisi)}
               </button>
@@ -115,8 +120,8 @@ export function SubmissionReadinessTab({
               <button
                 type="button"
                 className="ui-chip-btn ui-chip-btn--warning"
-                aria-pressed={problemFilter === "changed"}
-                onClick={() => setProblemFilter((prev) => (prev === "changed" ? "all" : "changed"))}
+                aria-pressed={activeProblemFilter === "changed"}
+                onClick={() => setProblemFilter(activeProblemFilter === "changed" ? "all" : "changed")}
               >
                 {T.SUMMARY_CHANGED(summary.changed)}
               </button>
