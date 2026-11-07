@@ -249,7 +249,7 @@ export const KeteranganPresetBar: React.FC<KeteranganPresetBarProps> = ({
           title={texts.RESET_TOOLTIP}
           aria-label={texts.RESET_TOOLTIP}
         >
-          <RotateCcw size={12} />
+          <RotateCcw size={16} />
           <span>{texts.BTN_RESET}</span>
         </button>
       </div>

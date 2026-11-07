@@ -1,5 +1,5 @@
 import React from "react";
-import { Bus, Columns, Zap, X } from "lucide-react";
+import { Columns, Zap, X } from "lucide-react";
 import { TEXT_ALERTS } from "@/constants/texts";
 
 interface BusInputModalHeaderProps {
@@ -35,9 +35,6 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <div className="ui-icon-tile" aria-hidden="true">
-          <Bus size={18} />
-        </div>
         <h2
           id={`bus-modal-title-${formId}`}
           style={{
@@ -79,7 +76,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
               transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
             }}
           >
-            <Columns size={13} />
+            <Columns size={16} />
             <span>
               {isExpandedAll
                 ? TEXT_ALERTS.BUS_INPUT_MODAL.SWITCH_TO_SINGLE_FOCUS
@@ -135,7 +132,7 @@ export const BusInputModalHeader: React.FC<BusInputModalHeaderProps> = ({
             flexShrink: 0,
           }}
         >
-          <X size={17} />
+          <X size={16} />
         </button>
       </div>
     </div>

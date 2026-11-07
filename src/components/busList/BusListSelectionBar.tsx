@@ -103,7 +103,7 @@ export const BusListSelectionBar: React.FC<BusListSelectionBarProps> = ({
           opacity: canApply ? 1 : 0.55,
         }}
       >
-        {isSubmitting && <Loader2 size={13} className="spinner" />}
+        {isSubmitting && <Loader2 size={16} className="spinner" />}
         {TEXT_DASHBOARD.BUS_LIST.SELECTED_APPLY_BTN}
       </button>
     </div>,

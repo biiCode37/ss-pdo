@@ -79,7 +79,7 @@ export const ToaShiftComparison: React.FC<ToaShiftComparisonProps> = ({
             fontWeight: 600,
           }}
         >
-          <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+          <AlertTriangle size={16} style={{ flexShrink: 0 }} />
           <span>{live.formattedText}</span>
         </div>
       )}

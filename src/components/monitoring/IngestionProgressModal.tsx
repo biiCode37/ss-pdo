@@ -95,7 +95,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
         >
           {isComplete ? (
             <CheckCircle2
-              size={30}
+              size={24}
               style={{
                 color: "#10b981",
                 animation: "scaleIn 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -103,7 +103,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             />
           ) : (
             <CloudDownload
-              size={28}
+              size={24}
               style={{
                 color: "var(--accent-color, #3ECF8E)",
                 animation: "bounce 1.5s infinite ease-in-out",
@@ -199,7 +199,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
             >
               {!isComplete ? (
                 <>
-                  <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} />
+                  <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
                   <span>
                     {progress?.totalDays && progress.totalDays > 1
                       ? TEXT_MONITORING.INGESTION.PROGRESS_COUNT_RANGE(
@@ -216,7 +216,7 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                 </>
               ) : (
                 <>
-                  <Sparkles size={13} style={{ color: "#10b981" }} />
+                  <Sparkles size={16} style={{ color: "#10b981" }} />
                   <span style={{ color: "#10b981" }}>
                     {TEXT_MONITORING.INGESTION.PROGRESS_COMPLETE_LABEL}
                   </span>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Calendar, ChevronRight, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import {
   type MonitoringPeriodFilter,
@@ -316,7 +316,6 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                   gap: "8px",
                 }}
               >
-                <Calendar size={18} style={{ color: "var(--accent-color, #3ECF8E)" }} />
                 {TEXT_MONITORING.PERIOD.CUSTOM_MODAL_TITLE}
               </h3>
               <button
@@ -333,7 +332,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                 title={TEXT_COMMON.BUTTONS.CLOSE}
                 aria-label={TEXT_COMMON.BUTTONS.CLOSE}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
@@ -434,7 +433,7 @@ export const MonitoringPeriodSelector: React.FC<MonitoringPeriodSelectorProps> =
                 }}
               >
                 {TEXT_MONITORING.PERIOD.APPLY_BTN}
-                <ChevronRight size={14} />
+                <ChevronRight size={16} />
               </button>
             </div>
           </div>

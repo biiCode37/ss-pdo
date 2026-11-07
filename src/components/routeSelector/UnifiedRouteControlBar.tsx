@@ -69,7 +69,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
         title={TEXT_DASHBOARD.ROUTE_SELECTOR.DATE_DISPLAY_TITLE(displayDateLabel)}
       >
         <Calendar
-          size={14}
+          size={16}
           style={{ color: "var(--color-action-primary-bg, #3ECF8E)", flexShrink: 0 }}
         />
         <span
@@ -193,7 +193,7 @@ export const UnifiedRouteControlBar: React.FC<UnifiedRouteControlBarProps> = ({
               }}
             />
             <span>{statusLabel}</span>
-            <ChevronDown size={12} style={{ opacity: 0.7 }} />
+            <ChevronDown size={16} style={{ opacity: 0.7 }} />
           </button>
         );
       })() : null}

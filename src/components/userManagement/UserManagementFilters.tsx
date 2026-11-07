@@ -92,7 +92,7 @@ export const UserManagementFilters: React.FC<UserManagementFiltersProps> = ({
         }}
       >
         <Search
-          size={17}
+          size={16}
           style={{
             position: "absolute",
             left: "14px",

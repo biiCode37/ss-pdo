@@ -94,7 +94,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                 onClick={form.handleCopyKmAkhir1ToAwal2}
                 style={singleFocusCopyBtnStyle}
               >
-                <Copy size={11} style={{ display: "inline", marginRight: "4px" }} />
+                <Copy size={16} style={{ display: "inline", marginRight: "4px" }} />
                 <span>{TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_AKHIR_S1_ACTION(kmAkhir1)}</span>
               </button>
             )}
@@ -152,7 +152,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
                 gap: "6px",
               }}
             >
-              <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+              <AlertTriangle size={16} style={{ flexShrink: 0 }} />
               <span>{crossShiftError}</span>
             </div>
           )}
@@ -173,7 +173,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                <AlertTriangle size={16} style={{ flexShrink: 0 }} />
                 <span>{crossDayErrorS2}</span>
               </div>
               <label
@@ -287,7 +287,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -307,7 +307,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -403,7 +403,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -423,7 +423,7 @@ export const SingleFocusKmShift2: React.FC<SingleFocusKmShift2Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}

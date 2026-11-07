@@ -537,7 +537,7 @@ function A2ReportModalComponent({
                 gap: '8px',
               }}
             >
-              <Loader2 size={14} className="animate-spin" />
+              <Loader2 size={16} className="animate-spin" />
               <span>Memeriksa status laporan di server...</span>
             </div>
           ) : isAlreadySaved ? (
@@ -555,7 +555,7 @@ function A2ReportModalComponent({
                 gap: '8px',
               }}
             >
-              <CheckCircle size={15} style={{ flexShrink: 0, color: '#34d399' }} />
+              <CheckCircle size={16} style={{ flexShrink: 0, color: '#34d399' }} />
               <span>{TEXT_PDO_FORM.A2_REPORT.SAVED_BANNER(shift, savedAtTime || undefined)}</span>
             </div>
           ) : (
@@ -814,7 +814,7 @@ function A2ReportModalComponent({
                       opacity: isSubmitting ? 0.6 : 1,
                     }}
                   >
-                    <Trash2 size={15} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               ))}
@@ -880,7 +880,7 @@ function A2ReportModalComponent({
           >
             {isSubmitting ? (
               <>
-                <Loader2 size={15} className="animate-spin" />
+                <Loader2 size={16} className="animate-spin" />
                 <span>{TEXT_PDO_FORM.A2_REPORT.SAVING_BTN}</span>
               </>
             ) : (

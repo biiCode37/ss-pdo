@@ -135,9 +135,9 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
             disabled={isReauthenticating}
           >
             {isReauthenticating ? (
-              <RefreshCw size={14} className="spinner" />
+              <RefreshCw size={16} className="spinner" />
             ) : (
-              <RefreshCw size={14} />
+              <RefreshCw size={16} />
             )}
             {isReauthenticating ? TEXT_COMMON.STATUS.PROCESSING : TEXT_AUTH.REAUTH_BTN}
           </button>
@@ -190,7 +190,7 @@ export const DashboardStatusBanners: React.FC<DashboardStatusBannersProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--danger-color, #ef4444)" }}>
-            <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={20} style={{ flexShrink: 0 }} />
             <span>{TEXT_AUTH.SESSION_NEED_REAUTH}</span>
           </div>
           <button

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Sun, Moon, Split } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import type { AnalyticsSummary } from "../utils/analytics";
 import { safeFormatNumber } from "../utils/numberUtils";
 import { TEXT_DASHBOARD } from "../constants/texts";
@@ -29,7 +29,6 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
         }}
       >
         <div className="analytics-card-title">
-          <Split size={18} style={{ color: "var(--color-shift-1-fg)" }} />
           <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.TITLE}</span>
         </div>
         {dateBadge && (
@@ -89,7 +88,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Sun size={15} />
+              <Sun size={16} />
               <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_1}</span>
             </div>
             {totalBothShifts > 0 && (
@@ -144,7 +143,7 @@ function ShiftComparisonCardComponent({ summary, dateBadge }: Props) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Moon size={15} />
+              <Moon size={16} />
               <span>{TEXT_DASHBOARD.SHIFT_COMPARISON.SHIFT_2}</span>
             </div>
             {totalBothShifts > 0 && (

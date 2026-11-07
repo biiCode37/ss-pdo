@@ -25,7 +25,7 @@ export const ReportHeadwaySection: React.FC<ReportHeadwaySectionProps> = ({
           marginBottom: "8px",
         }}
       >
-        <Clock size={14} color="var(--accent-color, #3ECF8E)" />
+        <Clock size={16} color="var(--accent-color, #3ECF8E)" />
         <label
           style={{
             fontSize: "12px",

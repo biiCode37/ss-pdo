@@ -28,7 +28,7 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess, s
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-        <AlertTriangle size={15} style={{ color: 'var(--color-warning-fg)', flexShrink: 0 }} />
+        <AlertTriangle size={16} style={{ color: 'var(--color-warning-fg)', flexShrink: 0 }} />
         <span
           style={{
             whiteSpace: 'nowrap',
@@ -61,7 +61,7 @@ export const SuperadminMaintenanceBanner: React.FC<Props> = ({ onManageAccess, s
             transition: 'opacity 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
           }}
         >
-          <Settings size={12} />
+          <Settings size={16} />
           {TEXT_PAGE_MANAGEMENT.SUPERADMIN_BANNER.MANAGE_BTN}
         </button>
       )}

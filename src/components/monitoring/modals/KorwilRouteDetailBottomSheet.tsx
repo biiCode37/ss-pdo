@@ -1,14 +1,6 @@
 // ponytail: Implementasi modal bottom sheet mandiri berbasis vanilla CSS variables tanpa dependency modal eksternal
 import React, { useEffect, useMemo } from "react";
-import {
-  X,
-  ExternalLink,
-  Award,
-  Bus,
-  Users,
-  Route as RouteIcon,
-  Zap,
-} from "lucide-react";
+import { X, ExternalLink, Award, Bus, Users, Route as RouteIcon, Zap } from "lucide-react";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
@@ -295,7 +287,7 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
             >
               {/* Header Title di Dalam Card */}
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <Award size={15} style={{ color: "var(--accent-color, #10B981)" }} />
+                <Award size={16} style={{ color: "var(--accent-color, #10B981)" }} />
                 <span
                   style={{
                     fontSize: "12px",

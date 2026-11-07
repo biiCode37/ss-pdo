@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useRef, useCallback } from "react";
-import { X, Bus, Navigation, MessageSquare, Users, AlertTriangle, Repeat } from "lucide-react";
+import { X, Navigation, Users, AlertTriangle, Repeat } from "lucide-react";
 import type { BusData } from "../services/googleSheets";
 import { calculateUnitMetrics } from "../utils/unitAnalytics";
 import { safeFormatNumber } from "../utils/numberUtils";
@@ -145,9 +145,6 @@ export function UnitDetailModal({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div className="ui-icon-tile" aria-hidden="true">
-            <Bus size={18} />
-          </div>
           <div>
             <h3
               id="unit-detail-modal-title"
@@ -186,7 +183,7 @@ export function UnitDetailModal({
             flexShrink: 0,
           }}
         >
-          <X size={17} />
+          <X size={16} />
         </button>
       </div>
 
@@ -234,7 +231,7 @@ export function UnitDetailModal({
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Navigation size={13} style={{ color: "var(--shift1-color, #38bdf8)", flexShrink: 0 }} />
+              <Navigation size={16} style={{ color: "var(--shift1-color, #38bdf8)", flexShrink: 0 }} />
               <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--shift1-color, #38bdf8)" }}>
                 {safeFormatNumber(metrics.kmShift1)}
               </span>
@@ -244,7 +241,7 @@ export function UnitDetailModal({
             </div>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Users size={13} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
+              <Users size={16} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
               <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {safeFormatNumber(metrics.totalShift1Pnp)}
               </span>
@@ -313,7 +310,7 @@ export function UnitDetailModal({
 
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Navigation size={13} style={{ color: "var(--shift2-color, #c084fc)", flexShrink: 0 }} />
+              <Navigation size={16} style={{ color: "var(--shift2-color, #c084fc)", flexShrink: 0 }} />
               <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--shift2-color, #c084fc)" }}>
                 {safeFormatNumber(metrics.kmShift2)}
               </span>
@@ -323,7 +320,7 @@ export function UnitDetailModal({
             </div>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
-              <Users size={13} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
+              <Users size={16} style={{ color: "var(--text-secondary, #94a3b8)", flexShrink: 0 }} />
               <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {safeFormatNumber(metrics.totalShift2Pnp)}
               </span>
@@ -417,7 +414,7 @@ export function UnitDetailModal({
               {TEXT_UNIT_DETAIL.STRIP_RITASE}
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-              <Repeat size={12} style={{ color: "var(--accent-color, #38bdf8)" }} />
+              <Repeat size={16} style={{ color: "var(--accent-color, #38bdf8)" }} />
               <span style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary, #ededed)" }}>
                 {metrics.tripPergi || "0"}/{metrics.tripPulang || "0"}
               </span>
@@ -539,7 +536,6 @@ export function UnitDetailModal({
             gap: "6px",
           }}
         >
-          <MessageSquare size={16} style={{ color: "var(--accent-color, #38bdf8)" }} />
           <span>{TEXT_UNIT_DETAIL.NOTES_SECTION_TITLE}</span>
         </div>
 
@@ -562,7 +558,7 @@ export function UnitDetailModal({
                 }}
               >
                 <AlertTriangle
-                  size={14}
+                  size={16}
                   style={{ color: "var(--warning-color, #f59e0b)", flexShrink: 0, marginTop: "1px" }}
                 />
                 <span style={{ lineHeight: 1.4, wordBreak: "break-word", textTransform: "uppercase" }}>

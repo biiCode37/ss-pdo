@@ -49,7 +49,7 @@ export const ReportAccordionHeader: React.FC<ReportAccordionHeaderProps> = ({
             flexShrink: 0,
           }}
         >
-          <Bus size={18} />
+          <Bus size={20} />
         </div>
         <div>
           <h3
@@ -89,7 +89,7 @@ export const ReportAccordionHeader: React.FC<ReportAccordionHeaderProps> = ({
             color: "var(--text-secondary)",
           }}
         >
-          {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </div>
       </div>
     </div>

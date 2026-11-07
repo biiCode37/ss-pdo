@@ -83,7 +83,7 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Sun size={15} style={{ color: "var(--color-shift-1-fg)" }} />
+              <Sun size={16} style={{ color: "var(--color-shift-1-fg)" }} />
               <span
                 style={{
                   fontSize: "12px",
@@ -149,7 +149,7 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Moon size={15} style={{ color: "var(--color-shift-2-fg)" }} />
+              <Moon size={16} style={{ color: "var(--color-shift-2-fg)" }} />
               <span
                 style={{
                   fontSize: "12px",

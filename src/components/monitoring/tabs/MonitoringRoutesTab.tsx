@@ -154,7 +154,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
             }}
           >
             <Search
-              size={15}
+              size={16}
               style={{
                 position: "absolute",
                 left: "12px",
@@ -194,7 +194,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                   alignItems: "center",
                 }}
               >
-                <X size={14} />
+                <X size={16} />
               </button>
             )}
           </div>
@@ -224,7 +224,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
                 transition: "all 0.2s ease",
               }}
             >
-              <CheckCheck size={15} />
+              <CheckCheck size={16} />
               <span>
                 {TEXT_MONITORING.BULK_VERIFY.BUTTON_LABEL(
                   submittedRoutes.length,
@@ -375,7 +375,7 @@ export const MonitoringRoutesTab: React.FC<MonitoringRoutesTabProps> = ({
               flexShrink: 0,
             }}
           >
-            <Filter size={12} />
+            <Filter size={16} />
             <span>{TEXT_MONITORING.ROUTES_TAB.KORWIL_LABEL}</span>
           </div>
 

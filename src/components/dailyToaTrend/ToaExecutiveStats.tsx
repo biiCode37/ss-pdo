@@ -46,7 +46,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
             gap: "4px",
           }}
         >
-          <Award size={12} style={{ color: "var(--total-color)" }} />
+          <Award size={16} style={{ color: "var(--total-color)" }} />
           {TEXT_DASHBOARD.TOA_TREND.PEAK_LABEL}
         </span>
         <span
@@ -87,7 +87,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
             gap: "4px",
           }}
         >
-          <TrendingDown size={12} style={{ color: "var(--danger-text)" }} />
+          <TrendingDown size={16} style={{ color: "var(--danger-text)" }} />
           {TEXT_DASHBOARD.TOA_TREND.LOWEST_LABEL}
         </span>
         <span
@@ -128,7 +128,7 @@ export const ToaExecutiveStats: React.FC<ToaExecutiveStatsProps> = ({
             gap: "4px",
           }}
         >
-          <Zap size={12} style={{ color: "var(--info-text)" }} />
+          <Zap size={16} style={{ color: "var(--info-text)" }} />
           {TEXT_DASHBOARD.TOA_TREND.AVG_LABEL}
         </span>
         <span

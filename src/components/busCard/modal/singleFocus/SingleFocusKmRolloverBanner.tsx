@@ -37,7 +37,7 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
           fontWeight: 700,
         }}
       >
-        <Sparkles size={14} />
+        <Sparkles size={16} />
         <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_DETECTED_TITLE}</span>
       </div>
       <div
@@ -71,7 +71,7 @@ export const SingleFocusKmRolloverBanner: React.FC<SingleFocusKmRolloverBannerPr
           marginTop: "2px",
         }}
       >
-        <Sparkles size={13} />
+        <Sparkles size={16} />
         <span>
           {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(
             suggestion.suggestedKm,

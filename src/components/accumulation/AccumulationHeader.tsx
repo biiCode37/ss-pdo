@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Layers } from "lucide-react";
+import { X } from "lucide-react";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 
 interface AccumulationHeaderProps {
@@ -42,9 +42,6 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div className="ui-icon-tile" aria-hidden="true">
-            <Layers size={18} />
-          </div>
           <div>
             <h3
               id="accumulation-sheet-title"
@@ -89,7 +86,7 @@ export const AccumulationHeader: React.FC<AccumulationHeaderProps> = ({
             flexShrink: 0,
           }}
         >
-          <X size={17} />
+          <X size={16} />
         </button>
       </div>
     </>

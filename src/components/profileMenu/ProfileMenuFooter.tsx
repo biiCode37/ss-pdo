@@ -59,7 +59,7 @@ export const ProfileMenuFooter: React.FC<ProfileMenuFooterProps> = ({
             transition: "all 0.15s ease",
           }}
         >
-          <LogOut size={18} />
+          <LogOut size={20} />
           <span>{TEXT_DASHBOARD.PROFILE_MENU.LOGOUT_BTN}</span>
         </button>
       </div>

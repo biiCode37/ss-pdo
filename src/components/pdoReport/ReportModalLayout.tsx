@@ -104,7 +104,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
               flexShrink: 0,
             }}
           >
-            <Bus size={18} />
+            <Bus size={20} />
           </div>
           <div>
             <h3
@@ -149,7 +149,7 @@ export const ReportModalLayout: React.FC<ReportModalLayoutProps> = ({
               }}
               title={TEXT_COMMON.BUTTONS.CLOSE}
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           )}
         </div>

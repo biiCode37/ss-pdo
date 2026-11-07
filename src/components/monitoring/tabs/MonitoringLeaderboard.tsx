@@ -247,7 +247,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
               marginBottom: "8px",
             }}
           >
-            <Trophy size={15} style={{ color: "#F59E0B" }} />
+            <Trophy size={16} style={{ color: "#F59E0B" }} />
             <span
               style={{
                 fontSize: "12px",
@@ -282,7 +282,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
               marginBottom: "8px",
             }}
           >
-            <Target size={15} style={{ color: "#10B981" }} />
+            <Target size={16} style={{ color: "#10B981" }} />
             <span
               style={{
                 fontSize: "12px",
@@ -317,7 +317,7 @@ export const MonitoringLeaderboard: React.FC<MonitoringLeaderboardProps> = ({
               marginBottom: "8px",
             }}
           >
-            <AlertTriangle size={15} style={{ color: "#EF4444" }} />
+            <AlertTriangle size={16} style={{ color: "#EF4444" }} />
             <span
               style={{
                 fontSize: "12px",

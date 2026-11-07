@@ -241,7 +241,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               flexShrink: 0,
             }}
           >
-            <CloudDownload size={22} />
+            <CloudDownload size={24} />
           </div>
           <div>
             <h2
@@ -290,7 +290,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
             boxSizing: 'border-box',
           }}
         >
-          <Calendar size={14} style={{ flexShrink: 0 }} />
+          <Calendar size={16} style={{ flexShrink: 0 }} />
           <span>
             {isFutureMonth
               ? TEXT_MONITORING.MONTHLY_SYNC.FUTURE_MONTH_ERR(targetMonthName, targetYear)
@@ -315,7 +315,7 @@ export const MonthlySyncModal: React.FC<MonthlySyncModalProps> = ({
               whiteSpace: 'pre-line',
             }}
           >
-            <AlertCircle size={18} style={{ flexShrink: 0, marginTop: '1px' }} />
+            <AlertCircle size={20} style={{ flexShrink: 0, marginTop: '1px' }} />
             <div style={{ flex: 1, lineHeight: 1.4 }}>{errorMessage}</div>
           </div>
         )}

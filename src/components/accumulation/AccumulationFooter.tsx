@@ -51,7 +51,7 @@ export const AccumulationFooter: React.FC<AccumulationFooterProps> = ({
           gap: "8px",
         }}
       >
-        <Layers size={14} style={{ flexShrink: 0 }} />
+        <Layers size={16} style={{ flexShrink: 0 }} />
         <span>
           {TEXT_DASHBOARD.ACCUMULATION_SHEET.PREVIEW_RANGE_LABEL(
             safeStartDay,

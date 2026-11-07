@@ -150,7 +150,7 @@ export const UserPickerModal: React.FC<Props> = ({
               transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
             }}
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 
@@ -195,7 +195,7 @@ export const UserPickerModal: React.FC<Props> = ({
                   padding: '2px',
                 }}
               >
-                <X size={14} />
+                <X size={16} />
               </button>
             )}
           </div>

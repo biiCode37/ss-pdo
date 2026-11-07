@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, ChevronLeft, ChevronRight, X, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Check } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import { type MonitoringPeriodFilter } from "@/services/allRouteMonitoringService";
 import { acquireScrollLock } from "@/utils/scrollLockCoordinator";
@@ -164,7 +164,6 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
               gap: "8px",
             }}
           >
-            <Calendar size={18} style={{ color: "var(--accent-color, #3ECF8E)" }} />
             {TEXT_MONITORING.PERIOD.MONTHLY_MODAL_TITLE}
           </h3>
           <button
@@ -183,7 +182,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             title={TEXT_COMMON.BUTTONS.CLOSE}
             aria-label={TEXT_COMMON.BUTTONS.CLOSE}
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 
@@ -383,7 +382,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
                 }}
               >
                 <span>{name.slice(0, 3)}</span>
-                {isSelected && <Check size={12} strokeWidth={3} />}
+                {isSelected && <Check size={16} strokeWidth={3} />}
               </button>
             );
           })}
@@ -428,7 +427,7 @@ export const MonitoringMonthPickerModal: React.FC<MonitoringMonthPickerModalProp
             }}
           >
             {TEXT_MONITORING.PERIOD.APPLY_BTN}
-            <ChevronRight size={14} />
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>

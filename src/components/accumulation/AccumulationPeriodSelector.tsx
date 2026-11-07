@@ -105,7 +105,7 @@ export const AccumulationPeriodSelector: React.FC<
             marginBottom: "8px",
           }}
         >
-          <Calendar size={13} />
+          <Calendar size={16} />
           <span>{TEXT_DASHBOARD.ACCUMULATION_SHEET.FROM_LABEL}</span>
         </div>
         <div
@@ -182,7 +182,7 @@ export const AccumulationPeriodSelector: React.FC<
             marginBottom: "8px",
           }}
         >
-          <Calendar size={13} />
+          <Calendar size={16} />
           <span>{TEXT_DASHBOARD.ACCUMULATION_SHEET.TO_LABEL}</span>
         </div>
         <div

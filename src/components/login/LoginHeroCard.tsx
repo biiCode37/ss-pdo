@@ -185,7 +185,7 @@ export function LoginHeroCard({
           transition: "all 0.15s ease",
         }}
       >
-        <Info size={14} color="var(--accent-color, #3ECF8E)" />
+        <Info size={16} color="var(--accent-color, #3ECF8E)" />
         <span>Pelajari Aplikasi & Izin Akses</span>
       </button>
     </div>

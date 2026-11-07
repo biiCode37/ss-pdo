@@ -20,7 +20,7 @@ export function LoginInfoPermissionsSection({
           marginBottom: "8px",
         }}
       >
-        <FileSpreadsheet size={17} color="var(--accent-color, #3ECF8E)" />
+        <FileSpreadsheet size={16} color="var(--accent-color, #3ECF8E)" />
         <h4
           style={{
             fontSize: "16px",
@@ -61,7 +61,7 @@ export function LoginInfoPermissionsSection({
           marginBottom: "8px",
         }}
       >
-        {showDetails ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+        {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         <span>
           {showDetails
             ? TEXT_AUTH.HIDE_PERMISSIONS_DETAIL

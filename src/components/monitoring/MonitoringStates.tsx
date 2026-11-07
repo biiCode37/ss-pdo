@@ -82,7 +82,7 @@ export const MonitoringStates: React.FC<MonitoringStatesProps> = ({
         }}
       >
         <AlertCircle
-          size={36}
+          size={24}
           style={{ color: "var(--danger-color, #ef4444)" }}
         />
         <h2

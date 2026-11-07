@@ -39,7 +39,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
               color: "var(--accent-color, #3ECF8E)",
             }}
           >
-            <Info size={18} />
+            <Info size={20} />
           </div>
           <h3
             style={{
@@ -68,7 +68,7 @@ export function LoginInfoHeader({ onClose }: LoginInfoHeaderProps) {
           aria-label={TEXT_COMMON.BUTTONS.CLOSE}
           data-testid="close-info-modal-btn"
         >
-          <X size={18} />
+          <X size={20} />
         </button>
       </div>
     </>

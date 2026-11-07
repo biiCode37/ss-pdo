@@ -31,7 +31,7 @@ export const ReportTrafficJamsSection: React.FC<
           marginBottom: "8px",
         }}
       >
-        <AlertTriangle size={14} color="var(--warning-color, #f59e0b)" />
+        <AlertTriangle size={16} color="var(--warning-color, #f59e0b)" />
         <label
           style={{
             fontSize: "12px",
@@ -138,7 +138,7 @@ export const ReportTrafficJamsSection: React.FC<
             transition: "background 0.15s ease",
           }}
         >
-          <Plus size={14} />{" "}
+          <Plus size={16} />{" "}
           <span>{TEXT_PDO_FORM.TRAFFIC_JAMS.ADD_BTN}</span>
         </button>
       </div>

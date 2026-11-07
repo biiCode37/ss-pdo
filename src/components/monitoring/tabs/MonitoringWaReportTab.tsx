@@ -242,7 +242,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
           }}
         >
           <FileSpreadsheet
-            size={18}
+            size={20}
             style={{ color: "var(--accent-color, #3ECF8E)" }}
           />
           <h3
@@ -381,7 +381,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                 cursor: "pointer",
               }}
             >
-              <Sun size={13} />
+              <Sun size={16} />
               <span>Shift 1 (Pagi)</span>
             </button>
 
@@ -408,7 +408,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                 cursor: "pointer",
               }}
             >
-              <Moon size={13} />
+              <Moon size={16} />
               <span>Shift 2 (Siang)</span>
             </button>
           </div>
@@ -435,7 +435,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
               marginBottom: "8px",
             }}
           >
-            <AlertTriangle size={18} style={{ color: "#F59E0B" }} />
+            <AlertTriangle size={20} style={{ color: "#F59E0B" }} />
             <h4
               style={{
                 fontSize: "14px",
@@ -514,7 +514,7 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
                       cursor: "pointer",
                     }}
                   >
-                    <PlusCircle size={12} />
+                    <PlusCircle size={16} />
                     <span>{TEXT_WA_REPORT.DATA_READINESS.INPUT_QUICK_BTN}</span>
                   </button>
                 </div>

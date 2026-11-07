@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Globe,
-  Layers,
-  Sparkles,
-  Sun,
-  Moon,
-  CloudOff,
-  ChevronRight,
-} from "lucide-react";
+import { Globe, Layers, Sparkles, Sun, Moon, CloudOff, ChevronRight } from "lucide-react";
 import {
   showFormatSheetConfirm,
   showToast,
@@ -126,7 +118,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Globe size={18} style={{ color: "var(--accent-color)" }} />
+              <Globe size={20} style={{ color: "var(--accent-color)" }} />
               <div style={{ textAlign: "left" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>{TEXT_DASHBOARD.PROFILE_MENU.REGIONAL_MONITORING}</span>
@@ -186,7 +178,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Layers size={18} style={{ color: "var(--accent-color)" }} />
+            <Layers size={20} style={{ color: "var(--accent-color)" }} />
             <span>{TEXT_DASHBOARD.PROFILE_MENU.CROSS_PERIOD}</span>
           </div>
           <ChevronRight size={16} style={{ opacity: 0.5, flexShrink: 0 }} />
@@ -213,7 +205,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Sparkles size={18} style={{ color: "var(--accent-color)" }} />
+            <Sparkles size={20} style={{ color: "var(--accent-color)" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.FORMAT_SHEET}</div>
               <div
@@ -250,9 +242,9 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             {isDarkMode ? (
-              <Sun size={18} style={{ color: "#f59e0b" }} />
+              <Sun size={20} style={{ color: "#f59e0b" }} />
             ) : (
-              <Moon size={18} style={{ color: "var(--accent-color)" }} />
+              <Moon size={20} style={{ color: "var(--accent-color)" }} />
             )}
             <span>{TEXT_DASHBOARD.PROFILE_MENU.THEME_MODE}</span>
           </div>
@@ -290,7 +282,7 @@ export const ProfileFeaturesSection: React.FC<ProfileFeaturesSectionProps> = ({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <CloudOff size={18} />
+              <CloudOff size={20} />
               <span>
                 {!isOnline
                   ? TEXT_DASHBOARD.PROFILE_MENU.OFFLINE_MODE

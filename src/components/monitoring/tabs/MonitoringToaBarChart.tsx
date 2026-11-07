@@ -217,7 +217,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <BarChart3
-            size={18}
+            size={20}
             style={{ color: "var(--accent-color, #3ECF8E)" }}
           />
           <div>
@@ -536,7 +536,7 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               : TEXT_MONITORING.DASHBOARD.CHART_EXPAND_BTN(routes.length)}
           </span>
           <ChevronDown
-            size={13}
+            size={16}
             style={{
               transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
               transition: "transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)",

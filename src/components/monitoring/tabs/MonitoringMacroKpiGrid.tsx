@@ -125,7 +125,7 @@ export const MonitoringMacroKpiGrid: React.FC<MonitoringMacroKpiGridProps> = ({
                   color: kpi.color,
                 }}
               >
-                <Icon size={14} />
+                <Icon size={16} />
               </div>
             </div>
 

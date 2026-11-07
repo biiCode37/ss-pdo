@@ -102,7 +102,7 @@ export const UserManagementEmptyState: React.FC<
       }}
     >
       <Users
-        size={36}
+        size={24}
         style={{ color: "var(--text-secondary, #64748b)", opacity: 0.5 }}
       />
       <h3

@@ -11,18 +11,18 @@ import { describe, test, expect } from "vitest";
  * Baseline hanya boleh diubah ke angka yang LEBIH KECIL.
  */
 const BASELINE = {
-  // Diukur 07 Nov 2026 setelah refact_215 (gradasi dihapus).
-  rawHexColor: 786,
-  rgbHslFunction: 931,
+  // Diukur 07 Nov 2026 setelah refact_217 (ikon dirapikan).
+  rawHexColor: 780,
+  rgbHslFunction: 930,
   gradient: 0,
   gradientText: 0,
-  inlineStyleObject: 2008,
+  inlineStyleObject: 2000,
   // refact_216: tipografi dinormalisasi ke skala, dikunci di nol.
   fontSizeBelow12px: 0,
   fontSizeOffScale: 0,
   fontWeightHeavy: 0,
-  iconSizeOffScale: 274,
-  legacyAccentColor: 247,
+  iconSizeOffScale: 0,
+  legacyAccentColor: 236,
   textShadow: 0,
   backdropFilter: 34,
 } as const;
@@ -73,6 +73,8 @@ const fontSizesPx = (): number[] => {
     // Objek style JSX (termasuk ternary multi-baris) dan CSS di string template SweetAlert.
     for (const [, seg] of s.text.matchAll(/fontSize:([^,}]+)/g)) collect(seg, false);
     for (const [, seg] of s.text.matchAll(/font-size:\s*([^;}"'`<>]+)/g)) collect(seg, true);
+    // Atribut SVG/JSX: fontSize="9" atau fontSize={9}.
+    for (const [, n] of s.text.matchAll(/\bfontSize=(?:"|\{)(\d+(?:\.\d+)?)(?:"|\})/g)) out.push(Number(n));
   }
   return out;
 };
@@ -100,7 +102,7 @@ const measure = (): Record<Metric, number> => {
     inlineStyleObject: countMatches(/style=\{\{/g, (s) => s.isTsx),
     fontSizeBelow12px: sizes.filter((px) => px < 12).length,
     fontSizeOffScale: sizes.filter((px) => !FONT_SIZE_SCALE.has(px)).length,
-    fontWeightHeavy: countMatches(/(?:fontWeight:\s*["']?|font-weight:\s*)(?:800|900)\b/g),
+    fontWeightHeavy: countMatches(/(?:fontWeight:\s*["']?|fontWeight=["{]|font-weight:\s*)(?:800|900)\b/g),
     iconSizeOffScale: iconSizes().filter((n) => !ICON_SIZE_SCALE.has(n)).length,
     legacyAccentColor: countMatches(/--accent-color|#3ecf8e|#24b47e/gi),
     textShadow: countMatches(/textShadow|text-shadow/g),

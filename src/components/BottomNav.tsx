@@ -31,7 +31,7 @@ function BottomNavComponent({
           data-testid="bottom-nav-input"
         >
           <div className="bottom-nav-icon-wrapper">
-            <ClipboardList size={19} />
+            <ClipboardList size={20} />
             {pendingQueueCount > 0 && (
               <span className="bottom-nav-badge">{pendingQueueCount}</span>
             )}
@@ -50,7 +50,7 @@ function BottomNavComponent({
           data-testid="bottom-nav-analytics"
         >
           <div className="bottom-nav-icon-wrapper">
-            <BarChart3 size={19} />
+            <BarChart3 size={20} />
           </div>
           <span className="bottom-nav-label">
             {TEXT_DASHBOARD.TABS.DASHBOARD_SHORT}
@@ -66,7 +66,7 @@ function BottomNavComponent({
           data-testid="bottom-nav-units"
         >
           <div className="bottom-nav-icon-wrapper">
-            <Bus size={19} />
+            <Bus size={20} />
           </div>
           <span className="bottom-nav-label">
             {TEXT_DASHBOARD.TABS.UNIT_SHORT}

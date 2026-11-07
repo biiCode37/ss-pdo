@@ -1,12 +1,5 @@
 import React, { useRef, useState } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  Calendar,
-  RefreshCw,
-  CloudDownload,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Calendar, RefreshCw, CloudDownload } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import {
   formatIndonesianDateLabel,
@@ -305,7 +298,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
               aria-label={isMonthly ? TEXT_MONITORING.PERIOD.CHOOSE_MONTH_BTN : TEXT_COMMON.NAV.CHOOSE_DATE}
             >
               <Calendar
-                size={14}
+                size={16}
                 style={{ color: "var(--accent-color, #3ECF8E)", flexShrink: 0 }}
               />
               <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -316,7 +309,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                   : formatIndonesianDateLabel(selectedDate)}
               </span>
               <ChevronDown
-                size={12}
+                size={16}
                 style={{
                   color: "var(--text-secondary, #8b8b8b)",
                   opacity: 0.7,

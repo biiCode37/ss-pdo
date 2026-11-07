@@ -145,12 +145,12 @@ export function BulkRouteSection({
       >
         {isInspecting ? (
           <>
-            <Loader2 className="spinner" size={14} />
+            <Loader2 className="spinner" size={16} />
             <span>{texts.INSPECTING_PROGRESS(inspectProgress.current, inspectProgress.total)}</span>
           </>
         ) : (
           <>
-            <Search size={14} />
+            <Search size={16} />
             <span>{texts.BTN_INSPECT}</span>
           </>
         )}
@@ -159,13 +159,13 @@ export function BulkRouteSection({
       {/* Pesan Error / Sukses */}
       {bulkFormError && (
         <div style={{ color: 'var(--danger-color)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <AlertCircle size={14} style={{ flexShrink: 0 }} />
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
           <span>{bulkFormError}</span>
         </div>
       )}
       {bulkSuccessMessage && (
         <div style={{ color: 'var(--success-color, #10b981)', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <CheckCircle size={14} style={{ flexShrink: 0 }} />
+          <CheckCircle size={16} style={{ flexShrink: 0 }} />
           <span>{bulkSuccessMessage}</span>
         </div>
       )}
@@ -269,7 +269,7 @@ export function BulkRouteSection({
 
                   {/* Status Badge */}
                   <div style={{ flexShrink: 0 }}>
-                    {isItemInspecting && <Loader2 className="spinner" size={14} />}
+                    {isItemInspecting && <Loader2 className="spinner" size={16} />}
                     {isReady && (
                       <span
                         style={{
@@ -329,7 +329,7 @@ export function BulkRouteSection({
                           }}
                           title={SERVICE_ACCOUNT_EMAIL}
                         >
-                          {copiedEmail ? <Check size={10} color="#10b981" /> : <Copy size={10} />}
+                          {copiedEmail ? <Check size={16} color="#10b981" /> : <Copy size={16} />}
                           <span>{copiedEmail ? 'Disalin!' : 'Salin Email'}</span>
                         </button>
                       </div>

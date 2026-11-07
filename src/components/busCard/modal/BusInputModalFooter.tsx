@@ -79,7 +79,7 @@ export const BusInputModalFooter: React.FC<BusInputModalFooterProps> = ({
           transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
-        <Check size={isKeyboardOpen ? 16 : 18} />
+        <Check size={isKeyboardOpen ? 16 : 20} />
         <span>{TEXT_ALERTS.BUS_INPUT_MODAL.SAVE_BTN}</span>
       </button>
     </div>

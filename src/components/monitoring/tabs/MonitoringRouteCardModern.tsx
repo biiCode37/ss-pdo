@@ -213,9 +213,9 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               }}
             >
               {isSyncing ? (
-                <Loader2 size={11} className="animate-spin text-sky-400" />
+                <Loader2 size={16} className="animate-spin text-sky-400" />
               ) : (
-                <RefreshCw size={11} />
+                <RefreshCw size={16} />
               )}
             </button>
           )}
@@ -235,7 +235,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 border: "1px solid var(--color-success-border)",
               }}
             >
-              <CheckCircle2 size={12} />
+              <CheckCircle2 size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_VERIFIED}
             </span>
           )}
@@ -255,7 +255,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 border: "1px solid var(--color-info-border)",
               }}
             >
-              <Send size={12} />
+              <Send size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_SUBMITTED}
             </span>
           )}
@@ -275,7 +275,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 border: "1px solid var(--color-warning-border)",
               }}
             >
-              <Clock size={12} />
+              <Clock size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_DRAFT}
             </span>
           )}
@@ -295,7 +295,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 border: "1px solid var(--color-border-control)",
               }}
             >
-              <AlertTriangle size={12} />
+              <AlertTriangle size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_EMPTY}
             </span>
           )}
@@ -499,7 +499,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 transition: "all 0.15s ease",
               }}
             >
-              <Check size={13} />
+              <Check size={16} />
               <span>{TEXT_MONITORING.ROUTE_CARD.BTN_VERIFY}</span>
             </button>
           )}
@@ -513,7 +513,7 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
               opacity: 0.6,
             }}
           >
-            <ChevronRight size={15} />
+            <ChevronRight size={16} />
           </div>
         </div>
       </div>

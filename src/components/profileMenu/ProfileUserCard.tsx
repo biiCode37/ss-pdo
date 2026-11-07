@@ -87,7 +87,7 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
                 flexShrink: 0,
               }}
             >
-              <User size={22} />
+              <User size={24} />
             </div>
           )}
           <div style={{ minWidth: 0, overflow: "hidden" }}>

@@ -297,7 +297,7 @@ export function BusInputModal({
                     fontWeight: 600,
                   }}
                 >
-                  <AlertCircle size={15} />
+                  <AlertCircle size={16} />
                   <span>{TEXT_ALERTS.BUS_INPUT_MODAL.VALIDATION_HEADER}</span>
                 </div>
                 <ul style={{ margin: "4px 0 0 16px", padding: 0 }}>
@@ -328,7 +328,7 @@ export function BusInputModal({
                     cursor: "pointer",
                   }}
                 >
-                  <Sparkles size={13} />
+                  <Sparkles size={16} />
                   <span>
                     {TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(
                       form.smartRolloverSuggestion.suggestedKm,

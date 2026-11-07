@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, MapPin, Plus, Loader2 } from 'lucide-react';
+import { X, Plus, Loader2 } from 'lucide-react';
 import { TEXT_DASHBOARD, TEXT_COMMON } from '../../constants/texts';
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler';
 
@@ -151,7 +151,6 @@ export function RouteSelectorSheet({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <MapPin size={18} style={{ color: 'var(--accent-color)' }} />
             <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
               {TEXT_DASHBOARD.ROUTE_SELECTOR.TITLE}
             </span>
@@ -172,7 +171,7 @@ export function RouteSelectorSheet({
             }}
             title={TEXT_COMMON.CLOSE}
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 
@@ -203,7 +202,7 @@ export function RouteSelectorSheet({
               gap: '4px',
             }}
           >
-            <Plus size={14} /> {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_BTN}
+            <Plus size={16} /> {TEXT_DASHBOARD.ROUTE_SELECTOR.ADD_ROUTE_BTN}
           </button>
         </div>
 

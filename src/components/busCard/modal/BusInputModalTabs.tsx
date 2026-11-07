@@ -16,22 +16,22 @@ export const BusInputModalTabs: React.FC<BusInputModalTabsProps> = ({
     {
       id: "shift1",
       label: TEXT_ALERTS.BUS_INPUT_MODAL.TAB_SHIFT_1,
-      icon: <Gauge size={13} />,
+      icon: <Gauge size={16} />,
     },
     {
       id: "shift2",
       label: TEXT_ALERTS.BUS_INPUT_MODAL.TAB_SHIFT_2,
-      icon: <Gauge size={13} />,
+      icon: <Gauge size={16} />,
     },
     {
       id: "trip",
       label: TEXT_ALERTS.BUS_INPUT_MODAL.TAB_RITASE,
-      icon: <Bus size={13} />,
+      icon: <Bus size={16} />,
     },
     {
       id: "notes",
       label: TEXT_ALERTS.BUS_INPUT_MODAL.TAB_KET,
-      icon: <FileText size={13} />,
+      icon: <FileText size={16} />,
     },
   ];
 

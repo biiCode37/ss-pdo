@@ -44,7 +44,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
           marginBottom: '20px',
         }}
       >
-        <ShieldAlert size={34} />
+        <ShieldAlert size={24} />
       </div>
 
       {/* Main Title & Subtitle */}
@@ -124,7 +124,7 @@ export const AccessRestrictedState: React.FC<Props> = ({
                     flexShrink: 0,
                   }}
                 >
-                  <UserCheck size={15} />
+                  <UserCheck size={16} />
                 </div>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <span

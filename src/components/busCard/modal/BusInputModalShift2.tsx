@@ -162,7 +162,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                   gap: "4px",
                 }}
               >
-                <Copy size={11} />
+                <Copy size={16} />
                 <span>{TEXT_ALERTS.BUS_INPUT_MODAL.COPY_KM_AKHIR_S1_BTN}</span>
               </button>
             )}
@@ -186,7 +186,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
               flexShrink: 0,
             }}
           >
-            {showKmAwalEdit ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            {showKmAwalEdit ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             <span>{showKmAwalEdit ? TEXT_COMMON.BUTTONS.CLOSE : TEXT_COMMON.BUTTONS.EDIT}</span>
           </button>
         </div>
@@ -248,7 +248,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                   : "var(--color-warning-bg)",
             }}
           >
-            <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS2.formattedText}</span>
           </div>
         )}
@@ -288,7 +288,7 @@ export const BusInputModalShift2: React.FC<BusInputModalShift2Props> = ({
                   gap: "6px",
                 }}
               >
-                <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                <AlertTriangle size={16} style={{ flexShrink: 0 }} />
                 <span>{crossShiftErrorS2}</span>
               </div>
             )}

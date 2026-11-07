@@ -100,7 +100,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Users size={18} style={{ color: 'var(--color-action-primary-bg)' }} />
+            <Users size={20} style={{ color: 'var(--color-action-primary-bg)' }} />
             <h3
               style={{
                 margin: 0,
@@ -210,7 +210,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
                         fontWeight: 700,
                       }}
                     >
-                      <Lock size={10} />
+                      <Lock size={16} />
                       {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.SUPERADMIN_REQUIRED}
                     </span>
                   ) : (
@@ -270,7 +270,7 @@ export const BulkRoleConfigModal: React.FC<Props> = ({
               opacity: isSaving ? 0.7 : 1,
             }}
           >
-            <Check size={14} />
+            <Check size={16} />
             {TEXT_PAGE_MANAGEMENT.BULK_ACTION.SAVE_ROLES_BTN}
           </button>
         </div>

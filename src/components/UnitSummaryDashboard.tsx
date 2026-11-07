@@ -95,7 +95,7 @@ function UnitSummaryDashboardComponent({
           style={{ textAlign: "center", padding: "32px" }}
         >
           <Bus
-            size={32}
+            size={24}
             style={{ color: "var(--text-secondary)", marginBottom: "8px" }}
           />
           <p>{TEXT_DASHBOARD.BUS_LIST.EMPTY_SUMMARY(searchQuery)}</p>

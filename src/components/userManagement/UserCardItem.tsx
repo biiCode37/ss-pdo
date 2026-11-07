@@ -150,7 +150,7 @@ export const UserCardItem: React.FC<UserCardItemProps> = ({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          <Clock size={11} />
+          <Clock size={16} />
           <span>
             {user.last_login_at
               ? new Date(user.last_login_at).toLocaleDateString("id-ID", {

@@ -57,7 +57,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Users size={18} style={{ color: "#3b82f6" }} />
+            <Users size={20} style={{ color: "#3b82f6" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.USER_MANAGEMENT}</div>
               <div
@@ -98,7 +98,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Sliders size={18} style={{ color: "#f59e0b" }} />
+              <Sliders size={20} style={{ color: "#f59e0b" }} />
               <div style={{ textAlign: "left" }}>
                 <div>{TEXT_PAGE_MANAGEMENT.PROFILE_MENU.PAGE_MANAGEMENT}</div>
                 <div
@@ -139,7 +139,7 @@ export const ProfileAdminSection: React.FC<ProfileAdminSectionProps> = ({
           title={TEXT_DASHBOARD.PROFILE_MENU.COMING_SOON_TITLE}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <History size={18} style={{ color: "var(--text-secondary)" }} />
+            <History size={20} style={{ color: "var(--text-secondary)" }} />
             <div style={{ textAlign: "left" }}>
               <div>{TEXT_DASHBOARD.PROFILE_MENU.AUDIT_LOG}</div>
               <div

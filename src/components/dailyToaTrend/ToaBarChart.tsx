@@ -188,7 +188,7 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
             }}
           >
             <Award
-              size={12}
+              size={16}
               style={{
                 color: "var(--color-success-fg, #22c55e)",
                 filter: "drop-shadow(0px 1px 2px rgba(34,197,94,0.4))",
@@ -210,7 +210,7 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
               }}
             >
               <TrendingDown
-                size={12}
+                size={16}
                 style={{
                   color: "var(--color-error-fg, #ef4444)",
                   filter: "drop-shadow(0px 1px 2px rgba(244,63,94,0.4))",
@@ -255,8 +255,8 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
               <text
                 x="0"
                 y="1.5"
-                fontSize="10"
-                fontWeight="800"
+                fontSize="13"
+                fontWeight="700"
                 fill="var(--color-text-primary)"
                 textAnchor="middle"
               >
@@ -284,7 +284,7 @@ export const ToaBarChart: React.FC<ToaBarChartProps> = ({
               key={`label-${bar.day}`}
               x={bar.x + barWidth / 2}
               y={chartHeight - 4}
-              fontSize="9"
+              fontSize="13"
               fontWeight={bar.isSelected || bar.isGlobalTab ? 700 : 500}
               fill={
                 bar.isSelected

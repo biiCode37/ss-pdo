@@ -136,7 +136,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                <AlertTriangle size={16} style={{ flexShrink: 0 }} />
                 <span>{crossDayErrorS1}</span>
               </div>
               <label
@@ -250,7 +250,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS1.formattedText}</span>
           </div>
         )}
@@ -270,7 +270,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS1.formattedText}</span>
           </div>
         )}
@@ -366,7 +366,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS1.formattedText}</span>
           </div>
         )}
@@ -386,7 +386,7 @@ export const SingleFocusKmShift1: React.FC<SingleFocusKmShift1Props> = ({
               gap: "6px",
             }}
           >
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS1.formattedText}</span>
           </div>
         )}

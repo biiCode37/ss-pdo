@@ -179,7 +179,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
               flexShrink: 0,
             }}
           >
-            {showKmAwalEdit ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            {showKmAwalEdit ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             <span>{showKmAwalEdit ? TEXT_COMMON.BUTTONS.CLOSE : TEXT_COMMON.BUTTONS.EDIT}</span>
           </button>
         </div>
@@ -248,7 +248,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                   : "rgba(245, 158, 11, 0.1)",
             }}
           >
-            <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{kmLiveS1.formattedText}</span>
           </div>
         )}
@@ -283,7 +283,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                  <AlertTriangle size={16} style={{ flexShrink: 0 }} />
                   <span>{crossDayErrorS1}</span>
                 </div>
                 <label
@@ -334,7 +334,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     fontWeight: 700,
                   }}
                 >
-                  <Sparkles size={14} />
+                  <Sparkles size={16} />
                   <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_DETECTED_TITLE}</span>
                 </div>
                 <div style={{ fontSize: "12px", color: "var(--text-secondary, #cbd5e1)", lineHeight: 1.4 }}>
@@ -362,7 +362,7 @@ export const BusInputModalShift1: React.FC<BusInputModalShift1Props> = ({
                     marginTop: "2px",
                   }}
                 >
-                  <Sparkles size={13} />
+                  <Sparkles size={16} />
                   <span>{TEXT_ALERTS.BUS_INPUT_MODAL.ROLLOVER_APPLY_BTN(form.smartRolloverSuggestion.suggestedKm)}</span>
                 </button>
               </div>

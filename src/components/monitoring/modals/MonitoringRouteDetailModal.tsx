@@ -1,15 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  X,
-  ExternalLink,
-  Check,
-  CheckCircle2,
-  Send,
-  Clock,
-  AlertTriangle,
-  Bus,
-  ShieldCheck,
-} from "lucide-react";
+import { X, ExternalLink, Check, CheckCircle2, Send, Clock, AlertTriangle, Bus, ShieldCheck } from "lucide-react";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 import { extractRouteTroubledUnits } from "../monitoringUtils";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
@@ -275,7 +265,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   border: "1px solid var(--color-success-border)",
                 }}
               >
-                <CheckCircle2 size={12} />
+                <CheckCircle2 size={16} />
                 {TEXT_MONITORING.ROUTE_CARD.BADGE_VERIFIED}
               </span>
             )}
@@ -294,7 +284,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   border: "1px solid var(--color-info-border)",
                 }}
               >
-                <Send size={12} />
+                <Send size={16} />
                 {TEXT_MONITORING.ROUTE_CARD.BADGE_SUBMITTED}
               </span>
             )}
@@ -313,7 +303,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   border: "1px solid var(--color-warning-border)",
                 }}
               >
-                <Clock size={12} />
+                <Clock size={16} />
                 {TEXT_MONITORING.ROUTE_CARD.BADGE_DRAFT}
               </span>
             )}
@@ -332,7 +322,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                   border: "1px solid var(--color-border-subtle)",
                 }}
               >
-                <AlertTriangle size={12} />
+                <AlertTriangle size={16} />
                 {TEXT_MONITORING.ROUTE_CARD.BADGE_EMPTY}
               </span>
             )}
@@ -357,7 +347,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               }}
               title={TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_CLOSE_TITLE}
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           </div>
         </div>
@@ -685,7 +675,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                         border: "1px solid var(--color-warning-border)",
                       }}
                     >
-                      <AlertTriangle size={11} />
+                      <AlertTriangle size={16} />
                       {tFleet.BADGE_TROUBLED(troubledUnits.length)}
                     </span>
                   ) : realops > 0 ? (
@@ -704,7 +694,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                         border: "1px solid var(--color-success-border)",
                       }}
                     >
-                      <ShieldCheck size={12} />
+                      <ShieldCheck size={16} />
                       {tFleet.BADGE_ALL_READY}
                     </span>
                   ) : null}
@@ -808,7 +798,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                       border: "1px solid var(--color-success-border)",
                     }}
                   >
-                    <ShieldCheck size={18} style={{ color: "var(--color-success-fg)", flexShrink: 0 }} />
+                    <ShieldCheck size={20} style={{ color: "var(--color-success-fg)", flexShrink: 0 }} />
                     <span
                       style={{
                         fontSize: "12px",
@@ -1151,7 +1141,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
               transition: "all 0.15s ease",
             }}
           >
-            <ExternalLink size={14} />
+            <ExternalLink size={16} />
             <span>{TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_OPEN_SHEET}</span>
           </button>
 
@@ -1178,7 +1168,7 @@ export const MonitoringRouteDetailModal: React.FC<MonitoringRouteDetailModalProp
                 minHeight: "40px",
               }}
             >
-              <Check size={14} />
+              <Check size={16} />
               <span>{TEXT_MONITORING.ROUTE_DETAIL_MODAL.ACTIONS.BTN_VERIFY}</span>
             </button>
           )}

@@ -2,16 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
 import type { RegionalRouteItem } from "@/services/allRouteMonitoringService";
 import { TEXT_MONITORING, TEXT_FLEET_STATUS } from "@/constants/texts";
-import {
-  Bus,
-  CheckCircle2,
-  AlertTriangle,
-  ShieldCheck,
-  ChevronDown,
-  ChevronUp,
-  Edit3,
-  Clock,
-} from "lucide-react";
+import { Bus, CheckCircle2, AlertTriangle, ShieldCheck, ChevronDown, ChevronUp, Edit3, Clock } from "lucide-react";
 import { sortRoutesByCode } from "@/utils/routeSorting";
 import { normalizeRouteCode } from "@/services/googleSheets/globalReportReader";
 import { QuickKorlapFleetModal } from "@/components/fleetStatus/QuickKorlapFleetModal";
@@ -467,7 +458,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
-            <Bus size={17} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+            <Bus size={16} style={{ color: "var(--accent-color, #3ECF8E)" }} />
             <h3
               style={{
                 fontSize: "14px",
@@ -561,7 +552,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
               >
                 {TEXT_MONITORING.FLEET_TAB.SGO_LABEL}
               </span>
-              <CheckCircle2 size={11} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={16} style={{ color: "#10B981" }} />
             </div>
             <div
               style={{
@@ -617,7 +608,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                 {TEXT_MONITORING.FLEET_TAB.NON_SGO_LABEL}
               </span>
               {stats.totalTerkendala > 0 && (
-                <AlertTriangle size={11} style={{ color: "#F59E0B" }} />
+                <AlertTriangle size={16} style={{ color: "#F59E0B" }} />
               )}
             </div>
             <div
@@ -1141,7 +1132,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         title={TEXT_FLEET_STATUS.QUICK_KORLAP.MODAL_TITLE}
                         aria-label="Koreksi Data Rute"
                       >
-                        <Edit3 size={12} />
+                        <Edit3 size={16} />
                       </button>
 
                       {/* Badge Kendala: [Jumlah] + Icon Warning (Tanpa Icon Bus) */}
@@ -1160,7 +1151,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         }}
                       >
                         <span>{group.units.length}</span>
-                        <AlertTriangle size={11} style={{ color: "#F59E0B" }} />
+                        <AlertTriangle size={16} style={{ color: "#F59E0B" }} />
                       </span>
 
                       {/* Chevron Toggle */}
@@ -1172,9 +1163,9 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
                         }}
                       >
                         {isExpanded ? (
-                          <ChevronUp size={14} />
+                          <ChevronUp size={16} />
                         ) : (
-                          <ChevronDown size={14} />
+                          <ChevronDown size={16} />
                         )}
                       </div>
                     </div>
@@ -1299,7 +1290,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              <ShieldCheck size={15} style={{ color: "#10B981" }} />
+              <ShieldCheck size={16} style={{ color: "#10B981" }} />
               <span
                 style={{
                   fontSize: "12px",
@@ -1386,7 +1377,7 @@ export const MonitoringFleetStatusTab: React.FC<MonitoringFleetStatusTabProps> =
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-              <Clock size={13} style={{ color: "var(--text-secondary)" }} />
+              <Clock size={16} style={{ color: "var(--text-secondary)" }} />
               <span
                 style={{
                   fontSize: "12px",

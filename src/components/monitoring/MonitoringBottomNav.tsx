@@ -72,7 +72,7 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
               aria-label={item.label}
             >
               <div className="bottom-nav-icon-wrapper">
-                <Icon size={19} />
+                <Icon size={20} />
               </div>
               <span className="bottom-nav-label">
                 {item.label}

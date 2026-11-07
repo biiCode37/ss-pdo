@@ -187,7 +187,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
           >
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ShieldCheck size={18} style={{ color: 'var(--color-action-primary-bg)' }} />
+                <ShieldCheck size={20} style={{ color: 'var(--color-action-primary-bg)' }} />
                 <h3
                   style={{
                     margin: 0,
@@ -228,7 +228,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                 cursor: 'pointer',
               }}
             >
-              <X size={18} />
+              <X size={20} />
             </button>
           </div>
 
@@ -404,7 +404,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             fontWeight: 700,
                           }}
                         >
-                          <Lock size={10} />
+                          <Lock size={16} />
                           {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.SUPERADMIN_REQUIRED}
                         </span>
                       ) : (
@@ -448,7 +448,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <UserPlus size={14} />
+                    <UserPlus size={16} />
                     {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.BTN_ADD_ACCOUNT}
                   </button>
                 </div>
@@ -490,7 +490,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             padding: '4px',
                           }}
                         >
-                          <Trash2 size={15} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     ))}
@@ -542,7 +542,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                       cursor: 'pointer',
                     }}
                   >
-                    <Ban size={14} />
+                    <Ban size={16} />
                     {TEXT_PAGE_MANAGEMENT.CONFIG_MODAL.BTN_ADD_ACCOUNT}
                   </button>
                 </div>
@@ -584,7 +584,7 @@ export const PageAccessConfigModal: React.FC<Props> = ({
                             padding: '4px',
                           }}
                         >
-                          <Trash2 size={15} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     ))}

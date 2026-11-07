@@ -123,7 +123,7 @@ function UserProfileHeaderComponent({ onOpenProfile }: UserProfileHeaderProps) {
             }}
           />
         ) : (
-          <User size={18} strokeWidth={2.2} />
+          <User size={20} strokeWidth={2.2} />
         )}
       </div>
 

@@ -92,7 +92,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
               }}
             >
               <Users
-                size={18}
+                size={20}
                 className="text-blue-500"
                 style={{ flexShrink: 0 }}
               />
@@ -140,7 +140,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
             title={TEXT_USER_MANAGEMENT.HEADER.REFRESH_TITLE}
           >
             <RefreshCw
-              size={15}
+              size={16}
               className={isLoading ? "animate-spin" : ""}
             />
           </button>
@@ -163,7 +163,7 @@ export const UserManagementHeader: React.FC<UserManagementHeaderProps> = ({
               transition: "all 0.15s ease",
             }}
           >
-            <UserPlus size={15} />
+            <UserPlus size={16} />
             <span>{TEXT_USER_MANAGEMENT.HEADER.ADD_BTN}</span>
           </button>
         </div>

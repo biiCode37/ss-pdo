@@ -120,7 +120,7 @@ function BusCardComponent({
                   transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
                 }}
               >
-                {isSelected && <Check size={14} strokeWidth={3} />}
+                {isSelected && <Check size={16} strokeWidth={3} />}
               </span>
             )}
             <span className="bus-card-unit" style={{ fontWeight: 700, fontSize: "16px" }}>{bus.unit}</span>
@@ -145,7 +145,7 @@ function BusCardComponent({
             <UnitStatusBadge keterangan={keteranganHariIni} />
             {isLoading && (
               <Loader2
-                size={14}
+                size={16}
                 className="spinner"
                 style={{ color: "var(--accent-color)", flexShrink: 0 }}
               />
@@ -179,7 +179,7 @@ function BusCardComponent({
           }}
         >
           <AlertTriangle
-            size={13}
+            size={16}
             style={{
               color: "var(--color-text-secondary)",
               flexShrink: 0,

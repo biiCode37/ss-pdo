@@ -62,7 +62,7 @@ export function WaReportHeader({ onClose }: WaReportHeaderProps) {
           padding: "6px",
         }}
       >
-        <X size={22} />
+        <X size={24} />
       </button>
     </div>
   );

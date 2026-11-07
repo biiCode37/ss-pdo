@@ -7,14 +7,7 @@ import { parseIndonesianNumber } from "../utils/numberUtils";
 import { UnitStatusBadge } from "./ui/UnitStatusBadge";
 import { UNIT_STATUS_CARD_CLASS } from "./ui/unitStatusClass";
 import { TEXT_DASHBOARD } from "../constants/texts";
-import {
-  Bus,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  XCircle,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock, AlertCircle, XCircle } from "lucide-react";
 import type { UnitSummaryItem, UnitShiftStatus } from "../utils/unitAnalytics";
 
 interface Props {
@@ -41,7 +34,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
             gap: "5px",
           }}
         >
-          <CheckCircle2 size={13} style={{ flexShrink: 0 }} />
+          <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
           <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_FULL_COMPLETE}</span>
         </span>
       );
@@ -61,7 +54,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
             gap: "5px",
           }}
         >
-          <AlertCircle size={13} style={{ flexShrink: 0 }} />
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
           <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_1_ONLY}</span>
         </span>
       );
@@ -81,7 +74,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
             gap: "5px",
           }}
         >
-          <AlertCircle size={13} style={{ flexShrink: 0 }} />
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
           <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY}</span>
         </span>
       );
@@ -101,7 +94,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
             gap: "5px",
           }}
         >
-          <Clock size={13} style={{ flexShrink: 0 }} />
+          <Clock size={16} style={{ flexShrink: 0 }} />
           <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE}</span>
         </span>
       );
@@ -122,7 +115,7 @@ function renderStatusBadge(status: UnitShiftStatus) {
             gap: "5px",
           }}
         >
-          <XCircle size={13} style={{ flexShrink: 0, opacity: 0.7 }} />
+          <XCircle size={16} style={{ flexShrink: 0, opacity: 0.7 }} />
           <span>{TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY}</span>
         </span>
       );
@@ -186,10 +179,6 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
             fontSize: "16px",
           }}
         >
-          <Bus
-            size={16}
-            style={{ color: "var(--accent-color)", flexShrink: 0 }}
-          />
           <span className="bus-card-unit">{item.unit}</span>
         </div>
 
@@ -268,7 +257,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
           }}
         >
           <AlertTriangle
-            size={13}
+            size={16}
             style={{ color: "var(--orange-color, #f97316)", flexShrink: 0, marginTop: "2px" }}
           />
           <div

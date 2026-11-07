@@ -262,7 +262,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
               }}
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={20} />
             </button>
 
             <div>
@@ -318,7 +318,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 transition: 'all 0.2s cubic-bezier(0.32, 0.72, 0, 1)',
               }}
             >
-              {isSelectMode ? <Check size={14} /> : <CheckSquare size={14} />}
+              {isSelectMode ? <Check size={16} /> : <CheckSquare size={16} />}
               <span>
                 {isSelectMode
                   ? TEXT_PAGE_MANAGEMENT.BULK_ACTION.EXIT_SELECT_MODE
@@ -341,7 +341,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                 flexShrink: 0,
               }}
             >
-              <ShieldAlert size={13} />
+              <ShieldAlert size={16} />
               <span>{TEXT_PAGE_MANAGEMENT.SUPERADMIN_BADGE}</span>
             </div>
           </div>
@@ -490,7 +490,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                     color: 'var(--color-role-admin-fg)',
                   }}
                 >
-                  <Layout size={19} />
+                  <Layout size={20} />
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -516,7 +516,7 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                         color: 'var(--color-text-secondary)',
                       }}
                     >
-                      <Lock size={10} />
+                      <Lock size={16} />
                       {TEXT_PAGE_MANAGEMENT.STATUS.LOCKED}
                     </span>
                   </div>
@@ -671,9 +671,9 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       flexShrink: 0,
                     }}
                   >
-                    {setting.category === 'page' && <Layout size={19} />}
-                    {setting.category === 'tab' && <Layers size={19} />}
-                    {setting.category === 'modal' && <Sliders size={19} />}
+                    {setting.category === 'page' && <Layout size={20} />}
+                    {setting.category === 'tab' && <Layers size={20} />}
+                    {setting.category === 'modal' && <Sliders size={20} />}
                   </div>
 
                   <div style={{ minWidth: 0 }}>
@@ -715,12 +715,12 @@ export const PageManagementPage: React.FC<Props> = ({ onBack }) => {
                       >
                         {isEnabled ? (
                           <>
-                            <CheckCircle2 size={10} />
+                            <CheckCircle2 size={16} />
                             {TEXT_PAGE_MANAGEMENT.STATUS.ACTIVE}
                           </>
                         ) : (
                           <>
-                            <AlertCircle size={10} />
+                            <AlertCircle size={16} />
                             {TEXT_PAGE_MANAGEMENT.STATUS.MAINTENANCE}
                           </>
                         )}

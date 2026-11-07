@@ -49,9 +49,9 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
             }}
           >
             {isAllConfirmed ? (
-              <CheckCircle2 size={19} style={{ color: "#10B981" }} />
+              <CheckCircle2 size={20} style={{ color: "#10B981" }} />
             ) : (
-              <ShieldAlert size={19} style={{ color: "#F59E0B" }} />
+              <ShieldAlert size={20} style={{ color: "#F59E0B" }} />
             )}
           </div>
           <div

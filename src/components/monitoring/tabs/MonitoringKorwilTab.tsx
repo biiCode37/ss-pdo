@@ -1,12 +1,5 @@
 import React, { useState, useMemo } from "react";
-import {
-  Users,
-  ChevronDown,
-  ChevronUp,
-  Award,
-  UserCheck,
-  ArrowUpRight,
-} from "lucide-react";
+import { Users, ChevronDown, ChevronUp, Award, UserCheck, ArrowUpRight } from "lucide-react";
 import { TEXT_MONITORING } from "@/constants/texts";
 import type {
   RegionalMonitoringResult,
@@ -78,7 +71,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
             color: "var(--text-secondary)",
           }}
         >
-          <Users size={48} style={{ opacity: 0.4, margin: "0 auto 16px auto", display: "block" }} />
+          <Users size={24} style={{ opacity: 0.4, margin: "0 auto 16px auto", display: "block" }} />
           <h3 style={{ fontSize: "16px", fontWeight: 700, margin: "0 0 8px 0", color: "var(--text-primary)" }}>
             {TEXT_MONITORING.KORWIL_TAB.EMPTY_TITLE}
           </h3>
@@ -157,7 +150,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                 gap: "8px",
               }}
             >
-              <Award size={18} style={{ color: "var(--accent-color, #3ECF8E)" }} />
+              <Award size={20} style={{ color: "var(--accent-color, #3ECF8E)" }} />
               {TEXT_MONITORING.KORWIL_TAB.TOTAL_WILAYAH_CARD}
             </h2>
             <span style={{ fontSize: "12px", color: "var(--text-secondary, #888)", display: "block", marginTop: "2px" }}>
@@ -548,7 +541,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
                           </span>
                         </div>
                         {onSelectRoute && (
-                          <ArrowUpRight size={14} style={{ color: "var(--text-secondary, #888)" }} />
+                          <ArrowUpRight size={16} style={{ color: "var(--text-secondary, #888)" }} />
                         )}
                       </div>
                     </div>

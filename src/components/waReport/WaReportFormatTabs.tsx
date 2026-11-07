@@ -48,7 +48,7 @@ export function WaReportFormatTabs({
             color: "#d97706",
           }}
         >
-          <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+          <AlertTriangle size={20} style={{ flexShrink: 0 }} />
           <span>
             {TEXT_WA_REPORT.WARNING_UNSUBMITTED(unsubmittedCount, totalRoutesCount)}
           </span>
@@ -88,7 +88,7 @@ export function WaReportFormatTabs({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 700 }}>
-            <FileText size={12} />
+            <FileText size={16} />
             <span>{TEXT_WA_REPORT.FORMAT_TABS.FORMAT_1}</span>
           </div>
           <span style={{ fontSize: "12px", opacity: 0.8, fontWeight: 500 }}>
@@ -116,7 +116,7 @@ export function WaReportFormatTabs({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 700 }}>
-            <FileText size={12} />
+            <FileText size={16} />
             <span>{TEXT_WA_REPORT.FORMAT_TABS.FORMAT_2}</span>
           </div>
           <span style={{ fontSize: "12px", opacity: 0.8, fontWeight: 500 }}>
@@ -144,7 +144,7 @@ export function WaReportFormatTabs({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", fontWeight: 700 }}>
-            <FileText size={12} />
+            <FileText size={16} />
             <span>{TEXT_WA_REPORT.FORMAT_TABS.FORMAT_3}</span>
           </div>
           <span style={{ fontSize: "12px", opacity: 0.8, fontWeight: 500 }}>
@@ -264,7 +264,7 @@ export function WaReportFormatTabs({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#f87171", fontWeight: 700, fontSize: "12px" }}>
-            <AlertTriangle size={15} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={16} style={{ flexShrink: 0 }} />
             <span>{TEXT_WA_REPORT.BLOCKING_TITLE(selectedShift)}</span>
           </div>
           <p style={{ margin: 0, fontSize: "12px", color: "var(--text-secondary, #94a3b8)", lineHeight: 1.35 }}>

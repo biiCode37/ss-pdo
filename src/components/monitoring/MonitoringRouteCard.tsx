@@ -137,7 +137,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                   border: "1px solid rgba(16, 185, 129, 0.25)",
                 }}
               >
-                <CheckCircle2 size={13} />
+                <CheckCircle2 size={16} />
                 {TEXT_MONITORING.ROUTE_CARD.BADGE_VERIFIED}
               </span>
             )}
@@ -156,7 +156,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 border: "1px solid var(--color-info-border)",
               }}
             >
-              <Send size={13} />
+              <Send size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_SUBMITTED}
             </span>
           )}
@@ -175,7 +175,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 border: "1px solid var(--color-warning-border)",
               }}
             >
-              <Clock size={13} />
+              <Clock size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_DRAFT}
             </span>
           )}
@@ -194,7 +194,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
                 border: "1px solid var(--card-border, rgba(255, 255, 255, 0.08))",
               }}
             >
-              <AlertTriangle size={13} />
+              <AlertTriangle size={16} />
               {TEXT_MONITORING.ROUTE_CARD.BADGE_EMPTY}
             </span>
           )}
@@ -443,7 +443,7 @@ export const MonitoringRouteCard: React.FC<MonitoringRouteCardProps> = ({
               cursor: "pointer",
             }}
           >
-            <CheckCircle2 size={13} />
+            <CheckCircle2 size={16} />
             <span>{TEXT_MONITORING.ROUTE_CARD.BTN_VERIFY}</span>
           </button>
         )}

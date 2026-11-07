@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Search,
-  Filter,
-  CheckCircle2,
-  Loader2,
-  ChevronDown,
-  ListChecks,
-} from "lucide-react";
+import { Search, Filter, CheckCircle2, Loader2, ChevronDown, ListChecks } from "lucide-react";
 import { TEXT_DASHBOARD } from "@/constants/texts";
 import { BUS_CATEGORIES } from "./busListUtils";
 
@@ -97,7 +90,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
         >
           {isSubmittingBulk && (
             <Loader2
-              size={13}
+              size={16}
               className="spinner"
               style={{ color: "var(--accent-color)" }}
             />
@@ -140,7 +133,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             transition: "all 0.18s cubic-bezier(0.32, 0.72, 0, 1)",
           }}
         >
-          <ListChecks size={14} />
+          <ListChecks size={16} />
           <span>{TEXT_DASHBOARD.BUS_LIST.SELECT_MODE_BTN}</span>
         </button>
 
@@ -180,7 +173,7 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
             ))}
           </select>
           <ChevronDown
-            size={14}
+            size={16}
             style={{
               position: "absolute",
               right: "9px",
@@ -236,9 +229,9 @@ export const BusListControlBar: React.FC<BusListControlBarProps> = ({
           onClick={onToggleUnfinished}
         >
           {showOnlyUnfinished ? (
-            <CheckCircle2 size={14} style={{ color: "var(--success-color)" }} />
+            <CheckCircle2 size={16} style={{ color: "var(--success-color)" }} />
           ) : (
-            <Filter size={14} />
+            <Filter size={16} />
           )}
           {showOnlyUnfinished
             ? TEXT_DASHBOARD.BUS_LIST.FILTER_UNFINISHED

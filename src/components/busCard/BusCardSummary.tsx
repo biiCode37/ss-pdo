@@ -1,11 +1,7 @@
 import type { BusData } from "@/services/googleSheets";
 import { parseIndonesianNumber, safeFormatNumber } from "@/utils/numberUtils";
 import { TEXT_DASHBOARD } from "@/constants/texts";
-import {
-  Navigation,
-  AlertCircle,
-  ArrowRightLeft,
-} from "lucide-react";
+import { Navigation, AlertCircle, ArrowRightLeft } from "lucide-react";
 import { isUnitOff, isUnitTo, isUnitOffOrToEvdal } from "@/utils/keteranganUtils";
 
 interface BusCardSummaryProps {
@@ -90,7 +86,7 @@ export function BusCardSummary({
             gap: "5px",
           }}
         >
-          <ArrowRightLeft size={12} style={{ flexShrink: 0 }} />
+          <ArrowRightLeft size={16} style={{ flexShrink: 0 }} />
           <span>
             Trip:{" "}
             {hasTrip
@@ -138,9 +134,9 @@ export function BusCardSummary({
         }}
       >
         {isFilled ? (
-          <Navigation size={12} style={{ flexShrink: 0 }} />
+          <Navigation size={16} style={{ flexShrink: 0 }} />
         ) : (
-          <AlertCircle size={12} style={{ flexShrink: 0 }} />
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
         )}
         <span>
           {label}: {isFilled ? String(val) : TEXT_DASHBOARD.BUS_CARD_ACTIONS.EMPTY_BADGE}

@@ -104,7 +104,7 @@ export function QueueModal({
                         showInfoToast(TEXT_ALERTS.QUEUE_MODAL.TOAST_RETRY);
                       }}
                     >
-                      <RotateCw size={14} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_RETRY}
+                      <RotateCw size={16} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_RETRY}
                     </button>
                     <button
                       className="btn btn-outline"
@@ -118,7 +118,7 @@ export function QueueModal({
                       }}
                       onClick={() => onDelete(item.id)}
                     >
-                      <Trash2 size={14} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_DELETE}
+                      <Trash2 size={16} /> {TEXT_ALERTS.QUEUE_MODAL.BTN_DELETE}
                     </button>
                   </>
                 )}

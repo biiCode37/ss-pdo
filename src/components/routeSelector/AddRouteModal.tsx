@@ -129,7 +129,7 @@ export function AddRouteModal({
                 justifyContent: 'center',
               }}
             >
-              <Plus size={18} />
+              <Plus size={20} />
             </div>
             <h3
               style={{
@@ -158,7 +158,7 @@ export function AddRouteModal({
             }}
             aria-label={TEXT_COMMON.CLOSE}
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 
@@ -401,19 +401,19 @@ export function AddRouteModal({
         {/* Live Status Inspection Badge */}
         {checkStatus === 'checking' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--accent-color)', marginBottom: '12px' }}>
-            <Loader2 className="spinner" size={14} />
+            <Loader2 className="spinner" size={16} />
             <span>{checkMessage || TEXT_DASHBOARD.ROUTE_SELECTOR.CHECKING_ACCESS}</span>
           </div>
         )}
         {checkStatus === 'valid' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success-color, #10b981)', marginBottom: '12px', fontWeight: 600 }}>
-            <CheckCircle size={15} />
+            <CheckCircle size={16} />
             <span>{checkMessage}</span>
           </div>
         )}
         {checkStatus === 'invalid' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--danger-color)', marginBottom: '12px' }}>
-            <AlertCircle size={15} />
+            <AlertCircle size={16} />
             <span>{checkMessage}</span>
           </div>
         )}
@@ -441,7 +441,7 @@ export function AddRouteModal({
             gap: '8px',
           }}
         >
-          {isSaving ? <Loader2 className="spinner" size={18} /> : null}
+          {isSaving ? <Loader2 className="spinner" size={20} /> : null}
           <span>{isSaving ? TEXT_DASHBOARD.ROUTE_SELECTOR.SAVING_ROUTE : TEXT_DASHBOARD.ROUTE_SELECTOR.SAVE_ROUTE_BTN}</span>
         </button>
           </>

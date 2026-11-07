@@ -1,11 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import {
-  MapPin,
-  ChevronDown,
-  ChevronLeft,
-  AlertTriangle,
-  CloudOff,
-} from "lucide-react";
+import { MapPin, ChevronDown, ChevronLeft, AlertTriangle, CloudOff } from "lucide-react";
 import { UserProfileHeader } from "@/components/UserProfileHeader";
 import { RouteSelectorCard } from "@/components/RouteSelectorCard";
 import { TEXT_DASHBOARD } from "@/constants/texts";
@@ -153,7 +147,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               aria-label={TEXT_DASHBOARD.SWITCHER.TITLE}
               data-testid="back-to-monitoring-btn"
             >
-              <ChevronLeft size={14} style={{ flexShrink: 0 }} />
+              <ChevronLeft size={16} style={{ flexShrink: 0 }} />
               <span>{TEXT_DASHBOARD.SWITCHER.REGIONAL_MONITORING}</span>
             </button>
           )}
@@ -181,9 +175,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             aria-label={TEXT_DASHBOARD.ROUTE_SELECTOR.ACTIVE_ROUTE_ARIA(activeRouteCode)}
             data-testid="active-route-badge-btn"
           >
-            <MapPin size={13} style={{ color: "var(--color-action-primary-bg, #3ECF8E)", flexShrink: 0 }} />
+            <MapPin size={16} style={{ color: "var(--color-action-primary-bg, #3ECF8E)", flexShrink: 0 }} />
             <span>{activeRouteCode}</span>
-            <ChevronDown size={12} style={{ opacity: 0.65, flexShrink: 0 }} />
+            <ChevronDown size={16} style={{ opacity: 0.65, flexShrink: 0 }} />
           </button>
 
           {queue.length > 0 && (
@@ -213,9 +207,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               title={TEXT_DASHBOARD.SYNC_QUEUE_TITLE}
             >
               {hasConflictOrFailedQueue ? (
-                <AlertTriangle size={13} />
+                <AlertTriangle size={16} />
               ) : (
-                <CloudOff size={13} />
+                <CloudOff size={16} />
               )}
               <span>{queue.length}</span>
             </div>
