@@ -171,12 +171,7 @@ export function BusCardSummary({
         <span className="bus-metric-label">
           {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_RITASE}
         </span>
-        <span
-          className="bus-metric-value"
-          style={{
-            color: "var(--color-text-primary)",
-          }}
-        >
+        <span className="bus-metric-value">
           {hasTrip && totalRit > 0 ? (
             <>
               {totalRitDisplay}{" "}
@@ -193,10 +188,7 @@ export function BusCardSummary({
         <span className="bus-metric-label">
           {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_KM}
         </span>
-        <span
-          className="bus-metric-value"
-          style={{ color: "var(--shift1-color)" }}
-        >
+        <span className="bus-metric-value">
           {hasKm ? (
             <>
               {safeFormatNumber(totalKm)}
@@ -213,10 +205,7 @@ export function BusCardSummary({
         <span className="bus-metric-label">
           {TEXT_DASHBOARD.BUS_CARD_ACTIONS.LABEL_PASSENGER}
         </span>
-        <span
-          className="bus-metric-value"
-          style={{ color: "var(--text-primary)" }}
-        >
+        <span className="bus-metric-value">
           {hasPnp ? (
             <>
               {safeFormatNumber(totalPnp)}

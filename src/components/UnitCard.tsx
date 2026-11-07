@@ -212,7 +212,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
         {/* Kolom 2: Total KM Tempuh */}
         <div className="bus-metric-col">
           <span className="bus-metric-label">{TEXT_DASHBOARD.UNIT_CARD.LABEL_KM}</span>
-          <span className="bus-metric-value" style={{ color: "var(--shift1-color)" }}>
+          <span className="bus-metric-value">
             {item.totalKm > 0 ? (
               <>
                 {safeFormatNumber(item.totalKm)}
@@ -227,7 +227,7 @@ function UnitCardComponent({ item, onSelectUnit }: Props) {
         {/* Kolom 3: Total Pelanggan */}
         <div className="bus-metric-col">
           <span className="bus-metric-label">{TEXT_DASHBOARD.UNIT_CARD.LABEL_PASSENGER}</span>
-          <span className="bus-metric-value" style={{ color: "var(--text-primary)" }}>
+          <span className="bus-metric-value">
             {item.totalPassengers > 0 ? (
               <>
                 {safeFormatNumber(item.totalPassengers)}

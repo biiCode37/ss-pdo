@@ -13,10 +13,10 @@ import { describe, test, expect } from "vitest";
 const BASELINE = {
   // Diukur 07 Nov 2026 setelah refact_217 (ikon dirapikan).
   rawHexColor: 780,
-  rgbHslFunction: 930,
+  rgbHslFunction: 925,
   gradient: 0,
   gradientText: 0,
-  inlineStyleObject: 2000,
+  inlineStyleObject: 1994,
   // refact_216: tipografi dinormalisasi ke skala, dikunci di nol.
   fontSizeBelow12px: 0,
   fontSizeOffScale: 0,

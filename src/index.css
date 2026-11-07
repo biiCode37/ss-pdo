@@ -134,7 +134,7 @@ input[type="number"] {
 /* Card Surface Utilities */
 .glass {
   background: var(--card-bg);
-  border: 1px solid var(--color-border-control);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 16px;
 }
 
@@ -375,34 +375,32 @@ select.input-field {
   padding-top: 6px;
 }
 .bus-card {
+  position: relative;
   overflow: hidden;
   scroll-margin-top: calc(var(--sticky-header-height, 90px) + 12px);
-  border-left: 3.5px solid transparent;
-  transition: transform 0.18s var(--ease-spring), box-shadow 0.18s var(--ease-spring), border-color 0.18s var(--ease-spring);
 }
-.bus-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+/* refact_212: warna status HANYA di tepi kiri & kanan; latar kartu tetap netral.
+   refact_219: digambar di lapisan ::after (di atas latar isi kartu) agar semua kartu
+   punya border 1px yang sama di keempat sisi dan isi kartu tidak bergeser. */
+.bus-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 4px 0 0 var(--unit-edge, transparent), inset -4px 0 0 var(--unit-edge, transparent);
 }
-/* Status kartu unit dari keterangan sepanjang hari (refact_209) */
-.bus-card {
-  border-right: 3.5px solid transparent;
-}
-/* refact_212: warna status HANYA di garis tepi kiri & kanan; latar kartu tetap netral */
 .bus-card.unit-status-off {
-  border-left-color: var(--color-unit-off-border);
-  border-right-color: var(--color-unit-off-border);
+  --unit-edge: var(--color-unit-off-border);
 }
 .bus-card.unit-status-kendala {
-  border-left-color: var(--color-unit-kendala-border);
-  border-right-color: var(--color-unit-kendala-border);
+  --unit-edge: var(--color-unit-kendala-border);
 }
 .bus-card.unit-status-to {
-  border-left-color: var(--color-unit-to-border);
-  border-right-color: var(--color-unit-to-border);
+  --unit-edge: var(--color-unit-to-border);
 }
 .bus-card-header {
-  padding: 16px 20px;
+  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -457,12 +455,8 @@ select.input-field {
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-surface-subtle);
   border-top: 1px solid var(--card-border);
-}
-
-[data-theme="light"] .bus-metric-strip {
-  background: rgba(0, 0, 0, 0.015);
 }
 
 .bus-metric-col {
@@ -471,11 +465,13 @@ select.input-field {
   align-items: center;
   text-align: center;
   gap: 2px;
-  padding: 2px 4px;
+  padding: 4px;
 }
 
-.bus-metric-col:not(:last-child) {
-  border-right: 1px solid var(--card-border);
+/* Pemisah kolom di sisi kiri kolom berikutnya: kolom Ritase yang bisa diketuk
+   (radius 8px) tidak lagi membuat garis pemisahnya melengkung (refact_219). */
+.bus-metric-col + .bus-metric-col {
+  border-left: 1px solid var(--card-border);
 }
 
 .bus-metric-interactive {
@@ -485,11 +481,7 @@ select.input-field {
 }
 
 .bus-metric-interactive:hover {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-[data-theme="light"] .bus-metric-interactive:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--color-action-secondary-bg);
 }
 
 .bus-metric-interactive:active {
@@ -498,16 +490,14 @@ select.input-field {
 
 .bus-metric-label {
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  opacity: 0.85;
+  font-weight: 600;
+  color: var(--color-text-secondary);
 }
 
 .bus-metric-value {
   font-size: 14px;
   font-weight: 700;
+  color: var(--color-text-primary);
   font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: baseline;
@@ -523,8 +513,7 @@ select.input-field {
 }
 
 .bus-metric-empty {
-  color: var(--text-secondary);
-  opacity: 0.45;
+  color: var(--color-text-muted);
   font-weight: 600;
   font-size: 13px;
 }

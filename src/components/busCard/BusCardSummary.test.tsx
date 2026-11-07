@@ -39,7 +39,8 @@ describe('BusCardSummary — ritase satu warna netral', () => {
   it.each([['8', '8'], ['8', '7'], ['7', '8'], ['8', '5'], ['3', '3']])(
     '%s/%s tampil dengan warna netral yang sama',
     (p, q) => {
-      expect(renderAll(p, q)?.style.color).toBe('var(--color-text-primary)');
+      // refact_219: warna netral datang dari kelas .bus-metric-value; tanpa override inline per kondisi trip.
+      expect(renderAll(p, q)?.style.color).toBe('');
     },
   );
 

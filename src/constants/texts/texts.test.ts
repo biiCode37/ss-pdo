@@ -439,7 +439,7 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_SHIFT_2_ONLY).toBe('Hanya Shift 2');
     expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_INCOMPLETE).toBe('Parsial');
     expect(TEXT_DASHBOARD.UNIT_CARD.STATUS_EMPTY).toBe('Belum Terisi');
-    expect(TEXT_DASHBOARD.UNIT_CARD.LABEL_RITASE).toBe('RITASE');
+    expect(TEXT_DASHBOARD.UNIT_CARD.LABEL_RITASE).toBe('Ritase');
     expect(TEXT_DASHBOARD.UNIT_CARD.ARIA_VIEW_DETAIL('101')).toBe('Lihat detail unit 101');
     expect(TEXT_DASHBOARD.BUS_LIST.ALL_UNITS_FILLED).toContain('selesai diisi');
   });
