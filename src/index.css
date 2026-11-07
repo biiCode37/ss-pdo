@@ -6,6 +6,7 @@
 @import "./styles/components/forms.css";
 @import "./styles/components/status.css";
 @import "./styles/components/charts.css";
+@import "./styles/components/submission.css";
 
 :root {
 
