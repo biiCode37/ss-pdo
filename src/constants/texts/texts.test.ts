@@ -513,7 +513,7 @@ describe('Centralized UI Text Dictionary', () => {
   });
 
   it('exports TEXT_MONITORING.SUBMISSION untuk fitur siap kirim', () => {
-    expect(TEXT_MONITORING.NAV.SUBMISSION).toBe('Siap Kirim');
+    expect(TEXT_MONITORING.NAV.SUBMISSION).toBe('Cek Data');
     expect(TEXT_MONITORING.SUBMISSION.SUMMARY(12, 18)).toBe('Siap kirim 12/18');
     expect(TEXT_MONITORING.SUBMISSION.ISSUE_MISSING('Trip pulang')).toBe('Trip pulang kosong');
     expect(TEXT_MONITORING.SUBMISSION.ISSUE_WAJAR('TOA S1', 'Program Keur/ Renops')).toBe('Wajar · TOA S1 kosong · Program Keur/ Renops');

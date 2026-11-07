@@ -155,7 +155,7 @@ export const TEXT_MONITORING = {
     FLEET_STATUS: "Status Armada",
     WA_REPORT: "Laporan WA",
     PROFILE: "Profil",
-    SUBMISSION: "Siap Kirim",
+    SUBMISSION: "Cek Data",
   },
   PERIOD: {
     LABEL: "Periode Pemantauan",
