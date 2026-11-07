@@ -39,7 +39,7 @@ describe("MonitoringBottomNav Component", () => {
     });
 
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.ROUTES);
-    expect(container.textContent).toContain(TEXT_MONITORING.NAV.FLEET_STATUS);
+    expect(container.textContent).toContain(TEXT_MONITORING.NAV.SUBMISSION);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.DASHBOARD);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.KORWIL);
     expect(container.textContent).toContain(TEXT_MONITORING.NAV.WA_REPORT);
@@ -48,7 +48,7 @@ describe("MonitoringBottomNav Component", () => {
     const buttons = container.querySelectorAll<HTMLButtonElement>(".monitoring-tab-btn");
     expect(buttons.length).toBe(5);
     expect(buttons[0].getAttribute("data-testid")).toBe("monitoring-tab-routes");
-    expect(buttons[1].getAttribute("data-testid")).toBe("monitoring-tab-fleet_status");
+    expect(buttons[1].getAttribute("data-testid")).toBe("monitoring-tab-siap_kirim");
     expect(buttons[2].getAttribute("data-testid")).toBe("monitoring-tab-dashboard"); // EXACT CENTER (Slot 3)!
     expect(buttons[3].getAttribute("data-testid")).toBe("monitoring-tab-korwil");
     expect(buttons[4].getAttribute("data-testid")).toBe("monitoring-tab-wa_report");
@@ -89,7 +89,7 @@ describe("MonitoringBottomNav Component", () => {
     });
 
     const fleetTabBtn = container.querySelector<HTMLButtonElement>(
-      '[data-testid="monitoring-tab-fleet_status"]'
+      '[data-testid="monitoring-tab-siap_kirim"]'
     );
     expect(fleetTabBtn).toBeTruthy();
 
@@ -97,7 +97,7 @@ describe("MonitoringBottomNav Component", () => {
       fleetTabBtn?.click();
     });
 
-    expect(onSelectTab).toHaveBeenCalledWith("fleet_status");
+    expect(onSelectTab).toHaveBeenCalledWith("siap_kirim");
   });
 
   it("calls onSelectTab with korwil when Capaian Korwil tab is clicked", async () => {

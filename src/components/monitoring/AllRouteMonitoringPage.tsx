@@ -14,6 +14,7 @@ import {
   ingestRegionalRouteSummariesForRange,
   ingestSingleRouteSummary,
   ingestSingleRouteSummaryForRange,
+  getWibTodayString,
   type IngestionProgress,
 } from "@/services/regionalIngestionService";
 import type { DailyFleetShiftWithUnits } from "@/types/supabase";
@@ -30,6 +31,8 @@ import { MonitoringRoutesTab } from "./tabs/MonitoringRoutesTab";
 import { MonitoringKorwilTab } from "./tabs/MonitoringKorwilTab";
 import { MonitoringFleetStatusTab } from "./tabs/MonitoringFleetStatusTab";
 import { MonitoringWaReportTab } from "./tabs/MonitoringWaReportTab";
+import { SubmissionReadinessTab, type ReadinessSegment } from "./readiness/SubmissionReadinessTab";
+import { PendingUpdateBanner } from "./PendingUpdateBanner";
 import { SUPERVISOR_TABS, matchesSupervisorTab } from "./monitoringUtils";
 import { usePageAccess } from "@/context/PageAccessContext";
 import { getStoredUserRole } from "@/utils/roleStorage";
@@ -42,9 +45,8 @@ import {
 // Re-export untuk kompatibilitas penuh (Zero Breaking Change)
 export { SUPERVISOR_TABS, matchesSupervisorTab };
 
-// ponytail: angka Monitoring boleh telat ≤60 detik demi kuota egress Free Plan (BUG-QUOTA-200-02); turunkan jika pindah ke server kantor
+// ponytail: tab capaian tidak lagi memuat ulang otomatis; event realtime hanya memunculkan banner (hemat Log Ingestion 1 GB), muat ulang atas ketukan pengguna
 export const REALTIME_MIN_DEBOUNCE_MS = 3000;
-export const REALTIME_MIN_INTERVAL_MS = 60_000;
 
 export interface AllRouteMonitoringPageProps {
   onBackToRouteView?: () => void;
@@ -66,17 +68,16 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   // 1. Navigation Tab State (Persisten via sessionStorage agar tidak ter-reset)
   const [activeTab, setActiveTabState] = useState<MonitoringTab>(() => {
     try {
-      const saved = sessionStorage.getItem("SS_MONITORING_ACTIVE_TAB") as MonitoringTab;
-      if (
-        saved &&
-        ["dashboard", "routes", "fleet_status", "wa_report", "korwil"].includes(saved)
-      ) {
-        return saved;
+      const saved = sessionStorage.getItem("SS_MONITORING_ACTIVE_TAB");
+      // Tab lama "Status Armada" kini menjadi segmen Armada di dalam tab Siap Kirim
+      const mapped = saved === "fleet_status" ? "siap_kirim" : saved;
+      if (mapped && ["dashboard", "routes", "siap_kirim", "wa_report", "korwil"].includes(mapped)) {
+        return mapped as MonitoringTab;
       }
     } catch {
       // Abaikan jika storage diblokir
     }
-    return "dashboard";
+    return "siap_kirim";
   });
 
   const setActiveTab = useCallback((tab: MonitoringTab) => {
@@ -88,11 +89,20 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     }
   }, []);
 
+  const [readinessSegment, setReadinessSegment] = useState<ReadinessSegment>("kelengkapan");
+  const readinessReloadRef = useRef<() => void>(() => {});
+  const registerReadinessReload = useCallback((fn: () => void) => {
+    readinessReloadRef.current = fn;
+  }, []);
+  // Data capaian hanya dimuat bila tab yang terbuka memerlukannya (hemat request saat tab Siap Kirim dibuka)
+  const needsRegionalData = activeTab !== "siap_kirim" || readinessSegment === "armada";
+
   const { canAccessPage, isUnderMaintenance } = usePageAccess();
   const currentUserRole = getStoredUserRole();
 
   // 2. Date & Period State
-  const todayStr = useMemo(() => new Date().toISOString().split("T")[0], []);
+  // Tanggal operasional WIB (bukan UTC: 00.00–07.00 WIB sebelumnya masih terbaca tanggal kemarin)
+  const todayStr = useMemo(() => getWibTodayString(), []);
   const [selectedDate, setSelectedDate] = useState<string>(
     currentDate || todayStr,
   );
@@ -135,6 +145,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   const [isBulking, setIsBulking] = useState<boolean>(false);
   const [verifyingRouteId, setVerifyingRouteId] = useState<number | null>(null);
   const [syncingRouteId, setSyncingRouteId] = useState<number | null>(null);
+  const [hasPendingUpdate, setHasPendingUpdate] = useState<boolean>(false);
 
   // Stable ref untuk pembacaan status data tanpa memicu re-creation loop pada loadData
   const dataRef = useRef(data);
@@ -193,6 +204,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
               });
         setData(regionalRes);
         setFleetShifts(fleetRes);
+        setHasPendingUpdate(false);
       } catch (err: unknown) {
         console.warn("[AllRouteMonitoringPage] Gagal memuat data monitoring:", err);
         if (!dataRef.current) {
@@ -208,42 +220,23 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
     [selectedDate, currentPeriod],
   );
 
+  // Muat data capaian sekali per periode/tanggal, hanya bila tab yang terbuka memerlukannya
+  const loadedKeyRef = useRef<string | null>(null);
   useEffect(() => {
+    if (!needsRegionalData) return;
+    const key = `${currentPeriod.mode}:${currentPeriod.startDate}:${currentPeriod.endDate}:${selectedDate}`;
+    if (loadedKeyRef.current === key) return;
+    loadedKeyRef.current = key;
     loadData();
-  }, [loadData]);
+  }, [loadData, needsRegionalData, currentPeriod, selectedDate]);
 
-  const loadDataRef = useRef(loadData);
-  useEffect(() => {
-    loadDataRef.current = loadData;
-  }, [loadData]);
-
-  // 4b. Realtime Subscription: Dengarkan perubahan tabel daily_route_reports secara hening (Silent In-place Update)
-  // BUG-QUOTA-200-02: hanya tanggal yang dilihat (mode harian), jeda saat tab tersembunyi, maksimal 1 muat ulang per 60 detik
+  // 4b. Realtime: event perubahan daily_route_reports hanya memunculkan banner "Ada pembaruan data" (tanpa request).
+  // Muat ulang dilakukan saat pengguna mengetuk banner — menggantikan muat ulang otomatis ≤1×/menit (refact_200).
   const realtimeDateFilter = currentPeriod.mode === "daily" ? currentPeriod.date : null;
-  const lastSilentLoadAtRef = useRef(0);
 
   useEffect(() => {
+    if (!needsRegionalData) return;
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-    let pendingWhileHidden = false;
-
-    const runSilentLoad = () => {
-      debounceTimer = null;
-      if (document.visibilityState !== "visible") {
-        pendingWhileHidden = true;
-        return;
-      }
-      lastSilentLoadAtRef.current = Date.now();
-      loadDataRef.current?.("silent");
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible" && pendingWhileHidden) {
-        pendingWhileHidden = false;
-        lastSilentLoadAtRef.current = Date.now();
-        loadDataRef.current?.("silent");
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     const channel = supabase
       .channel(`monitoring-realtime-reports-${realtimeDateFilter ?? "period"}`)
@@ -256,33 +249,37 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
           ...(realtimeDateFilter ? { filter: `date=eq.${realtimeDateFilter}` } : {}),
         },
         () => {
-          // Redam minimal 3000ms; event selama timer berjalan ikut digabung ke 1 muat ulang hening
+          // Redam minimal 3000ms; event beruntun digabung menjadi 1 kali munculnya banner
           if (debounceTimer) return;
-          const sinceLast = Date.now() - lastSilentLoadAtRef.current;
-          const delay = Math.max(REALTIME_MIN_DEBOUNCE_MS, REALTIME_MIN_INTERVAL_MS - sinceLast);
-          debounceTimer = setTimeout(runSilentLoad, delay);
+          debounceTimer = setTimeout(() => {
+            debounceTimer = null;
+            setHasPendingUpdate(true);
+          }, REALTIME_MIN_DEBOUNCE_MS);
         }
       )
-      .subscribe((status) => {
-        // Tangani fluktuasi koneksi secara hening tanpa unhandled websocket error
-        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
-          // Koneksi websocket terputus sementara, biarkan fallback ke manual refresh
-        }
-      });
+      .subscribe();
 
     return () => {
       if (debounceTimer) clearTimeout(debounceTimer);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
       supabase.removeChannel(channel);
     };
-  }, [realtimeDateFilter]);
+  }, [realtimeDateFilter, needsRegionalData]);
+
+  const handleReloadPending = () => {
+    setHasPendingUpdate(false);
+    loadData(true);
+  };
 
   const handlePeriodChange = (newPeriod: MonitoringPeriodFilter) => {
     setCurrentPeriod(newPeriod);
+    const nextDate = newPeriod.mode === "daily" ? newPeriod.date : selectedDate;
     if (newPeriod.mode === "daily") {
       setSelectedDate(newPeriod.date);
       onDateChange?.(newPeriod.date);
     }
+    if (!needsRegionalData) return;
+    // Tandai kunci periode baru agar efek muat-malas tidak memuat ulang untuk kedua kalinya
+    loadedKeyRef.current = `${newPeriod.mode}:${newPeriod.startDate}:${newPeriod.endDate}:${nextDate}`;
     loadData(false, newPeriod);
   };
 
@@ -296,6 +293,14 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
       console.warn("[AllRouteMonitoringPage] Gagal navigasi tanggal:", err);
     }
   };
+
+  const handleSelectDate = useCallback(
+    (date: string) => {
+      setSelectedDate(date);
+      onDateChange?.(date);
+    },
+    [onDateChange],
+  );
 
   const handleDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -561,7 +566,11 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         selectedDate={selectedDate}
         onStepDate={handleStepDate}
         onDateInputChange={handleDateInputChange}
-        onRefresh={() => loadData(true)}
+        onRefresh={() =>
+          activeTab === "siap_kirim" && readinessSegment === "kelengkapan"
+            ? readinessReloadRef.current()
+            : loadData(true)
+        }
         refreshing={refreshing}
         loading={loading}
         onSync18Routes={handleSync18Routes}
@@ -580,13 +589,45 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
           paddingBottom: "calc(76px + env(safe-area-inset-bottom, 12px))",
         }}
       >
-        <MonitoringStates
-          loading={loading && !data}
-          errorMessage={errorMessage}
-          onRetry={() => loadData("initial")}
-        />
+        {needsRegionalData && (
+          <PendingUpdateBanner visible={hasPendingUpdate} onReload={handleReloadPending} />
+        )}
 
-        {(!loading || data) && !errorMessage && data && (
+        {activeTab === "siap_kirim" && (
+          <SubmissionReadinessTab
+            selectedDate={selectedDate}
+            onSelectDate={handleSelectDate}
+            segment={readinessSegment}
+            onSegmentChange={setReadinessSegment}
+            onRegisterReload={registerReadinessReload}
+            armadaContent={
+              data ? (
+                <MonitoringFleetStatusTab
+                  selectedDate={selectedDate}
+                  fleetShifts={fleetShifts}
+                  routes={data.routes}
+                  onRefresh={() => loadData(true)}
+                />
+              ) : (
+                <MonitoringStates
+                  loading={loading}
+                  errorMessage={errorMessage}
+                  onRetry={() => loadData("initial")}
+                />
+              )
+            }
+          />
+        )}
+
+        {activeTab !== "siap_kirim" && (
+          <MonitoringStates
+            loading={loading && !data}
+            errorMessage={errorMessage}
+            onRetry={() => loadData("initial")}
+          />
+        )}
+
+        {activeTab !== "siap_kirim" && (!loading || data) && !errorMessage && data && (
           <>
             {activeTab === "dashboard" && (
               !canAccessPage("regional_summary", currentUserRole) ? (
@@ -631,15 +672,6 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
               <MonitoringKorwilTab
                 data={data}
                 onSelectRoute={onSelectRoute}
-              />
-            )}
-
-            {activeTab === "fleet_status" && (
-              <MonitoringFleetStatusTab
-                selectedDate={selectedDate}
-                fleetShifts={fleetShifts}
-                routes={data.routes}
-                onRefresh={() => loadData(true)}
               />
             )}
 
