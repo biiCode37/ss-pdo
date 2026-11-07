@@ -145,20 +145,7 @@ export function UnitDetailModal({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.1))",
-              color: "var(--accent-color, #38bdf8)",
-              border: "1px solid rgba(56, 189, 248, 0.3)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
+          <div className="ui-icon-tile" aria-hidden="true">
             <Bus size={18} />
           </div>
           <div>

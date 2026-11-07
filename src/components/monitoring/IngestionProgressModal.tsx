@@ -70,23 +70,6 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
           overflow: "hidden",
         }}
       >
-        {/* Subtle decorative glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-40px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "140px",
-            height: "140px",
-            background: isComplete
-              ? "radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%)"
-              : "radial-gradient(circle, rgba(62, 207, 142, 0.25) 0%, transparent 70%)",
-            borderRadius: "50%",
-            pointerEvents: "none",
-          }}
-        />
-
         {/* Animated Icon Container */}
         <div
           style={{
@@ -265,13 +248,10 @@ export const IngestionProgressModal: React.FC<IngestionProgressModalProps> = ({
                 width: `${percent}%`,
                 height: "100%",
                 background: isComplete
-                  ? "linear-gradient(90deg, #10b981 0%, #34d399 100%)"
-                  : "linear-gradient(90deg, #3ECF8E 0%, #10b981 100%)",
+                  ? "var(--color-success-fg)"
+                  : "var(--color-action-primary-bg)",
                 borderRadius: "999px",
                 transition: "width 0.35s cubic-bezier(0.32, 0.72, 0, 1)",
-                boxShadow: isComplete
-                  ? "0 0 10px rgba(16, 185, 129, 0.4)"
-                  : "0 0 10px rgba(62, 207, 142, 0.4)",
               }}
             />
           </div>

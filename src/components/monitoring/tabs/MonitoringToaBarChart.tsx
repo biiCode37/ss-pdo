@@ -168,13 +168,10 @@ export const MonitoringToaBarChart: React.FC<MonitoringToaBarChartProps> = ({
               minWidth: displayVal > 0 && isBarsAnimated ? "3px" : "0px",
               borderRadius: "2px",
               background: isSelected
-                ? "linear-gradient(90deg, #3ECF8E 0%, #10B981 100%)"
+                ? "var(--color-action-primary-bg)"
                 : displayVal > 0
-                  ? "linear-gradient(90deg, rgba(62, 207, 142, 0.85) 0%, #10B981 100%)"
+                  ? "var(--color-chart-1)"
                   : "transparent",
-              boxShadow: isSelected
-                ? "0 0 6px rgba(62, 207, 142, 0.5)"
-                : "none",
               transition: "width 0.65s cubic-bezier(0.32, 0.72, 0, 1)",
               transitionDelay: staggerDelay,
               willChange: "width",

@@ -11,17 +11,17 @@ import { describe, test, expect } from "vitest";
  * Baseline hanya boleh diubah ke angka yang LEBIH KECIL.
  */
 const BASELINE = {
-  // Diukur 07 Nov 2026 setelah refact_213.
-  rawHexColor: 837,
-  rgbHslFunction: 972,
-  gradient: 28,
-  gradientText: 6,
-  inlineStyleObject: 2013,
+  // Diukur 07 Nov 2026 setelah refact_215 (gradasi dihapus).
+  rawHexColor: 786,
+  rgbHslFunction: 931,
+  gradient: 0,
+  gradientText: 0,
+  inlineStyleObject: 2008,
   fontSizeBelow12px: 386,
   fontSizeOffScale: 619,
   fontWeightHeavy: 106,
   iconSizeOffScale: 274,
-  legacyAccentColor: 264,
+  legacyAccentColor: 247,
   textShadow: 0,
   backdropFilter: 34,
 } as const;

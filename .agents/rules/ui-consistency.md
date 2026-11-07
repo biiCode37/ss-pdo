@@ -32,7 +32,7 @@ Jika butuh varian, tambahkan prop atau kelas modifier pada komponen yang ada. **
 - Status (OFF, TO, kendala, sukses, error) **selalu disertai label teks**, tidak boleh hanya warna.
 - Bayangan hanya untuk lapisan melayang (modal, sheet, dropdown). Kartu biasa cukup border tipis, tanpa bayangan.
 
-## 5. Tipografi (skala SEMENTARA, sampai disetujui lewat mockup)
+## 5. Tipografi (skala SEMENTARA, sampai disetujui pengguna)
 - Ukuran yang diizinkan (px): **12, 13, 14, 16, 18, 20, 24**, plus **28** khusus angka besar. **Minimal 12px**; dilarang 8–11px dan nilai pecahan seperti 11.5px atau 0.78rem.
 - Satuan ukuran huruf: **px**. Jangan mencampur `rem` dan `px` di komponen yang sama.
 - Bobot: **400, 500, 600, 700**. Bobot 800 hanya untuk satu angka utama per layar.
@@ -64,7 +64,7 @@ Jika butuh varian, tambahkan prop atau kelas modifier pada komponen yang ada. **
 - `src/styles/components/focus-ring.test.ts` menjaga aturan fokus (bagian 3).
 
 ## 10. Proses wajib untuk perubahan visual
-1. Tunjukkan mockup **sebelum/sesudah di light & dark** dan tunggu persetujuan pengguna sebelum implementasi.
+1. Mockup dibuat **hanya jika pengguna memintanya**. Tanpa permintaan, langsung implementasi perubahan yang sudah disepakati.
 2. Setelah implementasi, verifikasi di browser (lebar ~375px, light & dark) dengan bukti nyata (screenshot/nilai computed style).
 3. Dokumentasikan di `refactor-ss-pdo/refact_N` dan jalankan 4 quality gate di `AGENTS.md`.
 

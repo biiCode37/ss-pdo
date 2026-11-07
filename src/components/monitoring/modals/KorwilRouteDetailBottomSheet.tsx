@@ -284,8 +284,8 @@ export const KorwilRouteDetailBottomSheet: React.FC<KorwilRouteDetailBottomSheet
           {bestRecord > 0 && (
             <div
               style={{
-                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(62, 207, 142, 0.05))",
-                border: "1px solid rgba(16, 185, 129, 0.25)",
+                background: "var(--color-success-bg)",
+                border: "1px solid var(--color-success-border)",
                 borderRadius: "14px",
                 padding: "12px 14px",
                 display: "flex",

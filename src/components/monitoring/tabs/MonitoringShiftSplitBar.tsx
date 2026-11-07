@@ -35,14 +35,14 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
           borderRadius: "8px",
           overflow: "hidden",
           display: "flex",
-          backgroundColor: "rgba(255, 255, 255, 0.05)",
+          backgroundColor: "var(--color-surface-subtle)",
           marginBottom: "12px",
         }}
       >
         <div
           style={{
             width: `${s1Pct}%`,
-            background: "linear-gradient(90deg, #F59E0B 0%, #D97706 100%)",
+            background: "var(--color-shift-1-fg)",
             transition: "width 0.3s ease",
           }}
           title={`Shift 1: ${s1Pct}%`}
@@ -50,7 +50,7 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
         <div
           style={{
             width: `${s2Pct}%`,
-            background: "linear-gradient(90deg, #6366F1 0%, #4F46E5 100%)",
+            background: "var(--color-shift-2-fg)",
             transition: "width 0.3s ease",
           }}
           title={`Shift 2: ${s2Pct}%`}
@@ -68,8 +68,8 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
         {/* Shift 1 */}
         <div
           style={{
-            background: "rgba(245, 158, 11, 0.06)",
-            border: "1px solid rgba(245, 158, 11, 0.18)",
+            background: "var(--color-shift-1-bg)",
+            border: "1px solid var(--color-shift-1-border)",
             borderRadius: "12px",
             padding: "10px 12px",
           }}
@@ -83,12 +83,12 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Sun size={15} style={{ color: "#F59E0B" }} />
+              <Sun size={15} style={{ color: "var(--color-shift-1-fg)" }} />
               <span
                 style={{
                   fontSize: "12px",
                   fontWeight: 700,
-                  color: "#F59E0B",
+                  color: "var(--color-shift-1-fg)",
                 }}
               >
                 {TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.SHIFT_1}
@@ -134,8 +134,8 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
         {/* Shift 2 */}
         <div
           style={{
-            background: "rgba(99, 102, 241, 0.06)",
-            border: "1px solid rgba(99, 102, 241, 0.18)",
+            background: "var(--color-shift-2-bg)",
+            border: "1px solid var(--color-shift-2-border)",
             borderRadius: "12px",
             padding: "10px 12px",
           }}
@@ -149,12 +149,12 @@ export const MonitoringShiftSplitBar: React.FC<MonitoringShiftSplitBarProps> = (
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <Moon size={15} style={{ color: "#818CF8" }} />
+              <Moon size={15} style={{ color: "var(--color-shift-2-fg)" }} />
               <span
                 style={{
                   fontSize: "12px",
                   fontWeight: 700,
-                  color: "#818CF8",
+                  color: "var(--color-shift-2-fg)",
                 }}
               >
                 {TEXT_MONITORING.DASHBOARD.SHIFT_SPLIT.SHIFT_2}

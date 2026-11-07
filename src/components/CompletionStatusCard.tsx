@@ -113,9 +113,8 @@ function CompletionStatusCardComponent({
                 style={{
                   fontSize: "11.5px",
                   fontWeight: 800,
-                  color: "#061a10",
-                  background:
-                    "linear-gradient(135deg, #3ECF8E 0%, #24B47E 100%)",
+                  color: "var(--color-success-fg)",
+                  background: "var(--color-success-bg)",
                   padding: "3px 8px",
                   minWidth: "92px",
                   display: "inline-flex",
@@ -123,7 +122,6 @@ function CompletionStatusCardComponent({
                   alignItems: "center",
                   borderRadius: "6px",
                   letterSpacing: "0.3px",
-                  boxShadow: "0 2px 6px rgba(62, 207, 142, 0.35)",
                   whiteSpace: "nowrap",
                   flexShrink: 0,
                 }}

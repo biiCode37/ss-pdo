@@ -35,3 +35,16 @@
   background: var(--color-surface-subtle);
 }
 
+
+/* Kotak ikon header modal — dipakai bersama (refact_215) */
+.ui-icon-tile {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--color-action-secondary-bg);
+  color: var(--color-action-secondary-fg);
+}

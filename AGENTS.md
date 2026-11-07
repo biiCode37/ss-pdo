@@ -93,7 +93,7 @@ Aturan lengkap **WAJIB dibaca sebelum menyentuh kode UI**: [`.agents/rules/ui-co
 4. **Tanpa gradasi, glow/neon, text-shadow, glassmorphism baru**; `--accent-color`/`#3ECF8E` adalah warisan dan dilarang di kode baru.
 5. **Skala sementara:** font 12–24px (min 12px, px saja, bobot 400–700), ikon 16/20/24 hanya untuk navigasi/tombol ikon/status bertopang teks, jarak kelipatan 4, radius 8/12/16/999.
 6. **Teks bantuan minimal:** hanya untuk error, empty state, format input, dan aksi yang merusak data.
-7. Perubahan visual wajib mockup **sebelum/sesudah light & dark** yang disetujui pengguna, lalu diverifikasi di browser.
+7. Perubahan visual wajib diverifikasi di browser (light & dark). Mockup dibuat **hanya jika pengguna memintanya**.
 8. **Penjaga otomatis:** `src/styles/ui-debt-ratchet.test.ts` dan `src/styles/components/focus-ring.test.ts` wajib lulus. Jika jumlah pelanggaran naik, perbaiki kodenya; **dilarang menaikkan `BASELINE`** (hanya boleh diturunkan setelah merapikan).
 
 ## Standar Keamanan Basis Data & Row-Level Security (Strict RLS & Anti-Privilege Escalation)

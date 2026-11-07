@@ -489,14 +489,13 @@ export const MonitoringRouteCardModern: React.FC<MonitoringRouteCardModernProps>
                 gap: "5px",
                 padding: "6px 12px",
                 borderRadius: "8px",
-                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-                color: "#ffffff",
+                background: "var(--color-action-primary-bg)",
+                color: "var(--color-action-primary-fg)",
                 border: "none",
                 fontSize: "11.5px",
                 fontWeight: 700,
                 cursor: isVerifying ? "wait" : "pointer",
                 opacity: isVerifying ? 0.7 : 1,
-                boxShadow: "0 2px 8px rgba(16, 185, 129, 0.3)",
                 transition: "all 0.15s ease",
               }}
             >

@@ -106,8 +106,8 @@ export const MonitoringDashboardTab: React.FC<MonitoringDashboardTabProps> = ({
               height: "100%",
               width: `${progressPct}%`,
               background: isAllConfirmed
-                ? "linear-gradient(90deg, #10B981 0%, #059669 100%)"
-                : "linear-gradient(90deg, #3ECF8E 0%, #10B981 100%)",
+                ? "var(--color-success-fg)"
+                : "var(--color-action-primary-bg)",
               borderRadius: "6px",
               transition: "width 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
             }}

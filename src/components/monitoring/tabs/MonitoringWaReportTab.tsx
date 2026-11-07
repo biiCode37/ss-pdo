@@ -570,13 +570,12 @@ export const MonitoringWaReportTab: React.FC<MonitoringWaReportTabProps> = ({
             gap: "8px",
             padding: "11px 16px",
             borderRadius: "12px",
-            background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
-            color: "#ffffff",
+            background: "var(--color-action-primary-bg)",
+            color: "var(--color-action-primary-fg)",
             border: "none",
             fontSize: "13px",
             fontWeight: 700,
             cursor: "pointer",
-            boxShadow: "0 4px 14px rgba(37, 211, 102, 0.35)",
             transition: "all 0.15s ease",
           }}
         >

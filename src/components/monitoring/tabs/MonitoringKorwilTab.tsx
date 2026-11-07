@@ -140,7 +140,7 @@ export const MonitoringKorwilTab: React.FC<MonitoringKorwilTabProps> = ({
             left: 0,
             right: 0,
             height: "4px",
-            background: "linear-gradient(90deg, var(--accent-color, #3ECF8E), #10B981, #059669)",
+            background: "var(--color-action-primary-bg)",
           }}
         />
 

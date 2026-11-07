@@ -28,21 +28,6 @@ export function LoginHeroCard({
         borderRadius: "20px",
       }}
     >
-      {/* Radial Glow Accent */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-50px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "220px",
-          height: "220px",
-          background:
-            "radial-gradient(circle, rgba(62, 207, 142, 0.22) 0%, rgba(62, 207, 142, 0) 70%)",
-          pointerEvents: "none",
-        }}
-      />
-
       <img
         src="/app-logo.png"
         alt="Logo PUSM"
@@ -52,7 +37,6 @@ export function LoginHeroCard({
           margin: "0 auto 14px auto",
           borderRadius: "20px",
           display: "block",
-          filter: "drop-shadow(0 8px 20px rgba(62, 207, 142, 0.28))",
         }}
       />
 
@@ -62,10 +46,7 @@ export function LoginHeroCard({
           fontWeight: 800,
           letterSpacing: "-0.5px",
           marginBottom: "4px",
-          background: "var(--title-gradient)",
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          WebkitTextFillColor: "transparent",
+          color: "var(--color-text-primary)",
           lineHeight: 1.2,
         }}
         aria-label={`${TEXT_DASHBOARD.APP_TITLE} - ${TEXT_DASHBOARD.APP_SUBTITLE}`}

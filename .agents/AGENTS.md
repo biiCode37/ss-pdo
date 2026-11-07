@@ -10,7 +10,7 @@ Dokumen ini berisi aturan emas (_Golden Rules_) dan batasan teknis yang **WAJIB 
 - Selalu uji dan pastikan bahwa setiap komponen UI (kartu, form, tombol, tabel) terlihat sangat indah, proporsional, dan nyaman digunakan di layar ponsel pengguna operasional di lapangan.
 - Selalu sesuaikan warna dan kontras untuk **2 Tema: Light Mode & Dark Mode**.
 - **Larangan Keras Pewarnaan:** Dilarang menggunakan nilai warna mentah (*hardcoded hex/rgb*). Wajib menggunakan sistem token semantik dari `src/styles/tokens/semantic.css` yang telah teruji rasio kontras WCAG.
-- **Konsistensi Tampilan (Anti-Slop):** WAJIB mematuhi [`rules/ui-consistency.md`](./rules/ui-consistency.md) untuk setiap kode UI baru/diubah: pakai ulang komponen yang ada, tanpa inline style statis baru, satu cincin fokus, tanpa gradasi/glow, skala font/ikon/jarak/radius, teks bantuan minimal, dan mockup light & dark sebelum implementasi.
+- **Konsistensi Tampilan (Anti-Slop):** WAJIB mematuhi [`rules/ui-consistency.md`](./rules/ui-consistency.md) untuk setiap kode UI baru/diubah: pakai ulang komponen yang ada, tanpa inline style statis baru, satu cincin fokus, tanpa gradasi/glow, skala font/ikon/jarak/radius, teks bantuan minimal, dan verifikasi light & dark di browser.
 
 ---
 

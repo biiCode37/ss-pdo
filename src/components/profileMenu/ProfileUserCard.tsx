@@ -71,7 +71,6 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
                 borderRadius: "50%",
                 objectFit: "cover",
                 flexShrink: 0,
-                boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
               }}
             />
           ) : (
@@ -80,13 +79,12 @@ export const ProfileUserCard: React.FC<ProfileUserCardProps> = ({
                 width: "42px",
                 height: "42px",
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #3ECF8E, #24B47E)",
+                background: "var(--color-action-secondary-bg)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#061a10",
+                color: "var(--color-action-secondary-fg)",
                 flexShrink: 0,
-                boxShadow: "0 4px 12px rgba(62, 207, 142, 0.3)",
               }}
             >
               <User size={22} />

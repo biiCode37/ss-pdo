@@ -104,7 +104,7 @@ export const MonitoringReadinessBanner: React.FC<
           style={{
             height: "100%",
             width: `${pct}%`,
-            background: "linear-gradient(90deg, #3ECF8E 0%, #00C573 100%)",
+            background: "var(--color-action-primary-bg)",
             borderRadius: "9999px",
             transition: "width 0.4s ease",
           }}
