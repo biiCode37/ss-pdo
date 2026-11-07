@@ -60,8 +60,10 @@ export function ReadinessRouteDetailModal({
     <ModalShell isOpen onClose={onClose} title={T.DETAIL_TITLE(view.routeCode)} id="submission-detail" backHandlerId="submission_detail"
       backdropClassName="modal-overlay submission-modal-backdrop" contentClassName="submission-modal">
       <div className="submission-modal__header">
-        <h2 className="submission-modal__title">{T.DETAIL_TITLE(view.routeCode)}</h2>
-        <span className="ui-status" data-tone={STATE_TONE[view.state]}>{T.STATE[view.state]}</span>
+        <div className="submission-modal__heading">
+          <h2 className="submission-modal__title">{T.DETAIL_TITLE(view.routeCode)}</h2>
+          <span className="ui-status" data-tone={STATE_TONE[view.state]}>{T.STATE[view.state]}</span>
+        </div>
         <button
           type="button"
           className="ui-button ui-button--secondary submission-modal__close"
