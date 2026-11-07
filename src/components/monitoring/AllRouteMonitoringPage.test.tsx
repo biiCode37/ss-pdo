@@ -635,6 +635,16 @@ describe('AllRouteMonitoringPage Component', () => {
     expect(regionalService.fetchRegionalMonitoringData).not.toHaveBeenCalled();
   });
 
+  it('tombol Perbarui Data di header tidak terkunci saat tab Siap Kirim (data capaian tidak dimuat)', async () => {
+    sessionStorage.removeItem('SS_MONITORING_ACTIVE_TAB');
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+    const refresh = container.querySelector('button[aria-label="Perbarui Data"], button[title="Perbarui Data"]') as HTMLButtonElement | null;
+    expect(refresh).not.toBeNull();
+    expect(refresh?.disabled).toBe(false);
+  });
+
   it('memetakan tab tersimpan lama fleet_status ke siap_kirim', async () => {
     sessionStorage.setItem('SS_MONITORING_ACTIVE_TAB', 'fleet_status');
     await act(async () => {

@@ -571,8 +571,9 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
             ? readinessReloadRef.current()
             : loadData(true)
         }
-        refreshing={refreshing}
-        loading={loading}
+        // Status muat data capaian hanya relevan bila data itu memang dimuat (bukan di tab Siap Kirim)
+        refreshing={needsRegionalData && refreshing}
+        loading={needsRegionalData && loading}
         onSync18Routes={handleSync18Routes}
         syncing18Routes={syncing18Routes}
         currentPeriod={currentPeriod}
