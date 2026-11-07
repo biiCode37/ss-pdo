@@ -491,6 +491,7 @@ export const TEXT_MONITORING = {
       totalToa: "Total TOA",
     },
     ISSUE_MISSING: (fields: string) => `${fields} kosong`,
+    ISSUE_WAJAR: (fields: string, note: string) => `Wajar · ${fields} kosong${note ? ` · ${note}` : ""}`,
     ISSUE_EMPTY: "Belum diisi sama sekali",
     ISSUE_REASON: {
       RITASE_TANPA_TOA: "Ritase terisi, TOA kosong",

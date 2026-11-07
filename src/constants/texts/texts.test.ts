@@ -516,6 +516,8 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.NAV.SUBMISSION).toBe('Siap Kirim');
     expect(TEXT_MONITORING.SUBMISSION.SUMMARY(12, 18)).toBe('Siap kirim 12/18');
     expect(TEXT_MONITORING.SUBMISSION.ISSUE_MISSING('Trip pulang')).toBe('Trip pulang kosong');
+    expect(TEXT_MONITORING.SUBMISSION.ISSUE_WAJAR('TOA S1', 'Program Keur/ Renops')).toBe('Wajar · TOA S1 kosong · Program Keur/ Renops');
+    expect(TEXT_MONITORING.SUBMISSION.ISSUE_WAJAR('Total TOA', '')).toBe('Wajar · Total TOA kosong');
     expect(TEXT_MONITORING.SUBMISSION.CONFIRMED_BY('Budi', '21.40')).toBe('Dikonfirmasi Budi pukul 21.40');
     expect(TEXT_MONITORING.SUBMISSION.BACKLOG_TITLE(3)).toContain('3 rute belum dikonfirmasi');
     expect(TEXT_MONITORING.SUBMISSION.ERRORS.REASON_REQUIRED).toBeTruthy();

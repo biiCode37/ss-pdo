@@ -17,7 +17,7 @@ export function formatTime(iso: string | null): string {
 export function ReadinessRouteCard({ view, onOpen }: { view: RouteReadinessView; onOpen: (v: RouteReadinessView) => void }) {
   const c = view.completeness;
   const total = c ? Object.values(c.counts).reduce((a, b) => a + b, 0) : 0;
-  const lengkap = c ? c.counts.LENGKAP + c.counts.DIKECUALIKAN : 0;
+  const lengkap = c ? (c.counts.LENGKAP ?? 0) + (c.counts.WAJAR ?? 0) + (c.counts.DIKECUALIKAN ?? 0) : 0;
   return (
     <li>
       <button type="button" className="submission-card" onClick={() => onOpen(view)}>
