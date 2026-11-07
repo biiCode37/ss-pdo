@@ -15,7 +15,7 @@
 
 Kolom **wajib**: Trip Pergi, Trip Pulang, TOA S1, Total TOA. Kolom **opsional**: Manual S1, Manual S2, Keterangan. **KM awal/akhir S1/S2 tidak diperiksa.** TOA S2 adalah kolom berumus, jadi tidak diperiksa sebagai input.
 
-- **Sel kosong berarti belum diisi; angka 0 berarti terisi** (berlaku untuk trip dan TOA). Petugas wajib mengetik 0 untuk nilai yang memang nol. Perhitungan memeriksa **isi sel mentah**, bukan hasil `parseIndonesianNumber` yang mengubah sel kosong menjadi 0.
+- **Sel kosong berarti belum diisi; angka 0 berarti terisi** (berlaku untuk trip dan TOA). Sel berisi `-` juga dianggap kosong, selaras dengan `normalizeFieldValue`. Petugas wajib mengetik 0 untuk nilai yang memang nol. Perhitungan memeriksa **isi sel mentah**, bukan hasil `parseIndonesianNumber` yang mengubah sel kosong menjadi 0.
 - "Ritase terisi" = Trip Pergi **dan** Trip Pulang keduanya terisi.
 
 | Status | Kondisi |
@@ -27,7 +27,7 @@ Kolom **wajib**: Trip Pergi, Trip Pulang, TOA S1, Total TOA. Kolom **opsional**:
 | `SEBAGIAN` | Selain di atas: ada data, tapi minimal satu kolom wajib kosong |
 
 - Keterangan **hanya** membebaskan baris yang kosong total. Unit yang sempat beroperasi lalu kendala tetap diperiksa normal.
-- **Klasifikasi keterangan memakai aturan yang sama dengan `classifyUnitKeterangan` di `src/utils/keteranganUtils.ts`** (termasuk LIBUR, TO, dan token `SO`/`SGO` sebagai `NORMAL`). Regex lokal yang sekarang ada di `sheet-sync-webhook` tidak dipakai untuk kelengkapan. Kesetaraan dijaga dengan uji paritas (§7).
+- **Klasifikasi keterangan memakai aturan yang sama dengan `classifyUnitKeterangan` di `src/utils/keteranganUtils.ts`.** Yang dibutuhkan hanya NORMAL vs bukan-NORMAL; NORMAL = kosong atau `SO`/`SGO` (boleh berprefiks S1:/S2:). Pengecualian terdokumentasi: `-` dan `0` dianggap tanpa keterangan. Regex lokal yang sekarang ada di `sheet-sync-webhook` tidak dipakai untuk kelengkapan. Kesetaraan dijaga dengan uji paritas (§7).
 - Status rute = jumlah unit per status, ditambah daftar unit selain `LENGKAP` dan `DIKECUALIKAN`.
 - Mode penilaian **apa adanya**, tanpa tenggat jam: aplikasi menampilkan status, dan korlap yang menilai sesuai waktunya.
 
@@ -41,7 +41,7 @@ Kolom **wajib**: Trip Pergi, Trip Pulang, TOA S1, Total TOA. Kolom **opsional**:
   {
     "v": 1,
     "computedAt": "2026-11-07T14:05:00Z",
-    "status": "ok | header_not_found | tab_not_found",
+    "status": "ok | header_not_found",
     "counts": { "LENGKAP": 24, "DIKECUALIKAN": 2, "BELUM_DIISI": 1, "JANGGAL": 1, "SEBAGIAN": 0 },
     "issues": [ { "unit": "KLM 540", "status": "SEBAGIAN", "missing": ["tripPulang"] },
                 { "unit": "KLM 541", "status": "JANGGAL", "reason": "TOA_TANPA_RITASE" } ],
