@@ -123,4 +123,32 @@ describe("MonitoringBottomNav Component", () => {
 
     expect(onSelectTab).toHaveBeenCalledWith("korwil");
   });
+
+  it("scrolls to top when the active tab is clicked and does not call onSelectTab", async () => {
+    const onSelectTab = vi.fn();
+    const scrollToMock = vi.fn();
+    window.scrollTo = scrollToMock;
+
+    await act(async () => {
+      root.render(
+        <MonitoringBottomNav
+          activeTab="dashboard"
+          onSelectTab={onSelectTab}
+        />
+      );
+    });
+
+    const activeTabBtn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="monitoring-tab-dashboard"]'
+    );
+    expect(activeTabBtn).toBeTruthy();
+
+    act(() => {
+      activeTabBtn?.click();
+    });
+
+    expect(scrollToMock).toHaveBeenCalledTimes(1);
+    expect(scrollToMock).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+    expect(onSelectTab).not.toHaveBeenCalled();
+  });
 });

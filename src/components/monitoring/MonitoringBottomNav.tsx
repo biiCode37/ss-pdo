@@ -67,7 +67,7 @@ export const MonitoringBottomNav = memo(function MonitoringBottomNav({
               aria-selected={isActive}
               data-testid={`monitoring-tab-${item.id}`}
               className={`bottom-nav-item monitoring-tab-btn ${isActive ? "active" : ""}`}
-              onClick={() => onSelectTab(item.id)}
+              onClick={() => (isActive ? window.scrollTo({ top: 0, behavior: "smooth" }) : onSelectTab(item.id))}
               title={item.label}
               aria-label={item.label}
             >
