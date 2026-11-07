@@ -5,6 +5,7 @@ import {
   buildReadinessViews,
   computeBacklog,
   deriveRouteState,
+  filterViewsByProblem,
   pickDefaultDate,
   readWatchlist,
   summarizeViews,
@@ -86,6 +87,31 @@ describe('watchlist', () => {
     expect(readWatchlist('2026-11-08')).toEqual([]);
     localStorage.setItem('SS_SUBMISSION_WATCHLIST_2026-11-09', '{rusak');
     expect(readWatchlist('2026-11-09')).toEqual([]);
+  });
+});
+
+describe('filterViewsByProblem', () => {
+  const routes = [
+    { id: 1, route_code: 'JAK.01' },
+    { id: 2, route_code: 'JAK.02' },
+    { id: 3, route_code: 'JAK.03' },
+    { id: 4, route_code: 'JAK.04' },
+    { id: 5, route_code: 'JAK.05' },
+  ];
+  const rows = [
+    { route_id: 1, route_code: 'JAK.01', completeness: comp({ JANGGAL: 1 }), last_synced_at: null },
+    { route_id: 2, route_code: 'JAK.02', completeness: comp({ BELUM_DIISI: 1 }), last_synced_at: null },
+    { route_id: 3, route_code: 'JAK.03', completeness: null, last_synced_at: null },
+    { route_id: 4, route_code: 'JAK.04', completeness: comp({}, 'bbbb0002'), last_synced_at: null },
+    { route_id: 5, route_code: 'JAK.05', completeness: comp(), last_synced_at: null },
+  ];
+  const views = buildReadinessViews(routes, rows, [conf(4, '2026-11-07')], '2026-11-07');
+
+  it('memfilter rute berdasarkan problemFilter untuk keempat nilai', () => {
+    expect(filterViewsByProblem(views, 'all')).toHaveLength(5);
+    expect(filterViewsByProblem(views, 'janggal').map((v) => v.routeCode)).toEqual(['JAK.01']);
+    expect(filterViewsByProblem(views, 'belum').map((v) => v.routeCode)).toEqual(['JAK.02', 'JAK.03']);
+    expect(filterViewsByProblem(views, 'changed').map((v) => v.routeCode)).toEqual(['JAK.04']);
   });
 });
 

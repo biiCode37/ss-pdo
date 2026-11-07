@@ -62,4 +62,37 @@ describe('SubmissionReadinessTab', () => {
     expect(document.querySelector('.submission-modal__body')).toBeTruthy();
     expect(document.querySelector('.submission-modal__footer')).toBeTruthy();
   });
+
+  it('memiliki .submission-control-bar dan memfilter rute saat chip masalah diklik', async () => {
+    await act(async () => {
+      root.render(<SubmissionReadinessTab selectedDate="2026-11-07" onSelectDate={vi.fn()} segment="kelengkapan" onSegmentChange={vi.fn()} armadaContent={null} />);
+    });
+    const controlBar = container.querySelector('.submission-control-bar');
+    expect(controlBar).toBeTruthy();
+
+    let cards = container.querySelectorAll('.submission-card');
+    expect(cards).toHaveLength(2);
+
+    const janggalChip = [...container.querySelectorAll<HTMLButtonElement>('.ui-chip-btn')].find((btn) =>
+      btn.textContent?.includes(TEXT_MONITORING.SUBMISSION.SUMMARY_JANGGAL(1)),
+    );
+    expect(janggalChip).toBeTruthy();
+    expect(janggalChip?.getAttribute('aria-pressed')).toBe('false');
+
+    await act(async () => {
+      janggalChip?.click();
+    });
+    expect(janggalChip?.getAttribute('aria-pressed')).toBe('true');
+    cards = container.querySelectorAll('.submission-card');
+    expect(cards).toHaveLength(1);
+    expect(container.textContent).toContain('JAK.01');
+    expect(container.textContent).not.toContain('JAK.02');
+
+    await act(async () => {
+      janggalChip?.click();
+    });
+    expect(janggalChip?.getAttribute('aria-pressed')).toBe('false');
+    cards = container.querySelectorAll('.submission-card');
+    expect(cards).toHaveLength(2);
+  });
 });

@@ -1,5 +1,8 @@
 /* Tab Siap Kirim: kelengkapan data & konfirmasi (spec 2026-11-07). Hanya token semantik, skala jarak/radius/font AGENTS. */
 .submission-tab { display: flex; flex-direction: column; gap: 12px; padding: 12px 16px; }
+.submission-control-bar { position: sticky; top: var(--sticky-header-height, 0px); z-index: 5; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 6px 16px; margin: 0 -16px; background: var(--color-surface-canvas); border-bottom: 1px solid var(--color-border-subtle); overflow-x: auto; }
+.submission-control-bar__summary { font-size: 14px; font-weight: 600; color: var(--color-text-primary); font-variant-numeric: tabular-nums; white-space: nowrap; flex-shrink: 0; }
+.submission-control-bar__pick-btn { min-width: 44px; min-height: 44px; padding: 0; flex-shrink: 0; margin-left: auto; }
 .submission-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
 .submission-summary__primary { font-size: 16px; font-weight: 600; color: var(--color-text-primary); }
 .submission-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
