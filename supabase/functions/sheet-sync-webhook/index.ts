@@ -1,6 +1,12 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8";
 import { computeRouteCompleteness, type RouteCompleteness } from "../_shared/completeness.ts";
+import { resolveSyncTargetDate } from "../_shared/syncDate.ts";
+import { wibTodayString } from "../_shared/submissionRules.ts";
+
+// Cache spreadsheetId -> {year, month} file sheet (stabil sepanjang bulan) agar tiap edit tidak menambah request
+const SHEET_PERIOD_CACHE_TTL_MS = 60 * 60 * 1000;
+const sheetPeriodCache = new Map<string, { year: number; month: number; at: number }>();
 
 function getCorsHeaders(req: Request) {
   const origin = req.headers.get("origin") || "";
@@ -317,19 +323,51 @@ Deno.serve(async (req: Request) => {
     // Normalisasi kode rute (contoh: JAK 60 -> JAK.60)
     const normalizedCode = rawRouteCode.toUpperCase().replace(/\s+/g, ".");
 
-    // Tentukan tanggal target (WIB)
-    let targetDateStr = String(body.date || "").trim();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(targetDateStr)) {
-      // Ambil tanggal hari ini dalam zona waktu Asia/Jakarta (WIB: UTC+7)
-      const now = new Date();
-      const wibOffset = 7 * 60; // 7 jam
-      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-      const wibDate = new Date(utc + wibOffset * 60000);
-      const y = wibDate.getFullYear();
-      const m = String(wibDate.getMonth() + 1).padStart(2, "0");
-      const d = String(wibDate.getDate()).padStart(2, "0");
-      targetDateStr = `${y}-${m}-${d}`;
+    // Inisialisasi Supabase internal client (juga dipakai untuk menentukan bulan file sheet)
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return new Response(JSON.stringify({ error: "Server Supabase tidak terkonfigurasi dengan benar" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Tentukan tanggal target (refact_226): tanggal eksplisit > tab yang diedit (tahun/bulan dari file sheet) > hari ini WIB.
+    // Sebelumnya tab diabaikan sehingga edit di tab tanggal lama tercatat ke tanggal hari ini.
+    let sheetYear: number | null = null;
+    let sheetMonth: number | null = null;
+    const bodySheetId = String(body.spreadsheetId || "").trim();
+    const hasExplicitDate = /^\d{4}-\d{2}-\d{2}$/.test(String(body.date || "").trim());
+    if (!hasExplicitDate && bodySheetId && /^\d{1,2}$/.test(String(body.tabName ?? "").trim())) {
+      const cachedPeriod = sheetPeriodCache.get(bodySheetId);
+      if (cachedPeriod && Date.now() - cachedPeriod.at < SHEET_PERIOD_CACHE_TTL_MS) {
+        sheetYear = cachedPeriod.year;
+        sheetMonth = cachedPeriod.month;
+      } else {
+        const { data: sheetRow } = await supabase
+          .from("route_sheets")
+          .select("year, month")
+          .eq("spreadsheet_id", bodySheetId)
+          .limit(1)
+          .maybeSingle();
+        if (sheetRow) {
+          sheetYear = Number(sheetRow.year);
+          sheetMonth = Number(sheetRow.month);
+          if (sheetPeriodCache.size > 200) sheetPeriodCache.clear();
+          sheetPeriodCache.set(bodySheetId, { year: sheetYear, month: sheetMonth, at: Date.now() });
+        }
+      }
+    }
+    const targetDateStr = resolveSyncTargetDate({
+      date: body.date,
+      tabName: body.tabName,
+      sheetYear,
+      sheetMonth,
+      todayWib: wibTodayString(),
+    });
 
     const [yStr, mStr, dStr] = targetDateStr.split("-");
     const targetYear = parseInt(yStr, 10);
@@ -367,17 +405,6 @@ Deno.serve(async (req: Request) => {
 
     inFlightSyncs.add(syncKey);
 
-    // Inisialisasi Supabase internal client
-    const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-    if (!supabaseUrl || !supabaseServiceKey) {
-      return new Response(JSON.stringify({ error: "Server Supabase tidak terkonfigurasi dengan benar" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // 1. Verifikasi rute di database (Whitelist check)
     const { data: routeData, error: routeError } = await supabase
