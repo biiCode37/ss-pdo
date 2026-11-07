@@ -5,6 +5,9 @@ import {
   triggerRealtimeSheetSync,
   broadcastBusUpdate,
   subscribeToBusUpdates,
+  recheckRoutesCompleteness,
+  RECHECK_ALL_CONCURRENCY,
+  RECHECK_ALL_COOLDOWN_MS,
 } from './realtimeSyncService';
 import { supabase } from './supabase';
 
@@ -170,5 +173,117 @@ describe('realtimeSyncService', () => {
     // Clean up
     unsubscribe();
     expect(supabase.removeChannel).toHaveBeenCalledWith(mockChannel);
+  });
+});
+
+describe('recheckRoutesCompleteness (cek ulang semua rute)', () => {
+  // Waktu sistem dimajukan per test agar jeda antar-penekanan (state modul) tidak saling memengaruhi
+  let clock = Date.UTC(2026, 10, 8, 10, 0, 0);
+  beforeEach(() => {
+    clock += 10 * 60 * 1000;
+    vi.useFakeTimers();
+    vi.setSystemTime(clock);
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it('memicu webhook tepat sekali per rute (tanpa duplikat) dengan tanggal eksplisit dan melaporkan progres', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal('fetch', fetchMock);
+    const progress: Array<[number, number]> = [];
+
+    const result = await recheckRoutesCompleteness(['JAK.01', 'JAK.02', 'JAK.01', 'JAK.03'], '2026-11-07', (d, t) => progress.push([d, t]));
+
+    expect(result).toEqual({ status: 'done', total: 3, failed: 0 });
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    const bodies = fetchMock.mock.calls.map((c) => JSON.parse(c[1].body));
+    expect(bodies).toEqual([
+      { routeCode: 'JAK.01', date: '2026-11-07' },
+      { routeCode: 'JAK.02', date: '2026-11-07' },
+      { routeCode: 'JAK.03', date: '2026-11-07' },
+    ]);
+    expect(progress[0]).toEqual([0, 3]);
+    expect(progress[progress.length - 1]).toEqual([3, 3]);
+  });
+
+  it(`membatasi paling banyak ${RECHECK_ALL_CONCURRENCY} request webhook berjalan bersamaan`, async () => {
+    let active = 0;
+    let peak = 0;
+    const fetchMock = vi.fn(async () => {
+      active++;
+      peak = Math.max(peak, active);
+      await Promise.resolve();
+      await Promise.resolve();
+      active--;
+      return { ok: true };
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const codes = Array.from({ length: 18 }, (_, i) => `JAK.${String(i + 1).padStart(2, '0')}`);
+
+    const result = await recheckRoutesCompleteness(codes, '2026-11-08');
+
+    expect(fetchMock).toHaveBeenCalledTimes(18);
+    expect(peak).toBe(RECHECK_ALL_CONCURRENCY);
+    expect(result).toEqual({ status: 'done', total: 18, failed: 0 });
+  });
+
+  it('menghitung rute yang gagal (HTTP error atau jaringan) tanpa menghentikan rute lain', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({ ok: true })
+      .mockResolvedValueOnce({ ok: false, status: 404 })
+      .mockRejectedValueOnce(new Error('network'));
+    vi.stubGlobal('fetch', fetchMock);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await recheckRoutesCompleteness(['A', 'B', 'C'], '2026-11-08');
+
+    expect(result).toEqual({ status: 'done', total: 3, failed: 2 });
+    warn.mockRestore();
+  });
+
+  it('menolak penekanan ulang selama jeda 2 menit tanpa request apa pun, lalu boleh lagi setelah jeda lewat', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await recheckRoutesCompleteness(['A'], '2026-11-08');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(30_000);
+    const blocked = await recheckRoutesCompleteness(['A'], '2026-11-08');
+    expect(blocked).toEqual({ status: 'cooldown', remainingMs: RECHECK_ALL_COOLDOWN_MS - 30_000 });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(RECHECK_ALL_COOLDOWN_MS);
+    const again = await recheckRoutesCompleteness(['A'], '2026-11-08');
+    expect(again.status).toBe('done');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('mengabaikan penekanan kedua saat cek ulang semua masih berjalan (in-flight guard)', async () => {
+    let release: () => void = () => {};
+    const fetchMock = vi.fn(() => new Promise((resolve) => { release = () => resolve({ ok: true }); }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const first = recheckRoutesCompleteness(['A'], '2026-11-08');
+    const second = await recheckRoutesCompleteness(['A'], '2026-11-08');
+    expect(second).toEqual({ status: 'busy' });
+
+    release();
+    await expect(first).resolves.toEqual({ status: 'done', total: 1, failed: 0 });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('tidak mengirim request dan tidak memulai jeda saat perangkat offline', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal('fetch', fetchMock);
+    vi.stubGlobal('navigator', { onLine: false });
+
+    expect(await recheckRoutesCompleteness(['A'], '2026-11-08')).toEqual({ status: 'offline' });
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    vi.stubGlobal('navigator', { onLine: true });
+    expect((await recheckRoutesCompleteness(['A'], '2026-11-08')).status).toBe('done');
   });
 });

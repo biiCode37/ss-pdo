@@ -1,7 +1,9 @@
 // src/components/monitoring/readiness/SubmissionReadinessTab.tsx
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ListChecks } from "lucide-react";
 import { TEXT_MONITORING } from "@/constants/texts";
+import { recheckRoutesCompleteness } from "@/services/realtimeSyncService";
+import { showErrorToast, showInfoToast, showSuccessToast } from "@/utils/alertUtils";
 import { useSubmissionReadiness } from "./useSubmissionReadiness";
 import {
   BACKLOG_DAYS, SUBMISSION_FEATURE_START_DATE, buildReadinessViews, computeBacklog, filterViewsByProblem,
@@ -17,14 +19,15 @@ const T = TEXT_MONITORING.SUBMISSION;
 export type ReadinessSegment = "kelengkapan" | "armada";
 
 export function SubmissionReadinessTab({
-  selectedDate, onSelectDate, segment, onSegmentChange, armadaContent, onRegisterReload,
+  selectedDate, onSelectDate, segment, onSegmentChange, armadaContent, onRegisterRecheckAll,
 }: {
   selectedDate: string;
   onSelectDate: (date: string) => void;
   segment: ReadinessSegment;
   onSegmentChange: (s: ReadinessSegment) => void;
   armadaContent: ReactNode;
-  onRegisterReload?: (fn: () => void) => void;
+  /** Tombol refresh header di segmen Kelengkapan = cek ulang semua rute (refact_227) */
+  onRegisterRecheckAll?: (fn: () => Promise<void>) => void;
 }) {
   const readiness = useSubmissionReadiness(selectedDate, segment === "kelengkapan");
   const [watchlist, setWatchlist] = useState<number[]>(() => readWatchlist(selectedDate));
@@ -32,10 +35,10 @@ export function SubmissionReadinessTab({
   const [problemFilter, setProblemFilter] = useState<ProblemFilter>("all");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [detail, setDetail] = useState<RouteReadinessView | null>(null);
+  const [recheckProgress, setRecheckProgress] = useState<{ done: number; total: number } | null>(null);
   const defaultAppliedRef = useRef(false);
 
   useEffect(() => { setWatchlist(readWatchlist(selectedDate)); }, [selectedDate]);
-  useEffect(() => { onRegisterReload?.(() => { void readiness.reload(); }); }, [onRegisterReload, readiness.reload]);
 
   // Tanggal default (sekali per mount): kemarin bila rute pantauan/semua rute kemarin belum tuntas
   useEffect(() => {
@@ -67,6 +70,23 @@ export function SubmissionReadinessTab({
   const activeProblemFilter: ProblemFilter = problemCounts[problemFilter] > 0 ? problemFilter : "all";
   const filteredByWatchlist = onlyWatchlist && watchlist.length > 0 ? views.filter((v) => watchlist.includes(v.routeId)) : views;
   const visibleViews = filterViewsByProblem(filteredByWatchlist, activeProblemFilter);
+
+  // Cek ulang semua: membaca ulang sheet tiap rute (filter Pantauan dihormati agar request seperlunya),
+  // lalu memuat ulang status sekali agar hasil tampil walau event Realtime terlewat.
+  const recheckCodes = useMemo(() => filteredByWatchlist.map((v) => v.routeCode), [filteredByWatchlist]);
+  const { reload } = readiness;
+  const recheckAll = useCallback(async () => {
+    if (recheckCodes.length === 0) return;
+    const result = await recheckRoutesCompleteness(recheckCodes, selectedDate, (done, total) => setRecheckProgress({ done, total }));
+    setRecheckProgress(null);
+    if (result.status === "cooldown") { showInfoToast(T.RECHECK_ALL_COOLDOWN(Math.ceil(result.remainingMs / 1000))); return; }
+    if (result.status === "offline") { showErrorToast(T.RECHECK_ALL_OFFLINE); return; }
+    if (result.status !== "done") return;
+    await reload();
+    if (result.failed > 0) showErrorToast(T.RECHECK_ALL_PARTIAL(result.failed, result.total));
+    else showSuccessToast(T.RECHECK_ALL_DONE(result.total));
+  }, [recheckCodes, selectedDate, reload]);
+  useEffect(() => { onRegisterRecheckAll?.(recheckAll); }, [onRegisterRecheckAll, recheckAll]);
   const backlog = useMemo(
     () => computeBacklog({
       routes: readiness.routes, confirmations: readiness.confirmations, todayWib: readiness.todayWib,
@@ -95,7 +115,9 @@ export function SubmissionReadinessTab({
             <button type="button" className="ui-segmented-btn" aria-pressed={onlyWatchlist} onClick={() => setOnlyWatchlist(true)}>{T.FILTER_WATCHLIST(watchlist.length)}</button>
           </div>
           <div className="submission-control-bar">
-            <span className="submission-control-bar__summary">{T.SUMMARY(summary.confirmed, summary.total)}</span>
+            <span className="submission-control-bar__summary" aria-live="polite">
+              {recheckProgress ? T.RECHECK_ALL_PROGRESS(recheckProgress.done, recheckProgress.total) : T.SUMMARY(summary.confirmed, summary.total)}
+            </span>
             {summary.janggal > 0 && (
               <button
                 type="button"

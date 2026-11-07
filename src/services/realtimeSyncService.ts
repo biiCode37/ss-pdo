@@ -58,14 +58,11 @@ export async function triggerRealtimeSheetSync(
   });
 }
 
-async function executeSync(key: string, routeCode: string, date?: string): Promise<void> {
-  const entry = syncEntries.get(key);
-  syncEntries.delete(key);
-
+/** Satu panggilan webhook sheet-sync; true bila server menjawab sukses (termasuk "skipped" karena cooldown server). */
+async function postSheetSync(routeCode: string, date?: string): Promise<boolean> {
   const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-
   try {
-    await fetch(WEBHOOK_URL, {
+    const res = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -81,8 +78,19 @@ async function executeSync(key: string, routeCode: string, date?: string): Promi
         date,
       }),
     });
+    return Boolean(res?.ok);
   } catch (err) {
     console.warn('[RealtimeSync] Gagal memicu Edge Function sheet-sync-webhook:', err);
+    return false;
+  }
+}
+
+async function executeSync(key: string, routeCode: string, date?: string): Promise<void> {
+  const entry = syncEntries.get(key);
+  syncEntries.delete(key);
+
+  try {
+    await postSheetSync(routeCode, date);
   } finally {
     if (entry) {
       entry.resolvers.forEach((res) => {
@@ -92,6 +100,62 @@ async function executeSync(key: string, routeCode: string, date?: string): Promi
       });
     }
   }
+}
+
+// Cek ulang semua rute (refact_227): tiap rute = 1 Edge Function + 1 baca Google Sheets + beberapa log,
+// jadi dibatasi 3 request bersamaan dan jeda 2 menit antar-penekanan.
+export const RECHECK_ALL_CONCURRENCY = 3;
+export const RECHECK_ALL_COOLDOWN_MS = 2 * 60 * 1000;
+// ponytail: jeda disimpan di memori modul (hilang saat halaman dimuat ulang); cukup selama webhook punya cooldown server 3 dtk per rute.
+let lastRecheckAllAt = 0;
+let recheckAllInFlight = false;
+
+export type RecheckAllResult =
+  | { status: 'done'; total: number; failed: number }
+  | { status: 'cooldown'; remainingMs: number }
+  | { status: 'busy' }
+  | { status: 'offline' };
+
+/**
+ * Membaca ulang kelengkapan beberapa rute sekaligus lewat webhook sheet-sync (tanggal eksplisit).
+ * Hasilnya sampai ke layar lewat Realtime/reload pemanggil; fungsi ini hanya melaporkan progres dan jumlah gagal.
+ */
+export async function recheckRoutesCompleteness(
+  routeCodes: string[],
+  date: string,
+  onProgress?: (done: number, total: number) => void,
+): Promise<RecheckAllResult> {
+  if (recheckAllInFlight) return { status: 'busy' };
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return { status: 'offline' };
+  const elapsed = Date.now() - lastRecheckAllAt;
+  if (lastRecheckAllAt > 0 && elapsed < RECHECK_ALL_COOLDOWN_MS) {
+    return { status: 'cooldown', remainingMs: RECHECK_ALL_COOLDOWN_MS - elapsed };
+  }
+
+  const codes = [...new Set(routeCodes.filter(Boolean))];
+  const total = codes.length;
+  if (!isSupabaseConfigured || total === 0) return { status: 'done', total, failed: 0 };
+
+  recheckAllInFlight = true;
+  lastRecheckAllAt = Date.now();
+  onProgress?.(0, total); // umpan balik seketika sebelum rute pertama selesai
+  let next = 0;
+  let done = 0;
+  let failed = 0;
+  const worker = async () => {
+    while (next < total) {
+      const code = codes[next++];
+      if (!(await postSheetSync(code, date))) failed++;
+      done++;
+      onProgress?.(done, total);
+    }
+  };
+  try {
+    await Promise.all(Array.from({ length: Math.min(RECHECK_ALL_CONCURRENCY, total) }, worker));
+  } finally {
+    recheckAllInFlight = false;
+  }
+  return { status: 'done', total, failed };
 }
 
 /**

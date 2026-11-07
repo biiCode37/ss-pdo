@@ -90,9 +90,19 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
   }, []);
 
   const [readinessSegment, setReadinessSegment] = useState<ReadinessSegment>("kelengkapan");
-  const readinessReloadRef = useRef<() => void>(() => {});
-  const registerReadinessReload = useCallback((fn: () => void) => {
-    readinessReloadRef.current = fn;
+  // Tombol refresh header di segmen Kelengkapan = cek ulang semua rute (refact_227); fungsi didaftarkan oleh tab
+  const readinessRecheckRef = useRef<() => Promise<void>>(async () => {});
+  const registerReadinessRecheck = useCallback((fn: () => Promise<void>) => {
+    readinessRecheckRef.current = fn;
+  }, []);
+  const [readinessRechecking, setReadinessRechecking] = useState(false);
+  const handleReadinessRecheck = useCallback(async () => {
+    setReadinessRechecking(true);
+    try {
+      await readinessRecheckRef.current();
+    } finally {
+      setReadinessRechecking(false);
+    }
   }, []);
   // Data capaian hanya dimuat bila tab yang terbuka memerlukannya (hemat request saat tab Siap Kirim dibuka)
   const needsRegionalData = activeTab !== "siap_kirim" || readinessSegment === "armada";
@@ -566,13 +576,10 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
         selectedDate={selectedDate}
         onStepDate={handleStepDate}
         onDateInputChange={handleDateInputChange}
-        onRefresh={() =>
-          activeTab === "siap_kirim" && readinessSegment === "kelengkapan"
-            ? readinessReloadRef.current()
-            : loadData(true)
-        }
+        onRefresh={() => (needsRegionalData ? loadData(true) : void handleReadinessRecheck())}
+        refreshTitle={needsRegionalData ? undefined : TEXT_MONITORING.SUBMISSION.RECHECK_ALL_TITLE}
         // Status muat data capaian hanya relevan bila data itu memang dimuat (bukan di tab Siap Kirim)
-        refreshing={needsRegionalData && refreshing}
+        refreshing={needsRegionalData ? refreshing : readinessRechecking}
         loading={needsRegionalData && loading}
         onSync18Routes={handleSync18Routes}
         syncing18Routes={syncing18Routes}
@@ -600,7 +607,7 @@ export const AllRouteMonitoringPage = memo(function AllRouteMonitoringPage({
             onSelectDate={handleSelectDate}
             segment={readinessSegment}
             onSegmentChange={setReadinessSegment}
-            onRegisterReload={registerReadinessReload}
+            onRegisterRecheckAll={registerReadinessRecheck}
             armadaContent={
               data ? (
                 <MonitoringFleetStatusTab

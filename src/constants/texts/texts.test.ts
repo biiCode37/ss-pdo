@@ -521,6 +521,12 @@ describe('Centralized UI Text Dictionary', () => {
     expect(TEXT_MONITORING.SUBMISSION.CONFIRMED_BY('Budi', '21.40')).toBe('Dikonfirmasi Budi pukul 21.40');
     expect(TEXT_MONITORING.SUBMISSION.BACKLOG_TITLE(3)).toContain('3 rute belum dikonfirmasi');
     expect(TEXT_MONITORING.SUBMISSION.ERRORS.REASON_REQUIRED).toBeTruthy();
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_TITLE).toBe("Cek ulang semua rute");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_PROGRESS(7, 18)).toBe("Mengecek 7/18…");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_DONE(18)).toBe("18 rute selesai dicek ulang");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_PARTIAL(2, 18)).toContain("2 dari 18 rute gagal");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_COOLDOWN(90)).toContain("90 detik");
+    expect(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_OFFLINE).toBeTruthy();
     expect(TEXT_MONITORING.PENDING_UPDATE.RELOAD).toBe('Muat ulang');
   });
 

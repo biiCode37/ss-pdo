@@ -16,6 +16,8 @@ export interface MonitoringHeaderProps {
   onStepDate: (days: number) => void;
   onDateInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRefresh: () => void;
+  /** Label tombol refresh bila berbeda dari bawaan (mis. "Cek ulang semua rute" di tab Siap Kirim) */
+  refreshTitle?: string;
   refreshing: boolean;
   loading: boolean;
   onOpenWaModal?: () => void;
@@ -34,6 +36,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   onStepDate,
   onDateInputChange,
   onRefresh,
+  refreshTitle = TEXT_MONITORING.HEADER.REFRESH_TITLE,
   refreshing,
   loading,
   onSync18Routes,
@@ -437,8 +440,8 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
                 transition: "all 0.2s ease",
                 flexShrink: 0,
               }}
-              title={TEXT_MONITORING.HEADER.REFRESH_TITLE}
-              aria-label={TEXT_MONITORING.HEADER.REFRESH_TITLE}
+              title={refreshTitle}
+              aria-label={refreshTitle}
             >
               <RefreshCw
                 size={16}

@@ -22,10 +22,19 @@ vi.mock('@/services/regionalIngestionService', () => ({
 }));
 
 // Tab Siap Kirim punya test sendiri (readiness/*); di sini cukup stub yang meneruskan konten segmen Armada
-vi.mock('./readiness/SubmissionReadinessTab', () => ({
-  SubmissionReadinessTab: ({ armadaContent, segment }: { armadaContent: unknown; segment: string }) =>
-    segment === 'armada' ? armadaContent : <div data-testid="readiness-tab" />,
-}));
+// dan mendaftarkan fungsi cek ulang semua palsu yang bisa dikendalikan test.
+const readinessRecheck = { fn: vi.fn(async () => {}) };
+vi.mock('./readiness/SubmissionReadinessTab', async () => {
+  const { useEffect } = await import('react');
+  return {
+    SubmissionReadinessTab: ({ armadaContent, segment, onRegisterRecheckAll }: {
+      armadaContent: unknown; segment: string; onRegisterRecheckAll?: (fn: () => Promise<void>) => void;
+    }) => {
+      useEffect(() => { onRegisterRecheckAll?.(() => readinessRecheck.fn()); }, [onRegisterRecheckAll]);
+      return segment === 'armada' ? armadaContent : <div data-testid="readiness-tab" />;
+    },
+  };
+});
 
 vi.mock('@/services/allRouteMonitoringService', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services/allRouteMonitoringService')>();
@@ -635,14 +644,34 @@ describe('AllRouteMonitoringPage Component', () => {
     expect(regionalService.fetchRegionalMonitoringData).not.toHaveBeenCalled();
   });
 
-  it('tombol Perbarui Data di header tidak terkunci saat tab Siap Kirim (data capaian tidak dimuat)', async () => {
+  it('tombol refresh header di tab Siap Kirim menjadi "Cek ulang semua rute" dan tidak terkunci (data capaian tidak dimuat)', async () => {
     sessionStorage.removeItem('SS_MONITORING_ACTIVE_TAB');
     await act(async () => {
       root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
     });
-    const refresh = container.querySelector('button[aria-label="Perbarui Data"], button[title="Perbarui Data"]') as HTMLButtonElement | null;
-    expect(refresh).not.toBeNull();
+    const refresh = container.querySelector('[data-testid="monitoring-refresh-btn"]') as HTMLButtonElement | null;
+    expect(refresh?.getAttribute('aria-label')).toBe(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_TITLE);
     expect(refresh?.disabled).toBe(false);
+  });
+
+  it('tombol refresh di tab Siap Kirim menjalankan cek ulang semua rute (bukan muat data capaian) dan terkunci selama berjalan', async () => {
+    sessionStorage.removeItem('SS_MONITORING_ACTIVE_TAB');
+    (regionalService.fetchRegionalMonitoringData as any).mockClear();
+    let finish: () => void = () => {};
+    readinessRecheck.fn = vi.fn(() => new Promise<void>((resolve) => { finish = resolve; }));
+    await act(async () => {
+      root.render(<AllRouteMonitoringPage currentDate="2026-09-02" />);
+    });
+    const refresh = container.querySelector('[data-testid="monitoring-refresh-btn"]') as HTMLButtonElement;
+
+    await act(async () => { refresh.click(); });
+    expect(readinessRecheck.fn).toHaveBeenCalledTimes(1);
+    expect(refresh.disabled).toBe(true);
+    expect(regionalService.fetchRegionalMonitoringData).not.toHaveBeenCalled();
+
+    await act(async () => { finish(); });
+    expect(refresh.disabled).toBe(false);
+    readinessRecheck.fn = vi.fn(async () => {});
   });
 
   it('memetakan tab tersimpan lama fleet_status ke siap_kirim', async () => {

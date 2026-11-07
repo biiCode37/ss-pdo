@@ -19,10 +19,12 @@ const state = {
 };
 vi.mock('./useSubmissionReadiness', () => ({ useSubmissionReadiness: () => state }));
 vi.mock('@/services/submissionReadinessService', () => ({ confirmRouteSubmission: vi.fn(), ConfirmSubmissionError: class extends Error {} }));
-vi.mock('@/services/realtimeSyncService', () => ({ triggerRealtimeSheetSync: vi.fn() }));
+vi.mock('@/services/realtimeSyncService', () => ({ triggerRealtimeSheetSync: vi.fn(), recheckRoutesCompleteness: vi.fn() }));
 vi.mock('@/utils/alertUtils', () => ({ showErrorToast: vi.fn(), showInfoToast: vi.fn(), showSuccessToast: vi.fn() }));
 
 import { SubmissionReadinessTab } from './SubmissionReadinessTab';
+import { recheckRoutesCompleteness } from '@/services/realtimeSyncService';
+import { showInfoToast, showSuccessToast, showErrorToast } from '@/utils/alertUtils';
 
 describe('SubmissionReadinessTab', () => {
   let container: HTMLDivElement;
@@ -172,5 +174,87 @@ describe('SubmissionReadinessTab', () => {
     } finally {
       state.rows = originalRows;
     }
+  });
+
+  describe('cek ulang semua rute (tombol refresh header)', () => {
+    const renderWithRegister = async () => {
+      let recheckAll: (() => Promise<void>) | null = null;
+      await act(async () => {
+        root.render(
+          <SubmissionReadinessTab selectedDate="2026-11-07" onSelectDate={vi.fn()} segment="kelengkapan" onSegmentChange={vi.fn()}
+            armadaContent={null} onRegisterRecheckAll={(fn) => { recheckAll = fn; }} />,
+        );
+      });
+      expect(recheckAll).not.toBeNull();
+      return () => recheckAll!();
+    };
+
+    beforeEach(() => {
+      vi.mocked(recheckRoutesCompleteness).mockReset();
+      state.reload.mockClear();
+      vi.mocked(showInfoToast).mockClear();
+      vi.mocked(showSuccessToast).mockClear();
+      vi.mocked(showErrorToast).mockClear();
+    });
+
+    it('memicu cek ulang semua rute untuk tanggal terpilih, menampilkan progres, lalu memuat ulang status sekali', async () => {
+      let report: (done: number, total: number) => void = () => {};
+      let finish: (v: { status: 'done'; total: number; failed: number }) => void = () => {};
+      vi.mocked(recheckRoutesCompleteness).mockImplementation((_codes, _date, onProgress) => {
+        report = onProgress!;
+        return new Promise((resolve) => { finish = resolve; });
+      });
+      const run = await renderWithRegister();
+
+      let pending!: Promise<void>;
+      await act(async () => { pending = run(); });
+      expect(recheckRoutesCompleteness).toHaveBeenCalledTimes(1);
+      expect(vi.mocked(recheckRoutesCompleteness).mock.calls[0][0]).toEqual(['JAK.01', 'JAK.02']);
+      expect(vi.mocked(recheckRoutesCompleteness).mock.calls[0][1]).toBe('2026-11-07');
+
+      await act(async () => { report(1, 2); });
+      expect(container.querySelector('.submission-control-bar__summary')?.textContent).toBe(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_PROGRESS(1, 2));
+
+      await act(async () => { finish({ status: 'done', total: 2, failed: 0 }); await pending; });
+      expect(state.reload).toHaveBeenCalledTimes(1);
+      expect(showSuccessToast).toHaveBeenCalledWith(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_DONE(2));
+      expect(container.querySelector('.submission-control-bar__summary')?.textContent).toBe(TEXT_MONITORING.SUBMISSION.SUMMARY(0, 2));
+    });
+
+    it('melaporkan rute yang gagal dicek ulang', async () => {
+      vi.mocked(recheckRoutesCompleteness).mockResolvedValue({ status: 'done', total: 2, failed: 1 });
+      const run = await renderWithRegister();
+      await act(async () => { await run(); });
+      expect(showErrorToast).toHaveBeenCalledWith(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_PARTIAL(1, 2));
+      expect(state.reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('saat masih dalam jeda hanya memberi tahu sisa waktu tanpa memuat ulang', async () => {
+      vi.mocked(recheckRoutesCompleteness).mockResolvedValue({ status: 'cooldown', remainingMs: 89_200 });
+      const run = await renderWithRegister();
+      await act(async () => { await run(); });
+      expect(showInfoToast).toHaveBeenCalledWith(TEXT_MONITORING.SUBMISSION.RECHECK_ALL_COOLDOWN(90));
+      expect(state.reload).not.toHaveBeenCalled();
+    });
+
+    it('hanya mengecek rute pantauan saat filter Pantauan aktif', async () => {
+      vi.mocked(recheckRoutesCompleteness).mockResolvedValue({ status: 'done', total: 1, failed: 0 });
+      const run = await renderWithRegister();
+      // Simpan pantauan berisi JAK.02 lewat modal pilih rute lalu aktifkan filter Pantauan
+      await act(async () => {
+        container.querySelector<HTMLButtonElement>('.submission-control-bar__pick-btn')?.click();
+      });
+      const option = [...document.querySelectorAll<HTMLButtonElement>('.ui-option-btn')].find((b) => b.textContent === 'JAK.02');
+      expect(option).toBeTruthy();
+      await act(async () => { option?.click(); });
+      const save = [...document.querySelectorAll<HTMLButtonElement>('button')].find((b) => b.textContent === TEXT_MONITORING.SUBMISSION.WATCHLIST_SAVE);
+      await act(async () => { save?.click(); });
+      const watchBtn = [...container.querySelectorAll<HTMLButtonElement>('.ui-segmented-btn')].find((b) => b.textContent === TEXT_MONITORING.SUBMISSION.FILTER_WATCHLIST(1));
+      await act(async () => { watchBtn?.click(); });
+
+      await act(async () => { await run(); });
+      expect(vi.mocked(recheckRoutesCompleteness).mock.calls[0][0]).toEqual(['JAK.02']);
+      localStorage.clear();
+    });
   });
 });
