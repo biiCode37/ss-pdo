@@ -67,3 +67,102 @@
   }
 }
 
+/* Tombol toolbar padat (Set Jumlah Trip, Pilih, Fokus Kolom, Filter) — refact_220.
+   Tinggi 40px: di atas minimum WCAG 2.5.8 (24px) tanpa membuat header lengket terlalu tinggi. */
+.ui-toolbar-btn {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.ui-toolbar-btn[aria-pressed="true"] {
+  background: var(--color-action-primary-bg);
+  border-color: var(--color-action-primary-bg);
+  color: var(--color-action-primary-fg);
+}
+
+.ui-toolbar-btn:disabled {
+  cursor: wait;
+}
+
+/* Varian <select> pada toolbar: rata kiri, ruang untuk ikon chevron di kanan. */
+.ui-toolbar-select {
+  width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+  padding-right: 32px;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: left;
+}
+
+/* Pil ringkas di header (rute aktif, status laporan, antrean, keluar akumulasi) — refact_220. */
+.ui-chip-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-default);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ui-chip-btn--accent {
+  background: var(--color-selection-bg);
+  border-color: var(--color-selection-bg);
+  color: var(--color-selection-fg);
+}
+
+.ui-chip-btn--warning {
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+  color: var(--color-warning-fg);
+}
+
+.ui-chip-btn--error {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error-fg);
+}
+
+.ui-chip-btn--success {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success-fg);
+}
+
+.ui-chip-btn--info {
+  background: var(--color-info-bg);
+  border-color: var(--color-info-border);
+  color: var(--color-info-fg);
+}
+
+.ui-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+

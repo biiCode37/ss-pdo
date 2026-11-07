@@ -204,14 +204,103 @@ input[type="number"] {
   gap: 8px;
 }
 
-.unified-input-control-panel .search-container {
-  position: static;
-  padding: 0;
-  background: transparent;
+/* Toolbar Input SS (refact_220): tata letak dari kelas, bukan objek style inline. */
+.buslist-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.unified-input-control-panel .search-input-wrapper {
+.buslist-controls-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.buslist-controls-row--actions {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+}
+
+.buslist-select-wrapper {
+  position: relative;
   min-width: 0;
+}
+
+.buslist-select-chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.buslist-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.buslist-search .search-input {
+  height: 40px;
+  font-size: 13px;
+  border-radius: 12px;
+}
+
+/* Baris tanggal + status laporan A2 (refact_220) */
+.unified-route-control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.unified-route-control-bar--standalone {
+  padding: 4px 8px;
+}
+
+.route-date-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+/* Baris progres harian (refact_220) */
+.buslist-progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.buslist-progress-label {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.buslist-progress-track {
+  height: 4px;
+  background: var(--color-border-subtle);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.buslist-progress-fill {
+  height: 100%;
+  background: var(--color-action-primary-bg);
+  transition: width 0.4s var(--ease-spring);
+}
+
+.buslist-progress-fill--done {
+  background: var(--color-success-fg);
 }
 
 /* Set Jumlah Trip Trigger Button */

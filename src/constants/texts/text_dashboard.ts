@@ -24,6 +24,7 @@ export const TEXT_DASHBOARD = {
     TITLE: 'Buka Dashboard Monitoring Wilayah & Laporan WA',
   },
   ROUTE_SELECTOR: {
+    EXIT_ACCUMULATION_TITLE: 'Keluar dari mode akumulasi kembali ke harian',
     LABEL: 'Rute & Tanggal Operasional',
     TITLE: 'Pilih Rute & Tanggal',
     ROUTE_PERIOD_LABEL: 'Pilih Rute & Periode',
@@ -228,6 +229,8 @@ export const TEXT_DASHBOARD = {
     SET_TRIP_FAILED: 'Gagal Menyimpan Set Jumlah Trip',
     SELECT_MODE_BTN: 'Pilih',
     SELECT_MODE_TITLE: 'Pilih beberapa unit untuk Set Trip Terpilih',
+    FOCUS_COLUMN_ARIA: 'Pilih kolom yang ditampilkan',
+    PROGRESS_COUNT_SUFFIX: (total: number, percent: number) => `/${total} unit (${percent}%)`,
     SELECTED_COUNT: (count: number) => `${count} unit dipilih`,
     SELECTED_APPLY_BTN: 'Set Trip Terpilih',
     SELECTED_CANCEL_BTN: 'Batal',

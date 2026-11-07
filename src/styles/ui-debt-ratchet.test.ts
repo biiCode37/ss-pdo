@@ -12,19 +12,19 @@ import { describe, test, expect } from "vitest";
  */
 const BASELINE = {
   // Diukur 07 Nov 2026 setelah refact_217 (ikon dirapikan).
-  rawHexColor: 780,
-  rgbHslFunction: 925,
+  rawHexColor: 769,
+  rgbHslFunction: 904,
   gradient: 0,
   gradientText: 0,
-  inlineStyleObject: 1994,
+  inlineStyleObject: 1962,
   // refact_216: tipografi dinormalisasi ke skala, dikunci di nol.
   fontSizeBelow12px: 0,
   fontSizeOffScale: 0,
   fontWeightHeavy: 0,
   iconSizeOffScale: 0,
-  legacyAccentColor: 236,
+  legacyAccentColor: 231,
   textShadow: 0,
-  backdropFilter: 34,
+  backdropFilter: 33,
   // refact_218: radius & jarak dinormalisasi ke skala, dikunci di nol.
   radiusOffScale: 0,
   spacingOffScale: 0,
