@@ -91,8 +91,11 @@ export async function fetchDailyRouteReportsByDate(date: string): Promise<DailyR
 export async function upsertDailyRouteReport(
   report: Partial<DailyRouteReport> & { route_id: number; route_code: string; date: string }
 ): Promise<DailyRouteReport> {
+  // `completeness` hanya ditulis sheet-sync-webhook; pemanggil yang men-spread laporan lama (select('*'))
+  // tidak boleh menimpanya dengan nilai basi (spec siap kirim §3.1)
+  const { completeness: _serverOwned, ...clientFields } = report as typeof report & { completeness?: unknown };
   const payload = {
-    ...report,
+    ...clientFields,
     updated_at: new Date().toISOString()
   };
 

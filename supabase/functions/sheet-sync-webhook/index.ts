@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8";
+import { computeRouteCompleteness, type RouteCompleteness } from "../_shared/completeness.ts";
 
 function getCorsHeaders(req: Request) {
   const origin = req.headers.get("origin") || "";
@@ -463,6 +464,15 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    // Kelengkapan "Siap Kirim": dihitung dari baris yang sama (tanpa baca Sheets tambahan).
+    // Kegagalan di sini tidak boleh menggagalkan penyimpanan angka capaian.
+    let completeness: RouteCompleteness | null = null;
+    try {
+      completeness = computeRouteCompleteness(rows);
+    } catch (err) {
+      console.warn("[SheetSyncWebhook] Gagal menghitung kelengkapan:", err);
+    }
+
     // Normalisasi string header untuk pencocokan toleran
     const normalizeString = (str: string) => (str ? str.toLowerCase().replace(/[^a-z0-9]/g, "") : "");
 
@@ -729,6 +739,7 @@ Deno.serve(async (req: Request) => {
       data_source: isAppManual
         ? (existingReport?.data_source || "app_input")
         : (existingReport?.data_source || "sheet_ingestion"),
+      ...(completeness ? { completeness } : {}),
       last_synced_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
