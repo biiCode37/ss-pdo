@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, ChevronDown, Calendar, RefreshCw, CloudDownload } from "lucide-react";
 import { TEXT_MONITORING, TEXT_COMMON } from "@/constants/texts";
 import {
@@ -46,6 +46,25 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
 
+  const headerRef = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const updateHeight = () => {
+      document.documentElement.style.setProperty(
+        "--sticky-header-height",
+        `${header.offsetHeight}px`,
+      );
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty("--sticky-header-height");
+    };
+  }, []);
+
   const isDaily = !currentPeriod || currentPeriod.mode === "daily";
   const isMonthly = currentPeriod?.mode === "monthly";
 
@@ -92,6 +111,7 @@ export const MonitoringHeader: React.FC<MonitoringHeaderProps> = ({
 
   return (
     <header
+      ref={headerRef}
       style={{
         position: "sticky",
         top: 0,

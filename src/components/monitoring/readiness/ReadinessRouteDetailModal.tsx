@@ -1,5 +1,6 @@
 // src/components/monitoring/readiness/ReadinessRouteDetailModal.tsx
 import { useEffect, useState } from "react";
+import { X } from "lucide-react";
 import { ModalShell } from "@/components/ui/ModalShell";
 import { TEXT_MONITORING } from "@/constants/texts";
 import { showErrorToast, showInfoToast, showSuccessToast } from "@/utils/alertUtils";
@@ -10,6 +11,7 @@ import {
   type SubmissionConfirmation,
 } from "@/services/submissionReadinessService";
 import { REASON_MIN_LENGTH } from "../../../../supabase/functions/_shared/submissionRules.ts";
+import { STATE_TONE } from "./ReadinessRouteCard";
 import type { RouteReadinessView } from "./readinessModel";
 
 const T = TEXT_MONITORING.SUBMISSION;
@@ -54,37 +56,58 @@ export function ReadinessRouteDetailModal({
   return (
     <ModalShell isOpen onClose={onClose} title={T.DETAIL_TITLE(view.routeCode)} id="submission-detail" backHandlerId="submission_detail"
       backdropClassName="modal-overlay submission-modal-backdrop" contentClassName="submission-modal">
-      <h2 className="submission-modal__title">{T.DETAIL_TITLE(view.routeCode)}</h2>
-      {!c && <p className="submission-modal__text">{T.DETAIL_NO_DATA}</p>}
-      {c && c.status !== "ok" && <p className="submission-modal__text">{T.DETAIL_FORMAT_ERROR}</p>}
-      {c && c.status === "ok" && c.issues.length === 0 && <p className="submission-modal__text">{T.DETAIL_NO_ISSUES}</p>}
-      {c && c.status === "ok" && c.issues.length > 0 && (
-        <ul className="submission-issues">
-          {c.issues.map((issue) => (
-            <li key={issue.unit} className="submission-issue">
-              <span className="submission-issue__unit">{issue.unit}</span>
-              <span className="ui-status" data-tone={issue.status === "SEBAGIAN" ? "warning" : "error"}>
-                {issue.reason
-                  ? T.ISSUE_REASON[issue.reason]
-                  : issue.missing
-                    ? T.ISSUE_MISSING(issue.missing.map((f) => T.FIELD[f]).join(", "))
-                    : T.ISSUE_EMPTY}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {needsReason && (
-        <label className="submission-reason">
-          <span>{T.REASON_LABEL}</span>
-          <textarea className="ui-input" rows={3} maxLength={300} value={reason} placeholder={T.REASON_PLACEHOLDER}
-            onChange={(e) => setReason(e.target.value)} />
-          <span className="submission-modal__text">{T.REASON_HINT(view.issueCount)}</span>
-        </label>
-      )}
-      <div className="submission-actions">
-        <button type="button" className="ui-button ui-button--secondary" onClick={handleRecheck}>{T.BTN_RECHECK}</button>
-        <button type="button" className="ui-button ui-button--primary" disabled={!canConfirm} onClick={handleConfirm}>{T.BTN_CONFIRM}</button>
+      <div className="submission-modal__header">
+        <h2 className="submission-modal__title">{T.DETAIL_TITLE(view.routeCode)}</h2>
+        <span className="ui-status" data-tone={STATE_TONE[view.state]}>{T.STATE[view.state]}</span>
+        <button
+          type="button"
+          className="ui-button ui-button--secondary submission-modal__close"
+          aria-label={T.BTN_CLOSE}
+          onClick={onClose}
+        >
+          <X size={20} aria-hidden="true" />
+        </button>
+      </div>
+      <div className="submission-modal__body">
+        {!c && <p className="submission-modal__text">{T.DETAIL_NO_DATA}</p>}
+        {c && c.status !== "ok" && <p className="submission-modal__text">{T.DETAIL_FORMAT_ERROR}</p>}
+        {c && c.status === "ok" && c.issues.length === 0 && <p className="submission-modal__text">{T.DETAIL_NO_ISSUES}</p>}
+        {c && c.status === "ok" && c.issues.length > 0 && (
+          <ul className="submission-issues">
+            {c.issues.map((issue) => (
+              <li key={issue.unit} className="submission-issue">
+                <span className="submission-issue__unit">{issue.unit}</span>
+                <span className="ui-status" data-tone={issue.status === "SEBAGIAN" ? "warning" : "error"}>
+                  {issue.reason
+                    ? T.ISSUE_REASON[issue.reason]
+                    : issue.missing
+                      ? T.ISSUE_MISSING(issue.missing.map((f) => T.FIELD[f]).join(", "))
+                      : T.ISSUE_EMPTY}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="submission-modal__footer">
+        {needsReason && (
+          <label className="submission-reason">
+            <span>{T.REASON_LABEL}</span>
+            <textarea
+              className="ui-input"
+              rows={2}
+              maxLength={300}
+              value={reason}
+              placeholder={T.REASON_PLACEHOLDER}
+              onChange={(e) => setReason(e.target.value)}
+            />
+            <span className="submission-modal__text">{T.REASON_HINT(view.issueCount)}</span>
+          </label>
+        )}
+        <div className="submission-actions">
+          <button type="button" className="ui-button ui-button--secondary" onClick={handleRecheck}>{T.BTN_RECHECK}</button>
+          <button type="button" className="ui-button ui-button--primary" disabled={!canConfirm} onClick={handleConfirm}>{T.BTN_CONFIRM}</button>
+        </div>
       </div>
     </ModalShell>
   );

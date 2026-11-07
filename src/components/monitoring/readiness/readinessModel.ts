@@ -135,3 +135,20 @@ export function writeWatchlist(date: string, routeIds: number[]): void {
   }
 }
 
+export type ProblemFilter = 'all' | 'janggal' | 'belum' | 'changed';
+
+export function filterViewsByProblem(
+  views: RouteReadinessView[],
+  filter: ProblemFilter,
+): RouteReadinessView[] {
+  if (filter === 'all') return views;
+  if (filter === 'janggal') return views.filter((v) => v.state === 'JANGGAL');
+  if (filter === 'belum') {
+    return views.filter(
+      (v) => v.state === 'BELUM_DIISI' || v.state === 'NO_DATA' || v.state === 'FORMAT_ERROR',
+    );
+  }
+  if (filter === 'changed') return views.filter((v) => v.state === 'CHANGED_AFTER_CONFIRM');
+  return views;
+}
+
