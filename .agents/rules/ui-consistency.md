@@ -62,6 +62,16 @@ Jika butuh varian, tambahkan prop atau kelas modifier pada komponen yang ada. **
 - **Ritme vertikal:** jarak header lengket ke konten pertama, antarkartu, dan antarbagian = **12px**. Ruang di atas dock bawah saat konten habis = **±20px** (padding bawah `.app-container`). Jangan menambah `paddingTop`/`marginTop` pembungkus halaman untuk mengatur jarak ini.
 - Mobile-first: rapi di lebar **360px**, tanpa scroll horizontal; dicek di light & dark.
 
+### 8a. Kontrol penting tetap terjangkau saat scroll (berlaku sejak refact_224)
+Aplikasi dipakai petugas lapangan dengan satu tangan. Informasi konteks dan tombol aksi utama **tidak boleh hilang** saat pengguna menggulir.
+- **Dialog / bottom sheet / panel yang isinya bisa di-scroll** wajib berstruktur **header – isi – footer**:
+  - Header (judul konteks, misalnya "Kelengkapan JAK.58", + **tombol tutup** ikon X dengan `aria-label`, minimal 44×44 px) **tidak ikut tergulir**.
+  - Footer berisi aksi utama (Simpan, Konfirmasi, dsb.) **tidak ikut tergulir** dan berada di zona jempol (bawah).
+  - Yang di-scroll hanya bagian isi (`overflow-y: auto`, `overscroll-behavior: contain`). Pola acuan: footer modal input bus.
+- **Daftar panjang** dengan kontrol (filter, ringkasan, tombol pemilih) memakai **satu baris kontrol sticky yang ringkas** (±48 px, maksimal 1 baris di lebar 360 px) tepat di bawah header halaman yang sticky. Posisinya memakai `top: var(--sticky-header-height)`, yang diisi header lewat `ResizeObserver` (pola `DashboardHeader`). Kontrol yang jarang dipakai saat menelusuri daftar (segmen besar, banner informasi) **tidak** dijadikan sticky, supaya ruang daftar tetap luas.
+- Jangan menumpuk banyak lapisan sticky. Header halaman + 1 baris kontrol + navigasi bawah adalah batas maksimal.
+- Mengetuk tab yang sedang aktif di navigasi bawah menggulir halaman kembali ke atas (konvensi umum aplikasi mobile; tidak perlu teks bantuan).
+
 ## 9. Penjaga otomatis (wajib lulus)
 - `src/styles/ui-debt-ratchet.test.ts` menghitung pelanggaran (hex/rgba mentah, gradasi, inline style, ukuran huruf < 12px atau di luar skala, bobot 800+, ukuran ikon di luar skala, `--accent-color` warisan, text-shadow, backdrop-filter). Jika angkanya **naik**, test gagal: **perbaiki kodenya**.
 - **Dilarang menaikkan angka `BASELINE`**. Baseline hanya boleh diturunkan, yaitu saat merapikan kode; test akan meminta penurunan itu.
