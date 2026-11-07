@@ -87,7 +87,7 @@ Setiap audit kode atau refactor SS_PDO wajib didokumentasikan di `refactor-ss-pd
 ## Standar Konsistensi Tampilan UI (Anti-Slop)
 
 Aturan lengkap **WAJIB dibaca sebelum menyentuh kode UI**: [`.agents/rules/ui-consistency.md`](./.agents/rules/ui-consistency.md). Ringkasan yang tidak boleh dilanggar:
-1. **Pakai ulang dulu:** cek `.ui-button`, `.ui-input`, `.ui-input-group`, `ModalShell`, `UnitStatusBadge`, `alertUtils` sebelum membuat komponen/gaya baru. Dilarang menyalin komponen lalu mengubah sedikit gayanya.
+1. **Pakai ulang dulu:** cek `.ui-button`, `.ui-toolbar-btn`, `.ui-chip-btn`, `.ui-input`, `.ui-input-group`, `ModalShell`, `UnitStatusBadge`, `alertUtils` sebelum membuat komponen/gaya baru. Dilarang menyalin komponen lalu mengubah sedikit gayanya.
 2. **Tanpa inline style statis baru** (warna, font, jarak, radius, border, bayangan); taruh di kelas `src/styles/components/*.css`.
 3. **Satu cincin fokus** untuk kolom teks (refact_213); dilarang `:focus` yang mengubah border/glow dan `outline: none` di luar pola `.ui-input-group`.
 4. **Tanpa gradasi, glow/neon, text-shadow, glassmorphism baru**; `--accent-color`/`#3ECF8E` adalah warisan dan dilarang di kode baru.
