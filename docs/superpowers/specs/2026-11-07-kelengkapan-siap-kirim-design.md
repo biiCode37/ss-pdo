@@ -78,7 +78,7 @@ Kolom **wajib**: Trip Pergi, Trip Pulang, TOA S1, Total TOA. Kolom **opsional**:
   - Segmen **Armada** memakai `MonitoringFleetStatusTab` yang sudah ada **apa adanya**, sehingga tidak ada fungsi yang hilang. Edit armada tetap tersedia juga di tab Laporan WA.
 - Tab Siap Kirim menjadi tab **default** halaman Monitoring.
 - Isi segmen Kelengkapan, dari atas ke bawah:
-  1. **Pita tunggakan** (hanya bila ada): jumlah pasangan rute–tanggal yang belum dikonfirmasi dalam 7 hari terakhir (hanya tanggal ≥ tanggal fitur aktif). Daftarnya bisa diketuk untuk melompat ke tanggal tersebut.
+  1. **Pita tunggakan** (hanya bila ada): jumlah pasangan rute–tanggal yang belum dikonfirmasi dalam 7 hari terakhir, tidak termasuk hari ini, dan hanya untuk tanggal ≥ tanggal fitur aktif. Tanggal fitur aktif adalah konstanta `SUBMISSION_FEATURE_START_DATE` (format `YYYY-MM-DD`) yang diisi tanggal peluncuran produksi. Daftarnya bisa diketuk untuk melompat ke tanggal tersebut.
   2. **Ringkasan tanggal** dan pemilih tanggal yang sudah ada.
   3. **Filter pantauan pribadi**: chip "Semua rute" / "Pantauan saya (n)" dan pemilih rute. Disimpan di `localStorage` per tanggal per perangkat, dengan akses dibungkus try/catch.
   4. **Daftar kartu rute**, urut: Janggal → Belum diisi / Belum ada data / Format tidak dikenali → Sebagian → Berubah setelah konfirmasi → Lengkap belum dikonfirmasi → Sudah dikonfirmasi. Kartu menampilkan jumlah per status, "diperbarui HH:MM", dan status konfirmasi (siapa dan jam berapa, atau tanda ⚠ berubah).
